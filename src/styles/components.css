@@ -16354,7 +16354,20 @@
     flex: 1 1 auto;
     min-height: 0;
   }
+  /* The redesigned (framed) menu's DEFAULT geometry. 920px clears the 900px
+     opt-shell container breakpoint, so the rail opens with its labels and every
+     .opt-row label renders un-ellipsized beside its control (the legacy 420px
+     default clipped "UI Scale" / "Music" / "Sound" to a few characters). The
+     shared .window max-width/max-height viewport clamps still win on small
+     screens, the hud-mobile layer overrides win on touch, and a user-chosen
+     inline size (window_resize.ts, persisted by options_window.ts) beats this
+     rule. --opt-rail-w feeds the .opt-body grid's rail column; it previously
+     had NO desktop definition (only the hud-mobile 248px), so any window wider
+     than the collapse breakpoint lost its columns entirely (an invalid var()
+     resets grid-template-columns to none and stacks the panes). */
   #options-menu:has(> .window-frame) {
+    --opt-rail-w: 220px;
+    width: 920px;
     padding: 0;
     background: transparent;
     border: 0;
@@ -16532,7 +16545,10 @@
   }
   .opt-row {
     display: grid;
-    grid-template-columns: 1fr auto;
+    /* The label column keeps a readable floor before it ellipsizes: with a bare
+       1fr a narrow (user-resized) window collapsed the label to almost nothing
+       while the auto control column kept its full slider width. */
+    grid-template-columns: minmax(6em, 1fr) auto;
     align-items: center;
     column-gap: var(--spacing-md);
     min-height: var(--touch-min);

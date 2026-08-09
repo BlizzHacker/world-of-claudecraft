@@ -17,9 +17,15 @@ import {
   FIELD_RECIPES,
   TOOL_RECIPES,
 } from '../src/sim/content/recipes';
-import { ZONE1_CAMPS, ZONE1_CHAPEL_CAMPS, ZONE1_NPCS, ZONE1_ZONE } from '../src/sim/content/zone1';
-import { ZONE2_CAMPS, ZONE2_NPCS, ZONE2_ZONE } from '../src/sim/content/zone2';
-import { ZONE3_CAMPS, ZONE3_NPCS, ZONE3_ZONE } from '../src/sim/content/zone3';
+import {
+  ZONE1_CAMPS,
+  ZONE1_CHAPEL_CAMPS,
+  ZONE1_NPCS,
+  ZONE1_WILDS_CAMPS,
+  ZONE1_ZONE,
+} from '../src/sim/content/zone1';
+import { ZONE2_CAMPS, ZONE2_NPCS, ZONE2_WILDS_CAMPS, ZONE2_ZONE } from '../src/sim/content/zone2';
+import { ZONE3_CAMPS, ZONE3_NPCS, ZONE3_WILDS_CAMPS, ZONE3_ZONE } from '../src/sim/content/zone3';
 import { MOBS, NPCS } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
 import type { CampDef, NpcDef } from '../src/sim/types';
@@ -34,9 +40,13 @@ interface ZoneContent {
 // camps only. Zone 1 includes the appended chapel camps (spawned last but
 // just as hostile).
 const ZONE_CONTENT: ZoneContent[] = [
-  { zone: ZONE1_ZONE, npcs: ZONE1_NPCS, camps: [...ZONE1_CAMPS, ...ZONE1_CHAPEL_CAMPS] },
-  { zone: ZONE2_ZONE, npcs: ZONE2_NPCS, camps: ZONE2_CAMPS },
-  { zone: ZONE3_ZONE, npcs: ZONE3_NPCS, camps: ZONE3_CAMPS },
+  {
+    zone: ZONE1_ZONE,
+    npcs: ZONE1_NPCS,
+    camps: [...ZONE1_CAMPS, ...ZONE1_CHAPEL_CAMPS, ...ZONE1_WILDS_CAMPS],
+  },
+  { zone: ZONE2_ZONE, npcs: ZONE2_NPCS, camps: [...ZONE2_CAMPS, ...ZONE2_WILDS_CAMPS] },
+  { zone: ZONE3_ZONE, npcs: ZONE3_NPCS, camps: [...ZONE3_CAMPS, ...ZONE3_WILDS_CAMPS] },
 ];
 
 function zoneContentById(zoneId: string): ZoneContent {

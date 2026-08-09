@@ -2,16 +2,26 @@
 // NPC id, druid/polymorph form) onto a rigged glTF asset + clip names + kit.
 // Pure data + dispatch — no three.js imports, no loading.
 
+import { isBoundedResidency } from './residency';
 import { MECH_CHROMAS, type MechChroma } from '../../sim/content/skins';
 import { offhandMirrorsWeaponSkin } from '../../sim/content/weapon_skin_rules';
 import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
 import { ITEMS, MOBS } from '../../sim/data';
 import { ALL_CLASSES, type Entity, isMechWearer, type PlayerClass } from '../../sim/types';
+import { resolveRealmCharacterVisual } from '../../sim/realms/class_visuals';
 import { infernalCharacterSelection } from '../../sim/realms/infernal_classes';
 import { resolveActiveRealmId } from '../../sim/realms/registry';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
 import type { OverheadEmoteId } from '../../world_api';
+import {
+  KAYKIT_EMOTES,
+  MESHY_CLIP_BANK_URL,
+  MESHY_BANK_EMOTES,
+  withMeshyBank,
+} from './clip_vocab';
 import { GENERATED_REALM_BODIES, GENERATED_VISUALS } from './manifest.generated';
+import { GENERATED_CREATURE_BODIES, GENERATED_CREATURE_VISUALS } from './creatures.generated';
+import { GENERATED_CREATURE_BODY_PINS } from './creature_pins.generated';
 import {
   hostileHumanoidVisualKey,
   infernalNpcVisualKey,
@@ -163,25 +173,11 @@ export type WeaponLayoutOverride = Pick<VisualDef, 'attach' | 'weaponSlots' | 'o
 // Clip sets per source rig family
 // ---------------------------------------------------------------------------
 
-const KAYKIT_EMOTES: Partial<Record<OverheadEmoteId, EmoteClipSpec>> = {
-  wave: { clips: ['Spellcast_Raise', 'Cheer'], timeScale: 0.9 },
-  laugh: { clips: ['Hit_A', 'Cheer'], timeScale: 1.45, repeats: 2 },
-  question: { clips: ['Block', 'Spellcast_Raise'], timeScale: 1.15 },
-  cheer: { clips: ['Cheer'], timeScale: 1.05, repeats: 2 },
-  dance: {
-    clips: ['Running_Strafe_Left', 'Running_Strafe_Right', 'Cheer'],
-    timeScale: 1.05,
-    repeats: 2,
-  },
-  point: { clips: ['Spellcast_Shoot', '2H_Ranged_Shoot'], timeScale: 0.95 },
-  flex: { clips: ['Block', 'Cheer'], timeScale: 0.8 },
-  salute: { clips: ['Spellcast_Raise', 'Block'], timeScale: 1.18 },
-  cry: { clips: ['Hit_A', 'Sit_Floor_Down'], timeScale: 0.65 },
-  bow: { clips: ['Sit_Floor_Down', 'Spellcast_Raise'], timeScale: 1.35 },
-  clap: { clips: ['1H_Melee_Attack_Slice_Diagonal', 'Cheer'], timeScale: 1.55, repeats: 2 },
-  roar: { clips: ['2H_Melee_Attack_Chop', '1H_Melee_Attack_Chop', 'Cheer'], timeScale: 0.9 },
-  kneel: { clips: ['Sit_Floor_Down'], timeScale: 0.85 },
-};
+// KAYKIT_EMOTES moved to clip_vocab.ts so the 1,600+ pipeline-rigged bodies in
+// manifest.generated.ts can share the exact map the shipped player bodies use.
+// They are the same rig family and were emitted with NO emote map at all, so
+// every /wave, /dance and /cheer on a library body was a silent no-op:
+// playEmote() finds no spec and returns before touching the mixer.
 
 const kaykit = (attack: string[], idle = 'Idle'): ClipMap => ({
   idle,
@@ -507,7 +503,11 @@ const meshyBiped = (
 // Curated Infernal humans are rebuilt by build_infernal_human_rigs.mjs. Exact-rig
 // actions are used where available and donor actions are transferred as rest-pose
 // deltas, so each distinct body stays upright through every gameplay state.
-const INFERNAL_HUMAN_CLIPS: ClipMap = {
+// meshy24, the clip bank's own rig family, so the bank fills everything the 10
+// baked takes leave empty: walkBack, sit, swim, the extra swings, and 20 real
+// emote gestures instead of aliasing four of them onto Wave and Taunt. Their own
+// Wave/Taunt stay as the fallback behind each bank clip.
+const INFERNAL_HUMAN_CLIPS: ClipMap = withMeshyBank({
   idle: 'Idle',
   walk: 'Walk',
   run: 'Run',
@@ -522,7 +522,7 @@ const INFERNAL_HUMAN_CLIPS: ClipMap = {
     flex: { clips: ['Taunt'] },
     salute: { clips: ['Wave'] },
   },
-};
+});
 // Raid 02 asset-pipeline rig (stone_cantor.glb): Mixamo-rigged, ships
 // Idle / Cast / Walk / Death plus a synthesized 'Hit' flinch authored by
 // scripts/_add_cantor_hit_anim.mjs (the batch has no hit-react take). A
@@ -566,6 +566,7 @@ const REALM_MODELS = '/cr-realms';
 function infernalHuman(fileName: string, height = 2.15): VisualDef {
   return {
     url: `${REALM_MODELS}/infernal/${fileName}`,
+    animUrls: [MESHY_CLIP_BANK_URL],
     height,
     clips: INFERNAL_HUMAN_CLIPS,
     lazyPreload: true,
@@ -1297,12 +1298,22 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   realm_cryptic_bone_herald: {
     url: `${REALM_MODELS}/crypticrealm/bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb`,
     height: HUMANOID_H,
-    clips: meshyBiped(),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     lazyPreload: true,
   },
   realm_infernal_crimson_behemoth: {
     url: `${REALM_MODELS}/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb`,
     height: 2.9,
+    // NOT bank-wired, and this is the rule the bank has to live by: the 48 clips
+    // are authored on a HUMANOID body. A non-humanoid rig that happens to share
+    // the meshy24 joint names binds all 48 cleanly, preserves every bone length
+    // (they are rotations-only), reports every state as moving - and renders as a
+    // shredded spike, because humanoid joint rotations are meaningless on a
+    // digitigrade, winged or long-necked rest pose. Verified by rendering it.
     // The export carries only locomotion + jumps; there is no idle/hit/death/cast
     // take, so Walking stands in for rest and reactions and the spin-jump doubles as
     // the swing. Names verified against the shipped GLB (scripts/audit_clips.mjs).
@@ -1319,21 +1330,22 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   realm_infernal_horned_demon: {
     url: `${REALM_MODELS}/infernal/demon-horned_1a19d7ca.glb`,
     height: HUMANOID_H,
-    // Locomotion-only export: no idle/hit/death/cast take exists, so Walking covers
-    // rest and reactions rather than leaving the slots unresolved (bind pose).
-    clips: {
-      idle: 'Walking',
-      walk: 'Walking',
-      run: 'Running',
-      attack: ['Running'],
-      death: 'Walking',
-      hit: ['Walking'],
-    },
+    // RE-RIGGED onto the KayKit reference skeleton: the locomotion-only Meshy
+    // export this map was written for no longer exists, and the file now carries
+    // the full 22-clip vocabulary. Not one name matched, so it bound NOTHING and
+    // stood in bind pose through every state.
+    clips: kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     lazyPreload: true,
   },
   realm_infernal_skullbeast: {
     url: `${REALM_MODELS}/infernal/skullbeast_5d2ecebf.glb`,
     height: 2.4,
+    // NOT bank-wired, and this is the rule the bank has to live by: the 48 clips
+    // are authored on a HUMANOID body. A non-humanoid rig that happens to share
+    // the meshy24 joint names binds all 48 cleanly, preserves every bone length
+    // (they are rotations-only), reports every state as moving - and renders as a
+    // shredded spike, because humanoid joint rotations are meaningless on a
+    // digitigrade, winged or long-necked rest pose. Verified by rendering it.
     // Unsteady_Walk is the closest thing to an idle this export has; the standard
     // Idle/Hit/Death/Cast/Basic_Jump takes are simply not in the file.
     clips: {
@@ -1394,22 +1406,13 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   realm_infernal_durance_humanoid: infernalHuman('infernal_class_warrior.glb', 2.3),
   realm_infernal_dark_paladin: {
     url: `${REALM_MODELS}/infernal/dark_paladin_commander.glb`,
-    animUrls: [
-      `${REALM_MODELS}/infernal/dark_paladin_running.glb`,
-      `${REALM_MODELS}/infernal/dark_paladin_reaping_swing.glb`,
-    ],
     height: 2.35,
-    // The commander mesh and its two sidecar takes export Blender-style
-    // "Armature|<take>|baselayer" clip names; the bare take names never existed, so
-    // every slot missed and the body stood in bind pose.
-    clips: {
-      idle: 'Armature|walking_man|baselayer',
-      walk: 'Armature|walking_man|baselayer',
-      run: 'Armature|running|baselayer',
-      attack: ['Armature|Reaping_Swing|baselayer'],
-      death: 'Armature|walking_man|baselayer',
-      hit: ['Armature|walking_man|baselayer'],
-    },
+    // RE-RIGGED onto the KayKit reference skeleton. The "Armature|<take>|baselayer"
+    // names this map was fixed to are gone from the file, so it bound nothing and the
+    // commander stood in bind pose. The two sidecar animUrls went with them: both now
+    // carry the SAME 22 clips as the body itself, so they were two extra
+    // multi-megabyte lazy fetches contributing no clip the body did not already have.
+    clips: kaykit(['2H_Melee_Attack_Chop', '1H_Melee_Attack_Chop']),
     lazyPreload: true,
   },
   // --- Durance of Hate delve enemies: real infernal demon bodies (no KayKit) ---
@@ -1434,7 +1437,11 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     // Behemoth model is now reserved for THE BUTCHER (the true endboss).
     url: `${REALM_MODELS}/infernal/meshy_ai_horned_demon_warrior_0616234420_texture_2233cac0.glb`,
     height: 3.2,
-    clips: meshyBiped(),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['2H_Melee_Attack_Chop']),
     lazyPreload: true,
   },
   // --- New infernal monster bodies (the big asset push) --------------------
@@ -1449,7 +1456,11 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     // Cursed Iron Knight: an armored revenant, heavy melee.
     url: `${REALM_MODELS}/infernal/meshy_ai_cursed_knight_s_iro_0616234359_texture_abda8208.glb`,
     height: 2.8,
-    clips: meshyBiped(),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['1H_Melee_Attack_Chop', '2H_Melee_Attack_Chop']),
     lazyPreload: true,
   },
   hellmaw_lava_fiend_body: {
@@ -1502,46 +1513,84 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   realm_classic_orc: {
     url: `${REALM_MODELS}/classic/another-orc-meshy_ai_meshy_merged_animations_743223cb.glb`,
     height: HUMANOID_H,
-    clips: meshyBiped(['Attack']),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['1H_Melee_Attack_Chop', '2H_Melee_Attack_Chop']),
     lazyPreload: true,
   },
   realm_classic_big_orc: {
     url: `${REALM_MODELS}/classic/bigass-orc-meshy_ai_meshy_merged_animations_86937638.glb`,
     height: 2.8,
-    clips: meshyBiped(),
+    // meshy24 rig, so the shared bank drives it: this export has no idle, no hit,
+    // no death and no cast take of its own, which is why Walking used to stand in
+    // for dying. Its own gait stays; the bank fills the rest.
+    animUrls: [MESHY_CLIP_BANK_URL],
+    clips: withMeshyBank({
+      idle: 'Idle_Alt_A',
+      walk: 'Walking',
+      run: 'Running',
+      attack: [],
+      death: 'Death_A',
+      jump: 'Basic_Jump',
+    }),
     lazyPreload: true,
   },
   realm_classic_fighting_elf: {
     url: `${REALM_MODELS}/classic/fighting-elf-meshy_ai_meshy_merged_animations_943c5367.glb`,
     height: HUMANOID_H,
-    clips: meshyBiped(['Reaping_Swing', 'Dodge_and_Counter', 'Counter_Attack'], {
-      run: 'RunFast',
-      jump: 'Backflip_Sweep_Kick',
-    }),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['1H_Melee_Attack_Slice_Diagonal', 'Dualwield_Melee_Attack_Chop']),
     lazyPreload: true,
   },
   realm_classic_dwarf: {
     url: `${REALM_MODELS}/classic/gray-dwarf-meshy_ai_meshy_merged_animations_a33ff315.glb`,
     height: 2.25,
-    clips: meshyBiped(),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['1H_Melee_Attack_Chop', '2H_Melee_Attack_Chop']),
     lazyPreload: true,
   },
   realm_classic_female_elf: {
     url: `${REALM_MODELS}/classic/female-elf-meshy_ai_meshy_merged_animations_2dde3113.glb`,
     height: HUMANOID_H,
-    clips: meshyBiped(),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['1H_Melee_Attack_Slice_Diagonal', '2H_Ranged_Shoot']),
     lazyPreload: true,
   },
   realm_classic_female_orc: {
     url: `${REALM_MODELS}/classic/female-orc-meshy_ai_meshy_merged_animations_a5a08a67.glb`,
     height: HUMANOID_H,
-    clips: meshyBiped(),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['1H_Melee_Attack_Chop', '2H_Melee_Attack_Chop']),
     lazyPreload: true,
   },
   realm_classic_treasure_dwarf: {
     url: `${REALM_MODELS}/classic/treasure-dwarf-meshy_ai_meshy_merged_animations_91488daf.glb`,
     height: 2.25,
-    clips: meshyBiped(),
+    // meshy24 rig, so the shared bank drives it: this export has no idle, no hit,
+    // no death and no cast take of its own, which is why Walking used to stand in
+    // for dying. Its own gait stays; the bank fills the rest.
+    animUrls: [MESHY_CLIP_BANK_URL],
+    clips: withMeshyBank({
+      idle: 'Idle_Alt_A',
+      walk: 'Walking',
+      run: 'Running',
+      attack: [],
+      death: 'Death_A',
+    }),
     lazyPreload: true,
   },
   realm_classic_kitty: {
@@ -2714,8 +2763,55 @@ const HAND_VISUALS: Record<string, VisualDef> = {
 // Hand-authored entries above; pipeline-generated bodies below. Spread order is
 // deliberate: GENERATED first, HAND second, so a curated key ALWAYS wins over a
 // generated one of the same name and re-running the asset pipeline is safe.
+// --- Corrections over the emitted pipeline manifest --------------------------
+// Kept HERE rather than in manifest.generated.ts so re-running the asset pipeline
+// cannot drop them and a regeneration diff stays a pure asset diff.
+//
+// 1. emit_manifest.mjs assumes every staged body was rigged onto the KayKit
+//    reference skeleton and hands them all the KayKit clip map. These came from
+//    the Meshy pipeline and are on the meshy24 skeleton carrying
+//    Idle/Walk/Run/Attack/[Cast/]Hit/Death - so of the 14 KayKit names the
+//    generated map asks for, exactly ONE ("Idle") exists. That is the Infernal
+//    HERO roster, the bodies on the character-select screen. They are also the
+//    one family the shared clip bank can drive, so they take it.
+// 2. Every other generated body is a kaykit body carrying the same 22 baked
+//    clips as the shipped player GLBs, but the emitted map has no `emote` entry,
+//    so playEmote() returned immediately on all of them.
+const MESHY_RIGGED_GENERATED = /^realm_infernal_(hero_|meshy_necro_warlord)/;
+
+function generatedVisualCorrections(): Record<string, VisualDef> {
+  const out: Record<string, VisualDef> = {};
+  for (const [key, def] of Object.entries(GENERATED_VISUALS)) {
+    if (MESHY_RIGGED_GENERATED.test(key)) {
+      out[key] = {
+        ...def,
+        animUrls: [...(def.animUrls ?? []), MESHY_CLIP_BANK_URL],
+        clips: withMeshyBank({
+          idle: 'Idle',
+          walk: 'Walk',
+          run: 'Run',
+          // The body's own 'Attack' take stays at the FRONT of the rotation; the
+          // bank's extra swings follow it.
+          attack: ['Attack'],
+          hit: ['Hit'],
+          death: 'Death',
+          cast: 'Cast',
+        }),
+      };
+    } else if (!def.clips.emote) {
+      out[key] = { ...def, clips: { ...def.clips, emote: KAYKIT_EMOTES } };
+    }
+  }
+  return out;
+}
+
 export const VISUALS: Record<string, VisualDef> = {
   ...GENERATED_VISUALS,
+  ...generatedVisualCorrections(),
+  // Quadrupeds bound onto the shipped wolf donor rig (creatures.generated.ts).
+  // Same precedence rule as above: generated first, HAND last, so a curated key
+  // always wins and re-running the asset pipeline stays safe.
+  ...GENERATED_CREATURE_VISUALS,
   ...HAND_VISUALS,
 };
 
@@ -3108,13 +3204,27 @@ interface BodyOverrideEntry {
   assetName?: string;
 }
 const BODY_OVERRIDES: Record<string, Record<string, BodyOverrideEntry>> = {};
-const OVERRIDE_AUTO_CLIPS: ClipMap = {
+// Override bodies mount the shared Meshy clip bank (armature-only GLB on the
+// 24-joint Meshy skeleton) via animUrls, so their vocabulary is the bank's
+// contract names below plus the body's own bespoke clips. '__auto__' entries
+// still resolve against whatever is actually loaded (clip_resolution.ts), so a
+// body works - degraded but animated - even if the bank fails to load.
+const OVERRIDE_CLIP_BANK_URL = MESHY_CLIP_BANK_URL;
+// '__auto__' idle/walk/run/death keep each body's own bespoke takes (resolved
+// against the real inventory in clip_resolution.ts); everything else is the
+// shared bank vocabulary, defined once in clip_vocab.ts and shared with the
+// curated meshy24 bodies so the two can never drift apart. Emote_Cry and
+// Emote_Bow ARE in the bank but were aliased onto Sit_Floor_Down and Emote_Point
+// here, so crying looked like sitting down and bowing duplicated pointing.
+const OVERRIDE_AUTO_CLIPS: ClipMap = withMeshyBank({
   idle: '__auto__',
   walk: '__auto__',
   run: '__auto__',
   attack: ['__auto__'],
+  hit: ['__auto__'],
   death: '__auto__',
-};
+  emote: MESHY_BANK_EMOTES,
+});
 
 /** Install the operator's body overrides for a realm (the client calls this after
  *  it fetches /api/realm-visuals/<realm>). Empty/undefined clears them. */
@@ -3134,7 +3244,30 @@ function overrideVisualHash(url: string): string {
   return (hash >>> 0).toString(36);
 }
 
+// url -> registered visual key, built lazily over VISUALS (which already holds
+// the generated realm bodies) and kept in step as override visuals are added.
+let visualKeyByUrl: Map<string, string> | null = null;
+function knownVisualKeyForUrl(url: string): string | null {
+  if (!visualKeyByUrl) {
+    visualKeyByUrl = new Map();
+    for (const [k, def] of Object.entries(VISUALS)) {
+      if (def?.url && !visualKeyByUrl.has(def.url)) visualKeyByUrl.set(def.url, k);
+    }
+  }
+  return visualKeyByUrl.get(url) ?? null;
+}
+
 function registerOverrideVisual(entry: BodyOverrideEntry): string {
+  // An override almost always points at a GLB the manifest ALREADY registers -
+  // every generated realm body, and every hand-authored one. Synthesizing a
+  // second, generic def for that same file discards everything the real entry
+  // knows: its fitted height (2.2-2.3 for the infernal humans, 2.6 for generated
+  // bodies - not the 2.0 guess below), its authored clip map, weapon sockets and
+  // tint. NPCs pointed at known bodies this way rendered short, bare and stiff.
+  // Reuse the registered entry; only a genuinely unknown url needs the generic
+  // auto-clip def, which leans on the shared clip bank to animate at all.
+  const known = knownVisualKeyForUrl(entry.assetUrl);
+  if (known) return known;
   const key = `override_${overrideVisualHash(entry.assetUrl)}`;
   if (!VISUALS[key]) {
     VISUALS[key] = {
@@ -3143,9 +3276,33 @@ function registerOverrideVisual(entry: BodyOverrideEntry): string {
       autoClip: true,
       lazyPreload: true,
       clips: OVERRIDE_AUTO_CLIPS,
+      animUrls: [OVERRIDE_CLIP_BANK_URL],
     };
+    visualKeyByUrl?.set(entry.assetUrl, key);
   }
   return key;
+}
+
+/** The operator's override row for a CHARACTER (no Entity required), in the same
+ *  precedence the world uses: hero id, hero display name, the canonical selection
+ *  a hidden variant presents under, then the base class. Split out of
+ *  {@link overrideVisualKeyForEntity} so the 2D surfaces (unit-frame portraits,
+ *  roster chips, the char-select turntable) resolve through the IDENTICAL chain
+ *  instead of each re-deriving it. */
+function overrideEntryForCharacter(
+  realm: string,
+  realmHeroId: string | null | undefined,
+  cls: PlayerClass,
+): BodyOverrideEntry | undefined {
+  const map = BODY_OVERRIDES[realm];
+  if (!map) return undefined;
+  const selection = infernalCharacterSelection(realm, realmHeroId ?? null, cls);
+  let entry = selection ? (map[`hero:${selection.id}`] ?? map[`hero:${selection.name}`]) : undefined;
+  // A hidden hero variant with no published body of its own falls back to
+  // the canonical selection it presents under (e.g. hero:infernal-hero-sorcerer-m
+  // -> hero:infernal-hero-sorcerer-sorceress until a male body is published).
+  if (!entry && selection?.variantOf) entry = map[`hero:${selection.variantOf}`];
+  return entry ?? map[`class:${cls}`];
 }
 
 /** The override visual key for an entity, or null. A realm hero assignment is
@@ -3156,9 +3313,7 @@ function overrideVisualKeyForEntity(e: Entity): string | null {
   if (!map) return null;
   let entry: BodyOverrideEntry | undefined;
   if (e.kind === 'player') {
-    const selection = infernalCharacterSelection(realm, e.realmHeroId, e.templateId as PlayerClass);
-    entry = selection ? (map[`hero:${selection.id}`] ?? map[`hero:${selection.name}`]) : undefined;
-    entry ??= map[`class:${e.templateId}`];
+    entry = overrideEntryForCharacter(realm, e.realmHeroId, e.templateId as PlayerClass);
   } else if (e.kind === 'npc') {
     entry = map[`npc:${e.templateId}`];
   } else if (e.kind === 'mob') {
@@ -3168,6 +3323,67 @@ function overrideVisualKeyForEntity(e: Entity): string | null {
   }
   return entry ? registerOverrideVisual(entry) : null;
 }
+
+/**
+ * The visual key that renders a body GLB named by URL.
+ *
+ * The create screen and the body editor speak in asset URLs, not manifest keys,
+ * and their only way to show a face was a portrait png published beside the GLB.
+ * Where none exists the card rendered blank. This hands those surfaces the same
+ * key the renderer uses, so they can render the body itself: an already-known
+ * file reuses its real manifest entry (fitted height, authored clips, sockets),
+ * and only a genuinely unknown file gets the generic auto-clip def.
+ */
+export function visualKeyForBodyAsset(assetUrl: string): string {
+  return registerOverrideVisual({ assetUrl });
+}
+
+/** A character as the non-world surfaces know it: a roster row, an inspect
+ *  target, a HUD unit frame. No Entity, so no `templateId`/`kind`. */
+export interface CharacterVisualQuery {
+  cls: PlayerClass;
+  /** Realm the overrides were installed under. Defaults to the active realm. */
+  realm?: string | null;
+  realmHeroId?: string | null;
+  /** The server-published body for this character (CharacterSummary.visualKey /
+   *  the wire's `vk`). Used when no operator override claims the character. */
+  visualKey?: string | null;
+  skinCatalog?: 'class' | 'mech' | null;
+}
+
+/**
+ * THE resolver every character-face surface must use.
+ *
+ * Before this existed the 2D surfaces had their own, weaker chain: they consulted
+ * only the /api/realm-visuals overrides and then guessed a portrait png sitting
+ * beside the body GLB. Nothing published those pngs for the class-level bodies,
+ * so every lookup 404'd and the surfaces fell back to `player_<class>` — the
+ * stock KayKit mini — for characters the world was rendering on a real library
+ * body. This runs the same order the world's {@link visualKeyFor} does:
+ *
+ *   1. the Combat Mech cosmetic (class-agnostic body),
+ *   2. the operator's live body override (hero -> variant -> class),
+ *   3. the compiled realm body the server assigned (`visualKey` / REALM_CLASS_VISUALS),
+ *   4. the class rig.
+ *
+ * Note step 2 can name a lazily-loaded GLB: callers that render must preload it
+ * (preloadVisualAssets) and re-render, not treat "not loaded yet" as "no body".
+ */
+export function visualKeyForCharacter(q: CharacterVisualQuery): string {
+  if (q.skinCatalog === 'mech') return 'player_mech';
+  const realm = q.realm ?? resolveActiveRealmId();
+  const entry = overrideEntryForCharacter(realm, q.realmHeroId ?? null, q.cls);
+  if (entry) return registerOverrideVisual(entry);
+  if (q.visualKey && VISUALS[q.visualKey]) return q.visualKey;
+  // The server omits `vk` for older rows; the compiled per-realm table is the
+  // same mapping it would have sent, so the roster never falls back to KayKit
+  // just because a character predates the field.
+  const compiled = resolveRealmCharacterVisual(realm, q.cls, q.realmHeroId ?? null).visualKey;
+  if (compiled && VISUALS[compiled]) return compiled;
+  return VISUALS[`player_${q.cls}`] ? `player_${q.cls}` : 'player_warrior';
+}
+
+
 
 
 // Families the generated bodies can legitimately stand in for. Every generated
@@ -3196,6 +3412,13 @@ function generatedBodyFor(
   family: string | undefined,
   templateId: string | undefined,
 ): string | null {
+  // A console browser has a hard resident-memory ceiling and the pool exists to
+  // spread a family across HUNDREDS of distinct bodies, each with its own
+  // base/normal/metallic set. Twenty of them is a few hundred MB of texture
+  // residency that nothing can reclaim, which is what trips
+  // SBOX_FATAL_MEMORY_EXCEEDED. Falling through to the shared family bodies
+  // costs visible variety and keeps the world on screen.
+  if (isBoundedResidency()) return null;
   if (!family || !GENERATED_POOL_FAMILIES.has(family)) return null;
   const pool = GENERATED_REALM_BODIES[realm];
   if (!pool || pool.length === 0) return null;
@@ -3209,6 +3432,67 @@ function generatedBodyFor(
  *  otherwise collapse a whole family onto one shared body. */
 function poolFirst(realm: string, family: string | undefined, templateId: string | undefined): string | null {
   return generatedBodyFor(realm, family, templateId);
+}
+
+// Families the generated QUADRUPED roster (creatures.generated.ts) can stand in
+// for. Every body there is bound to the wolf donor rig and walks on four legs,
+// so membership is decided by SILHOUETTE, not by theme:
+//   beast - the roster IS this family: canines, felines, bears, boars, equines,
+//           apes, rhinos, elephants. 13 templates, 10 of which already name a
+//           curated body, so the pool only ever claims the generic remainder.
+// Everything else is deliberately excluded. humanoid/undead/demon/troll/ogre are
+// bipeds already served by GENERATED_POOL_FAMILIES; spider has eight legs;
+// mudfin and burrower stand upright; elemental and dragonkin are fully claimed by
+// authored bodies (mob_dragonkin, hellmaw_dragon_body,
+// realm_claudecraft_arcane_dragon) that a four-legged wolf gait would downgrade.
+//
+// reptile was measured and rejected: its one template (deepfen_spearjaw) already
+// has an authored mob_spearjaw body, and a hash pool cannot tell a saurian from
+// an ape - it drew a gorilla in Infernal. That template renders as a humanoid in
+// Cryptic Realm and Infernal today, but the fix is an authored mapping, not a
+// random draw.
+//
+// Disjoint from GENERATED_POOL_FAMILIES on purpose: because no family is in both
+// sets, the two pools can share the identical seed shape below without ever
+// being asked the same question, so neither can move in lockstep with the other.
+//
+// Adding a family here is NOT enough to make it reach the pool: the crypticrealm
+// and infernal branches of visualKeyFor dispatch on explicit family lists, so a
+// new family needs a call site too. tests/generated_creatures.test.ts pins that
+// only beasts resolve to a creature, which fails loudly if this set grows.
+const GENERATED_CREATURE_FAMILIES = new Set(['beast']);
+
+/** The quadruped twin of generatedBodyFor: same FNV-1a stableHash, same seed
+ *  shape, same residency gate, over the realm's own creature roster.
+ *
+ *  REALM PURITY: GENERATED_CREATURE_BODIES[realm] is keyed by the realm the body
+ *  was actually STAGED into (its GLB lives under /cr-realms/<realm>/creatures/),
+ *  and that key is the only way a body is ever reached. There is deliberately no
+ *  affinity, alias, or nearest-theme fallback here - those are what previously
+ *  leaked classic bodies into Infernal. A realm with no staged creatures gets
+ *  null and keeps its existing family fallback. */
+function generatedCreatureBodyFor(
+  realm: string,
+  family: string | undefined,
+  templateId: string | undefined,
+): string | null {
+  // Same ceiling as the humanoid pool: spreading a family over dozens of bodies,
+  // each with its own baked texture set, is exactly the residency that trips
+  // SBOX_FATAL_MEMORY_EXCEEDED on a console browser. Bounded devices keep the
+  // single shared family body.
+  if (isBoundedResidency()) return null;
+  if (!family || !GENERATED_CREATURE_FAMILIES.has(family)) return null;
+  const pool = GENERATED_CREATURE_BODIES[realm];
+  if (!pool || pool.length === 0) return null;
+  // The hash below is taken modulo the pool size, so adding ONE body to a realm
+  // re-rolls every mob in it — that is how mire_prowler turned from a drake into
+  // a gorilla when the base realm grew from 2 bodies to 9. Templates that already
+  // had a body keep it by pin; only new templates draw from the grown pool, so a
+  // realm can gain assets without re-skinning creatures players already know.
+  const pinned = templateId ? GENERATED_CREATURE_BODY_PINS[realm]?.[templateId] : undefined;
+  if (pinned && pool.includes(pinned)) return pinned;
+  const seed = `${realm}:${family}:${templateId ?? 'anon'}`;
+  return pool[stableHash(seed) % pool.length] ?? null;
 }
 
 export function visualKeyFor(e: Entity): string {
@@ -3233,7 +3517,16 @@ export function visualKeyFor(e: Entity): string {
       // into this realm through mob_bandit/mob_dark_caster fallbacks.
       if (override === 'mob_training_dummy') return override;
       if (family && ['beast', 'spider', 'mudfin', 'burrower', 'troll', 'ogre'].includes(family)) {
-        return override ?? realmFamily ?? FAMILY_KEYS[family] ?? 'mob_wolf';
+        // The realm's own quadrupeds sit between the curated override and
+        // realmFamily: mob_wolf/mob_boar/mob_spider keep their identities, but a
+        // generic beast no longer collapses onto the single realmFamily body.
+        return (
+          override ??
+          generatedCreatureBodyFor(realm, family, e.templateId) ??
+          realmFamily ??
+          FAMILY_KEYS[family] ??
+          'mob_wolf'
+        );
       }
       if (family === 'undead') {
         // An authored skeleton body (e.g. the Nythraxis raid boss's skel_golem)
@@ -3266,10 +3559,17 @@ export function visualKeyFor(e: Entity): string {
         return override;
       }
       if (family && ['beast', 'spider', 'mudfin'].includes(family)) {
-        return override ?? realmFamily ?? FAMILY_KEYS[family] ?? 'mob_wolf';
+        return (
+          override ??
+          generatedCreatureBodyFor(realm, family, e.templateId) ??
+          realmFamily ??
+          FAMILY_KEYS[family] ??
+          'mob_wolf'
+        );
       }
       // Spread humanoid-shaped families across the generated pool instead of the
-      // single per-family body; curated overrides above already returned.
+      // single per-family body; curated overrides above already returned. Beasts
+      // returned earlier, through the creature roster in the animal list above.
       {
         const pooled = poolFirst(realm, family, e.templateId);
         if (pooled) return pooled;
@@ -3291,7 +3591,10 @@ export function visualKeyFor(e: Entity): string {
     // the active realm has a themed monster family.
     if (override) return override;
     // Pool ahead of realmFamily: REALM_MOB_FAMILY_KEYS resolves ONE body per family,
-    // which shadowed the entire generated roster wherever it was defined.
+    // which shadowed the entire generated roster wherever it was defined. Same
+    // reasoning for the quadrupeds, which is why they sit at the same point.
+    const creature = generatedCreatureBodyFor(realm, family, e.templateId);
+    if (creature) return creature;
     const generated = generatedBodyFor(realm, family, e.templateId);
     if (generated) return generated;
     if (realmFamily) return realmFamily;

@@ -97,7 +97,7 @@ import {
 import { inRangeStationTypes, stationTypesSignature } from '../sim/professions/stations';
 import { TIER_SKILL_STEP, tierForSkill } from '../sim/professions/wheel';
 import { type QuestObjectiveRef, questObjectivesForMob } from '../sim/quest_targets';
-import { activeMaxLevel } from '../sim/realms/registry';
+import { activeMaxLevel, resolveActiveRealmId } from '../sim/realms/registry';
 import type { ResolvedAbility } from '../sim/sim';
 import type {
   AbilityDef,
@@ -597,7 +597,7 @@ import {
   type PlayerTooltipModel,
   playerTooltipHtml,
 } from './player_tooltip_view';
-import { hydratePortraits, portraitChipHtml } from './portrait_chip';
+import { characterPortraitUrl, hydratePortraits, portraitChipHtml } from './portrait_chip';
 import { procAuraConsumeSelfNoteText, procAuraGainSelfNoteText } from './proc_fct_notes';
 import { buildProcOverlay } from './proc_overlay_dom';
 import { attachOverlayDrag } from './proc_overlay_drag';
@@ -5208,9 +5208,30 @@ export class Hud {
     // A mech wearer IS the mech in the world, the frame must agree, and their
     // `skin` is a chroma index that means nothing to the class atlas.
     const mech = isMechWearer(self);
-    const look = self && !mech ? modularLookFor(self) : null;
-    if (self && mech) this.portraits.drawMech(canvas, skin, cls);
-    else if (self && look)
+    if (self && mech) {
+      this.portraits.drawMech(canvas, skin, cls);
+      return;
+    }
+    // A realm body (visualKeyFor resolves to something other than the class
+    // rigs) must be the face the frame shows: try the pre-rendered portrait
+    // png published beside the body GLB (an OPTIMISATION; no realm ships them
+    // today), then render the very body the world renderer draws. Resolving
+    // the face any other way is how the frame ended up showing the KayKit
+    // class rig for a player standing there on a realm body.
+    const bodyKey = self ? visualKeyFor(self) : null;
+    if (self && bodyKey && !bodyKey.startsWith('player_')) {
+      const bodyUrl = characterPortraitUrl(resolveActiveRealmId(), self.realmHeroId, cls);
+      const drawBody = () => this.portraits.drawVisual(canvas, bodyKey, cls, skin);
+      if (bodyUrl) {
+        this.portraits.drawHeadshot(canvas, bodyUrl, drawBody);
+        return;
+      }
+      drawBody();
+      return;
+    }
+    // Composed base-game characters paint their own face, hair and colours.
+    const look = self ? modularLookFor(self) : null;
+    if (self && look)
       this.portraits.drawModularPlayer(canvas, modularKeyFor(self), look, cls, skin);
     else this.portraits.drawClass(canvas, cls, skin);
   }
@@ -5224,11 +5245,19 @@ export class Hud {
     const target = this.targetPortraitSubject;
     if (!target) return;
     if (target.kind === 'player') {
-      this.portraits.drawClass(
-        this.targetPortraitEl,
-        target.templateId as PlayerClass,
-        target.skin ?? 0,
-      );
+      const cls = target.templateId as PlayerClass;
+      const skin = target.skin ?? 0;
+      // Same resolution as the player frame: the published png when it exists,
+      // otherwise render the entity's own world body (visualKeyFor), never the
+      // bare class rig.
+      const bodyUrl = characterPortraitUrl(resolveActiveRealmId(), target.realmHeroId, cls);
+      const drawBody = () =>
+        this.portraits.drawVisual(this.targetPortraitEl, visualKeyFor(target), cls, skin);
+      if (bodyUrl) {
+        this.portraits.drawHeadshot(this.targetPortraitEl, bodyUrl, drawBody);
+      } else {
+        drawBody();
+      }
     } else {
       const template = MOBS[target.templateId];
       const faceUrl = targetPortraitUrl(target.templateId, Boolean(template));
@@ -5255,7 +5284,17 @@ export class Hud {
     const tot = this.totPortraitSubject;
     if (!tot) return;
     if (tot.kind === 'player') {
-      this.portraits.drawClass(this.totPortraitEl, tot.templateId as PlayerClass, tot.skin ?? 0);
+      const cls = tot.templateId as PlayerClass;
+      const skin = tot.skin ?? 0;
+      // Same real-body resolution as the target frame (see drawTargetPortrait).
+      const bodyUrl = characterPortraitUrl(resolveActiveRealmId(), tot.realmHeroId, cls);
+      const drawBody = () =>
+        this.portraits.drawVisual(this.totPortraitEl, visualKeyFor(tot), cls, skin);
+      if (bodyUrl) {
+        this.portraits.drawHeadshot(this.totPortraitEl, bodyUrl, drawBody);
+      } else {
+        drawBody();
+      }
     } else {
       this.portraits.drawCrest(
         this.totPortraitEl,
@@ -16917,7 +16956,16 @@ export class Hud {
       this.sim.player.skinCatalog ?? 'class',
     );
     if (preview.visualKey !== 'player_mech') {
-      this.mountCharPreview(container, this.sim.cfg.playerClass, preview.skin, preview.visualKey);
+      // activeCharacterAppearancePreview only knows class vs mech, so its
+      // non-mech answer is always `player_<class>` — the KayKit rig. The sheet's
+      // identity chip already shows visualKeyFor(player); the doll beside it
+      // must agree.
+      this.mountCharPreview(
+        container,
+        this.sim.cfg.playerClass,
+        preview.skin,
+        visualKeyFor(this.sim.player),
+      );
       return;
     }
     if (!this.mechAssetsPromise) this.mechAssetsPromise = preloadMechAssets();
@@ -17047,6 +17095,8 @@ export class Hud {
       offhand: string | null;
       /** The inspected player's server-resolved active weapon skin (wire wsk). */
       weaponSkinId: string | null;
+      /** The body the inspected player renders on in the world. */
+      visualKey?: string;
     },
   ): void {
     const preview = activeCharacterAppearancePreview(params.cls, params.skin, params.skinCatalog);
@@ -17054,7 +17104,8 @@ export class Hud {
       this.mountSharedPreview(container, {
         cls: params.cls,
         skin: preview.skin,
-        previewKey: preview.visualKey === 'player_mech' ? preview.visualKey : undefined,
+        previewKey:
+          preview.visualKey === 'player_mech' ? preview.visualKey : (params.visualKey ?? undefined),
         mainhand: params.mainhand,
         offhand: params.offhand,
         weaponSkinId: params.weaponSkinId,
@@ -18062,6 +18113,10 @@ export class Hud {
           name,
           variant: 'sm',
           catalog: ent?.skinCatalog,
+          // With a live entity the chip shows that player's actual body; a
+          // chat-name menu for someone not in view has no entity to resolve, so
+          // it keeps the class chip.
+          visualKey: ent ? visualKeyFor(ent) : undefined,
         })
       : '';
     const label = esc(t('hudChrome.playerMenu.aiTagTitle'));
@@ -18267,7 +18322,7 @@ export class Hud {
   openInspect(pid: number): void {
     const e = this.sim.entities.get(pid);
     if (e?.kind !== 'player') return;
-    this.inspectWindow.openInspect(e, Date.now());
+    this.inspectWindow.openInspect(e, Date.now(), visualKeyFor(e));
   }
 
   /** Open the Loot Settings window: the leader gets the editable master-loot

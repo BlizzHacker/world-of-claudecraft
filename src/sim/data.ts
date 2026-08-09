@@ -246,6 +246,7 @@ import {
   ZONE1_QUEST_ORDER,
   ZONE1_QUESTS,
   ZONE1_ROADS,
+  ZONE1_WILDS_CAMPS,
   ZONE1_ZONE,
 } from './content/zone1';
 import {
@@ -259,6 +260,7 @@ import {
   ZONE2_QUEST_ORDER,
   ZONE2_QUESTS,
   ZONE2_ROADS,
+  ZONE2_WILDS_CAMPS,
   ZONE2_ZONE,
 } from './content/zone2';
 import {
@@ -271,6 +273,7 @@ import {
   ZONE3_QUEST_ORDER,
   ZONE3_QUESTS,
   ZONE3_ROADS,
+  ZONE3_WILDS_CAMPS,
   ZONE3_ZONE,
 } from './content/zone3';
 import { DUNGEON_WALL_HW, DUNGEON_WALL_X } from './dungeon_layout';
@@ -513,6 +516,11 @@ export const CAMPS: CampDef[] = [
   // The Drakelands dragonkin brood belt (v0.35 rework) arrived after the
   // knights: same append-last rule, so every camp above keeps its draws.
   ...DRAKELANDS_BROOD_CAMPS,
+  // The overworld wilds bestiary (fork asset wave) merged in after the brood
+  // belt: appended LAST per the same draw-order rule.
+  ...ZONE1_WILDS_CAMPS,
+  ...ZONE2_WILDS_CAMPS,
+  ...ZONE3_WILDS_CAMPS,
 ];
 
 // Escort quest runs (src/sim/escort.ts): defs authored per realm, merged here

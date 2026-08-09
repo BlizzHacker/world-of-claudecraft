@@ -383,7 +383,14 @@ export const ja_JP: EnTranslations = {
       "bow": "お辞儀",
       "clap": "拍手",
       "roar": "雄叫び",
-      "kneel": "ひざまずく"
+      "kneel": "ひざまずく",
+      "alert": "Alert!",
+      "lookaround": "Look Around",
+      "carry": "Heavy Load",
+      "roll": "Roll",
+      "collapse": "Collapse",
+      "shuffle": "Shuffle",
+      "shimmy": "Shimmy"
     },
     "emoteWheel": {
       "edit": "編集",
@@ -12329,6 +12336,48 @@ export const ja_JP: EnTranslations = {
       },
       "wildheart_high_priest": {
         "name": "盆地の声ズルガー"
+      },
+      "sowfield_marauder": {
+        "name": "Sowfield Marauder"
+      },
+      "brightwood_ravager": {
+        "name": "Brightwood Ravager"
+      },
+      "coppervein_savage": {
+        "name": "Coppervein Savage"
+      },
+      "reedbank_mauler": {
+        "name": "Reedbank Mauler"
+      },
+      "blackwater_reaver": {
+        "name": "Blackwater Reaver"
+      },
+      "silthollow_charger": {
+        "name": "Silthollow Charger"
+      },
+      "fenmoor_hunter": {
+        "name": "Fenmoor Hunter"
+      },
+      "drownfen_terror": {
+        "name": "Drownfen Terror"
+      },
+      "highwind_warbeast": {
+        "name": "Highwind Warbeast"
+      },
+      "cairnfell_render": {
+        "name": "Cairnfell Render"
+      },
+      "scarpfall_fury": {
+        "name": "Scarpfall Fury"
+      },
+      "frostline_scourge": {
+        "name": "Frostline Scourge"
+      },
+      "stormfell_ravener": {
+        "name": "Stormfell Ravener"
+      },
+      "talusrift_devourer": {
+        "name": "Talusrift Devourer"
       },
       "ironvein_foreman": {
         "name": "鉄脈の現場監督"

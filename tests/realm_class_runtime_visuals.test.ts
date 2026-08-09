@@ -31,8 +31,10 @@ describe('realm class runtime visuals', () => {
   it('maps only classes with playable runtime GLBs', () => {
     expect(realmClassVisualKey('Classic', 'priest')).toBe('realm_classic_female_elf');
     expect(realmClassVisualKey('Infernal', 'rogue')).toBe('realm_infernal_class_rogue');
+    // was forge_worker, barred 2026-08-08: its arms are weighted to the spine,
+    // so they hold a T-pose through every clip
     expect(realmClassVisualKey('Cryptic Realm', 'warlock')).toBe(
-      'realm_infernal_human_forge_worker',
+      'realm_infernal_human_hooded_wanderer',
     );
     expect(realmClassVisualKey('Classic', 'warlock')).toBeNull();
   });
@@ -96,7 +98,11 @@ describe('realm class runtime visuals', () => {
     ];
     const keys = classes.map((cls) => realmClassVisualKey('Cryptic Realm', cls));
 
-    expect(new Set(keys).size).toBe(classes.length);
+    // Was one distinct body per class. Six of the nine pointed at a body that
+    // fails in motion, and the civilian bank has only three survivors, so the
+    // nine share three. The prefix and no-demon rules below are unchanged -
+    // only the variety count gave way. RAISE THIS BACK as bodies are repaired.
+    expect(new Set(keys).size).toBeGreaterThanOrEqual(3);
     for (const key of keys) {
       expect(key).toMatch(/^realm_infernal_human_/);
       expect(key).not.toMatch(/bone_herald|elf|orc|demon/i);
@@ -117,10 +123,18 @@ describe('realm class runtime visuals', () => {
     ];
     const keys = classes.map((cls) => realmClassVisualKey('Infernal', cls));
 
-    expect(new Set(keys).size).toBe(classes.length);
+    // Was one distinct body per class; seven of the nine failed the 2026-08-08
+    // render audit, so the nine share the five that passed. RAISE THIS BACK.
+    expect(new Set(keys).size).toBeGreaterThanOrEqual(5);
     for (const key of keys) {
       expect(key).toMatch(/^realm_infernal_class_/);
-      expect(key).not.toMatch(/dark_paladin|bone_herald|demon|behemoth|skullbeast/i);
+      // The exclusion list is a NAME check standing in for "no monster body".
+      // "Demon Hunter" is a hunter OF demons - a canonical human archetype in
+      // INFERNAL_HERO_CLASSES - and one of only three class bodies that
+      // survived the audit, so it is named rather than cast out.
+      if (key !== 'realm_infernal_class_demon_hunter') {
+        expect(key).not.toMatch(/dark_paladin|bone_herald|demon|behemoth|skullbeast/i);
+      }
     }
   });
 });

@@ -15,9 +15,15 @@ import {
   type PortraitFraming,
   playerPortraitDataUrl,
   portraitsReady,
+  requestVisualPortrait,
   visualPortraitDataUrl,
 } from '../render/characters/portrait';
+import {
+  infernalCharacterSelection,
+  infernalHeroOverrideKeys,
+} from '../sim/realms/infernal_classes';
 import type { PlayerClass, SkinCatalog } from '../sim/types';
+import { firstRealmVisualOverride } from './cryptic/realm_visual_overrides';
 import { esc } from './esc';
 import { t } from './i18n';
 import { iconDataUrl } from './icons';
@@ -59,6 +65,47 @@ export interface PortraitChipOpts {
    *  class-atlas index, and any `look` is ignored (the world shows the mech,
    *  so the chip must too). */
   catalog?: SkinCatalog;
+  /** A ready-made portrait image URL — the real-body png published beside a
+   *  hero GLB (see {@link characterPortraitUrl}). Wins over the crest and the
+   *  rendered 3D class/visual portraits; a failed load reverts to that
+   *  pre-existing flow via the module-level error listener below. */
+  imageUrl?: string | null;
+}
+
+/** Portrait render published next to a body GLB (same basename, .png) — the
+ *  create-screen convention (realmHeroPortraitUrl in main.ts delegates here). */
+export function portraitUrlForBodyAsset(assetUrl: string | null | undefined): string | null {
+  if (!assetUrl || !/\.glb$/i.test(assetUrl)) return null;
+  return assetUrl.replace(/\.glb$/i, '.png');
+}
+
+/**
+ * The real-body portrait png for a character, or null when it has no
+ * reassigned realm body. Resolution mirrors overrideVisualKeyForEntity
+ * (render/characters/manifest.ts) and the create screen's infernalClassChoice:
+ * the realm's operator overrides are consulted for the hero id, then the hero
+ * display name, then — for a hidden hero variant — its canonical selection's
+ * id and name, then the base class, and the winning body's GLB url maps to
+ * the portrait png published beside it. Never loads a GLB — callers keep their
+ * crest/class-portrait fallback for a missing override or a 404ing png.
+ * `realm` must be the id the overrides were installed under (the active realm
+ * id: realmContentForCharacterUi().id at char-select, resolveActiveRealmId()
+ * in world).
+ */
+export function characterPortraitUrl(
+  realm: string | null | undefined,
+  realmHeroId: string | null | undefined,
+  cls: PlayerClass,
+): string | null {
+  if (!realm) return null;
+  const selection = infernalCharacterSelection(realm, realmHeroId ?? null, cls);
+  const override = firstRealmVisualOverride(
+    realm,
+    selection
+      ? [...infernalHeroOverrideKeys(realm, selection), `class:${cls}`]
+      : [`class:${cls}`],
+  );
+  return override ? portraitUrlForBodyAsset(override.assetUrl) : null;
 }
 
 /** Class crest data URL — the placeholder before the 3D portrait is ready and
@@ -81,67 +128,129 @@ export function portraitChipHtml(opts: PortraitChipOpts): string {
     look = null,
     catalog = 'class',
     visualKey,
+    imageUrl,
   } = opts;
   const mech = catalog === 'mech';
   // A composed chip is never `deferSource`: that path re-derives the URL in
   // hydratePortraits from data attributes alone, and a look does not fit in
   // one. It is only used for dense repeated grids of OTHER players anyway.
+  // A resolved realm body wins over the class default: the class portrait is
+  // always the KayKit model, which is not who the player is looking at.
+  const bodyPortrait =
+    !mech && !look && visualKey ? visualPortraitDataUrl(visualKey, skin, framing) : null;
   const portrait = mech
     ? visualPortraitDataUrl('player_mech', skin, framing)
     : look
       ? modularPortraitDataUrl(modularVisualKey(cls), look, framing)
       : visualKey
-        ? (visualPortraitDataUrl(visualKey, skin, framing) ?? playerPortraitDataUrl(cls, skin, framing))
+        ? (bodyPortrait ?? playerPortraitDataUrl(cls, skin, framing))
         : deferSource
           ? null
           : playerPortraitDataUrl(cls, skin, framing);
-  const src = deferSource ? null : (portrait ?? crestUrl(cls));
-  const source = src ? ` src="${src}"` : '';
-  const pending = portrait && !deferSource ? '' : ' data-portrait-pending="1"';
-  const fallbackCls = portrait && !deferSource ? '' : ' is-fallback';
+  // A published real-body portrait image beats both; if it 404s the module
+  // error listener below reverts the chip to the crest/3D-portrait flow.
+  const src = deferSource ? null : (imageUrl ?? portrait ?? crestUrl(cls));
+  const source = src ? ` src="${esc(src)}"` : '';
+  const external = imageUrl ? ' data-portrait-external="1"' : '';
+  // "Pending" covers three cases: no portrait at all (crest placeholder), a
+  // deferred source, AND a realm body whose GLB is not resident yet, where
+  // `portrait` above silently became the KayKit class rig. Only flagging the
+  // first is why a reassigned character kept a stock face for the life of the
+  // page — hydratePortraits was never invited to look at it again.
+  const needsBody = !mech && !look && !!visualKey && !bodyPortrait;
+  const pending =
+    !imageUrl && (needsBody || !portrait || deferSource) ? ' data-portrait-pending="1"' : '';
+  const fallbackCls = imageUrl || (portrait && !deferSource) ? '' : ' is-fallback';
   const alt = esc(t('character.portraitAlt', { name }));
   const badgeHtml = badge
     ? `<img class="portrait-badge" src="${crestUrl(cls)}" alt="" aria-hidden="true" draggable="false">`
     : '';
   return (
-    `<span class="portrait-chip portrait-${variant}${fallbackCls}" data-class="${cls}" data-cls="${cls}" data-skin="${skin}" data-catalog="${catalog}" data-framing="${framing}"${visualKey ? ` data-visual="${visualKey}"` : ''}${pending}>` +
+    `<span class="portrait-chip portrait-${variant}${fallbackCls}" data-class="${cls}" data-cls="${cls}" data-skin="${skin}" data-catalog="${catalog}" data-framing="${framing}"${visualKey ? ` data-visual="${visualKey}"` : ''}${external}${pending}>` +
     `<span class="portrait-ring"><img class="portrait-img"${source} alt="${alt}" loading="lazy" decoding="async" draggable="false"></span>` +
     badgeHtml +
     `</span>`
   );
 }
 
-/** Swap any still-pending placeholder chips under `root` for the real 3D
- *  portrait. Safe to call repeatedly; a no-op until assets are ready. */
+/** Paint `url` into a chip and mark it settled. */
+function settleChip(chip: HTMLElement, url: string): void {
+  const img = chip.querySelector<HTMLImageElement>('.portrait-img');
+  if (img) img.src = url;
+  chip.classList.remove('is-fallback');
+  chip.removeAttribute('data-portrait-pending');
+}
+
+/**
+ * Swap any still-pending chip under `root` for the real 3D portrait.
+ *
+ * The chip's own body (`data-visual`) is authoritative — it is the key the WORLD
+ * renders that character on. This used to ignore data-visual entirely and always
+ * paint `playerPortraitDataUrl(cls)`, so the one function whose whole job was to
+ * upgrade a placeholder actively OVERWROTE a correct realm portrait with the
+ * KayKit class rig. When the body is not resident the class headshot still shows
+ * immediately (no blank chip), but the chip stays pending and the GLB is fetched
+ * so the real face lands a moment later. Safe to call repeatedly.
+ */
 export function hydratePortraits(
   root: ParentNode = document,
   onlyClass?: PlayerClass,
   onlySkin?: number,
 ): void {
   if (!portraitsReady()) return;
-  root.querySelectorAll<HTMLElement>('.portrait-chip[data-portrait-pending]').forEach((chip) => {
-    const cls = chip.dataset.cls as PlayerClass | undefined;
-    if (!cls) return;
-    const skin = Number(chip.dataset.skin ?? 0) || 0;
-    if (onlyClass && (cls !== onlyClass || skin !== onlySkin)) return;
-    const framing = (chip.dataset.framing as PortraitFraming | undefined) ?? 'headshot';
-    const url =
-      chip.dataset.catalog === 'mech'
-        ? visualPortraitDataUrl('player_mech', skin, framing)
-        : chip.dataset.visual
-          ? (visualPortraitDataUrl(chip.dataset.visual, skin, framing) ??
-            playerPortraitDataUrl(cls, skin, framing))
-          : playerPortraitDataUrl(cls, skin, framing);
-    if (!url) return;
-    const img = chip.querySelector<HTMLImageElement>('.portrait-img');
-    if (img) {
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      img.src = url;
-    }
-    chip.classList.remove('is-fallback');
-    chip.removeAttribute('data-portrait-pending');
-  });
+  root
+    .querySelectorAll<HTMLElement>(
+      '.portrait-chip[data-portrait-pending]:not([data-portrait-external])',
+    )
+    .forEach((chip) => {
+      const cls = chip.dataset.cls as PlayerClass | undefined;
+      if (!cls) return;
+      const skin = Number(chip.dataset.skin ?? 0) || 0;
+      if (onlyClass && (cls !== onlyClass || skin !== onlySkin)) return;
+      const framing = (chip.dataset.framing as PortraitFraming | undefined) ?? 'headshot';
+      if (chip.dataset.catalog === 'mech') {
+        const url = visualPortraitDataUrl('player_mech', skin, framing);
+        if (url) settleChip(chip, url);
+        return;
+      }
+      const visualKey = chip.dataset.visual;
+      if (visualKey) {
+        const body = visualPortraitDataUrl(visualKey, skin, framing);
+        if (body) {
+          settleChip(chip, body);
+          return;
+        }
+        // Stand the class rig in so the row is not blank, but leave the chip
+        // pending: the real body is on its way.
+        const stand = playerPortraitDataUrl(cls, skin, framing);
+        if (stand) {
+          const img = chip.querySelector<HTMLImageElement>('.portrait-img');
+          if (img) img.src = stand;
+          chip.classList.remove('is-fallback');
+        }
+        if (chip.dataset.portraitLoading) return;
+        chip.dataset.portraitLoading = '1';
+        void requestVisualPortrait(visualKey, skin, framing).then((url) => {
+          delete chip.dataset.portraitLoading;
+          // The chip may have been re-rendered onto a different character while
+          // the GLB was in flight; only paint if it still wants this body.
+          if (url && chip.isConnected && chip.dataset.visual === visualKey) settleChip(chip, url);
+        });
+        return;
+      }
+      const url = playerPortraitDataUrl(cls, skin, framing);
+      if (url) settleChip(chip, url);
+    });
+}
+
+/** Re-arm every body-backed chip under `root` and repaint it. Call after the
+ *  operator's overrides change: the chip's `data-visual` may now name a
+ *  different GLB, and a settled chip is otherwise never looked at again. */
+export function refreshPortraits(root: ParentNode = document): void {
+  root
+    .querySelectorAll<HTMLElement>('.portrait-chip[data-visual]')
+    .forEach((chip) => chip.setAttribute('data-portrait-pending', '1'));
+  hydratePortraits(root);
 }
 
 // Once the GLBs finish loading, upgrade every placeholder currently on screen.
@@ -150,3 +259,42 @@ onPortraitUpdate((visualKey, skin) => {
   if (!visualKey.startsWith('player_')) return;
   hydratePortraits(document, visualKey.slice('player_'.length) as PlayerClass, skin);
 });
+
+// A real-body portrait image (data-portrait-external) that fails to load falls
+// back to the pre-existing behavior: the rendered 3D portrait when available,
+// else the class crest (upgraded later by hydratePortraits). Image error
+// events do not bubble, so listen in the capture phase; one listener covers
+// every chip on the page. Guarded so importing this module outside a DOM
+// (vitest node env) stays safe.
+if (typeof document !== 'undefined') {
+  document.addEventListener(
+    'error',
+    (ev) => {
+      const img = ev.target;
+      if (!(img instanceof HTMLImageElement) || !img.classList.contains('portrait-img')) return;
+      const chip = img.closest<HTMLElement>('.portrait-chip[data-portrait-external]');
+      if (!chip) return;
+      chip.removeAttribute('data-portrait-external');
+      const cls = chip.dataset.cls as PlayerClass | undefined;
+      if (!cls) return;
+      const skin = Number(chip.dataset.skin ?? 0) || 0;
+      const framing = (chip.dataset.framing as PortraitFraming | undefined) ?? 'headshot';
+      const visualKey = chip.dataset.visual;
+      const url = visualKey ? visualPortraitDataUrl(visualKey, skin, framing) : null;
+      if (url) {
+        img.src = url;
+        return;
+      }
+      // No resident body: paint the best stand-in we have RIGHT NOW and re-arm
+      // the chip so hydratePortraits fetches the real body. This is the live
+      // path in practice — no realm publishes the sibling portrait png that
+      // characterPortraitUrl points at, so every external chip lands here.
+      const stand = playerPortraitDataUrl(cls, skin, framing);
+      img.src = stand ?? crestUrl(cls);
+      if (!stand) chip.classList.add('is-fallback');
+      chip.setAttribute('data-portrait-pending', '1');
+      hydratePortraits(chip.parentElement ?? document);
+    },
+    true,
+  );
+}

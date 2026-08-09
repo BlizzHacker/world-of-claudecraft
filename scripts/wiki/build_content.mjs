@@ -1001,13 +1001,13 @@ export interface GuideDungeon {
   name?: string;
 }
 
-export interface GuideWarlockPet { id: string; name: string; model: string; tint?: string; tintStrength?: number; still?: string; }
+export interface GuideWarlockPet { id: string; name: string; model: string | null; tint?: string; tintStrength?: number; still?: string; }
 
 // Druid shapeshift forms. Unnamed on purpose: the gallery labels them with guide.models.form*
 // keys so the names localize like the rest of the picker chrome.
-export interface GuideDruidForm { id: string; model: string; tint?: string; tintStrength?: number; still?: string; }
+export interface GuideDruidForm { id: string; model: string | null; tint?: string; tintStrength?: number; still?: string; }
 
-export interface GuideCreature { name: string; min: number; max: number; rare: boolean; templateId: string; model: string; tint?: string; tintStrength?: number; still?: string; }
+export interface GuideCreature { name: string; min: number; max: number; rare: boolean; templateId: string; model: string | null; tint?: string; tintStrength?: number; still?: string; }
 export interface GuideFamily { family: string; creatures: GuideCreature[]; }
 
 export interface GuideDelveKeeper { name: string; title: string; }

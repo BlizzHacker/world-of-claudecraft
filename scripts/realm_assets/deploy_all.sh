@@ -25,7 +25,13 @@ for r in infernal classic dominion arcane fps arcadevoid crypticrealm claudecraf
       bt=$(stat -c %Y "$d/dist-server/server.cjs")
       if [ "$st" -ge "$bt" ]; then echo "SKIP $r/$s (already current)"; ok=$((ok+1)); continue; fi
     fi
-    git -C "$d" checkout --detach "$SHA" >/dev/null 2>&1 || { echo "SKIP $r/$s (checkout)"; fail=$((fail+1)); continue; }
+    # -f, because the BUILD dirties the worktree it just built in: `npm run build`
+    # regenerates tracked artifacts (src/guide/content.generated.ts among them),
+    # so every ring is left with local modifications and the NEXT deploy's plain
+    # checkout is refused. That is not hypothetical - it failed all 36 rings at
+    # once, silently, reporting only "SKIP (checkout)". A stage worktree holds no
+    # work worth keeping; the sha is the whole truth here.
+    git -C "$d" checkout -f --detach "$SHA" >/dev/null 2>&1 || { echo "SKIP $r/$s (checkout)"; fail=$((fail+1)); continue; }
     if ( cd "$d" && timeout 1800 npm run build >"/tmp/d_${r}_$s.log" 2>&1 \
          && timeout 900 npm run build:server >>"/tmp/d_${r}_$s.log" 2>&1 ); then
       systemctl restart "cryptic-realm-stage@$r-$s" 2>/dev/null

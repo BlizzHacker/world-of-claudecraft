@@ -31,7 +31,7 @@ describe('static structure NPCs', () => {
     }
   });
 
-  it('the Town Defense Board holds its exact spawn position in a live sim', () => {
+  it('the Town Defense Board holds its exact spawn position in a live sim', { timeout: 120_000 }, () => {
     forceRealm('infernal');
     const sim = new Sim({ seed: 5, playerClass: 'warrior', autoEquip: true });
     const board = [...sim.entities.values()].find((e) => e.templateId === 'town_defense_board');

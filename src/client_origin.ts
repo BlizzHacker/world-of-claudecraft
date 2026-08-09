@@ -18,8 +18,24 @@ export const NATIVE_API_ORIGIN =
 export const DESKTOP_APP = isDesktopAppRuntime();
 export const DESKTOP_API_ORIGIN = DESKTOP_APP ? runtimeApiOrigin() : '';
 
+// The Xbox/console shell serves the packaged client from https://app.local,
+// which is only a file host: there is no server there. VITE_API_ORIGIN is the
+// intended way to point the packaged build at the real site (build:native), but
+// a dist built without it ships NATIVE_API_ORIGIN empty, the base falls back to
+// location.host (app.local), and every REST/WebSocket call fails with
+// "Connection to the server was lost." Detecting the packaged host at runtime
+// makes the online path work regardless of how the dist was built. Offline play
+// never opens a socket, so it is unaffected; on the website location.hostname is
+// the real site and this stays empty.
+const PACKAGED_APP_HOST = 'app.local';
+export const PACKAGED_API_ORIGIN =
+  typeof location !== 'undefined' && location.hostname === PACKAGED_APP_HOST
+    ? 'https://crypticrealm.com'
+    : '';
+
 export function apiUrl(path: string, base = ''): string {
   if (/^https?:\/\//.test(path)) return path;
-  const origin = normalizeOrigin(base) || NATIVE_API_ORIGIN || DESKTOP_API_ORIGIN;
+  const origin =
+    normalizeOrigin(base) || NATIVE_API_ORIGIN || DESKTOP_API_ORIGIN || PACKAGED_API_ORIGIN;
   return origin ? `${origin}${path}` : path;
 }

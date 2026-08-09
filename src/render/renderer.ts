@@ -337,6 +337,7 @@ import { projectionScalePixels } from './perceptual_lod_core';
 import { resolveDirectPickEntityId } from './pick_resolution';
 import { PlacedAssetsView } from './placed_assets';
 import { type PlayerAuraRingInput, PlayerAuraRings } from './player_aura_rings';
+import { RealmDecorView } from './realm_decor';
 import {
   applyPointLightBudget,
   flickerContributingFireLights,
@@ -1675,6 +1676,7 @@ export class Renderer {
   // never asked for the view (the shipped game with the built-in world).
   private placedAssetsView: PlacedAssetsView | null = null;
   private jailScene: JailSceneView;
+  private realmDecorView: RealmDecorView | null = null;
   private foliage: FoliageView;
   private fish: FishView;
   private motes: MotesView;
@@ -2215,6 +2217,19 @@ export class Renderer {
     // dome shader cross-fades the same textures). The raw equirects carry
     // the unclamped sun that the dome shader tames with per-biome gain, so
     // the environment intensity is rescaled to match the shipped look.
+    //
+    // There is deliberately NO `else` branch. three r165 applies scene.environment
+    // only to standard/physical materials -- three.module.js does
+    //   const environment = material.isMeshStandardMaterial ? scene.environment : null;
+    // -- and the low tier is precisely the tier that has no standard materials:
+    // GFX.standardMaterials is false there (gfx.ts), so props, terrain, foliage and
+    // every character material are built as MeshLambertMaterial. Seeding an env map
+    // on this path would therefore light nothing at all, while still paying a PMREM
+    // render plus a session-lifetime render target on exactly the weak devices the
+    // tier exists for. Low tier buys back the missing IBL in the light rig instead:
+    // hemisphere 0.98 vs 0.45 and sun 2.65 vs 2.8 just below, plus
+    // applyLowReadabilityLift() in characters/assets.ts. If low tier ever looks too
+    // dark, move those numbers -- adding an IBL here is measurably a no-op.
     if (!LOW_GFX) {
       // Phone WebKit keeps only the spawn biome PMREM for the session. The on-device
       // diagnostic showed that the old deferred second PMREM was followed by a process
@@ -2587,6 +2602,22 @@ export class Renderer {
       this.placedAssetsView = new PlacedAssetsView(placements, this.sim.cfg.seed);
       setRenderCategory(this.placedAssetsView.group, 'props');
       this.scene.add(this.placedAssetsView.group);
+    }
+
+    // Automatic realm decoration: the shipped realm asset store, placed by
+    // src/sim/realm_decor.ts. Deterministic in (realm, seed), cosmetic only (no
+    // colliders, no entities), and LAZY — the catalogue is a dynamic import and
+    // the GLBs stream in over idle slots, so nothing here gates world entry.
+    // Custom editor maps opt out: their author already placed what they wanted.
+    if (!this.sim.cfg.world) {
+      const decor = new RealmDecorView(this.sim.cfg.seed);
+      this.realmDecorView = decor;
+      setRenderCategory(decor.group, 'props');
+      this.scene.add(decor.group);
+      void decor.start(getActiveRealm().id, this.sim.cfg.seed).catch(() => {
+        // Decoration is cosmetic: a failed catalogue chunk or GLB must never
+        // take the world down with it.
+      });
     }
 
     this.jailScene = buildJailScene(this.sim.cfg.seed);
@@ -4100,7 +4131,11 @@ export class Renderer {
           maxPointLights: GFX.maxPointLights,
           activePointLights: this.effectivePointLights || GFX.maxPointLights,
           shadowMap: GFX.shadowMap,
-          nativeIosMemoryProfile: GFX.nativeIosMemoryProfile,
+          // A console browser has the same hard ceiling as phone WebKit, so it
+          // takes the constrained prewarm budget too. Reading the iOS-specific
+          // flag here left Xbox on the desktop budget: 12s and up to 72 views,
+          // measured at 59 views and 247 texture uploads on a real console.
+          nativeIosMemoryProfile: GFX.boundedResidency,
         },
       },
       autoGovernor: GFX.autoGovernor,
@@ -4746,6 +4781,7 @@ export class Renderer {
       dt,
       this.reducedMotion(),
     );
+    this.realmDecorView?.update(this.camera.position.x, this.camera.position.z, fogFar);
     this.eastbrookTownView.update(
       this.camera.position.x,
       this.camera.position.y,
@@ -5078,6 +5114,14 @@ export class Renderer {
         if (performance.now() >= deadline) return { group, visualCount: idx };
         const color = CLASSES[cls]?.color ?? 0xffffff;
         const entity = this.prewarmEntity('player', cls, color, 1, skin, -11_000 - idx);
+        // The mob and NPC prewarm passes already skip lazy models; this one did
+        // not, and an admin body override is enough to route a plain class here:
+        // visualKeyFor consults the override map first, so `player_spiritborn`
+        // resolves to a realm bank body whose GLB is deliberately absent from
+        // the boot sweep. Building it throws "character asset not preloaded" and
+        // the entity is dropped for the whole session — the live-view path is
+        // what fetches these, on demand.
+        if (isVisualLazy(visualKeyFor(entity))) continue;
         const visual = createCharacterVisual(entity);
         // assets unavailable: skip the seed
         if (!visual) continue;
@@ -11038,6 +11082,7 @@ export class Renderer {
       dt,
       this.reducedMotion(),
     );
+    this.realmDecorView?.update(this.camera.position.x, this.camera.position.z, fogFar);
     this.eastbrookTownView.update(
       this.camera.position.x,
       this.camera.position.y,

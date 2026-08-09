@@ -24,16 +24,20 @@ describe('builder prop key validation', () => {
   });
 
   it.each([
-    undefined,
-    null,
-    0,
-    true,
-    {},
-    [],
-    ['well'],
-  ])('rejects a non-string client value', (value) => {
-    expect(isValidBuilderPropKey(value)).toBe(false);
+    'realm:classic/buildings/abandoned_manor_019a5964',
+    'realm:fps/vehicles/alien_rover_deluxe_x_019f5155',
+    'realm:arcadevoid/mechs/ancient_mech_walker_x_019c01e2',
+    'realm:crypticrealm/props/a_cocktail_01955245',
+  ])('accepts the realm-store prop ID %s', (key) => {
+    expect(isValidBuilderPropKey(key)).toBe(true);
   });
+
+  it.each([undefined, null, 0, true, {}, [], ['well']])(
+    'rejects a non-string client value',
+    (value) => {
+      expect(isValidBuilderPropKey(value)).toBe(false);
+    },
+  );
 
   it.each([
     '',
@@ -60,6 +64,13 @@ describe('builder prop key validation', () => {
     'library:piktura/0123456789abcdef0123456',
     'library:piktura/0123456789abcdef012345678',
     'library:piktura/0123456789abcdef01234567/extra',
+    'realm:classic/../secret/x',
+    'realm:classic/buildings/../../etc/passwd',
+    'realm:classic/review/data_classic',
+    'realm:CLASSIC/props/x',
+    'realm:classic/props/a/b',
+    'realm:classic/props/',
+    'realm:/props/x',
   ])('rejects the unsafe or unknown prop ID %s', (key) => {
     expect(isValidBuilderPropKey(key)).toBe(false);
   });

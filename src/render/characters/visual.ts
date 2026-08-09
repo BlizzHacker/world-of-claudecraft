@@ -342,6 +342,20 @@ function tipFadedWeaponGeometry(
   return geometry;
 }
 
+// Live-instance registry behind the `__crAnim()` console hook: every active
+// visual reports which clips resolved and which action is playing right now.
+// Diagnosis surface for "this body does not animate" reports - a screenshot
+// cannot distinguish a missing action from a stalled state machine; this can.
+const LIVE_VISUALS = new Set<CharacterVisual>();
+declare global {
+  interface Window {
+    __crAnim?: () => unknown[];
+  }
+}
+if (typeof window !== 'undefined') {
+  window.__crAnim = () => [...LIVE_VISUALS].map((v) => v.animDebug());
+}
+
 export class CharacterVisual {
   /** add to the entity group; pivot at feet, faces +Z; renderer applies e.scale */
   readonly root = new THREE.Group();
@@ -536,16 +550,18 @@ export class CharacterVisual {
     // wearer class's independent mainhand and offhand layout.
     // Override only the held-item layout on a shallow def clone, leaving the rest of
     // the def (clips/height/tint) intact and never mutating the shared cached def.
-    const resolvedDef = resolveClipMap(prep.def.clips, [...prep.clips.keys()]);
+    const resolvedClips = resolveClipMap(prep.def.clips, [...prep.clips.keys()]);
     this.def = weaponOverride
       ? {
           ...prep.def,
+          clips: resolvedClips,
           attach: weaponOverride.attach,
           weaponSlots: weaponOverride.weaponSlots,
           offhandSlot: weaponOverride.offhandSlot,
         }
-      : prep.def;
+      : { ...prep.def, clips: resolvedClips };
     this.key = key;
+    LIVE_VISUALS.add(this);
     this.entityColor = entityColor;
     this.skinIndex = skinIndex;
     this.weaponItemId = weaponItemId;
@@ -1960,7 +1976,30 @@ export class CharacterVisual {
     });
   }
 
+  /** Console diagnosis payload for window.__crAnim(). */
+  animDebug(): {
+    key: string;
+    state: string;
+    current: string | null;
+    actions: string[];
+    clips: { idle: string; walk: string; run: string; attack: readonly string[] };
+  } {
+    return {
+      key: this.key,
+      state: this.baseState,
+      current: this.current?.getClip().name ?? null,
+      actions: [...this.actions.keys()],
+      clips: {
+        idle: this.def.clips.idle,
+        walk: this.def.clips.walk,
+        run: this.def.clips.run,
+        attack: this.def.clips.attack,
+      },
+    };
+  }
+
   dispose(): void {
+    LIVE_VISUALS.delete(this);
     this.disposed = true;
     this.disposeWeaponAura();
     this.disposeWeaponVfx();

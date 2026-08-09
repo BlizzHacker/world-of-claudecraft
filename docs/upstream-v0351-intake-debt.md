@@ -1,5 +1,36 @@
 # v0.35.1 intake: test-debt ledger (2026-08-09)
 
+## Addendum: the production asset-wave merge (2026-08-09, second pass)
+
+The 58-commit production wave (IP quarantines, portrait/body resolution, anim
+bank fixes, decor, the overworld wilds bestiary) merged into this branch after
+the initial intake. Reconciliation notes:
+
+- tests/parity: goldens regenerated (the appended wilds camps shift world-gen
+  draws); three scenarios re-hunted per their own documented rule
+  (hit_rating_heroic pair 1022 to 1023, master_loot 38 to 69,
+  professions_craft 5 to 25); two suite timeouts widened for the heavier
+  13-zone world, assertions unchanged.
+- Pin updates for the merged union: command_schema send/dispatch counts
+  (224/237), the S3 social-directory walk (+6 fork venue modules), the
+  hud_perf_budget options_window and unit_portrait_painter allowances (the
+  merged options window carries the fork trio plus the wave's evolution; the
+  retired requestIdleCallback name-only exception is replaced by a full
+  requestAnimationFrame drivers contract and the exception table is pinned
+  empty).
+- tests/visual_manifest.test.ts: three failures are PRE-EXISTING production
+  debt, not introduced by the merge. The tests (identical bytes on both
+  parents) expect curated bodies (npc_chronicler, mob_spearjaw, the Infernal
+  humanoid clip packs) that production's own crypticrealm crossroads routing
+  (the realm block in visualKeyFor plus infernalNpcVisualKey's role map)
+  cannot return; they fail on the production parent by code identity. The
+  merge preserves production's live rendering; reconciling the tests with the
+  crossroads routing is follow-up work.
+- The guide keeps the upstream on-disk-GLB guarantee: realm-store bodies bake
+  model: null (type widened to string | null, consumers null-guard) rather
+  than a /cr-realms/ URL no public checkout can serve; six orphaned mob_wolf
+  stills deleted with their figures.
+
 The one-jump intake of upstream release/v0.35.1 into the asset-pipeline line was
 reconciled to a measurably healthier state than the production parent, without
 reaching full suite green. This file is the honest ledger so nobody re-derives it.

@@ -19,6 +19,7 @@
 // (optionally ONLY=<mobId,mobId> to re-render a subset).
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import * as esbuild from 'esbuild';
@@ -152,6 +153,7 @@ const MIME = {
   '.json': 'application/json',
   '.gltf': 'model/gltf+json',
 };
+const REALM_STORE_ROOT = process.env.CR_REALM_STORE || '/opt/cr-realms-store';
 const server = http.createServer(async (req, res) => {
   const url = decodeURIComponent((req.url || '/').split('?')[0]);
   if (url === '/__portraits.html') {
@@ -164,8 +166,21 @@ const server = http.createServer(async (req, res) => {
     res.end(bundleJs);
     return;
   }
-  const filePath = path.normalize(path.join(publicDir, url));
-  if (filePath !== publicDir && !filePath.startsWith(publicDir + path.sep)) {
+  // Realm GLBs are gitignored and ship out-of-band into the asset store, so
+  // public/ only ever holds a partial mirror (no creatures/ at all). Production
+  // serves /cr-realms from that store; do the same here, or every creature
+  // portrait 404s on a file that is present on disk.
+  const roots = url.startsWith('/cr-realms/') ? [publicDir, REALM_STORE_ROOT] : [publicDir];
+  let filePath = null;
+  for (const root of roots) {
+    const candidate = path.normalize(path.join(root, url.startsWith('/cr-realms/') && root === REALM_STORE_ROOT
+      ? url.slice('/cr-realms'.length)
+      : url));
+    if (candidate !== root && !candidate.startsWith(root + path.sep)) continue;
+    filePath = candidate;
+    if (existsSync(candidate)) break;
+  }
+  if (!filePath) {
     res.statusCode = 403;
     res.end('forbidden');
     return;

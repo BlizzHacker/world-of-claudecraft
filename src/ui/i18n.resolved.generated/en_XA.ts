@@ -383,7 +383,14 @@ export const en_XA: EnTranslations = {
       "bow": "[Ɓóŵ]",
       "clap": "[Çļáþ]",
       "roar": "[Ŕóáŕ]",
-      "kneel": "[Ķñééļ]"
+      "kneel": "[Ķñééļ]",
+      "alert": "[Áļéŕţ!]",
+      "lookaround": "[Ļóóķ Áŕóúñð]",
+      "carry": "[Ĥéáʋý Ļóáð]",
+      "roll": "[Ŕóļļ]",
+      "collapse": "[Çóļļáþšé]",
+      "shuffle": "[Šĥúƒƒļé]",
+      "shimmy": "[Šĥíɱɱý]"
     },
     "emoteWheel": {
       "edit": "[Éðíţ]",
@@ -12329,6 +12336,48 @@ export const en_XA: EnTranslations = {
       },
       "wildheart_high_priest": {
         "name": "[Žúļĝáŕ, Ʋóíçé óƒ ţĥé Ɓášíñ]"
+      },
+      "sowfield_marauder": {
+        "name": "[Šóŵƒíéļð Ɱáŕáúðéŕ]"
+      },
+      "brightwood_ravager": {
+        "name": "[Ɓŕíĝĥţŵóóð Ŕáʋáĝéŕ]"
+      },
+      "coppervein_savage": {
+        "name": "[Çóþþéŕʋéíñ Šáʋáĝé]"
+      },
+      "reedbank_mauler": {
+        "name": "[Ŕééðƀáñķ Ɱáúļéŕ]"
+      },
+      "blackwater_reaver": {
+        "name": "[Ɓļáçķŵáţéŕ Ŕéáʋéŕ]"
+      },
+      "silthollow_charger": {
+        "name": "[Šíļţĥóļļóŵ Çĥáŕĝéŕ]"
+      },
+      "fenmoor_hunter": {
+        "name": "[Ƒéñɱóóŕ Ĥúñţéŕ]"
+      },
+      "drownfen_terror": {
+        "name": "[Ðŕóŵñƒéñ Ţéŕŕóŕ]"
+      },
+      "highwind_warbeast": {
+        "name": "[Ĥíĝĥŵíñð Ŵáŕƀéášţ]"
+      },
+      "cairnfell_render": {
+        "name": "[Çáíŕñƒéļļ Ŕéñðéŕ]"
+      },
+      "scarpfall_fury": {
+        "name": "[Šçáŕþƒáļļ Ƒúŕý]"
+      },
+      "frostline_scourge": {
+        "name": "[Ƒŕóšţļíñé Šçóúŕĝé]"
+      },
+      "stormfell_ravener": {
+        "name": "[Šţóŕɱƒéļļ Ŕáʋéñéŕ]"
+      },
+      "talusrift_devourer": {
+        "name": "[Ţáļúšŕíƒţ Ðéʋóúŕéŕ]"
       },
       "ironvein_foreman": {
         "name": "[Íŕóñʋéíñ Ƒóŕéɱáñ]"

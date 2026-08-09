@@ -61,6 +61,15 @@ export type InfernalCharacterVisualKey =
   | 'realm_cryptic_bone_herald'
   | 'realm_infernal_skullbeast';
 
+export interface InfernalHeroVariant {
+  /** Short user-facing label for the card's segmented toggle (e.g. 'Female'). */
+  readonly label: string;
+  /** A REAL selection id: the variant exists in the selections list as a hidden
+   *  entry (flagged variantOf), so create validation and body resolution treat
+   *  it exactly like any other selection. */
+  readonly heroId: string;
+}
+
 export interface InfernalCharacterSelection {
   readonly id: string;
   readonly name: string;
@@ -69,6 +78,15 @@ export interface InfernalCharacterSelection {
   /** Any registered visual key. Was narrowed to the infernal union while this
    *  roster was infernal-only; every realm now supplies its own bodies. */
   readonly visualKey: string;
+  /** Presentation variants of this canonical card (canonical entries only).
+   *  The card renders a compact segmented toggle; picking one submits the
+   *  variant's own id as the character's realmHeroId. */
+  readonly variants?: readonly InfernalHeroVariant[];
+  /** Set on hidden variant selections: the canonical selection id this variant
+   *  presents under. Hidden entries never render as their own creator card and
+   *  resolve to the canonical body until an override for their own
+   *  `hero:<id>` key is published. */
+  readonly variantOf?: string;
 }
 
 const entry = (
@@ -133,6 +151,35 @@ export const INFERNAL_HERO_CLASSES: readonly InfernalHeroClass[] = [
   entry('The Sundering', 'Wizard', 'mage'),
 ];
 
+/**
+ * COMPILED FALLBACK ONLY - this is not what the creator screen usually shows.
+ *
+ * infernalClassChoice() resolves `hero:<id>` / `hero:<name>` through the live
+ * override document FIRST and only falls back to this table (see
+ * realm_class_presentation.ts). As of 2026-08-08 sixteen of the eighteen cards
+ * carry a published override, so for those cards this map is dead code until
+ * someone clears the override.
+ *
+ * That matters because the two are drawn from DIFFERENT banks. The overrides
+ * point at `realm_infernal_hero_*.glb` - large Meshy rig+animate bodies with a
+ * 6-clip pack (Idle/Walk/Run/Attack/Hit/Death and NO emote) - while this table
+ * points at the 10-clip `infernal_class_*` bank. They are different files with
+ * different faults, and a body judged in one bank says nothing about the other.
+ * The 2026-08-08 render audit swept only the class bank, which is why the
+ * Blood Knight shipped broken: its class body passes, and its hero body (the one
+ * players actually saw) tears its forearms into tubes in Walk and shreds in
+ * Attack. Render the asset the card RESOLVES to, not the key it names.
+ *
+ * OUTSTANDING DEBT: eleven entries below (Sorcerer, Amazon, Barbarian,
+ * Necromancer, Druid, Assassin, Wizard, Crusader, Spiritborn, Warlock, Tempest)
+ * still name a body in INFERNAL_DEFECTIVE_CLASS_BODY_KEYS. They are harmless
+ * today only because an override shadows every one of them - clearing any of
+ * those overrides puts a scarecrow back on that card. They are deliberately NOT
+ * repointed here: the class bank has only about three intact bodies, so honest
+ * fallbacks would collapse eleven archetypes onto three and destroy the variety
+ * the cards exist for. Repairing the bank is the fix; Paladin was repointed
+ * because it had no override to hide behind.
+ */
 const HERO_VISUALS: Readonly<Record<string, InfernalCharacterVisualKey>> = {
   Warrior: 'realm_infernal_class_warrior',
   Rogue: 'realm_infernal_class_rogue',
@@ -140,7 +187,12 @@ const HERO_VISUALS: Readonly<Record<string, InfernalCharacterVisualKey>> = {
   Amazon: 'realm_infernal_class_amazon',
   Barbarian: 'realm_infernal_class_barbarian',
   Necromancer: 'realm_infernal_class_necromancer',
-  Paladin: 'realm_infernal_class_paladin',
+  // was realm_infernal_class_paladin. That body tears both feet into long pale
+  // planks through Attack (rendered and confirmed 2026-08-08), and Paladin was
+  // the ONE card with no override at all, so the broken fallback was what the
+  // creator screen actually served. A `hero:infernal-hero-paladin` override now
+  // points at a library knight; this keeps the fallback on a body that passed.
+  Paladin: 'realm_infernal_class_blood_knight',
   Druid: 'realm_infernal_class_druid',
   Assassin: 'realm_infernal_class_assassin',
   'Demon Hunter': 'realm_infernal_class_demon_hunter',
@@ -152,6 +204,18 @@ const HERO_VISUALS: Readonly<Record<string, InfernalCharacterVisualKey>> = {
   Warlock: 'realm_infernal_class_warlock',
   'Blood Knight': 'realm_infernal_class_blood_knight',
   Tempest: 'realm_infernal_class_tempest',
+};
+
+/** Presentation variants per canonical selection name. Adding an entry here is
+ *  the ONLY step needed to give any hero card a variant toggle: each heroId
+ *  becomes a real hidden selection automatically (same class/faction/visual)
+ *  and resolves to the canonical body until a body override for its own
+ *  `hero:<id>` key is published. */
+const HERO_VARIANTS: Readonly<Record<string, readonly InfernalHeroVariant[]>> = {
+  'Sorcerer / Sorceress': [
+    { label: 'Female', heroId: 'infernal-hero-sorceress' },
+    { label: 'Male', heroId: 'infernal-hero-sorcerer-m' },
+  ],
 };
 
 const HELL_SELECTIONS: readonly Omit<InfernalCharacterSelection, 'id'>[] = [
@@ -205,6 +269,28 @@ export function infernalSelectionId(side: 'heaven' | 'hell', name: string): stri
   return `infernal-${side === 'hell' ? 'hell' : 'hero'}-${slug}`;
 }
 
+/** Push a canonical selection plus, when HERO_VARIANTS names it, the hidden
+ *  selection behind each of its variants. */
+function pushWithVariants(
+  selections: InfernalCharacterSelection[],
+  selection: InfernalCharacterSelection,
+): void {
+  const variants = HERO_VARIANTS[selection.name];
+  if (!variants || variants.length === 0) {
+    selections.push(selection);
+    return;
+  }
+  selections.push({ ...selection, variants });
+  for (const variant of variants) {
+    selections.push({
+      ...selection,
+      id: variant.heroId,
+      name: `${selection.name} (${variant.label})`,
+      variantOf: selection.id,
+    });
+  }
+}
+
 function buildSelections(): InfernalCharacterSelection[] {
   const selections: InfernalCharacterSelection[] = [];
   const seen = new Set<string>();
@@ -214,7 +300,7 @@ function buildSelections(): InfernalCharacterSelection[] {
     const visualKey = HERO_VISUALS[name];
     if (!visualKey) continue;
     seen.add(name);
-    selections.push({
+    pushWithVariants(selections, {
       id: infernalSelectionId('heaven', name),
       name,
       engineClass: source.engineClass,
@@ -223,7 +309,7 @@ function buildSelections(): InfernalCharacterSelection[] {
     });
   }
   for (const enemy of HELL_SELECTIONS) {
-    selections.push({
+    pushWithVariants(selections, {
       ...enemy,
       id: infernalSelectionId('hell', enemy.name),
     });
@@ -283,4 +369,25 @@ export function infernalCharacterSelection(
       (selection) => selection.id === selectionId && selection.engineClass === engineClass,
     ) ?? null
   );
+}
+
+/**
+ * Ordered `hero:` override-lookup keys for a selection. A hidden variant that
+ * has no published body of its own resolves through the canonical selection it
+ * presents under (id, then display name), so a variant is selectable before
+ * its body exists and simply shows the canonical body until then.
+ */
+export function infernalHeroOverrideKeys(
+  realm: string,
+  selection: Pick<InfernalCharacterSelection, 'id' | 'name' | 'variantOf'>,
+): string[] {
+  const keys = [`hero:${selection.id}`, `hero:${selection.name}`];
+  if (selection.variantOf) {
+    keys.push(`hero:${selection.variantOf}`);
+    const canonical = infernalCharacterSelectionsForRealm(realm).find(
+      (candidate) => candidate.id === selection.variantOf,
+    );
+    if (canonical && canonical.name !== selection.name) keys.push(`hero:${canonical.name}`);
+  }
+  return keys;
 }

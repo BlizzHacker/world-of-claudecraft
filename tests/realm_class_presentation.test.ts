@@ -131,7 +131,11 @@ describe('realm class presentation', () => {
 
   it('exposes one version-neutral human hero card per Infernal archetype', () => {
     const choices = infernalHeroChoicesForRealm(getRealm('infernal'));
-    const heroes = choices.filter((choice) => choice.factionSide === 'heaven');
+    // Hidden variant entries (variantOf) back a card's Female/Male toggle and
+    // never render as cards; the card-grid invariants ignore them.
+    const heroes = choices.filter(
+      (choice) => choice.factionSide === 'heaven' && !choice.variantOf,
+    );
 
     expect(heroes.map((choice) => [choice.name, choice.baseClass])).toEqual(
       INFERNAL_HERO_ARCHETYPES,
@@ -172,6 +176,25 @@ describe('realm class presentation', () => {
     ).toBe(true);
     expect(new Set(heroes.map((choice) => choice.assetUrl)).size).toBe(heroes.length);
     expect(new Set(baseChoices.map((choice) => choice.assetUrl)).size).toBe(baseChoices.length);
+  });
+
+  it('models hero variants as hidden selections that fall back to the canonical body', () => {
+    const choices = infernalHeroChoicesForRealm(getRealm('infernal'));
+    const canonical = choices.find(
+      (choice) => choice.heroId === 'infernal-hero-sorcerer-sorceress',
+    );
+    expect(canonical?.variantOf).toBeUndefined();
+    expect(canonical?.variants).toEqual([
+      { label: 'Female', heroId: 'infernal-hero-sorceress' },
+      { label: 'Male', heroId: 'infernal-hero-sorcerer-m' },
+    ]);
+    for (const variant of canonical?.variants ?? []) {
+      const hidden = choices.find((choice) => choice.heroId === variant.heroId);
+      expect(hidden?.variantOf, variant.heroId).toBe('infernal-hero-sorcerer-sorceress');
+      expect(hidden?.baseClass, variant.heroId).toBe('mage');
+      // No body of its own yet: it presents the canonical card's compiled asset.
+      expect(hidden?.assetUrl, variant.heroId).toBe(canonical?.assetUrl);
+    }
   });
 
   it('keeps distinct demon and corrupted previews on the Hell side only', () => {

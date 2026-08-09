@@ -104,6 +104,13 @@ export const hudChromeStrings = {
     clap: 'Clap',
     roar: 'Roar',
     kneel: 'Kneel',
+    alert: 'Alert!',
+    lookaround: 'Look Around',
+    carry: 'Heavy Load',
+    roll: 'Roll',
+    collapse: 'Collapse',
+    shuffle: 'Shuffle',
+    shimmy: 'Shimmy',
   },
   emoteWheel: {
     edit: 'Edit',

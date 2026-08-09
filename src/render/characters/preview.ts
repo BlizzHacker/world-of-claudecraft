@@ -3,7 +3,12 @@ import * as THREE from 'three';
 import { CLASSES } from '../../sim/data';
 import type { PlayerClass } from '../../sim/types';
 import { trackWebGLContext } from '../context_release';
-import { mechAssetsReady, preloadMechAssets } from './assets';
+import {
+  mechAssetsReady,
+  preloadMechAssets,
+  preloadVisualAssets,
+  visualAssetsReady,
+} from './assets';
 import { modularVisualKey, VISUALS, type WeaponLayoutOverride } from './manifest';
 import {
   type ArmorLoadout,
@@ -11,6 +16,7 @@ import {
   type ModularLook,
   modularBuildSignature,
 } from './modular';
+import { chooseExternalPreviewClipName } from './preview_clip';
 import {
   appearanceSignature,
   type PreviewAppearance,
@@ -19,7 +25,6 @@ import {
 import { PREVIEW_FRAMING, type PreviewFramingName } from './preview_framing';
 import { characterPreviewFrameVisible, resolveCharacterPreviewPolicy } from './preview_policy';
 import { CharacterVisual } from './visual';
-import { chooseExternalPreviewClipName } from './preview_clip';
 import { loadGltf } from '../assets/loader';
 export type ExternalPreviewState = 'idle' | 'loading' | 'ready' | 'error';
 
@@ -142,6 +147,9 @@ export class CharacterPreview {
   private appearanceSig: string | null = null;
   /** Look handed to the next modular rebuild (setVisualKey reads it back). */
   private pendingLook: ModularLook | null = null;
+  // The body key most recently ASKED for, which is not the mounted one while a
+  // lazy GLB is in flight. An arriving fetch only mounts if it still matches.
+  private requestedVisualKey: string | null = null;
   private clock = new THREE.Clock();
   private animationFrameId: number | null = null;
   private resizeObserver: ResizeObserver | null = null;
@@ -264,16 +272,20 @@ export class CharacterPreview {
       return;
     }
     const v = previewAppearanceVisual(a);
+    // setVisualKey fetches a non-resident body and mounts it on arrival, which
+    // leaves the turntable EMPTY for the length of that fetch when nothing was
+    // mounted before — the first roster click on char-select. Stand the class
+    // rig up first, exactly as the mech branch above does, so the panel is never
+    // blank; the real body replaces it and a failure leaves something up.
+    if (!visualAssetsReady(v.visualKey)) {
+      this.setVisualKey(`player_${a.cls}`, v.weaponItemId, null, v.offhandItemId);
+    }
     this.setVisualKey(v.visualKey, v.weaponItemId, v.weaponOverride, v.offhandItemId);
     // setVisualKey is intentionally idempotent. If only the skin changed, keep
     // the warm rig and update its shared material bindings in place.
     this.currentVisual?.setSkin(a.skin);
   }
 
-  /** Set the active model by raw visual key (e.g. `player_mech` for the cosmetic
-   *  turntable). The asset must already be loaded — callers preload first.
-   *  `weaponOverride` lets a cosmetic body adopt a class hand layout (including
-   *  shields and dual wield), matching the in-world render. */
   /** Show the composed modular body (character creation's live turntable) for
    *  a class: its modular def carries the class clips and hand layout, and the
    *  starter weapons default from the class. Any change to gender/hair/brows/
@@ -304,6 +316,19 @@ export class CharacterPreview {
     this.currentVisual?.applyModularSliders(app);
   }
 
+  /**
+   * Set the active model by raw visual key (e.g. `player_mech` for the cosmetic
+   * turntable). `weaponOverride` lets a cosmetic body adopt a class hand layout
+   * (including shields and dual wield), matching the in-world render.
+   *
+   * A body whose GLB is not resident is FETCHED and mounted when it arrives,
+   * rather than throwing into the catch below. That throw ("character asset not
+   * preloaded") is silent to the user — it just leaves the previous body on the
+   * turntable — and every realm body and every operator-assigned override GLB is
+   * `lazyPreload`, so it fired for exactly the characters that have a real body.
+   * On char-select the survivor was the class rig: the KayKit mini. The requested
+   * key is tracked so a newer selection landing mid-fetch always wins.
+   */
   setVisualKey(
     visualKey: string,
     weaponItemId: string | null = null,
@@ -311,6 +336,25 @@ export class CharacterPreview {
     offhandItemId: string | null = null,
   ): void {
     if (this.destroyed) return;
+    this.requestedVisualKey = visualKey;
+    // A composed modular body builds synchronously from its parts; only a
+    // single-GLB body (realm bodies, operator overrides) takes the lazy fetch.
+    if (!VISUALS[visualKey]?.modular && !visualAssetsReady(visualKey)) {
+      // An external model requested while this body is in flight must win: the
+      // rebuild below calls clearExternalModel, so a late arrival would other-
+      // wise wipe a create-screen preview that loaded in the meantime.
+      const extToken = this.externalLoadToken;
+      void preloadVisualAssets(visualKey)
+        .then(() => {
+          if (this.destroyed || this.requestedVisualKey !== visualKey) return;
+          if (this.externalLoadToken !== extToken) return;
+          this.setVisualKey(visualKey, weaponItemId, weaponOverride, offhandItemId);
+        })
+        .catch((err) => {
+          console.error(`Failed to load preview character body ${visualKey}:`, err);
+        });
+      return;
+    }
     const look = VISUALS[visualKey]?.modular ? this.pendingLook : null;
     const nextSig = JSON.stringify([
       visualKey,
@@ -321,6 +365,8 @@ export class CharacterPreview {
     ]);
     if (this.currentVisual && this.currentVisualSig === nextSig) return;
     this.closeupCache.clear();
+    this.clearExternalModel();
+    // Clean up current visual if it exists
     if (this.currentVisual) {
       // CharacterVisual keeps shared geometry/material caches but owns its
       // mixer and cloned skeleton bone textures, so a genuine replacement must

@@ -282,7 +282,7 @@ function warlockPetsHtml(): string {
   const items = GUIDE_WARLOCK_PETS.map(
     (pet) => `
       <li class="guide-pet">
-        ${modelViewerEmbed({ modelKey: pet.model, tint: pet.tint, name: pet.name, still: pet.still })}
+        ${pet.model ? modelViewerEmbed({ modelKey: pet.model, tint: pet.tint, name: pet.name, still: pet.still }) : ''}
         <span class="guide-pet-name">${esc(pet.name)}</span>
         <span class="guide-pet-line">${esc(t(`guide.petHook.${pet.id}` as TranslationKey))}</span>
       </li>`,

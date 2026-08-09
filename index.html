@@ -53,7 +53,16 @@
 
 <!-- Cloudflare Turnstile (bot gate on login/registration). Rendered explicitly
      by src/main.ts only when VITE_TURNSTILE_SITEKEY is configured. -->
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+  // Web only. The packaged console app is served from app.local and has no
+  // server to protect with a captcha; loading it there just fails offline.
+  if (location.hostname !== 'app.local') {
+    var ts = document.createElement('script');
+    ts.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    ts.async = true; ts.defer = true;
+    document.head.appendChild(ts);
+  }
+</script>
 
 <!-- Canonical URL -->
 <link rel="canonical" href="https://crypticrealm.com/" />
@@ -161,11 +170,10 @@
 <link rel="preload" as="image" href="/cryptic-realm-loading-bg.webp" />
 <link rel="preload" as="image" href="./ui/cursors/gauntlet.png" />
 <link rel="preload" as="image" href="./ui/cursors/arrow.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..700&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="/fonts/fonts.css" rel="stylesheet">
 <!-- Google tag (gtag.js) - skipped on localhost so dev sessions don't pollute analytics -->
 <script>
+  if (location.hostname !== 'app.local') {
   if (!['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)) {
     const s = document.createElement('script');
     s.async = true;
@@ -176,13 +184,16 @@
     gtag('js', new Date());
     gtag('config', 'G-BR5Z7GT7C2');
   }
+  }
 </script>
 <!-- Meta Pixel Code - skipped on localhost so dev sessions don't pollute analytics -->
 <script>
+  if (location.hostname !== 'app.local') {
   if (!['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)) {
     !((f,b,e,v,n,t,s)=> {if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1692101265042180');
     fbq('track', 'PageView');
+  }
   }
 </script>
 <!-- End Meta Pixel Code -->

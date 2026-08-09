@@ -58,6 +58,8 @@ function creatureOptions(): ModelOption[] {
   const all: ModelOption[] = [];
   for (const f of GUIDE_FAMILIES) {
     for (const c of f.creatures) {
+      // Realm-store bodies bake no on-disk GLB (model: null); text-only entry.
+      if (!c.model) continue;
       all.push({
         modelKey: c.model,
         name: c.name,
@@ -78,22 +80,34 @@ const FORM_NAME: Record<string, TranslationKey> = {
 };
 
 function formOptions(): ModelOption[] {
-  return GUIDE_DRUID_FORMS.map((f) => ({
-    modelKey: f.model,
-    name: t(FORM_NAME[f.id] ?? 'guide.models.groupForms'),
-    tint: f.tint,
-    still: f.still,
-  }));
+  return GUIDE_DRUID_FORMS.flatMap((f) =>
+    f.model
+      ? [
+          {
+            modelKey: f.model,
+            name: t(FORM_NAME[f.id] ?? 'guide.models.groupForms'),
+            tint: f.tint,
+            still: f.still,
+          },
+        ]
+      : [],
+  );
 }
 
 function petOptions(): ModelOption[] {
   return dedupeByModel(
-    GUIDE_WARLOCK_PETS.map((p) => ({
-      modelKey: p.model,
-      name: p.name,
-      tint: p.tint,
-      still: p.still,
-    })),
+    GUIDE_WARLOCK_PETS.flatMap((p) =>
+      p.model
+        ? [
+            {
+              modelKey: p.model,
+              name: p.name,
+              tint: p.tint,
+              still: p.still,
+            },
+          ]
+        : [],
+    ),
   );
 }
 

@@ -67,13 +67,13 @@ export interface GuideDungeon {
   name?: string;
 }
 
-export interface GuideWarlockPet { id: string; name: string; model: string; tint?: string; tintStrength?: number; still?: string; }
+export interface GuideWarlockPet { id: string; name: string; model: string | null; tint?: string; tintStrength?: number; still?: string; }
 
 // Druid shapeshift forms. Unnamed on purpose: the gallery labels them with guide.models.form*
 // keys so the names localize like the rest of the picker chrome.
-export interface GuideDruidForm { id: string; model: string; tint?: string; tintStrength?: number; still?: string; }
+export interface GuideDruidForm { id: string; model: string | null; tint?: string; tintStrength?: number; still?: string; }
 
-export interface GuideCreature { name: string; min: number; max: number; rare: boolean; templateId: string; model: string; tint?: string; tintStrength?: number; still?: string; }
+export interface GuideCreature { name: string; min: number; max: number; rare: boolean; templateId: string; model: string | null; tint?: string; tintStrength?: number; still?: string; }
 export interface GuideFamily { family: string; creatures: GuideCreature[]; }
 
 export interface GuideDelveKeeper { name: string; title: string; }
@@ -2183,6 +2183,22 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "still": "/guide-stills/mob_boar__935116.webp"
       },
       {
+        "name": "Sowfield Marauder",
+        "min": 3,
+        "max": 4,
+        "rare": false,
+        "templateId": "sowfield_marauder",
+        "model": null
+      },
+      {
+        "name": "Brightwood Ravager",
+        "min": 4,
+        "max": 5,
+        "rare": false,
+        "templateId": "brightwood_ravager",
+        "model": null
+      },
+      {
         "name": "Old Greyjaw",
         "min": 4,
         "max": 4,
@@ -2192,15 +2208,20 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "still": "/guide-stills/greyjaw.webp"
       },
       {
+        "name": "Coppervein Savage",
+        "min": 5,
+        "max": 6,
+        "rare": false,
+        "templateId": "coppervein_savage",
+        "model": null
+      },
+      {
         "name": "Void Stalker",
         "min": 5,
         "max": 6,
         "rare": false,
         "templateId": "void_stalker",
-        "model": "mob_wolf",
-        "tint": "#2f2a44",
-        "tintStrength": 0.35,
-        "still": "/guide-stills/mob_wolf__2f2a44__s35.webp"
+        "model": null
       },
       {
         "name": "Mire Prowler",
@@ -2208,10 +2229,23 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 8,
         "rare": false,
         "templateId": "mire_prowler",
-        "model": "mob_wolf",
-        "tint": "#4d5656",
-        "tintStrength": 0.35,
-        "still": "/guide-stills/mob_wolf__4d5656__s35.webp"
+        "model": null
+      },
+      {
+        "name": "Reedbank Mauler",
+        "min": 8,
+        "max": 9,
+        "rare": false,
+        "templateId": "reedbank_mauler",
+        "model": null
+      },
+      {
+        "name": "Blackwater Reaver",
+        "min": 9,
+        "max": 10,
+        "rare": false,
+        "templateId": "blackwater_reaver",
+        "model": null
       },
       {
         "name": "Bog Bloat",
@@ -2225,15 +2259,44 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "still": "/guide-stills/mob_murloc__6b8e23__s45.webp"
       },
       {
+        "name": "Silthollow Charger",
+        "min": 10,
+        "max": 11,
+        "rare": false,
+        "templateId": "silthollow_charger",
+        "model": null
+      },
+      {
+        "name": "Fenmoor Hunter",
+        "min": 11,
+        "max": 12,
+        "rare": false,
+        "templateId": "fenmoor_hunter",
+        "model": null
+      },
+      {
+        "name": "Drownfen Terror",
+        "min": 12,
+        "max": 13,
+        "rare": false,
+        "templateId": "drownfen_terror",
+        "model": null
+      },
+      {
         "name": "Ridge Stalker",
         "min": 13,
         "max": 14,
         "rare": false,
         "templateId": "ridge_stalker",
-        "model": "mob_wolf",
-        "tint": "#8c8270",
-        "tintStrength": 0.35,
-        "still": "/guide-stills/mob_wolf__8c8270__s35.webp"
+        "model": null
+      },
+      {
+        "name": "Highwind Warbeast",
+        "min": 14,
+        "max": 15,
+        "rare": false,
+        "templateId": "highwind_warbeast",
+        "model": null
       },
       {
         "name": "Veiled Doe",
@@ -2245,6 +2308,14 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "still": "/guide-stills/mob_veiled_doe.webp"
       },
       {
+        "name": "Cairnfell Render",
+        "min": 15,
+        "max": 16,
+        "rare": false,
+        "templateId": "cairnfell_render",
+        "model": null
+      },
+      {
         "name": "Veiled Stag",
         "min": 15,
         "max": 16,
@@ -2254,15 +2325,28 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "still": "/guide-stills/mob_veiled_stag.webp"
       },
       {
+        "name": "Scarpfall Fury",
+        "min": 16,
+        "max": 17,
+        "rare": false,
+        "templateId": "scarpfall_fury",
+        "model": null
+      },
+      {
+        "name": "Frostline Scourge",
+        "min": 17,
+        "max": 18,
+        "rare": false,
+        "templateId": "frostline_scourge",
+        "model": null
+      },
+      {
         "name": "Snowdrift Wolf",
         "min": 17,
         "max": 18,
         "rare": false,
         "templateId": "snowdrift_wolf",
-        "model": "mob_wolf",
-        "tint": "#eef4f8",
-        "tintStrength": 0.35,
-        "still": "/guide-stills/mob_wolf__eef4f8__s35.webp"
+        "model": null
       },
       {
         "name": "Gilded Stag",
@@ -2287,15 +2371,28 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "still": "/guide-stills/mob_fox__d87838__s35.webp"
       },
       {
+        "name": "Stormfell Ravener",
+        "min": 18,
+        "max": 19,
+        "rare": false,
+        "templateId": "stormfell_ravener",
+        "model": null
+      },
+      {
+        "name": "Talusrift Devourer",
+        "min": 18,
+        "max": 19,
+        "rare": false,
+        "templateId": "talusrift_devourer",
+        "model": null
+      },
+      {
         "name": "Terrace Howler",
         "min": 19,
         "max": 20,
         "rare": false,
         "templateId": "terrace_howler",
-        "model": "mob_wolf",
-        "tint": "#9db4c8",
-        "tintStrength": 0.35,
-        "still": "/guide-stills/mob_wolf__9db4c8__s35.webp"
+        "model": null
       },
       {
         "name": "Moonfleece Grazer",
@@ -2369,10 +2466,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 20,
         "rare": false,
         "templateId": "topiary_wolf",
-        "model": "mob_wolf",
-        "tint": "#4a8a4e",
-        "tintStrength": 0.35,
-        "still": "/guide-stills/mob_wolf__4a8a4e__s35.webp"
+        "model": null
       }
     ]
   },

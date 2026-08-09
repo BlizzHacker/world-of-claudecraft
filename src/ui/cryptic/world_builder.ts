@@ -341,8 +341,11 @@ export function openWorldBuilderDock(): void {
         res = await fetch('/api/forged-props', { credentials: 'same-origin' });
         data = await res.json();
         items = (Array.isArray(data.props) ? data.props : []).map(
-          (asset: { key: string; name: string; group?: string }) => ({
-            placeKey: `forged:${asset.key}`,
+          (asset: { key: string; name: string; group?: string; placeKey?: string }) => ({
+            // The catalog now mixes uploaded `forged:` GLBs with the shipped
+            // realm store's `realm:` ones, so the row carries its own key; the
+            // fallback keeps an older server (which sends none) working.
+            placeKey: asset.placeKey || `forged:${asset.key}`,
             name: asset.name,
             group: asset.group || 'forged',
           }),

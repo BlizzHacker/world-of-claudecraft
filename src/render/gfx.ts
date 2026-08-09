@@ -16,6 +16,11 @@ import {
   patchPbrRimGlowFragmentShader,
 } from './pbr_fragment_shader';
 import { isSoftwareRendererName } from './software_renderer';
+import {
+  consoleGenerationFrom,
+  consoleNeedsConstrainedMemory,
+} from '../game/console_generation';
+import { setBoundedResidency } from './characters/residency';
 
 // Quality tiers: every tier-dependent knob keys off this module instead of
 // scattered LOW_GFX ternaries.
@@ -100,6 +105,11 @@ export interface GfxRuntimeHints {
   /** 4 GB-class device or a fresh entry-crash marker (src/device_memory_hint.ts). */
   tightMemory?: boolean;
   platform?: 'ios' | 'android' | 'other';
+  /** Game console browser (Xbox). Desktop-class hints, console-class budget. */
+  xboxConsole?: boolean;
+  /** Console model stamped by the packaged shell (data-console); absent in a
+   *  plain console browser, which then takes the cautious generation. */
+  consoleModel?: string;
   graphicsPreset?: number;
   terrainDetail?: number;
   foliageDensity?: number;
@@ -215,6 +225,9 @@ export interface GfxSettings {
   readonly constrainedMemory: boolean;
   /** Packaged iOS WKWebView profile that bounds retained GPU resources independently of FPS. */
   readonly nativeIosMemoryProfile: boolean;
+  /** Hard resident-memory ceiling: iOS WebKit, or a console browser sandbox.
+   *  Distinct from constrainedMemory, which only sheds per-frame cost. */
+  readonly boundedResidency: boolean;
   /** Global cap for inactive skinned character rigs retained for reuse. */
   readonly maxPooledCharacterVisuals: number;
   /** Global cap for inactive ground-object views (harvest nodes, loot, quest pickups) retained for reuse. */
@@ -934,6 +947,12 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
   // while either native WKWebView or iOS Safari can stamp the same marker after
   // a foreground entry kill. Both WebKit hosts share the WebContent ceiling.
   const tightMemoryProfile = hints?.platform === 'ios' && hints?.tightMemory === true;
+  // A console browser has the SAME hard resident-memory ceiling as iOS WebKit:
+  // an Xbox One X reports SBOX_FATAL_MEMORY_EXCEEDED and the page dies on world
+  // entry. constrainedMemory only sheds per-frame cost (MSAA, shadow texels,
+  // DPR); the ceiling is about allocations the governor cannot reclaim once
+  // made, so the console takes the bounded-residency path too.
+  const boundedResidency = nativeIosMemoryProfile || hints?.xboxConsole === true;
   // Phone-class browsers live under a hard per-process memory ceiling (iOS WebKit evicts the
   // WebContent process outright); shed the largest one-shot GPU allocations there. Shadow-map
   // texels, MSAA, and DPR are cosmetic sharpness only, so this never crosses the
@@ -945,6 +964,8 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
       maxTouchPoints: hints?.maxTouchPoints ?? 0,
       coarsePointer: hints?.coarsePointer ?? false,
       narrowViewport: hints?.narrowViewport ?? false,
+      xboxConsole: hints?.xboxConsole ?? false,
+      consoleModel: hints?.consoleModel,
     });
   const aaPolicy = gfxAaPolicy(tier, {
     constrainedMemory,
@@ -959,17 +980,18 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
     bucketBaselines: bucketBaselines(bucketBands),
     budget: GFX_BUDGETS[tier],
     autoGovernor: shouldUseAutoGovernor(tier, hints?.search ?? ''),
-    composer: !nativeIosMemoryProfile && gfxTierAtLeast(tier, 'high'),
-    gradePass: !nativeIosMemoryProfile && gfxTierAtLeast(tier, 'medium'),
+    composer: !boundedResidency && gfxTierAtLeast(tier, 'high'),
+    gradePass: !boundedResidency && gfxTierAtLeast(tier, 'medium'),
     // N8AO runs on the composer tiers: half-res + Low quality on high keeps
     // it ~1ms-class on real GPUs; ultra and insane get full-res Medium
-    ao: !nativeIosMemoryProfile && gfxTierAtLeast(tier, 'high'),
-    msaaSamples: aaPolicy.msaaSamples,
-    pixelRatioCap: aaPolicy.pixelRatioCap,
+    ao: !boundedResidency && gfxTierAtLeast(tier, 'high'),
+    msaaSamples: boundedResidency ? 0 : aaPolicy.msaaSamples,
+    // The console ceiling caps DPR harder than any browser profile (1.25).
+    pixelRatioCap: boundedResidency ? Math.min(1.25, aaPolicy.pixelRatioCap) : aaPolicy.pixelRatioCap,
     // Shadows are cosmetic and duplicate the visible scene draw. Both constrained browsers and
     // the stricter native-iOS residency profile remove that duplicate pass.
     dynamicShadows: tier !== 'low' && !constrainedMemory,
-    shadowMap: nativeIosMemoryProfile
+    shadowMap: boundedResidency
       ? 1024
       : tier === 'low'
         ? 2048
@@ -980,24 +1002,24 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
           : constrainedMemory
             ? 2048
             : 4096,
-    standardMaterials: !nativeIosMemoryProfile && gfxTierAtLeast(tier, 'medium'),
+    standardMaterials: !boundedResidency && gfxTierAtLeast(tier, 'medium'),
     // Round-10 detail-knob defaults (see the interface comment): High takes the
     // existing Advanced-Medium profile to bound its steady cost (basic worn
     // surface, reduced carpet, cavity-only relief). Ultra retains the full
     // 3-tap layers; Insane remains the 4-tap everything-on showcase.
-    surfaceDetail: !nativeIosMemoryProfile && gfxTierAtLeast(tier, 'high'),
+    surfaceDetail: !boundedResidency && gfxTierAtLeast(tier, 'high'),
     surfaceDetailTaps: tier === 'insane' ? 4 : gfxTierAtLeast(tier, 'ultra') ? 3 : 0,
     surfaceDetailClampK: tier === 'insane' ? 1 : tier === 'ultra' ? 0.85 : 0,
-    bladeCarpetRadius: nativeIosMemoryProfile
+    bladeCarpetRadius: boundedResidency
       ? 0
       : gfxTierAtLeast(tier, 'ultra')
         ? 34
         : tier === 'high'
           ? 24
           : 0,
-    cliffScree: !nativeIosMemoryProfile && gfxTierAtLeast(tier, 'ultra'),
-    canopyDetail: !nativeIosMemoryProfile && gfxTierAtLeast(tier, 'ultra'),
-    terrainRelief: nativeIosMemoryProfile
+    cliffScree: !boundedResidency && gfxTierAtLeast(tier, 'ultra'),
+    canopyDetail: !boundedResidency && gfxTierAtLeast(tier, 'ultra'),
+    terrainRelief: boundedResidency
       ? 0
       : gfxTierAtLeast(tier, 'ultra')
         ? 3
@@ -1006,16 +1028,16 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
           : 0,
     aoFullRes: gfxTierAtLeast(tier, 'ultra'),
     smaa: aaPolicy.postAa === 'smaa',
-    bloom: !nativeIosMemoryProfile && gfxTierAtLeast(tier, 'high'),
+    bloom: !boundedResidency && gfxTierAtLeast(tier, 'high'),
     terrainCastShadows: tier !== 'low' && !constrainedMemory,
-    lowPlus: tier === 'low' || nativeIosMemoryProfile,
+    lowPlus: tier === 'low' || boundedResidency,
     // Tree and rock placement must match across clients because those decorations
     // occlude world sightlines. Keep the constrained profile on the full placement
     // set and reduce only non-occluding grass below.
     leanFoliage: tier === 'low' || (tier === 'medium' && weakIntegratedGpu),
     grassRadius: tightMemoryProfile
       ? 34
-      : nativeIosMemoryProfile
+      : boundedResidency
         ? 52
         : tier === 'low'
           ? 80
@@ -1026,7 +1048,7 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
             : 82,
     grassStep: tightMemoryProfile
       ? 3.8
-      : nativeIosMemoryProfile
+      : boundedResidency
         ? 2.75
         : tier === 'low'
           ? 2.05
@@ -1035,7 +1057,7 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
               ? 2.35
               : 2.0
             : 1.8,
-    farGrassDensityFloor: nativeIosMemoryProfile
+    farGrassDensityFloor: boundedResidency
       ? 0.5
       : constrainedMemory
         ? 0.55
@@ -1048,12 +1070,13 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
               : tier === 'ultra'
                 ? 0.75
                 : 0.8,
-    terrainSplat: !nativeIosMemoryProfile && gfxTierAtLeast(tier, 'medium'),
+    terrainSplat: !boundedResidency && gfxTierAtLeast(tier, 'medium'),
     windSway: true,
-    maxPointLights: nativeIosMemoryProfile ? 2 : constrainedMemory ? 3 : 6,
+    maxPointLights: boundedResidency ? 2 : constrainedMemory ? 3 : 6,
     constrainedMemory,
     nativeIosMemoryProfile,
     tightMemory: tightMemoryProfile,
+    boundedResidency,
     // Every OTHER budget in this function falls back through constrainedMemory (the
     // cross-platform touch/coarse-pointer/narrow-viewport/deviceMemory detector, see
     // maxPointLights above) before reaching its desktop default; this one used to jump
@@ -1067,7 +1090,7 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
     // GPU skeleton re-upload hitch pooling exists for, without growing without bound.
     maxPooledCharacterVisuals: tightMemoryProfile
       ? 4
-      : nativeIosMemoryProfile
+      : boundedResidency
         ? 6
         : constrainedMemory
           ? 24
@@ -1082,7 +1105,7 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
     // maxPooledCharacterVisuals above; desktop keeps the historical unbounded pool.
     maxPooledObjects: tightMemoryProfile
       ? 4
-      : nativeIosMemoryProfile
+      : boundedResidency
         ? 6
         : constrainedMemory
           ? 24
@@ -1091,7 +1114,7 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
     // memory profiles and the low tier (which includes software GL) opt out and
     // keep the straight-to-frozen far LOD.
     farCharacterAnimScale:
-      tier === 'low' || constrainedMemory || nativeIosMemoryProfile ? 1 : FAR_ANIM_RANGE_SCALE_MAX,
+      tier === 'low' || constrainedMemory || boundedResidency ? 1 : FAR_ANIM_RANGE_SCALE_MAX,
     vistaTier: tier,
     waterTier: tier,
   };
@@ -1364,6 +1387,11 @@ function runtimeHints(): GfxRuntimeHints {
     ...runtimeDeviceHints(),
     search: typeof location !== 'undefined' ? location.search : '',
     gpuRenderer: probeGpuRenderer(),
+    xboxConsole: typeof navigator !== 'undefined' && /\bXbox\b/i.test(navigator.userAgent),
+    consoleModel:
+      typeof document !== 'undefined'
+        ? (document.documentElement.dataset.console ?? undefined)
+        : undefined,
     graphicsPreset: storedNumericSetting('graphicsPreset'),
     terrainDetail: storedNumericSetting('terrainDetail'),
     foliageDensity: storedNumericSetting('foliageDensity'),
@@ -1397,9 +1425,25 @@ function mobilePlatformFromNavigator(
 export function isConstrainedBrowser(
   hints: Pick<
     GfxRuntimeHints,
-    'deviceMemory' | 'maxTouchPoints' | 'coarsePointer' | 'narrowViewport'
+    | 'deviceMemory'
+    | 'maxTouchPoints'
+    | 'coarsePointer'
+    | 'narrowViewport'
+    | 'xboxConsole'
+    | 'consoleModel'
   >,
 ): boolean {
+  // A console reports desktop-class memory and cores. On an Xbox One the
+  // browser is sandboxed on 2017 silicon driving a 4K panel and the desktop
+  // heuristics resolve far too high, but a Series X has the headroom for
+  // the normal budget, so the two generations are separated rather than
+  // both being pinned to phone-class settings.
+  if (hints.xboxConsole) {
+    return consoleNeedsConstrainedMemory(
+      consoleGenerationFrom(hints.consoleModel),
+      true,
+    );
+  }
   if (hints.deviceMemory !== undefined && hints.deviceMemory <= 4) return true;
   return hints.maxTouchPoints > 0 && (hints.coarsePointer || hints.narrowViewport);
 }
@@ -1753,6 +1797,8 @@ const initialHints = runtimeHints();
 export let activeGfxProfile = profileFromHints(initialHints, false, 0);
 export let gfxProfileEpoch = activeGfxProfile.epoch;
 export let GFX: GfxSettings = activeGfxProfile.settings;
+// Publish the ceiling to the pure manifest layer, which cannot import this file.
+setBoundedResidency(GFX.boundedResidency);
 
 export function getActiveGfxProfile(): GfxProfile {
   return activeGfxProfile;
@@ -1777,6 +1823,7 @@ export function activateGfxProfile(profile: GfxProfile): GfxProfile {
   });
 
   GFX = settings;
+  setBoundedResidency(settings.boundedResidency);
   softwareGlDetected = activated.softwareRendering;
   activeGfxProfile = activated;
   gfxProfileEpoch = epoch;

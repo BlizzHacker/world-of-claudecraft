@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { PlayerClass } from '../../sim/types';
 import { assetsReady } from '../assets/preload';
 import { trackWebGLContext } from '../context_release';
-import { ensureSkinTexture } from './assets';
+import { ensureSkinTexture, preloadVisualAssets, visualAssetsReady } from './assets';
 import { VISUALS } from './manifest';
 import { type ModularLook, modularSignature } from './modular';
 import { type PortraitFraming, portraitFrameParams } from './portrait_framing';
@@ -262,6 +262,56 @@ function capture(
       visual.dispose();
     }
   }
+}
+
+// In-flight requestVisualPortrait promises, keyed like the portrait cache, so a
+// roster of eight characters on the same reassigned body issues ONE GLB fetch.
+const pending = new Map<string, Promise<string | null>>();
+
+/**
+ * The headshot for a visual key, loading its GLB first if needed.
+ *
+ * {@link visualPortraitDataUrl} is synchronous and returns null for a body whose
+ * asset is not resident — which is the normal state for every operator-assigned
+ * override body and every `lazyPreload` realm body, since only the boot set is
+ * preloaded. Callers that treated that null as "this character has no body" fell
+ * straight back to the class rig, i.e. the KayKit mini, and cached it. Use this
+ * instead wherever a real face matters: it preloads the body, renders once, and
+ * resolves with the data URL (or null if the body genuinely cannot be built).
+ */
+export function requestVisualPortrait(
+  visualKey: string,
+  skin = 0,
+  framing: PortraitFraming = 'headshot',
+): Promise<string | null> {
+  const key = `${visualKey}:${skin}:${framing}`;
+  const cached = cache.get(key);
+  if (cached) return Promise.resolve(cached);
+  const inflight = pending.get(key);
+  if (inflight) return inflight;
+  const job = (async () => {
+    try {
+      await assetsReady();
+      if (!visualAssetsReady(visualKey)) await preloadVisualAssets(visualKey);
+      return visualPortraitDataUrl(visualKey, skin, framing);
+    } catch {
+      // A missing/404ing body GLB is not fatal: the caller keeps whatever it
+      // painted (class headshot or crest).
+      return null;
+    } finally {
+      pending.delete(key);
+    }
+  })();
+  pending.set(key, job);
+  return job;
+}
+
+/** Drop every cached headshot. Called when the operator's body overrides change
+ *  (`cr-realm-visuals-changed`): the same visual KEY can now name a different
+ *  GLB, so a stale data URL would pin the old face for the rest of the session. */
+export function clearPortraitCache(): void {
+  cache.clear();
+  pending.clear();
 }
 
 /** Run `cb` once character assets finish preloading (immediately if already

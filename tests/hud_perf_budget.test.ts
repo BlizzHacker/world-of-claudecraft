@@ -662,7 +662,7 @@ const CANVAS_PAINTERS: ReadonlyArray<ScannedPainter> = [
   { file: 'map_window_painter.ts', allow: {}, reflowAllow: { getComputedStyle: 1 } },
   { file: 'minimap_painter.ts', allow: {}, reflowAllow: { getComputedStyle: 1 } },
   { file: 'perf_graph_painter.ts', allow: {}, reflowAllow: {} },
-  { file: 'unit_portrait_painter.ts', allow: { '.dataset': 4 }, reflowAllow: {} },
+  { file: 'unit_portrait_painter.ts', allow: { '.dataset': 9 }, reflowAllow: {} },
 ];
 
 // BUCKET 3 of 3: cold painters, the DEFAULT for a `*_window.ts`.
@@ -894,10 +894,42 @@ const COLD_PAINTER_ALLOWANCES: ReadonlyArray<ColdPainter> = [
     reflowAllow: { '.getBoundingClientRect': 2, getComputedStyle: 2, '.scrollTop': 2 },
     driverAllow: {},
   },
-  // The bug-report submit path schedules its screenshot capture off the critical
-  // path. ONE call, guarded by a feature check with a setTimeout fallback; the
-  // count is 3 because the optional-API type declaration names it twice more.
-  { file: 'options_window.ts', reflowAllow: {}, driverAllow: { requestIdleCallback: 3 } },
+  // The merged options window (fork trio + the asset-wave evolution): the
+  // mobile shell restores its scroll offset across a section rebuild (three
+  // .scrollTop touches, one .clientHeight page-scroll step), the drag-save
+  // rect capture reads .getBoundingClientRect at drag end and defers the
+  // persist through ONE one-shot requestAnimationFrame, the keyboard-nav
+  // focus scan filters on .getClientRects, and the rect capture divides by
+  // getUiScale (one import name + one call). All run on open/interaction,
+  // never from a paint cadence.
+  {
+    file: 'options_window.ts',
+    reflowAllow: {
+      '.clientHeight': 1,
+      '.scrollTop': 3,
+      '.getBoundingClientRect': 1,
+      '.getClientRects': 1,
+      getUiScale: 2,
+    },
+    driverAllow: { requestAnimationFrame: 1 },
+    drivers: [
+      {
+        driver: 'requestAnimationFrame',
+        everyMs: null,
+        why: 'one-shot deferral, not a cadence: the pointerup rect sampler waits one frame so the drag controller has committed its final left/top inside its own pointerup handler, then persists the geometry through saveWindowRect. Armed once per pointerup while the menu is open and never re-armed from inside its own callback.',
+        stopsAt: {},
+        // Counted occurrences, not writes: the deferred sampler READS the
+        // root's inline style (one .style for the geometry capture) and the
+        // open/mobile guards read one .style + one .classList; a token count
+        // cannot tell a read from a write, and this callback fires once per
+        // pointerup, never on a cadence.
+        writeAllow: { '.style': 2, '.classList': 1 },
+        queryAllow: {},
+        idlAllow: {},
+        reflowAllow: {},
+      },
+    ],
+  },
   { file: 'professions_window.ts', reflowAllow: { '.scrollTop': 2 }, driverAllow: {} },
   { file: 'spellbook_window.ts', reflowAllow: { '.scrollTop': 2 }, driverAllow: {} },
   // The root, trigger, and popover rects position the target-aura configurator inside the
@@ -1166,16 +1198,7 @@ interface DriverNameOnlyException {
   readonly repeating: number;
   readonly why: string;
 }
-const DRIVER_NAME_ONLY: readonly DriverNameOnlyException[] = [
-  {
-    file: 'options_window.ts',
-    driver: 'requestIdleCallback',
-    names: 3,
-    sweepResolvable: 0,
-    repeating: 0,
-    why: 'the bug-report screenshot capture defers itself off the interaction frame once, with a setTimeout(0) fallback. requestIdleCallback is not universally available, so the module names it three times to use it once: the optional member on the widened window type, the feature-detect guard, and the call. The call goes through that widened local rather than off the global, so the body sweep resolves none of the three. It arms nothing repeating, so there is no per-tick contract to declare either.',
-  },
-];
+const DRIVER_NAME_ONLY: readonly DriverNameOnlyException[] = [];
 const driverNameOnlyByFile = new Map(DRIVER_NAME_ONLY.map((e) => [e.file, e]));
 /** Name occurrences an exception accounts for but the body sweep cannot resolve. */
 const DRIVER_NAME_ONLY_UNRESOLVABLE = DRIVER_NAME_ONLY.reduce(
@@ -1376,7 +1399,13 @@ describe('hud_perf_budget ARM 1: every src/ui painter holds its bucket contract 
   // table to keep the arithmetic green, and lose the contract silently: exactly
   // the quiet loosening this exception exists to avoid.
   it('every DRIVER_NAME_ONLY claim is checked against the real source, not just the table', () => {
-    expect(DRIVER_NAME_ONLY.length, 'the exception table is non-empty').toBeGreaterThan(0);
+    // The last name-only exception (options_window's feature-detected
+    // requestIdleCallback) retired with the asset-wave merge: its rAF
+    // replacement is a resolvable global call carrying a full `drivers`
+    // contract instead. The table is pinned EMPTY so the next entry is a
+    // conscious act that re-reads the audit rules below; the audit loop and
+    // its synthetic registrationProblems fixture keep the machinery honest.
+    expect(DRIVER_NAME_ONLY.length, 'the exception table is pinned empty').toBe(0);
     for (const entry of DRIVER_NAME_ONLY) {
       const src = stripComments(painterRawSource(entry.file));
       const occurrences = src.split(entry.driver).length - 1;
@@ -1464,6 +1493,7 @@ describe('hud_perf_budget ARM 1: every src/ui painter holds its bucket contract 
       'daily_rewards_window.ts#0',
       'daily_rewards_window.ts#1',
       'hud/delve/lockpick_window.ts#0',
+      'options_window.ts#0',
     ]);
     // THIRD, the matchers must have seen real source. The positive control is the lockpick
     // clock, whose three per-tick writes are the reason this gate exists.

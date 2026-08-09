@@ -1,0 +1,6114 @@
+{
+ "classic/melee/a_colossal_frost_giant_made_of_shimmering_ice_wi_0193cacb.glb": {
+  "worldSize": [
+   1.6324,
+   2.0042,
+   0.9415
+  ],
+  "nodeScale": 1.0021,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3647,
+   "max": 0.5792,
+   "nMin": 3171,
+   "nMax": 170
+  }
+ },
+ "classic/melee/a_green_acid_scythe_01946ac7.glb": {
+  "worldSize": [
+   1.9943,
+   1.0204,
+   0.1096
+  ],
+  "nodeScale": 0.9972,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3982,
+   "max": 0.3256,
+   "nMin": 544,
+   "nMax": 1938
+  }
+ },
+ "classic/melee/a_green_acid_scythe_01946ac8.glb": {
+  "worldSize": [
+   0.0738,
+   1.3102,
+   2.001
+  ],
+  "nodeScale": 1.0005,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.5636,
+   "max": 0.2077,
+   "nMin": 701,
+   "nMax": 1398
+  }
+ },
+ "classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493df.glb": {
+  "worldSize": [
+   1.9995,
+   1.0865,
+   0.2148
+  ],
+  "nodeScale": 0.9997,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.2573,
+   "max": 0.2895,
+   "nMin": 650,
+   "nMax": 1961
+  }
+ },
+ "classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb": {
+  "worldSize": [
+   2.0007,
+   1.3163,
+   0.2416
+  ],
+  "nodeScale": 1.0004,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.2551,
+   "max": 0.5292,
+   "nMin": 1378,
+   "nMax": 2826
+  }
+ },
+ "classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493f7.glb": {
+  "worldSize": [
+   1.9184,
+   1.209,
+   1.9961
+  ],
+  "nodeScale": 0.9981,
+  "axis": "z",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.8333,
+   "max": 0.8818,
+   "nMin": 510,
+   "nMax": 1082
+  }
+ },
+ "classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_01949402.glb": {
+  "worldSize": [
+   0.1335,
+   1.113,
+   1.9961
+  ],
+  "nodeScale": 0.9981,
+  "axis": "z",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3667,
+   "max": 0.4403,
+   "nMin": 665,
+   "nMax": 555
+  }
+ },
+ "classic/melee/a_scythe_the_iconic_tool_of_the_grim_reaper_01968c91.glb": {
+  "worldSize": [
+   1.1601,
+   2,
+   0.1328
+  ],
+  "nodeScale": 1,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3666,
+   "max": 0.2534,
+   "nMin": 1181,
+   "nMax": 5066
+  }
+ },
+ "classic/melee/a_shield_made_of_wood_and_iron_strapped_to_the_s_0196a113.glb": {
+  "worldSize": [
+   1.7091,
+   1.9846,
+   0.684
+  ],
+  "nodeScale": 0.9923,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3376,
+   "max": 0.3054,
+   "nMin": 2836,
+   "nMax": 1410
+  }
+ },
+ "classic/melee/a_shield_made_of_wood_but_in_the_shape_of_a_woma_01949413.glb": {
+  "worldSize": [
+   1.1692,
+   1.9993,
+   0.341
+  ],
+  "nodeScale": 0.9997,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1488,
+   "max": 0.2171,
+   "nMin": 485,
+   "nMax": 718
+  }
+ },
+ "classic/melee/a_shield_made_of_wood_but_in_the_shape_of_a_woma_0194941a.glb": {
+  "worldSize": [
+   1.1692,
+   1.9993,
+   0.341
+  ],
+  "nodeScale": 0.9997,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1488,
+   "max": 0.2172,
+   "nMin": 482,
+   "nMax": 721
+  }
+ },
+ "classic/melee/a_stylized_cartoonish_wooden_sword_with_a_handle_01944382.glb": {
+  "worldSize": [
+   1.9984,
+   1.0115,
+   0.9868
+  ],
+  "nodeScale": 0.9992,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.5173,
+   "max": 0.5579,
+   "nMin": 1657,
+   "nMax": 1229
+  }
+ },
+ "classic/melee/a_stylized_cartoonish_wooden_sword_with_a_handle_01944392.glb": {
+  "worldSize": [
+   0.0977,
+   0.305,
+   2.0049
+  ],
+  "nodeScale": 1.0025,
+  "axis": "z",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0538,
+   "max": 0.0648,
+   "nMin": 533,
+   "nMax": 2124
+  }
+ },
+ "classic/melee/a_weapon_glove_with_claws_similar_to_the_one_fro_0194ad32.glb": {
+  "worldSize": [
+   1.5219,
+   1.9872,
+   1.857
+  ],
+  "nodeScale": 0.9936,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.8749,
+   "max": 0.6783,
+   "nMin": 855,
+   "nMax": 929
+  }
+ },
+ "classic/melee/ancient_battleaxe_0198b902.glb": {
+  "worldSize": [
+   0.9144,
+   1.9947,
+   0.2883
+  ],
+  "nodeScale": 0.9973,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1044,
+   "max": 0.1854,
+   "nMin": 1611,
+   "nMax": 3307
+  }
+ },
+ "classic/melee/astartes_grim_future_wearing_a_cape_0194eb44.glb": {
+  "worldSize": [
+   1.3217,
+   1.9952,
+   1.1641
+  ],
+  "nodeScale": 0.9976,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.37,
+   "max": 0.2796,
+   "nMin": 1252,
+   "nMax": 2986
+  }
+ },
+ "classic/melee/astartes_grim_future_wearing_a_cape_0194eb45.glb": {
+  "worldSize": [
+   1.3217,
+   1.9952,
+   1.1641
+  ],
+  "nodeScale": 0.9976,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.37,
+   "max": 0.2796,
+   "nMin": 1252,
+   "nMax": 2986
+  }
+ },
+ "classic/melee/astartes_grim_future_wearing_a_cape_0194eb48.glb": {
+  "worldSize": [
+   1.522,
+   2.0029,
+   0.8847
+  ],
+  "nodeScale": 1.0015,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.4259,
+   "max": 0.2726,
+   "nMin": 1371,
+   "nMax": 3165
+  }
+ },
+ "classic/melee/astartes_grim_future_wearing_a_cape_0194eb4a.glb": {
+  "worldSize": [
+   1.522,
+   2.0029,
+   0.8847
+  ],
+  "nodeScale": 1.0015,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.4257,
+   "max": 0.2727,
+   "nMin": 1364,
+   "nMax": 3170
+  }
+ },
+ "classic/melee/azure_scythe_0194a562.glb": {
+  "worldSize": [
+   0.7379,
+   1.9949,
+   0.0857
+  ],
+  "nodeScale": 0.9974,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0273,
+   "max": 0.1383,
+   "nMin": 516,
+   "nMax": 2260
+  }
+ },
+ "classic/melee/bad_decisions_club_019dca50.glb": {
+  "worldSize": [
+   1.3801,
+   1.8974,
+   1.656
+  ],
+  "nodeScale": 0.9487,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.5944,
+   "max": 0.2379,
+   "nMin": 522,
+   "nMax": 763
+  }
+ },
+ "classic/melee/chainsaw_sword_chronoforgeweapon_0194b287.glb": {
+  "worldSize": [
+   1.9975,
+   1.304,
+   0.2919
+  ],
+  "nodeScale": 0.9988,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.4458,
+   "max": 0.5706,
+   "nMin": 2617,
+   "nMax": 261
+  }
+ },
+ "classic/melee/chainsaw_sword_chronoforgeweapon_0194b28c.glb": {
+  "worldSize": [
+   1.9993,
+   0.5702,
+   0.3122
+  ],
+  "nodeScale": 0.9997,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0939,
+   "max": 0.1022,
+   "nMin": 701,
+   "nMax": 926
+  }
+ },
+ "classic/melee/chainsaw_sword_chronoforgeweapon_0194b290.glb": {
+  "worldSize": [
+   0.3309,
+   1.0234,
+   1.9944
+  ],
+  "nodeScale": 0.9972,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.4397,
+   "max": 0.4065,
+   "nMin": 1059,
+   "nMax": 1058
+  }
+ },
+ "classic/melee/chainsaw_sword_chronoforgeweapon_0194b47c.glb": {
+  "worldSize": [
+   1.9975,
+   1.304,
+   0.2919
+  ],
+  "nodeScale": 0.9988,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.4458,
+   "max": 0.5706,
+   "nMin": 2617,
+   "nMax": 261
+  }
+ },
+ "classic/melee/chronoforgeweapon_hr_giger_weapon_inspired_0194b47d.glb": {
+  "worldSize": [
+   2.0002,
+   0.243,
+   0.1238
+  ],
+  "nodeScale": 1.0001,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0411,
+   "max": 0.0436,
+   "nMin": 844,
+   "nMax": 1347
+  }
+ },
+ "classic/melee/crimson_blade_0194a884.glb": {
+  "worldSize": [
+   0.0908,
+   1.999,
+   0.6463
+  ],
+  "nodeScale": 0.9995,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.0517,
+   "max": 0.0453,
+   "nMin": 1961,
+   "nMax": 369
+  }
+ },
+ "classic/melee/crimson_blade_fb41b775.glb": {
+  "worldSize": [
+   0.4934,
+   2.0057,
+   0.0921
+  ],
+  "nodeScale": 1.0029,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.0463,
+   "max": 0.037,
+   "nMin": 1580,
+   "nMax": 482
+  }
+ },
+ "classic/melee/crimson_scythe_0194a559.glb": {
+  "worldSize": [
+   0.7621,
+   2.0026,
+   0.1227
+  ],
+  "nodeScale": 1.0013,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0489,
+   "max": 0.1437,
+   "nMin": 1225,
+   "nMax": 2815
+  }
+ },
+ "classic/melee/crimson_scythe_0194a562.glb": {
+  "worldSize": [
+   0.7574,
+   1.996,
+   0.1365
+  ],
+  "nodeScale": 0.998,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.039,
+   "max": 0.1328,
+   "nMin": 1163,
+   "nMax": 3193
+  }
+ },
+ "classic/melee/death_s_edge_0194700f.glb": {
+  "worldSize": [
+   0.4241,
+   2.007,
+   0.1605
+  ],
+  "nodeScale": 1.0035,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0253,
+   "max": 0.0511,
+   "nMin": 332,
+   "nMax": 3416
+  }
+ },
+ "classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb": {
+  "worldSize": [
+   0.5646,
+   2.0019,
+   0.3715
+  ],
+  "nodeScale": 1.001,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1747,
+   "max": 0.0522,
+   "nMin": 1085,
+   "nMax": 1460
+  }
+ },
+ "classic/melee/demonic_warhammer_019b8bea.glb": {
+  "worldSize": [
+   1.2437,
+   1.9012,
+   0.3379
+  ],
+  "nodeScale": 0.9506,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0817,
+   "max": 0.2366,
+   "nMin": 627,
+   "nMax": 2525
+  }
+ },
+ "classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb": {
+  "worldSize": [
+   2.0035,
+   1.3274,
+   0.7705
+  ],
+  "nodeScale": 1.0018,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3208,
+   "max": 0.5406,
+   "nMin": 3154,
+   "nMax": 1735
+  }
+ },
+ "classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb": {
+  "worldSize": [
+   0.109,
+   1.9984,
+   0.4633
+  ],
+  "nodeScale": 0.9992,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0426,
+   "max": 0.0576,
+   "nMin": 1437,
+   "nMax": 464
+  }
+ },
+ "classic/melee/dreadnought_warhammer_the_object_features_a_robu_01940376.glb": {
+  "worldSize": [
+   1.9895,
+   1.6869,
+   0.8918
+  ],
+  "nodeScale": 0.9947,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3378,
+   "max": 0.3375,
+   "nMin": 1289,
+   "nMax": 1380
+  }
+ },
+ "classic/melee/eagle_crest_shield_019a8843.glb": {
+  "worldSize": [
+   1.208,
+   1.9017,
+   0.5781
+  ],
+  "nodeScale": 0.9508,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.172,
+   "max": 0.2747,
+   "nMin": 540,
+   "nMax": 1311
+  }
+ },
+ "classic/melee/emblem_grim_future_emblem_019702dc.glb": {
+  "worldSize": [
+   1.9999,
+   1.4759,
+   0.3005
+  ],
+  "nodeScale": 1,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3526,
+   "max": 0.3753,
+   "nMin": 1975,
+   "nMax": 2132
+  }
+ },
+ "classic/melee/emblem_grim_future_emblem_01970361.glb": {
+  "worldSize": [
+   2.002,
+   1.1827,
+   0.2346
+  ],
+  "nodeScale": 1.001,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3604,
+   "max": 0.3664,
+   "nMin": 830,
+   "nMax": 891
+  }
+ },
+ "classic/melee/emblem_grim_future_emblem_0197039a.glb": {
+  "worldSize": [
+   1.9882,
+   1.6584,
+   0.3932
+  ],
+  "nodeScale": 0.9941,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.352,
+   "max": 0.3185,
+   "nMin": 680,
+   "nMax": 673
+  }
+ },
+ "classic/melee/emblem_grim_future_emblem_0197039e.glb": {
+  "worldSize": [
+   1.9944,
+   1.4536,
+   0.858
+  ],
+  "nodeScale": 0.9972,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3328,
+   "max": 0.3323,
+   "nMin": 960,
+   "nMax": 882
+  }
+ },
+ "classic/melee/emblem_grim_future_emblem_d9079bad.glb": {
+  "worldSize": [
+   1.9903,
+   1.5438,
+   0.9386
+  ],
+  "nodeScale": 0.9952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.4754,
+   "max": 0.522,
+   "nMin": 773,
+   "nMax": 796
+  }
+ },
+ "classic/melee/ethereal_blade_display_019b0aac.glb": {
+  "worldSize": [
+   1.0766,
+   1.9005,
+   0.6353
+  ],
+  "nodeScale": 0.9503,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2907,
+   "max": 0.1317,
+   "nMin": 2664,
+   "nMax": 1313
+  }
+ },
+ "classic/melee/ethereal_blade_icon_019a7501.glb": {
+  "worldSize": [
+   1.0601,
+   1.9005,
+   0.5829
+  ],
+  "nodeScale": 0.9503,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3071,
+   "max": 0.1879,
+   "nMin": 2965,
+   "nMax": 2126
+  }
+ },
+ "classic/melee/flameburst_wand_019a7398.glb": {
+  "worldSize": [
+   0.9885,
+   1.2893,
+   1.9015
+  ],
+  "nodeScale": 0.9508,
+  "axis": "z",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0392,
+   "max": 0.35,
+   "nMin": 102,
+   "nMax": 7016
+  }
+ },
+ "classic/melee/frozen_starblade_axe_0199cead.glb": {
+  "worldSize": [
+   0.5996,
+   1.9014,
+   0.1557
+  ],
+  "nodeScale": 0.9507,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0828,
+   "max": 0.1236,
+   "nMin": 3565,
+   "nMax": 2777
+  }
+ },
+ "classic/melee/gobling_holdinga_a_giant_hammer_the_gobling_is_h_0194ce4b.glb": {
+  "worldSize": [
+   1.2091,
+   2.0032,
+   0.5114
+  ],
+  "nodeScale": 1.0016,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2898,
+   "max": 0.2607,
+   "nMin": 2077,
+   "nMax": 950
+  }
+ },
+ "classic/melee/gobling_holdinga_a_giant_hammer_the_gobling_is_h_0194d3dc.glb": {
+  "worldSize": [
+   1.2099,
+   2.0008,
+   0.5113
+  ],
+  "nodeScale": 1.0004,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2876,
+   "max": 0.2607,
+   "nMin": 2065,
+   "nMax": 965
+  }
+ },
+ "classic/melee/gobling_holdinga_a_giant_hammer_the_gobling_is_h_0194d3f9.glb": {
+  "worldSize": [
+   1.7862,
+   1.9892,
+   1.0615
+  ],
+  "nodeScale": 0.9946,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.4193,
+   "max": 0.3606,
+   "nMin": 2285,
+   "nMax": 965
+  }
+ },
+ "classic/melee/grey_wizard_staff_01968c93.glb": {
+  "worldSize": [
+   0.2336,
+   1.9916,
+   0.2144
+  ],
+  "nodeScale": 0.9958,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0397,
+   "max": 0.0671,
+   "nMin": 757,
+   "nMax": 5400
+  }
+ },
+ "classic/melee/grey_wizard_staff_8dbf51ea.glb": {
+  "worldSize": [
+   0.2336,
+   1.9916,
+   0.2144
+  ],
+  "nodeScale": 0.9958,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0397,
+   "max": 0.0671,
+   "nMin": 757,
+   "nMax": 5400
+  }
+ },
+ "classic/melee/hellbringer_battleaxe_019b89ec.glb": {
+  "worldSize": [
+   1.1818,
+   1.9025,
+   0.2271
+  ],
+  "nodeScale": 0.9512,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0324,
+   "max": 0.2071,
+   "nMin": 446,
+   "nMax": 3594
+  }
+ },
+ "classic/melee/industrial_ruins_grim_future_terrain_grimdark_in_019a1ea6.glb": {
+  "worldSize": [
+   1.8536,
+   0.8863,
+   1.9017
+  ],
+  "nodeScale": 0.9513,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.586,
+   "max": 0.5772,
+   "nMin": 3171,
+   "nMax": 3220
+  }
+ },
+ "classic/melee/infernal_crescent_axe_0194aa0e.glb": {
+  "worldSize": [
+   0.1215,
+   1.9993,
+   0.621
+  ],
+  "nodeScale": 0.9997,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0691,
+   "max": 0.1119,
+   "nMin": 1621,
+   "nMax": 3412
+  }
+ },
+ "classic/melee/infernal_scythe_0194a75e.glb": {
+  "worldSize": [
+   0.0888,
+   1.9979,
+   0.7959
+  ],
+  "nodeScale": 0.9989,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0527,
+   "max": 0.1949,
+   "nMin": 1499,
+   "nMax": 1805
+  }
+ },
+ "classic/melee/infernal_scythe_0194a878.glb": {
+  "worldSize": [
+   0.1031,
+   1.9976,
+   0.7711
+  ],
+  "nodeScale": 0.9988,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0622,
+   "max": 0.1887,
+   "nMin": 1489,
+   "nMax": 2382
+  }
+ },
+ "classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb": {
+  "worldSize": [
+   0.5544,
+   2.0065,
+   0.1168
+  ],
+  "nodeScale": 1.0033,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0317,
+   "max": 0.0445,
+   "nMin": 1206,
+   "nMax": 506
+  }
+ },
+ "classic/melee/masive_legendary_hammer_a_mixed_of_primitive_and_0194a06a.glb": {
+  "worldSize": [
+   1.9997,
+   1.9982,
+   0.7631
+  ],
+  "nodeScale": 0.9998,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.8506,
+   "max": 0.6966,
+   "nMin": 651,
+   "nMax": 1930
+  }
+ },
+ "classic/melee/masive_legendary_hammer_a_mixed_of_primitive_and_0194a074.glb": {
+  "worldSize": [
+   1.9984,
+   1.1975,
+   1.9995
+  ],
+  "nodeScale": 1,
+  "axis": "z",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.6816,
+   "max": 0.6841,
+   "nMin": 1889,
+   "nMax": 2014
+  }
+ },
+ "classic/melee/mystic_energy_staff_0199d5ed.glb": {
+  "worldSize": [
+   1.9023,
+   0.5065,
+   1.0372
+  ],
+  "nodeScale": 0.9511,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1774,
+   "max": 0.0887,
+   "nMin": 8511,
+   "nMax": 53
+  }
+ },
+ "classic/melee/ork_from_grim_future_019412f7.glb": {
+  "worldSize": [
+   1.3114,
+   1.9797,
+   1.7308
+  ],
+  "nodeScale": 0.9899,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.5763,
+   "max": 0.3319,
+   "nMin": 1697,
+   "nMax": 742
+  }
+ },
+ "classic/melee/ork_from_grim_future_019412fb.glb": {
+  "worldSize": [
+   1.9715,
+   1.8203,
+   1.3837
+  ],
+  "nodeScale": 0.9857,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3048,
+   "max": 0.4623,
+   "nMin": 662,
+   "nMax": 668
+  }
+ },
+ "classic/melee/ork_from_grim_future_019412fd.glb": {
+  "worldSize": [
+   1.2678,
+   1.9817,
+   1.7933
+  ],
+  "nodeScale": 0.9909,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.6654,
+   "max": 0.3609,
+   "nMin": 991,
+   "nMax": 477
+  }
+ },
+ "classic/melee/ork_from_grim_future_holding_a_huge_machine_gun_01959519.glb": {
+  "worldSize": [
+   1.323,
+   1.991,
+   1.815
+  ],
+  "nodeScale": 0.9955,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.5338,
+   "max": 0.4018,
+   "nMin": 1569,
+   "nMax": 924
+  }
+ },
+ "classic/melee/ork_from_grim_future_holding_a_huge_machine_gun_0195951a.glb": {
+  "worldSize": [
+   1.244,
+   1.9781,
+   1.4299
+  ],
+  "nodeScale": 0.9891,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.5724,
+   "max": 0.1483,
+   "nMin": 1336,
+   "nMax": 994
+  }
+ },
+ "classic/melee/ork_from_grim_future_holding_a_huge_machine_gun_0195951e.glb": {
+  "worldSize": [
+   1.244,
+   1.9781,
+   1.4299
+  ],
+  "nodeScale": 0.9891,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.5724,
+   "max": 0.1483,
+   "nMin": 1336,
+   "nMax": 994
+  }
+ },
+ "classic/melee/ork_from_grim_future_holding_a_huge_machine_gun_01959522.glb": {
+  "worldSize": [
+   1.031,
+   1.9833,
+   1.6799
+  ],
+  "nodeScale": 0.9917,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.5938,
+   "max": 0.2521,
+   "nMin": 1497,
+   "nMax": 1077
+  }
+ },
+ "classic/melee/ork_from_grim_future_holding_a_huge_machine_gun_01e6baf2.glb": {
+  "worldSize": [
+   1.031,
+   1.9833,
+   1.6799
+  ],
+  "nodeScale": 0.9917,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.5943,
+   "max": 0.2525,
+   "nMin": 1469,
+   "nMax": 1098
+  }
+ },
+ "classic/melee/savage_axe_0198b901.glb": {
+  "worldSize": [
+   1.0511,
+   1.9901,
+   0.3817
+  ],
+  "nodeScale": 0.9951,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1236,
+   "max": 0.179,
+   "nMin": 990,
+   "nMax": 5188
+  }
+ },
+ "classic/melee/skull_scepter_01946aea.glb": {
+  "worldSize": [
+   0.5015,
+   2.0029,
+   0.6184
+  ],
+  "nodeScale": 1.0015,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0509,
+   "max": 0.238,
+   "nMin": 905,
+   "nMax": 4779
+  }
+ },
+ "classic/melee/skull_scepter_01946af2.glb": {
+  "worldSize": [
+   0.5015,
+   2.0029,
+   0.6184
+  ],
+  "nodeScale": 1.0015,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0509,
+   "max": 0.238,
+   "nMin": 905,
+   "nMax": 4779
+  }
+ },
+ "classic/melee/skull_scepter_01946b02.glb": {
+  "worldSize": [
+   0.6048,
+   2.0073,
+   0.5311
+  ],
+  "nodeScale": 1.0036,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0285,
+   "max": 0.1138,
+   "nMin": 520,
+   "nMax": 4881
+  }
+ },
+ "classic/melee/skull_scepter_01946b03.glb": {
+  "worldSize": [
+   0.6048,
+   2.0073,
+   0.5311
+  ],
+  "nodeScale": 1.0036,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0285,
+   "max": 0.1138,
+   "nMin": 520,
+   "nMax": 4881
+  }
+ },
+ "classic/melee/skull_scepter_01946b39.glb": {
+  "worldSize": [
+   0.6048,
+   2.0073,
+   0.5311
+  ],
+  "nodeScale": 1.0036,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0285,
+   "max": 0.1137,
+   "nMin": 527,
+   "nMax": 4860
+  }
+ },
+ "classic/melee/skull_scepter_01946b50.glb": {
+  "worldSize": [
+   0.5015,
+   2.0026,
+   0.6183
+  ],
+  "nodeScale": 1.0013,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0508,
+   "max": 0.2377,
+   "nMin": 914,
+   "nMax": 4779
+  }
+ },
+ "classic/melee/skull_scepter_019471d0.glb": {
+  "worldSize": [
+   0.5347,
+   2.0101,
+   0.1499
+  ],
+  "nodeScale": 1.005,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0236,
+   "max": 0.0837,
+   "nMin": 1164,
+   "nMax": 5257
+  }
+ },
+ "classic/melee/skull_scepter_b60913fe.glb": {
+  "worldSize": [
+   0.4158,
+   2.005,
+   0.1136
+  ],
+  "nodeScale": 1.0025,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0159,
+   "max": 0.0667,
+   "nMin": 997,
+   "nMax": 5635
+  }
+ },
+ "classic/melee/skullblade_of_the_ancients_0198b903.glb": {
+  "worldSize": [
+   0.5944,
+   1.9577,
+   0.3164
+  ],
+  "nodeScale": 0.9788,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0146,
+   "max": 0.0982,
+   "nMin": 528,
+   "nMax": 1870
+  }
+ },
+ "classic/melee/skullbreaker_mace_0198b909.glb": {
+  "worldSize": [
+   0.6162,
+   1.9902,
+   0.6371
+  ],
+  "nodeScale": 0.9951,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0957,
+   "max": 0.1506,
+   "nMin": 1084,
+   "nMax": 1867
+  }
+ },
+ "classic/melee/skullbreaker_mace_d1173fea.glb": {
+  "worldSize": [
+   0.6168,
+   1.9937,
+   0.6348
+  ],
+  "nodeScale": 0.9968,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0999,
+   "max": 0.1693,
+   "nMin": 1169,
+   "nMax": 2427
+  }
+ },
+ "classic/melee/sparkburst_blade_0199d89d.glb": {
+  "worldSize": [
+   1.8973,
+   1.838,
+   0.8906
+  ],
+  "nodeScale": 0.9487,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.5322,
+   "max": 0.7862,
+   "nMin": 3310,
+   "nMax": 105
+  }
+ },
+ "classic/melee/sparkburst_blade_0199dde6.glb": {
+  "worldSize": [
+   1.9005,
+   1.7815,
+   0.8531
+  ],
+  "nodeScale": 0.9503,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.4889,
+   "max": 0.7611,
+   "nMin": 2821,
+   "nMax": 154
+  }
+ },
+ "classic/melee/spiked_blade_0194a881.glb": {
+  "worldSize": [
+   1.9886,
+   1.4589,
+   0.2296
+  ],
+  "nodeScale": 0.9943,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.5722,
+   "max": 0.5754,
+   "nMin": 1041,
+   "nMax": 842
+  }
+ },
+ "classic/melee/spiked_blade_0194a885.glb": {
+  "worldSize": [
+   0.152,
+   1.9986,
+   1.6429
+  ],
+  "nodeScale": 0.9993,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.6534,
+   "max": 0.6228,
+   "nMin": 1043,
+   "nMax": 1272
+  }
+ },
+ "classic/melee/spiked_skull_mace_01974b09.glb": {
+  "worldSize": [
+   1.2402,
+   2.0036,
+   0.9126
+  ],
+  "nodeScale": 1.0018,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0984,
+   "max": 0.2836,
+   "nMin": 654,
+   "nMax": 2237
+  }
+ },
+ "classic/melee/spiked_skull_mace_01974b0a.glb": {
+  "worldSize": [
+   1.2428,
+   1.9991,
+   0.9872
+  ],
+  "nodeScale": 0.9996,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3636,
+   "max": 0.2134,
+   "nMin": 864,
+   "nMax": 961
+  }
+ },
+ "classic/melee/spiked_skull_mace_5a63a98d.glb": {
+  "worldSize": [
+   1.2429,
+   1.9982,
+   0.9882
+  ],
+  "nodeScale": 0.9991,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3719,
+   "max": 0.215,
+   "nMin": 847,
+   "nMax": 968
+  }
+ },
+ "classic/melee/squat_and_wiry_with_leathery_green_skin_stretche_01960bd4.glb": {
+  "worldSize": [
+   1.3056,
+   1.9885,
+   1.1784
+  ],
+  "nodeScale": 0.9943,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.453,
+   "max": 0.3303,
+   "nMin": 2029,
+   "nMax": 1101
+  }
+ },
+ "classic/melee/squat_and_wiry_with_leathery_green_skin_stretche_01960c29.glb": {
+  "worldSize": [
+   1.5279,
+   2.003,
+   1.4098
+  ],
+  "nodeScale": 1.0015,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3929,
+   "max": 0.2001,
+   "nMin": 2130,
+   "nMax": 374
+  }
+ },
+ "classic/melee/squat_and_wiry_with_leathery_green_skin_stretche_01960c37.glb": {
+  "worldSize": [
+   1.3138,
+   1.9969,
+   1.3179
+  ],
+  "nodeScale": 0.9984,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.4615,
+   "max": 0.318,
+   "nMin": 1618,
+   "nMax": 681
+  }
+ },
+ "classic/melee/squat_and_wiry_with_leathery_green_skin_stretche_0196110d.glb": {
+  "worldSize": [
+   1.5009,
+   1.9989,
+   1.2753
+  ],
+  "nodeScale": 0.9995,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3653,
+   "max": 0.3568,
+   "nMin": 1681,
+   "nMax": 607
+  }
+ },
+ "classic/melee/sunburst_shield_019ac0cb.glb": {
+  "worldSize": [
+   0.6991,
+   1.8998,
+   0.2138
+  ],
+  "nodeScale": 0.9499,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1032,
+   "max": 0.0914,
+   "nMin": 1644,
+   "nMax": 991
+  }
+ },
+ "classic/melee/techblade_3000_chronoforgeweapon_0194a87f.glb": {
+  "worldSize": [
+   1.9967,
+   0.3971,
+   0.4027
+  ],
+  "nodeScale": 0.9983,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0975,
+   "max": 0.1081,
+   "nMin": 1765,
+   "nMax": 1364
+  }
+ },
+ "classic/melee/the_hydralisk_has_a_long_serpentine_lower_body_a_019639f2.glb": {
+  "worldSize": [
+   1.0727,
+   1.9851,
+   1.1122
+  ],
+  "nodeScale": 0.9926,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.2448,
+   "max": 0.3974,
+   "nMin": 1858,
+   "nMax": 1194
+  }
+ },
+ "classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8ec.glb": {
+  "worldSize": [
+   1.9818,
+   1.8134,
+   0.269
+  ],
+  "nodeScale": 0.9909,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.0603,
+   "max": 0.0588,
+   "nMin": 132,
+   "nMax": 149
+  }
+ },
+ "classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8ee.glb": {
+  "worldSize": [
+   0.1731,
+   1.7866,
+   1.9969
+  ],
+  "nodeScale": 0.9985,
+  "axis": "z",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.5588,
+   "max": 0.5822,
+   "nMin": 3091,
+   "nMax": 254
+  }
+ },
+ "classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8ef.glb": {
+  "worldSize": [
+   1.6337,
+   1.704,
+   1.9999
+  ],
+  "nodeScale": 1,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3624,
+   "max": 0.2838,
+   "nMin": 941,
+   "nMax": 738
+  }
+ },
+ "classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb": {
+  "worldSize": [
+   0.9699,
+   1.9972,
+   0.2404
+  ],
+  "nodeScale": 0.9986,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0417,
+   "max": 0.154,
+   "nMin": 774,
+   "nMax": 4015
+  }
+ },
+ "classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb": {
+  "worldSize": [
+   0.9699,
+   1.9972,
+   0.2404
+  ],
+  "nodeScale": 0.9986,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0416,
+   "max": 0.1545,
+   "nMin": 773,
+   "nMax": 4005
+  }
+ },
+ "classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb": {
+  "worldSize": [
+   0.9694,
+   1.9972,
+   0.2404
+  ],
+  "nodeScale": 0.9986,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0413,
+   "max": 0.1543,
+   "nMin": 772,
+   "nMax": 3958
+  }
+ },
+ "classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb": {
+  "worldSize": [
+   0.9694,
+   1.9972,
+   0.2404
+  ],
+  "nodeScale": 0.9986,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0413,
+   "max": 0.1543,
+   "nMin": 772,
+   "nMax": 3958
+  }
+ },
+ "classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb": {
+  "worldSize": [
+   0.2334,
+   1.992,
+   1.6233
+  ],
+  "nodeScale": 0.996,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.7278,
+   "max": 0.1549,
+   "nMin": 777,
+   "nMax": 5664
+  }
+ },
+ "classic/melee/the_object_is_a_double_bladed_scythe_with_curved_6283e6f2.glb": {
+  "worldSize": [
+   0.2076,
+   2.0247,
+   1.3635
+  ],
+  "nodeScale": 1.0123,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.5467,
+   "max": 0.4988,
+   "nMin": 2345,
+   "nMax": 1473
+  }
+ },
+ "classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb": {
+  "worldSize": [
+   0.2334,
+   1.992,
+   1.6233
+  ],
+  "nodeScale": 0.996,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.7278,
+   "max": 0.1549,
+   "nMin": 777,
+   "nMax": 5664
+  }
+ },
+ "classic/melee/the_object_is_a_double_bladed_scythe_with_curved_b6865020.glb": {
+  "worldSize": [
+   0.1731,
+   1.7866,
+   1.9969
+  ],
+  "nodeScale": 0.9985,
+  "axis": "z",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.5588,
+   "max": 0.5822,
+   "nMin": 3091,
+   "nMax": 254
+  }
+ },
+ "classic/melee/the_savage_cyclops_a_towering_brute_with_rough_g_0193f94b.glb": {
+  "worldSize": [
+   1.3552,
+   1.994,
+   0.7527
+  ],
+  "nodeScale": 0.997,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.2376,
+   "max": 0.3487,
+   "nMin": 436,
+   "nMax": 1315
+  }
+ },
+ "classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb": {
+  "worldSize": [
+   0.2674,
+   2.0118,
+   0.7066
+  ],
+  "nodeScale": 1.0059,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0465,
+   "max": 0.1426,
+   "nMin": 741,
+   "nMax": 6060
+  }
+ },
+ "classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb": {
+  "worldSize": [
+   0.2674,
+   2.0118,
+   0.7066
+  ],
+  "nodeScale": 1.0059,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0467,
+   "max": 0.1426,
+   "nMin": 742,
+   "nMax": 6057
+  }
+ },
+ "classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb": {
+  "worldSize": [
+   0.2522,
+   2.0018,
+   0.5929
+  ],
+  "nodeScale": 1.0009,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0603,
+   "max": 0.1458,
+   "nMin": 1325,
+   "nMax": 5650
+  }
+ },
+ "classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb": {
+  "worldSize": [
+   0.2522,
+   2.0018,
+   0.5929
+  ],
+  "nodeScale": 1.0009,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0603,
+   "max": 0.1458,
+   "nMin": 1325,
+   "nMax": 5650
+  }
+ },
+ "classic/melee/twin_blade_sphinx_019ddfc1.glb": {
+  "worldSize": [
+   1.294,
+   1.8979,
+   1.4477
+  ],
+  "nodeScale": 0.9489,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.4333,
+   "max": 0.2363,
+   "nMin": 1136,
+   "nMax": 696
+  }
+ },
+ "classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb": {
+  "worldSize": [
+   0.8136,
+   1.9965,
+   0.4233
+  ],
+  "nodeScale": 0.9982,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0623,
+   "max": 0.196,
+   "nMin": 912,
+   "nMax": 2030
+  }
+ },
+ "classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb": {
+  "worldSize": [
+   0.4578,
+   2.0014,
+   0.549
+  ],
+  "nodeScale": 1.0007,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0481,
+   "max": 0.193,
+   "nMin": 869,
+   "nMax": 1303
+  }
+ },
+ "classic/melee/untitled_019471a8.glb": {
+  "worldSize": [
+   0.5323,
+   1.9945,
+   1.3473
+  ],
+  "nodeScale": 0.9973,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.5328,
+   "max": 0.1475,
+   "nMin": 359,
+   "nMax": 8952
+  }
+ },
+ "classic/melee/untitled_019471b8.glb": {
+  "worldSize": [
+   0.5323,
+   1.9945,
+   1.3473
+  ],
+  "nodeScale": 0.9973,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.5328,
+   "max": 0.1475,
+   "nMin": 359,
+   "nMax": 8952
+  }
+ },
+ "classic/melee/untitled_01948bc5.glb": {
+  "worldSize": [
+   0.7362,
+   1.9861,
+   0.537
+  ],
+  "nodeScale": 0.9934,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2398,
+   "max": 0.201,
+   "nMin": 50,
+   "nMax": 379
+  }
+ },
+ "classic/melee/untitled_019501bf.glb": {
+  "worldSize": [
+   0.3233,
+   2,
+   0.1567
+  ],
+  "nodeScale": 1,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0216,
+   "max": 0.0474,
+   "nMin": 223,
+   "nMax": 4204
+  }
+ },
+ "classic/melee/untitled_0199ea6e.glb": {
+  "worldSize": [
+   0.1398,
+   1.9988,
+   0.6621
+  ],
+  "nodeScale": 0.9994,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0465,
+   "max": 0.0845,
+   "nMin": 728,
+   "nMax": 506
+  }
+ },
+ "classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb": {
+  "worldSize": [
+   0.3773,
+   0.5957,
+   2.0004
+  ],
+  "nodeScale": 1.0002,
+  "axis": "z",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0977,
+   "max": 0.1816,
+   "nMin": 1093,
+   "nMax": 3386
+  }
+ },
+ "classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb": {
+  "worldSize": [
+   0.5971,
+   0.8746,
+   2.021
+  ],
+  "nodeScale": 1.0105,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2174,
+   "max": 0.0733,
+   "nMin": 3195,
+   "nMax": 2036
+  }
+ },
+ "classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb": {
+  "worldSize": [
+   1.3372,
+   1.9828,
+   0.6265
+  ],
+  "nodeScale": 0.9914,
+  "axis": "y",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0744,
+   "max": 0.3503,
+   "nMin": 171,
+   "nMax": 3631
+  }
+ },
+ "classic/melee/warhammer_barbian_woman_figurine_and_holding_a_s_01937da6.glb": {
+  "worldSize": [
+   1.1195,
+   2.0264,
+   1.6712
+  ],
+  "nodeScale": 1.0132,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.416,
+   "max": 0.2811,
+   "nMin": 4848,
+   "nMax": 73
+  }
+ },
+ "classic/melee/warhammer_symbol_019a3821.glb": {
+  "worldSize": [
+   1.8992,
+   1.2439,
+   0.3503
+  ],
+  "nodeScale": 0.9496,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.4376,
+   "max": 0.434,
+   "nMin": 914,
+   "nMax": 842
+  }
+ },
+ "classic/melee/warhammer_symbol_019a3ac5.glb": {
+  "worldSize": [
+   1.9022,
+   1.2218,
+   0.3348
+  ],
+  "nodeScale": 0.9511,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.4439,
+   "max": 0.4593,
+   "nMin": 936,
+   "nMax": 1113
+  }
+ },
+ "classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb": {
+  "worldSize": [
+   1.9973,
+   1.1766,
+   0.0663
+  ],
+  "nodeScale": 0.9987,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3015,
+   "max": 0.502,
+   "nMin": 3016,
+   "nMax": 1460
+  }
+ },
+ "classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949412.glb": {
+  "worldSize": [
+   0.0741,
+   1.5053,
+   1.9971
+  ],
+  "nodeScale": 0.9985,
+  "axis": "z",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.4905,
+   "max": 0.5713,
+   "nMin": 2661,
+   "nMax": 649
+  }
+ },
+ "classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb": {
+  "worldSize": [
+   1.9973,
+   1.1766,
+   0.0663
+  ],
+  "nodeScale": 0.9987,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3015,
+   "max": 0.502,
+   "nMin": 3016,
+   "nMax": 1460
+  }
+ },
+ "fps/weapons/6_preview_1759801500824_png_0199d6b1.glb": {
+  "worldSize": [
+   1.904,
+   0.4281,
+   0.1562
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0589,
+   "max": 0.081,
+   "nMin": 1421,
+   "nMax": 1488
+  }
+ },
+ "fps/weapons/6_preview_1759801500824_png_0199d87d.glb": {
+  "worldSize": [
+   1.9124,
+   0.4317,
+   0.1587
+  ],
+  "nodeScale": 0.9562,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0581,
+   "max": 0.0912,
+   "nMin": 1376,
+   "nMax": 1353
+  }
+ },
+ "fps/weapons/adsas_preview_1759801538620_png_0199d85f.glb": {
+  "worldSize": [
+   1.9039,
+   0.4467,
+   0.1097
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0691,
+   "max": 0.0692,
+   "nMin": 1527,
+   "nMax": 1657
+  }
+ },
+ "fps/weapons/akatsuki_arsenal_xxt_019b2d6d.glb": {
+  "worldSize": [
+   1.901,
+   1.6295,
+   0.2889
+  ],
+  "nodeScale": 0.9505,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3964,
+   "max": 0.5416,
+   "nMin": 2956,
+   "nMax": 2245
+  }
+ },
+ "fps/weapons/arena_shooter_blaster_0199e7cd.glb": {
+  "worldSize": [
+   1.9028,
+   0.8604,
+   0.2437
+  ],
+  "nodeScale": 0.9514,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2035,
+   "max": 0.1698,
+   "nMin": 2260,
+   "nMax": 1216
+  }
+ },
+ "fps/weapons/arena_shooter_blaster_0199e7d4.glb": {
+  "worldSize": [
+   1.9021,
+   0.8394,
+   0.3088
+  ],
+  "nodeScale": 0.951,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1848,
+   "max": 0.1593,
+   "nMin": 2737,
+   "nMax": 969
+  }
+ },
+ "fps/weapons/arena_shooter_blaster_0199edde.glb": {
+  "worldSize": [
+   1.904,
+   0.8301,
+   0.3203
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2114,
+   "max": 0.1703,
+   "nMin": 6164,
+   "nMax": 515
+  }
+ },
+ "fps/weapons/asdasd_preview_1759801551337_png_0199d6b0.glb": {
+  "worldSize": [
+   1.904,
+   0.4337,
+   0.1248
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0615,
+   "max": 0.0761,
+   "nMin": 1511,
+   "nMax": 1539
+  }
+ },
+ "fps/weapons/auric_sidearm_019de508.glb": {
+  "worldSize": [
+   1.8081,
+   1.8989,
+   0.3155
+  ],
+  "nodeScale": 0.9495,
+  "axis": "y",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.699,
+   "max": 0.3997,
+   "nMin": 1187,
+   "nMax": 3182
+  }
+ },
+ "fps/weapons/azure_arc_assault_rifle_x_019cac43.glb": {
+  "worldSize": [
+   1.8992,
+   0.7934,
+   0.1873
+  ],
+  "nodeScale": 0.9496,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1471,
+   "max": 0.0915,
+   "nMin": 2014,
+   "nMax": 1877
+  }
+ },
+ "fps/weapons/azure_hex_pistol_019e4dfa.glb": {
+  "worldSize": [
+   1.8988,
+   1.1123,
+   0.2914
+  ],
+  "nodeScale": 0.9494,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3871,
+   "max": 0.2358,
+   "nMin": 1308,
+   "nMax": 3196
+  }
+ },
+ "fps/weapons/bio_hazard_sentinel_x_019bb11e.glb": {
+  "worldSize": [
+   1.8981,
+   0.6567,
+   0.2287
+  ],
+  "nodeScale": 0.9491,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1434,
+   "max": 0.0966,
+   "nMin": 753,
+   "nMax": 1648
+  }
+ },
+ "fps/weapons/biomech_assault_rifle_019e4c76.glb": {
+  "worldSize": [
+   1.8991,
+   0.9021,
+   0.2339
+  ],
+  "nodeScale": 0.9496,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1634,
+   "max": 0.1152,
+   "nMin": 1568,
+   "nMax": 1198
+  }
+ },
+ "fps/weapons/biotech_blaster_x_019bca90.glb": {
+  "worldSize": [
+   1.8765,
+   1.2563,
+   0.3933
+  ],
+  "nodeScale": 0.9382,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2258,
+   "max": 0.2039,
+   "nMin": 1399,
+   "nMax": 1111
+  }
+ },
+ "fps/weapons/biotech_x_blaster_019b5549.glb": {
+  "worldSize": [
+   1.9035,
+   1.0304,
+   0.2949
+  ],
+  "nodeScale": 0.9517,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2858,
+   "max": 0.135,
+   "nMin": 1124,
+   "nMax": 1701
+  }
+ },
+ "fps/weapons/blaster_3000_christmas2025_019b0b20.glb": {
+  "worldSize": [
+   1.9039,
+   1.0422,
+   0.2296
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1544,
+   "max": 0.2369,
+   "nMin": 1040,
+   "nMax": 1868
+  }
+ },
+ "fps/weapons/blaster_destructus_x_019a2ab3.glb": {
+  "worldSize": [
+   1.904,
+   0.9296,
+   0.2833
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1974,
+   "max": 0.1713,
+   "nMin": 2657,
+   "nMax": 1473
+  }
+ },
+ "fps/weapons/blaster_destructus_x_019a2c66.glb": {
+  "worldSize": [
+   1.904,
+   0.933,
+   0.311
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2022,
+   "max": 0.1607,
+   "nMin": 2864,
+   "nMax": 1566
+  }
+ },
+ "fps/weapons/blaster_destructus_x_019a4002.glb": {
+  "worldSize": [
+   1.9039,
+   0.9332,
+   0.3119
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2014,
+   "max": 0.1645,
+   "nMin": 2313,
+   "nMax": 1733
+  }
+ },
+ "fps/weapons/blaster_x_42_019a751b.glb": {
+  "worldSize": [
+   1.9039,
+   1.0011,
+   0.3103
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1567,
+   "max": 0.1376,
+   "nMin": 2086,
+   "nMax": 1042
+  }
+ },
+ "fps/weapons/blue_hex_cannon_019ebfdb.glb": {
+  "worldSize": [
+   1.8994,
+   1.1629,
+   0.3385
+  ],
+  "nodeScale": 0.9497,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1737,
+   "max": 0.1752,
+   "nMin": 1396,
+   "nMax": 1815
+  }
+ },
+ "fps/weapons/braindamaged_horror_blaster_019a11ca.glb": {
+  "worldSize": [
+   1.903,
+   1.2644,
+   0.4205
+  ],
+  "nodeScale": 0.9515,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1568,
+   "max": 0.184,
+   "nMin": 786,
+   "nMax": 1331
+  }
+ },
+ "fps/weapons/c0re_x_plasma_rifle_019bd1af.glb": {
+  "worldSize": [
+   1.898,
+   0.9356,
+   0.2414
+  ],
+  "nodeScale": 0.949,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2301,
+   "max": 0.1698,
+   "nMin": 1381,
+   "nMax": 1425
+  }
+ },
+ "fps/weapons/camouflage_tactical_rifle_x_019bd49c.glb": {
+  "worldSize": [
+   1.8992,
+   0.6706,
+   0.6184
+  ],
+  "nodeScale": 0.9496,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.143,
+   "max": 0.0969,
+   "nMin": 340,
+   "nMax": 1909
+  }
+ },
+ "fps/weapons/cerulean_railgun_019f1fb5.glb": {
+  "worldSize": [
+   1.8993,
+   1.6844,
+   0.37
+  ],
+  "nodeScale": 0.9496,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.316,
+   "max": 0.2794,
+   "nMin": 2431,
+   "nMax": 1620
+  }
+ },
+ "fps/weapons/cerulean_vanguard_rifle_x_019c8197.glb": {
+  "worldSize": [
+   1.8991,
+   0.6718,
+   0.1632
+  ],
+  "nodeScale": 0.9495,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.12,
+   "max": 0.0733,
+   "nMin": 2272,
+   "nMax": 981
+  }
+ },
+ "fps/weapons/chainbound_arc_cannon_x_019d0136.glb": {
+  "worldSize": [
+   1.8993,
+   1.1726,
+   0.3587
+  ],
+  "nodeScale": 0.9496,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1638,
+   "max": 0.1713,
+   "nMin": 1453,
+   "nMax": 1749
+  }
+ },
+ "fps/weapons/chainbound_arc_cannon_x_019d0139.glb": {
+  "worldSize": [
+   1.8985,
+   1.1373,
+   0.3089
+  ],
+  "nodeScale": 0.9492,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1554,
+   "max": 0.1789,
+   "nMin": 1188,
+   "nMax": 3226
+  }
+ },
+ "fps/weapons/chronoforgeweapon_hr_giger_weapon_inspired_0194b47d.glb": {
+  "worldSize": [
+   0.1892,
+   0.89,
+   2.0028
+  ],
+  "nodeScale": 1.0014,
+  "axis": "z",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1061,
+   "max": 0.1905,
+   "nMin": 1350,
+   "nMax": 2494
+  }
+ },
+ "fps/weapons/chronoforgeweapon_hr_giger_weapon_inspired_0194b480.glb": {
+  "worldSize": [
+   1.9952,
+   0.6377,
+   0.1956
+  ],
+  "nodeScale": 0.9976,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1676,
+   "max": 0.1446,
+   "nMin": 3122,
+   "nMax": 2478
+  }
+ },
+ "fps/weapons/chronoforgeweapon_pistol_biomechanical_0194b7b3.glb": {
+  "worldSize": [
+   2.0031,
+   0.9053,
+   0.2061
+  ],
+  "nodeScale": 1.0015,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2366,
+   "max": 0.1645,
+   "nMin": 2170,
+   "nMax": 1364
+  }
+ },
+ "fps/weapons/colorful_cartoon_rifle_0199edc4.glb": {
+  "worldSize": [
+   1.9214,
+   1.107,
+   0.4039
+  ],
+  "nodeScale": 0.9607,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1763,
+   "max": 0.1774,
+   "nMin": 1571,
+   "nMax": 1366
+  }
+ },
+ "fps/weapons/colorful_cartoon_rifle_0199edcc.glb": {
+  "worldSize": [
+   1.9039,
+   1.112,
+   0.4209
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1564,
+   "max": 0.1696,
+   "nMin": 1467,
+   "nMax": 1415
+  }
+ },
+ "fps/weapons/colorful_cartoon_rifle_0199ede5.glb": {
+  "worldSize": [
+   1.9039,
+   1.112,
+   0.4209
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1561,
+   "max": 0.1714,
+   "nMin": 1466,
+   "nMax": 1404
+  }
+ },
+ "fps/weapons/colorful_cartoon_rifle_0199f303.glb": {
+  "worldSize": [
+   1.904,
+   1.1276,
+   0.4019
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1535,
+   "max": 0.1672,
+   "nMin": 1705,
+   "nMax": 1224
+  }
+ },
+ "fps/weapons/colorful_cartoon_rifle_0199f71d.glb": {
+  "worldSize": [
+   1.904,
+   1.1276,
+   0.4019
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1538,
+   "max": 0.1687,
+   "nMin": 1708,
+   "nMax": 1210
+  }
+ },
+ "fps/weapons/colorful_cartoon_rifle_0199f729.glb": {
+  "worldSize": [
+   1.9036,
+   1.1067,
+   0.4123
+  ],
+  "nodeScale": 0.9518,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1619,
+   "max": 0.1738,
+   "nMin": 1558,
+   "nMax": 1357
+  }
+ },
+ "fps/weapons/colorful_techno_blaster_0199e7bc.glb": {
+  "worldSize": [
+   1.9036,
+   1.0772,
+   0.3023
+  ],
+  "nodeScale": 0.9518,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1385,
+   "max": 0.169,
+   "nMin": 2114,
+   "nMax": 956
+  }
+ },
+ "fps/weapons/colorful_techno_blaster_0199e829.glb": {
+  "worldSize": [
+   1.8935,
+   1.0955,
+   0.361
+  ],
+  "nodeScale": 0.9467,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1299,
+   "max": 0.1737,
+   "nMin": 3612,
+   "nMax": 1571
+  }
+ },
+ "fps/weapons/colorful_techno_blaster_0199e82b.glb": {
+  "worldSize": [
+   1.8935,
+   1.0955,
+   0.361
+  ],
+  "nodeScale": 0.9467,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1298,
+   "max": 0.174,
+   "nMin": 3564,
+   "nMax": 1542
+  }
+ },
+ "fps/weapons/colorful_techno_blaster_0199e8a8.glb": {
+  "worldSize": [
+   1.9036,
+   1.0772,
+   0.3023
+  ],
+  "nodeScale": 0.9518,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1385,
+   "max": 0.169,
+   "nMin": 2114,
+   "nMax": 956
+  }
+ },
+ "fps/weapons/colorful_techno_blaster_0199eb0c.glb": {
+  "worldSize": [
+   1.8935,
+   1.0955,
+   0.361
+  ],
+  "nodeScale": 0.9467,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1299,
+   "max": 0.1737,
+   "nMin": 3611,
+   "nMax": 1567
+  }
+ },
+ "fps/weapons/colorful_techno_blaster_019a2aa7.glb": {
+  "worldSize": [
+   1.904,
+   1.093,
+   0.3105
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1285,
+   "max": 0.1651,
+   "nMin": 2747,
+   "nMax": 1237
+  }
+ },
+ "fps/weapons/colorful_techno_blaster_019a2ab3.glb": {
+  "worldSize": [
+   1.904,
+   0.9296,
+   0.2833
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1974,
+   "max": 0.1713,
+   "nMin": 2657,
+   "nMax": 1473
+  }
+ },
+ "fps/weapons/crimson_arc_cannon_x_019ca6ad.glb": {
+  "worldSize": [
+   1.8946,
+   1.0742,
+   0.4774
+  ],
+  "nodeScale": 0.9473,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3285,
+   "max": 0.1657,
+   "nMin": 3053,
+   "nMax": 2602
+  }
+ },
+ "fps/weapons/crimson_circuit_enforcer_x_019d012e.glb": {
+  "worldSize": [
+   1.8993,
+   1.1267,
+   0.2411
+  ],
+  "nodeScale": 0.9496,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1963,
+   "max": 0.188,
+   "nMin": 721,
+   "nMax": 1828
+  }
+ },
+ "fps/weapons/crimson_cogwork_rifle_x_019cb39f.glb": {
+  "worldSize": [
+   1.8914,
+   0.8181,
+   0.4506
+  ],
+  "nodeScale": 0.9489,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2004,
+   "max": 0.0673,
+   "nMin": 499,
+   "nMax": 729
+  }
+ },
+ "fps/weapons/crimson_engine_gun_x_019ca5d3.glb": {
+  "worldSize": [
+   1.8978,
+   0.6538,
+   0.6314
+  ],
+  "nodeScale": 0.9489,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1349,
+   "max": 0.1598,
+   "nMin": 2091,
+   "nMax": 1128
+  }
+ },
+ "fps/weapons/crimson_eye_blaster_x_019cbcd8.glb": {
+  "worldSize": [
+   1.8991,
+   1.5085,
+   0.4051
+  ],
+  "nodeScale": 0.9495,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3306,
+   "max": 0.4503,
+   "nMin": 1131,
+   "nMax": 2333
+  }
+ },
+ "fps/weapons/crimson_power_blaster_019a1853.glb": {
+  "worldSize": [
+   1.9012,
+   1.0473,
+   0.4391
+  ],
+  "nodeScale": 0.9506,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1926,
+   "max": 0.2487,
+   "nMin": 2501,
+   "nMax": 1442
+  }
+ },
+ "fps/weapons/crimson_pulse_rifle_0199cead.glb": {
+  "worldSize": [
+   1.9039,
+   0.8033,
+   0.2145
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0673,
+   "max": 0.1339,
+   "nMin": 1787,
+   "nMax": 2077
+  }
+ },
+ "fps/weapons/crimson_pulse_rifle_0199ceb4.glb": {
+  "worldSize": [
+   1.9039,
+   0.8298,
+   0.1553
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0657,
+   "max": 0.1104,
+   "nMin": 1490,
+   "nMax": 2490
+  }
+ },
+ "fps/weapons/crimson_pulse_rifle_x_019cb916.glb": {
+  "worldSize": [
+   1.8993,
+   0.9686,
+   0.2926
+  ],
+  "nodeScale": 0.9496,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1395,
+   "max": 0.0916,
+   "nMin": 218,
+   "nMax": 972
+  }
+ },
+ "fps/weapons/crimson_runic_rifle_x_019ca53f.glb": {
+  "worldSize": [
+   1.8989,
+   0.718,
+   0.1516
+  ],
+  "nodeScale": 0.9495,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2447,
+   "max": 0.0847,
+   "nMin": 2160,
+   "nMax": 5707
+  }
+ },
+ "fps/weapons/crimson_runic_wargun_x_019ccaaf.glb": {
+  "worldSize": [
+   1.8972,
+   1.463,
+   0.3641
+  ],
+  "nodeScale": 0.9486,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2524,
+   "max": 0.1896,
+   "nMin": 1668,
+   "nMax": 754
+  }
+ },
+ "fps/weapons/crimson_sigil_compact_pdw_x_019ca29f.glb": {
+  "worldSize": [
+   1.8955,
+   0.9821,
+   0.2427
+  ],
+  "nodeScale": 0.9477,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.186,
+   "max": 0.1399,
+   "nMin": 2501,
+   "nMax": 902
+  }
+ },
+ "fps/weapons/crimson_sigil_railgun_x_019ca4b0.glb": {
+  "worldSize": [
+   1.8964,
+   1.0069,
+   0.2746
+  ],
+  "nodeScale": 0.9482,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1974,
+   "max": 0.1774,
+   "nMin": 2026,
+   "nMax": 1779
+  }
+ },
+ "fps/weapons/crimson_skull_assault_rifle_x_019ce799.glb": {
+  "worldSize": [
+   1.8986,
+   0.8996,
+   0.2969
+  ],
+  "nodeScale": 0.9493,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1109,
+   "max": 0.0957,
+   "nMin": 1493,
+   "nMax": 947
+  }
+ },
+ "fps/weapons/crimson_skullbound_p9_x_019ca56f.glb": {
+  "worldSize": [
+   1.897,
+   1.1288,
+   0.2381
+  ],
+  "nodeScale": 0.9485,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3607,
+   "max": 0.1705,
+   "nMin": 3593,
+   "nMax": 1236
+  }
+ },
+ "fps/weapons/crimson_skullbound_p9_x_019ca57b.glb": {
+  "worldSize": [
+   1.8989,
+   1.1049,
+   0.242
+  ],
+  "nodeScale": 0.9494,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3002,
+   "max": 0.1881,
+   "nMin": 2480,
+   "nMax": 2048
+  }
+ },
+ "fps/weapons/crimson_vanguard_x_019c76cb.glb": {
+  "worldSize": [
+   1.8995,
+   1.1298,
+   0.3112
+  ],
+  "nodeScale": 0.9497,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2951,
+   "max": 0.2885,
+   "nMin": 1040,
+   "nMax": 2410
+  }
+ },
+ "fps/weapons/cyber_armament_01998c78.glb": {
+  "worldSize": [
+   1.904,
+   1.8905,
+   0.3345
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.6397,
+   "max": 0.5143,
+   "nMin": 1170,
+   "nMax": 1814
+  }
+ },
+ "fps/weapons/cyber_armament_01998c7d.glb": {
+  "worldSize": [
+   1.9039,
+   1.8915,
+   0.3343
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.6357,
+   "max": 0.4973,
+   "nMin": 2233,
+   "nMax": 2826
+  }
+ },
+ "fps/weapons/cyber_blaster_xxx_019bcec1.glb": {
+  "worldSize": [
+   1.8971,
+   0.6893,
+   0.3495
+  ],
+  "nodeScale": 0.9486,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.0995,
+   "max": 0.0784,
+   "nMin": 2874,
+   "nMax": 976
+  }
+ },
+ "fps/weapons/cyber_revolver_pbr_0198deb7.glb": {
+  "worldSize": [
+   1.9911,
+   1.2582,
+   0.3354
+  ],
+  "nodeScale": 0.9955,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3397,
+   "max": 0.3731,
+   "nMin": 3258,
+   "nMax": 368
+  }
+ },
+ "fps/weapons/cyber_rifle_x_019a4fb9.glb": {
+  "worldSize": [
+   1.9012,
+   1.0299,
+   0.2518
+  ],
+  "nodeScale": 0.9506,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2449,
+   "max": 0.1505,
+   "nMin": 861,
+   "nMax": 126
+  }
+ },
+ "fps/weapons/cyber_rifle_x_019a54da.glb": {
+  "worldSize": [
+   1.9032,
+   0.9877,
+   0.2298
+  ],
+  "nodeScale": 0.9516,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2532,
+   "max": 0.1537,
+   "nMin": 1663,
+   "nMax": 156
+  }
+ },
+ "fps/weapons/cyberpunk_bullpup_rifle_x_rifle_019a210a.glb": {
+  "worldSize": [
+   1.904,
+   0.9479,
+   0.2561
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2026,
+   "max": 0.1937,
+   "nMin": 818,
+   "nMax": 1187
+  }
+ },
+ "fps/weapons/cyberpunk_bullpup_rifle_x_rifle_019a221e.glb": {
+  "worldSize": [
+   1.9041,
+   0.951,
+   0.2613
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2105,
+   "max": 0.2019,
+   "nMin": 751,
+   "nMax": 1372
+  }
+ },
+ "fps/weapons/emerald_arc_blaster_019e5318.glb": {
+  "worldSize": [
+   1.8978,
+   1.0183,
+   0.3755
+  ],
+  "nodeScale": 0.9489,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1717,
+   "max": 0.2062,
+   "nMin": 778,
+   "nMax": 3319
+  }
+ },
+ "fps/weapons/emerald_war_cannon_019e611b.glb": {
+  "worldSize": [
+   1.897,
+   1.4809,
+   0.45
+  ],
+  "nodeScale": 0.9485,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2971,
+   "max": 0.2261,
+   "nMin": 2111,
+   "nMax": 858
+  }
+ },
+ "fps/weapons/ethereal_armament_of_x_019a593f.glb": {
+  "worldSize": [
+   1.9036,
+   1.1583,
+   0.3718
+  ],
+  "nodeScale": 0.9518,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2235,
+   "max": 0.1983,
+   "nMin": 1478,
+   "nMax": 1497
+  }
+ },
+ "fps/weapons/ethereal_blaster_019a2571.glb": {
+  "worldSize": [
+   1.904,
+   1.0235,
+   0.2989
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2497,
+   "max": 0.2176,
+   "nMin": 2401,
+   "nMax": 2259
+  }
+ },
+ "fps/weapons/ethereal_blaster_019a2a79.glb": {
+  "worldSize": [
+   1.9039,
+   1.0353,
+   0.2984
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.247,
+   "max": 0.2111,
+   "nMin": 1784,
+   "nMax": 2442
+  }
+ },
+ "fps/weapons/frostbite_carbine_x_019be191.glb": {
+  "worldSize": [
+   1.8985,
+   0.7774,
+   0.1537
+  ],
+  "nodeScale": 0.9493,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0985,
+   "max": 0.1078,
+   "nMin": 1653,
+   "nMax": 1720
+  }
+ },
+ "fps/weapons/future_tactical_xrig_019a3af1.glb": {
+  "worldSize": [
+   1.9041,
+   1.1886,
+   0.2159
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1221,
+   "max": 0.1201,
+   "nMin": 1774,
+   "nMax": 557
+  }
+ },
+ "fps/weapons/futuristic_blaster_design_019bcde8.glb": {
+  "worldSize": [
+   1.8994,
+   0.7346,
+   0.3599
+  ],
+  "nodeScale": 0.9497,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1175,
+   "max": 0.1501,
+   "nMin": 1818,
+   "nMax": 1267
+  }
+ },
+ "fps/weapons/futuristic_blaster_mk1_0199cf81.glb": {
+  "worldSize": [
+   1.9023,
+   1.2462,
+   0.245
+  ],
+  "nodeScale": 0.9511,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1756,
+   "max": 0.1435,
+   "nMin": 1969,
+   "nMax": 1225
+  }
+ },
+ "fps/weapons/futuristic_blaster_mk1_0199cfaf.glb": {
+  "worldSize": [
+   1.9023,
+   1.2383,
+   0.2424
+  ],
+  "nodeScale": 0.9512,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1784,
+   "max": 0.1454,
+   "nMin": 1655,
+   "nMax": 1305
+  }
+ },
+ "fps/weapons/futuristic_blaster_mk1_0199e713.glb": {
+  "worldSize": [
+   1.9023,
+   1.2383,
+   0.2424
+  ],
+  "nodeScale": 0.9512,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1784,
+   "max": 0.1454,
+   "nMin": 1655,
+   "nMax": 1305
+  }
+ },
+ "fps/weapons/futuristic_blaster_mk1_0199e777.glb": {
+  "worldSize": [
+   1.9023,
+   1.2383,
+   0.2424
+  ],
+  "nodeScale": 0.9512,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1784,
+   "max": 0.1454,
+   "nMin": 1655,
+   "nMax": 1305
+  }
+ },
+ "fps/weapons/futuristic_bullpup_gun_x_019ae020.glb": {
+  "worldSize": [
+   1.9021,
+   0.914,
+   0.2231
+  ],
+  "nodeScale": 0.9511,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1149,
+   "max": 0.145,
+   "nMin": 1425,
+   "nMax": 1791
+  }
+ },
+ "fps/weapons/futuristic_bullpup_gun_x_019ae024.glb": {
+  "worldSize": [
+   1.9032,
+   0.9196,
+   0.2365
+  ],
+  "nodeScale": 0.9516,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1142,
+   "max": 0.1671,
+   "nMin": 1561,
+   "nMax": 2080
+  }
+ },
+ "fps/weapons/futuristic_energy_rifle_01998c6b.glb": {
+  "worldSize": [
+   1.916,
+   1.3901,
+   0.2732
+  ],
+  "nodeScale": 0.958,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.2268,
+   "max": 0.2317,
+   "nMin": 2145,
+   "nMax": 964
+  }
+ },
+ "fps/weapons/futuristic_energy_rifle_01998c6f.glb": {
+  "worldSize": [
+   1.92,
+   1.3901,
+   0.2738
+  ],
+  "nodeScale": 0.96,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.2463,
+   "max": 0.2672,
+   "nMin": 3685,
+   "nMax": 1255
+  }
+ },
+ "fps/weapons/futuristic_energy_rifle_019a9c67.glb": {
+  "worldSize": [
+   1.9036,
+   1.0131,
+   0.2249
+  ],
+  "nodeScale": 0.9518,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1343,
+   "max": 0.1211,
+   "nMin": 2605,
+   "nMax": 817
+  }
+ },
+ "fps/weapons/futuristic_energy_rifle_x_019c3ea3.glb": {
+  "worldSize": [
+   1.9935,
+   0.7739,
+   1.1594
+  ],
+  "nodeScale": 0.9967,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.2556,
+   "max": 0.2884,
+   "nMin": 2797,
+   "nMax": 127
+  }
+ },
+ "fps/weapons/futuristic_plasma_rifle_019b35b8.glb": {
+  "worldSize": [
+   1.9036,
+   0.7465,
+   0.2414
+  ],
+  "nodeScale": 0.9518,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2392,
+   "max": 0.1258,
+   "nMin": 2092,
+   "nMax": 885
+  }
+ },
+ "fps/weapons/futuristic_plasma_rifle_y_c_x_019bd925.glb": {
+  "worldSize": [
+   1.8992,
+   0.9676,
+   0.236
+  ],
+  "nodeScale": 0.9496,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1116,
+   "max": 0.1815,
+   "nMin": 980,
+   "nMax": 1981
+  }
+ },
+ "fps/weapons/futuristic_revolver_019ae07b.glb": {
+  "worldSize": [
+   1.9025,
+   0.9693,
+   0.2741
+  ],
+  "nodeScale": 0.9513,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3044,
+   "max": 0.2801,
+   "nMin": 1028,
+   "nMax": 1112
+  }
+ },
+ "fps/weapons/futuristic_rifle_x_019c14ab.glb": {
+  "worldSize": [
+   1.9973,
+   0.829,
+   0.2138
+  ],
+  "nodeScale": 0.9986,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1046,
+   "max": 0.0915,
+   "nMin": 3465,
+   "nMax": 611
+  }
+ },
+ "fps/weapons/futuristic_rifle_x_019c14ae.glb": {
+  "worldSize": [
+   1.9962,
+   0.8391,
+   0.2317
+  ],
+  "nodeScale": 0.9981,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.0963,
+   "max": 0.0916,
+   "nMin": 4391,
+   "nMax": 540
+  }
+ },
+ "fps/weapons/gatling_warstrider_x_019cbd7d.glb": {
+  "worldSize": [
+   1.8944,
+   1.1072,
+   0.9682
+  ],
+  "nodeScale": 0.9472,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3516,
+   "max": 0.3928,
+   "nMin": 1680,
+   "nMax": 4091
+  }
+ },
+ "fps/weapons/gilded_lumen_sniper_rifle_x_019ce266.glb": {
+  "worldSize": [
+   1.899,
+   0.8925,
+   0.2754
+  ],
+  "nodeScale": 0.9495,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1092,
+   "max": 0.1842,
+   "nMin": 1730,
+   "nMax": 1089
+  }
+ },
+ "fps/weapons/gilded_sentinel_019d6d40.glb": {
+  "worldSize": [
+   1.8982,
+   1.0932,
+   0.3953
+  ],
+  "nodeScale": 0.9491,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1836,
+   "max": 0.2246,
+   "nMin": 759,
+   "nMax": 3044
+  }
+ },
+ "fps/weapons/gilded_sigil_carbine_x_019cca39.glb": {
+  "worldSize": [
+   1.8988,
+   1.5219,
+   0.3669
+  ],
+  "nodeScale": 0.9494,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2855,
+   "max": 0.228,
+   "nMin": 2199,
+   "nMax": 1252
+  }
+ },
+ "fps/weapons/gilded_sigil_revolver_x_019d026d.glb": {
+  "worldSize": [
+   1.8909,
+   1.3004,
+   0.3539
+  ],
+  "nodeScale": 0.9455,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.4655,
+   "max": 0.4329,
+   "nMin": 662,
+   "nMax": 1757
+  }
+ },
+ "fps/weapons/green_assault_rifle_with_belted_ammunition_019c81e9.glb": {
+  "worldSize": [
+   1.897,
+   0.6802,
+   0.169
+  ],
+  "nodeScale": 0.9485,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1076,
+   "max": 0.1633,
+   "nMin": 850,
+   "nMax": 3374
+  }
+ },
+ "fps/weapons/green_revolver_x_019a21fd.glb": {
+  "worldSize": [
+   1.9036,
+   1.1413,
+   0.3332
+  ],
+  "nodeScale": 0.9518,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3286,
+   "max": 0.3078,
+   "nMin": 1726,
+   "nMax": 1305
+  }
+ },
+ "fps/weapons/green_revolver_x_019a2216.glb": {
+  "worldSize": [
+   1.9035,
+   1.1364,
+   0.307
+  ],
+  "nodeScale": 0.9517,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3397,
+   "max": 0.3159,
+   "nMin": 1516,
+   "nMax": 1285
+  }
+ },
+ "fps/weapons/health_x_rifle_019bce12.glb": {
+  "worldSize": [
+   1.8994,
+   0.8364,
+   0.3137
+  ],
+  "nodeScale": 0.9497,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.124,
+   "max": 0.1092,
+   "nMin": 1516,
+   "nMax": 1302
+  }
+ },
+ "fps/weapons/hellish_x_smg_019c4690.glb": {
+  "worldSize": [
+   1.9995,
+   1.956,
+   0.3691
+  ],
+  "nodeScale": 0.9998,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.6243,
+   "max": 0.5835,
+   "nMin": 3855,
+   "nMax": 2856
+  }
+ },
+ "fps/weapons/hyper_lumen_rifle_x_019cad83.glb": {
+  "worldSize": [
+   1.8987,
+   0.9079,
+   0.2712
+  ],
+  "nodeScale": 0.9494,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1541,
+   "max": 0.0977,
+   "nMin": 1571,
+   "nMax": 1186
+  }
+ },
+ "fps/weapons/infernal_circuit_rifle_019ec9fc.glb": {
+  "worldSize": [
+   1.8951,
+   1.0988,
+   0.3211
+  ],
+  "nodeScale": 0.9476,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2778,
+   "max": 0.1985,
+   "nMin": 2213,
+   "nMax": 637
+  }
+ },
+ "fps/weapons/jafaime_a_modern_sci_fi_revolver_with_attachment_0198d816.glb": {
+  "worldSize": [
+   1.993,
+   1.3397,
+   0.372
+  ],
+  "nodeScale": 0.9965,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3186,
+   "max": 0.3417,
+   "nMin": 2844,
+   "nMax": 762
+  }
+ },
+ "fps/weapons/lasertech_rifle_x_019b736c.glb": {
+  "worldSize": [
+   1.9035,
+   1.2303,
+   0.3258
+  ],
+  "nodeScale": 0.9517,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1777,
+   "max": 0.1215,
+   "nMin": 1783,
+   "nMax": 794
+  }
+ },
+ "fps/weapons/lumenstrike_blaster_019e54c8.glb": {
+  "worldSize": [
+   1.8988,
+   1.5886,
+   0.3542
+  ],
+  "nodeScale": 0.9494,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1807,
+   "max": 0.2636,
+   "nMin": 1442,
+   "nMax": 2866
+  }
+ },
+ "fps/weapons/mp40_submachine_gun_x_019ca357.glb": {
+  "worldSize": [
+   1.8982,
+   0.9197,
+   0.2176
+  ],
+  "nodeScale": 0.9491,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3653,
+   "max": 0.1923,
+   "nMin": 1269,
+   "nMax": 7785
+  }
+ },
+ "fps/weapons/mystic_blaster_01998c75.glb": {
+  "worldSize": [
+   1.9017,
+   1.2994,
+   0.4535
+  ],
+  "nodeScale": 0.9511,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1609,
+   "max": 0.3204,
+   "nMin": 3817,
+   "nMax": 652
+  }
+ },
+ "fps/weapons/mystic_blaster_01998c78.glb": {
+  "worldSize": [
+   1.9026,
+   1.2997,
+   0.4536
+  ],
+  "nodeScale": 0.9515,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1634,
+   "max": 0.3043,
+   "nMin": 4130,
+   "nMax": 855
+  }
+ },
+ "fps/weapons/mystic_blaster_019a2f95.glb": {
+  "worldSize": [
+   1.9028,
+   1.3613,
+   0.3545
+  ],
+  "nodeScale": 0.9514,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1828,
+   "max": 0.1672,
+   "nMin": 1812,
+   "nMax": 1411
+  }
+ },
+ "fps/weapons/mystic_enforcer_x_019c1b5e.glb": {
+  "worldSize": [
+   1.9983,
+   0.809,
+   0.2705
+  ],
+  "nodeScale": 0.9991,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.218,
+   "max": 0.1205,
+   "nMin": 3282,
+   "nMax": 2343
+  }
+ },
+ "fps/weapons/mystic_pulse_rifle_019a750f.glb": {
+  "worldSize": [
+   1.9037,
+   1.1235,
+   0.3616
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0776,
+   "max": 0.2138,
+   "nMin": 898,
+   "nMax": 1413
+  }
+ },
+ "fps/weapons/mystical_x_blaster_019a3662.glb": {
+  "worldSize": [
+   1.9034,
+   0.9434,
+   0.1847
+  ],
+  "nodeScale": 0.9517,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2341,
+   "max": 0.1299,
+   "nMin": 972,
+   "nMax": 1598
+  }
+ },
+ "fps/weapons/mystical_x_blaster_019a3b94.glb": {
+  "worldSize": [
+   1.9034,
+   0.9044,
+   0.2021
+  ],
+  "nodeScale": 0.9517,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2226,
+   "max": 0.1293,
+   "nMin": 1387,
+   "nMax": 1444
+  }
+ },
+ "fps/weapons/nebula_cannon_019eb727.glb": {
+  "worldSize": [
+   1.8988,
+   1.4447,
+   0.3743
+  ],
+  "nodeScale": 0.9494,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.2385,
+   "max": 0.2604,
+   "nMin": 1261,
+   "nMax": 3151
+  }
+ },
+ "fps/weapons/neon_blaster_019b2563.glb": {
+  "worldSize": [
+   1.9035,
+   0.9063,
+   0.3393
+  ],
+  "nodeScale": 0.9518,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1764,
+   "max": 0.2147,
+   "nMin": 2835,
+   "nMax": 1172
+  }
+ },
+ "fps/weapons/neon_blaster_christmas2025_019b1c73.glb": {
+  "worldSize": [
+   1.9039,
+   1.042,
+   0.393
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.154,
+   "max": 0.1152,
+   "nMin": 1141,
+   "nMax": 1150
+  }
+ },
+ "fps/weapons/neon_blaster_thanksgiving_019aca52.glb": {
+  "worldSize": [
+   1.903,
+   0.9247,
+   0.2488
+  ],
+  "nodeScale": 0.9515,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1294,
+   "max": 0.1698,
+   "nMin": 1375,
+   "nMax": 1611
+  }
+ },
+ "fps/weapons/neon_blaster_x_019bca7e.glb": {
+  "worldSize": [
+   1.8988,
+   0.6389,
+   0.3145
+  ],
+  "nodeScale": 0.9494,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.096,
+   "max": 0.0832,
+   "nMin": 2071,
+   "nMax": 869
+  }
+ },
+ "fps/weapons/neon_blaster_x_c0re_019a1c2c.glb": {
+  "worldSize": [
+   1.904,
+   0.8756,
+   0.2864
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1394,
+   "max": 0.1473,
+   "nMin": 1759,
+   "nMax": 1164
+  }
+ },
+ "fps/weapons/neon_blaster_x_c0re_019a1d18.glb": {
+  "worldSize": [
+   1.904,
+   0.871,
+   0.3182
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1512,
+   "max": 0.1395,
+   "nMin": 1912,
+   "nMax": 1133
+  }
+ },
+ "fps/weapons/neon_blaster_x_c0re_019a204a.glb": {
+  "worldSize": [
+   1.9039,
+   0.8793,
+   0.3084
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1392,
+   "max": 0.1541,
+   "nMin": 1687,
+   "nMax": 1299
+  }
+ },
+ "fps/weapons/neon_blaster_x_c0re_019a2104.glb": {
+  "worldSize": [
+   1.9039,
+   0.8312,
+   0.2898
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1353,
+   "max": 0.1354,
+   "nMin": 1911,
+   "nMax": 1060
+  }
+ },
+ "fps/weapons/neon_crossbow_x_019c3eef.glb": {
+  "worldSize": [
+   1.9897,
+   0.7209,
+   1.9186
+  ],
+  "nodeScale": 0.9954,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0753,
+   "max": 0.1251,
+   "nMin": 532,
+   "nMax": 1726
+  }
+ },
+ "fps/weapons/neon_flux_cannon_x_019d2911.glb": {
+  "worldSize": [
+   1.899,
+   0.6257,
+   0.2573
+  ],
+  "nodeScale": 0.9495,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1959,
+   "max": 0.0902,
+   "nMin": 2594,
+   "nMax": 2074
+  }
+ },
+ "fps/weapons/neon_flux_cannon_x_019d2f06.glb": {
+  "worldSize": [
+   1.8994,
+   0.6073,
+   0.2495
+  ],
+  "nodeScale": 0.9497,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1943,
+   "max": 0.1008,
+   "nMin": 2394,
+   "nMax": 1607
+  }
+ },
+ "fps/weapons/neon_fusion_blaster_019b25b0.glb": {
+  "worldSize": [
+   1.904,
+   1,
+   0.2912
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2871,
+   "max": 0.1816,
+   "nMin": 2297,
+   "nMax": 1515
+  }
+ },
+ "fps/weapons/neon_geometry_gun_019b5325.glb": {
+  "worldSize": [
+   1.9027,
+   1.4467,
+   0.3393
+  ],
+  "nodeScale": 0.9513,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.5777,
+   "max": 0.4,
+   "nMin": 2945,
+   "nMax": 1774
+  }
+ },
+ "fps/weapons/neon_phaser_rifle_019a201e.glb": {
+  "worldSize": [
+   1.904,
+   0.6376,
+   0.1546
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0668,
+   "max": 0.1022,
+   "nMin": 1184,
+   "nMax": 1210
+  }
+ },
+ "fps/weapons/neon_phaser_rifle_019a202c.glb": {
+  "worldSize": [
+   1.904,
+   0.6464,
+   0.139
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0612,
+   "max": 0.0901,
+   "nMin": 1120,
+   "nMax": 1115
+  }
+ },
+ "fps/weapons/neon_phaser_x_blaster_019a3b85.glb": {
+  "worldSize": [
+   1.9041,
+   1.5741,
+   0.3996
+  ],
+  "nodeScale": 0.9521,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2653,
+   "max": 0.2403,
+   "nMin": 1328,
+   "nMax": 1639
+  }
+ },
+ "fps/weapons/neon_phaser_x_blaster_019a5ab1.glb": {
+  "worldSize": [
+   1.9039,
+   1.5478,
+   0.374
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2717,
+   "max": 0.2458,
+   "nMin": 1419,
+   "nMax": 1541
+  }
+ },
+ "fps/weapons/neon_pulse_blaster_01998c69.glb": {
+  "worldSize": [
+   1.904,
+   1.3512,
+   0.3923
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.252,
+   "max": 0.2296,
+   "nMin": 1116,
+   "nMax": 2938
+  }
+ },
+ "fps/weapons/neon_pulse_blaster_01998c6f.glb": {
+  "worldSize": [
+   1.92,
+   1.3901,
+   0.2738
+  ],
+  "nodeScale": 0.96,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.2463,
+   "max": 0.2672,
+   "nMin": 3685,
+   "nMax": 1255
+  }
+ },
+ "fps/weapons/neon_pulse_blaster_christmas2025_019b0ac1.glb": {
+  "worldSize": [
+   1.9017,
+   1.5462,
+   0.2482
+  ],
+  "nodeScale": 0.9508,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.2016,
+   "max": 0.2334,
+   "nMin": 952,
+   "nMax": 2467
+  }
+ },
+ "fps/weapons/neon_pulse_pistol_x_019c7c3e.glb": {
+  "worldSize": [
+   1.8974,
+   1.328,
+   0.3231
+  ],
+  "nodeScale": 0.9487,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.4059,
+   "max": 0.3841,
+   "nMin": 3259,
+   "nMax": 5214
+  }
+ },
+ "fps/weapons/neon_pulse_rifle_x_019bd931.glb": {
+  "worldSize": [
+   1.8977,
+   1.2722,
+   0.391
+  ],
+  "nodeScale": 0.9488,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3465,
+   "max": 0.3425,
+   "nMin": 2250,
+   "nMax": 4114
+  }
+ },
+ "fps/weapons/neon_runic_sniper_rifle_x_019ccd4d.glb": {
+  "worldSize": [
+   1.8989,
+   0.7622,
+   1.8154
+  ],
+  "nodeScale": 0.9494,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0866,
+   "max": 0.1395,
+   "nMin": 472,
+   "nMax": 1320
+  }
+ },
+ "fps/weapons/neon_sidearm_x_kill_019b22e4.glb": {
+  "worldSize": [
+   1.9021,
+   1.5831,
+   0.3632
+  ],
+  "nodeScale": 0.9511,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.5511,
+   "max": 0.5298,
+   "nMin": 1085,
+   "nMax": 2855
+  }
+ },
+ "fps/weapons/neon_tactical_rifle_019a2029.glb": {
+  "worldSize": [
+   1.9039,
+   0.9686,
+   0.2336
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1652,
+   "max": 0.135,
+   "nMin": 937,
+   "nMax": 1515
+  }
+ },
+ "fps/weapons/neon_tactical_rifle_019a202f.glb": {
+  "worldSize": [
+   1.9035,
+   0.9579,
+   0.1957
+  ],
+  "nodeScale": 0.9518,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1623,
+   "max": 0.1273,
+   "nMin": 947,
+   "nMax": 1584
+  }
+ },
+ "fps/weapons/neon_tactical_rifle_019a204b.glb": {
+  "worldSize": [
+   1.9038,
+   0.976,
+   0.1938
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1541,
+   "max": 0.1472,
+   "nMin": 668,
+   "nMax": 1538
+  }
+ },
+ "fps/weapons/neon_tactical_rifle_019a2103.glb": {
+  "worldSize": [
+   1.904,
+   0.9826,
+   0.2008
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1599,
+   "max": 0.1431,
+   "nMin": 885,
+   "nMax": 1380
+  }
+ },
+ "fps/weapons/neon_vein_blaster_x_019bca6c.glb": {
+  "worldSize": [
+   1.8981,
+   0.9153,
+   0.2153
+  ],
+  "nodeScale": 0.949,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1039,
+   "max": 0.0974,
+   "nMin": 1842,
+   "nMax": 1419
+  }
+ },
+ "fps/weapons/neon_x_camouflage_pistol_019b6a56.glb": {
+  "worldSize": [
+   1.9003,
+   1.4727,
+   0.4128
+  ],
+  "nodeScale": 0.9501,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.4224,
+   "max": 0.293,
+   "nMin": 1265,
+   "nMax": 5754
+  }
+ },
+ "fps/weapons/neon_x_camouflage_pistol_019b6c51.glb": {
+  "worldSize": [
+   1.8982,
+   1.4744,
+   0.3807
+  ],
+  "nodeScale": 0.9517,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.485,
+   "max": 0.3271,
+   "nMin": 3053,
+   "nMax": 4978
+  }
+ },
+ "fps/weapons/neon_x_p1st0l_019b213d.glb": {
+  "worldSize": [
+   1.8671,
+   1.3927,
+   0.3572
+  ],
+  "nodeScale": 0.9336,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.4802,
+   "max": 0.3537,
+   "nMin": 622,
+   "nMax": 3613
+  }
+ },
+ "fps/weapons/neon_x_pulse_pistol_019b5549.glb": {
+  "worldSize": [
+   1.9021,
+   1.623,
+   0.3581
+  ],
+  "nodeScale": 0.9511,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.548,
+   "max": 0.3688,
+   "nMin": 949,
+   "nMax": 3690
+  }
+ },
+ "fps/weapons/neon_x_smg_019ae364.glb": {
+  "worldSize": [
+   1.904,
+   0.9198,
+   0.4077
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1675,
+   "max": 0.1238,
+   "nMin": 1928,
+   "nMax": 926
+  }
+ },
+ "fps/weapons/p90_acid_x_019cd2b7.glb": {
+  "worldSize": [
+   1.8982,
+   1.3728,
+   0.2259
+  ],
+  "nodeScale": 0.9491,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1247,
+   "max": 0.1735,
+   "nMin": 1378,
+   "nMax": 1539
+  }
+ },
+ "fps/weapons/photon_blaster_x_019c3ec3.glb": {
+  "worldSize": [
+   1.9992,
+   0.7737,
+   1.1379
+  ],
+  "nodeScale": 0.9996,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.2727,
+   "max": 0.2746,
+   "nMin": 984,
+   "nMax": 136
+  }
+ },
+ "fps/weapons/pixelated_precision_rifle_019a6ad5.glb": {
+  "worldSize": [
+   1.904,
+   0.8619,
+   0.1704
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0933,
+   "max": 0.0978,
+   "nMin": 2217,
+   "nMax": 1416
+  }
+ },
+ "fps/weapons/plasma_annihilator_x_019bd1d7.glb": {
+  "worldSize": [
+   1.8963,
+   0.7862,
+   0.6348
+  ],
+  "nodeScale": 0.9481,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0847,
+   "max": 0.1487,
+   "nMin": 1268,
+   "nMax": 1088
+  }
+ },
+ "fps/weapons/plasma_blaster_x_x_0199ed1f.glb": {
+  "worldSize": [
+   1.9038,
+   1.0701,
+   0.3423
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2684,
+   "max": 0.1841,
+   "nMin": 2159,
+   "nMax": 1318
+  }
+ },
+ "fps/weapons/plasma_blaster_x_x_0199edc2.glb": {
+  "worldSize": [
+   1.9029,
+   1.1001,
+   0.3148
+  ],
+  "nodeScale": 0.9515,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2425,
+   "max": 0.219,
+   "nMin": 2754,
+   "nMax": 1735
+  }
+ },
+ "fps/weapons/plasma_blaster_x_x_0199edd9.glb": {
+  "worldSize": [
+   1.9038,
+   1.0697,
+   0.3423
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2686,
+   "max": 0.1849,
+   "nMin": 2161,
+   "nMax": 1312
+  }
+ },
+ "fps/weapons/plasma_blaster_x_x_fe5fa009.glb": {
+  "worldSize": [
+   1.9034,
+   1.0985,
+   0.3109
+  ],
+  "nodeScale": 0.9517,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2611,
+   "max": 0.2095,
+   "nMin": 2664,
+   "nMax": 1897
+  }
+ },
+ "fps/weapons/psy_sn1per_x_019be18a.glb": {
+  "worldSize": [
+   1.8978,
+   0.835,
+   0.1918
+  ],
+  "nodeScale": 0.9489,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0942,
+   "max": 0.0952,
+   "nMin": 644,
+   "nMax": 2162
+  }
+ },
+ "fps/weapons/pulse_blaster_mkii_x_019a54e2.glb": {
+  "worldSize": [
+   1.904,
+   1.6048,
+   0.3737
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1747,
+   "max": 0.2443,
+   "nMin": 1411,
+   "nMax": 1331
+  }
+ },
+ "fps/weapons/pulse_gun_x_019a7389.glb": {
+  "worldSize": [
+   1.9036,
+   1.129,
+   0.2247
+  ],
+  "nodeScale": 0.9518,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2119,
+   "max": 0.171,
+   "nMin": 1186,
+   "nMax": 1301
+  }
+ },
+ "fps/weapons/pulse_rifle_xtc_duality_0199e719.glb": {
+  "worldSize": [
+   1.92,
+   1.3558,
+   0.2852
+  ],
+  "nodeScale": 0.96,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2054,
+   "max": 0.1502,
+   "nMin": 2836,
+   "nMax": 1365
+  }
+ },
+ "fps/weapons/pulse_rifle_xtc_duality_0199e76d.glb": {
+  "worldSize": [
+   1.9203,
+   1.3576,
+   0.286
+  ],
+  "nodeScale": 0.9601,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.189,
+   "max": 0.1566,
+   "nMin": 2655,
+   "nMax": 1170
+  }
+ },
+ "fps/weapons/pulse_rifle_xtc_duality_0199e776.glb": {
+  "worldSize": [
+   1.9198,
+   1.2293,
+   0.2437
+  ],
+  "nodeScale": 0.9599,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2145,
+   "max": 0.1561,
+   "nMin": 1686,
+   "nMax": 1240
+  }
+ },
+ "fps/weapons/pulse_rifle_xtc_duality_0199e777.glb": {
+  "worldSize": [
+   1.9222,
+   1.1924,
+   0.2635
+  ],
+  "nodeScale": 0.9611,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1948,
+   "max": 0.1433,
+   "nMin": 1627,
+   "nMax": 1966
+  }
+ },
+ "fps/weapons/quantum_blaster_mk_x_019c0b30.glb": {
+  "worldSize": [
+   1.9989,
+   0.7038,
+   0.4697
+  ],
+  "nodeScale": 0.9995,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0914,
+   "max": 0.1035,
+   "nMin": 423,
+   "nMax": 1225
+  }
+ },
+ "fps/weapons/retro_tech_blaster_0199e0dc.glb": {
+  "worldSize": [
+   1.9019,
+   1.4187,
+   0.3041
+  ],
+  "nodeScale": 0.951,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1732,
+   "max": 0.2252,
+   "nMin": 1440,
+   "nMax": 1913
+  }
+ },
+ "fps/weapons/retro_tech_blaster_0199e12a.glb": {
+  "worldSize": [
+   1.9021,
+   1.4461,
+   0.3501
+  ],
+  "nodeScale": 0.951,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1952,
+   "max": 0.2292,
+   "nMin": 1199,
+   "nMax": 2087
+  }
+ },
+ "fps/weapons/retro_tech_blaster_0199e390.glb": {
+  "worldSize": [
+   1.9023,
+   1.4181,
+   0.3583
+  ],
+  "nodeScale": 0.9512,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2262,
+   "max": 0.1969,
+   "nMin": 1430,
+   "nMax": 1851
+  }
+ },
+ "fps/weapons/retro_tech_blaster_0199e6e4.glb": {
+  "worldSize": [
+   1.9041,
+   1.4215,
+   0.3605
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2345,
+   "max": 0.2098,
+   "nMin": 1420,
+   "nMax": 2888
+  }
+ },
+ "fps/weapons/revolver_in_shadows_019b0a97.glb": {
+  "worldSize": [
+   1.9035,
+   1.0516,
+   0.3244
+  ],
+  "nodeScale": 0.9517,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3283,
+   "max": 0.2708,
+   "nMin": 1082,
+   "nMax": 2243
+  }
+ },
+ "fps/weapons/rifle_silhouette_01946212.glb": {
+  "worldSize": [
+   0.1437,
+   0.5858,
+   1.9992
+  ],
+  "nodeScale": 0.9996,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1952,
+   "max": 0.0906,
+   "nMin": 1601,
+   "nMax": 497
+  }
+ },
+ "fps/weapons/rifle_silhouette_01946216.glb": {
+  "worldSize": [
+   0.1438,
+   0.5858,
+   1.9993
+  ],
+  "nodeScale": 0.9997,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1945,
+   "max": 0.092,
+   "nMin": 1593,
+   "nMax": 481
+  }
+ },
+ "fps/weapons/sci_fi_armament_019a7382.glb": {
+  "worldSize": [
+   1.904,
+   1.2022,
+   0.3405
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2429,
+   "max": 0.1931,
+   "nMin": 2548,
+   "nMax": 1749
+  }
+ },
+ "fps/weapons/seriously_dangerous_blaster_0199e775.glb": {
+  "worldSize": [
+   1.9041,
+   1.1019,
+   0.3131
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1508,
+   "max": 0.1634,
+   "nMin": 1639,
+   "nMax": 1101
+  }
+ },
+ "fps/weapons/seriously_dangerous_blaster_0199e7bf.glb": {
+  "worldSize": [
+   1.9041,
+   1.1019,
+   0.3131
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1516,
+   "max": 0.1657,
+   "nMin": 1610,
+   "nMax": 1119
+  }
+ },
+ "fps/weapons/seriously_dangerous_blaster_0199e8ac.glb": {
+  "worldSize": [
+   1.9029,
+   1.1191,
+   0.3649
+  ],
+  "nodeScale": 0.9515,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1562,
+   "max": 0.1725,
+   "nMin": 2040,
+   "nMax": 852
+  }
+ },
+ "fps/weapons/seriously_dangerous_blaster_0199ed04.glb": {
+  "worldSize": [
+   1.904,
+   1.0953,
+   0.298
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1335,
+   "max": 0.1561,
+   "nMin": 2579,
+   "nMax": 1425
+  }
+ },
+ "fps/weapons/sh0ck_x_rifle_019ae33b.glb": {
+  "worldSize": [
+   1.904,
+   0.7255,
+   0.2791
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1006,
+   "max": 0.1188,
+   "nMin": 1605,
+   "nMax": 1781
+  }
+ },
+ "fps/weapons/silenced_machine_pistol_vector_0199e6b7.glb": {
+  "worldSize": [
+   1.904,
+   0.9221,
+   0.1904
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3078,
+   "max": 0.3055,
+   "nMin": 728,
+   "nMax": 3744
+  }
+ },
+ "fps/weapons/silenced_machine_pistol_vector_0199e6c7.glb": {
+  "worldSize": [
+   1.904,
+   0.9221,
+   0.1904
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3071,
+   "max": 0.3072,
+   "nMin": 724,
+   "nMax": 3754
+  }
+ },
+ "fps/weapons/silenced_machine_pistol_vector_0199e6e2.glb": {
+  "worldSize": [
+   1.904,
+   0.9221,
+   0.1904
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3071,
+   "max": 0.3066,
+   "nMin": 731,
+   "nMax": 3843
+  }
+ },
+ "fps/weapons/silenced_machine_pistol_vector_0199ed0b.glb": {
+  "worldSize": [
+   1.904,
+   0.9277,
+   0.2482
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3069,
+   "max": 0.312,
+   "nMin": 667,
+   "nMax": 4480
+  }
+ },
+ "fps/weapons/silenced_machine_pistol_vector_019a2a4f.glb": {
+  "worldSize": [
+   1.8982,
+   0.9049,
+   0.2238
+  ],
+  "nodeScale": 0.9491,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2955,
+   "max": 0.2862,
+   "nMin": 699,
+   "nMax": 3669
+  }
+ },
+ "fps/weapons/silenced_machine_pistol_vector_019a2a5e.glb": {
+  "worldSize": [
+   1.904,
+   0.9221,
+   0.1904
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3071,
+   "max": 0.3066,
+   "nMin": 731,
+   "nMax": 3843
+  }
+ },
+ "fps/weapons/silenced_machine_pistol_vector_019a2a5f.glb": {
+  "worldSize": [
+   1.904,
+   0.9221,
+   0.1904
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3072,
+   "max": 0.3071,
+   "nMin": 735,
+   "nMax": 3820
+  }
+ },
+ "fps/weapons/silenced_machine_pistol_vector_019a2a60.glb": {
+  "worldSize": [
+   1.904,
+   0.9226,
+   0.2113
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3029,
+   "max": 0.307,
+   "nMin": 372,
+   "nMax": 4147
+  }
+ },
+ "fps/weapons/silenced_machine_pistol_vector_4b3ca8f3.glb": {
+  "worldSize": [
+   1.904,
+   0.9221,
+   0.1904
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3068,
+   "max": 0.3065,
+   "nMin": 735,
+   "nMax": 3850
+  }
+ },
+ "fps/weapons/skull_gun_x_019c3ef3.glb": {
+  "worldSize": [
+   1.9944,
+   0.5924,
+   0.262
+  ],
+  "nodeScale": 0.9972,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1117,
+   "max": 0.0858,
+   "nMin": 2835,
+   "nMax": 1273
+  }
+ },
+ "fps/weapons/skullforge_blaster_x_019ceb90.glb": {
+  "worldSize": [
+   1.8979,
+   0.8049,
+   0.2806
+  ],
+  "nodeScale": 0.9489,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1163,
+   "max": 0.0817,
+   "nMin": 2223,
+   "nMax": 911
+  }
+ },
+ "fps/weapons/skullforge_inferno_cannon_y_019ccaaa.glb": {
+  "worldSize": [
+   1.8987,
+   1.0234,
+   0.2309
+  ],
+  "nodeScale": 0.9494,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1166,
+   "max": 0.1073,
+   "nMin": 1207,
+   "nMax": 1830
+  }
+ },
+ "fps/weapons/soda_blaster_019ba563.glb": {
+  "worldSize": [
+   1.8992,
+   1.2831,
+   0.3519
+  ],
+  "nodeScale": 0.9496,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3023,
+   "max": 0.3643,
+   "nMin": 779,
+   "nMax": 1767
+  }
+ },
+ "fps/weapons/stealth_combat_rifle_with_suppressor_and_red_dot_019ca470.glb": {
+  "worldSize": [
+   1.8994,
+   0.9115,
+   0.2541
+  ],
+  "nodeScale": 0.9497,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1184,
+   "max": 0.1293,
+   "nMin": 1342,
+   "nMax": 1709
+  }
+ },
+ "fps/weapons/steampunk_armament_x_019bd498.glb": {
+  "worldSize": [
+   1.899,
+   1.0076,
+   0.3076
+  ],
+  "nodeScale": 0.9495,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2387,
+   "max": 0.1565,
+   "nMin": 1326,
+   "nMax": 554
+  }
+ },
+ "fps/weapons/steampunk_blaster_019a6458.glb": {
+  "worldSize": [
+   1.9019,
+   0.9323,
+   0.309
+  ],
+  "nodeScale": 0.951,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1275,
+   "max": 0.2374,
+   "nMin": 900,
+   "nMax": 1175
+  }
+ },
+ "fps/weapons/steampunk_cyber_blaster_x_019c159b.glb": {
+  "worldSize": [
+   1.9986,
+   1.8408,
+   0.7724
+  ],
+  "nodeScale": 0.9995,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.421,
+   "max": 0.4025,
+   "nMin": 1690,
+   "nMax": 2756
+  }
+ },
+ "fps/weapons/steampunk_enforcer_christmas2025_019b25b6.glb": {
+  "worldSize": [
+   1.8983,
+   1.2633,
+   0.3773
+  ],
+  "nodeScale": 0.9492,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3669,
+   "max": 0.3238,
+   "nMin": 1858,
+   "nMax": 2558
+  }
+ },
+ "fps/weapons/steampunk_laser_blaster_christmas2025_019b22ef.glb": {
+  "worldSize": [
+   1.9038,
+   1.0422,
+   0.2359
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.187,
+   "max": 0.168,
+   "nMin": 313,
+   "nMax": 2270
+  }
+ },
+ "fps/weapons/steampunk_lightning_rifle_019c32cd.glb": {
+  "worldSize": [
+   2,
+   1.0143,
+   0.2012
+  ],
+  "nodeScale": 1,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0957,
+   "max": 0.195,
+   "nMin": 539,
+   "nMax": 1132
+  }
+ },
+ "fps/weapons/steampunk_precision_019a4fe2.glb": {
+  "worldSize": [
+   1.9034,
+   0.7424,
+   0.5205
+  ],
+  "nodeScale": 0.9517,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0979,
+   "max": 0.1673,
+   "nMin": 343,
+   "nMax": 1325
+  }
+ },
+ "fps/weapons/steampunk_precision_019a54cb.glb": {
+  "worldSize": [
+   1.9008,
+   0.7396,
+   0.533
+  ],
+  "nodeScale": 0.9504,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.0971,
+   "max": 0.1607,
+   "nMin": 374,
+   "nMax": 1246
+  }
+ },
+ "fps/weapons/steampunk_rifle_x_019a5397.glb": {
+  "worldSize": [
+   1.9038,
+   1.0257,
+   0.2759
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1828,
+   "max": 0.1421,
+   "nMin": 1293,
+   "nMax": 412
+  }
+ },
+ "fps/weapons/steampunk_rifle_x_019a54d1.glb": {
+  "worldSize": [
+   1.9029,
+   0.9983,
+   0.2815
+  ],
+  "nodeScale": 0.9514,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1787,
+   "max": 0.1396,
+   "nMin": 2306,
+   "nMax": 217
+  }
+ },
+ "fps/weapons/steampunk_tech_blaster_x_019c0484.glb": {
+  "worldSize": [
+   1.8987,
+   1.1713,
+   0.407
+  ],
+  "nodeScale": 0.9499,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1162,
+   "max": 0.1372,
+   "nMin": 2178,
+   "nMax": 4691
+  }
+ },
+ "fps/weapons/steampunk_x_sc0rn_rifle_019a3b72.glb": {
+  "worldSize": [
+   1.9038,
+   0.6217,
+   0.218
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1778,
+   "max": 0.1133,
+   "nMin": 1636,
+   "nMax": 1911
+  }
+ },
+ "fps/weapons/submachine_gun_x_019c193e.glb": {
+  "worldSize": [
+   1.9992,
+   1.9053,
+   0.3339
+  ],
+  "nodeScale": 0.9996,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.5867,
+   "max": 0.5466,
+   "nMin": 2381,
+   "nMax": 3466
+  }
+ },
+ "fps/weapons/t19_cluster_cannon_x_019ca68c.glb": {
+  "worldSize": [
+   1.892,
+   1.6465,
+   1.8919
+  ],
+  "nodeScale": 0.9467,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.6947,
+   "max": 0.7722,
+   "nMin": 17,
+   "nMax": 25
+  }
+ },
+ "fps/weapons/tactical_bullpup_rifle_x_019c2bb2.glb": {
+  "worldSize": [
+   1.9968,
+   0.9166,
+   0.2908
+  ],
+  "nodeScale": 0.9984,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.114,
+   "max": 0.1288,
+   "nMin": 1664,
+   "nMax": 1568
+  }
+ },
+ "fps/weapons/tactical_handgun_with_scope_0199cbdf.glb": {
+  "worldSize": [
+   1.902,
+   1.0893,
+   0.2403
+  ],
+  "nodeScale": 0.951,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1333,
+   "max": 0.2089,
+   "nMin": 1110,
+   "nMax": 1287
+  }
+ },
+ "fps/weapons/tactical_handgun_with_scope_0199cf9f.glb": {
+  "worldSize": [
+   1.9029,
+   1.0752,
+   0.2476
+  ],
+  "nodeScale": 0.9515,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1252,
+   "max": 0.1877,
+   "nMin": 1471,
+   "nMax": 1294
+  }
+ },
+ "fps/weapons/tactical_precision_019a5e92.glb": {
+  "worldSize": [
+   1.9037,
+   0.8439,
+   0.1987
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.0887,
+   "max": 0.086,
+   "nMin": 3098,
+   "nMax": 1023
+  }
+ },
+ "fps/weapons/tactical_precision_019a5ea3.glb": {
+  "worldSize": [
+   1.9037,
+   0.8525,
+   0.214
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.0959,
+   "max": 0.0805,
+   "nMin": 1663,
+   "nMax": 979
+  }
+ },
+ "fps/weapons/tactical_precision_019a66fe.glb": {
+  "worldSize": [
+   1.9029,
+   0.9671,
+   0.1721
+  ],
+  "nodeScale": 0.9514,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2409,
+   "max": 0.1052,
+   "nMin": 1692,
+   "nMax": 1973
+  }
+ },
+ "fps/weapons/tactical_precision_019a755b.glb": {
+  "worldSize": [
+   1.904,
+   0.8387,
+   0.205
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1029,
+   "max": 0.0786,
+   "nMin": 1655,
+   "nMax": 633
+  }
+ },
+ "fps/weapons/tactical_precision_x_rifle_019a2a81.glb": {
+  "worldSize": [
+   1.904,
+   0.9675,
+   0.2501
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1573,
+   "max": 0.0867,
+   "nMin": 2276,
+   "nMax": 1284
+  }
+ },
+ "fps/weapons/tactical_precision_x_rifle_019a2ab4.glb": {
+  "worldSize": [
+   1.9024,
+   0.9901,
+   0.245
+  ],
+  "nodeScale": 0.9512,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1742,
+   "max": 0.1084,
+   "nMin": 1416,
+   "nMax": 2348
+  }
+ },
+ "fps/weapons/tactical_precision_x_rifle_019a2ad4.glb": {
+  "worldSize": [
+   1.902,
+   1.109,
+   0.2591
+  ],
+  "nodeScale": 0.951,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.196,
+   "max": 0.0974,
+   "nMin": 1714,
+   "nMax": 1572
+  }
+ },
+ "fps/weapons/techno_blasterx_christmas2025_019b2e09.glb": {
+  "worldSize": [
+   1.9035,
+   1.1634,
+   0.3669
+  ],
+  "nodeScale": 0.9518,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2258,
+   "max": 0.1814,
+   "nMin": 1718,
+   "nMax": 1254
+  }
+ },
+ "fps/weapons/tesla_power_saw_gun_x_019c1671.glb": {
+  "worldSize": [
+   1.9927,
+   1.1752,
+   0.2739
+  ],
+  "nodeScale": 0.9963,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1342,
+   "max": 0.1941,
+   "nMin": 2176,
+   "nMax": 487
+  }
+ },
+ "fps/weapons/the_heavy_force_x_019d04f5.glb": {
+  "worldSize": [
+   1.8994,
+   0.8626,
+   0.1931
+  ],
+  "nodeScale": 0.9497,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1623,
+   "max": 0.1385,
+   "nMin": 872,
+   "nMax": 1674
+  }
+ },
+ "fps/weapons/toy_blaster_gun_019b0a7f.glb": {
+  "worldSize": [
+   1.9039,
+   1.0908,
+   0.2457
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1759,
+   "max": 0.1315,
+   "nMin": 2588,
+   "nMax": 1337
+  }
+ },
+ "fps/weapons/untitled_0196162a.glb": {
+  "worldSize": [
+   0.7572,
+   1.0431,
+   2
+  ],
+  "nodeScale": 1,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2261,
+   "max": 0.2014,
+   "nMin": 112,
+   "nMax": 146
+  }
+ },
+ "fps/weapons/untitled_01961aa1.glb": {
+  "worldSize": [
+   0.6803,
+   1.2841,
+   2
+  ],
+  "nodeScale": 1,
+  "axis": "z",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.087,
+   "max": 0.2497,
+   "nMin": 163,
+   "nMax": 350
+  }
+ },
+ "fps/weapons/untitled_01961acd.glb": {
+  "worldSize": [
+   0.3887,
+   0.9144,
+   2
+  ],
+  "nodeScale": 1,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1759,
+   "max": 0.0568,
+   "nMin": 55,
+   "nMax": 328
+  }
+ },
+ "fps/weapons/untitled_0199396c.glb": {
+  "worldSize": [
+   0.3923,
+   1.2116,
+   2
+  ],
+  "nodeScale": 1,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2246,
+   "max": 0.0696,
+   "nMin": 344,
+   "nMax": 165
+  }
+ },
+ "fps/weapons/untitled_01993f8d.glb": {
+  "worldSize": [
+   0.6803,
+   1.2841,
+   2
+  ],
+  "nodeScale": 1,
+  "axis": "z",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.087,
+   "max": 0.2497,
+   "nMin": 163,
+   "nMax": 350
+  }
+ },
+ "fps/weapons/untitled_019977ec.glb": {
+  "worldSize": [
+   0.3923,
+   1.2116,
+   2
+  ],
+  "nodeScale": 1,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2246,
+   "max": 0.0696,
+   "nMin": 344,
+   "nMax": 165
+  }
+ },
+ "fps/weapons/untitled_019977f0.glb": {
+  "worldSize": [
+   0.3887,
+   0.9144,
+   2
+  ],
+  "nodeScale": 1,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1611,
+   "max": 0.0529,
+   "nMin": 89,
+   "nMax": 844
+  }
+ },
+ "fps/weapons/untitled_019979fd.glb": {
+  "worldSize": [
+   0.3887,
+   0.9144,
+   2
+  ],
+  "nodeScale": 1,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1611,
+   "max": 0.0529,
+   "nMin": 89,
+   "nMax": 844
+  }
+ },
+ "fps/weapons/untitled_019989cd.glb": {
+  "worldSize": [
+   0.7572,
+   1.0431,
+   2
+  ],
+  "nodeScale": 1,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2261,
+   "max": 0.2014,
+   "nMin": 112,
+   "nMax": 146
+  }
+ },
+ "fps/weapons/untitled_01998c6a.glb": {
+  "worldSize": [
+   0.5264,
+   0.8473,
+   2
+  ],
+  "nodeScale": 1,
+  "axis": "z",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1726,
+   "max": 0.1946,
+   "nMin": 99,
+   "nMax": 202
+  }
+ },
+ "fps/weapons/untitled_0199ca19.glb": {
+  "worldSize": [
+   0.8629,
+   1.0304,
+   2
+  ],
+  "nodeScale": 1,
+  "axis": "z",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.3101,
+   "max": 0.3441,
+   "nMin": 104,
+   "nMax": 108
+  }
+ },
+ "fps/weapons/untitled_0199eae0.glb": {
+  "worldSize": [
+   0.7208,
+   0.5794,
+   2
+  ],
+  "nodeScale": 1,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1487,
+   "max": 0.1238,
+   "nMin": 427,
+   "nMax": 104
+  }
+ },
+ "fps/weapons/untitled_019cd221.glb": {
+  "worldSize": [
+   1.9971,
+   1.6129,
+   0.3637
+  ],
+  "nodeScale": 0.9986,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.2126,
+   "max": 0.325,
+   "nMin": 1371,
+   "nMax": 2395
+  }
+ },
+ "fps/weapons/untitled_019ea763.glb": {
+  "worldSize": [
+   0.3371,
+   1.2965,
+   1.9999
+  ],
+  "nodeScale": 0.9999,
+  "axis": "z",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3711,
+   "max": 0.2786,
+   "nMin": 2006,
+   "nMax": 2211
+  }
+ },
+ "fps/weapons/untitled_019ea764.glb": {
+  "worldSize": [
+   0.2655,
+   1.0474,
+   1.9992
+  ],
+  "nodeScale": 0.9996,
+  "axis": "z",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1953,
+   "max": 0.2828,
+   "nMin": 1181,
+   "nMax": 2445
+  }
+ },
+ "fps/weapons/vanguard_railpistol_x_019caf60.glb": {
+  "worldSize": [
+   1.8994,
+   1.408,
+   0.3541
+  ],
+  "nodeScale": 0.9497,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3939,
+   "max": 0.3658,
+   "nMin": 1017,
+   "nMax": 5422
+  }
+ },
+ "fps/weapons/verdigris_arcane_carbine_xxx_019ccae1.glb": {
+  "worldSize": [
+   1.8937,
+   1.4665,
+   0.4381
+  ],
+  "nodeScale": 0.9469,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.2728,
+   "max": 0.2784,
+   "nMin": 1952,
+   "nMax": 1822
+  }
+ },
+ "fps/weapons/vibrant_toy_blaster_christmas2025_019b1c38.glb": {
+  "worldSize": [
+   1.9029,
+   1.1383,
+   0.3489
+  ],
+  "nodeScale": 0.9514,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.4003,
+   "max": 0.3167,
+   "nMin": 2062,
+   "nMax": 1900
+  }
+ },
+ "fps/weapons/vinebound_ion_rifle_x_019c76d0.glb": {
+  "worldSize": [
+   1.8978,
+   1.127,
+   0.5128
+  ],
+  "nodeScale": 0.9489,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.2203,
+   "max": 0.2436,
+   "nMin": 1088,
+   "nMax": 2462
+  }
+ },
+ "fps/weapons/vsu212_x_blaster_019a7546.glb": {
+  "worldSize": [
+   1.9037,
+   1.0029,
+   0.2359
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1214,
+   "max": 0.1504,
+   "nMin": 1909,
+   "nMax": 1420
+  }
+ },
+ "fps/weapons/x_neon_assault_rifle_019c5098.glb": {
+  "worldSize": [
+   1.9988,
+   0.9627,
+   0.2369
+  ],
+  "nodeScale": 0.9994,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1783,
+   "max": 0.1879,
+   "nMin": 3561,
+   "nMax": 2922
+  }
+ },
+ "fps/weapons/x_plosive_gun_of_quake_019a2a96.glb": {
+  "worldSize": [
+   1.904,
+   1.0867,
+   0.3256
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2978,
+   "max": 0.2745,
+   "nMin": 1855,
+   "nMax": 2333
+  }
+ },
+ "fps/weapons/x_plosive_gun_of_quake_019a2ab5.glb": {
+  "worldSize": [
+   1.9025,
+   1.0905,
+   0.3279
+  ],
+  "nodeScale": 0.9513,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2941,
+   "max": 0.2793,
+   "nMin": 1961,
+   "nMax": 2623
+  }
+ },
+ "fps/weapons/x_plosive_gun_of_quake_019a2f8a.glb": {
+  "worldSize": [
+   1.9039,
+   1.0848,
+   0.3647
+  ],
+  "nodeScale": 0.9519,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.3058,
+   "max": 0.2721,
+   "nMin": 1779,
+   "nMax": 2659
+  }
+ },
+ "fps/weapons/x_revolver_019cec0d.glb": {
+  "worldSize": [
+   1.8987,
+   0.7944,
+   0.267
+  ],
+  "nodeScale": 0.9493,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2545,
+   "max": 0.2398,
+   "nMin": 761,
+   "nMax": 2050
+  }
+ },
+ "fps/weapons/x_revolver_019f2af4.glb": {
+  "worldSize": [
+   1.899,
+   0.7871,
+   0.2689
+  ],
+  "nodeScale": 0.9495,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2437,
+   "max": 0.2341,
+   "nMin": 371,
+   "nMax": 2501
+  }
+ },
+ "fps/weapons/x_sc0rn_killer_rifle_019a73ad.glb": {
+  "worldSize": [
+   1.904,
+   1.0414,
+   0.2387
+  ],
+  "nodeScale": 0.952,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1941,
+   "max": 0.1666,
+   "nMin": 1504,
+   "nMax": 1398
+  }
+ },
+ "fps/weapons/x_smg_icicle_019d0f78.glb": {
+  "worldSize": [
+   1.8995,
+   1.1996,
+   0.3172
+  ],
+  "nodeScale": 0.9497,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1247,
+   "max": 0.1554,
+   "nMin": 2079,
+   "nMax": 896
+  }
+ },
+ "fps/weapons/x_tactical_blaster_019ae52f.glb": {
+  "worldSize": [
+   1.9033,
+   1.0747,
+   0.3729
+  ],
+  "nodeScale": 0.9517,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.1739,
+   "max": 0.1384,
+   "nMin": 2713,
+   "nMax": 942
+  }
+ },
+ "fps/weapons/x_tactical_rifle_019ae5b4.glb": {
+  "worldSize": [
+   1.9026,
+   0.9561,
+   0.2278
+  ],
+  "nodeScale": 0.9513,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1344,
+   "max": 0.1727,
+   "nMin": 1813,
+   "nMax": 766
+  }
+ },
+ "fps/weapons/x_torn_cyber_devourer_0199c786.glb": {
+  "worldSize": [
+   1.898,
+   1.4534,
+   0.2924
+  ],
+  "nodeScale": 0.9496,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2158,
+   "max": 0.1822,
+   "nMin": 3985,
+   "nMax": 1682
+  }
+ },
+ "fps/weapons/x_torn_cyber_devourer_0199ca0d.glb": {
+  "worldSize": [
+   1.9032,
+   1.4557,
+   0.2939
+  ],
+  "nodeScale": 0.9516,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1811,
+   "max": 0.2484,
+   "nMin": 2471,
+   "nMax": 1292
+  }
+ },
+ "fps/weapons/x_torn_cyber_devourer_0199ca10.glb": {
+  "worldSize": [
+   1.8993,
+   1.4556,
+   0.3281
+  ],
+  "nodeScale": 0.9497,
+  "axis": "x",
+  "thinEnd": "max",
+  "radius": {
+   "min": 0.2185,
+   "max": 0.1675,
+   "nMin": 1336,
+   "nMax": 1761
+  }
+ },
+ "fps/weapons/x_torn_cyber_devourer_0199ca4c.glb": {
+  "worldSize": [
+   1.8985,
+   1.4514,
+   0.2871
+  ],
+  "nodeScale": 0.9492,
+  "axis": "x",
+  "thinEnd": "min",
+  "radius": {
+   "min": 0.1735,
+   "max": 0.24,
+   "nMin": 2242,
+   "nMax": 1282
+  }
+ }
+}

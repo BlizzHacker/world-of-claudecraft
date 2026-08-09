@@ -73,7 +73,14 @@ describe('character visual manifest', () => {
     });
     expect(visualKeyFor({ kind: 'mob', templateId: 'forest_wolf' } as never)).toBe('mob_wolf');
     expect(visualKeyFor({ kind: 'mob', templateId: 'wild_boar' } as never)).toBe('mob_boar');
-    expect(visualKeyFor({ kind: 'mob', templateId: 'mire_prowler' } as never)).toBe('mob_wolf');
+    // mire_prowler is the un-named generic beast, so it is exactly what the
+    // Infernal quadruped roster is for: it draws a staged Infernal creature
+    // instead of collapsing onto the shared wolf. The named animals above keep
+    // their GLBs, which is what this test is really about. Pool membership and
+    // realm purity are pinned in tests/generated_creatures.test.ts.
+    expect(visualKeyFor({ kind: 'mob', templateId: 'mire_prowler' } as never)).toMatch(
+      /^realm_infernal_/,
+    );
     expect(visualKeyFor({ kind: 'npc', templateId: 'warden_fenwick' } as never)).toMatch(
       /^realm_infernal_human_/,
     );
@@ -119,7 +126,10 @@ describe('character visual manifest', () => {
       'a_future_cryptic_civilian',
     ];
     const npcKeys = npcIds.map((templateId) => visualKeyFor({ kind: 'npc', templateId } as never));
-    expect(new Set(npcKeys).size).toBeGreaterThanOrEqual(6);
+    // Was 6. The 2026-08-08 render audit cut the civilian rotation to the three
+    // bodies whose limbs actually animate (see INFERNAL_DEFECTIVE_BODY_KEYS).
+    // RAISE THIS BACK as bodies are repaired.
+    expect(new Set(npcKeys).size).toBeGreaterThanOrEqual(3);
     for (const key of npcKeys) {
       expect(key).toMatch(/^realm_infernal_human_/);
       expect(key).not.toMatch(/bone_herald|npc_|elf|orc|demon/i);

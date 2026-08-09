@@ -107,7 +107,7 @@ import { mouselookReleaseFacing } from './game/mouselook_release';
 import { diagonalMovementVisualFacing } from './game/movement_visual';
 import { music } from './game/music';
 import { tryNearbyInteraction } from './game/nearby_interaction';
-import { isOfflineModeAvailable } from './game/offline_mode_gate';
+import { isOfflineModeAvailable, isPackagedConsoleApp } from './game/offline_mode_gate';
 import { loadOfflineSave, mountOfflineAutosave } from './game/offline_save';
 import { padReelItemId } from './game/pad_reel';
 import { createPerfMonitor } from './game/perf';
@@ -216,7 +216,13 @@ import {
   preloadMechAssets,
   startStreamedCharacterPreloads,
 } from './render/characters/assets';
-import { skinCount, weaponSkinModelUrl } from './render/characters/manifest';
+import {
+  setBodyOverrides,
+  skinCount,
+  visualKeyForBodyAsset,
+  visualKeyForCharacter,
+  weaponSkinModelUrl,
+} from './render/characters/manifest';
 import {
   ARMOR_SETS,
   type ArmorLoadout,
@@ -228,13 +234,14 @@ import {
   normalizeAppearance,
 } from './render/characters/modular';
 import {
+  clearPortraitCache,
   onPortraitsReady,
   onPortraitUpdate,
   playerPortraitDataUrl,
+  requestVisualPortrait,
   resetPortraitRendererForGraphicsRebuild,
 } from './render/characters/portrait';
 import { type RecycledRendererContext, recycleWebGL2Context } from './render/context_recycle';
-import { setBodyOverrides } from './render/characters/manifest';
 import { installWebGLContextRelease } from './render/context_release';
 import { setDayNightPhaseOverride, setLunarPhaseOverride } from './render/day_night_clock';
 import {
@@ -395,7 +402,13 @@ import { applyPerfOrnamentVars } from './ui/perf_ornament_svg';
 import { PerfOverlay } from './ui/perf_overlay';
 import { type PerfOverlayConfig, PerfOverlayConfigStore } from './ui/perf_overlay_config';
 import { buildPerfOverlayView, FrameMeter } from './ui/perf_overlay_model';
-import { hydratePortraits, portraitChipHtml } from './ui/portrait_chip';
+import {
+  characterPortraitUrl,
+  hydratePortraits,
+  portraitChipHtml,
+  portraitUrlForBodyAsset,
+  refreshPortraits,
+} from './ui/portrait_chip';
 import { hideReconnectOverlay, showReconnectOverlay } from './ui/reconnect_overlay';
 import { createSpectateBadge } from './ui/spectate_badge';
 import { refreshStartSkinPickerPortraits } from './ui/start_skin_picker_portraits';
@@ -5471,6 +5484,9 @@ function decorateClassChips(): void {
   document
     .querySelectorAll<HTMLElement>('#charcreate-panel .mini-class, #offline-select .mini-class')
     .forEach((li) => {
+      // Realm hero cards ship their own portrait + stacked-label markup; the
+      // generic base-class face and label rebuild must not overwrite them.
+      if (li.dataset.heroId) return;
       if (li.querySelector('.mini-class-portrait')) return;
       const cls = li.dataset.class as PlayerClass;
       const key = li.dataset.i18n;
@@ -5821,6 +5837,12 @@ function realmClassPresentation(cls: PlayerClass) {
 function showClassPreview(cls: PlayerClass): void {
   const realmClass = realmClassPresentation(cls);
   if (realmClass?.assetUrl) {
+    // setExternalModel keeps whatever body is mounted until the GLB lands, which
+    // means NOTHING on the first mount: the create screen showed an empty
+    // turntable for the whole multi-megabyte fetch, and forever if it failed.
+    // Stand the class rig up first so the panel is never blank; the external
+    // model replaces it on arrival and survives a failure.
+    characterPreview?.setClass(cls);
     characterPreview?.setExternalModel(realmClass.assetUrl);
     return;
   }
@@ -5960,6 +5982,112 @@ function ensureCharCreateFactionFilter(): void {
   });
 }
 
+/** User-facing copy for an asset-status label: drop the "GLB" file-format
+ *  speak ("Playable human GLB" -> "Playable"). Data attributes keep the raw
+ *  label for tooling. */
+function realmAssetDisplayLabel(label: string): string {
+  const cleaned = label
+    .replace(/\s*\bGLB\b\s*/gi, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+  return /^playable\b/i.test(cleaned) ? 'Playable' : cleaned;
+}
+
+/** Portrait render published next to a hero body GLB (same basename, .png).
+ *  The one .glb -> .png convention lives in portrait_chip.ts so the roster
+ *  rows and unit frames resolve the same way this create screen always has. */
+function realmHeroPortraitUrl(assetUrl: string | undefined): string | null {
+  return portraitUrlForBodyAsset(assetUrl);
+}
+
+/**
+ * Give every hero card a face.
+ *
+ * The card thumbnail was a bare `<img>` at the .glb -> .png convention with an
+ * inline `onerror` that hid it, so a hero whose body has no published png (the
+ * whole compiled `infernal_class_*` set — Warrior, Rogue, Paladin among them)
+ * rendered as a blank card while its neighbours showed art. Nothing was broken
+ * about those heroes; the screen simply had no way to draw a body it had not
+ * been handed a picture of. Now it renders the GLB itself, the same offscreen
+ * headshot the roster chips and unit frames use.
+ */
+// One body GLB at a time. Each is multi-megabyte with its own texture set and
+// nothing reclaims it, so firing every missing card at once is exactly the
+// residency spike that trips SBOX_FATAL_MEMORY_EXCEEDED on a console browser.
+let heroCardPortraitQueue: Promise<unknown> = Promise.resolve();
+
+function hydrateHeroCardPortraits(row: HTMLElement): void {
+  const imgs = [...row.querySelectorAll<HTMLImageElement>('img.mini-class-portrait[data-body]')];
+  const renderBody = (img: HTMLImageElement): void => {
+    const assetUrl = img.dataset.body;
+    if (!assetUrl || img.dataset.bodyRendered) return;
+    img.dataset.bodyRendered = '1';
+    heroCardPortraitQueue = heroCardPortraitQueue
+      .then(() => (img.isConnected ? requestVisualPortrait(visualKeyForBodyAsset(assetUrl)) : null))
+      .then((url) => {
+        // A body that cannot be built at all still degrades to the old
+        // text-only card rather than a broken-image glyph.
+        if (url) {
+          img.src = url;
+          img.style.display = '';
+        } else {
+          img.style.display = 'none';
+        }
+      })
+      .catch(() => {
+        img.style.display = 'none';
+      });
+  };
+  // Only cards the operator can actually see pay for a body fetch; the roster
+  // scrolls, and an off-screen card's face is worth nothing until it is on
+  // screen. No IntersectionObserver (old WebViews) = render them all, queued.
+  const observer =
+    typeof IntersectionObserver === 'function'
+      ? new IntersectionObserver(
+          (entries, obs) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              obs.unobserve(entry.target);
+              renderBody(entry.target as HTMLImageElement);
+            }
+          },
+          { root: null, rootMargin: '200px' },
+        )
+      : null;
+  for (const img of imgs) {
+    // A published png is the cheap path; only its absence or failure needs the
+    // GLB. Bind the error hook before observing so a late 404 still recovers.
+    // Hide FIRST, render second. The old inline onerror hid the img outright;
+    // replacing it with a render request left the browser's broken-image glyph
+    // on the card for as long as the body took to fetch, which is worse than the
+    // blank card it replaced. renderBody un-hides on success.
+    img.addEventListener(
+      'error',
+      () => {
+        img.style.display = 'none';
+        renderBody(img);
+      },
+      { once: true },
+    );
+    const needsBody = !img.getAttribute('src') || (img.complete && img.naturalWidth === 0);
+    if (!needsBody) continue;
+    // Never let a known-broken (or absent) png occupy the card while its body
+    // renders; the queue can be several seconds deep.
+    img.style.display = 'none';
+    if (observer) observer.observe(img);
+    else renderBody(img);
+  }
+}
+
+/** Compact glyph for a hero-variant toggle chip: the conventional signs for the
+ *  common Female/Male pair, any other (data-authored, short) label verbatim. */
+function variantToggleGlyph(label: string): string {
+  const normalized = label.trim().toLowerCase();
+  if (normalized === 'female') return '\u2640';
+  if (normalized === 'male') return '\u2642';
+  return label;
+}
+
 function paintInfernalHeroRoster(
   row: HTMLElement,
   choices: ReturnType<typeof infernalHeroChoicesForRealm>,
@@ -5967,12 +6095,36 @@ function paintInfernalHeroRoster(
 ): void {
   row.classList.add('infernal-hero-roster');
   row.innerHTML = choices
+    // Hidden variant entries never render a card of their own; they are only
+    // reachable through the canonical card's variant toggle.
+    .filter((choice) => !choice.variantOf)
     .filter((choice) => !activeFaction || choice.faction === activeFaction)
-    .map(
-      (choice) =>
-        `<button type="button" class="mini-class realm-skinned realm-playable" data-class="${choice.baseClass}" data-hero-id="${choice.heroId}" data-faction="${choice.faction}" data-realm-faction="${choice.faction}" data-realm-asset="${choice.assetUrl}" data-realm-asset-name="${choice.assetName}" data-realm-asset-status="ready" aria-label="${escapeHtml(`${choice.name}, ${choice.faction}`)}" aria-pressed="false" title="${escapeHtml(choice.assetName ?? choice.name)}"><span class="mini-class-label">${escapeHtml(choice.name)}</span><span class="mini-class-faction">${escapeHtml(choice.faction)} - Playable GLB</span></button>`,
-    )
+    .map((choice) => {
+      // Portrait render published alongside the body GLB. Only the Meshy hero
+      // set has one; every hero still on a compiled `infernal_class_*` body has
+      // no png, and hiding the img on error is what left Warrior / Rogue /
+      // Paladin as blank cards. Carry the body url so hydrateHeroCardPortraits
+      // below can render the actual GLB when the png is missing.
+      const portraitUrl = realmHeroPortraitUrl(choice.assetUrl);
+      const portraitHtml = choice.assetUrl
+        ? `<img class="mini-class-portrait"${portraitUrl ? ` src="${escapeHtml(portraitUrl)}"` : ''} data-body="${escapeHtml(choice.assetUrl)}" alt="" decoding="async" />`
+        : '';
+      const variants = choice.variants ?? [];
+      // The pending create always carries a specific variant id (default =
+      // first variant); the canonical id stays valid for existing characters.
+      const defaultHeroId = variants[0]?.heroId ?? choice.heroId;
+      const variantsHtml = variants.length
+        ? `<span class="mini-class-variants" role="group" aria-label="${escapeHtml(`${choice.name} variant`)}">${variants
+            .map(
+              (variant, index) =>
+                `<span class="mini-class-variant${index === 0 ? ' sel' : ''}" role="button" tabindex="0" data-variant-hero-id="${variant.heroId}" aria-pressed="${index === 0 ? 'true' : 'false'}" aria-label="${escapeHtml(variant.label)}" title="${escapeHtml(variant.label)}">${escapeHtml(variantToggleGlyph(variant.label))}</span>`,
+            )
+            .join('')}</span>`
+        : '';
+      return `<button type="button" class="mini-class realm-skinned realm-playable${choice.assetUrl ? ' has-portrait' : ''}" data-class="${choice.baseClass}" data-hero-id="${defaultHeroId}" data-faction="${choice.faction}" data-realm-faction="${choice.faction}" data-realm-asset="${choice.assetUrl}" data-realm-asset-name="${choice.assetName}" data-realm-asset-status="ready" aria-label="${escapeHtml(`${choice.name}, ${choice.faction}`)}" aria-pressed="false" title="${escapeHtml(choice.assetName ?? choice.name)}">${portraitHtml}<span class="mini-class-text"><span class="mini-class-label">${escapeHtml(choice.name)}</span><span class="mini-class-faction">${escapeHtml(choice.faction)}</span></span>${variantsHtml}</button>`;
+    })
     .join('');
+  hydrateHeroCardPortraits(row);
   row.querySelectorAll<HTMLElement>('.mini-class').forEach((card) => {
     const select = () => {
       row.querySelectorAll<HTMLElement>('.mini-class').forEach((other) => {
@@ -5990,12 +6142,63 @@ function paintInfernalHeroRoster(
     card.addEventListener('keydown', (event) =>
       handleKeyboardActivation(event as KeyboardEvent, select),
     );
+    // Variant toggle: picking one swaps the pending create's hero id
+    // (data-hero-id) while the card stays selected, then reruns the select
+    // flow so details/preview resolve through the variant id. A variant with
+    // no published body yet still works — resolution falls back to the
+    // canonical hero's body (see infernalHeroOverrideKeys).
+    card.querySelectorAll<HTMLElement>('.mini-class-variant').forEach((chip) => {
+      const pick = () => {
+        const variantHeroId = chip.dataset.variantHeroId;
+        if (!variantHeroId) return;
+        card.dataset.heroId = variantHeroId;
+        card.querySelectorAll<HTMLElement>('.mini-class-variant').forEach((other) => {
+          other.classList.toggle('sel', other === chip);
+          other.setAttribute('aria-pressed', other === chip ? 'true' : 'false');
+        });
+        select();
+      };
+      chip.addEventListener('click', (event) => {
+        event.stopPropagation();
+        pick();
+      });
+      chip.addEventListener('keydown', (event) => {
+        const key = (event as KeyboardEvent).key;
+        if (key !== 'Enter' && key !== ' ') return;
+        event.preventDefault();
+        event.stopPropagation();
+        pick();
+      });
+    });
   });
   const first = row.querySelector<HTMLElement>('.mini-class');
   if (first) first.click();
 }
 
 const realmVisualOverridesFetched = new Set<string>();
+
+// In-flight/settled override loads by realm id, so every consumer (create
+// screen, char-select roster, world entry) awaits the SAME fetch instead of
+// racing it (previously world entry could slip past a fetch the create screen
+// had already started but not finished). setBodyOverrides runs inside the
+// promise, so awaiting it guarantees the overrides are installed for both the
+// character UI and the in-world renderer. Resolves whether a document loaded.
+const realmVisualOverridesLoads = new Map<string, Promise<boolean>>();
+function ensureRealmVisualOverridesLoaded(realmId: string): Promise<boolean> {
+  let load = realmVisualOverridesLoads.get(realmId);
+  if (!load) {
+    load = fetchRealmVisualOverrides(realmId)
+      .catch(() => false)
+      .then((loaded) => {
+        // Push the same overrides into the in-world renderer so a reassigned
+        // NPC/class body applies to the world, not just the create screen.
+        setBodyOverrides(realmId, getRealmVisualOverrides(realmId));
+        return loaded;
+      });
+    realmVisualOverridesLoads.set(realmId, load);
+  }
+  return load;
+}
 
 // Admin: expose the live body editor globally (also reachable over
 // arcforge.moveweight.com, which proxies /api/*) and repaint the create screen
@@ -6006,7 +6209,21 @@ const realmVisualOverridesFetched = new Set<string>();
 window.addEventListener('cr-realm-visuals-changed', () => {
   const realmId = realmContentForCharacterUi().id;
   setBodyOverrides(realmId, getRealmVisualOverrides(realmId));
+  // A saved override re-points a class/hero at a DIFFERENT GLB, so every face
+  // already captured under the old assignment is now wrong. Portraits are data
+  // URLs cached for the life of the page, so without this drop the operator sees
+  // the pre-edit body until a full reload — which is how "still the old face"
+  // survived an edit that had visibly worked in the world.
+  clearPortraitCache();
   paintRealmClassChoices();
+  refreshPortraits(document);
+  // A roster row bakes its resolved body into data-visual at paint time, so a
+  // reassignment needs the rows rebuilt, not just repainted — otherwise the
+  // operator sees the pre-edit body until a reload.
+  const charselect = document.getElementById('charselect-panel');
+  if (charselect && charselect.style.display !== 'none' && charselect.offsetParent !== null) {
+    void refreshCharacters();
+  }
 });
 
 let realmEditorButtonChecked = false;
@@ -6048,10 +6265,7 @@ function paintRealmClassChoices(): void {
   // so a reassigned class/hero body shows without a code deploy.
   if (!realmVisualOverridesFetched.has(realm.id)) {
     realmVisualOverridesFetched.add(realm.id);
-    void fetchRealmVisualOverrides(realm.id).then((loaded) => {
-      // Push the same overrides into the in-world renderer so a reassigned
-      // NPC/class body applies to the world, not just the create screen.
-      setBodyOverrides(realm.id, getRealmVisualOverrides(realm.id));
+    void ensureRealmVisualOverridesLoaded(realm.id).then((loaded) => {
       if (loaded) paintRealmClassChoices();
     });
   }
@@ -6111,16 +6325,18 @@ function paintRealmClassChoices(): void {
     }
     delete label.dataset.i18n;
     label.textContent = choice.name;
+    const statusLabel = realmAssetDisplayLabel(choice.assetStatusLabel);
     button.setAttribute(
       'aria-label',
       choice.assetUrl
-        ? `${choice.name}, ${choice.faction}, ${choice.assetStatusLabel}, ArcForge model`
-        : `${choice.name}, ${choice.faction}, ${choice.assetStatusLabel}`,
+        ? `${choice.name}, ${choice.faction}, ${statusLabel}, ArcForge model`
+        : `${choice.name}, ${choice.faction}, ${statusLabel}`,
     );
-    button.title = choice.assetIssue ?? choice.assetStatusLabel;
+    button.title = choice.assetIssue ?? statusLabel;
     button.style.setProperty('--class-color', choice.color);
     const badge = factionBadgeForMiniClass(button);
-    badge.textContent = `${choice.faction} - ${choice.assetStatusLabel}`;
+    badge.textContent =
+      choice.assetStatus === 'ready' ? choice.faction : `${choice.faction} - ${statusLabel}`;
   });
 }
 
@@ -7637,6 +7853,12 @@ async function refreshCharacters(): Promise<void> {
     // character shows the mech body without a class-body flash (setAppearance
     // falls back gracefully if this has not resolved yet).
     if (chars.some((c) => c.skinCatalog === 'mech')) void preloadMechAssets();
+    // Roster rows show each hero's REAL body portrait (the png published beside
+    // its GLB), resolved through the operator's live body overrides — install
+    // them before the rows render. Best-effort: on a failed fetch the chips
+    // just keep the crest/class-portrait flow.
+    const rosterRealmId = realmContentForCharacterUi().id;
+    await ensureRealmVisualOverridesLoaded(rosterRealmId);
     listEl.innerHTML = '';
     // Per-row guard. A throw in the row builder used to abort the whole loop AFTER
     // listEl was cleared, leaving an empty roster with no message and no trace -
@@ -7688,7 +7910,26 @@ async function refreshCharacters(): Promise<void> {
       const inWorldHint = c.online
         ? `<span class="char-inworld-hint">${escapeHtml(t('character.inWorldHint'))}</span>`
         : '';
-      row.innerHTML = `${portraitChipHtml({ cls: c.class, skin: c.skin ?? 0, name: c.name, variant: 'sm' })}
+      row.innerHTML = `${portraitChipHtml({
+        cls: c.class,
+        skin: c.skin ?? 0,
+        name: c.name,
+        variant: 'sm',
+        // The body this character renders on in the world. Without it the chip
+        // had only the imageUrl below to go on, and since nothing publishes
+        // those pngs every row 404'd straight back to the KayKit class headshot.
+        visualKey: visualKeyForCharacter({
+          realm: rosterRealmId,
+          realmHeroId: c.realmHeroId,
+          cls: c.class,
+          visualKey: c.visualKey,
+          skinCatalog: c.skinCatalog,
+        }),
+        // A pre-rendered portrait png beside the body GLB, when one exists: it
+        // skips the offscreen 3D render entirely. Its absence (or a 404) now
+        // costs nothing — the chip falls back to rendering visualKey above.
+        imageUrl: characterPortraitUrl(rosterRealmId, c.realmHeroId, c.class),
+      })}
         <div class="char-id">
           <span class="char-name">${escapeHtml(c.name)}</span>
           <span class="char-sub">${escapeHtml(t('character.levelClass', { level: c.level, className }))}${escapeHtml(statusText)}</span>
@@ -7887,11 +8128,7 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
   // Load the operator's body overrides before the world renders so any reassigned
   // NPC/class body applies in-world from the first frame (all entry paths pass here).
   const enterRealmId = realmContentForCharacterUi().id;
-  if (!realmVisualOverridesFetched.has(enterRealmId)) {
-    realmVisualOverridesFetched.add(enterRealmId);
-    await fetchRealmVisualOverrides(enterRealmId).catch(() => false);
-  }
-  setBodyOverrides(enterRealmId, getRealmVisualOverrides(enterRealmId));
+  await ensureRealmVisualOverridesLoaded(enterRealmId);
   try {
     if (button) {
       button.disabled = true;
@@ -8011,6 +8248,19 @@ function charselectAppearance(c: CharacterSummary): PreviewAppearance {
   ensureCharacterUrl(weaponSkinModelUrl(c.weaponSkinId ?? null));
   return {
     cls: c.class,
+    // PreviewAppearance has carried an optional `visualKey` all along and this
+    // builder simply never filled it, so previewAppearanceVisual fell through to
+    // `player_<class>` and the turntable showed the KayKit rig for every
+    // character — even though the roster row already tells us the real body
+    // (CharacterSummary.visualKey) and the operator's overrides are installed by
+    // the time rows render. Resolve it exactly the way the world does.
+    visualKey: visualKeyForCharacter({
+      realm: realmContentForCharacterUi().id,
+      realmHeroId: c.realmHeroId,
+      cls: c.class,
+      visualKey: c.visualKey,
+      skinCatalog: c.skinCatalog,
+    }),
     skin: c.skin ?? 0,
     skinCatalog: c.skinCatalog ?? 'class',
     mainhandItemId: c.mainhandItemId ?? null,
@@ -8065,7 +8315,7 @@ function renderClassDetails(
   const classLabel = realmClass?.name ?? classDisplayName(className);
   const roleLabel = realmClass?.role ?? t(details.roleKey);
   const assetChipHtml = realmClass
-    ? `<span class="class-details-asset asset-${escapeHtml(realmClass.assetStatus)}">${escapeHtml(realmClass.assetStatusLabel)}</span>`
+    ? `<span class="class-details-asset asset-${escapeHtml(realmClass.assetStatus)}">${escapeHtml(realmAssetDisplayLabel(realmClass.assetStatusLabel))}</span>`
     : '';
   const assetNoteHtml = realmClass?.assetIssue
     ? `<p class="class-details-asset-note">${escapeHtml(realmClass.assetIssue)}</p>`
@@ -10589,7 +10839,10 @@ function wireStartScreens(): void {
   // Offline mode runs an unauthenticated local Sim with no server authority:
   // a dev/local-testing convenience only. Disabled in production builds,
   // unchanged (enabled) under `npm run dev`.
-  const offlineAvailable = isOfflineModeAvailable(import.meta.env.DEV);
+  const offlineAvailable = isOfflineModeAvailable(
+    import.meta.env.DEV,
+    isPackagedConsoleApp(location.hostname),
+  );
 
   const resumeOnlineSession = async (): Promise<void> => {
     if (!api.token && !hydrateApiFromSavedSession()) {

@@ -6187,9 +6187,15 @@
       flex: 1 1 auto;
       min-height: 0;
       display: grid;
-      grid-template-columns: 1fr auto;
+      /* Both tracks are FIXED-formula: the old `1fr auto` let the details pane
+         resize with its content, so picking a hero with longer lore text shoved
+         the whole roster grid sideways on every click. */
+      grid-template-columns: minmax(0, 1fr) clamp(380px, 42vw, 760px);
       gap: 28px;
       align-items: stretch;
+    }
+    .cs-body-create > * {
+      min-width: 0;
     }
     .cs-list-col,
     .cs-detail-col,
@@ -7987,6 +7993,7 @@
   }
   .mini-class-row.infernal-hero-roster {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 64px;
     max-height: min(52vh, 560px);
     overflow-y: auto;
     align-content: start;
@@ -8001,8 +8008,96 @@
   }
   .infernal-hero-roster .mini-class-faction {
     display: block;
-    margin-top: 4px;
+    margin-top: 0;
     font-size: 9px;
+  }
+  /* Hero cards: fixed-geometry rows (portrait left, name stacked over the
+     faction subtitle). Selection only recolors border/shadow, and the
+     constant height plus template-inlined portrait mean clicks and async
+     repaints never reflow the grid. The id-scoped selectors out-rank the
+     mobile-touch and cs-wow card rules so geometry matches on every body. */
+  #charcreate-panel .mini-class-row.infernal-hero-roster .mini-class {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    box-sizing: border-box;
+    width: auto;
+    height: 64px;
+    min-height: 64px;
+    padding: 6px 8px;
+    overflow: hidden;
+    text-align: left;
+  }
+  #charcreate-panel .mini-class-row.infernal-hero-roster .mini-class .mini-class-portrait {
+    flex: 0 0 auto;
+    width: 46px;
+    height: 46px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    outline: none;
+    object-fit: cover;
+    object-position: 50% 12%;
+    background: radial-gradient(circle at 50% 30%, #232234, #0c0c14);
+    box-shadow: none;
+  }
+  #charcreate-panel .mini-class-row.infernal-hero-roster .mini-class .mini-class-text {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+  }
+  #charcreate-panel .mini-class-row.infernal-hero-roster .mini-class .mini-class-label {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    line-height: 1.15;
+  }
+  #charcreate-panel .mini-class-row.infernal-hero-roster .mini-class .mini-class-faction {
+    display: block;
+    margin-top: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  /* Variant segmented toggle (e.g. Female/Male) on cards whose hero offers
+     presentation variants. Sits at the card's right edge inside the fixed
+     64px row so it never changes the card geometry the roster layout owns. */
+  #charcreate-panel .mini-class-row.infernal-hero-roster .mini-class .mini-class-variants {
+    display: flex;
+    flex: 0 0 auto;
+    margin-left: auto;
+    gap: 3px;
+  }
+  .mini-class-variants .mini-class-variant {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 4px;
+    border: 1px solid rgba(137, 102, 43, 0.55);
+    border-radius: 5px;
+    background: rgba(12, 10, 14, 0.65);
+    color: #b9a783;
+    font-size: 13px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .mini-class-variants .mini-class-variant:hover,
+  .mini-class-variants .mini-class-variant:focus-visible {
+    border-color: rgba(214, 168, 96, 0.9);
+    color: #f4e6c8;
+  }
+  .mini-class-variants .mini-class-variant.sel {
+    border-color: #d6a860;
+    background: linear-gradient(180deg, rgba(96, 66, 24, 0.9), rgba(52, 34, 16, 0.95));
+    color: #ffe9bd;
   }
   .realm-faction-filter {
     display: flex;
@@ -8068,6 +8163,7 @@
     z-index: 4;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: 64px;
     align-content: start;
     justify-content: stretch;
     width: clamp(350px, 30vw, 480px);
@@ -8091,14 +8187,36 @@
     .infernal-hero-roster
     .mini-class {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
     width: auto;
     min-width: 0;
-    min-height: 62px;
-    padding: 8px 6px;
-    gap: 4px;
+    height: 64px;
+    min-height: 64px;
+    padding: 6px 8px;
+    gap: 8px;
+    overflow: hidden;
+    text-align: left;
     border: 1px solid rgba(95, 76, 48, 0.68);
     border-radius: 6px;
     background: linear-gradient(160deg, rgba(28, 24, 30, 0.96), rgba(11, 10, 15, 0.96));
+  }
+  body:not(.mobile-touch)
+    #charcreate-panel.cs-wow.infernal-roster-active
+    .infernal-hero-roster
+    .mini-class
+    .mini-class-portrait {
+    flex: 0 0 auto;
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    border: 1px solid rgba(95, 76, 48, 0.68);
+    outline: none;
+    object-fit: cover;
+    object-position: 50% 12%;
+    background: radial-gradient(circle at 50% 30%, #232234, #0c0c14);
+    box-shadow: none;
   }
   body:not(.mobile-touch)
     #charcreate-panel.cs-wow.infernal-roster-active

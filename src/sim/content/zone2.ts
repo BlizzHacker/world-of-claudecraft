@@ -93,6 +93,140 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
     slowStrike: { chance: 0.3, mult: 1.3, duration: 8, name: 'Miring Pounce', school: 'physical' },
     componentTags: ['hide', 'claw', 'meat'],
   },
+  // ---------------------------------------------------------------------
+  // Marsh backcountry beasts (levels 8-13). No curated body by design - see the
+  // note on the Vale pack in content/zone1.ts. Names stay species-neutral
+  // because the rendered quadruped is hash-picked per realm.
+  // ---------------------------------------------------------------------
+  reedbank_mauler: {
+    id: 'reedbank_mauler',
+    name: 'Reedbank Mauler',
+    minLevel: 8,
+    maxLevel: 9,
+    family: 'beast',
+    hpBase: 48,
+    hpPerLevel: 19,
+    dmgBase: 8,
+    dmgPerLevel: 2.2,
+    attackSpeed: 2.0,
+    armorPerLevel: 12,
+    moveSpeed: 8.2,
+    aggroRadius: 11,
+    loot: [
+      { copper: 34, chance: 1 },
+      { itemId: 'lesser_healing_potion', chance: 0.08 },
+    ],
+    scale: 1.0,
+    color: 0x5d6d5b,
+    componentTags: ['hide', 'meat'],
+  },
+  blackwater_reaver: {
+    id: 'blackwater_reaver',
+    name: 'Blackwater Reaver',
+    minLevel: 9,
+    maxLevel: 10,
+    family: 'beast',
+    hpBase: 50,
+    hpPerLevel: 19,
+    dmgBase: 8,
+    dmgPerLevel: 2.3,
+    attackSpeed: 2.1,
+    armorPerLevel: 13,
+    moveSpeed: 8,
+    aggroRadius: 11,
+    // Physical-school bleed, the same shape the Ridge Stalker carries a band
+    // higher: a refreshing wound rather than a poison.
+    bleed: {
+      chance: 0.25,
+      perTick: 4,
+      interval: 3,
+      duration: 9,
+      name: 'Raking Wound',
+      school: 'physical',
+    },
+    loot: [
+      { copper: 38, chance: 1 },
+      { itemId: 'lesser_healing_potion', chance: 0.08 },
+    ],
+    scale: 1.05,
+    color: 0x3f5561,
+    componentTags: ['hide', 'meat'],
+  },
+  silthollow_charger: {
+    id: 'silthollow_charger',
+    name: 'Silthollow Charger',
+    minLevel: 10,
+    maxLevel: 11,
+    family: 'beast',
+    hpBase: 52,
+    hpPerLevel: 20,
+    dmgBase: 9,
+    dmgPerLevel: 2.3,
+    attackSpeed: 2.2,
+    armorPerLevel: 13,
+    moveSpeed: 8.6,
+    aggroRadius: 11,
+    loot: [
+      { copper: 44, chance: 1 },
+      { itemId: 'lesser_healing_potion', chance: 0.08 },
+    ],
+    scale: 1.0,
+    color: 0x6b5a45,
+    componentTags: ['hide', 'meat'],
+  },
+  fenmoor_hunter: {
+    id: 'fenmoor_hunter',
+    name: 'Fenmoor Hunter',
+    minLevel: 11,
+    maxLevel: 12,
+    family: 'beast',
+    hpBase: 54,
+    hpPerLevel: 20,
+    dmgBase: 9,
+    dmgPerLevel: 2.4,
+    attackSpeed: 2.0,
+    armorPerLevel: 14,
+    moveSpeed: 8.4,
+    aggroRadius: 12,
+    packFrenzy: { radius: 12, hasteMult: 1.25, duration: 8 },
+    loot: [
+      { copper: 50, chance: 1 },
+      { itemId: 'healing_potion', chance: 0.06 },
+    ],
+    scale: 1.0,
+    color: 0x54604f,
+    componentTags: ['hide', 'meat'],
+  },
+  drownfen_terror: {
+    id: 'drownfen_terror',
+    name: 'Drownfen Terror',
+    minLevel: 12,
+    maxLevel: 13,
+    family: 'beast',
+    hpBase: 56,
+    hpPerLevel: 21,
+    dmgBase: 10,
+    dmgPerLevel: 2.4,
+    attackSpeed: 2.1,
+    armorPerLevel: 14,
+    moveSpeed: 8.2,
+    aggroRadius: 12,
+    canSwim: true,
+    slowStrike: {
+      chance: 0.25,
+      mult: 1.25,
+      duration: 8,
+      name: 'Dragging Grip',
+      school: 'physical',
+    },
+    loot: [
+      { copper: 56, chance: 1 },
+      { itemId: 'healing_potion', chance: 0.06 },
+    ],
+    scale: 1.1,
+    color: 0x46524d,
+    componentTags: ['hide', 'meat'],
+  },
   deepfen_murloc: {
     id: 'deepfen_murloc',
     name: 'Deepfen Snapper',
@@ -1340,6 +1474,18 @@ export const ZONE2_CAMPS: CampDef[] = [
   // Listed last so their spawn draws never perturb the other camps' placement.
   { mobId: 'bog_bloat', center: { x: 72, z: 428 }, radius: 11, count: 5 },
   { mobId: 'bog_bloat', center: { x: 110, z: 440 }, radius: 11, count: 4 },
+];
+
+// Marsh backcountry beast packs (levels 8-13). Own export, spread at the TAIL of
+// the merged CAMPS array (data.ts) so these draws never perturb the existing
+// camps' deterministic placement. Centres avoid the lakes, the causeway, and the
+// existing packs' pull rings.
+export const ZONE2_WILDS_CAMPS: CampDef[] = [
+  { mobId: 'reedbank_mauler', center: { x: 75, z: 255 }, radius: 18, count: 5 },
+  { mobId: 'blackwater_reaver', center: { x: -85, z: 233 }, radius: 18, count: 5 },
+  { mobId: 'silthollow_charger', center: { x: -60, z: 350 }, radius: 18, count: 5 },
+  { mobId: 'fenmoor_hunter', center: { x: 25, z: 420 }, radius: 18, count: 5 },
+  { mobId: 'drownfen_terror', center: { x: -60, z: 505 }, radius: 16, count: 5 },
 ];
 
 export const ZONE2_OBJECTS: GroundObjectDef[] = [

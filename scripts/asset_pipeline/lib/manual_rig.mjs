@@ -17,8 +17,39 @@
 // weighted 1/d^4, with a laterality guard so .l bones never grab -X vertices
 // and vice versa. Chibi bodies are blobby and forgiving, which is exactly why
 // this simple solver has a chance of looking decent.
+//
+// ---------------------------------------------------------------------------
+// DATA OWNERSHIP: a rigging operation owns the SKIN and nothing else.
+//
+// It may write JOINTS_0, WEIGHTS_0, the skin, its joints and its inverse bind
+// matrices. It must NEVER decide what the model LOOKS like: materials,
+// textures, images, samplers, texCoord wiring, UV sets, vertex colours and
+// tangents belong to the source art and must survive a rebind untouched.
+//
+// manualRigOntoReference() opens the REFERENCE document and mutates it in
+// place, so by default everything downstream of "what does it look like"
+// starts as the REFERENCE's, not the source's. The old material hand-copy
+// carried only baseColor/normal/ORM + metallic/roughness, which silently
+// dropped emissive maps, emissive/baseColor factors, alphaMode, doubleSided,
+// sampler + texCoord wiring and every KHR material extension — enough to turn
+// a pale emissive-lit body into a dark metal one — and then textureCompress()
+// halved the atlas on top. `preserveSourceArt: true` fixes that at the root by
+// MERGING the source document in and binding the new mesh to the source's own
+// (fully cloned, extension-complete) materials, and skips the resampling step.
+//
+// rebindSkinInPlace() is the correct operation for a model that is ALREADY
+// rigged and only has bad weights: it re-solves JOINTS_0/WEIGHTS_0 inside the
+// source's own document against the source's own skeleton. It never opens a
+// second document, so substituting the art is structurally impossible, and the
+// clip vocabulary, joint set, bind matrices and model scale are all preserved
+// by construction. Prefer it over a reference rebind whenever the source
+// already carries a working skeleton — a reference rebind also swaps the clip
+// library, the joint names and the bind scale, which is rarely what a
+// "the shoulder is broken" repair actually wants.
+// ---------------------------------------------------------------------------
 import { getBounds } from '@gltf-transform/core';
-import { dedup, prune, textureCompress } from '@gltf-transform/functions';
+import { dedup, mergeDocuments, prune, textureCompress } from '@gltf-transform/functions';
+import { solveGeodesicWeights } from './geodesic_weights.mjs';
 import { openGlb, saveGlb } from './glb.mjs';
 
 const ROT = ([x, y, z]) => [-z, y, x]; // -90deg about Y: +X facing -> +Z facing
@@ -156,40 +187,60 @@ function distToSegment(p, a, b) {
   return Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]);
 }
 
-/** Rig `rawGlbPath` onto `referenceGlbPath`'s skeleton; write to `outPath`.
- *  Options: yaw ('auto' -90deg default via preRotated=false), armY override.
- *  Returns a fit report. */
-export async function manualRigOntoReference(rawGlbPath, referenceGlbPath, outPath, opts = {}) {
-  const K = opts.influences ?? 4;
-  const POW = opts.falloff ?? 4;
+// --- Shared skeleton/solver core -------------------------------------------
+// Used by BOTH rig modes so they cannot drift apart. Extracted verbatim from
+// the original reference path; the only generalisations are name matching
+// (case-insensitive `head`, Left*/Right* laterality) which are inert on the
+// KayKit reference convention and only fire on other joint naming schemes.
 
-  // --- Reference rig: joints, bind-pose world positions, mesh bounds -------
-  const doc = await openGlb(referenceGlbPath); // mutated in place, saved to outPath
-  const root = doc.getRoot();
-  const skin = root.listSkins()[0];
-  if (!skin) throw new Error('reference model has no skin');
+/** Bind-pose joint world positions, from the inverse bind matrices. */
+function bindSkeleton(skin) {
   const joints = skin.listJoints();
-  // BIND-pose joint positions from the inverse bind matrices: this is the
-  // space skinned vertices must live in, NOT the rest-pose world space.
   const ibmArr = skin.getInverseBindMatrices().getArray();
   const jointPos = joints.map((_, i) => {
     const inv = inverse4(Array.from(ibmArr.slice(i * 16, (i + 1) * 16)));
     return [inv[12], inv[13], inv[14]];
   });
   const byName = new Map(joints.map((j, i) => [j.getName(), i]));
-  const refBounds = getBounds(root.listScenes()[0]);
-  // Bind-frame anchors (the bind space can be offset AND scaled relative to
-  // the rest pose; the knight's is ~2.18x with the body axis at x=-1.11):
-  // ground = the root joint's bind height, body axis = hips XZ, and the
-  // T-pose arm line = wrist height above ground.
-  const P = (name) => jointPos[byName.get(name)];
-  const groundY = P('root')?.[1] ?? 0;
-  const centerX = P('hips')?.[0] ?? 0;
-  const centerZ = P('hips')?.[2] ?? 0;
-  const wristAbove = (P('wrist.r')?.[1] ?? 1.11) - groundY;
+  return { joints, jointPos, byName };
+}
 
-  // Bone segments, attributed to the PROXIMAL joint. Skip root (whole-body
-  // mover, no direct weights) and handslots (attachment-only).
+/** Ground plane, body axis and T-pose arm line, in bind space.
+ *  Exact anchors on the KayKit convention (root / hips / wrist.r); falls back
+ *  to measured equivalents on any other skeleton (lowest joint / the joint
+ *  with no parent inside the joint set / the mean wrist-or-hand height). */
+function bindAnchors(joints, jointPos, byName) {
+  const lower = new Map(joints.map((j, i) => [j.getName().toLowerCase(), i]));
+  const at = (n) => (lower.has(n) ? jointPos[lower.get(n)] : null);
+  const ys = jointPos.map((p) => p[1]);
+  const groundY = at('root')?.[1] ?? Math.min(...ys);
+
+  let axis = at('hips');
+  if (!axis) {
+    const childNames = new Set();
+    for (const j of joints)
+      for (const c of j.listChildren()) if (byName.has(c.getName())) childNames.add(c.getName());
+    const i = joints.findIndex((j) => !childNames.has(j.getName()));
+    axis = jointPos[i >= 0 ? i : 0];
+  }
+
+  let armY = at('wrist.r')?.[1];
+  if (armY == null) {
+    const hands = joints
+      .map((j, i) => [j.getName(), i])
+      .filter(([n]) => /wrist|hand/i.test(n) && !/^handslot/i.test(n))
+      .map(([, i]) => jointPos[i][1]);
+    armY = hands.length
+      ? hands.reduce((a, b) => a + b, 0) / hands.length
+      : groundY + 0.5 * (Math.max(...ys) - groundY);
+  }
+  return { groundY, centerX: axis[0], centerZ: axis[2], armLine: armY - groundY };
+}
+
+/** Bone segments attributed to the PROXIMAL joint. Skips the whole-body root
+ *  (no direct weights) and handslots (attachment-only). Leaf joints get a
+ *  synthetic stub sized off the arm line: head up, everything else forward. */
+function buildSegments(joints, jointPos, byName, armLine) {
   const segments = [];
   for (let i = 0; i < joints.length; i++) {
     const name = joints[i].getName();
@@ -201,21 +252,112 @@ export async function manualRigOntoReference(rawGlbPath, referenceGlbPath, outPa
       any = true;
     }
     if (!any) {
-      // Synthetic leaf segments, sized relative to the bind frame: the chibi
-      // head is a big rigid blob above its joint; toes extend forward (+Z).
       const p = jointPos[i];
-      const dir = name === 'head' ? [0, 0.4 * wristAbove, 0] : [0, 0, 0.05 * wristAbove];
+      const dir = /^head$/i.test(name) ? [0, 0.4 * armLine, 0] : [0, 0, 0.05 * armLine];
       segments.push({ joint: i, a: p, b: [p[0] + dir[0], p[1] + dir[1], p[2] + dir[2]] });
     }
   }
-  const sideGuard = 0.02 * wristAbove;
-  const side = (i) => {
-    const n = joints[i].getName();
-    return n.endsWith('.l') ? 1 : n.endsWith('.r') ? -1 : 0;
+  return segments;
+}
+
+/** Laterality classifier: +1 for left-side joints, -1 for right, 0 for spine.
+ *  Reads `.l`/`.r` (KayKit) and `Left*`/`Right*` (Mixamo-style) names, then
+ *  confirms which tag actually sits at +X from the bind positions, so a rig
+ *  authored mirrored can't invert the guard. */
+function lateralityFn(joints, jointPos, centerX) {
+  const tag = (n) =>
+    n.endsWith('.l') ? 'l' : n.endsWith('.r') ? 'r' : /^left/i.test(n) ? 'l' : /^right/i.test(n) ? 'r' : null;
+  let sum = 0;
+  joints.forEach((j, i) => {
+    const t = tag(j.getName());
+    if (t) sum += (t === 'l' ? 1 : -1) * (jointPos[i][0] - centerX);
+  });
+  const lSign = sum >= 0 ? 1 : -1;
+  return (i) => {
+    const t = tag(joints[i].getName());
+    return t ? (t === 'l' ? lSign : -lSign) : 0;
   };
+}
+
+/** Solve one vertex: nearest bone segments by 1/d^POW, laterality-guarded,
+ *  duplicate joints merged, top-K normalised. Writes into jointsOut/weightsOut
+ *  at slot v. */
+function solveVertex(p, v, segments, side, centerX, sideGuard, K, POW, jointsOut, weightsOut) {
+  const lx = p[0] - centerX;
+  const best = []; // {joint, w}
+  for (const seg of segments) {
+    const s = side(seg.joint);
+    if (s === 1 && lx < -sideGuard) continue;
+    if (s === -1 && lx > sideGuard) continue;
+    const d = distToSegment(p, seg.a, seg.b);
+    const w = 1 / (d ** POW + 1e-8);
+    best.push({ joint: seg.joint, w });
+  }
+  best.sort((a, b) => b.w - a.w);
+  // Merge duplicate joints among the top hits, then take K.
+  const merged = [];
+  for (const c of best) {
+    const hit = merged.find((m) => m.joint === c.joint);
+    if (hit) hit.w += c.w;
+    else merged.push({ ...c });
+    if (merged.length >= K && merged.length > 8) break;
+  }
+  merged.sort((a, b) => b.w - a.w);
+  const top = merged.slice(0, K);
+  const sum = top.reduce((s2, c) => s2 + c.w, 0) || 1;
+  for (let k = 0; k < 4; k++) {
+    jointsOut[v * 4 + k] = top[k]?.joint ?? 0;
+    weightsOut[v * 4 + k] = (top[k]?.w ?? 0) / sum;
+  }
+}
+
+/** Rig `rawGlbPath` onto `referenceGlbPath`'s skeleton; write to `outPath`.
+ *  Options: yaw ('auto' -90deg default via preRotated=false), and fitHeight —
+ *  a direct height fit (in reference BIND space) that overrides the arm-line
+ *  scale heuristic. Use it whenever the heuristic misfires; see the note at the
+ *  scale computation below.
+ *
+ *  preserveSourceArt (default false): bind the new body to the SOURCE's own
+ *  materials instead of hand-copying a subset of PBR slots onto fresh ones, and
+ *  skip the texture resample. Off, this function is byte-for-byte what it has
+ *  always been (the humanoid path under 1,672 registered bodies); on, the
+ *  output's appearance is the source's, complete with emissive maps, factors,
+ *  alpha/doubleSided state, sampler + texCoord wiring and KHR material
+ *  extensions. Any rebind of an ALREADY-ART-DIRECTED asset wants it on.
+ *  Returns a fit report. */
+export async function manualRigOntoReference(rawGlbPath, referenceGlbPath, outPath, opts = {}) {
+  const K = opts.influences ?? 4;
+  const POW = opts.falloff ?? 4;
+  const preserveArt = opts.preserveSourceArt === true;
+
+  // --- Reference rig: joints, bind-pose world positions, mesh bounds -------
+  const doc = await openGlb(referenceGlbPath); // mutated in place, saved to outPath
+  const root = doc.getRoot();
+  const skin = root.listSkins()[0];
+  if (!skin) throw new Error('reference model has no skin');
+  // BIND-pose joint positions from the inverse bind matrices: this is the
+  // space skinned vertices must live in, NOT the rest-pose world space.
+  const { joints, jointPos, byName } = bindSkeleton(skin);
+  const refBounds = getBounds(root.listScenes()[0]);
+  // Bind-frame anchors (the bind space can be offset AND scaled relative to
+  // the rest pose; the knight's is ~2.18x with the body axis at x=-1.11):
+  // ground = the root joint's bind height, body axis = hips XZ, and the
+  // T-pose arm line = wrist height above ground.
+  const { groundY, centerX, centerZ, armLine: wristAbove } = bindAnchors(joints, jointPos, byName);
+
+  const segments = buildSegments(joints, jointPos, byName, wristAbove);
+  const sideGuard = 0.02 * wristAbove;
+  const side = lateralityFn(joints, jointPos, centerX);
 
   // --- Raw mesh: read arrays, transform into reference bind space ----------
+  // With preserveSourceArt the source document is MERGED into the output
+  // document first, so every source Material has a complete, extension-carrying
+  // clone owned by `doc` and the new body can simply point at it — there is
+  // nothing left to hand-copy and therefore nothing left to silently drop.
+  // Everything merged that ISN'T art (scenes, nodes, the source's own skin and
+  // clips) is disposed once the geometry has been read; prune() clears the rest.
   const rawDoc = await openGlb(rawGlbPath);
+  const srcMap = preserveArt ? mergeDocuments(doc, rawDoc) : null;
   const rawPrims = rawDoc
     .getRoot()
     .listMeshes()
@@ -254,7 +396,20 @@ export async function manualRigOntoReference(rawGlbPath, referenceGlbPath, outPa
     }
   }
   const rawArmY = armYSum / Math.max(1, armN) - min[1]; // above feet
-  const scale = wristAbove / rawArmY;
+  // The arm-line heuristic assumes a T-posed humanoid whose widest 5% of
+  // vertices ARE the outstretched hands. On an A-posed, winged, caped, based or
+  // simply non-humanoid mesh the widest slice sits somewhere else entirely and
+  // the fit lands at the wrong scale. That is not a cosmetic miss: the reference
+  // skeleton is a FIXED size on every body (handslot.r is bit-identical across
+  // the whole library), so a mis-scaled mesh leaves every socket-attached prop
+  // both mis-sized (by 1/k) and mis-placed (the mesh's fist moves to k x the
+  // socket's offset while the socket stays put). Note the heuristic is
+  // scale-INVARIANT — re-running it on already-fitted geometry reproduces the
+  // same wrong answer — so a bad fit can only be corrected by overriding it.
+  // fitHeight replaces it with a direct height fit against the reference.
+  const scale = opts.fitHeight
+    ? opts.fitHeight / Math.max(1e-6, max[1] - min[1])
+    : wristAbove / rawArmY;
   const midX = (min[0] + max[0]) / 2;
   const midZ = (min[2] + max[2]) / 2;
 
@@ -286,32 +441,7 @@ export async function manualRigOntoReference(rawGlbPath, referenceGlbPath, outPa
       pos[v * 3 + 1] = p[1];
       pos[v * 3 + 2] = p[2];
       // Nearest segments with laterality guard (relative to the body axis).
-      const lx = p[0] - centerX;
-      const best = []; // {joint, w}
-      for (const seg of segments) {
-        const s = side(seg.joint);
-        if (s === 1 && lx < -sideGuard) continue;
-        if (s === -1 && lx > sideGuard) continue;
-        const d = distToSegment(p, seg.a, seg.b);
-        const w = 1 / (d ** POW + 1e-8);
-        best.push({ joint: seg.joint, w });
-      }
-      best.sort((a, b) => b.w - a.w);
-      // Merge duplicate joints among the top hits, then take K.
-      const merged = [];
-      for (const c of best) {
-        const hit = merged.find((m) => m.joint === c.joint);
-        if (hit) hit.w += c.w;
-        else merged.push({ ...c });
-        if (merged.length >= K && merged.length > 8) break;
-      }
-      merged.sort((a, b) => b.w - a.w);
-      const top = merged.slice(0, K);
-      const sum = top.reduce((s2, c) => s2 + c.w, 0) || 1;
-      for (let k = 0; k < 4; k++) {
-        jointsAttr[v * 4 + k] = top[k]?.joint ?? 0;
-        weightsAttr[v * 4 + k] = (top[k]?.w ?? 0) / sum;
-      }
+      solveVertex(p, v, segments, side, centerX, sideGuard, K, POW, jointsAttr, weightsAttr);
     }
     // Normals: rotate only (uniform scale + translation preserve direction).
     const nrmSrc = prim.getAttribute('NORMAL')?.getArray();
@@ -334,11 +464,20 @@ export async function manualRigOntoReference(rawGlbPath, referenceGlbPath, outPa
       weightsAttr,
       uv: prim.getAttribute('TEXCOORD_0')?.getArray() ?? null,
       indices: prim.getIndices()?.getArray() ?? null,
-      material: prim.getMaterial(),
+      // preserveSourceArt: the merged clone of the source material, already in
+      // this document. Otherwise the source-document material, hand-copied below.
+      material: (srcMap && srcMap.get(prim.getMaterial())) || prim.getMaterial(),
     };
   });
 
   // --- Rebuild the reference doc: drop its meshes, add the new skinned body -
+  // Under preserveSourceArt the merged source scenes/nodes/skin/animations go
+  // too: only its materials and textures are wanted, and prune() below cannot
+  // reach them while a merged scene still roots them.
+  if (srcMap) {
+    const byType = (t) => [...srcMap.values()].filter((p) => p.propertyType === t);
+    for (const t of ['Animation', 'Scene', 'Node', 'Skin']) for (const p of byType(t)) p.dispose();
+  }
   for (const node of root.listNodes()) if (node.getMesh()) node.setMesh(null);
   for (const mesh of root.listMeshes()) mesh.dispose();
 
@@ -346,19 +485,25 @@ export async function manualRigOntoReference(rawGlbPath, referenceGlbPath, outPa
   const mkAcc = (arr, type) => doc.createAccessor().setArray(arr).setType(type).setBuffer(buffer);
   const mesh = doc.createMesh('body');
   for (const b of built) {
-    // Material: copy the raw PBR set (color + normal + ORM) into this doc.
-    const mat = doc.createMaterial(b.material?.getName() ?? 'body');
-    const copyTex = (getter, setter) => {
-      const t = b.material?.[getter]();
-      if (!t) return;
-      const nt = doc.createTexture(t.getName()).setImage(t.getImage()).setMimeType(t.getMimeType());
-      mat[setter](nt);
-    };
-    copyTex('getBaseColorTexture', 'setBaseColorTexture');
-    copyTex('getNormalTexture', 'setNormalTexture');
-    copyTex('getMetallicRoughnessTexture', 'setMetallicRoughnessTexture');
-    mat.setMetallicFactor(b.material?.getMetallicFactor() ?? 0);
-    mat.setRoughnessFactor(b.material?.getRoughnessFactor() ?? 1);
+    // Material. preserveSourceArt: b.material is ALREADY a complete clone of
+    // the source's, owned by this doc (via doc.merge) — use it as-is, because
+    // any hand-copy is a list of slots someone has to remember to extend.
+    // Legacy path: copy the raw PBR set (color + normal + ORM) into this doc.
+    let mat = preserveArt ? b.material : null;
+    if (!mat) {
+      mat = doc.createMaterial(b.material?.getName() ?? 'body');
+      const copyTex = (getter, setter) => {
+        const t = b.material?.[getter]();
+        if (!t) return;
+        const nt = doc.createTexture(t.getName()).setImage(t.getImage()).setMimeType(t.getMimeType());
+        mat[setter](nt);
+      };
+      copyTex('getBaseColorTexture', 'setBaseColorTexture');
+      copyTex('getNormalTexture', 'setNormalTexture');
+      copyTex('getMetallicRoughnessTexture', 'setMetallicRoughnessTexture');
+      mat.setMetallicFactor(b.material?.getMetallicFactor() ?? 0);
+      mat.setRoughnessFactor(b.material?.getRoughnessFactor() ?? 1);
+    }
 
     const prim = doc
       .createPrimitive()
@@ -375,13 +520,211 @@ export async function manualRigOntoReference(rawGlbPath, referenceGlbPath, outPa
   const bodyNode = doc.createNode('body').setMesh(mesh).setSkin(skin);
   root.listScenes()[0].addChild(bodyNode);
 
-  await doc.transform(
-    prune(),
-    dedup(),
-    textureCompress({ targetFormat: 'webp', resize: [1024, 1024] }),
-  );
+  // textureCompress re-encodes and DOWNSAMPLES to 1024: fine for a raw
+  // generated body whose atlas is incidental, destructive for art someone
+  // authored. Under preserveSourceArt it is off unless asked for explicitly —
+  // compressing art is a separate, deliberate decision from rigging it.
+  const steps = [prune(), dedup()];
+  const compress = opts.textureCompress ?? !preserveArt;
+  if (compress) {
+    steps.push(
+      textureCompress(
+        compress === true ? { targetFormat: 'webp', resize: [1024, 1024] } : compress,
+      ),
+    );
+  }
+  await doc.transform(...steps);
+  // A GLB may hold at most one buffer, and mergeDocuments brings the source's
+  // along; after prune it is empty, but it still has to be removed. No-op on
+  // the default path, which never gains a second buffer.
+  const buffers = root.listBuffers();
+  if (buffers.length > 1) {
+    for (const acc of root.listAccessors())
+      if (acc.getBuffer() !== buffers[0]) acc.setBuffer(buffers[0]);
+    for (const extra of buffers.slice(1)) extra.dispose();
+  }
   await saveGlb(doc, outPath);
   report.clips = root.listAnimations().length;
   report.joints = joints.length;
+  report.textureBytes = root
+    .listTextures()
+    .reduce((s, t) => s + (t.getImage()?.byteLength ?? 0), 0);
+  report.materials = root.listMaterials().length;
+  report.textures = root.listTextures().length;
+  return report;
+}
+
+/** Re-solve the skin weights of an ALREADY-RIGGED model against its OWN
+ *  skeleton, in its OWN document. Writes ONLY JOINTS_0 and WEIGHTS_0.
+ *
+ *  This is the repair operation for "the bind is wrong" — a shoulder that
+ *  tears, a cap of vertices stranded on the wrong bone, weights that no amount
+ *  of smoothing can rescue because the discontinuity is in the assignment, not
+ *  in the falloff. Because it never opens a second document there is no
+ *  reference whose materials, textures, UV wiring, clip library, joint names,
+ *  inverse bind matrices or bind scale can leak in: geometry, art and animation
+ *  are all bit-preserved, and the only thing that changes is which bones each
+ *  vertex follows. No prune/dedup/textureCompress runs either — none of them
+ *  are rigging, and every one of them can alter the art.
+ *
+ *  Returns a report incl. the before/after dominant-joint histogram, which is
+ *  where a bad bind shows up numerically (e.g. 10k body vertices pinned to
+ *  Hips and zero on a shoulder that the clips animate).
+ *
+ *  WEIGHT MODEL. Default: straight-line distance to the bone segments, as
+ *  above. `weightModel: 'geodesic'` swaps in surface distance across the welded
+ *  triangle graph instead (see ./geodesic_weights.mjs). Reach for it whenever
+ *  the body is hollow, thin-limbed, plated or A-posed — i.e. whenever two
+ *  surfaces that different bones own are CLOSE IN THE AIR: a ribcage's inner
+ *  wall beside the upper arm, a pelvis plate hanging in front of the thighs,
+ *  claws past the wrist. Euclidean distance cannot tell those apart and hands
+ *  the surface to the wrong bone; surface distance can, because the mesh path
+ *  between them is long even where the gap is not.
+ *
+ *  The default path is untouched by the flag and stays byte-for-byte what it
+ *  has always been. Everything else about the operation — writing only
+ *  JOINTS_0/WEIGHTS_0, reusing the source accessors' storage classes, no
+ *  prune/dedup/textureCompress — is identical under either model. */
+export async function rebindSkinInPlace(srcGlbPath, outPath, opts = {}) {
+  const K = opts.influences ?? 4;
+  const POW = opts.falloff ?? 4;
+  const geodesic = opts.weightModel === 'geodesic';
+
+  const doc = await openGlb(srcGlbPath);
+  const root = doc.getRoot();
+  const skin = root.listSkins()[opts.skinIndex ?? 0];
+  if (!skin) throw new Error('model has no skin to rebind');
+  if (!skin.getInverseBindMatrices()) throw new Error('skin has no inverse bind matrices');
+
+  const { joints, jointPos, byName } = bindSkeleton(skin);
+  const { groundY, centerX, centerZ, armLine } = bindAnchors(joints, jointPos, byName);
+  const segments = buildSegments(joints, jointPos, byName, armLine);
+  const sideGuard = 0.02 * armLine;
+  const side = lateralityFn(joints, jointPos, centerX);
+
+  // Only the primitives actually driven by THIS skin. A skinned mesh node's own
+  // transform is ignored per spec, so POSITION already lives in the same bind
+  // space as inverse(IBM) — no rotate, no scale, no recentre. That is the whole
+  // reason this path cannot move or resize the body.
+  const prims = [];
+  for (const node of root.listNodes()) {
+    if (node.getSkin() !== skin) continue;
+    const mesh = node.getMesh();
+    if (!mesh) continue;
+    for (const prim of mesh.listPrimitives()) if (!prims.includes(prim)) prims.push(prim);
+  }
+  if (!prims.length) throw new Error('no primitives are bound to this skin');
+
+  const histogram = (jArr, wArr, n) => {
+    const counts = new Map();
+    for (let v = 0; v < n; v++)
+      for (let k = 0; k < 4; k++)
+        if (wArr[v * 4 + k] > 0.5) counts.set(jArr[v * 4 + k], (counts.get(jArr[v * 4 + k]) ?? 0) + 1);
+    return [...counts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([j, c]) => [joints[j].getName(), c]);
+  };
+
+  const report = {
+    joints: joints.length,
+    clips: root.listAnimations().length,
+    prims: prims.length,
+    verts: 0,
+    groundY: +groundY.toFixed(4),
+    bindCenter: [+centerX.toFixed(4), +centerZ.toFixed(4)],
+    armLine: +armLine.toFixed(4),
+    before: null,
+    after: null,
+  };
+
+  // Geodesic model: solved once for the WHOLE skin, because the surface graph
+  // spans every primitive (a body split across prims is still one surface).
+  // The write-back below is shared with the default path, so the accessor
+  // storage classes and the integer-weight quantisation cannot drift apart.
+  let geo = null;
+  if (geodesic) {
+    geo = solveGeodesicWeights({
+      prims: prims.filter((prim) => prim.getAttribute('POSITION')),
+      joints,
+      jointPos,
+      byName,
+      side,
+      centerX,
+      sideGuard,
+      armLine,
+      influences: K,
+      // A vertex no bone seed can reach across the surface is a detached shell.
+      // Falling back to the proven Euclidean solver there means this model can
+      // never leave a piece of the body unweighted.
+      fallbackSolve: (p) => {
+        const jTmp = new Uint32Array(4);
+        const wTmp = new Float32Array(4);
+        solveVertex(p, 0, segments, side, centerX, sideGuard, K, POW, jTmp, wTmp);
+        const m = new Map();
+        for (let k = 0; k < 4; k++) if (wTmp[k] > 0) m.set(jTmp[k], (m.get(jTmp[k]) ?? 0) + wTmp[k]);
+        return m;
+      },
+      opts,
+    });
+    report.geodesic = geo.report;
+  }
+
+  for (const prim of prims) {
+    const posAcc = prim.getAttribute('POSITION');
+    const jAcc = prim.getAttribute('JOINTS_0');
+    const wAcc = prim.getAttribute('WEIGHTS_0');
+    if (!posAcc || !jAcc || !wAcc) continue;
+    const pos = posAcc.getArray();
+    const n = posAcc.getCount();
+    report.verts += n;
+    if (!report.before) report.before = histogram(jAcc.getArray(), wAcc.getArray(), n);
+
+    // Reuse the existing accessors' storage classes so the file layout, the
+    // component types and the byte cost stay exactly what the source shipped.
+    const JCtor = joints.length > 255 && jAcc.getArray().BYTES_PER_ELEMENT === 1
+      ? Uint16Array
+      : jAcc.getArray().constructor;
+    const jOut = new JCtor(n * 4);
+    const wSolve = new Float32Array(n * 4);
+    if (geo) {
+      const solved = geo.perPrim.get(prim);
+      jOut.set(solved.j);
+      wSolve.set(solved.w);
+    } else {
+      const p = [0, 0, 0];
+      for (let v = 0; v < n; v++) {
+        p[0] = pos[v * 3];
+        p[1] = pos[v * 3 + 1];
+        p[2] = pos[v * 3 + 2];
+        solveVertex(p, v, segments, side, centerX, sideGuard, K, POW, jOut, wSolve);
+      }
+    }
+    jAcc.setArray(jOut);
+
+    const WCtor = wAcc.getArray().constructor;
+    if (WCtor === Float32Array) {
+      wAcc.setArray(wSolve);
+    } else {
+      // Normalised integer weights: quantise, then fix rounding drift on the
+      // largest influence so each vertex still sums to exactly full scale.
+      const scale = WCtor === Uint8Array ? 255 : 65535;
+      const wOut = new WCtor(n * 4);
+      for (let v = 0; v < n; v++) {
+        let acc = 0;
+        let big = 0;
+        for (let k = 0; k < 4; k++) {
+          wOut[v * 4 + k] = Math.round(wSolve[v * 4 + k] * scale);
+          acc += wOut[v * 4 + k];
+          if (wSolve[v * 4 + k] > wSolve[v * 4 + big]) big = k;
+        }
+        wOut[v * 4 + big] += scale - acc;
+      }
+      wAcc.setArray(wOut);
+    }
+    report.after = histogram(jOut, wSolve, n);
+  }
+
+  await saveGlb(doc, outPath);
   return report;
 }

@@ -61,27 +61,49 @@ export type RealmRuntimeVisualKeyLegacy =
 const REALM_CLASS_VISUALS: Partial<
   Record<RealmId, Partial<Record<PlayerClass, RealmRuntimeVisualKey>>>
 > = {
+  // Six of these nine pointed at a body whose arms do not move. Repointed
+  // 2026-08-08 onto bodies rendered at four phases each of Idle, Walk and
+  // Attack and looked at; see INFERNAL_DEFECTIVE_BODY_KEYS for what each one
+  // was doing wrong. The bank cannot currently field nine distinct working
+  // bodies, so classes share until it is repaired.
   crypticrealm: {
     warrior: 'realm_infernal_human_iron_warden',
-    paladin: 'realm_infernal_human_vanguard',
-    hunter: 'realm_infernal_human_iron_ranger',
-    rogue: 'realm_infernal_human_road_mercenary',
-    priest: 'realm_infernal_human_white_sage',
+    // was vanguard: no forearms and no hands, frozen stubs at the pauldrons
+    paladin: 'realm_infernal_human_iron_warden',
+    // was iron_ranger: LeftHand carries no weight and the lower body shears flat
+    hunter: 'realm_infernal_human_hooded_wanderer',
+    // was road_mercenary: forearms end in flat blades, no hands
+    rogue: 'realm_infernal_human_hooded_wanderer',
+    // was white_sage: no face under the hat, arm stubs, plank feet
+    priest: 'realm_infernal_human_hooded_wanderer',
     shaman: 'realm_infernal_human_weathered_elder',
     mage: 'realm_infernal_human_hooded_wanderer',
-    warlock: 'realm_infernal_human_forge_worker',
-    druid: 'realm_infernal_human_hermit',
+    // was forge_worker: arms locked straight out in a T through every clip
+    warlock: 'realm_infernal_human_hooded_wanderer',
+    // was hermit: same kite failure, plus a LeftHand that carries no weight
+    druid: 'realm_infernal_human_weathered_elder',
   },
+  // Seven of these nine pointed at a body that fails in motion; see
+  // INFERNAL_DEFECTIVE_CLASS_BODY_KEYS. The three survivors of the class bank
+  // are warrior, blood_knight and demon_hunter, with rogue and witch_doctor
+  // acceptable, so the nine classes share five bodies until the bank is fixed.
   infernal: {
     warrior: 'realm_infernal_class_warrior',
-    paladin: 'realm_infernal_class_paladin',
-    hunter: 'realm_infernal_class_amazon',
+    // was paladin: both feet stretch into flat pale planks
+    paladin: 'realm_infernal_class_blood_knight',
+    // was amazon: feet tear off into planks in Attack, plus a finger spike
+    hunter: 'realm_infernal_class_demon_hunter',
     rogue: 'realm_infernal_class_rogue',
-    priest: 'realm_infernal_class_sorcerer',
-    shaman: 'realm_infernal_class_monk',
-    mage: 'realm_infernal_class_wizard',
-    warlock: 'realm_infernal_class_warlock',
-    druid: 'realm_infernal_class_druid',
+    // was sorcerer: a full T-pose held through Idle and Walk, shredded sleeves
+    priest: 'realm_infernal_class_witch_doctor',
+    // was monk: bind span 0.94, arms stay splayed through Walk
+    shaman: 'realm_infernal_class_witch_doctor',
+    // was wizard: frozen arms, no hands, slab under the gown every Idle frame
+    mage: 'realm_infernal_class_witch_doctor',
+    // was warlock: the worst body in the bank - no arm weight on either hand
+    warlock: 'realm_infernal_class_witch_doctor',
+    // was druid: hands fused to the belt, feet torn into planks
+    druid: 'realm_infernal_class_rogue',
   },
   classic: {
     warrior: 'realm_classic_dwarf',

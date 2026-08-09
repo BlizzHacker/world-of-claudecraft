@@ -109,6 +109,10 @@ export interface InspectWindowDeps extends PainterHostPresentation {
       mainhand: string | null;
       weaponSkinId: string | null;
       offhand: string | null;
+      /** The body this player renders on in the world (visualKeyFor), so the
+       *  stage shows who you are actually standing next to rather than the class
+       *  rig. Absent = class rig, as before. */
+      visualKey?: string;
     },
   ): void;
 }
@@ -137,7 +141,7 @@ export class InspectWindow {
 
   /** Rich in-range inspect: compact header, identity badges, live class-colored
    *  turntable, and the worn 6/6 paperdoll. */
-  openInspect(e: InspectEntity, now: number): void {
+  openInspect(e: InspectEntity, now: number, bodyVisualKey?: string): void {
     const cls = e.templateId as PlayerClass;
     const el = this.deps.root();
     this.captureOpener();
@@ -222,6 +226,7 @@ export class InspectWindow {
         mainhand: e.equippedItems.mainhand ?? null,
         offhand: e.equippedItems.offhand ?? null,
         weaponSkinId: e.weaponSkinId ?? null,
+        visualKey: bodyVisualKey,
       });
     }
     el.querySelector('[data-close]')?.addEventListener('click', () => this.close());

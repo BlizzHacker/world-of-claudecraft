@@ -13,8 +13,11 @@
 //
 //   node emit_manifest.mjs --staging /staging --out src/render/characters/manifest.generated.ts
 
-import { readdirSync, writeFileSync, readFileSync, existsSync, statSync } from 'node:fs';
-import { join } from 'node:path';
+import { readdirSync, writeFileSync, readFileSync, existsSync, statSync,
+         openSync, closeSync, unlinkSync, renameSync } from 'node:fs';
+import { execSync } from 'node:child_process';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 function arg(n, d = null) {
   const i = process.argv.indexOf(`--${n}`);
@@ -57,13 +60,105 @@ function attacksFor(name, realm) {
 // Realms that fight with firearms. One weapon set, shared: build guns once and every
 // gun-carrying realm inherits them rather than each realm needing its own pass.
 const GUN_REALMS = new Set(['fps', 'dominion', 'arcadevoid']);
-const GUNS = ['wpn_rifle', 'wpn_revolver', 'wpn_blaster_heavy', 'wpn_blaster_sci'];
 
-/** Deterministic weapon pick so a body always spawns with the same gun. */
-function gunFor(key) {
-  let h = 0;
-  for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
-  return GUNS[h % GUNS.length];
+// The REAL weapon libraries, emitted by emit_arms.mjs from the asset store:
+// 255 guns under /cr-realms/fps/weapons and 77 confidently-gripped melee weapons
+// under /cr-realms/classic/melee, each with a measured grip baked into
+// src/render/characters/realm_arms.generated.ts.
+//
+// Before this, every armed body in a gun realm carried one of FOUR hardcoded
+// models, and `${realm}/wpn_*.glb` only actually exists under fps and dominion —
+// so every generated arcadevoid body was reaching for a 404 and rendering
+// empty-handed. Realms without their own bucket now borrow the owning realm's
+// files (the store is one shared tree served at /cr-realms, so a cross-realm URL
+// resolves on every realm host).
+const ARMS_INDEX = arg('arms', join(dirname(fileURLToPath(import.meta.url)), 'arms_index.generated.json'));
+const ARMS = existsSync(ARMS_INDEX) ? JSON.parse(readFileSync(ARMS_INDEX, 'utf8')) : null;
+
+// Fallback for a checkout without the arms index: the historical four models.
+const LEGACY_GUNS = ['wpn_rifle', 'wpn_revolver', 'wpn_blaster_heavy', 'wpn_blaster_sci'];
+
+function poolFor(kind, realm) {
+  const byRealm = ARMS?.[kind];
+  if (!byRealm) return null;
+  // A realm's own bucket wins; otherwise fall back to whichever realm owns the
+  // library for this weapon kind (fps for guns, classic for melee).
+  const own = byRealm[realm];
+  if (own?.length) return own;
+  const shared = kind === 'guns' ? byRealm.fps : byRealm.classic;
+  return shared?.length ? shared : null;
+}
+
+// A body's weapon is remembered, not just hashed. The hash below is taken
+// modulo the pool size, so it is deterministic only within ONE pool generation:
+// quarantining a handful of weapons changed pool.length and re-rolled 1,157 of
+// 1,170 bodies onto a different weapon, often a different CLASS of weapon. The
+// comment on this function used to promise a body "always spawns holding the
+// same weapon", and that was only ever true until someone touched the store.
+//
+// So the pick is recorded. A body that already has a weapon keeps it as long as
+// that weapon is still in the pool; only a body with no record, or whose weapon
+// really is gone, draws a fresh one. Removing an asset now perturbs the bodies
+// that held it and nothing else.
+function armExists(url) {
+  const rel = url.startsWith('/cr-realms/') ? url.slice('/cr-realms/'.length) : url;
+  return existsSync(`/opt/cr-realms-store/${rel}`);
+}
+// Filtering is per-pool, not per-body: 1,100+ bodies share a handful of pools,
+// and re-stat'ing 300 files for each of them is minutes of pointless syscalls.
+const LIVE_POOLS = new Map();
+function livePool(pool) {
+  let hit = LIVE_POOLS.get(pool);
+  if (!hit) {
+    hit = pool.filter(armExists);
+    LIVE_POOLS.set(pool, hit);
+  }
+  return hit;
+}
+const ARM_PICKS_PATH = '/opt/cryptic-realm/tmp/arm_picks.json';
+const ARM_PICKS = existsSync(ARM_PICKS_PATH)
+  ? JSON.parse(readFileSync(ARM_PICKS_PATH, 'utf8'))
+  : {};
+let armPicksDirty = false;
+let armPicksKept = 0;
+let armPicksFresh = 0;
+let armPicksLost = 0;
+
+/** Deterministic pick so a body always spawns holding the same weapon. Salted
+ *  per kind so a body's gun and its melee weapon are not the same index. */
+function armFor(pool, key, salt) {
+  const memo = `${salt}:${key}`;
+  // The pool comes from the arms INDEX, which is generated separately and can
+  // name a weapon that is no longer on disk. Filter to what actually exists
+  // before doing anything else — otherwise a re-draw can hand back the very
+  // file that was just quarantined, which is exactly what the first version of
+  // this fix did.
+  const live = livePool(pool);
+  if (!live.length) return pool[0];
+
+  const remembered = ARM_PICKS[memo];
+  if (remembered && live.includes(remembered)) {
+    armPicksKept++;
+    return remembered;
+  }
+  if (remembered) armPicksLost++;
+  let h = 2166136261;
+  const s = memo;
+  for (let i = 0; i < s.length; i++) h = ((h ^ s.charCodeAt(i)) * 16777619) >>> 0;
+  const picked = live[h % live.length];
+  ARM_PICKS[memo] = picked;
+  armPicksDirty = true;
+  armPicksFresh++;
+  return picked;
+}
+
+/** Mainhand URL for a generated body, or null to keep the hand-authored default. */
+function armUrlFor(realm, key) {
+  const gun = GUN_REALMS.has(realm);
+  const pool = poolFor(gun ? 'guns' : 'melee', realm);
+  if (pool) return armFor(pool, key, gun ? 'gun' : 'melee');
+  if (!gun) return null;
+  return `/cr-realms/${realm}/${armFor(LEGACY_GUNS, key, 'gun')}.glb`;
 }
 
 const entries = existsSync(ENTRIES) ? JSON.parse(readFileSync(ENTRIES, 'utf8')) : [];
@@ -188,16 +283,24 @@ for (const e of out) {
   lines.push("    tint: 'entity',");
   lines.push('    tintStrength: 0.18,');
   if (!e.armed) {
+    const armUrl = armUrlFor(e.realm, e.key);
     if (GUN_REALMS.has(e.realm)) {
       // Firearm: right hand only. A shield in the off-hand reads as nonsense on a
       // shooter, and the ranged clip already occupies both arms.
       lines.push('    attach: [');
-      lines.push(`      { url: \`\${REALM_MODELS}/${e.realm}/${gunFor(e.key)}.glb\`, bone: 'handslot.r' },`);
+      lines.push(`      { url: '${armUrl}', bone: 'handslot.r' },`);
       lines.push('    ],');
       lines.push('    weaponSlots: [0],');
     } else {
+      // Fantasy realms keep the authored KayKit shield in the off-hand; only the
+      // mainhand upgrades to a library weapon, and only when emit_arms.mjs was
+      // confident which end of it is the handle.
       lines.push('    attach: [');
-      lines.push("      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },");
+      if (armUrl) {
+        lines.push(`      { url: '${armUrl}', bone: 'handslot.r' },`);
+      } else {
+        lines.push("      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },");
+      }
       lines.push("      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },");
       lines.push('    ],');
       lines.push('    weaponSlots: [0],');
@@ -225,7 +328,42 @@ for (const e of out.filter((x) => x.armed)) lines.push(`  '${e.key}',`);
 lines.push(']);');
 lines.push('');
 
-writeFileSync(OUT, lines.join('\n'));
+// Several asset passes regenerate this file, and they have raced: a run that
+// emitted a CLEAN manifest was overwritten seconds later with stale content, so
+// quarantined assets stayed in the registry pointing at files that no longer
+// serve. Take an exclusive lock for the write, and rename into place so a reader
+// never sees a half-written module.
+const LOCK = `${OUT}.lock`;
+let lockFd = null;
+for (let i = 0; i < 60; i++) {
+  try {
+    lockFd = openSync(LOCK, 'wx');
+    break;
+  } catch (err) {
+    if (err.code !== 'EEXIST') throw err;
+    // A crashed run must not wedge every later one.
+    try {
+      if (Date.now() - statSync(LOCK).mtimeMs > 10 * 60_000) unlinkSync(LOCK);
+    } catch {}
+    execSync('sleep 2');
+  }
+}
+if (lockFd === null) {
+  console.error(`[emit] could not take ${LOCK} after 2 minutes — another emit is running; refusing to clobber it`);
+  process.exit(3);
+}
+try {
+  writeFileSync(`${OUT}.tmp`, lines.join('\n'));
+  renameSync(`${OUT}.tmp`, OUT);
+  if (armPicksDirty) {
+    writeFileSync(`${ARM_PICKS_PATH}.tmp`, JSON.stringify(ARM_PICKS, null, 0));
+    renameSync(`${ARM_PICKS_PATH}.tmp`, ARM_PICKS_PATH);
+  }
+  console.log(`[emit] weapon picks: ${armPicksKept} kept, ${armPicksFresh} new, ${armPicksLost} re-drawn (weapon gone)`);
+} finally {
+  closeSync(lockFd);
+  try { unlinkSync(LOCK); } catch {}
+}
 const armed = out.filter((e) => e.armed).length;
 console.log(`[emit] ${out.length} visuals -> ${OUT}`);
 console.log('[emit] authored per realm (owns the GLB):', stats);
