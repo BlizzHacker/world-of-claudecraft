@@ -626,7 +626,7 @@ export function dealDamage(
       kind,
     });
     pitEliminate(ctx, target.id, 'ko');
-    return;
+    return amount;
   }
 
   // Fiesta takedowns score a point and put the victim on a (growing) respawn
@@ -1213,6 +1213,7 @@ export function handleDeath(
 
     // Hardcore permadeath: the dead character's body becomes a lootable corpse
     // for live players of the same population. Deterministic transfer, no RNG.
+    const meta = e.kind === 'player' ? ctx.players.get(e.id) : undefined;
     if (meta?.hardcore) {
       const items: LootSlot[] = [];
       for (const slot of meta.inventory) {

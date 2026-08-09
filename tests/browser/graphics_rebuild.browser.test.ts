@@ -225,7 +225,6 @@ describe('Options live graphics rebuild transaction', () => {
         root: () => root,
         world: () => world as never,
         options: () => hooks,
-        auraOverlays: () => ({ setPlacement: () => {} }) as never,
         bugReport: () => null,
         captureFocus: () => null,
         focusFirstInteractive: (scope, selector) =>

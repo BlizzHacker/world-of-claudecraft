@@ -6,7 +6,7 @@ import { runEffects } from '../src/sim/combat/effect_dispatch';
 import { BUILTIN_WORLD } from '../src/sim/data';
 import type { PlayerMeta, ResolvedAbility } from '../src/sim/sim';
 import { Sim } from '../src/sim/sim';
-import type { AbilityDef, Aura, Entity, Vec3 } from '../src/sim/types';
+import type { AbilityDef, Aura, Entity, Vec3, WorldContent } from '../src/sim/types';
 import { dist2d } from '../src/sim/types';
 
 // Duel / diminishing-returns tests need two players and nothing else: the DR

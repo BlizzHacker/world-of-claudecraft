@@ -31,19 +31,7 @@ import {
   scanAnimRepair,
   shouldPlayLanding,
 } from './anim_state';
-import {
-  applyMaterials,
-  applyModularSliderMorphs,
-  assembleModel,
-  ensureSkinTexture,
-  prepareVisual,
-  setHeldOffhand,
-  setHeldWeapon,
-  setWeaponsStowed,
-  skinEmissiveTexture,
-  skinTexture,
-  tintedFarMaterials,
-} from './assets';
+import { applyMaterials, applyModularSliderMorphs, assembleModel, AssembleModelOptions, ensureSkinTexture, prepareVisual, setHeldOffhand, setHeldWeapon, setWeaponsStowed, skinEmissiveTexture, skinTexture, tintedFarMaterials } from './assets';
 import { HairSwayDriver } from './hair_sway';
 import { buildHalo } from './halo';
 import type { EmoteClipSpec, VisualDef, WeaponLayoutOverride } from './manifest';
@@ -64,6 +52,8 @@ import {
   disposeOwnedWeaponSkinMaterials,
   markOwnedWeaponSkinMaterials,
 } from './weapon_skin_materials';
+import { firstPersonMeshRole } from './first_person_parts';
+import { resolveClipMap } from './clip_resolution';
 
 export type { AnimState, BaseState } from './anim_state';
 

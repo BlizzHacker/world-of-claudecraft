@@ -107,7 +107,6 @@ describe('collectPolishProvenanceInputPaths', () => {
 
   it('matches the real provenance input surface: lockfile and renderer both in scope', async () => {
     const [contract, town, mailbox, notice] = await Promise.all([
-      // @ts-expect-error The executable capture contract intentionally ships as plain Node ESM.
       import('../scripts/assets/eastbrook_grand_armoury/capture_contract.mjs'),
       import('../scripts/assets/eastbrook_town/source_fingerprint.mjs'),
       import('../scripts/assets/eastbrook_mailbox/source_fingerprint.mjs'),

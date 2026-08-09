@@ -3,7 +3,9 @@
 // browser. The .mjs script has no TS/browser imports at module load, so vitest can import
 // it directly.
 import { describe, expect, it } from 'vitest';
-import { classifyDiff, diffChangedPaths, resolveTargets } from '../scripts/pr_shot_targets.mjs';
+import * as prShotModule from '../scripts/pr_shot_targets.mjs';
+
+const { classifyDiff, diffChangedPaths, resolveTargets } = prShotModule as Record<string, any>;
 
 describe('classifyDiff', () => {
   it('treats a backend/data-only diff as non-visual (captures nothing)', () => {

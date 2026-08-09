@@ -83,6 +83,8 @@ import {
   OBJECT_RESPAWN,
 } from './types';
 import { markWorldBossLooted } from './world_boss';
+import { activateWaypoint } from './waypoints';
+import { useTownPortal } from './town_portal';
 
 const LOCKPICK_OFFER_COOLDOWN = 4; // seconds between repeated rift_locked_chest offer emits per player
 

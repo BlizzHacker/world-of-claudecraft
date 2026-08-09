@@ -697,7 +697,7 @@ export const tr_TR: EnTranslations = {
       "railSol": "SOL",
       "railUsdc": "USDC",
       "railWoc": "WOC",
-      "railWocDiscount": "%{percent} indirim",
+      "railWocDiscount": "{percent}% off",
       "railWocUnavailable": "WOC fiyatlandırması şu anda mevcut değil.",
       "railNativeUnavailable": "SOL/WOC şu anda kullanılamıyor.",
       "amountLabel": "Miktar",
@@ -809,7 +809,7 @@ export const tr_TR: EnTranslations = {
     "mobile": {
       "jump": "Zıpla",
       "leaderboard": "Sıralama",
-      "dailyRewards": "Mağaza",
+      "dailyRewards": "Ödüller",
       "deeds": "Yiğitlikler",
       "mounts": "Binekler",
       "professions": "Meslekler",
@@ -826,7 +826,10 @@ export const tr_TR: EnTranslations = {
       "targetCycleShort": "Hedef",
       "spellbookPageLabel": "Sayfa {page}",
       "hideKeyboard": "Klavyeyi gizle",
-      "chatPlaceholder": "Bir şey söyle..."
+      "chatPlaceholder": "Bir şey söyle...",
+      "autorun": "Auto",
+      "hideMenuButtons": "Menü düğmelerini gizle",
+      "showMenuButtons": "Menü düğmelerini göster"
     },
     "tutorial": {
       "moveBodyTouch": "Hareket etmek için hareket çubuğunu kullan ve etrafa bakmak için ekranı sürükle. Başlamak için birkaç adım at.",
@@ -849,8 +852,8 @@ export const tr_TR: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "Güncelleme Mevcut",
-      "body": "World of ClaudeCraft'ın yeni bir sürümü mevcut. En son düzeltmeler ve iyileştirmeler için şimdi güncelle.",
-      "bodyWithVersion": "World of ClaudeCraft'ın {version} sürümü mevcut. En son düzeltmeler ve iyileştirmeler için şimdi güncelle.",
+      "body": "Cryptic Realm'ın yeni bir sürümü mevcut. En son düzeltmeler ve iyileştirmeler için şimdi güncelle.",
+      "bodyWithVersion": "Cryptic Realm'ın {version} sürümü mevcut. En son düzeltmeler ve iyileştirmeler için şimdi güncelle.",
       "notNow": "Şimdi Değil",
       "update": "Güncelle"
     },
@@ -1340,7 +1343,84 @@ export const tr_TR: EnTranslations = {
       "showAttackButton": "Saldırı Düğmesini Göster",
       "showDailyRewardsChest": "Günlük Ödül Sandığını Göster",
       "mobileCameraJoystick": "Kamera joystick'i",
-      "mobileLeftHanded": "Solak düzen"
+      "mobileLeftHanded": "Solak düzen",
+      "changed": "{count} değişiklik",
+      "changedSummary": "Varsayılanlardan {count} değişiklik",
+      "conflictDot": "Tuş ataması çakışması",
+      "done": "Bitti",
+      "keybindCleared": "{action} temizlendi",
+      "keybindEvicted": "{key}, {action} için atandı; {evicted} üzerinden kaldırıldı",
+      "keybindModifierHint": "İpucu: değiştirici tuş birleşimleri atayabilirsin. Bir tuşa basarken Shift, Ctrl veya Alt tuşunu basılı tutarak birleşimi yakala (örneğin Shift+1).",
+      "keybindRebinding": "{action} yeniden atanıyor. Bir tuşa bas veya iptal etmek için Escape tuşuna bas.",
+      "keybindTaken": "Tuş kaldırıldı",
+      "keybindUnbound": "{action} için tuş yok",
+      "modeOffline": "Çevrimdışı",
+      "modeOnline": "Çevrimiçi",
+      "overviewConflictAlert": "Bazı tuş atamaları çakışıyor veya atanmamış.",
+      "resetAllBody": "Bu işlem her ayarı varsayılan değerine döndürür. Geri alınamaz.",
+      "resetAllTitle": "Tüm ayarlar sıfırlansın mı?",
+      "searchEmpty": "Aramanla eşleşen ayar yok.",
+      "searchGoTo": "{category} bölümüne git",
+      "searchPlaceholder": "Ayarlarda ara",
+      "searchScopeAll": "Tüm ayarlar",
+      "searchScopeThis": "Bu bölüm",
+      "ia": {
+        "catAccessibilityName": "Erişilebilirlik",
+        "catAccessibilitySub": "Hareket, kontrast ve içerik rahatlığı.",
+        "catAudioSub": "Ses düzeyi ve ses açma kapama seçenekleri.",
+        "catControllerSub": "Oyun kumandası hissi ve düğme düzeni.",
+        "catControlsName": "Kontroller",
+        "catControlsSub": "Kamera, hareket, savaş ve geri bildirim.",
+        "catGraphicsSub": "Kalite, görüş ve dünya görselleri.",
+        "catInterfaceSub": "HUD ölçeği, paneller, sohbet ve birim çerçeveleri.",
+        "catKeybindsSub": "Her eylem için tuş ata.",
+        "catOverviewName": "Genel Bakış",
+        "catOverviewSub": "Sabitlenmiş temel ayarlar, hızlı eylemler ve değişiklikler.",
+        "catSystemName": "Sistem",
+        "catSystemSub": "Performans, destek ve hakkında.",
+        "catTouchName": "Dokunmatik",
+        "catTouchSub": "Ekran çubukları, görüş ve düğmeler.",
+        "railDisplay": "Görüntü",
+        "railInput": "Giriş",
+        "railSystem": "Sistem"
+      },
+      "legend": {
+        "back": "Geri",
+        "category": "Kategori",
+        "clear": "Temizle",
+        "navigate": "Gezin",
+        "page": "Sayfa",
+        "reset": "Sıfırla",
+        "select": "Seç"
+      },
+      "sec": {
+        "about": "Hakkında",
+        "actionBars": "Eylem Çubukları",
+        "buttons": "Düğmeler",
+        "camera": "Kamera",
+        "chat": "Sohbet",
+        "combat": "Savaş",
+        "combatTooltips": "Savaş ve İpuçları",
+        "content": "İçerik",
+        "feedback": "Geri Bildirim",
+        "feel": "Hissiyat",
+        "general": "Genel",
+        "hudExtras": "Ek HUD Öğeleri",
+        "inputMode": "Giriş Modu",
+        "look": "Bakış",
+        "motionContrast": "Hareket ve Kontrast",
+        "movement": "Hareket",
+        "panels": "Paneller",
+        "performance": "Performans",
+        "quality": "Kalite",
+        "scaleText": "Ölçek ve Metin",
+        "sticks": "Çubuklar",
+        "support": "Destek",
+        "toggles": "Açma Kapama",
+        "unitFrames": "Birim Çerçeveleri",
+        "view": "Görüş",
+        "volume": "Ses Düzeyi"
+      }
     },
     "talentRows": {
       "tab": "Seçimler",
@@ -1375,7 +1455,8 @@ export const tr_TR: EnTranslations = {
       "menuAction": "Oyun Menüsü",
       "zoomIn": "Yakınlaştır",
       "zoomOut": "Uzaklaştır",
-      "help": "Sol çubuk hareket ettirir, sağ çubuk bakışı yönlendirir. Ekran üzeri işaretçiyi kullanmak için bir pencere açın."
+      "help": "Sol çubuk hareket ettirir, sağ çubuk bakışı yönlendirir. Ekran üzeri işaretçiyi kullanmak için bir pencere açın.",
+      "duplicate": "Ayrıca {buttons} için atanmış"
     },
     "perf": {
       "title": "Performans Katmanı",
@@ -1606,7 +1687,11 @@ export const tr_TR: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "Yapı {n}"
+      "defaultBuildName": "Yapı {n}",
+      "choicesTab": "Seçimler",
+      "resetChoices": "Seçimleri Sıfırla",
+      "tierLevel": "{n}. Seviye",
+      "tierLevelLabel": "Seviye"
     },
     "tips": {
       "joinChannels": "İpucu: Dünya genelindeki oyuncularla sohbet etmek için /join world ya da /join lfg yaz."
@@ -1709,7 +1794,7 @@ export const tr_TR: EnTranslations = {
       "loggedOutPrompt": "Hesabınızı yönetmek için giriş yapın.",
       "memberSince": "Üyelik tarihi: {date}",
       "sectionSettings": "Hesap Ayarları",
-      "sectionWallet": "$WOC Cüzdanı",
+      "sectionWallet": "$CR Cüzdanı",
       "sectionCharacters": "Karakterler",
       "sectionDanger": "Tehlikeli Bölge",
       "changePassword": "Parolayı Değiştir",
@@ -1782,7 +1867,15 @@ export const tr_TR: EnTranslations = {
       "exportHint": "Hesabınızın ve karakterlerinizin bir kopyasını JSON dosyası olarak indirin. Ayrıca size bir onay e-postası gönderiyoruz.",
       "exportBtn": "Verilerimi İndir",
       "exportDone": "Verileriniz indirildi. Size bir onay e-postası gönderdik.",
-      "exportFailed": "Verileriniz dışa aktarılamadı. Birazdan tekrar deneyin."
+      "exportFailed": "Verileriniz dışa aktarılamadı. Birazdan tekrar deneyin.",
+      "connectionsSummary": "Link Google, Facebook, or Plex so you can sign in with them.",
+      "sectionConnections": "Connected Accounts",
+      "ssoLink": "Link Google / Facebook / Plex",
+      "ssoLinkConflict": "That account is already linked to a different Cryptic Realm login.",
+      "ssoLinked": "Linked — you can sign in with Google, Facebook, or Plex.",
+      "ssoNotLinked": "Not linked.",
+      "ssoUnlink": "Unlink",
+      "ssoUnlinkNeedsPassword": "Set a password first — SSO is currently your only way to sign in."
     },
     "masterLoot": {
       "title": "Ganimet ustasi",
@@ -1830,7 +1923,8 @@ export const tr_TR: EnTranslations = {
         "tusk": "Azı Dişi",
         "meat": "Et",
         "cloth": "Kumaş"
-      }
+      },
+      "concentrateHint": "Ne kadar az parça seçersen, her biri o kadar yüksek kademede olur."
     },
     "townFocus": {
       "title": "Kasaba Odağı",
@@ -2087,7 +2181,9 @@ export const tr_TR: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "UZAKTA"
+      "afkTag": "UZAKTA",
+      "mob": "[{level}] {name}",
+      "mobElite": "[{level}+] {name}"
     },
     "mobTooltip": {
       "levelFamily": "Seviye {level} {family}",
@@ -2160,7 +2256,7 @@ export const tr_TR: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "Kapat",
       "keybind": "Discord Paneli",
@@ -2407,8 +2503,8 @@ export const tr_TR: EnTranslations = {
       }
     },
     "marketIndicator": {
-      "aria": "Dünya Pazarı gelirleri veya eşyaları bekliyor",
-      "tip": "Satış gelirleri veya iade edilen eşyalar Tüccar'da seni bekliyor."
+      "aria": "Dünya Pazarı toplaması bekliyor",
+      "tip": "Tüccar'da senin için bekleyen altın ya da eşyalar var."
     },
     "noticeboard": {
       "empty": "Görünüşe göre hiçbir şey asılmamış."
@@ -2555,6 +2651,10 @@ export const tr_TR: EnTranslations = {
         "moongateCommunion": {
           "title": "Ay Geçidi Ayini",
           "note": "Hacılar, ay ortası ayının altında tapınağın ay geçidinde toplanıyor."
+        },
+        "fiestaNight": {
+          "note": "İkiye iki Fiesta ringi bu gece en gürültülü kalabalığını topluyor.",
+          "title": "Fiesta Gecesi"
         }
       }
     },
@@ -2678,7 +2778,17 @@ export const tr_TR: EnTranslations = {
     "archetypeTitle": {
       "label": "Unvan",
       "none": "Yok",
-      "hobbyLabel": "Hobi"
+      "hobbyLabel": "Hobi",
+      "alchemy": "Simyacı",
+      "armorcrafting": "Zırhçı",
+      "cooking": "Aşçı",
+      "enchanting": "Efsuncu",
+      "engineering": "Mühendis",
+      "inscription": "Kâtip",
+      "jewelcrafting": "Kuyumcu",
+      "leatherworking": "Derici",
+      "tailoring": "Terzi",
+      "weaponcrafting": "Silah Ustası"
     },
     "archetypePair": {
       "engineering+alchemy": "Bombacı",
@@ -2937,7 +3047,10 @@ export const tr_TR: EnTranslations = {
       "commissionToggle": "Sipariş parçası",
       "commissionToggleHint": "Ticaret yoluyla alan ilk karaktere bağlanır.",
       "commissionUnbound": "Sipariş parçası: ilk alıcıya bağlanır",
-      "commissionBound": "Sipariş parçası: alıcısına bağlı"
+      "commissionBound": "Sipariş parçası: alıcısına bağlı",
+      "craft": "Zanaat",
+      "notAtHub": "Bunu üretmek için zanaat merkezinde ve gereken kademede olmalısın.",
+      "throttled": "Çok hızlı üretiyorsun. Bir an bekle ve tekrar dene."
     },
     "itemMenu": {
       "use": "Kullan",
@@ -3002,7 +3115,10 @@ export const tr_TR: EnTranslations = {
       "replaceConfirmKeepsBond": "Komisyon bağı",
       "replaceConfirmCost": "Maliyet: {cost}",
       "replaceConfirmCostItem": "{name} x{count}",
-      "replaceConfirmAccept": "Değiştir"
+      "replaceConfirmAccept": "Değiştir",
+      "disenchantThrottled": "Çok hızlı büyü bozuyorsunuz. Bir an bekleyin ve tekrar deneyin.",
+      "enchantThrottled": "Çok hızlı büyü yapıyorsunuz. Bir an bekleyin ve tekrar deneyin.",
+      "salvageThrottled": "Çok hızlı parçalıyorsunuz. Bir an bekleyin ve tekrar deneyin."
     },
     "training": {
       "title": "Eğitim: {name}",
@@ -3263,7 +3379,7 @@ export const tr_TR: EnTranslations = {
       "lbSelfAccount": "Hesabın: {rank}. sıra, ilk {percent} yüzde, {renown} Ün",
       "lbSelfRank": "Hesabın: {rank}. sıra, ilk {percent} yüzde",
       "lbEmpty": "Henüz sıralamaya girmiş vakanüvis yok.",
-      "broadcastsLabel": "Yiğitlik açılışlarını lonca arkadaşların ve takipçilerinle, yiğitlik ve şaheser kartlarını da Discord akışıyla paylaş",
+      "broadcastsLabel": "Kazanılan yiğitlikleri lonca ve arkadaşlarınla paylaş",
       "titledName": "{name} [{title}]"
     },
     "continentMap": {
@@ -3273,6 +3389,66 @@ export const tr_TR: EnTranslations = {
       "toZone": "Bölge haritası",
       "toggleAria": "Dünya haritası ile bölge haritası arasında geçiş yap",
       "levels": "Seviye {min} ile {max} arası"
+    },
+    "arcade": {
+      "abort": "Leave session",
+      "active": "Game active",
+      "brawler": "Four-player Brawl",
+      "build": "Build",
+      "choose": "Choose a game",
+      "close": "Close games",
+      "code": "Session code",
+      "controls": "Controls: arrows/WASD to steer or move, Space to drift or jump, J/K to attack, E to use an item.",
+      "create": "Create session",
+      "finished": "Game finished",
+      "housing": "Eastbrook Homes",
+      "invite": "Invite party member",
+      "inviteHint": "Enter a party member player ID.",
+      "join": "Join by code",
+      "place": "Place piece",
+      "racing": "Cryptic Circuit",
+      "ready": "Ready",
+      "solo": "Solo vs NPCs",
+      "start": "Start",
+      "title": "Realm Games",
+      "townRts": "Eastbrook Command",
+      "train": "Train guard",
+      "unavailable": "This game is not enabled on this server.",
+      "unready": "Unready",
+      "waiting": "Waiting for players"
+    },
+    "zombie": {
+      "abort": "Abandon session",
+      "active": "The wave is active. Place towers or hold the line.",
+      "board": "Board",
+      "buildAt": "Build at {x}, {z}",
+      "claim": "Claim reward",
+      "close": "Close town defense",
+      "copyCode": "Share this code with your party",
+      "create": "Create defense session",
+      "defeat": "The town fell. Abandon the session and try again.",
+      "intro": "Build defenses, hold the road, and survive ten deterministic waves with your party.",
+      "invite": "{name} invited you to {kind}.",
+      "inviteHint": "Enter a party member's player ID.",
+      "invitePlayer": "Invite party member",
+      "join": "Join session",
+      "joinInvite": "Join game",
+      "lives": "Lives {lives}",
+      "ready": "Ready up",
+      "readyDone": "Ready",
+      "resources": "Resources {resources}",
+      "roster": "Roster",
+      "sessionCode": "Session code",
+      "startWave": "Start wave",
+      "status": "Status: {status}",
+      "title": "Eastbrook Town Defense",
+      "towerArrow": "Arrow tower",
+      "towerCannon": "Cannon tower",
+      "towerSlow": "Frost tower",
+      "unavailable": "Town Defense is still being staged. Check back after its QA checkpoint.",
+      "victory": "Eastbrook stands. Claim your reward.",
+      "waiting": "Waiting for the party to ready up.",
+      "wave": "Wave {wave}"
     }
   },
   "gatherEvent": {
@@ -3405,7 +3581,7 @@ export const tr_TR: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Cryptic Realm",
     "brandShort": "ClaudeCraft",
     "tagline": "Tarayıcınızda ücretsiz oynayabileceğiniz klasik tarzda bir MMO.",
     "skipToContent": "Ana içeriğe geç",
@@ -3472,7 +3648,7 @@ export const tr_TR: EnTranslations = {
       "github": "GitHub'daki Kaynak",
       "discord": "Discord'a Katıl",
       "communityWiki": "Topluluk Wiki'si",
-      "rights": "World of ClaudeCraft",
+      "rights": "Cryptic Realm",
       "linksLabel": "Oyun ve topluluk bağlantıları"
     },
     "language": {
@@ -3495,7 +3671,7 @@ export const tr_TR: EnTranslations = {
     },
     "home": {
       "eyebrow": "Klasik tarz tarayıcı MMO'su",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "Görev yap, grup kur ve elle kurulmuş bir dünyayı keşfet; tarayıcında ücretsiz.",
       "ctaPlay": "Şimdi Oyna",
       "ctaLearn": "Nasıl Oynanır",
@@ -3551,7 +3727,7 @@ export const tr_TR: EnTranslations = {
         "q1": "Ücretsiz mi oynanıyor?",
         "a1": "Evet. Oyunun tamamı seviye sınırına kadar ücretsiz ve GitHub'da açık kaynak.",
         "q2": "Kripto cüzdanına ihtiyacım var mı?",
-        "a2": "Hayır. Oyun, cüzdan olmadan da tümüyle oynanabilir. İsteğe bağlı topluluk jetonu yalnızca görsel süsler ve günlük ödül havuzundan bir pay ekler; gücü asla etkilemez.",
+        "a2": "Hayır. Oyun, cüzdan olmadan da tümüyle oynanabilir. İsteğe bağlı topluluk jetonu yalnızca görsel süsler açar ve gücü asla etkilemez.",
         "q3": "Çevrim dışı oynayabilir miyim?",
         "a3": "Evet. Tarayıcında anında başlayan bir tek oyunculu mod, ayrıca paylaşılan çevrim içi dünya var.",
         "q4": "Azami seviyeye ulaşmak ne kadar sürer?",
@@ -3571,7 +3747,7 @@ export const tr_TR: EnTranslations = {
       "step1Title": "Bir karakter yarat",
       "step1Body": "Bir sınıf ve görünüm seç, kahramanına bir ad ver ve dünyaya gir. Daha sonra başka karakterler de yaratabilirsin.",
       "step2Title": "İlk görevini bul",
-      "step2Body": "Mareşal Redbrook başlangıç kasabasında Kapıdaki Kurtlar göreviyle bekliyor ve yakınlardaki Ustabaşı Odell'in de işi var. İlk görevini almak için ikisinden biriyle konuş.",
+      "step2Body": "Mareşal Redbrook başlangıç kasabasında bekliyor. Onunla konuş ve Kapıdaki Kurtlar görevini kabul et.",
       "step3Title": "Hareket et ve etrafına bak",
       "step3Body": "W, A, S, D ile hareket et. Etrafına bakmak için sağ fare tuşunu basılı tut ve sürükle. Aşağı yukarı hepsi bu kadar.",
       "step4Title": "Bir şeyle dövüş",
@@ -3588,16 +3764,16 @@ export const tr_TR: EnTranslations = {
       "questsTitle": "Görevler",
       "questsBody": "Başının üzerinde işaret olan kişilerden görev al, amacı tamamla ve deneyim, altın ve teçhizat için geri teslim et. Ekrandaki takipçi, hedeflerini göz önünde tutar.",
       "deathTitle": "Ölüm son değildir",
-      "deathBody": "Düşersen, bedenin düştüğü yerde kalır ve en yakın mezarlıkta bir hayalet olarak yükselirsin. Ruhunu bedenine geri koştur, olduğun yerde, cezasız biçimde diril; ya da mezarlıktaki Solgun Bekçi'yi kabul et ve geçici bir güçsüzlük pahasına anında dirilme. Yepyeni kahramanlar bu güçsüzlükten büsbütün muaftır ve sahip olduğun ya da kazandığın hiçbir şey asla kaybolmaz.",
+      "deathBody": "Düşersen, ruhunu serbest bırakır ve en yakın mezarlıkta, tam canla dirilirsin; sonra bulunduğun yere geri dönersin. Hiçbir deneyim kaybı olmaz.",
       "groupingTitle": "Birlikte oynamak",
       "groupingBody": "Görev hakkını paylaşmak ve zindanlara girişmek için başkalarını gruba davet et. Dünyanın çoğu tek başına aşılabilir, yani gruplaşmak bir zorunluluk değil, bir tercihtir.",
       "onlineTitle": "Çevrim içi ya da çevrim dışı",
       "onlineBody": "Herkesle birlikte paylaşılan çevrim içi dünyada oyna ya da ipuçlarını öğrenmek için tarayıcında anında bir çevrim dışı dünya başlat.",
-      "reassure": "Yetenekler 10. seviyede açılır ve dövüş dışında olduğun her an sıfırlanabilir, bu yüzden erken seçimlerin asla kalıcı değildir. Gönlünce dene.",
+      "reassure": "Yetenekler 10. seviyede açılır ve istediğin zaman sıfırlanabilir, bu yüzden erken seçimlerin asla kalıcı değildir. Gönlünce dene.",
       "controlsLink": "Tam denetim başvurusunu gör"
     },
     "controls": {
-      "intro": "Masaüstü için varsayılan tuşlar. Esc dışında her atama oyunun seçenekler menüsünden değiştirilebilir; Esc ise her zaman oyun menüsünü açar. Bir atama Shift+Z gibi bir değiştirici kombinasyonu da olabilir.",
+      "intro": "Masaüstü için varsayılan tuşlar. Her atama oyunun seçenekler menüsünden değiştirilebilir.",
       "keyHeader": "Tuş",
       "actionHeader": "Aksiyon",
       "groupMovement": "Hareket",
@@ -3628,14 +3804,14 @@ export const tr_TR: EnTranslations = {
       "petBar": "Evcil çubuğu: Saldır, Dur, Tahrik, Savunmacı, Saldırgan (bir Avcı ya da Karabüyücü evcili çıkınca)",
       "attackMoveNote": "Bir tane daha, varsayılan olarak kapalı: seçeneklerden Saldır-Yürü'yü etkinleştirerek bir tuş ayırın (seçenek açıkken A); bu tuş sizi imlecinize doğru yürütür ve altındaki düşmana ya da yol boyunca karşılaşılan ilki üzerine saldırıya geçer.",
       "mobileHeading": "Mobilde",
-      "mobileBody": "Dokunmatik kontroller telefonlarda ve tabletlerde otomatik olarak belirir: solda bir hareket çubuğu, bakmak için başka herhangi bir yere sürükleme, kamerayı yakınlaştırmak için iki parmakla kıstırma ve yetenekleriniz ile menüleriniz için ekran üstü düğmeler. Sol üst köşedeki küçük bir ok menü düğmelerini gösterir ya da gizler ve oradaki Daha Fazla düğmesi pencerelerinizin geri kalanını tutar.",
+      "mobileBody": "Dokunmatik kontroller telefonlarda ve tabletlerde otomatik olarak belirir: solda bir hareket çubuğu, etrafa bakmak için sağda herhangi bir yere sürükleme ve yetenekleriniz ile menüleriniz için ekran üstü düğmeler.",
       "controllerHeading": "Oyun kumandasıyla",
-      "controllerBody": "Oyun kumandaları da çalışır ve kumanda desteği varsayılan olarak açıktır. Sol çubuk hareket ettirir, sağ çubuk kamerayı yöneltir, yüz ve omuz düğmeleri ise yeteneklerinizi, zıplamayı ve etkileşimi karşılar. Çantalarınız gibi bir pencere açtığınızda ekran üstü bir işaretçi belirir ve oyun menüsü doğrudan yön tuşları ve yüz düğmeleriyle gezinir. Düğmeleri yeniden atayabilir ve çubuk ölü bölgesini, kamera hızını, titreşimi ve ters bakışı seçeneklerdeki kumanda ayarlarından düzenleyebilirsiniz."
+      "controllerBody": "Oyun kumandaları da çalışır ve kumanda desteği varsayılan olarak açıktır. Sol çubuk hareket ettirir, sağ çubuk kamerayı yöneltir, yüz ve omuz düğmeleri ise yeteneklerinizi, zıplamayı ve etkileşimi karşılar. Menüler için ekran üstü bir işaretçi çağırmak üzere herhangi bir pencere açın. Düğmeleri yeniden atayabilir ve çubuk ölü bölgesini, kamera hızını, titreşimi ve ters bakışı seçeneklerdeki kumanda ayarlarından düzenleyebilirsiniz."
     },
     "settingsPage": {
       "heading": "Ayarlar ve Performans",
       "intro": "Oyunun en iyi şekilde görünmesini sağlayın veya en hızlı şekilde çalıştırın. Üç hazır ekipman ve ayrıca her grafik seçeneğinin gerçekte yaptığı şey.",
-      "wherePath": "Bu sayfadaki her şey oyunun içindedir: seçenekleri açmak için Esc tuşuna basın. Menü, sabitlenmiş temel ayarların bir Genel Bakış ekranıyla açılır ve kategoriler onun yanındaki bir rayda yer alır: aşağıdaki ayarlar Ekran grubundaki Grafikler, Arayüz ve Erişilebilirlik başlıkları altında, Performans Arayüzü ise Sistem altında bulunur. Daha da hızlısı, üstteki arama kutusuna bir ad yazıp doğrudan ona atlayın.",
+      "wherePath": "Bu sayfadaki her şey oyunda mevcuttur: Esc tuşuna basın ve Grafikler, Arayüz ve Performans Arayüzü'ne bakın.",
       "fairnessTitle": "Tasarım gereği fuar",
       "fairnessBody": "Burada güzelliği güçle takas eden hiçbir seçenek yok. Lower ayarları yalnızca kozmetik cilayı değiştirir, asla savaştığınız bilgileri değiştirmez: debuff'larınız, kullanım çubuklarınız, grup sağlığınız ve hasar numaralarınız Low ile Ultra arasında aynıdır. Mütevazı bir makinede oynamak asla bir dezavantaj değildir.",
       "loadoutsHeading": "Üç hazır yükleme",
@@ -3669,7 +3845,7 @@ export const tr_TR: EnTranslations = {
       "advancedHeading": "Gelişmiş ön ayar: kendinizinkini karıştırın",
       "advancedBody": "Gelişmiş, High seviyesinden başlar ve dört ekstra seçicinin kilidini açar, böylece karelerinizi gerçekten fark ettiğiniz yerde geçirebilirsiniz: Arazi Detayı, Yeşillik Yoğunluğu, Efektler ve Aydınlatma ve Gölge Kalitesi. Grafik Kalitesi gibi, yeniden yükleme sonrasında uygulanırlar.",
       "advancedMixes": "En sevdiğiniz iki karışım: Gölge Kalitesini High'de tutun ve ışık veren net, parlamayan bir görünüm için Efektler ve Aydınlatma'yı Low olarak ayarlayın veya çiçeklenmeyi korumak ve gölgeleri yumuşatmak için tam tersini yapın.",
-      "tableHeading": "Her grafik seçeneği açıklandı",
+      "tableHeading": "Her seçenek açıklandı",
       "colSetting": "Ayar",
       "colDoes": "Ne işe yarar",
       "colImpact": "FPS etkisi",
@@ -3707,15 +3883,15 @@ export const tr_TR: EnTranslations = {
       "resourcesTitle": "Her sınıfın kendi ritmi vardır",
       "resourcesBody": "Savaşçılar dövüşün göbeğinde Öfke biriktirir, hırsızlar istikrarlı geri dönen Enerji harcar ve büyücüler bir Mana havuzunu yönetir. Kaynağını öğrenmek, sınıfını iyi oynamanın yarısıdır.",
       "growTitle": "Her seviyede daha güçlenirsin",
-      "growBody": "Her seviye seni daha dayanıklı kılar ve yeni yetenekler açar, ta seviye {cap} sınırına kadar. Yukarı çıkmanın en hızlı yolu görevlerdir; avlanmak, zindan seferleri ve mağara seferleri geri kalanı tamamlar.",
+      "growBody": "Her seviye seni daha dayanıklı kılar ve yeni yetenekler açar, ta seviye {cap} sınırına kadar. Yukarı çıkmanın en hızlı yolu görevlerdir; zindanlar ve keşif onu tamamlar.",
       "effectsTitle": "Güçlendirmeler, zayıflatmalar ve kalabalık kontrolü",
-      "effectsBody": "Birçok yetenek, süren bir etki uygular. Faydalı olanlar (güçlendirmeler) istatistiklerini yükseltir, seni kalkanla korur ya da azar azar iyileştirir; zararlı olanlar (zayıflatmalar) zamanla hasarla canını tüketir ya da seni zayıflatır. Üzerinde ne olduğunu ve ne kadar süreceğini görmek için ekranın üst köşesindeki, mini haritanın yanındaki küçük simgeleri izle.",
-      "ccBody": "Kalabalık kontrolü, bir hedefin yapabileceklerini sınırlayan özel bir tür zayıflatmadır: sersemletmeler, kökler ve yavaşlatmalar, büyü okumayı durduran susturmalar, silahsızlandırmalar, korkutmalar ve bir düşmanı bir anlığına zararsız kılan dönüştürmeler. Diğer oyunculara karşı kontrol tekrarla aşınır: aynı tür çok hızlı yeniden uygulanınca önce zayıflar, sonra büsbütün etkisiz kalır; gizlilikten açılan bir sersemletme ise onu izleyen sersemletmelerden ayrı sayılır, böylece hiç kimse sonsuza dek çaresiz zincirlenemez. Dünyanın yaratıkları böyle bir kin gütmez: kontrol tekrarla onların üzerinde asla zayıflamaz; yine de en güçlü düşmanların çoğu, adlı seçkinler ve aralarındaki en güçlü şefler, hiç kontrol edilemez.",
+      "effectsBody": "Birçok yetenek, süren bir etki uygular. Faydalı olanlar (güçlendirmeler) istatistiklerini yükseltir, seni kalkanlar ya da seni azar azar iyileştirir; zararlı olanlar (zayıflatmalar) zamanla hasarla canını tüketir ya da seni zayıflatır. Üzerinde ne olduğunu ve ne kadar süreceğini görmek için aksiyon çubuğunun yanındaki küçük simgeleri izle.",
+      "ccBody": "Kalabalık kontrolü, bir hedefin yapabileceklerini sınırlayan özel bir tür zayıflatmadır: sersemletmeler, kökler ve yavaşlatmalar, büyü okumayı durduran susturmalar, silahsızlandırmalar, korkutmalar ve bir düşmanı bir anlığına zararsız kılan dönüştürme. Bunlardan bazıları, kökler, korkular ve dönüştürme gibi, çok hızlı yeniden uygulandığında tutuşlarını kaybeder, bu yüzden sonsuza dek zincirlenemezler.",
       "metersBody": "Bir dövüşün nasıl geçtiğini merak mı ediyorsun? Shift+H'ye basıp grup sayaçlarını aç; bunlar grubunun hasarını, iyileştirmesini ve tehdidini karşılaşma karşılaşma toplar.",
       "queueTitle": "Bir sonraki hamlen çoktan hazır",
       "queueBody": "Basışlarını kareye göre zamanlamak zorunda değilsin. Bir sonraki yeteneğine mevcut büyünün son anlarında bas; sıraya alınır ve büyü biter bitmez tetiklenir, böylece pratikli oyun boşluksuz akar. Çok erken bir basış ise basitçe reddedilir, dolayısıyla hiçbir şey boşa gitmez. Bazı yakın dövüş darbeleri de aynı şekilde çalışır, bir sonraki silah savuruşunla birlikte çıkar.",
       "deathTitle": "Düştüğünde",
-      "deathBody": "Canın sıfıra ulaşırsa olduğun yerde devrilirsin ve bedenin orada kalır. Ruhunu serbest bırak, en yakın mezarlıkta bir hayalet olarak yüksel: yaşayanlardan daha hızlı adımlarsın, düşmanlarının erişemeyeceği yerdesin, ama dövüşemez, yağmalayamaz ya da taşların üzerinde süzülen Solgun Bekçi dışında kimseyle konuşamazsın. Bundan sonrası senin seçimin. Hayaletini bedenine geri koştur, canının ve mananın bir kısmı geri gelmiş olarak, hiçbir ceza olmadan olduğun yerde dirilirsin. Ya da Solgun Bekçi'nin sunduğu anında dirilişi kabul et ve olduğun yerde kalk; bunun bedeli Bekçinin Bedeli'dir: ne kadar deneyimliysen o kadar uzun süren, tüm varlığını geçici olarak zayıflatan ve yepyeni karakterleri büsbütün muaf tutan bir güçsüzlük. Bir zindanın içinde düşersen ruhun dışarıdaki mezarlıkta bekler; hayaletini kapıdan geri yürüt, girişte dirilirsin. Mağara seferleri istisnadır: orada düşersen basitçe seferin girişinde ayağa kaldırılırsın, ancak ikinci bir düşüş seferi sona erdirir. Hangi yolu seçersen seç, ne deneyim, ne teçhizat, ne de para kaybedersin. Dövüşler arasında oturup yemek ye ve iç, böylece bir sonrakine tam güçle başlarsın."
+      "deathBody": "Canın sıfıra ulaşırsa devrilirsin. Ruhunu serbest bırakarak en yakın mezarlıkta tam canla diril, sonra geri dön; böylece bir ölüm sana biraz zamana mal olur, ilerlemene değil. Dövüşler arasında oturup yemek ye ve iç, böylece bir sonrakine tam güçle başlarsın."
     },
     "glossary": {
       "intro": "Bu rehber boyunca ve sohbette kullanılan terimler için hızlı bir başvuru.",
@@ -3791,11 +3967,11 @@ export const tr_TR: EnTranslations = {
       "q1": "Gerçekten ücretsiz mi?",
       "a1": "Evet. Oyunun tamamı seviye sınırına kadar ücretsiz oynanabilir ve kaynak kodu GitHub'da açıktır.",
       "q2": "Kripto cüzdanına ya da herhangi bir jetona ihtiyacım var mı?",
-      "a2": "Hayır. Oyun böyle bir şey olmadan tamamen oynanabilir. İsteğe bağlı topluluk jetonu yalnızca kozmetik gösteriş ve günlük ödül havuzundan bir pay ekler; gücü ya da ilerlemeyi asla etkilemez.",
+      "a2": "Hayır. Oyun böyle bir şey olmadan tamamen oynanabilir. İsteğe bağlı topluluk jetonu yalnızca kozmetik gösterişin kilidini açar ve gücü ya da ilerlemeyi asla etkilemez.",
       "q3": "Telefonumda oynayabilir miyim?",
       "a3": "Evet. Oyun dokunmatik kontrollerle bir mobil tarayıcıda çalışır ve ayrıca bir masaüstü başlatıcısı da vardır.",
       "q4": "Çevrimdışı ya da tek başıma oynayabilir miyim?",
-      "a4": "Evet. Anında bir tek oyunculu çevrimdışı mod vardır ve çevrimiçi dünya; zindanlar, akın ve dünya şefi dışında tamamen tek başına oynanabilir.",
+      "a4": "Evet. Anında bir tek oyunculu çevrimdışı mod vardır ve çevrimiçi dünya, zindanlar ile akın dışında tamamen tek başına oynanabilir.",
       "q5": "Kaç sınıf var?",
       "a5": "Dokuz; klasik tank, şifacı ve hasar rollerini kapsar, her biri bir kaynak sistemine (öfke, mana ya da enerji) ve kendi imza yeteneklerine sahiptir.",
       "q6": "Seviye sınırı nedir?",
@@ -3807,7 +3983,7 @@ export const tr_TR: EnTranslations = {
       "q9": "PvP var mı?",
       "a9": "Evet. Eğlence için herkese düello açın ya da diğer oyuncularla savaşmak için Küllü Kolezyum'a adım atın. PvP isteğe bağlıdır, dolayısıyla asla zorlanmazsınız.",
       "q10": "Azami seviyede yapılacak ne var?",
-      "a10": "Sınır seviye {cap}. Oradan itibaren beş oyunculu zindanları ve on oyunculu akını koşar, yükseltilmiş ganimet için onları bir de kahramanca modda alır, yükseldiğinde dünya şefiyle yüzleşir, kendini arenada sınar, yanında bir yoldaşla mağara seferlerine iner ve diyar sıralamalarında yükselmek için Yiğitlikler Kitabı'ndaki yiğitliklerin peşine düşersin.",
+      "a10": "Sınır seviye {cap}. Oradan itibaren beş oyunculu zindanları ve on oyunculu akını koşar, daha iyi teçhizatın peşinden gider ve kendinizi arenada sınarsınız.",
       "q11": "Nasıl grup bulurum?",
       "a11": "Karşılaştığınız herkesi bir gruba davet edin, sohbette sorun ya da bir zindanda takım kurun. Dünyanın çoğu tek başına oynanabilir, bu yüzden gruplaşmak bir tercihtir, zorunluluk değil."
     },
@@ -3834,7 +4010,7 @@ export const tr_TR: EnTranslations = {
       "abilitiesNote": "Kitten bir tat. Seviye atladıkça daha fazlasını öğrenirsin, ve yetenekler her şeyin nasıl oynandığını yeniden şekillendirir.",
       "masteryLabel": "Ustalık",
       "fullKitHeading": "Tam kit",
-      "fullKitNote": "Bu sınıfın seviye atladıkça öğrendiği donanım, açıldığı sırayla. Yetenekler birkaç ek beceri daha kazandırır ve hangilerinin kurgunu taşıyacağına karar verir.",
+      "fullKitNote": "Bu sınıfın öğrenebileceği her yetenek, açıldığı sırayla. Hangilerinin kurgunu taşıyacağına yetenekler karar verir.",
       "petsHeading": "İblisler",
       "petsNote": "Karabüyücüler yanlarında dövüşmek için iblisler çağırır, her biri farklı bir işe uygundur."
     },
@@ -3936,7 +4112,9 @@ export const tr_TR: EnTranslations = {
       "mark_of_the_wild": "Dövüşten önce kendine ya da bir dosta koyduğun kalıcı bir kutsama.",
       "moonfire": "Anında vurur ve hedefi yanar halde bırakır, hareket halindeyken iyidir.",
       "rejuvenation": "Anında okunur ve bir dostu zamanla iyileştirir, böylece harekete devam edebilirsin.",
-      "thorns": "Bir dostu korur, böylece yakın dövüş saldırganları vurdukları için kendilerine zarar verir."
+      "thorns": "Bir dostu korur, böylece yakın dövüş saldırganları vurdukları için kendilerine zarar verir.",
+      "commanding_shout": "Dayanıklılığı artırır, böylece dövüşte herkesin daha çok direnci olur.",
+      "rend": "Hedefi zamanla yıpratan bir kanama açar."
     },
     "petHook": {
       "emberkin": "Düşmanları güvenli bir mesafeden ateş oklarıyla hırpalayan menzilli bir iblis.",
@@ -3949,7 +4127,7 @@ export const tr_TR: EnTranslations = {
     },
     "bestiary": {
       "heading": "Yaratıklar Kitabı",
-      "intro": "Dünyanın yaratıkları, ailelerine göre gruplanmış. Bunlar açık arazide karşılaştığın sıradan düşmanlar. Seçkin düşmanlar ve onların savaş ağaları bu sayfalardan uzak durur, en ölümcül şeyler ise zindan kapılarının ardında bekler.",
+      "intro": "Dünyanın yaratıkları, ailelerine göre gruplanmış. Bunlar açık alanda karşılaştığın düşmanlar. En ölümcül şeyler, listelenmeden, zindan kapılarının ardında bekliyor.",
       "rare": "Nadir",
       "levels": "Seviye {min} ile {max} arası",
       "levelsSame": "Seviye {min}",
@@ -4015,7 +4193,7 @@ export const tr_TR: EnTranslations = {
     },
     "worldPage": {
       "heading": "Dünya",
-      "intro": "World of ClaudeCraft, yürüyerek aştığınız tek ve kesintisiz bir diyardır; güneyden kuzeye dizilmiş üç bölge. Hızlı seyahat yoktur, bu yüzden yolculuğun kendisi maceranın bir parçasıdır.",
+      "intro": "Cryptic Realm, yürüyerek aştığınız tek ve kesintisiz bir diyardır; güneyden kuzeye dizilmiş üç bölge. Hızlı seyahat yoktur, bu yüzden yolculuğun kendisi maceranın bir parçasıdır.",
       "hub": "Ana üs",
       "mapHeading": "Kuzeye giden yol",
       "mapSub": "Güneyden kuzeye üç bölge, her biri seviye olarak bir basamak daha yüksek. Görev izini takip edin, diyar sizi vadiden zirvelere taşır.",
@@ -4060,9 +4238,9 @@ export const tr_TR: EnTranslations = {
       "jungleGreeter": "Liman amiri, Drifthaven",
       "gardenGreeting": "Yüz yıldır kimse bir bahçıvan görmemiş olsa da biri çitleri budamaya devam ediyor. Labirente dikkat et: o da seni izliyor.",
       "gardenGreeter": "Kapı bekçisi, Hedgewick",
-      "valePlaceNotes": "Doğudere ilk ana üssünüzdür. Kurt Koşusu ve Yaban Domuzu Çayırı yumuşak av sahalarıdır; Ayna Gölü balık tutulacak güzel sulardır, gerçi sığlıklarında çamuryüzgeçler kaynar; Sableweb ve Bakır Kazısı örümcekleri ve cevhere aç kazıcıları saklar; bir Haydut Kampı ve Yıkık Şapel daha çetin işler barındırır; Emanetlik Tepesi, diyarın ilk mağara seferi olan Çökmüş Emanetlik'e iner; Parlakorman Açıklığı kuzeydeki sakin, güneşli bir korudur; ve Domuz Tarlası, Doğudere'nin surla çevrili domuztopu sahasıdır, orada Vadi Kupası bir hasat ateşkesi altında oynanır.",
-      "marshPlaceNotes": "Fenbridge tek kuru yolu korur. Avcı Sazlıkları ve Derinbataklık Sığlıkları bataklık hayvanları ve Mudfinlerle kaynar; Dul Örümcek Çalılığı sımsıkı ağlarla örülüdür; Boğulmuş Şapel ve Trol Höyükleri daha eski tehlikeleri barındırır; bataklığın kendi mağara seferi olan Boğulmuş Litanya ise höyüklerin hemen kuzeyinde açılır; Mezar Çağıran Kampı tarikatın siper kazdığı yerdir ve Batık Kale bataklığın örneklenmiş kalbidir.",
-      "peaksPlaceNotes": "Highwatch suru tutar. Sinsi Sırt ve Deeprock Oyukları sırt kedilerinin ve oyucularındır; Dev Etekleri ve Drogmar Savaş Kampı kiralık zorbalarındır; Fırtınakaya elementallerle çıtırdar ve altında Işıltıgöl ışıldar, kıyısı Boğulmuş Tapınak'a inen solgun ışıktan geçidi barındıran dağ gölü; Solucankült Çadırları ve Hortlak Tarlaları tarikatın yüksek mevzisini kuşatır, zirvesinde Mezarejderi Mabedi yer alır.",
+      "valePlaceNotes": "Eastbrook ilk ana üssünüzdür. Wolf Run ve Boar Meadow yumuşak av sahalarıdır; Mirror Lake balık tutulacak sakin sulardır; Sableweb ve Copper Dig örümcekleri ve cevhere aç kazıcıları saklar; bir Bandit Camp ve Fallen Chapel daha çetin işler barındırır; Reliquary Hill, diyarın ilk delvesi olan Collapsed Reliquary'ye iner; ve Brightwood Glade kuzeydeki sakin, güneşli bir korudur.",
+      "marshPlaceNotes": "Fenbridge tek kuru yolu korur. Sinsi Sazliklar ve Deepfen Sigliklari bataklik canavarlari ve Mudfinlerle kaynar; Dul Cadirligi simsiki aglarla oruludur; Bogulmus Sapel ve Trol Hoyukleri daha eski tehlikeleri barindirir; Gravecaller Kampi tarikatin siper kazdigi yerdir ve Batik Kale bataklarin orneklenmis kalbidir.",
+      "peaksPlaceNotes": "Highwatch suru tutar. Sinsi Sirt ve Deeprock Oyuklari sirt kedileri ve oyucularindir; Dev Etekleri ve Drogmar Savas Kampi kiralik zorbalarindir; Firtinakaya elementallerle citirdar ve altinda Piriltigol isildar; Solucankut Cadirlari ve Hortlak Tarlalari tarikatin yuksek mevzisini kusatir, zirvesinde Mezarejderi Mabedi yer alir.",
       "duskPlaceNotes": "Eldergleam, büyük ağacın altında toplanır. Alacakaranlık Mağarası ve seyir tepesi içeri giden yol ve vadinin ilk görünüşüdür; Kadim Koru ve Yıldız Düşümü Çukuru sessiz güneyi korur; Batık Avlu doğuda yabani otlarla kaplı kalıntıları barındırır; Parıldayan Derinlik ve Kristal Sığlıklar ise kuzeyde parıldar.",
       "emberPlaceNotes": "Wyrmwatch kapıyı tutar. Kapı Ormanı, çorak topraklardan önceki son yeşilliktir; Kül Kumulları kül ve daha kötüsüyle sürüklenir; Trol Meclisi, kum trollerinin ateşlerini topladığı yerdir; Kan Camı Tarlaları jilet gibi keskin parçalarla parıldar; ve Ejder Ağzı Kalderası ejderlerin etrafında döndüğü tüten taçtır.",
       "frostPlaceNotes": "Icemantle son sıcak ocağı korur. Kar Sınırı, kar yığınlarının hakimiyeti ele geçirdiği yeri gösterir; Buzul Gölü, buzun altında kara ve durgun bir sudur; Kutup Işığı Basamakları dans eden ışıkların altında yükselir; Titrek Bataklık asla tam olarak uyumayan donmuş bir bataklıktır; ve Uluyan Taraçalar her gece adını hak eder.",
@@ -4082,22 +4260,22 @@ export const tr_TR: EnTranslations = {
       "heading": "Görevler",
       "intro": "Görevler dünyanın kalbidir ve seviye atlamanın en hızlı yoludur. İşte nasıl işledikleri.",
       "acceptTitle": "Bulmak ve kabul etmek",
-      "acceptBody": "Başının üzerinde bir işaret olan kişilerin sana işi vardır. Bir görev kabul etmek için onlarla konuş. Doğudere'de Mareşal Redbrook, alabileceğin ilk görevlerden biri olan Kapıdaki Kurtlar'la bekliyor.",
+      "acceptBody": "Başının üzerinde bir işaret olan kişilerin sana işi vardır. Bir görev kabul etmek için onlarla konuş. İlk görevin, Doğudere'deki Mareşal Redbrook'tan alacağın Kapıdaki Kurtlar'dır.",
       "objectivesTitle": "Hedefler",
       "objectivesBody": "Belirli düşmanları öldür, eşyalar topla ya da dünyadaki bir şeyle etkileşime gir. Ekrandaki takipçi sen ilerledikçe ilerlemeni sayar. Fikrini değiştirirsen, bir görevi görev günlüğünden bırakabilir ve daha sonra onu veren kişiden tekrar alabilirsin.",
       "turninTitle": "Teslim etmek",
       "turninBody": "Tamamlanmış bir görevi teslim işaretçisine götür, harita sana nereyi göstereceğini söyler; tecrübe, para ve çoğu zaman sınıfına uygun seçilmiş bir teçhizat parçası için. Bu genellikle görevi sana veren kişidir, ama bazı görevler seni başka birine yönlendirir.",
       "partyTitle": "Grupla görev yapmak",
-      "partyBody": "Yakındaki grup üyeleri öldürme ve hedef katkısını paylaşır, bu yüzden birlikte görev yapmak hep daha hızlıdır, asla daha yavaş değil. Bir görevi grubunla da paylaşabilirsin: /share komutuyla onu tıklanabilir bir bağlantı olarak sohbete gönder; uygun her üye aynı görevi tek tıkla alabilir.",
+      "partyBody": "Yakındaki grup üyeleri öldürme ve hedef katkısını paylaşır, bu yüzden birlikte görev yapmak hep daha hızlıdır, asla daha yavaş değil. Bir görevi grubunla da paylaşabilirsin: /share komutuyla onu tıklanabilir bir bağlantı olarak sohbete gönder; yakındaki uygun her üye aynı görevi tek tıkla alabilir.",
       "storyTitle": "Hepsinin içinden geçen bir iplik",
       "storyBody": "Doğudere'deki ilk küçük işlerinden itibaren, ölülerde bir terslik var. Bir tarikat iş başında ve iz her bölgeden geçerek kuzeye götürür. Ardında kimin durduğunu öğrenmek için onu takip et.",
       "soloNote": "Ana hikaye, her bölümün finaline kadar tamamen tek başına yapılabilir; o final ise beş oyunculu bir zindandır.",
       "typesTitle": "Karşılaşacağın görev türleri",
       "typesBody": "Çoğu görev birkaç tanıdık biçimden biridir. Ekrandaki takipçi her birinin tam olarak ne istediğini açıkça yazar, böylece asla tahmin yürütmek zorunda kalmazsın.",
       "typeSlayTitle": "Öldür",
-      "typeSlayBody": "Bir hayvan sürüsünü seyrelt ya da işaretli bir düşmandan belirli sayıda yenerek bir tarikatın elini kır. İlk görevlerinden biri, Doğudere yolundan kurtları temizlemek, bunlardan biridir.",
+      "typeSlayBody": "Bir hayvan sürüsünü seyrelt ya da işaretli bir düşmandan belirli sayıda yenerek bir tarikatın elini kır. Oyundaki ilk görev, Doğudere yolundan kurtları temizlemek, bunlardan biridir.",
       "typeGatherTitle": "Topla",
-      "typeGatherBody": "Dünyadan ya da düşmanların düşürdüklerinden eşyalar topla: otlar, cevher, bir tarikatın iç karartıcı bileşenleri. Bazı parçalar yalnızca belirli bir düşmandan düşer, bu yüzden av ile ganimet bir arada gider.",
+      "typeGatherBody": "Dünyadan ya da düşmanların düşürdüklerinden eşyalar topla: otlar, cevher, kayıp mektuplar, bir tarikatın iç karartıcı bileşenleri. Bazı parçalar yalnızca belirli bir düşmandan düşer, bu yüzden av ile ganimet bir arada gider.",
       "typeInteractTitle": "Etkileşim",
       "typeInteractBody": "Dünyada sabit duran bir şeyi kullan, arındır ya da oku: kirletilmiş bir mezar, kıyı kayasına oyulmuş bir uyarı, mühürlü bir mezar kapısı. İşaretin yanına yürü ve üzerinde harekete geç.",
       "typeMusterTitle": "Savunmayı seferber et",
@@ -4184,11 +4362,11 @@ export const tr_TR: EnTranslations = {
       "tiersHeading": "Zorluk",
       "tiersBody": "Bir mağara seferi birden fazla zorluk sunar. Daha yüksek olanı düşmanları güçlendirir, bir sefer değiştiricisi katar ve karşılığında daha çoğunu öder. Ayrıca sizi içeri almadan önce birkaç seviye atlamış olmanızı ister.",
       "affixesHeading": "Sefer değiştiricileri",
-      "affixesBody": "Daha zorlu seferler, inişin nasıl oynandığını değiştiren bir değiştirici atar: huzursuz ölülerden kötü havaya, çökmeye yüz tutmuş tavan işçiliğine kadar. Tehlikeyi ve ödülü birlikte yükseltirler. Her mağara seferi kendi temasına uyan değiştiricilerden çeker; diyar genelinde havuz şöyle görünür:",
+      "affixesBody": "Daha zorlu seferler, inişin nasıl oynandığını değiştiren bir değiştirici atar: huzursuz ölülerden kötü havaya, çökmeye yakın tavandan tutun. Tehlikeyi ve ödülü birlikte yükseltirler. Mahzen temalı bir mağara seferi bunlardan herhangi birini atabilir:",
       "marksHeading": "Mağara Nişanları",
       "marksBody": "Mağara seferlerini temizlemek, paranızdan ayrı tutulan bir para birimi olan Mağara Nişanları kazandırır. Yoldaşınızı güçlendirmek ve başka hiçbir yerde bulamayacağınız teçhizatı edinmek için onları bekçide harcayın.",
       "whereHeading": "Nerede bulunur",
-      "whereBody": "İlk mağara seferi olan Çökmüş Emanetlik, Doğudere Vadisi'nin başlangıç vadisindeki Emanetlik Tepesi'nde açılır. Panoyu orada Birader Halven tutar ve hazır olduğunuzda sizi aşağı gönderir. Turları orada bitmez: Mirefen Bataklığı'nın kuzey kıyısındaki Trol Höyükleri'nin ötesinde, aynı bekçi ayaklarının üzerinde durmayı öğrenmiş seferciler için Boğulmuş Litanya'yı açar."
+      "whereBody": "İlk mağara seferi olan Çökmüş Emanetlik, Doğudere Vadisi'nin başlangıç vadisindeki Emanetlik Tepesi'nde açılır. Panoyu orada Birader Halven tutar ve hazır olduğunuzda sizi aşağı gönderir."
     },
     "talentsPage": {
       "heading": "Yetenekler ve uzmanlıklar",
@@ -4196,13 +4374,13 @@ export const tr_TR: EnTranslations = {
       "whatHeading": "Yetenekler ne işe yarar",
       "whatBody": "Seviye atladıkça, yeteneklerinize ve özelliklerinize küçük, kalıcı geliştirmeler yapmak için yetenek puanları kazanırsınız. Bunlar bir sınıfın hissini şekillendirir; onu daha fazla hasara, daha sağlam savunmaya ya da daha güçlü iyileştirmeye yöneltir.",
       "howHeading": "Nasıl çalışırlar",
-      "howBody": "Yetenekler 10. seviyede açılır ve tavana tırmandıkça puan kazanmaya devam edersiniz. Bunları sınıfınızın yetenek panelinde harcarsınız; yatırım yaptıkça ve seviye atladıkça daha derin sıralar açılır ve yapılarınız arasında geçmek için birden fazla düzen kaydedebilirsiniz.",
+      "howBody": "Yetenekler 10. seviyede açılır ve seviye tavanına tırmandıkça puan kazanmaya devam edersiniz. Bunları sınıfınızın yetenek panelinde harcarsınız ve birden fazla düzeni kaydederek yapılarınız arasında geçiş yapabilirsiniz.",
       "shareNote": "Tamamlanmış bir kurgu, paylaşılabilir kısa bir koda kopyalanıp bir arkadaşa verilebilir; o da onu yüklemek için doğrudan kendi yetenek paneline yapıştırır.",
       "choiceNote": "Her ağaçtaki birkaç puan, bir satın alma değil, bir yol ayrımıdır: düğüm iki ya da üç seçenek sunar ve siz bunlardan birine bağlanırsınız. Bir sonraki sıfırlamanız, ağaçtaki her şey gibi bu seçimi de yeniden açar.",
       "resetTitle": "Hiçbir şey kalıcı değildir",
-      "resetNote": "Yeteneklerinizi, dövüş dışında olduğunuz ve bir arena maçında olmadığınız her an sıfırlayabilirsiniz, bu yüzden erken bir seçim asla bir tuzak değildir. Bir şeyler deneyin, neyi sevdiğinizi görün ve fikrinizi serbestçe değiştirin.",
+      "resetNote": "Yeteneklerinizi dövüş dışında olduğunuz her an sıfırlayabilirsiniz, bu yüzden erken bir seçim asla bir tuzak değildir. Bir şeyler deneyin, neyi sevdiğinizi görün ve fikrinizi serbestçe değiştirin.",
       "specsHeading": "Sınıfa göre uzmanlıklar",
-      "specsBody": "Her sınıfın, her biri kendi rolüne ve kendine özgü bir odağına sahip birkaç uzmanlığı vardır. Yetenek panelinde birini seçmek, ona özgü bir imza yeteneği ve kalıcı bir ustalık kazandırır. İşte hepsinin genel görünümü. Tam donanımı için bir sınıfı açın."
+      "specsBody": "Her sınıfın, her biri kendi rolüne ve kendine özgü bir odağına sahip birkaç uzmanlığı vardır. İşte hepsinin genel görünümü. Tam donanımı için bir sınıfı açın."
     },
     "arenaPage": {
       "heading": "Arena ve PvP",
@@ -4210,8 +4388,10 @@ export const tr_TR: EnTranslations = {
       "duelsHeading": "Düellolar",
       "duelsBody": "Karşılaştığın herhangi bir oyuncuyu dostane bir düelloya davet et. Gururdan başka kaybedilecek bir şey yok, bu yüzden bir eşleşmeyi öğrenmenin ya da dostça bir tartışmayı çözmenin en kolay yoludur.",
       "coliseumHeading": "Kül Kolezyumu",
-      "coliseumBody": "Coliseum, diyarın arenasıdır; burada dereceli maçlarda diğer oyuncularla, bire bir ya da ikiye iki karşı karşıya gelirsin. Her kademe kendi sıralamasını tutar, bu yüzden bir galibiyet seni o merdivende, tüm diyarın görmesi için yukarı taşır. Bir kademeye tek başına ya da eşinle kaydolmak için Arena penceresini aç.",
+      "coliseumBody": "Coliseum, diyarın arenasıdır; burada dereceli maçlarda diğer oyuncularla, bire bir ya da ikiye iki karşı karşıya gelirsin. Her kademe kendi sıralamasını tutar, bu yüzden bir galibiyet seni o merdivende, tüm diyarın görmesi için yukarı taşır.",
       "ladderHeading": "Merdiveni tırmanmak",
+      "fiestaHeading": "İkiye iki Fiesta",
+      "fiestaBody": "Fiesta, kısa raundlarda oynanan hızlı, ikiye iki bir moddur. Raundlar arasında güçlendirmeler seçersin; bunlar kitini anında yeniden şekillendiren hızlı takviyelerdir, böylece hiçbir maç tam olarak aynı oynanmaz.",
       "ladderBody": "Dereceli oyun, konumunu zaman içinde takip eder. Nerede durduğunu ve diyarın zirvesini kimin tuttuğunu görmek için lider tablosuna bak."
     },
     "thornhollowPage": {
@@ -4257,9 +4437,9 @@ export const tr_TR: EnTranslations = {
       "nationMoon": "Hilalin altında mor ve gümüş: gece oyuncuları, ayakları hafif.",
       "nationCopperdig": "Kazma armalı bakır ve kahverengi: koşmayı hiç bırakmayan kazıcılar.",
       "rolesHeading": "Spor rolleri",
-      "rolesBody": "Rolün, sahaya çıkarken taşıyacağın donanımı belirler. Herkes vuruş yapar; gerisi mizaç meselesidir. Bire bir ve ikiye iki kademelerde herkes çok yönlü donanımı oynar, bu yüzden rol seçimleri asıl üçe üçten yukarısında öne çıkar.",
+      "rolesBody": "Rolün, sahaya çıkarken taşıyacağın donanımı belirler. Herkes vuruş yapar; gerisi mizaç meselesidir.",
       "rewardsHeading": "Ateşkes kuralları",
-      "rewardsBody": "Ateşkes kuralları deneyim ve ganimet olmadığı anlamına gelir: sonuçlanan bir maç siciline ve kazananlar panosuna işlenir, bir galibiyet günün ödül görevlerine de sayılır. Maçı terk etmek yerini kızağa alır ve Saha Bekçisi unutmaz."
+      "rewardsBody": "Ateşkes kuralları deneyim ve ganimet olmadığı anlamına gelir: sonuçlanan bir maç siciline ve kazananlar panosuna işlenir, günlük ödül puanları da beraberinde gelir. Maçı terk etmek yerini kızağa alır ve Saha Bekçisi unutmaz."
     },
     "deedsPage": {
       "intro": "Yiğitlikler Kitabı, dünyanın yaptığın her şeyin hesabını tuttuğu yerdir; başlangıç vadisinden attığın ilk adımlardan diyarın sunabileceği en çetin dövüşlere kadar. Oynadıkça yiğitlikler kazan, verdikleri unvanları taşı ve Ününün tırmanışını izle.",
@@ -4301,9 +4481,9 @@ export const tr_TR: EnTranslations = {
       "i1Title": "Yanlış bir sınıf seçemezsiniz",
       "i1Body": "Her sınıf kendi başının çaresine bakabilir ve seviye tavanına ulaşabilir. Başkasının en iyi dediğini değil, sevdiğiniz fantezi atmosferini seçin.",
       "i2Title": "Ölmenin size pek bir bedeli yok",
-      "i2Body": "Düştüğünüzde en yakın mezarlıkta bir hayalet olarak yükselirsiniz. Bedavaya dirilmek için bedeninize geri koşun ya da Solgun Bekçi'nin anında dirilişini kabul edip bu kolaylık uğruna kısa ömürlü bir güçsüzlük taşıyın. Ne deneyim, ne teçhizat, ne de para asla kaybolmaz, bu yüzden risk almak ve öğrenmek güvenlidir.",
+      "i2Body": "Düştüğünüzde, ruhunuzu serbest bırakır ve en yakın mezarlıkta dirilirsiniz, sonra geri dönersiniz. Hiç deneyim kaybetmezsiniz, bu yüzden risk almak ve öğrenmek güvenlidir.",
       "i3Title": "Yetenekler bir tuzak değildir",
-      "i3Body": "10. seviyede açılırlar ve dövüş dışında olduğunuz sürece istediğiniz zaman sıfırlanırlar, bu yüzden erken seçimleriniz asla kalıcı değildir.",
+      "i3Body": "10. seviyede açılırlar ve istediğiniz zaman sıfırlanırlar, bu yüzden erken seçimleriniz asla kalıcı değildir.",
       "i4Title": "Görev izini takip edin",
       "i4Body": "Görevler seviye atlamanın en hızlı yoludur ve sizi dünyanın bir ucundan diğerine taşır. Nereye gideceğinizden emin olmadığınızda bir sonraki işaretçiyi bulun.",
       "i5Title": "Teçhizatınızı güncel tutun",
@@ -4342,7 +4522,7 @@ export const tr_TR: EnTranslations = {
     "gear": {
       "intro": "Teçhizat, karakterinizin giydiği donanım ve taşıdığınız eşyalardır. Daha iyi teçhizat, güçlenmenin en istikrarlı yoludur ve çoğunu sadece oynayarak edinirsiniz.",
       "slotsTitle": "Neler kuşanabilirsiniz",
-      "slotsBody": "Bir silah yuvanız, yedi zırh yuvanız ve üç takı yuvanız var: bir boyun ve iki parmak. Her sınıf yalnızca belirli silahları kullanabilir ve kendi ağırlığına kadar zırh giyer (kumaş, deri ya da zincir), bu yüzden size uyan yükseltmeler, sınıfınız için yapılmış olanlardır. Takılar hiç ağırlık taşımaz: her sınıf kazandığı takıyı takar. Bunun içinde, her yuvayı bulduğunuz en iyi parçayla doldurun.",
+      "slotsBody": "Bir silah yuvanız ve yedi zırh yuvanız var. Her sınıf yalnızca belirli silahları kullanabilir ve kendi ağırlığına kadar zırh giyer (kumaş, deri ya da zincir), bu yüzden size uyan yükseltmeler, sınıfınız için yapılmış olanlardır. Bunun içinde, her yuvayı bulduğunuz en iyi parçayla doldurun.",
       "slotMainhand": "Silah",
       "slotHelmet": "Baş",
       "slotNeck": "Boyun",
@@ -4366,22 +4546,22 @@ export const tr_TR: EnTranslations = {
       "qualityNote": "Daha yüksek kalite genellikle daha iyi nitelik demektir, ama kalite bir kural değil, bir ipucudur. Sınıfınıza ve seviyenize iyi uyan bir parça, daha gösterişli olanı geçebilir.",
       "upgradeTitle": "Teçhizatınızı güncel tutun",
       "upgradeBody": "Eski bir parçayı taze bir yükseltmeyle değiştirmek, geride bıraktığınız teçhizatla kusursuz oynamaktan size daha çok şey kazandırır. Daha iyi bir şey düştüğünde ya da bir görev onu sunduğunda, alın. İyi eşyalarınızı sonraya saklamayın.",
-      "itemLevelBody": "İki parçayı hızlıca karşılaştırmak için seçeneklerden Eşya Seviyesini Göster’i aç. Düşmanlardan, görevlerden ve üretim mesleklerinden gelen, kaynağı bilinen teçhizat bir eşya seviyesi gösterir: kaynağına göre gücünü yaklaşık belirten tek bir sayı, farklı yuvalar arasında bile hangi yükseltmenin daha etkili olduğunu gösterir. Basit satıcı eşyaları ve başlangıç teçhizatı gibi böyle bir kaynağı olmayan parçalarda seviye görünmez; sayının olmaması normaldir.",
+      "itemLevelBody": "İki parçayı karşılaştırmanın hızlı bir yolunu istiyorsanız, seçeneklerden Eşya Seviyesini Göster ayarını açın. O zaman her silah ve zırh parçası bir eşya seviyesi gösterir; nereden geldiğine bağlı olarak kabaca ne kadar güçlü olduğunu belirten tek bir rakam. Böylece farklı yuvalar arasında bile hangi yükseltmenin daha ağır bastığını bir bakışta anlayabilirsiniz.",
       "sourcesTitle": "Teçhizat nereden gelir",
-      "sourcesBody": "Erken dönem yükseltmelerinizin çoğu görev ödülleridir, bu yüzden grindlemek yerine görevleri bitirmek işe yarar. Düşmanlar yendiğinizde teçhizat düşürür, kasabadaki satıcılar sağlam temel parçalar satar, zanaatkârlar toplanan malzemeleri giyilebilir parçalara dönüştürür ve oyuncu pazarı diğer maceracılardan alışveriş yapmanızı sağlar. Tepenin zirvesinde, başka hiçbir yerde bulunmayan teçhizatı iki nişan para birimi satın alır: mağara seferi bekçisindeki Mağara Nişanları ve Kahramanca Levazımcı'daki Kahramanca Nişanlar.",
+      "sourcesBody": "Erken dönem yükseltmelerinizin çoğu görev ödülleridir, bu yüzden grindlemek yerine görevleri bitirmek işe yarar. Düşmanlar yendiğinizde teçhizat düşürür, kasabadaki satıcılar sağlam temel parçalar satar ve oyuncu pazarı diğer maceracılardan alışveriş yapmanızı sağlar.",
       "soulboundTitle": "Ruha bağlı: yalnızca ve yalnızca sizin",
       "soulboundBody": "Birkaç özel ödül ruha bağlıdır, onları kazandığınız andan itibaren karakterinize bağlanır. Ruha bağlı bir eşya takas edilemez, postalanamaz, bir satıcıya satılamaz ya da pazara ilan edilemez; yalnızca ve yalnızca sizindir. Bugün bu koruma, Kahramanca Nişanları gibi ödül jetonlarını gözetir; kazandığınız teçhizat ise takas etmek, satmak ya da özgürce paylaşmak üzere sizindir.",
       "uniqueTitle": "Eşsiz Kuşanım: türünden yalnızca bir efsanevi",
       "uniqueBody": "Efsanevi eşyalar eşsiz kuşanımdır: karakterin, belirli bir efsanevi eşyanın aynı anda yalnızca bir kopyasını kuşanabilir ve onun kahramanca sürümü de aynı eşya sayılır. İkinci bir kopya çantalarında, bankada ya da pazarda durabilir, ama ikisini birden kuşanmaya çalışmak reddedilir; eşyanın bilgi kutusunda da altın renkli bir Eşsiz Kuşanım etiketi bulunur, böylece ikisi etrafında bir yapı kurmadan önce kuralı görebilirsin.",
       "setsTitle": "Takımlar ve takım bonusları",
-      "setsBody": "Bazı zırhlar, birlikte görünmek ve dövüşmek üzere biçilmiş birkaç parçadan oluşan uyumlu ailelerle gelir. Bir aileden yeterince parçayı aynı anda giyin, takım uyanır ve her parçanın kendi istatistiklerinin üstüne bonuslar verir; giydiğiniz parça arttıkça da güçlenir. Böyle ailelerden birkaçı, seviye atlarken değerli düşüşler olarak ortaya çıkar; en büyükleri ise seviye tavanına yakın en çetin grup içeriğinden gelir, bu yüzden tam bir takımın peşine düşmek klasik bir son oyun hedefidir.",
+      "setsBody": "En nadir zırhlar, birlikte görünmek ve dövüşmek üzere biçilmiş birkaç parçadan oluşan uyumlu ailelerle gelir. Bir aileden yeterince parçayı aynı anda giyin, takım uyanır ve her parçanın kendi istatistiklerinin üstüne bonuslar verir; giydiğiniz parça arttıkça da güçlenir. Bunlar, seviye tavanına yakın en çetin grup içeriğinden düşer, bu yüzden tam bir takımın peşine düşmek klasik bir son oyun hedefidir.",
       "consumablesTitle": "Sarf Malzemeleri",
       "consumablesIntro": "Bazı eşyalar hızlı bir fayda için bir kez kullanılır. Ucuz bir güvencedir, bu yüzden elinizin altında birkaç tane bulundurun.",
       "consumablesPotions": "İksir şişeleri, savaşın ortasında bile kullandığınız an sağlığı ya da manayı geri kazandırır, bu da bir çekim ters gittiğinde can kurtaran bir hamle olmalarını sağlar. Kısa bir ortak bekleme süresini paylaşırlar, bu yüzden onları kullanmak için iyi bir an planlayın.",
       "consumablesFood": "Yiyecek ve içecek, savaşlar arasında oturup dinlenirken sizi tazeler. Yemek sağlığı, içmek manayı geri kazandırır ve bu şekilde dinlenmek ücretsizdir. Çetin bir savaştan sonra yarı iyileşmiş hâlde bir sonrakine koşmak yerine birkaç saniye oturun.",
       "consumablesElixirs": "İksirler, macera sırasında geçici bir takviye sağlar; biraz daha ileri gitmek istediğinizde işe yarayan küçük bir avantaj.",
       "fishingTitle": "Balık Tutma",
-      "fishingBody": "Balık tutmak, ritimde sakin bir değişikliktir. Bir olta taşıyın, açık suyun kenarında kullanın ve takılanı çekin. Çoğunlukla yiyebileceğiniz birer yiyecek olan balıklar, birkaç bakıra satılacak ara sıra hurdalar ve arada bir değerli bir ender av yakalarsınız. Bulduğunuz şey, balık tuttuğunuz suya bağlıdır.",
+      "fishingBody": "Balık tutmak, ritimde sakin bir değişikliktir. Bir olta takın, açık suya atın ve takılanı çekin. Çoğunlukla yiyebileceğiniz birer yiyecek olan balıklar, birkaç bakıra satılacak ara sıra hurdalar ve arada bir değerli bir ender av yakalarsınız. Bulduğunuz şey, balık tuttuğunuz suya bağlıdır.",
       "fishingFood": "Çektiğiniz balıklar birer yiyecektir: dinlenmek için otururken birini yiyin, can yeniler; daha doyurucu balıklar ise kuzeydeki daha soğuk, daha derin sulardan gelir. Göle atılan bir olta, savaşlar arasında çantanızı dolu tutmanın sessiz bir yoludur.",
       "fishingRare": "Arada bir oltanız akşam yemeğinden çok daha iyi bir şey yakalar: herhangi bir suda herhangi bir balıkçının şansına denk gelebileceği ışıltılı, değerli bir balık. Birini oltaya takın ve günlüğünüz avla aydınlansın. Gölde geçen tembel bir öğleden sonrayı insanlara anlatmaya değer kılan türden talihli bir çekiştir.",
       "cosmeticsTitle": "Görünümler ve kozmetikler",
@@ -4392,19 +4572,20 @@ export const tr_TR: EnTranslations = {
       "cosmeticsApply": "Aktif görünümünüzü karakter ekranınızdaki görünüş satırından belirleyin ve açtığınız her şey arasında özgürce geçiş yapın."
     },
     "professions": {
-      "intro": "Dünya seni savaşın ve görevlerin ötesinde, toprağı ve ocağı işlediğin için de ödüllendirir: ham madde toplamak, on ayrı zanaat kolunda onları teçhizata ve mallara dönüştürmek ve bu zanaatların temsil ettiği on arketipten birinin kimliğine yerleşmek.",
+      "intro": "Dünya seni savaşın ve görevlerin ötesinde, toprağı ve ocağı işlediğin için de ödüllendirir: ham madde toplamak, on farklı zanaat kolunun üretim tezgahlarında onları teçhizata dönüştürmek ve bu zanaatların temsil ettiği on arketipten birinin kimliğine yerleşmek.",
       "harvestTitle": "Avın kendisini hasat etmek",
+      "harvestBody": "Toplama düğümlerde durmaz. Öldürülen pek çok canavardan birer kez hasat yapılabilir, ilk gelen alır; cesedin olağan ganimetiyle birlikte doğrudan cesetten post, diş, ipek ve et elde edilir; tek bir basışla her ikisi de açılır. Her seferinde seçim sizindir: cesedin sunduğu her şeyi alın ya da daha az bileşene odaklanın ve aldığınız şeyin ölçülebilir biçimde daha kaliteli bir derecesini kazanın.\n\nOrnek taşıyan bir ailede nadir veya daha iyi hasat turunda ayrıca imzalı mükemmel bir örnek (Bozulmamış Post, Bozulmamış İpek, Bozulmamış Zehir Bezi veya Birinci Kalite Et) olağan verimin üstüne gelir ve Yiğitlikler Kitabına Mükemmel Örnek kaydedilir. Her karakter hasat yapabilir, eğitim gerekmez; sahip olduğunuz herhangi bir toplama aleti hangi zanaata ait olursa olsun premium kolu sayılır.",
       "harvestBodyChoice": "Toplama düğümlerde durmaz. Öldürülen pek çok canavardan birer kez hasat yapılabilir, ilk gelen alır; cesedin olağan ganimetiyle birlikte doğrudan cesetten post, diş, ipek ve et elde edilir; tek bir basışla her ikisi de açılır. Bir canavar birden fazla işlenebilir bileşen taşıyorsa seçim sizindir: verebileceği her şeyi alın ya da daha az bileşene odaklanın ve aldığınız şeyin ölçülebilir biçimde daha kaliteli bir derecesini kazanın.\n\nOrnek taşıyan bir ailede nadir veya daha iyi hasat turunda ayrıca imzalı mükemmel bir örnek (Bozulmamış Post, Bozulmamış İpek, Bozulmamış Zehir Bezi veya Birinci Kalite Et) olağan verimin üstüne gelir ve Yiğitlikler Kitabına Mükemmel Örnek kaydedilir. Her karakter hasat yapabilir, eğitim gerekmez; sahip olduğunuz herhangi bir toplama aleti hangi zanaata ait olursa olsun premium kolu sayılır.",
       "focusTitle": "Kasaba Odağı",
       "focusBody": "Her merkez kasaba, uğrayan toplayıcılar için bir Kasaba Odağı paneli tutar: kasabada dur, onu mini haritanın yanından aç ve küçük bir odak puanı bütçesini önemsediğin bileşen türlerine yönelt. Bir bileşene ne kadar çok odak verirsen, sonraki her cesetten o kadar ince ve zengin çıkar; dağılımın karakterini nereye giderse takip eder ve kasabaya sonraki her uğrayışında onu ücretsiz yeniden düzenleyebilirsin.",
       "craftHowTitle": "Üretim penceresi",
-      "craftMasteryTitle": "Ustalık ne kadar sürer",
-      "craftMasteryBody": "Dürüst beklentiler: bir zanaatın 125 tavanına tırmanmak en az 125 başarılı zanaat gerektirir, çünkü tam kazanımlı her zanaat sizi tam bir puan ilerletir; pratikte ise tarifler eğitmen kademeleri arasında solduğundan biraz daha fazla. Zanaat eylemi hızlıdır; onu beslemek asıl yolculuktur; bu yüzden her zanaat için birkaç toparlama ve zanaat akşamı ayırın.\n\nToplama meslekleri, yolculuk ederken hasat ederseniz normal bir seviye atlamada 100 tavanına ulaşır; ancak son gerilim kuzeyin yüksek kademeli düğümlerini ister. Balık Tutma ise tasarım gereği uzun yoldur: kendi kazanım programına göre 200 ustalık üç binden fazla yakalamadır. Usta Olta Ustası, hafta sonları değil, sessiz akşamların mevsimi boyunca kazanılan bir unvandır.",
-      "archetypeChooseTitle": "Lonca mektubu ve fikir değiştirmek",
-      "archetypeChooseBody": "Bunların hiçbirini aramanıza gerek yok. Zanaatlarınızla uğraşın; becerileriniz belirgin biçimde bir çifte yöneldiğinde Zanaat Loncası bunu fark eder ve görülecek ustayı ile alınacak görevi adlandıran bir Karakargo mektubu gönderir. Mektup karakter başına bir kez gelir ve yalnızca henüz bir çifte bağlanmadıysanız.",
-      "archetypeSwitchBody": "Bir beyan ömür boyu hüküm de değildir. Hiç sahip olmadığınız bir çift yalnızca yeni bir uyum görevidir; bırakıp gittiğiniz bir çifte dönmek ise önce barışı tesis etmenizi ister: ilk seferinde beş görev ve daha önce yaptığınız her dönüş için üç görev daha eklenir (yepyeni bir çifti benimsemek bu sayıyı asla artırmaz). Seçim, hiçbir kapıyı temelli kilitlemeden anlamlı kalır.",
+      "craftMasteryTitle": "Beceri ve ustalık",
+      "craftMasteryBody": "Başarılı her üretim o zanaattaki becerini geliştirir ve daha zengin tarifler daha yüksek beceri gerektirir: temel tarifler herkese açıkken, giderek daha ileri tarifleri denemek giderek daha fazla ustalık ister. Bir zanaatta becerini büyütmek, basit başlangıç mallarından daha iddialı tariflere giden yoldur.",
+      "archetypeChooseTitle": "Arketipini seçmek",
+      "archetypeChooseBody": "İlk arketipini, seni bu kimliğe resmen kabul eden erken bir birinci bölge hikaye görevi aracılığıyla ilan edersin. O görevi tamamlayana dek henüz hiçbir arketip seçmiş sayılmazsın.",
+      "archetypeSwitchBody": "Bir kez arketip ilan etmiş olmak seni sonsuza dek ona bağlamaz. Farklı bir arketipe geçmek, önce eskisi için tekrarlanabilir bir \"gönül alma\" görevini tamamlamayı gerektirir ve her geçişte, bir sonraki sefer senden beklenen bedel biraz daha ağırlaşır; böylece geçiş yapmak bedelsiz değil, anlamlı kalır.",
       "whatHeading": "Kılıcın yanında bir meslek",
-      "whatBody": "Meslekler dünyanın çalışma hayatıdır: ham malzemeyi doğrudan topraktan söken dört toplama mesleği ve onu teçhizata, yemeğe, iksire ve alete dönüştüren on zanaatlık bir halka. Burada her şey bir başkasını besler. Kazdığınız cevher bir kılıç olur, kılıç bir büyü alır ve o büyü eski teçhizattan bozularak çıkarılan toza ihtiyaç duyar; yani bir toplayıcı, bir üretici ve bir tamirci hep aynı zincirin halkalarıdır.\n\nÜzerinde kara kara düşünülecek bir meslek sınırı yoktur. Her karakter, bugün içeriği olan sekiz zanaattan yedisini ve dört toplama mesleğinin hepsini yan yana yükseltebilir (Mühendislik tek direnendir: tarifleri tamamen serbest tavanın üzerinde başlar, bu yüzden onun merdiveni Bombacı yeminini bekler); tek özel seçim, sonunda üzerine yemin ettiğiniz kimlik olan arketipinizdir; yine de uyumlandığınızda onun ardında uykuya geçen zanaatlar yalnızca sıradan tariflerinde tırmanır, beceri 75'in ötesinde ise hiç tırmanmaz. Beceri asla düşmez ve öğrendiğiniz hiçbir şey elinizden alınmaz.",
+      "whatBody": "Meslekler dünyanın çalışan yaşamıdır: ham maddeyi doğrudan topraktan çeken dört toplama mesleği ve onu teçhizata, yiyeceğe, iksire ve alette dönüştüren on zanaatlık bir halka. Her şey burada başka bir şeyi besler. Kazdığın cevher bir kılıç olur, kılıç bir büyü yazar ve büyü eski teçhizattan kırılan toza ihtiyaç duyar; bu nedenle bir toplayıcı, bir üretici ve bir tamirci hepsi tek bir zincirin halkalarıdır.\n\nÜzülecek bir meslek sınırı yok. Her karakter, bugün içeriği olan sekiz zanaatı ve dört toplama mesleğini yan yana yükseltebilir; tek özel seçim, sonunda yeminettiğin kimlik olan arketipindir; ancak bağlandıktan sonra gerisinde uyumsuz hale düşen zanaat dalları tırmanmayı durdurur. Beceri asla düşmez ve öğrendiğin hiçbir şey asla alınmaz.",
       "ringHeading": "Zanaat halkası",
       "ringBody": "Bugün içeriği olan her zanaat 125 beceri tavanına ulaşır: Silah Yapımı, Zırh Yapımı, Terzilik, Deri İşleme, Aşçılık, Simya, Mühendislik ve Büyüleme. Bir tavanda meslek çalışmaya devam eder, hasatlar verim sağlamaya devam eder, üretimler çözülmeye devam eder ve şaheserler hala olabilir; yalnızca sayı tırmanmayı durdurur. Bir mesleğin tam tarif tablolarını ve rakamlarını görmek için aşağıdaki bir kartı seç.",
       "ringWaveNote": "Çarktaki iki zanaat, Mücevher İşleme ve Yazıtçılık, yerlerini tutar ama henüz tarif göndermiyor. Bu bir ihmal değil, kasıtlıdır: içerikleri gelecek bölgelerle birlikte gelir ve yukarıdaki tavanlar aynı şekilde yükselir; bu nedenle bugün tavana ulaşmış bir zanaat o genişlemeye hazırlık değil, bir avantajdır.",
@@ -4413,7 +4594,7 @@ export const tr_TR: EnTranslations = {
       "gatherHubHeading": "Toplama",
       "gatherHubBody": "Dört toplama mesleği, sahadan halkayı besler: Madencilik, Odun Kesimi ve Otçuluk topraktan cevher, kereste ve ot çıkarır ve 100 yetkinlikte sınırlanır; Balık Tutma ise kendi balık tutma ve çekme ritmiyle 200'e kadar uzanır. Aşağıdaki her sayfa tam düğüm haritalarını, alet merdivenlerini ve oranları taşır.",
       "archetypesHeading": "Çark ve arketipleri",
-      "archetypesBody": "On zanaat sabit bir çark üzerinde oturur ve o çark üzerindeki coğrafya önemlidir. Her iki komşu, adlandırılmış bir çift oluşturur: Silah Yapımı ile Zırh Yapımı için Demirci, Deri İşleme ile Terzilik için Teçhizatçı, Simya ile Aşçılık için Eczacı, Mühendislik ile Simya için Bombacı ve halkanın çevresinde altı tane daha.\n\nBir çifte uyumlanmak bir menü tıklaması değil, bir görevdir. Bugün dört çifte katılınabilir (Demirci, Teçhizatçı, Eczacı ve Bombacı); her biri Doğudere'deki yerleşik bir ustaya bağlıdır ve o ustanın kabul görevi, siz üstlenmeden önce anlaşmanın tamamını baştan açıkça söyler. Siz beyanda bulunana kadar her zanaat, nadir kademeye kadarki tariflerde serbestçe ilerler (beceri 74 ve altını isteyen her tarif), böylece seçim yapmadan önce neredeyse her şeyi deneyebilirsiniz (yalnızca Mühendislik'in o kadar düşük bir tarifi yoktur, bu yüzden onun sayısı bekler).\n\nUyumlandığınız anda çiftinizin iki zanaatı ana dallarınız olur ve tavan dışında hiçbir sınırları kalmaz. Çarkın geri kalanı kararmaz: ana dallarınızın karşısındaki bir zanaat, nadir kademe boyunca tırmanmayı sürdüren bir hobi olarak açık kalır (Demirci Haldren'in ocağındaki tekrarlanabilir bir görev hangisi olduğunu değiştirmenizi sağlar) ve diğer her zanaat uykuya geçer. Uykudaki bir zanaat becerisini ve sıradan tariflerini korur; bu tarifler 75'te grileşene kadar normal eğri üzerinde öğretmeyi sürdürür; sıradanın üzerindeki her şey ise bir anda ödemeyi keser ve uykudaki bir zanaat dinlenirken asla şaheser çıkarmaz.",
+      "archetypesBody": "On zanaat sabit bir çark üzerinde durur ve bu çarktaki konum önemlidir. Her iki komşu çift adıyla adlandırılır: Silah Yapımı ve Zırh Yapımı için Demirci, Deri İşleme ve Terzilik için Kumaşçı, Simya ve Aşçılık için Eczacı, Mühendislik ve Simya için Bombacı ve halkanın çevresinde altı tane daha.\n\nBir çifte bağlanmak bir menü tıklaması değil, bir görevdir. Bugün dört çifte katılabilirsiniz (Demirci, Kumaşçı, Eczacı ve Bombacı); her biri, kabulü öncesinde tüm pazarlığı baştan ortaya koyan bir kabul görevi olan Doğudere'deki sakin bir usta tarafından demirlenmiştir. İlan verene kadar her zanaat nadir kademelere kadar tariflerde serbestçe ilerler; bu yüzden seçmeden önce her şeyi deneyebilirsiniz.\n\nBağlandıktan sonra iki çift zanaatınız ana dallarınız olur ve tavana kadar tavanı yoktur. Tekerin geri kalanı kararmaz: ana dallarınızın karşısındaki bir zanaat nadir kademelere kadar tırmanmaya devam eden bir hobi olarak kalır (Smith Haldren'in dükkanındaki tekrar edilebilir bir görev hangisi olduğunu değiştirmenize izin verir) ve diğer tüm zanaat uyumsuz hale gelir. Uyumsuz bir zanaat becerisini ve yaygın tariflerini tutar; yalnızca tırmanmayı durdurur ve uyurken hiçbir zaman bir şaheser üretmez.",
       "pairFmt": "{a} ve {b}",
       "curveHeading": "Ustalık Eğrisi",
       "curveBody": "Beceri kazanımı her yerde tek kurala, dört durumlu Ustalık Eğrisine uyar. Her {step} beceri puanı bir kademedir ve her tarif, tarifin seninkine karşı nerede durduğuna göre puanlanır: kademende veya üzerinde tam kazanım verir, bir kademe altında yarım, iki aşağıda çeyrek ve üç veya daha fazla aşağıda hiç.\n\nZanaat penceresi bunu doğrudan tariflerin listesine klasik renklerde boyar: tam kazanım için turuncu, azaltılmış için sarı, damlama için yeşil, hiçbiri için gri. Kazanımlar belirlenimcidir, asla beceri artışı zarı değildir; bu nedenle aynı kademede aynı tarif becerini her zaman aynı miktarda artırır ve sarıya dönen bir tarif bir sonraki basamağı eğitmen sinyalidir.\n\nToplama aynı eğriyle aynı kademe adımıyla çalışır, tarif yerine düğüme karşı puanlanır: kolay düğümler geçerken griye döner ve sonraki bölgelerin daha zengin düğümleri bir tırmanışı tamamlayandır. Balık Tutma kendi programını tutar: 50 yetkinliğin altında her yakalamada tam bir puan, 100'e kadar yarım, 150'ye kadar onda bir ve 200'e kadar yavaş bir kuyruk; 100'den itibaren çöp yakalamalar hiçbir şey öğretmez.",
@@ -4424,11 +4605,32 @@ export const tr_TR: EnTranslations = {
       "deedsHeading": "Yolculuğu hatırlayan yiğitlikler",
       "deedsBody": "Yiğitlikler Kitabı her adımda yanındadır. İlk bağlanman Zanaat Yeminlisi'ni ve ilk şaheser Şaheser Ustası'nı kazandırır; her ikisi de unvan olarak takılabilir. Sekiz kazanılabilir zanaatın her biri 50 beceri için bir dönüm noktası yiğitliği işaretler ve tavanını Büyük Usta unvanıyla taçlandırır; Balık Tutma ise 100 yetkinlikte Eski Denizci'yi ve 200'de Usta Olta Ustası unvanını alır.\n\nDaha sakin sayfalar da vardır: ilk hasat ve ilk üretim, sahada şansın ortaya çıkardığı nadir bulgular ve hurda işleme için yiğitlikler. Hepsi kozmetiktir, yalnızca unvanlar ve Ün. Bir yiğitlik hiçbir zaman güç vermez; yalnızca orada olduğunu kanıtlar.",
       "startHeading": "Nereden başlanır",
-      "startBody": "Doğudere'ye yoldan yeni mi indiniz? Ustabaşı Odell'i bulun ve Her Ele Bir Zanaat'ı alın: sizi kasabanın güneydoğusundaki Bakır Kazısı çevresindeki maden damarlarına yönlendirecek ve ilk nasırlarınızı elinize verecek. Kazının kendisine dikkat edin: üzerine kamp kurmuş Deeprock Kazıcıları yeni gelen birinin birkaç seviye üstündedir, o yüzden önce dış damarları işleyin ve kampın göbeğini biraz seviye atladığınız zamana saklayın. Ondan sonra, görev yaparken geçtiğiniz her damarı, ağaç kümesini ve ot öbeğini hasat edin; yetkinlik gezginlere kendiliğinden gelir.\n\nKasabaya döndüğünüzde, üretim penceresini açmak için T'ye basın ve her karakterin başından beri bildiği sıradan tarifleri işleyin. Demirhanedeki, mutfaklardaki, dokuma tezgahındaki ve alet atölyesindeki ustaları ziyaret edip ne öğrettiklerine bakın, istikrarlı bir sikke için de iş emirlerini alın. Lonca'nın mektubu sizi bulduğunda, hangi çiftin ev gibi geldiğini çoktan biliyor olacaksınız.",
+      "startBody": "Doğudere'de yoldan yeni mi çıktın? Ustabaşı Odell'i bul ve Her El İçin Bir Meslek'i al: seni kasabanın güneybatısındaki Bakır Kazısı çevresindeki cevher damarlarına yönlendirecek ve ilk nasırlarını sana verecek. Oradan itibaren, görev yaparken geçtiğin her damarı, ağaç kümesini ve ot yamasını topla; yetkinlik gezginlere doğal olarak gelir.\n\nKasabaya dönünce, zanaat penceresini açmak için T'ye bas ve her karakterin başlangıçtan bildiği yaygın tarifleri çalış. Forge, mutfaklar, dokuma tezgahı ve alet atölyesindeki ustalara onların öğrettiklerini görmeye git ve düzenli para için iş emirlerini al. Lonca'nın mektubu sana ulaşana kadar hangi çiftin ev gibi hissettirdiğini zaten biliyor olacaksın.",
       "colStation": "İstasyon",
       "colHub": "Merkez",
       "colMaster": "Usta",
-      "masterCellFmt": "{name}, {title}"
+      "masterCellFmt": "{name}, {title}",
+      "archetypeIdentityBody": "Etkin arketipin, karakterinin bu dünyada kim olduğuna dair bir beyandır ve başkalarının ve dünyanın sana nasıl hitap ettiğine yansır. Beraberinde gelen ödüller ve tanınırlık hâlâ son haline getiriliyor; sistem tamamlandıkça yeniden göz at.",
+      "archetypeIdentityTitle": "Arketipin ne anlama gelir",
+      "archetypeIntro": "On zanaatın her biri aynı zamanda bir arketipi, yani o işi yapmanın ötesinde benimseyebileceğin daha geniş bir kimliği temsil eder. Etkin arketipin bir kontrol listesi değil, her seferinde tek bir seçimdir: bir tane taşırsın ve istersen daha sonra hangisini taşıdığını değiştirebilirsin.",
+      "archetypeSwitchTitle": "Fikir değiştirmek",
+      "archetypeTitle": "On arketip",
+      "craftComboBody": "Tek bir zanaatın kendi tarif listesinin ötesinde, çark aynı anda iki komşu zanaata başvuran birleşim tariflerini de destekler; bu, tek başına bir zanaata değil, halkadaki komşu işlere yatırım yapmış bir karakteri (ya da ticaret yapan bir çifti) ödüllendirir.",
+      "craftComboTitle": "Birleşim tarifleri",
+      "craftIntro": "On zanaat kolu, toplanan malzemeleri bitmiş teçhizata ve mala dönüştürür: Zırhçılık, Silah Ustalığı ve Kuyumculuk ham maddeyi giyilebilir teçhizata şekillendirir; Simya ve Mühendislik deneme yanılmayla ilerler; Aşçılık, Kâtiplik ve Efsunculuk diğer zanaatların ürünlerine dokunur; Terzilik ve Dericilik ise kesin kalıplarla çalışır. Hep birlikte bir çark oluştururlar: her zanaat iki komşusunun yanında ve bir diğerinin karşısında yer alır.",
+      "craftRecipesBody": "Her zanaatın kendi tarifleri vardır ve her tarif, topladığın ya da satın aldığın belirli malzemeler ister. Her zanaattaki en temel tarifler yalnızca sıradan malzeme ister ve en baştan üretilebilir; böylece bir zanaata, kilidinin açılmasını beklemeden, edindiğin anda başlayabilirsin.",
+      "craftRecipesTitle": "Tarifler ve malzemeler",
+      "craftRingBody": "On zanaat sabit bir halkaya dizilmiştir ve bir zanaatın o halkadaki yeri önemlidir: çark üzerinde yan yana duran zanaatlar, karşı taraftakilere kıyasla birbirleriyle daha çok ortaklık taşır. Bir zanaata bağlanmak, yalıtılmış bir beceri seçmek gibi değil, akraba işlerden oluşan bir aileye katılmak gibi hissettirmelidir.",
+      "craftRingTitle": "Uzmanlıklar çarkı",
+      "craftTitle": "On zanaat",
+      "gatherIntro": "Üç toplayıcılık kolu ham maddeyi doğrudan dünyadan çekip almanı sağlar: Madencilik damarlardan cevher ve taş çıkarır, Ağaç kesme ağaç kümelerinden kereste devirir, Bitkicilik ise yabani büyüyen ot ve bitkileri toplar. Her biri ayrı ayrı izlenir; birinde çalışmak diğerindeki ilerlemeni asla yavaşlatmaz.",
+      "gatherProficiencyBody": "Başarılı her hasat o toplayıcılık kolundaki yetkinliğini artırır. Daha yüksek yetkinlik, bir kaynaktan çıkardıklarını sıradan olandan yukarıya doğru daha nadir malzeme derecelerine kaydırır; yine de en nadir dereceler yüksek yetkinlikte bile nadir kalır. Daha çok pratik şansını asla düşürmez, yalnızca iyileştirir.",
+      "gatherProficiencyTitle": "Yetkinlik ve malzeme kalitesi",
+      "gatherTitle": "Toplayıcılık: Madencilik, Ağaç kesme ve Bitkicilik",
+      "gatherToolsBody": "Satıcılar her toplayıcılık kolu için temel aletler satar ve daha iyileri üretilebilir; böylece bir kaynak noktasında çalışmak, hep aynı kalmak yerine donandıkça daha yetkin hissettirir. Daha yüksek kademe aletler, daha zengin kaynaklara erişmenin ve uzun bir oturumda onları daha verimli işlemenin amaçlanan yoludur.",
+      "gatherToolsTitle": "Zanaatın aletleri",
+      "gatherWhatBody": "Cevher damarları, ağaç kümeleri ve ot öbekleri bölgelere görünür, sahipsiz nesneler olarak yerleştirilmiştir. Birine yaklaş ve içindekini toplamak için onunla etkileşime geç. Bir kaynağı topladıktan sonra, senin onu yeniden toplayabilmen için toparlanmaya ihtiyaç duyar; ama bu başkasını asla engellemez: bu arada başka bir oyuncu aynı kaynağı toplayabilir.",
+      "gatherWhatTitle": "Kaynak noktaları"
     },
     "profPages": {
       "back": "Mesleklere Dön",
@@ -4469,27 +4671,27 @@ export const tr_TR: EnTranslations = {
         "leatherworking": "Deri İşleme; engellemek yerine sıyrınan sınıflar için Çeviklik ve Dayanıklılık teçhizatı hazırlar: Fenbridge post temellerinden nadir bataklık bekçisi setine kadar; ve bataklıkta öğretilen tek derin zanaat odur.",
         "cooking": "Yemek Pişirme; günün avını 18 saniyelik dinlenme boyunca iyileştiren, oyundaki en ucuz iyileştirme olan sofra yemeklerine dönüştürür: Tuzlanmış Kurutulmuş Et'ten Marlow'un Büyük Kavurması'na kadar. Herkes yer, bu yüzden hiçbir zanaat bir grupta bu kadar evrensel biçimde karşılanmaz.",
         "alchemy": "Simya; bitkileri, bezleri ve camı dövüşleri kazandıran şişelere dönüştürür: işlerin ters gittiği anlarda kullanılan iyileştirme ve mana iksirlerini ve tüm zindan boyunca güçlendirme çubuğunuzda kalan stamina eleksirlerini.",
-        "engineering": "Mühendislik, ciddi her toplayıcının er ya da geç istediği aletleri üretir: hiçbir tezgahın para karşılığı satmayacağı kademe 4 ve kademe 5 kazmalar, baltalar, oraklar ve oltalar; her biri kendi altındaki aleti tüketerek.",
-        "enchanting": "Büyüleme teçhizatı parçalarına ayırır ve gücü geri koyar: istemediğiniz parçaları arkanik malzemelere bozun, sonra onları saklamayı düşündüğünüz bir parçaya kalıcı bir istatistik bonusu almak için harcayın. Bozma ve büyüleme ne istasyon ne de eğitmen ister; herkes daha ilk gün başlayabilir. Yalnızca alet atölyesinde öğretilen iki tılsım tarifi daha fazlasını ister."
+        "engineering": "Mühendislik, ciddi her toplayıcının sonunda istemesine rağmen hiçbir satıcının stoklayamayacağı kademe 4 ve kademe 5 kazma, balta ve orakları inşa eder; her biri bir altındaki aracı tüketir.",
+        "enchanting": "Büyüleme teçhizatı parçalara ayırır ve gücü geri koyar: istemediğiniz parçaları gizemli malzemelere kırın, ardından saklamayı düşündüğünüz bir parçaya kalıcı istatistik bonusu eklemek için bunları harcayın. İstasyon yok, eğitmen yok ve herkes birinci günden itibaren başlayabilir."
       },
       "craftProse": {
         "weaponcrafting": {
           "identityHeading": "Her savaşçının alışveriş yaptığı keskin kenar",
           "identityBody": "Her gruptaki biri bu zanaatın işini ister; çünkü yalnızca nadir kademe üç iştahı da karşılar: Güç yakın dövüşçüler için Osmiyum Savaş Kılıcı, Çeviklik savaşçılar için Glifçelik Savaş Baltası ve elbise kalabalığı için Zeka ve Ruh asası Yüksekçam Savaş Asası.\n\nZanaat tekerinde Zırh Yapımı ile Mücevher İşleme arasında durur. Yaşayan kimliği Demirci'dir: Silah Yapımı ve Zırh Yapımı çifti, kendi ellerinizle üç cevher damarını işleyerek Ustabaşı Darva'nın önünde ocakta yemin edilir; Mücevher İşleme ile Bıçakçı Usta çifti de tekerekte adlandırılmış ancak Mücevher İşleme daha sonraki bir bölge genişlemesine kadar tarif göndermediğinden henüz yemin edilemez.",
           "materialsHeading": "Demirhanenin içtiği şeyler",
-          "materialsBody": "Bel kemiği Madenciliktir. Bakır cevheri Doğudere Vadisi'nin kademe 1 damarlarından, demir cevheri Mirefen Bataklığı'ndan, osmiyum cevheri ise Dikenzirve Tepeleri'nden gelir ve merdivenin her kademesi aynı şekilde yükselir. Odun Kesimi beklediğinizden daha çok önem taşır: yaban domuzu mızrağının sapını demirkabuk verir, savaş tokmağının omzunu kül ağacı taşır ve savaş asasını tek bir yaşlıağaç kütüğü oluşturur.\n\nGerisi avdan ve tezgahtan gelir. Kabzalar için gereken Kaba Post doğrudan kurt ve yaban domuzu cesetlerinden hasat edilir, Kemik Parçaları huzursuz ölülerden ya da hurdaya ayrılan sıradan teçhizattan çıkar ve ocak merdiveni Demircilik Akısı yakar: bizzat Darva'dan kavanozu 20 bakır. Kendi madenciliğiniz geride kalırsa cevherin kendisinde hiçbir tezgah sizi kurtarmaz: osmiyum ya Dikenzirve damarlarından, ya Uzak Kıyı dışındaki her genç bölgenin başlangıç damarlarından (Uzak Kıyı'nın damarları demir çıkarır), ya da ticaretle veya Dünya Pazarı üzerinden başka bir oyuncunun yığınından gelir. Yalnızca Glifçelik Külçesi para karşılığı alınır: alet atölyesindeki Tamirci Gizzel'den ya da Highwatch'taki Donatım Subayı Bree'den.",
+          "materialsBody": "Madencilik omurgadır. Bakır cevheri Doğudere Vadisi'nin 1. kademe damarlarından, demir cevheri Mirefen Bataklığı'ndan, osmiyum cevheri ise Dikenzirve Tepelerinden gelir; merdivenin her basamağı aynı şekilde bir üste çıkar. Odun kesimi, tahmin ettiğinizden daha önemlidir: yaban domuzu mızrağının sapı kızılağaçtan yapılır, çekici omuzlayan dişbudaktır ve tek bir yüksekçam kütüğü savaş asasını oluşturur.\n\nGerisini av ve tezgah karşılar. Kavraç için ham deri, kurt ve yaban domuzu cesetlerinden doğrudan elde edilir; kemik parçaları gündelik öldürmelerden düşer; fırın merdiveni ise Darva'nın bizzat sattığı Demircilik Akıları'nı, kavanozu başına 20 bakırdan, yakar. Kendi madenciliğiniz geride kalıyorsa, Darva osmiyum cevherini demirhanede ve Tamirci Gizzel araç atölyesinde glifçelik külçelerini satar; bu fiyat, toplayan dostların ucuz görünmesini sağlayacak kadar yüksektir.",
           "ladderHeading": "Merdiven, kademe kademe",
           "ladderBody": "Tek alan tarifi olan Doğudere Savaş Kılıcı başından beri herkese bilinir ve avlanma düşürme malzemeleri (birkaç kurt dişi ve kemik parçası) artı ocak tezgahından alınan altı Demircilik Akı ile her yerde üretilir. Gerçek merdiven, hepsi ocağa bağlı üç kademede dokuz eğitmen tarifinden oluşur: bakır kademe (sakallı balta, flenç topuz, yaban domuzu mızrağı) beceri 0'da ücretsiz öğrenilir; demir kademe (uzun kılıç, savaş tokmağı, hançer) beceri 25'te tarif başına 25 gümüşe açılır; osmiyum kademesi (savaş kılıcı, savaş baltası, savaş asası) beceri 50'de her biri 1 altına açılır. Darva, bir zanaat kademesi kendi kademe bandına ulaşır ulaşmaz bir tarifi öğretir; bu yüzden her kademesi kendi beceri bandı başladığında açılır.\n\nBir tarif daha çiftle birlikte gelir: Mezar Ejderi Eldivenleri, yalnızca hem Silah Yapımı hem de Zırh Yapımı becerisi 25 olan uyumlu bir Demirci'nin yapabileceği, eğitmen tarafından öğretilen bir kombinasyon parçasıdır ve hiç istasyona ihtiyaç duymaz.",
           "routeHeading": "Şaheserler ve 125'e giden çalışan bir rota",
-          "routeBody": "Gerçek bir istatistik satırı olan her parça, ki bu merdivende demir kademesi ve üstü demektir, daha iyi kalite kademe tavanınızın içine sığdığı sürece örsten şaheser olarak çıkabilir; istatistiksiz bakır yaygınları asla tetiklemez, çünkü içlerinde iyileştirilecek hiçbir şey yoktur. Şaheser bonusu için demir ve osmiyum kademe 1, yaşlıağaç ve glifçelik kademe 2 malzeme sayılır; bir tarifin kendi kademesinin üstünde duran beceri de kademe başına kendi puanını ekler. Bu yüzden osmiyum üçlüsü arasında malzeme üstünlüğünü savaş baltası ile savaş asası taşır ve bir kademe, siz onu aştıktan sonra da daha iyi tetiklemeyi sürdürür.\n\nBakır kademesini 25'e kadar sürün, demir kademesini açıldığı gün eğitin ve 50'ye kadar sürün, sonra osmiyum kademesiyle 75'e çıkın. 75'ten sonra henüz daha yükseği gönderilmediğinden osmiyum tarifleri önce yarım, sonra çeyrek kazanıma solar: 125 tavanına ulaşmak için kabaca 150 üretim daha bütçeleyin ve toplu üretime oturduğunuzda dakikada on zanaat eylemlik ortak kısıtlamayı unutmayın.\n\nTırmanışı yol boyunca finanse edin: Darva'nın ocak iş emri her 30 dakikada bir elinizden sekiz bakır cevheri alır, karşılığında biraz para ve tecrübe verir; demir ve osmiyum kademeleri de seviye atlayan yakın dövüşçülere dürüstçe satılır. Yiğitlikler Kitabı beceri 50'de Keskinlik ve Su Verme'yi işaretler, 125'te ise Şaheser Silah Yapımı'nı taçlandırır."
+          "routeBody": "Gerçek bir istatistik satırına sahip her parça, yani bu merdivende demir basamağı ve üzeri, örsden şaheser olarak çıkabilir; statsız bakır sıradan ürünler hiçbir zaman proc yapmaz, çünkü içlerinde geliştirilebilecek bir şey yoktur. Demir, şaheser bonusu için 1. kademe malzeme sayılır; yüksekçam ve glifçelik ise 2. kademe sayılır, bu nedenle en üst basamak biraz daha sık proc yapar.\n\nBakır basamağında 25'e kadar gidin, demir basamağını açıldığı gün öğrenip 50'ye kadar götürün, ardından osmiyum basamağında 75'e ulaşın. 75'in ötesinde daha yüksek bir şey henüz yok, bu yüzden osmiyum tarifleri kazanımı yarıya, sonra çeyreğe düşürür: 125 sınırına ulaşmak için yaklaşık 150 zanaat daha bütçeleyin ve toplu üretim için oturduğunuzda dakika başına on zanaat eylemi olan paylaşılan kısıtlamayı unutmayın.\n\nTırmanışı giderken finanse edin: Darva'nın demirhanede verdiği iş emri her 30 dakikada sekiz bakır cevherini elinizden alır, karşılığında biraz altın ve deneyim verir; demir ve osmiyum basamakları ise gelişmekte olan yakın dövüşçülere dürüstçe satılır. Deeds Kitabı, 50. beceri düzeyinde Kenar ve Sunum'u işaretler ve 125'te Büyük Usta Silah Yapımı'nı taçlandırır."
         },
         "armorcrafting": {
           "identityHeading": "Ön cephe için zırh",
-          "identityBody": "Zırh Yapımı'nın merdiveni bir askerin kariyeri gibi okunur: başlangıçta sade Perçinli Bakır Kuşak, demir çizmeler ve eldivenler; ardından ilk gerçek istatistik satırlarını taşıyan demir zincir zırh gömleği, bacaklık ve omuzluklar; en sonda da nadir osmiyum pul büyük miğferi, göğüslüğü ve tozluğu, yani bir ustanın sanatının en tepesindeki zırh sayılarına sahip Güç ve Dayanıklılık parçaları.\n\nDaha sessiz bir yanı da var: büyücü istatistikli bir alan yaygını olan Doğudere Koruma Tozlukları ile beceri 75'teki nadir Zeka ve Ruh zincir omuzluğu Ocakpul Manto, büyüye yatkın zincir zırh giyenleri müşteri listesinde tutar. Halkada Silah Yapımı ile Mühendislik arasında durur; Silah Yapımı ile kurulan Demirci çiftine Dövme Ustası Darva'nın önünde yemin edilir, Mühendislik ile kurulan Çarklı Demirci çifti ise adlandırılmıştır ama henüz yemin görevi yoktur.",
+          "identityBody": "Zırh Yapımı'nın merdiveni bir askerin kariyeri gibi okunur: başlangıçta sade perçinli bakır kemer, bot ve eldivenden, ilk gerçek istatistik çizgilerine sahip demir zincir kaftan, bacakçeliği ve omuzluğa ve ardından bir ustanın yapabileceği en büyük zırh sayılarına sahip Güç ve Dayanıklılık parçaları olan nadir osmiyum pul büyük miğfer, zirhane ve bacakçeliğine kadar.\n\nSessiz bir yanı da vardır: büyücü istatistikli zırh olarak Doğudere Korumalı Bacakçeliği ve beceri 75'te nadir Zeka ve Ruh posta omuzluğu olan Ocakpul Manto, büyü odaklı zırh giyen oyuncuları müşteri listesinde tutar. Tekerekte Silah Yapımı ile Zırh Yapımı arasında durur; Silah Yapımı ile kurulan Demirci çifti Ustabaşı Darva'nın önünde yemin edilir; Mühendislik ile Çarklı Demirci çifti ise adlandırılmış ama henüz yemin görevi yoktur.",
           "materialsHeading": "Çuval dolusu cevher",
-          "materialsBody": "Hiçbir zanaat cevheri bu kadar hızlı yemez. Yalnızca demir zincir zırh gömleği beş demir cevheri alır ve her osmiyum pul parçası üç ya da dört osmiyum artı bir glifçelik külçesi ister; bu yüzden ciddi bir zırhçı ya Mirefen Bataklığı ile Dikenzirve Tepeleri'nde madencilik yapar ya da yapana para öder. İlk kademeyi bakır besler, doğrudan Bakır Kazısı'nın yanındaki damarlardan.\n\nMetalin çevresine yumuşak parçalar girer: kurt ve yaban domuzu cesetlerinden hasat edilen Kaba Post, huzursuz ölülerden çıkan (ya da sıradan teçhizattan hurdayla kurtarılan) Kemik Parçaları ve neredeyse her tarifte bulunan Demircilik Akısı kavanozları (ocakta her biri 20 bakır). Hiçbir tezgah osmiyum satmaz: sabırsızlar onu başka oyunculardan alır ya da kendileri kazar; Dikenzirve'de veya on bir genç bölgenin onunun başlangıç damarlarında (yalnızca Uzak Kıyı demir çıkarır).",
+          "materialsBody": "Hiçbir zanaat cevheri bu kadar hızlı tüketmez. Yalnızca demir zincir kaftan beş demir cevheri alır ve her osmiyum pul parçası üç ya da dört osmiyum ile bir glifçelik çubuğu ister; bu yüzden ciddi bir zırh ustası Mirefen Bataklığı'nda ve Dikenzirve Yüksekliklerinde maden çıkarır ya da bunu yapan birine para öder. Bakır ilk kademeyi besler; doğrudan Bakır Kazısı'ndaki damarlardandır.\n\nMeralin etrafına yumuşak parçalar gider: kurdu ve yaban domuzunun cesetlerinden toplanan kaba post, sıradan avlanmadan elde edilen kemik parçaları ve keten parçaları ve neredeyse her tarifte bir şişe Demircilik Akı (ocakta 20 bakır). Darva, sabırsızlar için tezgah üstünde osmiyum cevheri satar.",
           "ladderHeading": "Darva'nın ocağında öğrenmek",
-          "ladderBody": "İki alan yaygını, Doğudere Zincir Zırh Yeleği ve Koruma Tozlukları, başından beri bilinir ve her yerde üretilir. Eğitmen merdiveni Doğudere ocağında üç kademede dokuz tariftir: bakır kademesi beceri 0'da ücretsizdir, demir zincir kademesi beceri 25'te tarif başına 25 gümüş, osmiyum pul kademesi ise beceri 50'de her biri 1 altın tutar; her kademe, kademeniz ona ulaştığı anda öğrenilebilir.\n\nMerdivenin ötesinde iki özel tarif durur. Bağlıtaş Miğferi, iki Demirci kombinasyon tarifinden biridir (silah yapımı tarafındaki kardeşi Mezarejderi Eldivenleri'dir): eğitmenden öğretilir, istasyon istemez ve yalnızca her iki zanaatı da beceri 25'te olan uyumlu bir Demirci tarafından işlenebilir. Ocakpul Manto ise hiç öğretmen istemez: herkes onu başından beri bilir ve işlenmesinin önünde ocaktan ve malzemelerden başka hiçbir kapı yoktur. Listelenen 75 becerisi izinle değil kazanımla ilgilidir: Zırh Yapımı ana dalınızsa daha ilk çekiç darbesinden 99'a kadar tam beceri kazanımı öder, dolayısıyla artacak osmiyumu olan bir Demirci ona erkenden yaslanabilir. Ana dalın tavanının altında kademe 3 tarif hiçbir şey öğretmez; bu yüzden beyan etmemiş ya da hobi olarak çalışan bir zırhçı onu puan için değil, parça için işler.",
+          "ladderBody": "Doğudere Zincir Zırhı ve Korumalı Bacakçeliği olmak üzere iki alan yaygını başından beri bilinir ve her yerde üretilir. Eğitmen merdiveni, Doğudere dövme ocağında üç kademede dokuz tariften oluşur: bakır kademesi beceri 0'da ücretsizdir, demir zincir kademesi beceri 25'te tarif başına 25 gümüşe gelir ve osmiyum pul kademesi beceri 50'de her biri 1 altın eder; her kademesi kendi beceri bandı başladığında öğretilebilir.\n\nMerdivenin ötesinde iki özel tarif daha vardır. Sınırtaşı Miğferi, Demirci kombinasyon tarifidir: eğitmen tarafından öğretilir, istasyonsuzdur ve yalnızca her iki zanaat becerisi 25'te olan uyumlu bir Demirci tarafından yapılabilir. Ocakpul Manto için hiç eğitmene gerek yoktur: herkes bilir; ancak beceri 75'te ve ocağa bağlı olarak, bu zanaat kademe 3 baş tarifini oluşturur.",
           "routeHeading": "Şaheserler ve 125'e giden işleyen bir yol",
           "routeBody": "Demir zincir kademesinden itibaren her zanaat şaheser ihtimalini çevirir; yalnızca zırha özgü bakır yaygınlar işlem yapamaz, çünkü şaheser istatistikleri iyileştirir ve bunların istatistiği yoktur. Demir, işlem için kademe 1 malzeme sayılır; glifçelik ise kademe 2.\n\nYükseliş standart üç kademeli yolculuktur: bakır 25'e, demir zincir 50'ye, osmiyum pul 75'e; her kademe açıldığında eğitim alınır. Zırh Yapımı'nın şanslı olduğu yer 75 sonrasıdır: Ocakpul Manto kademe 3 tarif olduğundan 99'a kadar tam kazanım sağlar, yarısı sonrasına kadar; bu da son elli puan için bir baş tarifi olmayan bir zanaat yerine 150 yerine yaklaşık 75 üretim anlamına gelir. Her manto yedi osmiyum cevheri ve beş Demircilik Akı ister; başlamadan önce Dikenzirve'de ve ocak tezgahında stok yapın.\n\nDarva'nın iş siparişi, para ve deneyim karşılığında her 30 dakikada bir sekiz bakır cevher alır; bu, geride bıraktığınız düşük kademeli cevher için güzel bir depo görevi görür. Yiğitlikler Kitabı beceri 50'de Çekiç ve Levha'yı işaretler; Şaheser Zırh Yapımı ise 125 tavanında bekler."
         },
@@ -4507,61 +4709,61 @@ export const tr_TR: EnTranslations = {
           "identityHeading": "Hızlılar için deri",
           "identityBody": "Merdiven, sade Fenbridge post pantolon, çizme ve kemerden, ilk gerçek istatistik çizgilerine sahip sıradan dışı bataklık avcısı ceketi, başlığı ve omuzluğuna ve ardından bir ustanın kesebileceği en iyi deri olan nadir bataklık bekçisi setine yükselir. İki büyücü parçası onu tamamlar: Doğudere Druid'in Posta Yaygını ve beceri 75'teki Alacakaranlık Sarmalı.\n\nTekerekte Aşçılık ile Terzilik arasında durur. Yaşayan çifti Teçhizatçı'dır: Deri İşleme ve Terzilik birlikte, Doğudere'deki Dokumacı Ottilie'nin önünde yemin edilir; Aşçılık ile Avcı Ustası çifti tekerekte adlandırılmış ama henüz yemin görevi yoktur.",
           "materialsHeading": "Avlanma hayin kendisi",
-          "materialsBody": "Deri İşleme, seviye rotanızla tedarik hattınızın aynı şey olduğu zanaattır: Kaba Post doğrudan post taşıyan cesetlerden, hepsinden çok da kurtlarla yaban domuzlarından hasat edilir ve her ceset yalnızca tek bir hasatçıya hizmet eder, önce gelen alır. Nadir ya da daha iyi bir hasat atışı ayrıca Bozulmamış Post verir; bu, Bataklık Muhafızı Yeleği'nin istediği imzalı örnektir, bu yüzden bulduğunuz her birini bankaya koyun.\n\nYardımcı kadro küçüktür: örümcek bacağı ve ipeği, insansılardan düşen ev dokuması kumaş, her nadir bataklık bekçisi parçasında tek bir osmiyum cevheri (Alacakaranlık Postu Sargıları baş tarifinde altı tane) ve tabakhane tezgahından 16 bakıra bir Tabaklama Maddesi. Osmiyumun kendisi asla tezgahtan satın alınmaz: ya kendiniz kazın, Dikenzirve'de ya da neredeyse her genç bölgenin başlangıç damarlarında (yalnızca Uzak Kıyı demir çıkarır), ya da başka bir oyuncudan satın alın.",
+          "materialsBody": "Deri İşleme, seviye yolunuzun ve tedarik hattınızın aynı şey olduğu zanaat: kaba post, kurtlar ve yaban domuzları başta olmak üzere post taşıyan cesetlerden doğrudan hasat edilir ve her ceset yalnızca bir hasat edene hizmet eder; kim önce gelirse tümünü o alır. Nadir ya da daha iyi bir hasat turunda ayrıca imzalı örneklem olan Bozulmamış Post da verir; Bataklık Bekçisi Ceketi bunu ister, bu yüzden bulduğunuz her birini bankaya koyun.\n\nDestekleyen kadro küçüktür: örümcek bacakları ve ipeği, insansılarda düşen ev dokuma kumaşı, her bataklık bekçisi nadir parçasında tek bir osmiyum cevheri (Alacakaranlık Sarmalı baş tarifinde altı tane) ve tabhane tezgahından 16 bakıra bir Tabakçılık Ajanı. Tabakçı Hesk, kendiniz maden çıkarmak istemiyorsanız osmiyum cevheri de satar.",
           "ladderHeading": "Fenbridge'de öğrenilir",
-          "ladderBody": "İşin cilvesi şu: tabakhane, Mirefen Bataklığı yolu üzerindeki Fenbridge'de durur ve bu da Deri İşleme'yi bataklıkta öğretilen tek derin zanaat yapar. Sepici Hesk merdiveni kendi teknelerinin başında öğretir: Fenbridge post kademesi beceri 0'da ücretsiz, bataklık avcısı kademesi beceri 25'ten itibaren tarif başına 25 gümüş, bataklık bekçisi kademesi ise beceri 50'den itibaren her biri 1 altın; her kademe, kademeniz ona ulaştıkça açılır.\n\nÜç tarif eğitmeni atlar: alan yaygınları (Tabaklanmış Deri Ceket ve Doğudere Druidinin Postu) başından beri her yerde üretilir, Alacakaranlık Postu Sargıları ise herkesçe bilinir ama beceri 75'te durur ve tabakhaneye bağlıdır. Şunu unutmayın: Teçhizatçı yemininin kendisi Doğudere'de Ottilie'nin yanında edilir; bataklıkta yalnızca öğretim yapılır.",
+          "ladderBody": "İşte kıvrım: Tabakhane Fenbridge'de, Mirefen Bataklığı yolunda durur; bu Deri İşleme'yi Doğudere dışında öğretilen tek derin zanaat yapar. Tabakçı Hesk, çanlarında merdiveni öğretir: Fenbridge post kademesi beceri 0'da ücretsiz, bataklık avcısı kademesi beceri 25'te tarif başına 25 gümüşe, bataklık bekçisi kademesi ise beceri 50'den itibaren her biri 1 altına; her kademesi sizin kademeniz bunu ulaştığında açılır.\n\nİki tarif eğitmeni atlar: alan yaygınları (Tabaklanmış Deri Ceket ve Druid'in Postu) başından beri her yerde üretilir ve Alacakaranlık Sarmalı herkes tarafından bilinir ama beceri 75'te ve tabakhaneye bağlı olarak zanaatın kademe 3 baş tarifini oluşturur. Teçhizatçı yemininin kendisinin Ottilie ile Doğudere'de yapıldığını; yalnızca öğretimin bataklıkta gerçekleştiğini unutmayın.",
           "routeHeading": "Şaheserler ve 125'e giden işleyen bir yol",
-          "routeBody": "Gerçek istatistiği olan her parça, daha iyi kalite kademe tavanınızın içine sığdığı sürece şaheser şansını atar; istatistikli Doğudere Druidinin Postu da buna dahildir. Bataklık Muhafızı Yeleği'ndeki imzalı bir Bozulmamış Post, imzalı bileşen bonusunu kendiliğinden sağlar; tetikleme açısından osmiyum kademe 1 malzeme sayılır. İstatistiksiz post yaygınları hiç tetikleyemez.\n\nDoğal yoldan yükseltin: birinci seviyeden itibaren öldürdüğünüz her kurdu ve yaban domuzunu hasat edin, iki alan yaygınının sizi nerede durursanız durun 25'e taşımasına izin verin, sonra görevler sizi zaten bataklığa çekince teknelerin başında post kademesini eğitin. Bataklık avcısı sizi 50'ye, bataklık bekçisi 75'e taşır; ondan sonrası için Alacakaranlık Postu Sargıları devreye girer: altı osmiyum cevheri, üç Bozulmamış Post, iki Kaba Post ve bir Tabaklama Maddesi isteyen kademe 3 tarif, uyumlu bir Teçhizatçıya 99'a kadar tam, sonrasında yarım kazanım öder; 125 tavanına kalan son elli puan için yaklaşık 75 üretim demektir bu. Ana dalın tavanının altında kademe 3 tarif hiçbir şey öğretmez.\n\nSeyyar tabakhane bu zanaat için diğer hepsinden daha çok önem taşır: 75'te uzmanlaşın, bir heybe dolusu post Fenbridge'e geri yürümek yerine kamp ateşinin başında bitmiş teçhizata dönüşsün. Hesk'in tabakhane iş emri her 30 dakikada bir sekiz Kaba Post satın alır; zaten topladığınız derilerden derli toplu bir kazanç. Yiğitlikler Kitabı da beceri 50'de Sepicinin Zanaatı'nı, tavanda ise Şaheser Deri İşleme'yi işaretler."
+          "routeBody": "Bataklık avcısı kademesinden itibaren her zanaat şaheser ihtimalini çevirir; Bataklık Bekçisi Ceketindeki Bozulmamış Post, imzalı bileşen bonusunu otomatik olarak sağlar; osmiyum, işlem için kademe 1 malzeme sayılır. Statüsüz post yaygınları işlem yapamaz.\n\nDoğal yoldan seviye kazanın: birinci seviyeden itibaren öldürdüğünüz her kurdu ve yaban domuzunu hasat edin; post kademesini durduğunuz her yerde 25'e kadar üretin, ardından görevler sizi zaten bataklığa çekecekken Fenbridge'de eğitin. Bataklık avcısı sizi 50'ye; bataklık bekçisi ise 75'e taşır; bu noktanın ötesinde Alacakaranlık Sarmalı, altı osmiyum cevheri, üç Bozulmamış Post, iki kaba post ve bir Tabakçılık Ajanı içeren kademe 3 tarif, 99'a kadar tam kazanım sağlar ve sonrasında yarısı ödenir; 125 tavanına son elli puan için yaklaşık 75 üretim.\n\nSeyyar tabakhane bu zanaat için başka herhangi birinden daha önemlidir: 75'te uzmanlaşın ve bir torba dolusu post, Fenbridge'e geri yürümek yerine kamp ateşinde bitmiş teçhizata dönüşür. Hesk'in tabakhane iş siparişi her 30 dakikada bir sekiz kaba post satın alır; zaten topluyor olduğunuz postlar için düzgün bir getiri. Yiğitlikler Kitabı beceri 50'de Tabakçı Ticaret'i; Şaheser Deri İşleme'yi ise tavan noktasında işaretler."
         },
         "cooking": {
           "identityHeading": "Grubu besleyen kazan",
-          "identityBody": "Pişmiş bir yemek yediğinizde 18 saniyelik dinlenme boyunca sizi iyileştirir; çekişler arasında bu, oyundaki en ucuz iyileştirmedir. Merdiven, 90 can veren Tavada Kızarmış Nehir Levreği'nden 980 canlık Marlow'un Büyük Kavurması'na kadar uzanır; oyunda hiçbir şeyin geçemediği bir oturma iyileştirmesi.\n\nHalkada Aşçılık, Simya ile Deri İşleme arasında durur. Yaşayan çifti Eczacı'dır: Simya ve Aşçılık birlikte, kazan için dört yaban domuzu avlandıktan sonra Doğudere mutfaklarında Aşçı Marlow'un önünde yemin edilir; Deri İşleme ile kurulan Avcı Ustası çifti halkada adlandırılmıştır ama henüz yemin görevi yoktur.",
+          "identityBody": "Pişirilmiş bir yemek yer ve 18 saniyelik dinlenme boyunca iyileştirir; çekişler arasında oyundaki en ucuz iyileştirmedir. Merdiven, 90 can sağlayan Tavada Kızartılmış Nehir Levreğinden en büyük oturma iyileştirmesi olan Marlow'un Büyük Kavurması'na (980 can) kadar uzanır.\n\nTekerekte Aşçılık, Simya ile Deri İşleme arasında durur. Yaşayan çifti Eczacı'dır: Simya ve Aşçılık, Doğudere mutfaklarındaki Aşçı Marlow'un önünde dört yaban domuzu avladıktan sonra yemin edilir; Deri İşleme ile Avcı Ustası çifti tekerekte adlandırılmış ama henüz yemin görevi yoktur.",
           "materialsHeading": "Olta ve bıçakla beslenen bir kiler",
-          "materialsBody": "İmza malzemelerini bölge bölge balıkçılık sağlar: Doğudere Vadisi'nin sularından ayna alabalığı ve nehir levreği, Mirefen Bataklığı'ndan bataklık turnabalığı ve bataklık yılanbalığı, Dikenzirve Tepeleri'nden buzsolungaç alabalığı ve slatefin sazanı. Kademeler bölgeleri serbestçe karıştırır (ücretsiz kademe daha şimdiden bataklık turnabalığı ister, orta kademe Dikenzirve'nin buzsolungacını, nadir akşam yemeği ise Vadi'nin ayna alabalığını geri katar); bu yüzden yol nereye giderse orada balık tutan bir aşçının malzemesi hiç tükenmez.\n\nKasap tarafı hasat edilen cesetlerden gelir: yaban domuzlarından ve akrabalarından Av Eti ve nadir ya da daha iyi bir hasat atışında, büyük kavurmanın baş tacı olan imzalı bir Seçme Et. Otlar daha iyi yemekleri terbiyeler, tek bir Kül Ağacı Kütüğü yılanbalığını tütsüler ve Pişirme Tuzu, Marlow'un kendi tezgahında kesesi 8 bakırdır.",
+          "materialsBody": "Balık tutma, bölge bölge imza malzemelerini stoklar: Doğudere Vadisi sularından ayna alabalığı ve nehir levreği, Mirefen Bataklığı'ndan bataklık turna balığı ve bataklık yılanbalığı, Dikenzirve Yüksekliklerinden buzdiş alabalık ve arduvaz yüzgeçli sazan. Merdivenin her kademesi kendi kademesindeki balığı pişirir; bu yüzden balık tutan bir aşçının malzemesi hiç tükenmez.\n\nKasap tarafı hasat edilen cesetlerden gelir: yaban domuzu ve yakınlarından av eti ve nadir ya da daha iyi bir hasat turunda imzalı Birinci Sınıf Et, büyük kavurmanın merkezkoşası. Bitkiler iyi yemeklere lezzet katar, bir meşeağacı kütüğü yılanbalığını tütsüler ve Aşçılık Tuzu Marlow'un kendi tezgahından 8 bakıra bir kese gelir.",
           "ladderHeading": "Kurutulmuş etten büyük kavurmaya",
-          "ladderBody": "Tuzlanmış Kurutulmuş Et alan tarifidir: başından beri bilinir, bir örümcek bacağıyla yapılır, her yerde hazırlanabilir; her taze maceracının yol yiyeceğidir. Eğitmen merdiveni meydanın doğu tarafındaki Doğudere mutfaklarında pişirir: beceri 0'da ücretsiz kademe (levrek, Avcı Oyun Şişi, Otlu Bataklık Turna Balığı), beceri 25'te tarif başına 25 gümüşe orta kademe (Meşeağacı Tütsülenmiş Yılanbalığı, Altın Yapraklı Oyun Güveci, Buzdiş Çorbası) ve beceri 50'de her biri 1 altına nadir kademe (Gümüş Sazan Akşam Yemeği, Balıkçının Şölen Tabağı, Marlow'un Büyük Kavurması).\n\nToplu yemekler malzemelerinizi uzatır: tütsülenmiş yılanbalığı ve oyun güveci zanaat başına iki kişiye yetecek, şölen tabağı ise üç kişiye yetecek miktarda servis eder. Marlow, Aşçılıktaki kademeniz tarife ulaşır ulaşmaz her kademeyi öğretir.",
+          "ladderBody": "Tuzlanmış Kurutulmuş Et alan tarifidir: başından beri bilinir, bir örümcek bacağıyla yapılır, her yerde hazırlanabilir; her taze maceracının yol yiyeceğidir. Eğitmen merdiveni meydanın batı tarafındaki Doğudere mutfaklarında pişirir: beceri 0'da ücretsiz kademe (levrek, Avcı Oyun Şişi, Otlu Bataklık Turna Balığı), beceri 25'te tarif başına 25 gümüşe orta kademe (Meşeağacı Tütsülenmiş Yılanbalığı, Altın Yapraklı Oyun Güveci, Buzdiş Çorbası) ve beceri 50'de her biri 1 altına nadir kademe (Gümüş Sazan Akşam Yemeği, Balıkçının Şölen Tabağı, Marlow'un Büyük Kavurması).\n\nToplu yemekler malzemelerinizi uzatır: tütsülenmiş yılanbalığı ve oyun güveci zanaat başına iki kişiye yetecek, şölen tabağı ise üç kişiye yetecek miktarda servis eder. Marlow, Aşçılıktaki kademeniz tarife ulaşır ulaşmaz her kademeyi öğretir.",
           "routeHeading": "Şaheserler değil uzmanlaşma ve 125'e giden yol",
           "routeBody": "Aşçılık, şaheser hikayesinin dürüst istisnasıdır: bir yemeğin iyileştirilebilecek istatistik çizgisi yoktur, bu yüzden yemekler hiçbir zaman şaheser üretmez ve hiçbir aşçı bunu peşinde koşmamalıdır. Zanaatın ustalığı 75'te uzmanlaşmaktır: her malzemede beşte bir daha az, bu toplu yemeklerde hızla birleşir; ve zindanın kapısında yemek pişirilmesini sağlayan seyyar bir alan mutfağı.\n\nYakaladığınızı pişirin: tırmanışı bir balık tutma seansıyla eşleştirin ve iki beceri birbirini tüm yol boyunca besler. Kurutulmuş et ve ücretsiz kademe sizi zanaat başına bir puanla 25'e taşır, orta kademe 50'ye ve nadir kademe 75'e; 75 sonrasında henüz daha yüksek bir yemek gönderilmemiştir, bu yüzden nadir yemekler yarıya ve ardından çeyreğe solar, tavan noktasına ulaşmak için yaklaşık 150 daha üretim gerekir. Öğütme değil stok yapma olarak düşünün: bir lonca her porsiyonu yer.\n\nMarlow'un mutfakları iş siparişi, para ve deneyim karşılığında her 30 dakikada bir sekiz av eti satın alır; Yiğitlikler Kitabı beceri 50'de 125'teki Şaheser Aşçılık unvanına giden yolda Deneyimli Şef'i işaretler."
         },
         "alchemy": {
           "identityHeading": "Dövüşleri kazandıran şişeler",
-          "identityBody": "Bu zanaat Highwatch'taki eczanede işlenir; burası Eczacı Ustası Simyacı Verane'nin evidir. Verane tarif merdivenini öğretir, Cam Flakonları 12 bakıra satar ve iş emri üzerinden bitkilere para öder.\n\nZanaat halkasında Simya, deneme yanılma mesleklerinin arasında durur: bir yanında Mühendislik, öbür yanında Aşçılık. Bu ona iki çift kimliği kazandırır: Bombacı (Mühendislik ve Simya, Doğudere'de Tamirci Gizzel'in önünde benimsenir) ve Eczacı (Simya ve Aşçılık, Aşçı Marlow'un önünde yemin edilir). Simya'yı bir ana dal yapmak ve kendi imzalı işinizin size geri ders vermesini sağlamak için iki çiftten birine uyum sağlayın; Bombacı çifti ayrıca kendi kombinasyon karışımını, Ayı İksiri'ni açar, Eczacı çifti ise henüz hiçbir kombinasyon tarifi göndermez. Yine de merdivenin kendisi hiç beklemez, çünkü her Simya tarifi, beyan edilmemiş zanaatların altında çalıştığı nadir kademenin içinde durur; dolayısıyla tavana giden tırmanışın tamamı herhangi bir yeminden önce açıktır.",
+          "identityBody": "Zanaat, Yüksetnöbet'teki eczanede işlenir; burası, tarif merdivenini öğreten, cam flakon satışını 12 bakıra yapan ve bitkilerden iş siparişleri aracılığıyla para ödeyen Eczacı Ustabaşı Eczacı Verane'nin evidir.\n\nZanaat tekerinde Simya, deneme yanılma zanaatleriyle birlikte oturur: bir tarafta Mühendislik, diğer tarafta Aşçılık. Bu ona iki çift kimlik verir: Bombacı (Mühendislik ve Simya, Doğudere'deki Tamirci Gizzel'in önünde alınır) ve Eczacı (Simya ve Aşçılık, Aşçı Marlow'un önünde yemin edilir). Simyayı ana dal yapmak ve beceriyi tamamıyla tavanına açmak için iki çiftten birine uyum sağlayın; o zamana kadar herhangi bir ilan edilmemiş zanaat gibi nadir kademeye kadar çalışır.",
           "materialsHeading": "Bitkiler, bezler ve cam",
           "materialsBody": "Her iksir, kademesiyle eşleşen bitkilerle birlikte bir cam flakon ister: parlakyaprak Doğudere Vadisi'nde, altın yaprak Mirefen Bataklığı'nda, güneşyaprağı ise Dikenzirve Yüksekliklerinde yetişir; her bölgede bir bitki, böylece şişeleriniz dünyayla birlikte yükselir. Bitkicilik doğal ortak beceridir, ancak toplayıcılardan veya pazardan satın almak da işe yarar; derin bölgelerde daha iyi orak gerektiren yüksek kademeli bitkiler bulunduğundan, kendi bitkilerinizi topluyorsanız araçlarınızı güncel tutun.\n\nEleksir serisi bir avcının malzemesini ekler: zehirli cesetlerden toplanan Zehir Bezleri ve en üst eksir, şanslı bir ceset hasatında ortaya çıkan imzalı nadir örneklem olan Bozulmamış Zehir Bezi'ni ister. Kendiniz hasat etmiyorsanız, bir avcı arkadaştan getirmesini istemeye değer malzemeler bunlardır.",
           "ladderHeading": "Tarif merdiveni",
-          "ladderBody": "Zayıf İyileştirme İksiri'ni herkes başından beri bilir ve istasyon gerekmeden her yerde karıştırabilir. Gerçek merdiven, Verane'nin eczanede öğrettiği dokuz tariftir, her kademede üç tane: beceri 0 tarifleri ücretsizdir, beceri 25 kademesi tarif başına 25 gümüş, beceri 50 kademesi ise tarif başına 1 altın tutar. Her kademe bir iyileştirme şerbeti, bir mana şerbeti ve bir dayanıklılık eleksiri içerir; sıradan parlakyaprak şişelerinden (120 can, 160 mana) sıradan dışı altın yaprağa (200 can, 260 mana) ve nadir güneşyaprağına (280 can, 360 mana) doğru adım adım yükselir.\n\nEleksirler de aynı yoldan tırmanır: Domuz İksiri 10 dakika boyunca 6 Dayanıklılık verir, Zehirateşi İksiri 15 dakika boyunca 9, Yılan İksiri ise 15 dakika boyunca 12; üretim başına iki şişe çıkaran tek eleksir de Yılan'dır. Bir tarif daha kenarda durur: Ayı İksiri, Simya'nız 25'e ulaştığında Verane'nin 25 gümüşe öğrettiği bir kombinasyon karışımıdır; her yerde karıştırılabilir, ama yalnızca hem Simya'sı hem Mühendisliği 25 olan uyumlu bir Bombacı tarafından.",
+          "ladderBody": "Herkes başından beri Küçük İyileştirme İksiri'ni bilir ve onu istasyon gerekmeden her yerde karıştırabilir. Gerçek merdiven, eczanede Verane'nin öğrettiği her kademede üç adet olmak üzere dokuz tariftir: beceri 0 tarifleri ücretsizdir, beceri 25 kademesi tarif başına 25 gümüş, beceri 50 kademesi ise tarif başına 1 altın. Her kademe bir iyileştirme iksiri, bir mana iksiri ve bir stamina eleksiri içerir; sıradan parlakyaprak şişelerinden (120 can, 160 mana) nadir güneşyaprağına (280 can, 360 mana) kadar altın yaprak ara kademesiyle (200 can, 260 mana) ilerler.\n\nEleksirler de aynı şekilde yükselir: Yaban Domuzu Eksiri 10 dakika boyunca 6 Dayanıklılık verir, Zehirateşi Eksiri 15 dakika boyunca 9, Yılan Eksiri ise 15 dakika boyunca 12 verir; zanaat başına iki şişe üretir. Bir tarif daha kenarda durur: Ayı Eksiri, Verane'nin Simya 25'e ulaştığında 25 gümüşe öğrettiği, her yerde karıştırılabilen bir kombinasyon karışımıdır; ancak yalnızca hem Simya hem de Mühendislik 25 seviyesinde olan uyumlu bir Bombacı tarafından yapılabilir.",
           "routeHeading": "Bir simyacının 125'e giden yolu",
-          "routeBody": "Şerbetler ve eleksirler asla şaheser atmaz; o tetikleme istatistik taşıyan teçhizata aittir. Yine de adınız yol alır: nadir güneşyaprağı şerbetleri usta imzasıyla gelir ve çift şişelik Yılan İksiri'nin her şişesi de öyle; yani bu zanaatta nadir hiçbir şey tezgahtan imzasız çıkmaz. Beceri 75'te uzmanlaşırsınız ve o andan itibaren her Simya tarifi yüzde 20 daha az malzeme ister.\n\nBitkiciliği erken alın ve seviye atlarken toplayın: parlakyaprak Vadi'nin her yerindedir ve Verane'nin tezgahına vardığınızda ücretsiz kademe, zaten toplayacağınız otlarla sizi tertemiz biçimde beceri 25'e taşır. 25 kademesi açılır açılmaz öğrenin, altın yaprak için toplamanızı bataklığa taşıyın ve Verane'nin iş emri (45 bakıra altı Altın Yaprak Otu, her 30 dakikada bir tekrarlanabilir) yol boyunca size biraz para geri versin.\n\n50'den sonra, Dikenzirve güneşyaprağıyla güneşyaprağı şerbetleri ve Yılan partileri karıştırın; karışımda hâlâ biraz Vadi ve bataklık yeşilliği bulunsun. 100'den 125'e uzanan son bölüm kasıtlı olarak damla damla ilerler; bu yüzden sayı uğruna ot yakmak yerine gerçekten satan şeyi karıştırın ve tüketim mallarının, herkesin sonsuza dek yeniden satın aldığı tek üretilmiş mal olduğunu unutmayın. Yiğitlikler Kitabı beceri 50'de Tuhaf Karışımlar'ı, tavanda ise Şaheser Simya'yı işaretler."
+          "routeBody": "İksirler ve eleksirler hiçbir zaman şaheser üretmez; bu ihtimal istatistik taşıyan teçhizata aittir. Adınız yine de yolculuk eder: nadir güneşyaprağı iksirler birer birer üretilir ve bir yapımcı damgasıyla imzalanmış olarak gelir; çift parti Yılan Eksiri ise sade kalır. Beceri 75'te uzmanlaşırsınız ve o andan itibaren her Simya tarifi yüzde yirmi daha az malzeme tüketir.\n\nBitkiciliği erken alın ve seviye atlayarak toplayın: parlakyaprak Vadi'nin her yerindedir; Verane'nin tezgahına ulaştığınızda ücretsiz kademe sizi temiz biçimde zaten toplardınız her neyse bitkilerle beceri 25'e taşır. 25 kademesini açılır açılmaz öğrenin, toplamayı altın yaprak için bataklığa taşıyın ve Verane'nin iş siparişinin (30 dakikada bir tekrarlanabilir, altı Altın Yaprak Otu karşılığında 45 bakır) yolda biraz para geri çevirmesine izin verin.\n\n50'den itibaren Dikenzirve bitkilerinden güneşyaprağı iksirler ve Yılan partileri üretin. 100'den 125'e uzanan son bölüm kasıtlı olarak yavaş akar; bu yüzden sayıyı yükseltmek için bitki yakmak yerine gerçekten satılanı üretin; tüketim mallarının herkesin sonsuza dek yeniden satın aldığı tek üretilmiş mal olduğunu unutmayın. Yiğitlikler Kitabı, beceri 50'de Tuhaf Karışımları ve tavan noktasında Şaheser Simyayı işaretler."
         },
         "engineering": {
           "identityHeading": "Alet yapımcısının tekeli",
-          "identityBody": "Bu zanaat, Doğudere Meydanı'nın güneybatı köşesindeki alet atölyesinde işlenir; burası Alet İşlerinin Ustası Tamirci Gizzel'in evidir. Her alet serisinin 1 ile 3 arasındaki kademeleri sıradan satıcı stoğudur; kademe 4 ve kademe 5 ise ya bir mühendisin tezgahından çıkar ya da temizleme kapılarının ardındaki Boğulmuş Litanya'nın mağara tezgahından Mağara Nişanı karşılığında alınır, hiçbir kasadan para karşılığı asla çıkmaz.\n\nHalkada deneme yanılma mesleklerinin arasında, Simya ile Zırh Yapımı'nın yanında durur; bu da ona iki çift kimliği kazandırır: Bombacı (Mühendislik ve Simya, bizzat Gizzel'in önünde benimsenir) ve Çarklı Demirci (Zırh Yapımı ve Mühendislik, adlandırılmış ama henüz yemin edilemez). Bir uyarı burada başka her yerden daha çok önem taşır: Mühendisliğin tarif kademelerinin her biri, hobilerin ve beyan etmemiş ustaların altında çalıştığı nadir kademe tavanının üstünde durur; dolayısıyla beceri sayısı yalnızca ana dalları arasında Mühendislik bulunan bir usta için hareket eder, ki bu bugün Bombacı demektir. Kara aletlerini yine de herkes yapabilir; uyum sağlamamış bir usta bunu yapmaktan yalnızca hiçbir şey öğrenmez, üstelik iki olta tarifi ayrıca Gizzel'in öğretmesini ister.",
+          "identityBody": "Zanaat, Doğudere Meydanı'nın güneydoğu köşesindeki alet atölyesinde işlenir; burası Alet Atölyesi Ustası Tamirci Gizzel'in evidir. Her alet serisinin 1 ile 3. kademesi sıradan satıcı stoğudur; 4. ve 5. kademeler yalnızca bir mühendis aracılığıyla mevcuttur.\n\nTekerekte deneme yanılma zanaatleriyle birlikte Simya ve Zırh Yapımı'nın yanında durur; bu ona iki çift kimlik verir: Bombacı (Mühendislik ve Simya, Gizzel'in kendisinin önünde alınır) ve Çarklı Demirci (Zırh Yapımı ve Mühendislik, adlandırılmış ama henüz yemin edilemez). Burada başka herhangi bir yerden daha önemli bir uyarı vardır: Mühendislik'in her iki tarif kademesi de hobilerin ve ilan edilmemiş zanaatkarların çalıştığı nadir kademe tavanının üzerindedir; dolayısıyla beceri sayısı yalnızca Mühendislik'in ana dallarına dahil olduğu bir zanaatkar için hareket eder; bu bugün Bombacı anlamına gelir. Herkes yine de aletleri üretebilir; uyumsuz bir zanaatkar bunu yaparak yalnızca hiçbir şey öğrenmez.",
           "materialsHeading": "Bileşenler ve önceki aletler",
-          "materialsBody": "Her kara aleti tarifi, bir alt kademedeki aleti artı bir KALİTELİ malzemeyi tüketir ve kara merdiveninin tamamı bu eşleşmeden ibarettir: dört Kaliteli Demir Cevheri ile bir Mithril Maden Kazması, Toryum Maden Kazması'na dönüşür; sonra iki Glifçelik Külçesi, iki Kaliteli Toryum Cevheri ve o osmiyum kazması Arkanit Maden Kazması'nı verir. Balta ve orak serileri de kaliteli-artı-önceki-alet biçimini yineler: Kaliteli Kül Ağacı ve Kaliteli Yaşlıağaç Kütükleri, Kaliteli Altın Yaprak ve Kaliteli Güneş Yaprağı Otları; ama onların kademe 5 basamakları hiç Glifçelik Külçesi istemez: tepede pahalılaşan tek seri kazmadır. İki olta tarifi kalıbı bilerek kırar: Fırtına Makaralı Olta dört Günışıltısı Sazan ile bir Gümüş dere oltası ister, Gelgit Dövmeli Olta ise iki Sazan, sekiz Çiğ Slatefin Sazanı ve o Fırtına Makaralı Olta'yı; yani oltacı merdiveninin tepesi bir damarda değil, suyun üstünde ödenir.\n\nKaliteli malzeme hiçbir yerde satılmaz ve sıradan bir hasattan düşmez: onu, bir bölgenin tam dereceli damarlarından birini malzemenin kendisinden üst sıradaki bir aletle işleyerek elde edersiniz; pratikte bu, yapmaya çalıştığınız aletin bir kademe altındaki alet demektir (bir bölgenin yolcular için tuttuğu kolay damarlar, ne sallarsanız sallayın düz malzemeyi verir). Bu kasıtlıdır. Zanaat rotasında kademe 5 bir alet, bir alışveriş gezisinden değil, kademe 4 aleti gerçekten sallamaktan gelir; Mağara Nişanı tezgahı bunun etrafından dolanmanın tek yoludur. Tek istisna, işlenmiş ve yalnızca satıcıdan alınan Glifçelik Külçesi'dir: Highwatch'taki Donatım Subayı Bree'den ya da Gizzel'in kendi tezgahından külçesi 1 gümüş 60 bakır; bu yüzden maliyetine gömülü sabit bir para tabanı taşıyan tek alet Arkanit Maden Kazması'dır.",
+          "materialsBody": "Her alet tarifi, bir kademe altındaki aleti artı bir premium malzeme tüketir: dört Osmiyum Cevheri ve bir Gökcümüş Maden Kazması Osmiyum Maden Kazması'na dönüşür; ardından iki Glifçelik Çubuğu ve o osmiyum kazma Glifçelik Maden Kazması'na dönüşür; balta ve orak serileri de Meşeağacı ve Yüksekçam Tomrukları, Parlakyaprak ve Güneşyaprak Bitkileriyle aynı şekli yansıtır.\n\nGizzel, hız marjın üzerindeyse tüm altı premium bileşeni alet atölyesinde stoklar; ancak cevher, tomruk ve bitkiler Mirefen Bataklığı'nda ve Dikenzirve Yüksekliklerinde toplanabilir ve toplanmış stok kârın yaşadığı yerdir. Tek istisna, yalnızca satıcıdan alınan Glifçelik Çubuğu'dur; bu yüzden her glifçelik kademeli alet, maliyetine gömülü sabit bir sikke tabanı taşır.",
           "ladderHeading": "Alet merdiveni",
-          "ladderBody": "Merdiven sekiz tariftir ve hepsi alet atölyesi istasyonuna bağlıdır. Altı kara aleti tarifi kendiliğinden bilinir, hiçbir zaman eğitmen ücreti yoktur: beceri 75'te kademe 4 kazma, balta ve orak; beceri 150'de ise kademe 5 sürümleri. O ikinci sayı yazım hatası değildir ve mevcut 125 tavanının üstünde bilerek durur: burada beceri gereksinimleri bir üretimin önünü asla kesmez, yalnızca beceri kazanımını biçimlendirir; yani kademe 5 bir aleti, bileşenlerini ve kademe 4 selefini elinizde tuttuğunuz gün yapabilirsiniz. Üretilen iki olta öğretilen istisnadır: Gizzel, Fırtına Makaralı Olta'yı beceri 75'te 4 altına, Gelgit Dövmeli Olta'yı ise beceri 125'te 16 altına öğretir; her birini, zanaattaki kademeniz kendi kademesine ulaştığı anda.\n\nBitmiş her alet nadir ya da destansı kalitededir ve imzalı çıkar; yani adınız başka oyuncuların alet kemerlerinde bölge bölge dolaşır. Mühendislik ayrıca bir kombinasyon tarifinin yarısını taşır: hem Mühendisliği hem Simyası 25 olan uyumlu bir Bombacının karıştırdığı Ayı İksiri.",
+          "ladderBody": "Merdivenin tamamı altı tariften oluşur; hepsi alet atölyesi istasyonuna bağlıdır ve hepsi otomatik olarak bilinir, hiçbir zaman eğitmen ücreti gerekmez: beceri 75'te kademe 4 kazma, balta ve orak; beceri 150'de kademe 5 versiyonları. Bu ikinci sayı yazım hatası değildir ve 125 tavanının kasıtlı olarak üzerindedir: beceri gereksinimleri burada hiçbir zaman bir zanaat kilitlemez; yalnızca beceri kazanımını şekillendirir; bu yüzden bileşenlerini ve kademe 4 selefini elinizde tuttuğunuz gün bir kademe 5 alet inşa edebilirsiniz.\n\nHer bitmiş alet nadir ya da destansı kalitede olur ve imzalı çıkar; böylece adınız diğer oyuncuların alet kememerlerinde bölgelerde yolculuk eder. Mühendislik ayrıca bir kombinasyon tarifinin yarısını tutar: Ayı Eksiri, her ikisi de beceri 25'te olan Mühendislik ve Simya ile uyumlu bir Bombacı tarafından üretilir.",
           "routeHeading": "Bir mühendisçinin 125'e giden yolu",
           "routeBody": "Aletlerin savaş istatistiği yoktur, bu yüzden hiçbir zaman şaheser üretmezler; bu ihtimal istatistik taşıyan teçhizata aittir. Uzmanlaşma yine de beceri 75'te gelir: zanaat başına yüzde yirmi daha az malzeme ve her toplayıcılık gezisini bir atölyeye dönüştüren geçici bir alan atölyesi. Kazanım matematiği burada neredeyse solmaz: beceri 75 tarifleri 100'e kadar tam kazanım sağlar, sonrasında yarısı; beceri 150 tarifleri ise 125 tavanına kadar tam kazanım sağlar; bu yüzden gerçek kısıt, gri tarifler değil, bileşenler ve sikke.\n\nÖnce çiftinizi seçin, çünkü onsuz hiçbir şey hareket etmez: Tamirci Gizzel'den Bombacı uyumunu alın. Ardından merdiveni besleyin: Madencilik, Tomruk Kesimi veya Bitkicilik öğrenin ya da toplayıcılarla arkadaş olun, kademe 3 aletleri satıcılardan alın ve Gizzel'in iş siparişini (30 dakikada bir tekrarlanabilir, sekiz Demir Kabuk Tomruğu için 16 bakır) yürüyüş parası olarak değerlendirin.\n\nMühendislik, her bitmiş alet başına yaklaşık bir beceri puanı olan düşük hacimli bir prestij zanaatidir; bu yüzden her üretimi satış için stok olarak değerlendirin. Müşterilerinize yapacağınız satış konuşması kendi kendine yazar: bir düğümün kendi kademesinin üzerindeki her alet kademesi 2,5 saniyelik toplama yayından 0,4 saniye (1,5 saniyelik tabana kadar) düşürür; dolayısıyla kademe 5 alet dünyada her düğümde bir hız yükseltmesidir ve yalnızca siz yapabilirsiniz. Yiğitlikler Kitabı beceri 50'de Dişliler ve Makaralar'ı; Şaheser Mühendislik'i ise 125'te işaretler."
         },
         "enchanting": {
           "identityHeading": "Teçhizatı parçala, gücü geri koy",
-          "identityBody": "Her büyü başından beri bilinir, herkes daha ilk gün büyü bozabilir ve ikisi de asla istasyon istemez; beceri, her zanaat gibi 125'te tavan yapar. Mesleğin öğretilen tek köşesi iki tılsım tarifidir: Tamirci Gizzel, Doğudere Meydanı'nın güneybatı köşesindeki alet atölyesinde Toplayıcının Zulası'nı ve Zanaatkârın Gözü'nü, Büyülemeniz 25'e ulaştığında olağan kademe ücreti karşılığında öğretir; tılsımların kendisi de onun istasyonunda işlenir.\n\nHalkada Hat Sanatı ile Mücevher İşleme arasında durur; dolayısıyla iki çift kimliği Gizemci (Hat Sanatı ve Büyüleme) ile Mücevher Bağlayıcı'dır (Büyüleme ve Mücevher İşleme). İki komşu da ilk tariflerini beklediğinden henüz hiçbirine yemin edilemez; bu yüzden bugün Büyüleme herkesin zanaatı olarak tırmanır: herhangi bir yeminden önce nadir kademeye kadar serbesttir ve bir Bombacı ya da Eczacı için doğal bir hobi seçimidir. Büyüleyiciler toplama dünyasını da ayakta tutar: yuvaya takılabilen iki alet etkisi Büyüleyici işidir ve bir etkinin asıl üreticisi kendi etkilerini indirimli yeniden doldurur, uzmanlaştığında daha da ucuza.",
+          "identityBody": "İstasyon yoktur, eğitmen yoktur ve satın alınacak tarif listesi yoktur: her büyü baştan bilinir, herkes birinci günden itibaren büyü bozabilir ve beceri her zanaat gibi 125'te sınırlanır.\n\nTekerekte Hat Sanatı ile Mücevher İşleme arasında durur; bu yüzden iki çift kimliği vardır: Gizemci (Hat Sanatı ve Büyüleme) ve Mücevher Bağlayıcı (Büyüleme ve Mücevher İşleme). Her iki komşu da ilk tariflerini beklerken şimdilik ikisi de yemin edilemez; dolayısıyla bugün Büyüleme herkesin zanaatı olarak yükselir: herhangi bir yemin öncesinde nadir kademeye kadar ücretsiz ve bir Bombacı ya da Eczacı için doğal bir hobi seçimi. Büyücüler ayrıca toplayıcılık dünyasını da çalışır tutar: üç yuvalı alet efektleri Büyücü işidir ve özgün bir üretici kendi efektlerini indirimli olarak yeniden şarj eder; uzmanlaşıldığında daha da derin.",
           "levelingHeading": "Büyüleme nasıl seviye kazanır",
-          "levelingBody": "Beceriyi üç eylem hareket ettirir: bir parçayı büyü bozumuna sokmak, bir büyü uygulamak ve olağan üretim eğrisini tırmanan iki tılsımı üretmek. Her başarı en fazla bir puan değerindedir ve işin ne kadar ciddi olduğuna göre ölçeklenir: bozduğunuz parçanın nadirliği ya da uyguladığınız büyünün bileşen kademesi. Sıradan bozumlar ve yalnızca toz isteyen büyüler sıradan iş sayılır; sıradan dışı bozumlar ile öz büyüleri sıradan dışı; nadir bozumlar ile her Runlu ya da Daha İyi büyü nadir sayılır; destansı ve efsanevi bozumlar tabloda daha da yüksekte durur, ama bugün hiçbir büyüleme kimliği nadir kademenin ötesine geçmediğinden pratikte nadir iş kadar öderler. Bozma tezgahında tek bir dürüstlük kuralı geçerlidir: bir oyuncu tezgahından çıkmış bir parça (üretilmiş, imzalı ya da şaheser) yine malzemeye öğütülür ama hiçbir şey öğretmez; yani üret-ve-boz döngüsü kimseyi yükseltmez, dersler dünyada bulunan teçhizattadır.\n\nTanıdık ustalık solması 25 puanlık kademelerde işler: sıradan kalitedeki iş beceri 75'te griye döner, sıradan dışı iş 100'de ve nadir kademedeki iş tam olarak 125 tavanında. Büyüleme'nin kendine özgü bir iyiliği de vardır: arketip tavanınızın üstündeki girdi sıfırlanmak yerine o tavana yuvarlanır; yani uyum sağlamadan önce destansı bir bozum hiçbir şey öğretmemek yerine yalnızca nadir iş olarak sayılır. Büyüleme başka bir kimliğin arkasında uykuda kalırsa, bozma ve uygulama sıradan iş sayılır ve tırmanış 75'te durur; sıradan tavanın üstündeki üretim eğrisine binen iki tılsım ise uykuda bir büyüleyiciye hiçbir şey öğretmez. Onu hobiniz olarak tutun, nadir kademedeki iş yine öder, sadece 75'ten sonra daha yavaş.",
+          "levelingBody": "İki eylem beceriyi hareket ettirir: bir parça büyüsünü bozmak ve büyü uygulamak. Her başarı, işin ciddiyetine göre ölçeklenen en fazla bir puana değer: kırdığınız parçanın nadirliği veya uyguladığınız büyünün bileşen kademesi. Sıradan büyü bozmaları ve yalnızca toz içeren büyüler sıradan iş olarak sayılır; sıradan dışı büyü bozmaları ve öz büyüler sıradan dışı olarak; nadir büyü bozmaları ve her Runeli veya Gelişmiş büyü nadir olarak; destansı ve efsanevi büyü bozmaları daha da yüksek olarak sayılır.\n\nTanıdık ustalık solması 25 puanlı kademelerde uygulanır; sıradan kalite iş beceri 75'te griye döner, sıradan dışı iş 100'de ve nadir kademeli iş tam olarak 125 tavanında. Büyülemenin kendine özgü bir lütfu da vardır: arketip tavanınızın üzerindeki girdi sıfırlanmak yerine o tavana yuvarlanır; dolayısıyla uyum sağlamadan önce destansı bir büyü bozma yalnızca nadir olarak sayılır, hiçbir şey öğretmez demez. Büyüleme başka bir kimliğin ardında eylemsiz kalırsa, her şey sıradan iş olarak sayılır ve tırmanış 75'te durakslar; hobi olarak tutarsanız nadir kademeli iş yine öder, sadece 75 sonrasında daha yavaş.",
           "marketHeading": "Büyülenmiş kopyalar, köken ve pazar",
-          "marketBody": "Bir büyü uygulamak bileşenleri harcar ve eşyanın belirli bir kopyasını işaretler. Onu çantadaki bir kopyaya yöneltirseniz ayrı bir büyülü kopya alırsınız; zaten üzerinizde taşıdığınız bir parçaya yöneltirseniz parça yerinde, tam durduğu yerde büyülenir, çıkar-tak dansı olmadan. Her iki durumda da bonus o parçayı sonsuza dek izler: kuşanmayı bıraktığınızda, banka yolculuklarında ve ticaretlerde. Parça başına tek büyü: büyülü bir kopyaya farklı bir büyü uygulamak önce onay ister, sonra eski büyüyü tümüyle değiştirir ve malzemelerini geri vermeden yok eder. Satma, atma ve büyü bozumu her zaman önce düz kopyaları seçer; böylece bitmiş parçanız kazara yenip yutulmaz.\n\nŞaheser teçhizat ile büyüleme dosttur: şaheser bir parça tümüyle büyülenebilir kalır ve büyü, şaheser bonusunu ya da usta imzasını bozmadan onun üstüne eklenir. Bütün kaynaklar üst üste konduğunda, Daha İyi bir büyü taşıyan imzalı bir şaheser, üretilmiş bir parçanın ulaşabileceği en iyi haldir ve yine de tasarım gereği akın ganimetinin altında durur.\n\nPazarda, büyülü ya da imzalı bir parça diğer her şey gibi ilan edilir: kendi tek kopyalık ilanı olarak yayınlanır, ipucu kutusu büyüyü ve usta imzasını gösterir ve Kuzgun Postası onu aynı sadakatle taşır. Malzemeler zanaatın istikrarlı yarısı olmayı sürdürür: Toz, Öz ve Kıymıklar serbestçe ilan edilir, ilan vermek hiçbir şeye mal olmaz ve Tüccar yalnızca tamamlanan bir satıştan yüzde 5 alır. Klasik iki büyüleyici gelirini doğuran şey de budur: malzeme satmak ve bitmiş iş satmak; pazar üzerinden, kuzgunla ya da bir ticaret penceresinde yüz yüze."
+          "marketBody": "Bir büyü uygulamak bileşenleri tüketir ve eşyanın belirli bir kopyasını işaretler. Çantadaki bir kopyaya uygularsanız ayrı bir büyülenmiş kopya alırsınız; zaten takılı bir parçaya uygularsanız parça yerinde büyülenir, çıkarıp yeniden takmak gerekmez. Her iki durumda da bonus o parçayı çıkarmalar, banka gezileri ve takaslar boyunca sonsuza kadar izler. Parça başına bir büyü: büyülenmiş bir kopyaya farklı bir büyü uygulamak önce onay ister, sonra eski büyüyü doğrudan değiştirir; eski büyü, malzemeleri iade edilmeden yok edilir. Satmak, atmak ve büyü bozmak sade kopyaları önce tercih eder, bu yüzden bitmiş parçanız kazara yutulmaz. Aynı şekilde büyülenmiş kopyalar hatta çantalarınızda bir arada yığılabilir.\n\nŞaheser teçhizat ve büyüleme dosttur: şaheser bir parça tamamen büyülenebilir kalır ve büyü, şaheser bonusunu veya yapımcının imzasını bozmadan üstüne eklenir. Her kaynağı yığarak, Gelişmiş büyü taşıyan imzalı bir şaheser, üretilmiş bir parçanın ulaşabileceği en iyisidir; ve yine de tasarım gereği akın ganimetinin altında kalır.\n\nPazarda Dünya Pazarı yalnızca sade, değiştirilmemiş stoğu aracılık eder; bu yüzden büyülenmiş ve imzalı parçalar takas penceresi aracılığıyla yüz yüze el değiştirir. Malzemeler zanaatın pazarlanabilir yarısıdır: Toz, Öz ve Parçalar serbestçe listelenir, listeleme ücretsizdir ve Satıcı yalnızca tamamlanan satışın yüzde 5'ini alır. Bu, iki klasik büyücü gelirini oluşturur: pazarda malzeme satmak ve bir müşterinin parçasını takasla alıp büyüleyerek geri vermek."
         }
       },
       "howHeading": "Üretim nasıl çalışır",
-      "howBody": "Üretim penceresini açın (varsayılan tuş T); bildiğiniz her tarif, neye ihtiyaç duyduğu ve elinizde ne olduğuyla birlikte listelenir. İstasyona bağlı tarifler kasabada doğru istasyonun 20 yarda yakınında durmanızı ister, alan tarifleri her yerde üretilir ve Büyüleme'nin bozma ile büyüleme işleri hiçbir istasyon istemez (yalnızca iki tılsım tarifi istasyon işidir, alet atölyesinde). Başarısızlık zarı yoktur: malzemesi elde olan bir üretim her zaman başarılı olur.\n\nİki küçük sürtünme ekonomiyi dürüst tutar. Başarılı her üretim, eşyanın istatistik bütçesinin her puanı için 2 bakırlık bir ücret öder ve zanaat türü eylemler tek bir tempoyu paylaşır: her 60 saniyelik pencerede en fazla 10 üretim, büyü bozumu, büyüleme, hurda toplama veya alet yeniden dolumu. İkisi de normal bir oturumu rahatsız etmez; ikisi birden becerisi tavan yapmış bir uzmanın pazarı boğmasını engeller.",
+      "howBody": "Zanaat penceresini aç (varsayılan tuş T) ve bildiğin her tarifin ne gerektirdiği ve elinde ne olduğuyla birlikte listelendiğini görürsün. İstasyona bağlı tarifler kasabadaki doğru istasyonun 20 yardası içinde durmanı gerektirir, saha tarifleri her yerde yapılabilir ve Büyüleme için hiçbir istasyon gerekmez. Başarısızlık zarı yoktur: elinde malzemeler varken bir tarif her zaman başarılı olur.\n\nEkonomiyi dürüst tutan iki küçük sürtünme var. Her başarılı üretim, eşyanın istatistik bütçesinin her puanı için 2 bakır ücret öder ve üretim türü eylemler bir hızı paylaşır: herhangi bir 60 saniyede en fazla 10 üretim, parçalama, büyü yazımı veya hurda işlemi yapılabilir. İkisi de normal bir oturumu rahatsız etmez; her ikisi de maksimum uzmanın piyasayı doldurmasını engeller.",
       "recipesHeading": "Tarifler",
       "recipesNote": "Mesleğin her tarifi: tam beceri gereksinimi ve malzemeleri, nerede ve hangi ücretle öğrenildiği ve kazanımın yarıya, çeyreğe ve sıfıra düştüğü üç beceri değeri.",
       "masteryHeading": "Beceri kazanımı",
       "masteryBody": "Penceredeki her tarif, kazanım durumunu klasik renklerde taşır: turuncu tam kazanım anlamına gelir, sarı yarım, yeşil çeyrek, gri hiç. Sınırlar kesindir, her {step} beceri bir kademedir ve bir tarif seninkinin altındaki her kademe için bir renk solar.\n\nKazanımlar belirlenimci olduğundan (tam kazanımlı bir üretim seni tam olarak bir puan hareket ettirir), listeden tüm tırmanışı planlayabilirsin: bir basamak turuncu iken çalış, sarıya dönerken bir sonraki basamağı eğit ve gri bir tariften ilerleme bekleyerek malzeme harcama. {cap} tavanında sayı durur ama tarifler, şaheser şansı ve karlar çalışmaya devam eder.",
       "masterworkHeading": "Şaheserler",
-      "masterworkBody": "Başarılı her üretim tam olarak tarifin vaat ettiği şeydir, bazen de biraz fazlası: bir şaheser, aynı parçayı bir kalite kademesi daha ince bitirir ve bonus istatistikler üretim anında içine işlenir. Yalnızca ekler, asla düşürmez ve akın zemininin altında kalır; böylece üretilmiş teçhizat, bir akın ganimetinin yerini almadan mükemmel olabilir.\n\nŞans yayımlanmıştır, mistik değil: {base}% temel, becerinizin tarifin üzerinde oturduğu her kademe için {perTier}%, imzalı herhangi bir bileşen girdiğinde {signed}%, uzmanlaştığınızda ise {spec}%; daha yüksek kademeli malzemeler 1 ila 2% daha ekler ve hepsi {cap}% ile sınırlıdır. Yalnızca gerçek istatistiği olan bir parça iyileşebilir, dolayısıyla istatistiksiz sıradanlar, aletler ve tüketim maddeleri asla tetiklenmez; uykudaki bir zanaat hiç şaheser üretmez ve bir hobi zanaatı nadir tavanının ötesinde şaheser çıkaramaz.\n\nİyi iş, ustasını taşır. Nadir ve üzeri çıktılar imzalıdır, hem de her kopyası: üzerinde hazırlayanın adı yazar, toplanan malzemeler ise toplayanın adını taşır; bir şaheser ise kalitesi ne olursa olsun her zaman imzalıdır. İmza bir kökendir, bir kilit değil: imzalı mallar serbestçe takas edilir, postalanır ve Dünya Pazarı'nda ilan edilir.",
+      "masterworkBody": "Her başarılı üretim tam olarak tarifin vaat ettiğini çıkarır ve bazen biraz daha fazlasını: bir şaheser, aynı parçayı üretim anında dahil edilen bonus istatistiklerle bir kalite kademesi daha iyi bitirir. Yalnızca eklemedir, asla düşürme değil ve baskın teçhizat tavanının altında kalır; bu nedenle üretilmiş teçhizat mükemmel olabilir ama bir baskın düşüşünün yerini alamaz.\n\nŞans yayınlanmıştır, gizemli değil: {base}% temel, becerin tarifin üzerinde her kademe için {perTier}% artı, imzalı herhangi bir hammadde girdiğinde {signed}% artı, uzmanlaştıktan sonra {spec}% artı; daha yüksek kademeli malzemeler 1'den 2%'ye kadar ekler ve hepsi {cap}%'de sınırlanır. Yalnızca gerçek istatistiklere sahip bir parça gelişebilir; bu nedenle istatistiksiz sıradan eşyalar, aletler ve sarf malzemeleri asla oluşmaz; uyumsuz üretim hiçbir zaman bunu üretmez ve hobi üretimi nadir tavanını aşarak şaheser yapamaz.\n\nİyi iş yapıcısını taşır. Nadir ve daha iyi tek kopya çıktılar imzalıdır (Üretici: ...; toplanan malzemeler Toplayıcı: ... taşır), bir şaheser kalitesi ne olursa olsun her zaman imzalıdır ve aynı şekilde imzalanmış parçalar yine de istiflenebilir. İmza kökendir, kilit değil: imzalı mallar serbestçe takas edilir.",
       "trainingHeading": "Eğitim",
-      "trainingBody": "Eğitmen tarifleri yerleşik ustalardan gelir ve kendi istasyonlarında öğretilir. Kural tek satırdır: bir usta, zanaattaki kademeniz tarifin kendi kademesine ulaştığında o tarifi öğretir ve başka hiçbir şey buna kapı koymaz, ne seviyeniz ne de arketipiniz. Teçhizat ve tüketim merdivenleri basamaklarını beceri 0, 25 ve 50'de işletir; Mühendislik'in iki olta dersi merdiveni 75 ve 125'te sürdürür ve Büyüleme'nin iki tılsım tarifi 25 basamağında oturur, böylece kademeleriniz tırmandıkça yeni bir basamak açılır.\n\nÜcretler tek seferliktir ve basamağa göre sabittir: başlangıç basamağı ücretsizdir, beceri 25 basamağı tarif başına {tier1}, beceri 50 basamağı {tier2} tutar; üzerlerindeki olta dersleri ise tabloda her tarifin yanında listelenen kendi ücretlerini taşır. Eğitim almak için ustanın gerçek istasyonunda durmanız gerekir, mobil istasyon asla sayılmaz. Sıradan alan tarifleri ile altı üretilebilir kara aleti tarifi hiç eğitim gerektirmez; her karakter onları başından beri bilir.",
+      "trainingBody": "Eğitmen tarifler, istasyonlarında öğreten sakin ustalardan gelir. Kural tek satırdır: bir usta, zanaattaki kademin tarifin kendi kademesine ulaştığında bir tarif öğretir; başka hiçbir şey onu engellemez, ne seviye ne arketip. Eğitmen merdiveni bugün 0, 25 ve 50 becerisinde durur; bu nedenle tırmandığın her kademeyle yeni bir basamak açılır.\n\nÜcretler tek seferlik ve basamağa göre sabittir: başlangıç basamağı ücretsiz, 25 beceri basamağı tarif başına {tier1}, 50 beceri basamağı {tier2} öder. Eğitmek için ustanın gerçek istasyonunda durman gerekir ve mobil bir istasyon hiçbir zaman geçerli sayılmaz. Ortak saha tarifleri ve alet tarifleri hiç eğitim gerektirmez; her karakter onları başlangıçtan bilir.",
       "specializationHeading": "Uzmanlaşma",
       "specializationBody": "Bu zanaat {at} becerisinde seni uzmanlaştırır, görev gerekmez: tarifler o andan itibaren {pct}% daha az malzeme gerektirir ve uzmanlaşma şaheser şansına kendi artışını ekler.\n\nUzmanlar aynı zamanda atölyeyi yanlarında taşımayı öğrenir: uzmanlaşmış bir üretici bir seferde on dakikalığına sahaya mobil bir istasyon kurabilir; böylece istasyona bağlı tarifler kasabaya dönmek yerine maden ağzında çalışılabilir. Sınırları kasıtlıdır: bir usta yanında eğitim için veya sipariş edilmiş bir parçayı serbest bırakmak için hiçbir zaman geçerli sayılmaz ve zamanlayıcısında kullandığına bakılmaksızın sona erer.",
       "ench": {
@@ -4573,7 +4775,7 @@ export const tr_TR: EnTranslations = {
         "meleeWeapons": "Yakın dövüş silahları",
         "timberWeapons": "Asalar, değnekler, yaylar ve arbaletler",
         "enchantsHeading": "Büyüler",
-        "enchantsNote": "Büyüler üç kademede gelir. Temel kademe Çan Tozu ile çalışır (üst uçta biraz da Öz ister) ve silah yuvasının yanı sıra yardımcı el dışındaki her zırh yuvasını kapsar; istatistik eksenlerinde her yapının her yuva için bir şey bulacağı kadar seçenek vardır. Daha İyi kademe bir Çan Kırığı artı Öz'e mal olur: en çok fark yaratan yuvalarda daha güçlü bonuslar. Kırıklar bunların dışında iki rezerv daha besler, beşer taneden iki tılsım tarifi ve alet etkisi yeniden dolumlarının en üst basamağı; bu yüzden harcamadan önce birkaç tane biriktirin.\n\nİkisinin arasında beş Runlu büyü durur, her yazılan ikincil için bir tüketici; böylece öğüttüğünüz hiçbir şey çıkmaz sokak olmaz: Runlu Ağız (silah, Güç, Rezonant Çelik tüketir), Runlu Mühür (silah, Zeka, Rezonant Kereste), Runlu Doku (göğüslük, Ruh, Rezonant İplik), Runlu Post (bacaklar, Çeviklik, Rezonant Deri) ve Runlu Halkalar (miğfer, Dayanıklılık, Rezonant Halkalar). Her biri ayrıca iki Çan Özü ister; bir yuva ile istatistiğin hem temel hem Daha İyi büyüsünün bulunduğu yerde Runlu bonus tam ikisinin arasına düşer, buna karşılık Runlu Doku açık ara en güçlü göğüslük Ruh büyüsüdür ve Runlu Post bacaklar için var olan tek Çeviklik büyüsüdür. Kesin bonusların hepsi aşağıdaki tabloda.",
+        "enchantsNote": "Büyüler üç kademede gelir. Temel kademe Çan Tozu üzerinde çalışır (üst uçta biraz Öz ile) ve silah yuvasını artı her zırh yuvasını kapsar; her derleme her yuva için bir şey bulacak kadar çok istatistik ekseni seçeneğiyle. Daha İyi kademe bir Çan Kırığı artı Öz maliyeti gerektirir ve Kırıkların tek kullanım amacı budur: en yüksek etkili yuvalarda daha güçlü bonuslar.\n\nAralarında beş Runlu büyü oturur, yazılan ikincil başına bir tüketici, böylece öğüttüğünüz hiçbir şey asla çıkmaz: Runlu Kenar (silah, Güç, Rezonant Çelik tüketir), Runlu Odak (silah, Zeka, Rezonant Kereste), Runörgü (göğüs, Ruh, Rezonant İplik), Runlu Deri (bacaklar, Çeviklik, Rezonant Deri) ve Runlu Halkalar (miğfer, Dayanıklılık, Rezonant Halkalar). Her biri aynı zamanda iki Çan Özü alır ve güçte temel ile Daha İyi kardeşleri arasında konumlanır; tam bonuslar aşağıdaki tablodadır.",
         "colEnchant": "Büyü",
         "colSlot": "Yuva",
         "colTier": "Kademe",
@@ -4588,62 +4790,62 @@ export const tr_TR: EnTranslations = {
         "bonusFmt": "+{value} {stat}"
       },
       "gatherIntro": {
-        "mining": "Madencilik cevheri doğrudan dünyanın kayasından söker: Doğudere Vadisi'nde bakır, Mirefen Bataklığı'nda demir ve yukarıda Dikenzirve Tepeleri'nde osmiyum; bunların ötesindeki her genç bölgeye de başlangıç damarları serpiştirilmiştir ve hepsi ocak zanaatlarını besler. 1. seviyeden itibaren herkese açıktır: Doğudere, Fenbridge ya da Highwatch tezgahından alınan 20 bakırlık bir madenci kazması her başlangıç damarını açar, kazma merdiveninin üst basamakları ise kendi sayacınız onları hak ettikçe uyanır. 100 tavanına kadar kendi sayacında izlenir.",
-        "logging": "Odun Kesimi tüm dünyaya yayılmış ağaç kümelerinden kereste devirir: Doğudere Vadisi'nde demirkabuk, Mirefen Bataklığı'nda kül ağacı, Dikenzirve Tepeleri'nde yüksekçam ve her genç bölgede başlangıç kümeleri; saplar, asalar ve mühendisin tezgahı için ham stok. Çantanızda bir oduncu baltası varsa 1. seviyeden itibaren herkese açıktır (Doğudere, Fenbridge ve Highwatch tezgahlarında 20 bakır) ve 100 tavanına kadar kendi sayacında izlenir.",
-        "herbalism": "Bitkicilik yabanda yetişeni toplar: Doğudere Vadisi'nde parlakyaprak, Mirefen Bataklığı'nda altın yaprak, Dikenzirve Tepeleri'nde güneşyaprağı ve her genç bölgede başlangıç öbekleri; eczacılık mesleklerinin kazanını kaynatan yaprak ve sap. Çantanızda bir bitkicilik orağı varsa 1. seviyeden itibaren herkese açıktır (Doğudere, Fenbridge ve Highwatch tezgahlarında 20 bakır) ve 100 tavanına kadar kendi sayacında izlenir.",
-        "fishing": "Balıkçılık, toplama meslekleri arasında kuralın dışında kalanı ve en derinidir: gerçek bir ısır-ve-çek mini oyunu, üç ana bölgenin her birinde kendine ait av tabloları (bunların ötesindeki genç sular şimdilik hep Vadi'nin tablosunu sunar) ve diğerlerinin iki katı olan 200'lük bir yetkinlik tavanı. Bir olta alın, açık suya dönün ve oltayı atın."
+        "mining": "Madencilik cevheri doğrudan dünyanın kayasından çıkarır: Doğudere Vadisi'nde bakır, Mirefen Bataklığı'nda demir ve Dikenzirve Tepeleri'nde osmiyum; ocak zanaat dallarını besler. 1. seviyeden itibaren herkese açık: tek gereken çantanda bir madenci kazması, her bölge merkezinde 20 bakır. 100 tavanına kadar kendi sayacında takip edilir.",
+        "logging": "Odun Kesimi her üç bölgedeki ağaç kümelerinden kereste keser: Doğudere Vadisi'nde demir kabuklular, Mirefen Bataklığı'nda dişbudak ve Dikenzirve Tepeleri'nde yüksekçam; sap, asa ve mühendis tezgahı için ham malzeme. Çantanda bir oduncu baltasıyla (her bölge merkezinde 20 bakır) 1. seviyeden itibaren herkese açık, 100 tavanına kadar kendi sayacında takip edilir.",
+        "herbalism": "Otçuluk doğada yetişenleri toplar: Doğudere Vadisi'nde parlakyaprak, Mirefen Bataklığı'nda altın yaprak ve Dikenzirve Tepeleri'nde güneş yaprağı; eczane mesleklerini kaynatan yaprak ve sap. Çantanda bir otçu orağıyla (her bölge merkezinde 20 bakır) 1. seviyeden itibaren herkese açık, 100 tavanına kadar kendi sayacında takip edilir.",
+        "fishing": "Balık Tutma, toplama meslekleri arasında en sıra dışı ve en derin olanıdır: gerçek bir balık tutma ve çekme minigame'i, her bölgede kendine özgü av tabloları ve diğerlerinin iki katı olan 200 yetkinlik tavanı. Bir olta al, açık suyun önünde dur ve at."
       },
       "rhythmHeading": "Toplama ritmi",
-      "rhythmBody": "Bir hasat, anında bir kapış değil kısa ve görünür bir toplama yayıdır: temelde {base} saniye, asla {floor} saniyelik tabanın altına inmez. Düğümün kademesinin üzerinde, yetkinliğinizin kullanmanıza izin verdiği bir alet taşımak sizi üstündeki her kademe için {tool} saniye hızlandırır ve geçtiğiniz her yetkinlik bandı {band} saniye daha kırpar; düğümün kademesini yalnızca tutturmak sizi kapıdan içeri sokar, hızlı yapan ise onun üzerindeki kademelerdir.\n\nDolu bir çanta, toplama yayını daha başlamadan kibarca reddeder, böylece darbenin ortasında hiçbir şey ziyan olmaz; ayrıca her hasat küçük bir dilim karakter XP'si öder, tıpkı öldürme XP'sinin ölçeklendiği gibi düğümün seviyesi sizinkine göre ölçeklenir: önemsiz, gri bir düğüm tavana ulaşmış bir karaktere hiçbir şey öğretmez.",
-      "gainBody": "Kazanım belirlenimcidir, asla bir beceri artışı zarı değil: kazanım kademenizde ya da üzerinde olan bir düğüm hasat başına tam bir puan öğretir ve her {step} yetkinlik, düğüme karşı puanlanan bir kademedir. Kademe 1 düğümler 25'in altında tam öder, 49'a kadar yarım, 74'e kadar çeyrek ve 75'ten itibaren hiç; kademe 2 düğümler 49'a kadar tam öder; her mesleğin iki kademe 3 düğümü ise 74'e kadar tam ve {cap} tavanına kadar da yarım öder.\n\nAmaçlanan yol açıktır: Vadi'nin başlangıç düğümlerinde öğrenin, bataklığa geçin ve tırmanışı Dikenzirve Tepeleri'nin yüksek arazisinde tamamlayın. Tavanda öğrenme durur ama verim durmaz: tavana ulaşmış bir toplayıcı, mesleğin sunduğu en iyi olasılıkları sonsuza dek çekmeye devam eder.",
+      "rhythmBody": "Bir hasat, anlık bir kapmak değil, kısa görünür bir çekim süresidir: temel {base} saniye, asla {floor} saniye tabanının altına düşmez. Düğümün kademesinin üzerinde bir alete sahip olmak, onun üzerindeki her kademe için seni {tool} saniye hızlandırır ve geçtiğin her yetkinlik bandı {band} saniye daha kısar; düğümün kademesini eşlemek seni kapıya alır, onu aşan kademeler seni hızlandırandır.\n\nDolu bir çanta, çekim başlamadan nazikçe reddeder; böylece ortada hiçbir şey boşa gitmez ve her hasat, öldürme XP'sinin ölçeklendiği gibi, düğümün seviyesini kendi seviyene karşı ölçerek küçük bir karakter XP'si öder: önemsiz gri bir düğüm tavana ulaşmış bir karaktere hiçbir şey öğretmez.",
+      "gainBody": "Kazanım belirlenimcidir, asla bir beceri artışı zarı değildir: yetkinlik kademende veya üzerinde bir düğüm her hasat başına tam bir puan öğretir ve her {step} yetkinlik, düğüme karşı puanlanan bir kademedir. Kademe 1 düğümler 25 altında tam, 49'a kadar yarım, 74'e kadar çeyrek ve 75'ten sonra sıfır öder; kademe 2 düğümler 49'a kadar tam öder; tek kademe 3 düğüm 74'e kadar tam ve {cap} tavanına kadar yarım öder.\n\nHedeflenen yol açıktır: Vadi'nin başlangıç düğümlerinde öğren, bataklığa geç ve Dikenzirve Yaylası'nın yüksek arazisinde tırmanışı tamamla. Tavanda öğrenme durur ama verimler durmaz: tavana ulaşmış bir toplayıcı sonsuza kadar maksimum kaliteli malzeme çekmeye devam eder.",
       "nodesHeading": "Bölgeye göre düğümler",
       "nodesNote": "Düğümlerin nerede olduğu, kademeleri, hangi aleti gerektirdikleri ve ne verdikleri. Her düğüm, kendi hasatının {respawn} saniye sonra senin için yeniden oluşur; bu zamanlayıcı yalnızca senindir: aynı düğümde çalışan başka bir toplayıcı seni asla geciktirmez, bu yüzden düğüm yarışması ve bekleme yoktur. Merdivende yukarı çıkan her bölge, daha sert araziden daha iyi malzeme çıkarır.",
       "toolsHeading": "Aletler",
-      "toolsNote": "Her düğüm, mesleğinin aletini çantanızda ister, kademe 1 dahil: kazma yoksa cevher de yok, olta yoksa balık da yok. Satıcı merdiveni üç ana kasaba merkezinde kademe 1'den 3'e kadar uzanır: kademe 1 alet üçünde birden satılır, üzerindeki basamaklar ise onları kullanan arazinin başladığı yerde (Fenbridge kademe 2'yi, Highwatch kademe 3'ü ekler); bunların ötesindeki genç yerleşimlerde hiç alet bulunmaz, o yüzden yola çıkmadan önce donanın. Her tezgah, stokladığı her basamağı serbestçe satar ve her alet doğrudan takasla el değiştirebilir; üç adet 20 bakırlık kara başlangıç aleti dışında her basamak Pazar'a da ilan edilir ve postayla yolculuk eder: bu üçü bir tezgahtan alınır ya da elden ele geçer, asla geri satılmaz, postalanmaz veya ilan edilmez. Kapıya konan şey, aleti kullanabilmektir. Kademe 1'in üzerindeki bir kara aleti ancak kendi mesleğindeki yetkinliğiniz onu hak ettiğinde çalışır: kademe 2 için {tier2Prof}, kademe 3 için {tier3Prof} ve iki üretilebilir basamak için 85 ile 100; satıcı satırı, ipucu balonu ve aşağıdaki tablo bu şartı baştan söyler. O ana kadar önden alınmış bir alet çantanızda öylece bekler, hiçbir arazi açmaz, hız satın almaz ve ince kalite basmaz, sonra sayacınız kendi sayısına dokunduğu an kullanılabilir hale gelir. Oltalar tek istisnadır: hiçbir olta kullanım şartı taşımaz ve Doğudere'deki Tüccar Wilkes, önden alışveriş yapan balıkçılar için kademe 2 ve kademe 3 oltalarını bilerek stoklar. Bir alet asla kuşanma yuvası kaplamaz ve asla yıpranmaz, dolayısıyla her biri tek seferlik bir alımdır; kapı için de yalnızca kademe önemlidir: aynı kademenin daha nadir bir aleti fazladan hiçbir şey açmaz. Yine de nadirlik sadece renkten ibaret değildir. Yuvalı bir alet etkisinin daha uzun sürmesini sağlar, oltada ise çekme penceresini genişletir.\n\nDaha iyi bir alet iki değil üç şey satın alır. Daha yüksek kademeli araziyi açar, toplama yayını kısaltır ve çıkanı iyileştirir: bir damarı, bölgenin kendi malzemesinin ÜZERİNDE derecelendirilmiş bir aletle işleyin, hasat sade olan yerine onun ince kalitesini verir. Damarın, bölgenin tam kaliteli damarlarından biri olması gerekir; yani bir bölgenin gezginler için tuttuğu kolay damarlar yine sıradan malzeme verir. Üretilebilir alet tarifleri ince malzemeleri tüketir ve bir tarif ya da iş emri sıradan bir malzeme istediği her yerde ince kalite onun yerine sayılır, dolayısıyla yükseltmek sizi asla açıkta bırakmaz: sadece bakır cevherinizin İnce Bakır Cevheri olarak gelmesi demektir.\n\nSatıcı merdiveninin üzerinde her mesleğin iki üretilebilir aleti vardır, kademe 4 ve kademe 5; bunlar alet atölyesinde yapılır (kara tariflerini her karakter bilir; iş için tırmanan beceri Mühendislik'inkidir) ya da temizleme kapıları karşılandığında Boğulmuş Litanya tezgahından Mağara Nişanı ile alınır: aşağıdaki tablo Nişan fiyatını ve her basamağın istediği temizleme sayısını taşır. Hiçbir tüccar bunları sikke karşılığı satmaz. Balıkçılığın kendi çifti vardır ve bunlar başından bilinmek yerine alet yapımcısından öğrenilir. Bugün hiçbir düğüm ve hiçbir su kademe 3'ten fazlasını istemez, dolayısıyla en üstteki iki basamak erişim yerine hız, kalite ve daha müşfik bir çekme penceresi satın alır; daha yüksek kademeli arazi geldiğinde ise giriş bileti onlar olacak.",
+      "toolsNote": "Every node needs its trade's tool in your bags, tier 1 included: no pick, no ore, and no pole, no fish. The vendor ladder covers tiers 1 to 3 across the three heartland hubs: the tier-1 tool is sold at all three, the rungs above it where the ground that uses them begins (Fenbridge adds tier 2, Highwatch tier 3), and the younger settlements beyond them stock no tools at all, so kit up before you travel. Every counter sells every rung it stocks freely, and any tool passes by direct trade; every rung also lists on the Market and travels by mail except the three 20-copper land starters: those are bought at a counter or passed hand to hand, and never sold back, mailed, or listed. What is gated is the wielding. A land tool above tier 1 works only once your proficiency in its own trade has earned it, {tier2Prof} for tier 2, {tier3Prof} for tier 3, and 85 and 100 for the two crafted rungs, and the vendor row, the tooltip, and the table below all name the requirement up front. Until then a tool bought ahead simply waits in your bags, opening no ground, buying no speed, and minting no fine grades, then wields the moment your counter touches its number. Fishing rods are the one exception: no rod carries a wield requirement, and Trader Wilkes in Eastbrook deliberately stocks the tier 2 and tier 3 rods for anglers buying ahead. A tool never occupies an equip slot and never wears out, so each is a one-time purchase, and only the tier matters to the gate: a rarer tool of the same tier opens nothing extra. Rarity is not only colour, though. It makes a slotted tool effect last longer, and on a rod it widens the reel window.\n\nA better tool buys three things, not two. It opens higher-tier ground, it shortens the cast, and it improves what comes out: work a vein with a tool ranked ABOVE the zone's own material and the harvest yields the fine grade of it instead of the plain one. The vein has to be one of the zone's full-grade ones, so the easier veins a zone keeps for travellers still yield the ordinary material. Fine materials are what the crafted tool recipes consume, and a fine grade counts as its ordinary version anywhere a recipe or a work order asks for one, so upgrading never strands you: it just means your copper ore arrives as Fine Copper Ore.\n\nAbove the vendor ladder each trade has two crafted tools, tier 4 and tier 5, made at the toolworks (every character knows the land recipes; the skill that climbs for the work is Engineering's), or bought with Delve Marks at the Drowned Litany counter once its clears gates are met: the table below carries the Marks price and the clears each rung asks. No merchant ever sells them for coin. Fishing has its own pair, and they are learned from the toolmaker rather than known from the start. No node and no water today needs more than tier 3, so the top two rungs buy speed, grade and a kinder reel window rather than access, and they will be the entry ticket when higher-tier ground arrives.",
       "toolCrafted": "Üretilmiş ({craft})",
       "toolCraftedOrMarks": "Üretilmiş ({craft}) ya da üç Boğulmuş Litanya temizlemesinden sonra {marks} Mağara Nişanı",
       "toolCraftedOrMarksHeroic": "Üretilmiş ({craft}) ya da bir Kahramanca Boğulmuş Litanya temizlemesinden sonra {marks} Mağara Nişanı",
       "toolVendor": "{name} ({hub})",
       "toolUnavailable": "Satılmaz",
-      "priceNone": "Sikke karşılığında satılmaz",
+      "priceNone": "Satılmaz",
       "toolTierReq": "Kademe {tier} alet",
       "colWield": "Kullanım eşiği",
       "wieldNone": "Fark etmez",
       "yieldsHeading": "Hasat ne verir",
       "yieldsBody": "Her hasat, verdiği şeyin kalitesini çalar ve yetkinliğin tüm hikayesidir bu. Yeni başlayan bir toplayıcı her zaman yaygın malzeme çıkarır; her beceri puanı ağırlığı istikrarlı bir şekilde yaygından daha yüksek kademelere taşır ve asla geri dönmez; 100 tavanında yaygın kademe tamamen ortadan kalkar: her seferinde yüzde 60 nadir dışı, yüzde 30 nadir, yüzde 8 epik ve yüzde 2 efsanevi.\n\nKalite aynı zamanda miktar anlamına da gelir: yaygın çekim 1 birim, nadir dışı ve nadir 2, epik 3 ve efsanevi 4 verir. Nadir, epik veya efsanevi her çekim, tarafından toplandı olarak damgalanmış imzalı bir örnek olarak gelir: tavanda on hasattan dördü adını taşır ve Zanaat Ekonomisi sayfasındaki provenance kuralları, üreticilerin tam olarak bu yığınlar için neden fazladan ödediğini açıklar.",
       "bandsHeading": "Yetkinlik bantları",
-      "bandsBody": "Yetkinlik bantları, bir mesleğin sayacı üzerine serilen ortak 0/100/200 merdivenidir. Kara meslekleri için 100'de geçilen bant toplama yayını kısaltır ve tavanları bant 1'i sınır yapar. Balıkçılığın bantları hiçbir şeyi kısaltmaz: av tablolarını seçerler (eşleşen bir oltayla birlikte), bant 2'ye yalnızca balıkçılık ulaşır ve bir oltacıyı daha derin sulara çeken şey tırmanışın kendisidir; daha iyi tablolar da, sonraki dersler de orada yaşar.",
+      "bandsBody": "Yetkinlik bantları, bir zanaat sayacında ortaklaşa kullanılan 0/100/200 basamağıdır: her geçtiğiniz bant toplama yayını kısaltır; balık tutmada bantlar aynı zamanda avlanma tablolarını da belirler (buna uygun bir olta ile birlikte). Kara zanaatleri 100'de sınırlanır, dolayısıyla bant 1 onların tavanıdır; yalnızca balık tutma bant 2'ye ulaşır.",
       "bandFmt": "Bant {band}: {at} yetkinlikten itibaren",
       "rareHeading": "Nadir bulgular",
       "rareBody": "Her hasat, yetkinliğiniz ne olursa olsun {oneIn} ihtimalinden 1'i nadir bir bulgu şansı taşır: cevherde bozulmamış bir damar, kerestede antik kalp odunu, otlar arasında mehtaplı bir çiçek. Bulgu o hasatın verimini {mult} kat çarpar, her birim kalitesi ne olursa olsun adınızla imzalı olarak gelir ve tüm bölge bunu adıyla duyar. Her çeşit aynı zamanda Yiğitlikler Kitabınızda sıfır Ün'lü kendi koleksiyoncu işaretini yazar; yalnızca sizde gerçekleştiğini kanıtlamak için var olan bir işaret.",
-      "specimenBody": "Toplayıcılık yaparken çantanızda biraz yer boş bırakın: imzalı bir talih vurgunu, inecek kendi yerini ya da eşleşen imzalı bir yığın ister; hiçbiri sığmazsa verim yine gelir ama imza kaybolur. Ceset hasatının da kendi ikramiye kolu vardır: hasat edilen her bileşenin yaklaşık {pct}%'i nadir veya üzeri çıkar. Verecek mükemmel bir numunesi olan bir aile (post, ipek, zehir, et) sıradan verimini sade tutar ve imzalı numuneyi onun yanında basar; diğer her aile verimin kendisini imzalar.",
+      "specimenBody": "Çiftlik yaparken biraz çanta yeri bırak: bir beklenmedik kazanç imzalı gelmesi için açık yuvalar gerektirir ve hiçbir şey sığmazsa verim yine de gelir ama imza kaybolur. Ceset hasatının kendi jackpot kolu da vardır: ceset hasatlarının yaklaşık {pct}%'si nadir veya daha iyi çıkar; verimi imzalar ve örnek ailelerinde imzalı mükemmel bir örnek bağışlar.",
       "gatherDeedsHeading": "Yolda kazanılan yiğitlikler",
       "gatherDeeds": {
         "mining": "Herhangi bir mesleğin ilk düğümü Toprağın Meyvelerini kazandırır ve Madencilikteki 100 tavanı Kanında Maden'i yazar. Madencilik, Odun Kesimi, Otçuluk ve Balık Tutma'nın herhangi üçünde 100'e ulaşmak 25 Ün'de Usta Toplayıcı'yı ekler; bozulmamış bir damarı kırmak kendi koleksiyoncu işaretini kaydeder. Bunların hiçbiri güç vermez: yiğitlikler unvanlar ve Ün'dür, yürüdüğün yolların bir kaydıdır.",
         "logging": "Herhangi bir mesleğin ilk düğümü Toprağın Meyvelerini kazandırır ve Odun Kesimindeki 100 tavanı Kalp Odunu Yontucusu'nu yazar. Madencilik, Odun Kesimi, Otçuluk ve Balık Tutma'nın herhangi üçünde 100'e ulaşmak 25 Ün'de Usta Toplayıcı'yı ekler; antik bir kalp odunu darbesi kendi koleksiyoncu işaretini kaydeder. Yiğitlikler yalnızca unvanlar ve Ün'dür, asla güç değil.",
         "herbalism": "Herhangi bir mesleğin ilk düğümü Toprağın Meyvelerini kazandırır ve Otçuluktaki 100 tavanı Çayır Ustası'nı yazar. Madencilik, Odun Kesimi, Otçuluk ve Balık Tutma'nın herhangi üçünde 100'e ulaşmak 25 Ün'de Usta Toplayıcı'yı ekler; mehtaplı bir çiçek kendi koleksiyoncu işaretini kaydeder. Yiğitlikler yalnızca unvanlar ve Ün'dür, asla güç değil.",
-        "fishing": "100 kilometre taşı Eski Denizci'yi, 200 ise balıkçılık sanatının en tepesi olan Usta Balıkçı'yı kendi unvanıyla birlikte yazar; Balıkçılık ayrıca herhangi üç toplama mesleğinde 100'e ulaşınca kazanılan Usta Toplayıcı'ya da sayılır. Altı bölgenin sularından yakalanan ilk balık kendi sayfasını doldurur: üç ana bölge ile onların ötesindeki Söğüt Bataklığı, Fırtına Sırtı ve Uzak Kıyı; Günışıltısı Sazan ise Umut Işıltısı'nı kaydeder, bu yüzden çantasında olta taşıyan gezginler kitaplarını umduklarından daha hızlı doldurur."
+        "fishing": "100 dönüm noktası Eski Denizci'yi, 200 ise Master Angler unvanıyla birlikte Usta Olta Ustası'nı yazar; olta ustasının sanatının en zirvesi. Balık Tutma aynı zamanda herhangi üç toplama mesleğinde 100'e ulaşarak kazanılan Usta Toplayıcı'ya da sayılır. Her bölgenin sularından ilk balık kendi sayfasını doldurur ve Günışıltısı Sazan Umut Pırıltısı'nı kaydeder; bu yüzden çantasında olta taşıyan gezginler kitaplarını beklenenden daha hızlı doldurur."
       },
       "fish": {
         "startHeading": "Başlangıç",
-        "startBody": "Basit Olta, Doğudere'deki Balıkçı Brandt'ten 20 bakıra alınır (Eski Denizci'yi kasabanın doğu ucunda, Ayna Gölü'ne giden yolun kenarında arayın); Tamirci Gizzel, Fenbridge'deki Levazımcı Hale ve Highwatch'taki Donatım Subayı Bree de olta bulundurur. Oltayı, balık tutacak kadar derin bir suya dönükken, önünüzde yaklaşık 24 yardaya kadar kullanın; şamandıranız süzülüp gider.\n\nDövüşteyken, yüzerken ya da ölüyken olta atamazsınız: amaçlanan duruş kıyıdan atmaktır. Ne var ki sular da kara gibi sertleşir: bataklık en az kademe 2 Demir Makaralı Olta'yı, zirveler ise kademe 3 Gümüş Dere Oltası'nı ister ve o suyun istediği olta olmadan atılan misina elinizden hiç çıkmaz. Bunların üzerinde iki olta daha durur, Fırtına Makarası ve Gelgit Dövmesi: mühendisler bunları alet atölyesinde, misinanın sudan çıkardıklarıyla üretir; Boğulmuş Litanya'nın sefer tezgahı da temizleme kapılarının ardında Mağara Nişanı karşılığında satar, ama asla sikke karşılığında değil. Hiçbir su bunları istemez, dolayısıyla erişim yerine daha kısa bir bekleyiş ve daha geniş bir çekme penceresi satın alırlar; en üst basamakta bu, tam üç saniyede gelen bir ısırık demektir.",
+        "startBody": "Basit Bir Olta, Doğudere'de (kasabanın doğu kenarından Mirror Gölü'ne surat asan Eski Denizci'yi bul) Balıkçı Brandt'tan 20 bakıra satılır; Tinker Gizzel, Fenbridge'de Erzakçı Hale ve Highwatch'ta Levazımcı Bree de olta stoklar. Oltayı, önünde yaklaşık 24 yarda kadar ileriye kadar balık barındıracak kadar derin suyla yüz yüze kullan; yemi fırlar ve gider.\n\nDövüş halindeyken, yüzerken veya ölüyken atamazsın: kıyıdan atış yapmak olağan duruş olup her bölgedeki her balık tutulabilir su işe yarar.",
         "biteHeading": "Isırma ve çekme",
-        "biteBody": "Oltayı attıktan sonra ısırık, {min} ile {max} saniye arasında gizli bir anda gelir; gecikme misina suya değdiğinde belirlenir, bu yüzden hiçbir atış bir diğerine tam olarak benzemez. Şamandıra vurduğunda, oltaya tekrar basıp çekmek için {reel} saniyelik bir pencereniz olur: bu pencerenin içinde çekerseniz av elinizde kalır, geçirirseniz balık gösterecek hiçbir şey bırakmadan kaçar. Bütün bir seans {cap} saniyeyle sınırlıdır, bu yüzden sessiz bir atış bile çabuk sonuçlanır.\n\nDaha iyi oltalar mini oyunun her iki ucunu da keskinleştirir: ilkinin üzerindeki her olta kademesi, en üst oltanın hâlihazırda sıyırdığı üç saniyelik tabanın altına asla inmeden, mümkün olan en uzun bekleyişten {rod} saniye kırpar ve çekme penceresine {reelRod} saniye ekler; böylece Demir Makaralı Olta en kötü bekleyişi 3,25 saniyelik bir pencereyle 6,5 saniyeye, Gümüş Dere Oltası ise 4'ü aşan bir pencereyle 5 saniyeye indirir, nadirliği çekme süresini kademenin tek başına ödediğinin biraz ötesine genişletir. En hızlı ısırıklar elinizde ne olursa olsun hiç değişmez ve bir oltanın sayılması için yalnızca çantanızda olması yeterlidir.",
+        "biteBody": "Atıştan sonra {min} ile {max} saniye arasında gizli bir anda ısırma gelir; gecikme misina indiğinde belirlenir, bu nedenle hiçbir iki atış birbirinin aynı hissettirilmez. Şamandıra ısırdığında oltayı tekrar basmak ve misina çekmek için {reel} saniyelik bir pencereniz vardır: içinde çekin ve av iner, geçirseniz balık elinizde hiçbir şey kalmadan gider. Tüm oturum {cap} saniyede sona erer, bu nedenle sakin bir atış bile hızla çözüme kavuşur.\n\nDaha iyi oltalar minigame'in her iki ucunu da keskinleştirir: birincisinin ötesindeki her olta kademesi en uzun olası bekleme süresinden {rod} saniye kısar ve çekme penceresine {reelRod} saniye ekler; böylece Demir Makaralı en kötü beklemeyi 3,75 saniyelik bir pencereyle 6,5 saniyeye, Gümüş Dere ise 5 ve 4,5 saniyeye çeker. En hızlı ısırmalar ne tutarsanız tutun asla değişmez ve bir oltanın sayılması için yalnızca çantanızda bulunması yeterlidir.",
         "earlyReelNote": "Sabırsız parmaklar için bir uyarı: bir şey ısırmadan önce oltaya tekrar basarsan boş bir misina çekersin ve atış sona erer (atıştan hemen sonraki kısa bir an, yanlışlıkla iki kez basmayı bağışlar). Sabır oyunun tamamıdır: ısırmayı bekle, sonra vur.",
         "scheduleHeading": "Yetkinlik kazanımı",
-        "scheduleNote": "Balıkçılık kazanımı zar atmayan sabit bir çizelgeyi izler: yetkinlik 50'nin altında av başına tam bir puan, 100'ün altında yarım puan, 150'nin altında onda bir ve 150'den 200'e yavaş bir 0,02'lik sızıntı. O son etap kasten binlerce avlık bir yolculuktur: 200 bir beyandır, başka bir şeye giderken uğranan bir durak değil.\n\nDöküntü, {cutoff} değerinde tamamen öğretmeyi bırakır: oradan sonra yosunlar ve çizmeler sadece yosun ve çizmedir. Suyun kendisi de dersi sınırlar: Vadi'nin kademe 1 suları (ve ana bölgelerin ötesindeki her genç kıyı) 100'ün ötesinde hiçbir şey öğretmez, bataklığınkiler 150'de durur ve bir balıkçıyı 200'e kadar yalnızca Dikenzirve'ninkiler okutur. Bunun dışında karaya çıkarılan her av çizelgedeki oranda kazandırır, yani sayaç durduğunda çizelge size daha derin su aramanızı söylüyordur.",
+        "scheduleNote": "Balık tutma yetkinlik kazanımı sabit bir programa göre işler, zar atılmaz: 50 yetkinliğin altında her yakalamada tam bir puan, 100 yetkinliğin altında yarım puan, 150 yetkinliğin altında onda bir puan ve 150'den 200'e kadar 0,02 gibi yavaş bir akış. O son bölüm kasıtlı olarak binlerce yakalamayı gerektiren bir yolculuktur: 200 bir ifadedir, başka bir şeye giden yolda bir mola değil.\n\nÇöp, {cutoff} yetkinliğinde artık hiçbir şey öğretmez: oradan itibaren yosunlar ve çizmeler yalnızca yosun ve çizmedir. Bunun dışında her başarılı yakalama programa göre yetkinlik kazandırır; öyleyse zaten balık tutacağın yerlerde tut ve sayacın tırmanmasına izin ver.",
         "colProficiency": "Yetkinlik",
         "colGain": "Av başına kazanım",
         "belowFmt": "{below} altında",
         "tablesHeading": "Av tabloları",
-        "tablesNote": "Yetkinliğiniz üç av bandından birini seçer: başından beri bant 0, 100'de bant 1, 200'de bant 2; her biri ağırlığı döküntüden ve boş kancalardan gerçek balığa kaydırır, bölge bölge. İlkinin üzerindeki her bant ayrıca bir olta ister: bant 1 kademe 2 Demir Makaralı Olta'yı, bant 2 kademe 3 Gümüş Dere Oltası'nı. Etkin bandınız, becerinizin kazandırdığı ile oltanızın desteklediğinin küçük olanıdır ve bu sınır sessizdir: daha zayıf bir oltayla yine avlanırsınız, sadece alt bandın tablosundan; bu yüzden beceriniz tırmanırken avlarınız yerinde sayıyorsa önce oltanıza bakın.\n\nHer bölgenin suları kendi yemeklik balık çiftini barındırır; bölge derinleştikçe daha çok iyileştirirler, hepsi aşçılık girdisidir ve misinadan çıktığı ham haliyle oturup yemek için gayet uygundur. Tablonun geri kalanı balıkçının vergisidir: yosun, arada bir çizme ve hiçbir zaman tamamen kaybolmayan boş kanca. Ne kadar ödeyeceğiniz, nerede durduğunuza değil şamandıranızın düştüğü suya bağlıdır: bir atış 24 yardaya kadar uzanır ve suyun istediği olta, çektiği tablo, kazandırdığı yiğitlik ve nereye kadar öğrettiği, misina suya değdiği anda belirlenmek üzere o suyun ait olduğu bölgeye bakar. Her bölgenin suyu kendine ait bir bant için yazılmıştır, Vadi bant 0 için, bataklık bant 1 için, zirveler bant 2 için; bunun bir bant altında balık tutmak atışlarınızın kabaca üçte birini boş kancaya çevirir, iki bant altında yarısından fazlasını. Olta sizi suya götürür; onu kazançlı kılan beceridir ve balıkçıyı derine çeken de bu tırmanıştır, çünkü daha iyi bantlar sadece daha iyi kazanç değildir: Vadi'nin ötesinde öğretmeye devam eden tek sular onlardır. {rare} ise yalnızca av bandınıza yanıt veren, başka hiçbir şeye bakmayan tek satırdır: her bölgede aynı olasılık ve bant 2'de bant 0'a göre altı kat daha muhtemel; yani iskeledeki en nadir şey, bir Usta Balıkçı'nın gerçekten daha iyi olduğu şeydir.",
+        "tablesNote": "Yetkinliğin üç av bandından birini seçer: başlangıçtan itibaren 0. bant, 100'de 1. bant, 200'de 2. bant; her biri ağırlığı çöp ve boş kancalardan gerçek balıklara, bölge bölge kaydırır. İlkinin üzerindeki her bant bir olta da gerektirir: 1. bant kademe 2 Demir Makaralı Olta'yı, 2. bant ise kademe 3 Gümüş Dere Oltası'nı ister. Geçerli bandın, becerinin kazandırdığı ile oltanın desteklediğinin en düşüğü olduğunu ve sınırın sessiz işlediğini unutma: daha alt bir oltayla yine de yakalarsın, sadece daha düşük bandın tablosundan; becerin tırmanırken yakalamalar durağan hissettiriyorsa önce oltanı kontrol et.\n\nHer bölgenin suları kendine özgü bir çift yiyecek balığı barındırır; bölge daha derin oldukça daha fazla iyileştirir, hepsi yemek pişirme girdisidir ve doğrudan yenebilecek yiyeceklerdir. Tablonun geri kalanı ise olta ustasının vergisidir: yosun, ara sıra bir çizme ve hiçbir zaman tam anlamıyla ortadan kalkmayan boş kanca. {rare}, her kancada aynı uzun atışlıklı şanstır ve yetkinlikle asla değişmeyen sabit ihtimallerle gelir; bu yüzden iskeletteki en yeni olta ustasının şansı Usta Olta Ustasınınkiyle aynıdır.",
         "bandHeading": "Bant {band}: {at} ve üzeri yetkinlik, {rod}. kademe olta",
         "colCatch": "Av",
         "colOdds": "Olasılık",
         "pctFmt": "{pct}%",
         "emptyHook": "Hiçbir şey ısırmıyor",
         "koiHeading": "Günışıltısı Sazan",
-        "koiBody": "Oyundaki her su kütlesi aynı ödülü saklar: Günışıltısı Sazan, misinada sıradan dışı bir parıltı, bir satıcıya 75 bakır, gururunuza ise epeyce fazlası değerinde. Olasılığı yalnızca av bandınıza yanıt verir, başka hiçbir şeye; her bölgede aynıdır: av tablosunda bant 0'da yüzde 1'lik bir satır, bant 1'de 3, bant 2'de 6; ve çekilen her atışta çekiliş yapılır, yani sazan derin tabloları hak etmiş balıkçıya gelir. Bir tane yakalamak Yiğitlikler Kitabınıza Umut Işıltısı'nı yazar, sıfır Ün'lü bir koleksiyoncu işareti. Gerçekleştiğinde kayıt bunu bilmenizi sağlar."
+        "koiBody": "Oyundaki her su kütlesi aynı ödülü saklar: Günışıltısı Sazan, bir satıcıya 75 bakır, gururunuza ise çok daha fazla değer eden misina üzerindeki sıradan dışı bir parıltı. Olasılıkları her bantta iniş başına düz yüzde 3'tür (Dikenzirve'nin soğuk suyunda yüzde 4) ve birini tutmak Deeds Kitabına Umut Işıltısını kaydeder, sıfır Şöhretli koleksiyoncu işareti. Gerçekleştiğinde günlük bunu mutlaka bilmenizi sağlar."
       },
       "econ": {
         "title": "Zanaat Ekonomisi",
@@ -4659,7 +4861,7 @@ export const tr_TR: EnTranslations = {
         "feeUnbind": "Bağdan kurtarma ücreti",
         "feeUnbindValue": "{uncommon} sıradan dışı, {rare} nadir, {epic} destansı",
         "trainingHeading": "Eğitim ücretleri",
-        "trainingNote": "Her tarif basamağı için tek bir sabit ücret, bir usta onu öğrettiğinde bir kez alınır; aşağıdaki tablonun her basamağı bugün fiilen kullanımdadır, ücretsiz başlangıç tariflerinden en tepedeki alet yapımcısının olta derslerine kadar.",
+        "trainingNote": "Tarif basamağı başına bir sabit ücret, bir usta öğrettiğinde tek seferlik alınır; tablonun daha yüksek kademeleri gelecekteki içerikler için bekler.",
         "trainingTierFmt": "Kademe {tier}: {fee}",
         "free": "Ücretsiz",
         "sellsHeading": "Ne satar ve neden",
@@ -4675,7 +4877,7 @@ export const tr_TR: EnTranslations = {
         "commissionsHeading": "Komisyonlar ve Ustanın Bağı",
         "commissionsBody": "Komisyon, başkası için yapılan bir zanaattır. Bir silah, zırh parçası veya elde tutulan yan eşya üretirken (bir iksir bağ taşıyamaz), üretici üretimi komisyon olarak işaretleyebilir: bitmiş parça üreticinin elinde normal davranır, ancak bir ticaret el değiştirdiği anda onu alanın üstüne bağlanır. Bu Ustanın Bağı'dır: alıcı parçasını alır ve parça başkasına aktarılamaz ya da yeniden satılamaz.\n\nBağlar sonsuza kadar sürmez, sadece pahalıdır. Herhangi bir tezgah ustası, istasyonunda dururken bağlı bir parçayı bağdan kurtarır (taşınabilir bir tezgah bu hizmeti hiçbir zaman sunmaz), eşyanın kalitesine göre belirlenen bir ücret karşılığında: 25 gümüş sıradan dışı, 1 altın nadir, 4 altın destansı; bir efsanevi destansı oranını öder, komisyonlu sıradan bir parça ise sıradan dışı oranını öder.\n\nÜcret temiz bir sayfa satın alır, çözüm değil: parça hala bir komisyondur, bu nedenle bir sonraki ticarette kimin alacağına yeniden bağlanır ve imza, şaheser ile büyüler dahil her şey dokunulmadan kalır.",
         "provenanceHeading": "İmzalı işler",
-        "provenanceBody": "Bazı eşyalar bir ad taşır. Üzerine gelin; ipucu kutusu bir hammaddede filanca tarafından toplandı, bitmiş bir parçada ise filanca tarafından hazırlanmıştır der: aynı işaret, eşyanın nasıl var olduğuna göre sözcüklenmiştir. İmza eşyanın kendisinin bir parçasıdır; ticaretlerde, bankada, postada, Dünya Pazarı'nda ve hatta bir satıcıdan geri alımda bile onunla birlikte yol alır ve asla solmaz.\n\nToplama en iyi işini kendiliğinden imzalar: nadir ya da daha iyi atan her hasat imzalı gelir ve nadir bulgular beş katlık beklenmedik kazancının tamamını imzalar. Bir ceset hasadının şanslı atışı, ailenin verecek bir örneği olmadığı yerde verimi imzalar; örneği olduğu yerde ise verimi düz bırakır ve yanına imzalı bozulmamış örneği basar. Üretim de aynı çizgide imzalar: nadir ya da daha iyi bir çıktının her kopyası imzalı basılır ve bir şaheser, kalitesi ne olursa olsun her zaman imzalanır; böylece herhangi bir parçanın en iyi sürümü her zaman ustasının adını taşır. Size bir imzaya mal olabilecek tek şey dolu bir çantadır: imzalı bir birimin ineceği kendi yerine ya da eşleşen imzalı bir yığına ihtiyacı vardır.\n\nBir eşya yığını tek bir kimliği paylaşır; bu yüzden iki kopya ancak her işaret tam olarak eşleştiğinde birleşir: aynı eşya, aynı imzalayan, aynı şaheser istatistikleri, aynı büyü, aynı bağ. İmzalı bir kütük hiçbir yönde düz bir yığına katılmaz (birleşme birinin adını silerdi), ama birebir aynı içerikler seve seve birleşir; böylece aynı toplayıcının imzaladığı yirmi cevher tek bir yığında durur ve beklenmedik bir kazanç çantalarınızı param parça etmez.\n\nİmzalar ustalara geri öder: tezgahta gereken bir bileşenin imzalı herhangi bir kopyasını elde tutmak, kim imzalamış olursa olsun, şaheser şansına 2 yüzde puanı ekler; kendi elinizle imzaladığınız bir bileşeni tutmak ise o bileşenin gereken miktarını bir azaltır (asla birin altına inmez). Kendi imzalı nadir ya da daha iyi işiniz size ders vermeyi bile sürdürür, bugün yalnızca şişe üzerinden: imzaladığınız bir iksiri içtiğinizde, o iksiri karıştıran zanaat etkin ana dallarınızdan biri olduğu sürece küçük bir beceri sızıntısı o zanaata geri akar.",
+        "provenanceBody": "Bazı eşyalar bir isim taşır. Üzerine gelin, araç ipucu ham bir malzemede Falanca tarafından toplandı, bitmiş bir parçada ise Falanca tarafından yapıldı der: aynı işaret, eşyanın nasıl ortaya çıktığına göre ifade edilir. Bir imza eşyanın kendisinin parçasıdır, ticaretler ve banka aracılığıyla onunla seyahat eder ve asla solmaz.\n\nToplama en iyi işini otomatik olarak imzalar: nadir veya daha iyi kalite elde eden herhangi bir hasat imzalı gelir, nadir bulgular beş katlık beklenmedik ganimetin tamamını imzalar ve bir ceset hasatının şanslı zar atışı, bozulmamış numuneler dahil, verimini imzalar. Zanaat da aynı çizgide imzalar: nadir veya daha iyi kalitedeki tek kopya çıktı imzalı olarak üretilir ve bir şaheser kalitesi ne olursa olsun her zaman imzalar, böylece herhangi bir parçanın en ince versiyonu daima ustasının adını taşır. Bir imzayı kaybettirebilecek tek şey dolu bir çantadır: imzalı bir birimin kendi alanına ya da eşleşen imzalı bir yığına ihtiyacı vardır.\n\nBir eşya yığını tek bir kimliği paylaşır, bu nedenle iki kopya yalnızca her işaret tam olarak eşleştiğinde birleşir: aynı eşya, aynı imzalayan, aynı şaheser istatistikleri, aynı büyü, aynı bağ. İmzalı bir kütük hiçbir yönde düz bir yığına katılmaz (birleştirme birinin adını silerdi), ancak özdeş yükler mutlu bir şekilde birleşir, böylece aynı toplayıcı tarafından imzalanmış yirmi cevher tek yığında durur ve bir beklenmedik ganimet çantanızı dağıtmaz.\n\nİmzalar ustaları geri ödüllendirir: imzalayan kim olursa olsun, herhangi bir imzalı hammadde tüketimi şaheser şansına 2 yüzde puan ekler; kendi elinizle imzaladığınız bir hammaddeye sahip olmak ise o hammaddenin gerekli miktarını bir azaltır (asla birinin altına düşmez). Kendi imzaladığınız nadir veya daha iyi işler, kendi elinizde gerçekleştiğinde bile size öğretmeye devam eder: doğru anda içilen bir iksir, inen bir son darbe, bir öldürmede giyilen zırh, o zanaat aktif ana dallarınızdan biri olduğu sürece onu yapan zanaata küçük bir beceri damlar.",
         "collectorsHeading": "Koleksiyoncular, kupalar ve bir hikayenin bedeli",
         "collectorsBody": "Satıcılar kaynağa kördür: imzalı bir eşya NPC'ye tam fiyatına satılır. İmzanın getirdiği prim yalnızca oyuncular arasında mevcuttur; bu da onu ilginç kılan şeydir: ünlü bir toplayıcı tarafından imzalanmış bir yığın beklenmedik cevher, şanslı bir hasattan gelen Prime Cut, o zamandan beri emekli olmuş bir ustanın adını taşıyan şaheser bir bıçak, bunların hepsi birinin belleğinin değer biçtiği kadar değerlidir.\n\nDeeds Kitabı da aynı içgüdüye yaslanır: Bozulmamış Damar, Kadim Kalp Ağacı, Ay Işığı Çiçeği, Mükemmel Numune ve Umut Işıltısı, tamamen bir anın sizinle gerçekleştiğini kanıtlamak için var olan sıfır Şöhretli koleksiyoncu işaretleridir. Görevi kazandıran eşyayı elinizde tutun, elinizde makbuzu tutarsınız. Bunların hiçbiri güç değildir; köken istatistik satın almaz ve savaş kazanmaz, sadece iyi günlerin oyunun kağıt izi olur.",
         "castPaceHeading": "Okuma süresi ve altın gideri",
@@ -4701,15 +4903,15 @@ export const tr_TR: EnTranslations = {
         "q3": "Bir cesedi yağmalamak ile hasat etmek arasındaki fark nedir?",
         "a3": "Tek bir tuşa basmak her ikisini de kapsar. Bir cesedin tuttuğu her şey, altın ve düşen eşyaların yanı sıra hasat edilebilir bileşenler, aynı pencerede açılır: yağma normal yağma kurallarını izler ve hasat ise meslek tarafı olup malzemeleri cesetten soyar.\n\nHasat önce gelen tekil kullanımlıktır: her ceset tam olarak bir kez hasat edilebilir, çevrimiçi olup olmaksızın ilk kimin talep ettiği tarafından. Kasaba Odağınız ne aldığınızı şekillendirir: bir kasaba merkezinde dururken 10 odak puanını önem verdiğiniz bileşen türlerine dağıtabilirsiniz ve her odaklanmış bileşen daha iyi bir kademe atar (her 5 puan bir adım yükseltir, en fazla iki adım) ve daha fazla verir (puan başına yüzde 10). Odaklanmamış bileşenler asla kötüleştirilmez.",
         "q4": "Demir Ağacı Kütüğüm neden imzalı?",
-        "a4": "Talihinize denk geldi. Kabaca 90 hasattan 1'i nadir bir toplama olayını tetikler (ağaçta antik kalp odunu, cevherde bozulmamış bir damar, otlarda mehtaplı bir çiçek): verimi beş katına çıkarır, her birimi adınızla imzalar ve bulguyu tüm bölgeye duyurur. Sıradan bir hasatta çıkan nadir veya üzeri bir kalite çekimi de verimi imzalar.\n\nİmzalı malzemeler saklamaya ya da pahalıya satmaya değer: tezgahta, gereken bir bileşenin imzalı herhangi bir kopyasını elde tutmak şaheser şansına 2 yüzde puanı ekler. Yalnızca şunu unutmayın, bunlar sadece aynı şekilde imzalanmış kopyalarla yığın oluşturur, yani kendi çanta yuvalarını işgal ederler.",
+        "a4": "Beklenmedik bir ganimetle karşılaştınız. Her 90 hasattan yaklaşık 1'i nadir bir toplama olayı tetikler (bir ağaçta kadim kalp ağacı, cevherde bozulmamış damar, otlarda ay ışığı çiçeği): verimi beş kat çarpar, her birimi adınızla imzalar ve buluşu tüm bölgeye duyurur. Sıradan bir hasattaki nadir veya daha iyi kalite zar atışı da verimi imzalar.\n\nİmzalı malzemeler tutmaya ya da yüksek fiyata satmaya değer: bir zanaatta imzalı bir hammadde tüketimi şaheser şansına yüzde 2 ekler. Sadece yalnızca aynı şekilde imzalanmış kopyalarla yığın oluşturduklarını unutmayın; bu nedenle kendi çanta yuvalarını korurlar.",
         "q5": "Komisyonlu bir parçayı nasıl bağdan kurtarırım ve maliyeti nedir?",
         "a5": "Parçayı çantanızda taşıyarak herhangi bir zanaat tezgahına gidin ve ustaya ödeme yapın. Ücret eşyanın kalitesini izler: sıradan dışı parça için 25 gümüş, nadir için 1 altın, destansı için 4 altın; efsanevi destansı oranını öder ve komisyonlu sıradan parça sıradan dışı oranını öder. Gerçek bir tezgah olmalıdır: taşınabilir bir tezgah bu hizmeti asla sunmaz.\n\nÜcret temiz bir sayfa satın alır, çözüm değil: parça komisyon olmaya devam eder, bu nedenle bir sonraki ticarette kimin aldığına yeniden bağlanır. Birden fazla bağlı kopya bir yığını paylaşıyorsa, ödeme başına bir kopya soyulup bağdan kurtarılır.",
         "q6": "Tarifleri nereden öğrenirim ve maliyetleri nedir?",
-        "a6": "Dokuz sıradan alan tarifi ile altı üretilebilir kara aleti tarifi herkes tarafından başından beri bilinir; istasyona bağlı üç zirve tarifi de öyle (Ocakpul Manto, Koruma Dokumalı Başlık ve Alacakaranlık Postu Sargıları), bunlar eğitmen değil yalnızca kendi istasyonlarını ister. Geri kalan her şey, üç merkez kasabaya dağılmış istasyonlarında yerleşik ustalar tarafından öğretilir: çoğu Doğudere'de durur, tabakçı Fenbridge'de tabakhaneyi tutar, simyacı da Highwatch'ta eczaneyi tutar.\n\nEğitmen tarifleri basamaklar halinde ilerler: teçhizat ve tüketim zanaatları için beceri 0, 25 ve 50; tek seferlik ücretleri sırasıyla ücretsiz, 25 gümüş ve 1 altındır; Büyüleme'nin iki tılsım tarifi 25 basamağında oturur ve alet yapımcısı iki üretilebilir oltayı 75 ve 125'te, 4 ve 16 altına öğretir. Bir usta, o zanaattaki kademeniz tarifin kendi kademe bandına ulaştığı anda tarifi öğretir ve öğrenmek için onun istasyonunda duruyor olmanız gerekir: mobil istasyon sayılmaz.",
+        "a6": "Dokuz sıradan alan tarifi ve alet tarifleri, baştan herkese bilinir; tezgah bağlı üç doruk da (Ocakpul Manto, Koruyucu Dokuma Başlığı ve Alacakaranlık Sarmalı) eğitmen gerektirmez, yalnızca kendi tezgahları. Geri kalanı üç merkez kasabadaki tezgahlarında yerleşik ustalar tarafından öğretilir: çoğu Doğudere'de durur, tabakçı Fenbridge'deki tabakhaneyi, simyacı ise Highwatch'taki eczaneyi işletir.\n\nEğitmen tarifleri 0., 25. ve 50. beceri düzeyinde basamaklarda gelir; tek seferlik ücret olarak sırasıyla ücretsiz, 25 gümüş ve 1 altın fiyatlanır. Bir usta, o zanaat dalındaki bandınız tarifin kendi bandına ulaştığında tarifi öğretir ve öğrenmek için tezgahında durmanız gerekir: taşınabilir bir tezgah sayılmaz.",
         "q7": "Toplamam neden aniden yavaşladı?",
-        "a7": "Toplama yayı 2,5 saniyeden başlar ve iki şekilde kısalır: taşıdığınız ve kullanabildiğiniz, düğümün kendi kademesinin üzerindeki her alet kademesi için 0,4 saniye ve mesleğinizin sayacı 100 bandını geçtiğinde 0,15 saniye; 1,5 saniyelik bir taban vardır. Kademe 1 düğümlerden kademe 3 düğümlere geçin, fazlanız buharlaşır ve aynı kazma yeniden daha yavaş sallanır. Tam olarak gereken kademeyi elde tutmak hız satın almaz; yalnızca düğümü açar.\n\nBeceri kazanımı, üretimde olduğu gibi solar: yetkinliğiniz bir düğümün kademesini aştıkça o düğüm grileşir (kademe 1 düğümler yetkinlik 75'ten itibaren hiçbir şey öğretmez), dolayısıyla yavaş kazanımın cevabı daha yüksek kademeli düğümlerdir. Bunlar çantanızda en az kendi kademelerinde bir alet ister (hiçbir düğüm çıplak elle işlenmez, kademe 1 dahil) ve kademe 1'in üzerindeki bir kara aleti önce kendi kullanım işaretini de ister: kademe 2'den 5'e kadar kendi mesleğinde 40/70/85/100. Balıkçılık kendi azalma çizelgesini izler: yetkinlik 50'nin altında tam kazanım, 100'ün altında yarım, 150'nin altında 0,1'lik bir sızıntı ve 200'ün altında 0,02; döküntü avlar 100'den itibaren hiçbir şey öğretmez ve suyun kendisi de dersi sınırlar (kademe 1 suları 100'de, bataklık 150'de öğretmeyi bırakır), yani duran bir sayaç, suyu aştığınız anlamına da gelebilir.",
+        "a7": "Toplama süresi 2,5 saniyeden başlar ve iki şekilde kısaltılır: düğümün kendi kademesi üzerinde sahip olduğunuz her alet kademesi için 0,4 saniye ve geçmiş olduğunuz her yetkinlik bandı için 0,15 saniye (100 ve 200'de), zemin olarak 1,5 saniye. 1. kademe düğümlerden 3. kademe düğümlere geçin ve fazlalığınız kaybolur, bu nedenle aynı kazma tekrar daha yavaş sallanır. Tam olarak gereken kademeye sahip olmak hız kazandırmaz; yalnızca düğümü açar.\n\nBeceri kazanımı da zanaat gibi solar: bir düğüm, yetkinliğiniz kademesini geçtikçe grilenir (1. kademe düğümler 75. yetkinlikten itibaren hiçbir şey öğretmez), bu nedenle yavaş kazanımların yanıtı daha yüksek kademe düğümlerdir; bunlar en azından kendi kademelerinde bir alet gerektirir (çıplak eller 1. kademe sayılır). Balık tutma kendi azalmasını izler: 50. yetkinliğin altında tam kazanım, 100'ün altında yarı, 150'nin altında 0,1 damla ve 200'ün altında 0,02 damla; çöp avlar ise 100'den itibaren hiçbir şey öğretmez.",
         "q8": "Kasabadan uzakta zanaat yapabilir miyim?",
-        "a8": "Kısmen. Dokuz sıradan alan tarifi (başlangıç silahı, zırhı, yiyeceği ve iksiri gibi temel işler) her yerde, her zaman üretilir; yemin edilmiş çiftlerin üç kombinasyon tarifi de öyle. Bunların üzerindeki her şey bir istasyon türüne bağlıdır: demirhane, mutfaklar, eczane, tabakhane, dokuma tezgahı ya da alet atölyesi; ve üretimin gerçekleşmesi için istasyona 20 yarda mesafede olmanız gerekir.\n\nBir zanaatta beceri 75'te uzmanlaşırsınız ve yüzde 20 malzeme indiriminin yanında bir de mobil istasyon kazanırsınız: sahaya kurun, 10 dakika ayakta kalır ve gerçeğinin başındaymışsınız gibi o zanaatın tariflerine hizmet eder. Mobil istasyon yalnızca üretim içindir: tarif öğrenmek ve sipariş parçalarını bağdan kurtarmak her zaman kasabadaki gerçek istasyonu gerektirir."
+        "a8": "Kısmen. Dokuz sıradan alan tarifi (başlangıç silahı, zırh, yemek ve iksir temel malzemeleri) her yerde, her zaman üretilebilir. Bunların üzerindekiler bir tezgah türüne bağlıdır: demirhanesi, mutfak, eczane, tabakhane, dokuma tezgahı veya alet atölyesi; zanaatın gerçekleşmesi için tezgahın 20 yarda mesafesinde olmanız gerekir.\n\nBir zanaat dalında 75. beceriye ulaştığınızda uzmanlaşırsınız ve yüzde 20 malzeme indirimiyle birlikte taşınabilir bir tezgah kazanırsınız: onu sahaya yerleştirin, 10 dakika boyunca durur ve gerçeğindeymiş gibi o zanaat dalının tariflerine hizmet eder. Taşınabilir tezgah yalnızca zanaat içindir: tarif öğrenmek ve komisyonları bağdan kurtarmak her zaman kasabadaki gerçek tezgahı gerektirir."
       }
     },
     "economy": {
@@ -4718,16 +4920,16 @@ export const tr_TR: EnTranslations = {
       "coinBody": "Para üç sikkeyle gelir. Yüz bakır bir gümüş, yüz gümüş bir altın eder; böylece keseniz önce en küçük sikkeden dolar. Bunu görev ödüllerinden, düşen düşmanları yağmalamaktan ve artık ihtiyacınız olmayanı satmaktan kazanırsınız.",
       "vendorsTitle": "Satıcılar ve sattıkları",
       "vendorsBody": "Kasabalar ve karakollar, her biri kendi alanında uzman tüccarlarla doludur. Erzakçılar yiyecek ve içecek satar, silah ustaları ve zırhçılar teçhizat taşır ve bir levazımcı pratik yolculuk gereçleri bulundurur. Ne sattıklarını görmek için birinin yanına gidin.",
-      "marksTitle": "Nişanlar: paranın ötesindeki para birimleri",
-      "marksBody": "Biriktirdiğiniz tek şey para değildir. Mağara seferleri Mağara Nişanları öder; bunlar yalnızca mağara seferi bekçisinde, yoldaş geliştirmelerine ve başka yerde bulamayacağınız teçhizata harcanır. Kahramanca zindan seferleri, sondaki kötü adamın üzerinde Kahramanca Nişanlar bırakır; bunlar Highwatch'taki Kahramanca Levazımcı'yla, diyarın başka hiçbir köşesinin satmadığı takılara harcanır. Hiçbiri paranıza karışmaz.",
+      "marksTitle": "İkinci bir para birimi: Mağara Nişanları",
+      "marksBody": "Biriktirdiğiniz tek şey para değildir. Mağara seferleri, yalnızca mağara seferi bekçisinde yoldaş geliştirmelerine ve başka yerde bulamayacağınız teçhizata harcadığınız ayrı bir para birimi olan Mağara Nişanları öder. Asla paranıza karışmazlar.",
       "bankTitle": "Banka",
       "bankBody": "Her merkez kasabada diyarın bankacılık müessesesi olan Yaldızlı Kasa'nın bir şubesi bulunur. Oradaki veznedarla konuşarak kasanı aç: çantalarının ötesinde, karakterinin ömür boyu elinde tuttuğu özel bir depo. Oraya bıraktığın her şey, bir sonraki sefer hangi şubeye uğrarsan uğra, güvenle bekler.",
       "bankHow": "Kasan açıkken, çantandaki bir eşyaya tıklayarak onu yatır; kasadaki eşyaya tıklayarak geri al. Kasa yalnızca eşya tutar, asla para tutmaz; görev eşyaları da sende kalır. Yol ortasında çantaların dolduğunda, tek bir düğme bütün zanaat malzemelerini bir seferde içeri süpürür.",
       "bankSlots": "Yeni açılmış bir kasa küçük başlar ve seninle birlikte büyür. Veznedar, giderek artan fiyatlarla para karşılığında ek yuvalar satar; çevrimiçi oynamak ise bunun üzerine bonus yer kazandırır: doğrulanmış bir e-posta, bağlanmış hesaplar ve oyuna getirdiğin arkadaşlar gibi şeyler için.",
       "buyingTitle": "Alım ve satım",
-      "buyingBody": "Bir tüccarla konuşun ve mallarına göz atmayı seçin; dükkanları üç sekmeyle açılır: Göz At, Sat ve Geri Al. Göz At sekmesi stokladıkları her şeyi tutar, paranız yeterse sizindir. Sat sekmesi çantalarınızdan para ödeyecekleri şeyleri sıralar; kendi zar atışıyla belirlenmiş bir kaliteye sahip bir parçayı satarken önce onay istenir, böylece değerli bir nüsha yanlışlıkla asla elden kaçmaz. Pişman olduğunuz bir şeyden ayrılırsanız, Geri Al sekmesi son satışlarınızı tutar ve onları size ödenen parayla geri alabilirsiniz.",
+      "buyingBody": "Penceresini açmak için bir tüccarın yanında durun. Paranız yeterse stoklarındaki her şeyi satın alabilir ve çantanızdakilerin çoğunu altın karşılığında satabilirsiniz. Yanlışlıkla bir şey satarsanız, satıcı son satışlarınızı tutar ve onları geri satın alabilirsiniz.",
       "junkTitle": "Hurdaları temizleme",
-      "junkBody": "İşinize yaramayan ganimetler yine de herhangi bir satıcıya satılır, bu yüzden çantalarınızın dolmasına izin vermek yerine kasabadan her geçtiğinizde onları boşaltın. Satıcının Sat sekmesi, her Kötü kaliteli ıvır zıvırı tek seferde satan tek tıklık bir düğme bile tutar. Gerçekten değersiz öteberi yer açmak için doğrudan atılabilir de.",
+      "junkBody": "İşinize yaramayan ganimetler yine de herhangi bir satıcıya satılır, bu yüzden çantalarınızın dolmasına izin vermek yerine kasabadan her geçtiğinizde onları boşaltın. Gerçekten değersiz öteberi yer açmak için doğrudan atılabilir de.",
       "tradeTitle": "Diğer oyuncularla takas",
       "tradeBody": "Yanınızda duran herkesle yüz yüze takas yapabilirsiniz. İkiniz de eşyaları ve altını ortak bir pencereye koyarsınız ve değiş tokuş yalnızca ikiniz de onayladığınızda gerçekleşir, böylece hiçbir taraf tuzağa düşmez. Bir arkadaşa ganimet vermenin ya da bir anlaşmayı bağlamanın basit yoludur.",
       "mailTitle": "Kuzgun Postası",
@@ -4736,7 +4938,7 @@ export const tr_TR: EnTranslations = {
       "dailyTitle": "Günlük ödüller",
       "dailyBody": "Ekranındaki bir hazine sandığı düğmesi günlük ödüller penceresini açar. Her gün bir avuç görev ortaya koyar (görevleri tamamla, Kül Coliseumu'nda dövüş, bir Vadi Kupası maçı kazan) ve ödül çarkının ücretsiz bir dönüşünü sunar; hepsi o günün sıralamasına puan kazandırır ve günün en çok kazananları, isteğe bağlı topluluk jetonunu tutanlar için bir ödül havuzunu paylaşır. Bunların hiçbiri oyunda güç vermez. Pencerenin kendisi günün kurallarını ve kimin uygun olduğunu açıkça yazar, lider tablosunu gösterir ve geçmişini tutar.",
       "marketTitle": "Dünya Pazarı",
-      "marketBody": "Tüccar, asla karşılaşmayabileceğiniz insanlarla alıp satabileceğiniz, oyuncuların yürüttüğü bir takas olan Dünya Pazarı'nı işletir. Açmak için Doğudere'deki Tüccar'la ya da Highwatch'taki Müzayedeci Voss ile konuşun: iki görevli de aynı ortak pazara hizmet eder. Tüccar ayrıca orada kendi mallarından sürekli bir stok bulundurur, böylece başka hiçbir oyuncu ilan vermemişken bile satın alınacak her zaman bir şey vardır.",
+      "marketBody": "Tüccar, asla karşılaşmayabileceğiniz insanlarla alıp satabileceğiniz, oyuncuların yürüttüğü bir takas olan Dünya Pazarı'nı işletir. Açmak için Tüccar'la konuşun. Tüccar ayrıca orada kendi mallarından sürekli bir stok bulundurur, böylece başka hiçbir oyuncu ilan vermemişken bile satın alınacak her zaman bir şey vardır.",
       "marketBrowse": "Göz atma: satışta neyin olduğunu bulmak için ilanları kaydırın ya da isme göre arayın. Her ilan malları, satıcıyı ve tüm yığın için istenen fiyatı gösterir.",
       "marketPost": "İlan verme: çantalarınızdan bir yığın seçin, fiyatınızı belirleyin ve listeleyin. Mallar biri satın alana dek Tüccar tarafından tutulur. Satılmayan ilanlar bir süre sonra size geri döner ve fikrinizi değiştirirseniz birini erkenden geri alabilirsiniz.",
       "marketCollect": "Toplama: mallarınız satıldığında, geliriniz Tüccar'da sizi bekler. Satılmadan geri gelen her şeyle birlikte altını toplamak için geri dönün. Tüccar tamamlanan her satıştan küçük bir pay alır.",
@@ -4761,7 +4963,7 @@ export const tr_TR: EnTranslations = {
       "chanLfg": "Grup Arıyor.",
       "chanLfgBody": "Bir zindan koşmak için insan bulmaya yarayan, isteğe bağlı, diyar çapında bir kanal. Katılmak için sekmesini aç.",
       "chanGuild": "Lonca ve Subay.",
-      "chanGuildBody": "Loncan için kanallar. Lonca sohbeti her üyeye ulaşır; subay kanalı subaylar ve lonca lideri içindir.",
+      "chanGuildBody": "Loncan için kanallar. Lonca sohbeti her üyeye ulaşır; subay kanalı yalnızca subaylar içindir.",
       "partyHeading": "Grup kurmak",
       "partyBody": "Başka bir oyuncuyu, adına sağ tıklayıp davet etmeyi seçerek davet et. Bir grup en fazla beş oyuncu tutar ve içinizden biri liderdir.",
       "partyCredit": "Birbirine yakın grup üyeleri öldürme ve görev katkısını paylaşır, bu yüzden birlikte görev yapmak hep daha hızlıdır, asla daha yavaş değil. Bir grup aynı zamanda bir zindana takım olarak girmenin de yoludur.",
@@ -4771,7 +4973,7 @@ export const tr_TR: EnTranslations = {
       "lootCoinTitle": "Para.",
       "lootCoinBody": "Bir öldürmeden gelen para, onu toplayan kişiye gidebilir ya da grup arasında eşit bölünebilir.",
       "lootCommonTitle": "Eşyalar.",
-      "lootCommonBody": "Sıradan ganimetler grupta sırayla dağıtılabilir ya da toplayana gidebilir; daha iyi ganimetler ise herkesin adil bir şansı olsun diye zar atışına konur.",
+      "lootCommonBody": "Sıradan ganimetler toplayana gidebilir, daha iyi ganimetler ise herkesin adil bir şansı olsun diye zar atışına konur.",
       "lootRollTitle": "İhtiyaç, Açgözlülük ya da Geç.",
       "lootRollBody": "Bir eşya zar atışına gittiğinde, uygun her üye onu istiyorsa İhtiyaç, yalnızca yedek olarak alırsa Açgözlülük ya da çekilmek için Geç seçer. En yüksek zar kazanır.",
       "lootMasterTitle": "Ganimet sorumlusu.",
@@ -4794,7 +4996,7 @@ export const tr_TR: EnTranslations = {
       "markersHeading": "Hedef işaretleri",
       "markersBody": "Bir grupta, düşman bir yaratığı hedefle ve onu sekiz akın simgesinden biriyle taçlandırmak için hedef çerçevesindeki portresine sağ tıkla (dokunmatikte uzun bas). Herhangi bir üye işaretleyebilir, her simge bir seferde tek bir hedefte durur ve bir simgeyi kendi hedefine yeniden uygulamak onu temizler. Öldürme sırası, kalabalık kontrolü görevleri ya da düpedüz 'önce bu', bir cümleden çok daha hızlı gider bir simge olarak.",
       "etiquetteHeading": "Gruplaşma adabı",
-      "etiquetteBody": "Gruplaşmak bir tercihtir, bir angarya değil. Katıldığında selam ver, İhtiyaç'ı yalnızca gerçekten kullanacağın teçhizat için at ve ayrılmadan önce gruba haber ver. Biraz nezaket çok yol aldırır ve çoğu oyuncu arkadaşlıktan memnun olur. Moderatörler huzuru korur ve başkalarının oyunun tadını çıkarmasına izin vermeyen bir oyuncu, bir moderatör salıverene dek bir hücreye taşınabilir."
+      "etiquetteBody": "Gruplaşmak bir tercihtir, bir angarya değil. Katıldığında selam ver, İhtiyaç oyunu yalnızca gerçekten kullanacağın teçhizat için at ve ayrılmadan önce gruba haber ver. Biraz nezaket çok yol aldırır ve çoğu oyuncu arkadaşlıktan memnun olur."
     },
     "stats": {
       "intro": "Karakterin bir avuç nitelikle tanımlanır. İyi oynamak için onları ezberlemek zorunda değilsin, ama her birinin kabaca ne yaptığını bilmek karakter sayfanı okumana ve doğru yükseltmeleri seçmene yardımcı olur.",
@@ -4809,15 +5011,15 @@ export const tr_TR: EnTranslations = {
       "intTitle": "Zeka",
       "intBody": "Zeka, bir büyücünün mana havuzunu büyütür, büyü gücünü yükselterek büyülerinin daha sert vurmasını sağlar ve büyülerinin kritik yapma şansını iyileştirir. Manadan büyü yapan sınıflar için önemlidir; bir Öfke ya da Enerji sınıfı için pek bir şey yapmaz.",
       "spiTitle": "Ruh",
-      "spiBody": "Ruh, bir büyücünün büyü okumaya ara verdiğinde manasının ne kadar hızlı geri döndüğünü yönetir; ki bu, dövüşler arasında çoğu zamandır. Zeka gibi, mana sınıflarına hizmet eder ve diğerleri için pek bir şey ifade etmez.",
+      "spiBody": "Ruh, bir büyücünün manasının dövüş dışındayken ne kadar hızlı geri döndüğünü yönetir. Zeka gibi, mana sınıflarına hizmet eder ve diğerleri için pek bir şey ifade etmez.",
       "armorTitle": "Zırh",
       "armorBody": "Zırh aldığın fiziksel hasarı azaltır. Çoğunlukla üzerine giydiklerinden gelir ve daha ağır zırh sınıfları bundan çok daha fazlasını taşır. Seviyene yakın bir düşmana karşı daha fazla zırh, onun her vuruşunun daha hafif gelmesi demektir.",
       "apTitle": "Saldırı gücü",
-      "apBody": "Saldırı gücü, silahının ne kadar sert vurduğunu ölçer. Birincil niteliklerin onu besler ve bu nitelikleri taşıyan teçhizat onu daha da yükseltir; daha güçlü bir silah ise hasarını doğrudan artırır, bu yüzden bir yükseltme hasarda gerçek bir sıçrama olabilir.",
+      "apBody": "Saldırı gücü, silahının ne kadar sert vurduğunu ölçer. Birincil niteliklerin onu besler, daha güçlü silahlar ve teçhizat onu daha da yükseltir, bu yüzden bir yükseltme hasarda gerçek bir sıçrama olabilir.",
       "spTitle": "Büyü gücü",
       "spBody": "Büyü gücü, saldırı gücünün büyücülerdeki karşılığıdır: büyülerinin verdiği hasarı yükseltir. Zeka onu besler, büyücü teçhizatı ve takviyeler üstüne daha fazlasını ekler, bu yüzden bir büyü yapan, saldırı gücünü izleyen bir yakın dövüşçü gibi büyü gücünü izler.",
       "critTitle": "Kritik vuruş",
-      "critBody": "Kritik vuruş şansın, bir saldırının ne sıklıkta ekstra hasar verdiğidir. Herkes küçük bir temel şansla başlar ve Çeviklik (artı bazı yetenekler ve teçhizat) onun üstüne ekler. Karakter kâğıdın hem şansın kendisini hem de teçhizatının buna kattığı kritik vuruş puanını gösterir.",
+      "critBody": "Kritik vuruş şansın, bir saldırının ne sıklıkta ekstra hasar verdiğidir. Herkes küçük bir temel şansla başlar ve Çeviklik (artı bazı yetenekler ve teçhizat) onun üstüne ekler.",
       "dodgeTitle": "Sıyırma",
       "dodgeBody": "Sıyırma, gelen bir yakın dövüş saldırısından tamamen kaçınma şansındır. Küçük bir temel şansla başlarsın ve Çeviklik onu yükseltir, böylece çevik sınıflar daha çok darbe atlatır.",
       "hasteTitle": "Hız",
@@ -4832,16 +5034,16 @@ export const tr_TR: EnTranslations = {
     "progression": {
       "intro": "Her dövüş, her görev ve kuzeye atılan her adım kahramanını daha güçlü yapar. İşte seviye atlamanın nasıl işlediği ve zirveye vardığında seni nelerin geliştirmeye devam ettiği.",
       "xpTitle": "Tecrübeyi nasıl kazanırsın",
-      "xpBody": "Tecrübeyi görevleri tamamlayarak, düşmanları yenerek ve mağara seferlerini temizleyerek kazanırsın. Görevler açık ara en çoğunu verir, bu yüzden görev izini takip etmek tırmanmanın en hızlı yoludur. Yol boyunca öldürdüklerin ve mağara seferleri geri kalanı tamamlar.",
+      "xpBody": "Tecrübeyi görevleri tamamlayarak ve düşmanları yenerek kazanırsın. Görevler açık ara en çoğunu verir, bu yüzden görev izini takip etmek tırmanmanın en hızlı yoludur. Yol boyunca bir şeyler öldürmek geri kalanı tamamlar.",
       "capBody": "Her seviye seni daha güçlü kılar ve yeni yetenekler getirir, ta ki seviye {cap} olan tavana kadar.",
       "journeyTitle": "Kuzeye yolculuk",
       "journeyBody": "Dünya tek bir kesintisiz topraktır, güneyden kuzeye uzanan üç bölge, her biri seviye olarak bir basamak daha yüksek. Yeşil vadide başlar, bataklığı aşarak ilerler ve soğuk yüce zirvelerde sona erersin. Görev izini takip et, toprak seni birinden diğerine taşır.",
       "bandLabel": "Seviye {min} ile {max} arası",
       "restedTitle": "Dinlenmiş tecrübe",
-      "restedBody": "Bir hana gir ve dövüş dışında kal; beklerken karakterin dinlenmiş tecrübe biriktirir. Her kasabada bir tane vardır. Bir sonraki sefer dışarı çıkıp dövüştüğünde, o havuz tükenene kadar öldürdüklerine ekstra bir destek verir. Handa verilen bir mola asla boşa geçen zaman değildir; bir sonraki seviye atlama dilimini hızlandırır.",
+      "restedBody": "Bir handa olduğu gibi güvenli bir yerde, dövüş dışında dinlendiğinde, karakterin orada otururken dinlenmiş tecrübe biriktirir. Bir sonraki sefer dışarı çıkıp dövüştüğünde, o havuz tükenene kadar öldürdüklerine ekstra bir destek verir. Handa verilen bir mola asla boşa geçen zaman değildir; bir sonraki seviye atlama dilimini hızlandırır.",
       "capTitle": "Seviye {cap} seviyesine ulaşmak",
-      "capJourneyBody": "Seviye {cap} tavandır, seviye atlamanın sonu ama gelişmenin değil. Oradan itibaren zindanları ve akını normal ve kahramanca modda koşar, yükseldiğinde dünya şefiyle yüzleşir, daha iyi teçhizatın peşine düşer ve kendini arenada sınarsın.",
-      "prestigeBody": "Tecrübe, tavandan sonra bile sayılmaya devam eder. Kozmetik bir sanal seviyeyi besler, böylece tecrübe çubuğun tırmanmaya devam eder; ayrıca oraya ulaştığında karakter sayfandan talep edebileceğin uzun vadeli bir prestij rütbesi sağlar. Büyük ömür boyu tecrübe kilometre taşlarını geçmek, Yiğitlikler Kitabı'nda yiğitlikler de kazandırır; karakter sayfanda görünen kozmetik unvanlar ve isim levhası çerçeveleriyle birlikte. Bütün bunlar tamamen isteğe bağlıdır ve asla güç vermez, sadece yürüdüğün yolun bir nişanesidir.",
+      "capJourneyBody": "Seviye {cap} tavandır, seviye atlamanın sonu ama gelişmenin değil. Oradan itibaren zindanları ve akını koşar, daha iyi teçhizatın peşine düşer ve kendini arenada sınarsın.",
+      "prestigeBody": "Tecrübe, tavandan sonra bile sayılmaya devam eder. Kozmetik bir sanal seviyeyi besler, böylece tecrübe çubuğun tırmanmaya devam eder, ayrıca takdir için kazanabileceğin uzun vadeli bir prestij rütbesi sağlar. Büyük ömür boyu tecrübe kilometre taşlarını geçmek, karakter sayfanda görünen kozmetik unvanların ve isim levhası çerçevelerinin de kilidini açar. Bütün bunlar tamamen isteğe bağlıdır ve asla güç vermez, sadece yürüdüğün yolun bir nişanesidir.",
       "noRush": "Acele etmene gerek yok. Dünya kendi tempoda keyfini çıkarman için orada, o yüzden gez dolaş, gözüne çarpan görevleri al ve kahramanın yol boyunca gelişsin."
     },
     "placeholder": {
@@ -4855,7 +5057,7 @@ export const tr_TR: EnTranslations = {
   },
   "editor": {
     "appTitle": "Harita Editörü",
-    "docTitle": "Harita Editörü - World of ClaudeCraft",
+    "docTitle": "Harita Editörü - Cryptic Realm",
     "untitledMap": "Adsız Harita",
     "playtestPlayerName": "Haritacı",
     "topbar": {
@@ -5322,7 +5524,9 @@ export const tr_TR: EnTranslations = {
     "loginRegister": "Giriş/Kayıt",
     "account": "Hesap",
     "logout": "Çıkış Yap",
-    "donate": "Bağış Yap"
+    "donate": "Bağış Yap",
+    "contributions": "Contributions",
+    "whitepaper": "White Paper"
   },
   "stats": {
     "title": "Dünya Durumu",
@@ -5332,9 +5536,9 @@ export const tr_TR: EnTranslations = {
     "realmName": "Dünya Adı"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
+    "copyright": "2026 Cryptic Realm",
     "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "Açık Kaynak Proje",
+    "githubLabel": "Contributions",
     "whitepaper": "Teknik Doküman",
     "terms": "Hizmet Koşulları",
     "privacy": "Gizlilik Politikası",
@@ -5363,7 +5567,17 @@ export const tr_TR: EnTranslations = {
     "prerelease": "Ön sürüm",
     "viewOnGithub": "GitHub'da Görüntüle",
     "new": "Yeni",
-    "viewAll": "GitHub'daki tüm güncellemeleri görüntüle"
+    "viewAll": "GitHub'daki tüm güncellemeleri görüntüle",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "officialLog": "Official Work Log",
+    "openLink": "Open",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "prTitle": "Upstream Kindness Track",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links.",
+    "proofTitle": "$CR Proof",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap"
   },
   "download": {
     "title": "Masaüstü Başlatıcısını İndir",
@@ -5390,11 +5604,11 @@ export const tr_TR: EnTranslations = {
     "serverOnline": "Çevrimiçi",
     "serverOffline": "Çevrimdışı",
     "play": "Oyna",
-    "playAria": "World of ClaudeCraft oyna",
+    "playAria": "Cryptic Realm oyna",
     "serverLabel": "Dünyanı seç",
     "serverAria": "Dünya seç: Çevrimiçi veya Çevrimdışı",
     "serverOfflineSub": "Anında yerel dünya",
-    "caLabel": "$WOC Sözleşme Adresi",
+    "caLabel": "$CR Sözleşme Adresi",
     "caCopyAria": "Sözleşme adresini kopyala",
     "caNote": "WOC topluluk jetonumuzdur. Oynamak için gerekli değildir. WOC'un faydasını ve döngüsünü tartışmak için Discord'a katılın."
   },
@@ -5635,10 +5849,17 @@ export const tr_TR: EnTranslations = {
       "logOut": "Çıkış Yap",
       "invalid": "Lütfen geçerli bir e-posta adresi gir.",
       "failed": "E-postan kaydedilemedi. Lütfen tekrar dene."
-    }
+    },
+    "hardcoreChar": "Hardcore character",
+    "hardcoreHint": "Permadeath. If this character dies, it is permanently retired and can no longer be played. There is no resurrection.",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress).",
+    "ssoButton": "Continue with Google, Facebook, or Plex",
+    "ssoMoveweight": "Sign in with MoveWeight",
+    "ssoProviders": "Continue with Google, Facebook, Plex, or Discord"
   },
   "wallet": {
-    "label": "$WOC Cüzdanı",
+    "label": "$CR Cüzdanı",
     "connect": "Cüzdanı Doğrula",
     "connectTitle": "Solana cüzdanınızı doğrulayın",
     "connectAria": "Solana cüzdanınızı doğrulayın",
@@ -5671,11 +5892,11 @@ export const tr_TR: EnTranslations = {
     "linkedDisconnectedAria": "Cüzdan hesabınız için doğrulanmış kalır. Cüzdan uygulamasını yönetmek için yeniden bağlanın.",
     "linkTitle": "Bu cüzdanı imzalayıp hesabınıza bağlamak için tıklayın.",
     "connectedTitle": "Bağlandı. Bu cüzdanı hesabınıza bağlamak için giriş yapın.",
-    "balanceTitle": "Doğrulanmış Solana cüzdanı $WOC bakiyesi",
+    "balanceTitle": "Doğrulanmış Solana cüzdanı $CR bakiyesi",
     "balanceAria": "Doğrulanmış Solana cüzdanı bakiyesi: {balance}",
-    "balancePreviewTitle": "Bağlı cüzdan $WOC bakiyesi önizlemesi",
+    "balancePreviewTitle": "Bağlı cüzdan $CR bakiyesi önizlemesi",
     "balancePreviewAria": "Bağlı cüzdan bakiyesi önizlemesi: {balance}. Sahip rozetini doğrulamak için cüzdanı bağlayın.",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "bagConnect": "Cüzdanı bağla",
     "bagLink": "Cüzdanı doğrula",
     "bagReconnect": "Cüzdanı yeniden bağla",
@@ -5695,12 +5916,12 @@ export const tr_TR: EnTranslations = {
     "extensionHelp": "Burada bir cüzdan görmek için Solflare Wallet gibi bir tarayıcı cüzdan uzantısını etkin tutun.",
     "mobileAppHelp": "Phantom veya Solflare'i seç. Cüzdan uygulan onay isteyecek. Bu oyunu açık bırak ve bittiğinde geri dön.",
     "seekerAppHelp": "Seed Vault Wallet ile devam et. Bağlantı ve doğrulama isteklerini Seed Vault'ta incele, sonra oyuna dön.",
-    "standaloneAppHelp": "Ana Ekran uygulamasında cüzdan bağlantıları henüz mevcut değil. Phantom veya Solflare kullanmak için World of ClaudeCraft'ı Safari veya Chrome'da aç.",
+    "standaloneAppHelp": "Ana Ekran uygulamasında cüzdan bağlantıları henüz mevcut değil. Phantom veya Solflare kullanmak için Cryptic Realm'ı Safari veya Chrome'da aç.",
     "openAppTitle": "{wallet}'da devam et",
     "openAppHelp": "Bu isteği incelemek için {wallet}'u aç. Cüzdan uygulaması etkinken bu oyun sekmesini açık bırak.",
     "openAppButton": "{wallet}'u aç",
     "manualReturnBrowserHelp": "Onayladıktan sonra bu oyun sekmesine dön. iOS başka bir tarayıcı açarsa, kapat ve orijinal tarayıcıya manuel olarak dön.",
-    "manualReturnStandaloneHelp": "Onayladıktan sonra Ana Ekranından World of ClaudeCraft'a dön. iOS bir tarayıcı açarsa, kapat ve Ana Ekran uygulamasını manuel olarak yeniden aç.",
+    "manualReturnStandaloneHelp": "Onayladıktan sonra Ana Ekranından Cryptic Realm'a dön. iOS bir tarayıcı açarsa, kapat ve Ana Ekran uygulamasını manuel olarak yeniden aç.",
     "preparingAppButton": "{wallet} hazırlanıyor...",
     "walletAppUnavailable": "{wallet} hazırlanamadı. Bu pencereyi kapat ve tekrar dene.",
     "flowConnect": "Bir cüzdan seçin. Doğrulama otomatik olarak devam eder.",
@@ -5715,18 +5936,18 @@ export const tr_TR: EnTranslations = {
       "linkBody": "Bu tarayıcıda bir cüzdan uzantısı seç. Bir doğrulama mesajı imzalayacak, ardından masaüstü uygulamasına döneceksin.",
       "paymentBody": "Hesabına bağlı cüzdanı seç ve bu tarayıcıda işlemi onayla.",
       "extensionHelp": "Uyumlu cüzdan uzantısı bulunamadı. Phantom, Solflare veya başka bir Solana tarayıcı cüzdanını yükle ya da kilidini aç, ardından tekrar dene.",
-      "safety": "World of ClaudeCraft hiçbir zaman kurtarma ifadeni veya özel anahtarını istemez.",
+      "safety": "Cryptic Realm hiçbir zaman kurtarma ifadeni veya özel anahtarını istemez.",
       "continueWith": "{wallet} ile devam et",
       "reviewTitle": "Cüzdanında incele",
       "reviewBody": "{wallet}'dan gelen istemi takip et. Bu tarayıcı sayfasını açık bırak.",
       "completeTitle": "Cüzdan yetkilendirmesi tamamlandı",
-      "completeBody": "World of ClaudeCraft masaüstü uygulamasına dönebilirsin.",
+      "completeBody": "Cryptic Realm masaüstü uygulamasına dönebilirsin.",
       "returnButton": "Masaüstü uygulamasına dön",
       "failed": "Cüzdan yetkilendirmesi başarısız oldu veya süresi doldu. Masaüstü uygulamasına dön ve tekrar dene.",
       "retry": "Tekrar dene"
     },
-    "holder": "$WOC sahibi",
-    "holderTierTitle": "{tier} $WOC sahibi",
+    "holder": "$CR sahibi",
+    "holderTierTitle": "{tier} $CR sahibi",
     "holderTiers": {
       "ember": {
         "name": "Köz",
@@ -5750,7 +5971,7 @@ export const tr_TR: EnTranslations = {
       },
       "vaultwarden": {
         "name": "Kasa Muhafızı",
-        "flavor": "Artık gerçek bir kasayı koruyorsun: tüm $WOC'nin %0,01'i."
+        "flavor": "Artık gerçek bir kasayı koruyorsun: tüm $CR'nin %0,01'i."
       },
       "whale": {
         "name": "Balina",
@@ -5818,16 +6039,16 @@ export const tr_TR: EnTranslations = {
     "levelClass": "Seviye {level} - {className}",
     "topPercent": "İLK %{percent}",
     "realmSubtitle": "{realm} Dünyası",
-    "defaultRealm": "World of ClaudeCraft",
+    "defaultRealm": "Cryptic Realm",
     "brandWordmark": "WORLD OF CLAUDECRAFT",
     "recruited": "{count} davet edildi",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Efsaneni yarat: {siteUrl}",
     "arenaStat": "Arena",
-    "shareTierBit": ", {tier}-derece $WOC sahibi",
-    "shareText": "World of ClaudeCraft'ta efsanemi yaratıyorum: Seviye {level} {className}{tierBit}. Dünyama katıl:",
-    "nativeShareTitle": "World of ClaudeCraft",
+    "shareTierBit": ", {tier}-derece $CR sahibi",
+    "shareText": "Cryptic Realm'ta efsanemi yaratıyorum: Seviye {level} {className}{tierBit}. Dünyama katıl:",
+    "nativeShareTitle": "Cryptic Realm",
     "fileNameFallback": "oyuncu",
     "actionShareX": "X'te Paylaş",
     "actionCopyReferral": "Davet Bağlantısını Kopyala",
@@ -6025,6 +6246,71 @@ export const tr_TR: EnTranslations = {
       "toolSlips": "O alet bu kilitten kayıp gider.",
       "lockJammed": "Kilit, açılamayacak kadar sıkıştı. Başka bir deneme için delveyi tekrar temizle.",
       "lastPickSnaps": "Son maymuncuk kırılır. Kilit sıkışır. Delveyi tekrar temizlemezsen sandık kaybolur."
+    },
+    "venues": {
+      "derbyErrFull": "The grid is full for the next race.",
+      "derbyErrMarshal": "Sign up with the Race Marshal at the Thornwheel gate.",
+      "derbyErrRunning": "A race is already running. Wait for the next grid.",
+      "derbyFinish": "Checkered flag! You finish in {place} place.",
+      "derbyFinishPurse": "Checkered flag! You take {place} place and a {silver}s purse.",
+      "derbyGreen": "GREEN FLAG! Go go go!",
+      "derbyGrid": "Grid position {slot}. {laps} laps: follow the flags. Green in {seconds}...",
+      "derbyQueued": "You are signed up for the Thornwheel Derby ({count} on the grid).",
+      "derbyTimeUp": "Time! The Marshal waves you in.",
+      "homeDeed": "The deed to {name} is yours. Welcome home.",
+      "homeErrEntitlement": "A deed on Homestead Lane costs {price} $CR — settle the deed payment first.",
+      "homeErrHaveDeed": "You already hold a deed on Homestead Lane.",
+      "homeErrOwned": "That home already has an owner.",
+      "homeErrRealtor": "See Realtor Maribel on Homestead Lane to buy a home.",
+      "homeForSale": "That plot is still for sale.",
+      "homeShownDoor": "You are shown to the door.",
+      "hordeAlarm": "THE HORDE ALARM SOUNDS! The dead march on Eastbrook from the north road!",
+      "hordeBreach": "The dead break into the square! Wards left: {wards}.",
+      "hordeErrBoard": "Sound the alarm from the town defense board.",
+      "hordeErrBuildCost": "Raising a watch post costs 15s in timber and bowstrings.",
+      "hordeErrBuildMidWave": "Build between waves, not while the dead are inside the walls.",
+      "hordeErrCost": "Fortifying the town costs 20s in timber and nails.",
+      "hordeErrMaxWards": "The town is fortified to the rafters already.",
+      "hordeErrMidWave": "Fortify between waves, not while the dead are inside the walls.",
+      "hordeErrRunning": "The horde alarm is already sounding.",
+      "hordeFortified": "You fortify the town. Wards: {wards}. The line stands taller.",
+      "hordeLoss": "The last ward falls. The dead have Eastbrook tonight.",
+      "hordePostMax": "The watch posts are built out.",
+      "hordePostReinforced": "A watch post is reinforced to strength {level}.",
+      "hordePostUp": "A watch post rises on the line ({built} of {total}).",
+      "hordeWave": "WAVE {wave} of {waves}: {count} of the dead are on the road!",
+      "hordeWaveDown": "Wave {wave} is down. Fortify while you can — the next comes soon.",
+      "hordeWin": "The town stands! The bursar counts out your share: 80s.",
+      "pitBellMissed": "The bell rang without you. Your Boarpit card spot is forfeit.",
+      "pitDraw": "The Pit Master calls it a draw.",
+      "pitEnter": "Into the pit! {count} fighters. Fists in {seconds}...",
+      "pitErrFull": "The card is full for the next bout.",
+      "pitErrMaster": "Sign up with the Pit Master at the Boarpit gate.",
+      "pitErrRunning": "A bout is on. Wait for the next bell.",
+      "pitFight": "FIGHT!",
+      "pitForfeit": "You forfeit the bout.",
+      "pitKo": "Knocked out! You are hauled to the rail.",
+      "pitQueued": "You are on the card for the next Boarpit bout ({count} signed).",
+      "pitWin": "Last one standing! You take the pot: {silver}s.",
+      "skAxe": "Your builder shoulders the axe.",
+      "skBarracksUp": "Your barracks stands. Footmen may muster.",
+      "skBuilderDead": "Your camp builder has fallen.",
+      "skErrBusy": "You can't muster a warcamp right now.",
+      "skErrCost": "Not enough timber and stone for that.",
+      "skErrFull": "The muster roll is full.",
+      "skFootmanUp": "A footman answers the muster.",
+      "skHasBarracks": "Your camp already has a barracks.",
+      "skLoss": "The warband overruns the field. The skirmish is lost.",
+      "skNeedBarracks": "Footmen need a barracks.",
+      "skPick": "Your builder hefts the pick.",
+      "skQueued": "You are on the muster roll for a Warcamp Skirmish ({count} of 4).",
+      "skRally": "Your footmen march on the rally point.",
+      "skStart": "WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!",
+      "skTentDown": "Your Command Tent has fallen. Your camp is out.",
+      "skTowerUp": "A watchtower rises over your camp.",
+      "skTowersMax": "Your camp has all its watchtowers.",
+      "skWave": "Warband wave {wave} rides for the camps!",
+      "skWin": "The warband banner falls! The field is yours: 120s the commander."
     }
   },
   "lockpickUi": {
@@ -6170,7 +6456,8 @@ export const tr_TR: EnTranslations = {
       "riteChoose": "Boğulmuş Emanetlik'e yaklaş ve ayini başlatmak için F'ye bas",
       "ritePlayback": "Sunakları izle: yanma sırasını ezberle",
       "riteInput": "Her sunakta, yandıkları sırayla F'ye bas ({current}/{total})",
-      "riteOpen": "Emanetlik açık: ganimetini almak için üzerinde F'ye bas"
+      "riteOpen": "Emanetlik açık: ganimetini almak için üzerinde F'ye bas",
+      "descend": "Descend the Hellmaw"
     },
     "objective": {
       "kill_boss": "{boss} adlı düşmanı öldür",
@@ -6322,6 +6609,7 @@ export const tr_TR: EnTranslations = {
   "yumi": {
     "bracket3": "Yumi'yi Koru 3v3",
     "bracket5": "Yumi'yi Koru 5v5",
+    "enterQueue": "Yumi'yi Koru'ya Katıl!",
     "queue": {
       "join": "Yumi'yi Koru kuyruğuna katılıyorsun. Yoldaşını koru…",
       "leave": "Yumi'yi Koru kuyruğundan ayrılıyorsun.",
@@ -6359,6 +6647,7 @@ export const tr_TR: EnTranslations = {
   },
   "fiesta": {
     "bracket": "Fiesta",
+    "enterQueue": "Fiesta'ya Katıl!",
     "banner": {
       "wave": "DALGA {wave}/{total} — BİR GÜÇLENDİRME SEÇ!",
       "augmentGained": "Güçlendirme kazanıldı: {name}!",
@@ -6523,14 +6812,14 @@ export const tr_TR: EnTranslations = {
     }
   },
   "seo": {
-    "title": "World of ClaudeCraft: Klasik Tarzı Web MMO'su",
-    "description": "Doğrudan tarayıcında oynanabilen klasik tarzı bir mikro MMO olan World of ClaudeCraft'ta destansı bir maceraya atıl. Kalıcı bir ortak dünyaya katıl, sınıfları geliştir ve düşmanları alt et!",
+    "title": "Cryptic Realm: Klasik Tarzı Web MMO'su",
+    "description": "Doğrudan tarayıcında oynanabilen klasik tarzı bir mikro MMO olan Cryptic Realm'ta destansı bir maceraya atıl. Kalıcı bir ortak dünyaya katıl, sınıfları geliştir ve düşmanları alt et!",
     "genre": "MMORPG",
     "playMode": "Çok Oyunculu",
     "applicationCategory": "Oyun",
     "operatingSystem": "Web tarayıcısı",
-    "officialLabel": "Resmi World of ClaudeCraft web sitesi",
-    "officialBody": "worldofclaudecraft.com, Claudemoon dünyasının resmi ücretsiz tarayıcı MMO'sudur. Kalıcı bir karakterle çevrimiçi oyna, çevrimdışı tek başına keşfet, wiki'yi oku ve bu siteden doğrulanmış topluluk bağlantılarını takip et."
+    "officialLabel": "Resmi Cryptic Realm web sitesi",
+    "officialBody": "crypticrealm.com, Claudemoon dünyasının resmi ücretsiz tarayıcı MMO'sudur. Kalıcı bir karakterle çevrimiçi oyna, çevrimdışı tek başına keşfet, wiki'yi oku ve bu siteden doğrulanmış topluluk bağlantılarını takip et."
   },
   "a11y": {
     "goHome": "Ana sayfaya git",
@@ -6538,9 +6827,9 @@ export const tr_TR: EnTranslations = {
     "mainNavigation": "Ana gezinme",
     "languageSelection": "Dil seçimi",
     "characterActions": "Karakter eylemleri",
-    "githubProject": "World of ClaudeCraft GitHub projesini aç",
-    "discordCommunity": "World of ClaudeCraft Discord topluluğuna katıl",
-    "donateProject": "World of ClaudeCraft'a destek olmak için bağış yap"
+    "githubProject": "Cryptic Realm GitHub projesini aç",
+    "discordCommunity": "Cryptic Realm Discord topluluğuna katıl",
+    "donateProject": "Cryptic Realm'a destek olmak için bağış yap"
   },
   "entryGuard": {
     "title": "Grafikler düşürüldü",
@@ -6573,7 +6862,8 @@ export const tr_TR: EnTranslations = {
       "professions": "İpucu: toplama ve üretim mesleklerini savaş sınıfının yanında geliştirebilirsin.",
       "loadouts": "İpucu: puanları iki kez harcamadan farklı dizilimler arasında geçmek için birden fazla yetenek düzeni kaydet.",
       "pvp": "İpucu: dizilimini sınamak için başka bir oyuncuya dostça düello teklif et veya Kül Koliseumu arenası sırasına gir."
-    }
+    },
+    "reconnecting": "Bağlantı kesildi. Yeniden bağlanılıyor..."
   },
   "errors": {
     "nothingInteract": "Etkileşime girilecek bir şey yok.",
@@ -6615,6 +6905,7 @@ export const tr_TR: EnTranslations = {
   },
   "desktop": {
     "update": {
+      "downloading": "{version} güncellemesi indiriliyor...",
       "checkingTitle": "Güncellemeler kontrol ediliyor...",
       "checkingBody": "Yeni sürümler siz oynarken indirilir.",
       "uptodateTitle": "En güncel sürümdesin",
@@ -6627,11 +6918,11 @@ export const tr_TR: EnTranslations = {
       "dismiss": "Kapat"
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "body": "Oyun görünümü çalışmayı durdurdu. Yeniden yüklensin mi?",
       "reload": "Yeniden Yükle",
       "quit": "Çık",
-      "fatalBody": "World of ClaudeCraft beklenmeyen bir hatayla karşılaştı ve kapatılması gerekiyor."
+      "fatalBody": "Cryptic Realm beklenmeyen bir hatayla karşılaştı ve kapatılması gerekiyor."
     }
   },
   "gpuNotice": {
@@ -6666,7 +6957,9 @@ export const tr_TR: EnTranslations = {
     "characterCountOther": "{count} karakter",
     "selectedRealm": "Dünya: {name}",
     "statsOffline": "Çevrimdışı",
-    "statsRealmOffline": "{realm} (Çevrimdışı)"
+    "statsRealmOffline": "{realm} (Çevrimdışı)",
+    "enter": "Enter Realm",
+    "exchangeNote": "The Exchange is the only realm where items move between realms."
   },
   "character": {
     "loading": "Yükleniyor...",
@@ -6770,17 +7063,17 @@ export const tr_TR: EnTranslations = {
     "iosStandaloneDetail": "Ana ekran tam ekran modundasınız. Cihazı yatay konumda tutun.",
     "iosInstallDetail": "iPhone veya iPad'de gerçek tam ekran için önce bu sayfayı Ana Ekranınıza yükleyin.",
     "iosShareStep": "Safari'de Paylaş'a, ardından Ana Ekrana Ekle'ye dokunun.",
-    "iosOpenStep": "World of ClaudeCraft'ı yeni Ana Ekran simgesinden açın.",
+    "iosOpenStep": "Cryptic Realm'ı yeni Ana Ekran simgesinden açın.",
     "androidStandaloneDetail": "Tam ekran uygulama modundasınız. Cihazı yatay konumda tutun.",
     "androidInstallDetail": "Android'de tam ekran için önce bu sayfayı yükleyin veya Ana ekranınıza ekleyin.",
     "androidInstallStep": "Chrome'da menüye dokunun, ardından Uygulamayı yükle veya Ana ekrana ekle seçeneğini seçin.",
-    "androidOpenStep": "World of ClaudeCraft'ı yeni simgeden açın.",
+    "androidOpenStep": "Cryptic Realm'ı yeni simgeden açın.",
     "otherStandaloneDetail": "Cihazınızı yatay tam ekran konumunda tutun.",
     "otherInstallDetail": "En iyi tam ekran mobil deneyim için bu sayfayı yükleyin veya Ana ekranınıza ekleyin."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Dünya Kullanılamıyor",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - Dünya Kullanılamıyor",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "Dünya bakımı",
     "heading": "Dünya geçici olarak kullanılamıyor.",
     "body": "Oyun hizmetini yeniden başlatıyoruz ve Claudemoon'un kısa süre içinde geri döneceğini umuyoruz. Bu sayfa otomatik olarak denetlemeye devam edecek.",
@@ -6849,7 +7142,8 @@ export const tr_TR: EnTranslations = {
       "zoomIn": "Yakınlaştır",
       "zoomOut": "Uzaklaştır",
       "mapCanvasLabel": "Harita",
-      "mapSummary": "{zone} haritası."
+      "mapSummary": "{zone} haritası.",
+      "mobileArena": "Arena"
     },
     "options": {
       "gameMenu": "Oyun Menüsü",
@@ -6926,6 +7220,34 @@ export const tr_TR: EnTranslations = {
       "primary": "Birincil",
       "alternate": "Alternatif",
       "unbound": "Atanmamış",
+      "arcforge": "ArcForge",
+      "controller": "Controller",
+      "controllerDisconnected": "Not connected",
+      "coop": "Join Co-Op",
+      "customization": "Customization",
+      "mods": "Mods",
+      "padA": "A",
+      "padAttackTarget": "Attack nearest · target",
+      "padB": "B",
+      "padBack": "Back / View",
+      "padCursorNote": "When a menu, quest dialog, or chat opens, the on-screen cursor arms automatically — move it with a stick and press A to click (accept quests, send chat, use menus).",
+      "padCursorToggle": "Toggle mouse cursor",
+      "padDpad": "D-Pad",
+      "padInteract": "Interact / talk to NPC",
+      "padJumpClick": "Jump · click in cursor mode",
+      "padLbRb": "LB / RB",
+      "padLeftStick": "Left Stick",
+      "padLookCursor": "Look / move cursor",
+      "padLtRt": "LT / RT (hold)",
+      "padMenu": "Open game menu",
+      "padMove": "Move",
+      "padRightStick": "Right Stick",
+      "padSkillChords": "Hold + A/B/X/Y for skills 9–16",
+      "padSkills12": "Skills 1 & 2",
+      "padSkills47": "Skills 5–8",
+      "padStart": "Start / Menu",
+      "padXY": "X / Y",
+      "reportBug": "Report Bug",
       "mouseCamera": "Fare Kamerası",
       "keybindHelpMouseCamera": "Fare Kamerası kapalı: A/D döndürür, yörüngede dönmek için sürükleyin (klasik). Açık: kameraya göreli WASD, A/D yana kayar. Yeniden atamak için bir tuş hücresine tıklayın; Esc iptal eder."
     },
@@ -6956,7 +7278,7 @@ export const tr_TR: EnTranslations = {
         "nameplates": "İsim Levhalarını Aç/Kapat",
         "meters": "Hasar Ölçerleri",
         "social": "Arkadaşlar ve Lonca",
-        "arena": "PvP (Dikenvadi Ovası ve Arenalar)",
+        "arena": "Arena (Kül Koliseumu)",
         "chat": "Sohbeti Aç",
         "attack": "Saldır",
         "actionBarSlot": "Eylem Çubuğu {slot}"
@@ -7273,7 +7595,7 @@ export const tr_TR: EnTranslations = {
       "defensiveDesc": "Sana ya da evciline zarar veren düşmanlara saldırır.",
       "aggressiveDesc": "Yakındaki düşman varlıklara saldırır.",
       "rename": "Evcili Yeniden Adlandır",
-      "revive": "Yarasını Sar",
+      "revive": "Evcili Dirilt",
       "abandon": "Evcili Terk Et",
       "cancel": "İptal",
       "renameLabel": "Yeni bir evcil adı seç.",
@@ -7898,6 +8220,14 @@ export const tr_TR: EnTranslations = {
         "name": "Demir Nara",
         "description": "Tüm grup üyelerinin saldırı gücünü 30 dakika boyunca %{buff} artıran bir nara."
       },
+      "commanding_shout": {
+        "name": "Güçlendiren Nara",
+        "description": "Dayanıklılığını 2 dakika boyunca {buff} artırır."
+      },
+      "rend": {
+        "name": "Derin Yarık",
+        "description": "Hedefi yaralar, {duration} saniye boyunca {damage} kanama hasarı vermesine yol açar."
+      },
       "demoralizing_shout": {
         "name": "Vahim Uluma",
         "description": "Korkunç bir nara atarak yakındaki tüm düşmanların verdiği hasarı 20 saniye boyunca %{buff} azaltır."
@@ -7976,7 +8306,7 @@ export const tr_TR: EnTranslations = {
       },
       "greater_invisibility": {
         "name": "Üstün Görünmezlik",
-        "description": "20 sn boyunca gözden kaybolursun ve zamana yayılan 2 hasar etkisini kaldırırsın. Görünmezlik sona erdiğinde 2 sn boyunca %90 daha az hasar alırsın. (büyücü yeteneği)"
+        "description": "20 sn. boyunca kaybolursun: 2 zamanla hasar etkisini kaldırır ve görünmezken ve hemen sonrasında %90 daha az hasar alırsın. (büyücü yeteneği)"
       },
       "hot_streak": {
         "name": "Sıcak Seri",
@@ -8076,7 +8406,7 @@ export const tr_TR: EnTranslations = {
       },
       "frost_nova": {
         "name": "Buz Bağı",
-        "description": "Yakındaki tüm düşmanları 8 saniyeye kadar yerinde dondurur ve {damage} Ayaz hasarı verir. Köklenme etkisi, hedefin azami sağlığının %15’ine eşit toplam hasar aldıktan sonra kırılır; bu değer en az 20, en fazla 60 hasardır."
+        "description": "Yakındaki tüm düşmanları 8 saniyeye kadar yerinde dondurur ve {damage} Ayaz hasarı verir."
       },
       "arcane_explosion": {
         "name": "Aether Patlaması",
@@ -8131,7 +8461,7 @@ export const tr_TR: EnTranslations = {
         "description": "Hedefe %250 silah hasarı artı {damage} ile pusu kur. Gizlenmiş ve hedefin arkasında olmalısın. Bir hançer gerektirir. 1 kombo puanı kazandırır."
       },
       "stealth": {
-        "name": "Alaca Örtüsü",
+        "name": "Duskveil",
         "description": "Seni gölgelerde gizler: düşmanlar seni güçlükle fark eder, ancak %50 daha yavaş hareket edersin. Saldırmak ya da hasar almak Duskveil'i bozar. Çıkmak için tekrar kullan."
       },
       "adrenaline_rush": {
@@ -8363,7 +8693,7 @@ export const tr_TR: EnTranslations = {
         "description": "Silahını kavrayan ayazla güçlendirir: her vuruş 5 dakika boyunca {damage} ek hasar verir."
       },
       "ghost_wolf": {
-        "name": "Gölge Kurdu",
+        "name": "Shadewolf",
         "description": "Seni bir Shadewolf'a dönüştürür ve hareket hızını 10 dakika boyunca %40 artırır."
       },
       "stormstrike": {
@@ -8419,7 +8749,7 @@ export const tr_TR: EnTranslations = {
         "description": "Dost bir hedefi {damage} iyileştirir."
       },
       "mark_of_the_wild": {
-        "name": "Yaban Siperi",
+        "name": "Wildward",
         "description": "Dost bir hedefe Wildward'ı yerleştirir ve zırhını 30 dakika boyunca {buff} artırır."
       },
       "moonfire": {
@@ -8440,7 +8770,7 @@ export const tr_TR: EnTranslations = {
       },
       "bear_form": {
         "name": "Bruin Formu",
-        "description": "Bir ayıya dönüş: zırh +%130, saldırı gücü büyük ölçüde artar, saldırıların öfke biriktirir ve %30 daha fazla tehdit üretir. Büyücü formuna dönmek için tekrar kullan."
+        "description": "Bir ayıya dönüş: zırh +%90, saldırı gücü büyük ölçüde artar, saldırıların öfke biriktirir ve %30 daha fazla tehdit üretir. Büyücü formuna dönmek için tekrar kullan."
       },
       "maul": {
         "name": "Kemik Kıran",
@@ -8520,7 +8850,7 @@ export const tr_TR: EnTranslations = {
       },
       "tigers_fury": {
         "name": "Kurt Kanı",
-        "description": "Saldırı gücünü {duration} saniye boyunca {buff} artırır. Yalnızca Kurt Formu."
+        "description": "Increases attack power by {buff} for {duration} sec. Wolf Form only."
       },
       "rip": {
         "name": "Parçalama",
@@ -9059,8 +9389,8 @@ export const tr_TR: EnTranslations = {
         "description": "Düşmanı silah hasarı artı {damage} ile tırmalayan ve 9 saniye boyunca kanama hasarı yaratan gizlilik açılışı. 1 kombo puanı kazandırır. Yalnızca Kurt Formu."
       },
       "revive_pet": {
-        "name": "Yarasını Sar",
-        "description": "Evcilinin yaralarını sarar. Yaşıyorsa 12 saniye boyunca her 3 saniyede bir iyileştirerek toplam {overTime} can yeniler. Ölüyse %35 canla diriltir."
+        "name": "Evcili Diriltme",
+        "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
       }
     },
     "items": {
@@ -9149,7 +9479,7 @@ export const tr_TR: EnTranslations = {
         "name": "Doğudere Zincir Zırh Yeleği"
       },
       "valespun_robe": {
-        "name": "Vadieğirme Cübbesi"
+        "name": "Vadidokuma Cübbesi"
       },
       "tanned_leather_jerkin": {
         "name": "Tabaklanmış Deri Ceket"
@@ -9202,6 +9532,18 @@ export const tr_TR: EnTranslations = {
       "gravecaller_sigil": {
         "name": "Mezarçağıran'ın Mührü"
       },
+      "binding_ward": {
+        "name": "Hellmaw Binding Ward"
+      },
+      "renders_hateforged_cleaver": {
+        "name": "The Render's Hateforged Cleaver"
+      },
+      "sigilbrand_of_the_durance": {
+        "name": "Brand of the Hellmaw"
+      },
+      "hollow_fang_of_hate": {
+        "name": "Hollow Fang of the Well"
+      },
       "blessed_wax": {
         "name": "Kutsanmış Don Yağı"
       },
@@ -9251,13 +9593,13 @@ export const tr_TR: EnTranslations = {
         "name": "Keten Parçası"
       },
       "arcane_dust": {
-        "name": "Arkanik Toz"
+        "name": "Ezoterik Toz"
       },
       "arcane_essence": {
-        "name": "Arkanik Öz"
+        "name": "Ezoterik Öz"
       },
       "arcane_shard": {
-        "name": "Arkanik Kıymık"
+        "name": "Ezoterik Kırıntı"
       },
       "fen_muster_order": {
         "name": "Fenbridge Seferberlik Emri"
@@ -9518,7 +9860,7 @@ export const tr_TR: EnTranslations = {
         "name": "Zirveyünü Cübbesi"
       },
       "stalkerhide_jerkin": {
-        "name": "Sinsiposta Cepkeni"
+        "name": "Avcıderisi Ceketi"
       },
       "cragwalker_boots": {
         "name": "Kayayürüyen Çizmeleri"
@@ -9689,7 +10031,7 @@ export const tr_TR: EnTranslations = {
         "name": "Dişbudak Baltası"
       },
       "elderwood_axe": {
-        "name": "Yaşlıağaç Baltası"
+        "name": "Kadim Ağaç Baltası"
       },
       "goldleaf_sickle": {
         "name": "Altınyaprak Orağı"
@@ -9701,13 +10043,13 @@ export const tr_TR: EnTranslations = {
         "name": "Toryum Cevheri"
       },
       "arcanite_bar": {
-        "name": "Arkanit Çubuğu"
+        "name": "Arkanit Külçesi"
       },
       "ashwood_log": {
         "name": "Kül Ağacı Kütüğü"
       },
       "elderwood_log": {
-        "name": "Yaşlıağaç Kütüğü"
+        "name": "Yaşlı Mürver Kütüğü"
       },
       "goldleaf_herb": {
         "name": "Altın Yaprak Otu"
@@ -10720,6 +11062,15 @@ export const tr_TR: EnTranslations = {
       "simple_fishing_pole": {
         "name": "Basit Olta"
       },
+      "mount_forest_stag": {
+        "name": "Orman Geyiği Dizgini"
+      },
+      "mount_swamp_raptor": {
+        "name": "Mızrakçene Eyeri"
+      },
+      "mount_emerald_wyrm": {
+        "name": "Zümrüt Ejder Dizginleri"
+      },
       "tangled_weed": {
         "name": "Dolaşık Yabanot"
       },
@@ -10748,7 +11099,7 @@ export const tr_TR: EnTranslations = {
         "name": "Nightfang Postalları"
       },
       "glimmerfin_koi": {
-        "name": "Parıltıyüzgeci Sazan"
+        "name": "Pırıltıyüzgeç Koi"
       },
       "raw_bog_eel": {
         "name": "Çiğ Bataklık Yılanbalığı"
@@ -11625,6 +11976,36 @@ export const tr_TR: EnTranslations = {
       "vale_cup_ball": {
         "name": "Yaban Domuzu Topu"
       },
+      "hellmaw_charred_husk": {
+        "name": "Charred Husk"
+      },
+      "hellmaw_cinder_acolyte": {
+        "name": "Cinder Acolyte"
+      },
+      "hellmaw_cursed_knight": {
+        "name": "Cursed Iron Knight"
+      },
+      "hellmaw_ember_behemoth": {
+        "name": "Ember Behemoth"
+      },
+      "hellmaw_inferno_dragon": {
+        "name": "Inferno Dragon"
+      },
+      "hellmaw_lava_fiend": {
+        "name": "Lava Fiend"
+      },
+      "hellmaw_primal_beast": {
+        "name": "Primal Emberbeast"
+      },
+      "hellmaw_sigilbound_warlock": {
+        "name": "Sigil-Bound Warlock"
+      },
+      "hellmaw_the_render": {
+        "name": "The Render"
+      },
+      "hellmaw_wailing_spectre": {
+        "name": "Wailing Spectre"
+      },
       "thunzharr_waking_peak": {
         "name": "Thunzharr, Uyanan Zirve"
       },
@@ -12217,6 +12598,41 @@ export const tr_TR: EnTranslations = {
         "title": "Emanetlik Bekçisi",
         "greeting": "İz kuzeye çıktı. Bir emanetlik daha, bir ayin daha. Kademeni seç, sen dönene dek ipi ben tutarım."
       },
+      "cainhurst_sage": {
+        "name": "Cainhurst the Sage",
+        "title": "Keeper of the Hellmaw",
+        "greeting": "You pulled me from the Hellmaw, friend - I do not forget it. The well is open to you now. Steel yourself: The Render waits at the bottom."
+      },
+      "stable_master_wren": {
+        "name": "Wren Saddleworth",
+        "title": "Ahır Ustası",
+        "greeting": "Her kahramanın bir bineğe ihtiyacı var, {className}. Geyik sağlamdır, raptor hızlıdır, ejder ise... ejder uçar."
+      },
+      "mercenary_kael": {
+        "name": "Kael the Sellsword",
+        "title": "Wandering Mercenary",
+        "greeting": "Coin's coin, {className}. Lend a blade and the beast's yours to loot."
+      },
+      "huntress_verr": {
+        "name": "Huntress Verr",
+        "title": "Boar-Culler",
+        "greeting": "These tuskers won't thin themselves. Wade in - the kill counts for you."
+      },
+      "interior_merchant": {
+        "name": "Merchant",
+        "title": "Shopkeeper",
+        "greeting": "Wares for a wanderer? Take a look."
+      },
+      "interior_innkeeper": {
+        "name": "Innkeeper",
+        "title": "Host",
+        "greeting": "Rest your boots, traveller. The fire's warm."
+      },
+      "interior_villager": {
+        "name": "Villager",
+        "title": "Resident",
+        "greeting": "Oh - a visitor! Mind the mess."
+      },
       "spirit_healer": {
         "name": "Solgun Bekçi",
         "title": "Ölülerin Muhafızı",
@@ -12512,6 +12928,41 @@ export const tr_TR: EnTranslations = {
         "title": "Eczacı Ustası",
         "greeting": "İki kez ölçün ve bir kez dökün, {className}. Eczacının dökülen reaktiflere karşı sabrı yoktur."
       },
+      "town_defense_board": {
+        "name": "Town Defense Board",
+        "title": "Keeper of the Eastbrook Watch",
+        "greeting": "The road needs a watch. Gather your party and hold Eastbrook against the dead."
+      },
+      "race_marshal_pip": {
+        "name": "Yarış Hakemi Pip",
+        "title": "Dikenli Çark Bekçisi",
+        "greeting": "Altı araba, üç tur ve adına layık olmayan frenler, {className}. Deftere imzayı atıp gridde yerini alır mısın?"
+      },
+      "pit_master_grott": {
+        "name": "Çukur Ustası Grott",
+        "title": "Yaban Domuzu Çukuru Bekçisi",
+        "greeting": "Yumruklar, tekmeler ve vadinin sana verdiği her şey, {className}. Benim çukurumda kimse ölmez — kazıklar buna göz kulak olur. Afişe adını yazdırır mısın?"
+      },
+      "realtor_maribel": {
+        "name": "Emlakçı Maribel",
+        "title": "Eastbrook Homes",
+        "greeting": "Dört güzel arsa, {className}, vadinin havası bedava — tapular değil. Çiftlik Yolu’ndaki bir ev hamilerimize özeldir, CR parasıyla ödenir."
+      },
+      "skirmish_post": {
+        "name": "Savaş Kampı Yapısı",
+        "title": "Savaş Kampı Çatışması",
+        "greeting": "Savaş kampı direniyor."
+      },
+      "skirmish_builder": {
+        "name": "Kamp İnşaatçısı",
+        "title": "Savaş Kampı Çatışması",
+        "greeting": "Balta ya da kazma, komutanım — göstermen yeter."
+      },
+      "skirmish_footman": {
+        "name": "Kamp Piyadesi",
+        "title": "Savaş Kampı Çatışması",
+        "greeting": "Bana savaş çetesini göster."
+      },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
         "title": "Gelgit Gözcüsü",
@@ -12521,11 +12972,11 @@ export const tr_TR: EnTranslations = {
     "quests": {
       "q_prof_intro": {
         "title": "Her Ele Bir Zanaat",
-        "text": "Eastbrook'taki her ruh kılıcın yanı sıra bir zanaat da icra eder, {playerName}. Kasabanın güneydoğusundaki Bakır Kazısı'nın çevresindeki kayalarda maden damarları var. Git bir kazma salla ve bunlardan 5'ini kendin işle; dikkat et, farkı anlayabilirim.",
+        "text": "Doğudere'de herkes kılıcın yanında bir zanaatla uğraşır, {playerName}. Kasabanın etrafına dağılmış maden damarları var; git kazmanı salla ve bana 5 parça getir. Kendin çıkar, unutma; farkı anlarım.",
         "completion": "Gördün mü? Cevher toplandı ve ellerin nasırlandı. Yollarda gezerken madenciliğe, odun kesimine ve ot toplamaya devam et; kasabaya döndüğünde çarşının yanındaki Kasaba Odak Panosuna ve yakınındaki zanaat tezgahına dikkat et. İstersen hepsinde adil bir kazanç var.",
         "objectives": {
           "0": {
-            "label": "Maden damarı işlendi"
+            "label": "Maden Parçası"
           }
         }
       },
@@ -12604,7 +13055,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_supplies": {
         "title": "Çalınan Erzak",
-        "text": "O haydutlar son arabamı bastı ve dört sandık malı alıp kaçtı; aletler, tuz, kaliteli Doğudere keteni. Sandıklar, güneybatıdaki tepelerde bulunan kamplarının çevresine yığılmış. Onları benim için geri çalar mısın?",
+        "text": "O haydutlar son arabamı bastı ve dört sandık malı alıp kaçtı; aletler, tuz, kaliteli Doğudere keteni. Sandıklar, güneydoğudaki tepelerde bulunan kamplarının çevresine yığılmış. Onları benim için geri çalar mısın?",
         "completion": "Sandıklarım! Üzerlerinde neredeyse tek çizik bile yok. Sen bir harikasın.",
         "objectives": {
           "0": {
@@ -12833,7 +13284,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_no_rest": {
         "title": "Sazlıkta Huzur Yok",
-        "text": "Bu buhurdanların üzerindeki ayin boğulmuşları ayağa kalkmaya zorluyor ve şimdi onlara önderlik edecek kadar güçlü birini de ayağa kaldırdı. Muhafızlar ona Boğulmuş Savaş Lordu diyor; o Boğulmuş Şapel'i elinde tuttuğu sürece ölüler saflarını korur. Onu yere ser, {playerName}, geri kalanlar bataklığa dağılıp gitsin.",
+        "text": "The rite on those censers binds the drowned to rise, and now it has raised one strong enough to lead them. The wardens call him the Drowned Warlord, and while he holds the Drowned Chapel the dead keep their ranks. Break him, {playerName}, and the rest will scatter back into the mire.",
         "completion": "Ölülere, efendilerinin hiç göstermediği kadar merhamet gösteriyorsun. Şunu al; fazlasıyla hak ettin.",
         "objectives": {
           "0": {
@@ -12955,7 +13406,7 @@ export const tr_TR: EnTranslations = {
         }
       },
       "q_stalker_pelts": {
-        "title": "Yükseknöbet'te İlk Kırağı",
+        "title": "Highwatch'a Kış Geliyor",
         "text": "Bu dağda kış kapıyı çalmaz, {playerName}; tekmeyle kırar. Sekiz sırt pusucusu postu, duvarı ilk karlardan geçirecek kadar pelerini astarlar. O canavarlar, güneye giden yolun iki yanındaki sırtlarda dolanıyor.",
         "completion": "Kolum kadar kalın bunlar. Nöbetçiler bu yıl donmayacak; zahmetin için şu çizmeleri al.",
         "objectives": {
@@ -12986,7 +13437,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_old_cragmaw": {
         "title": "İhtiyar Cragmaw",
-        "text": "Dağ halkı, gözcümün bulduğu izlere bir ad koydu: İhtiyar Cragmaw, kendi sürüsünün üç kuşağından uzun yaşamış, postu yara izleriyle kaplı zorba bir kedi. Sinsilerin yolumu doldurmasının nedeni o, {playerName}. İni, güneye giden yolun üstündeki doğu sırtında. Yanına bir arkadaş al ve o yaşlı şeytanı yere ser.",
+        "text": "Dağ halkı, gözcümün bulduğu izlere bir ad koydu: İhtiyar Cragmaw, kendi sürüsünün üç kuşağından uzun yaşamış, postu yara izleriyle kaplı zorba bir kedi. Sinsilerin yolumu doldurmasının nedeni o, {playerName}. İni, güneye giden yolun üstündeki batı sırtında. Yanına bir arkadaş al ve o yaşlı şeytanı yere ser.",
         "completion": "Sonunda devrildi. Dağ halkı o kedinin surdan bile uzun yaşayacağına yemin ederdi. Sinsiler artık yüksek karlarında kalacak, {playerName}, ve devriyelerim yolda kan dökmeden yürüyecek. Senin sayende bütün sırt daha sessiz.",
         "objectives": {
           "0": {
@@ -13219,11 +13670,21 @@ export const tr_TR: EnTranslations = {
       },
       "q_the_codfather": {
         "title": "Codfather",
-        "text": "Codfather yalnızca bir balık değil, {playerName}, o soğukkanlı bir katil. Eskiler kahvaltıda Bataklık Sinsileri yediğine yemin eder; katıksız dehşetten, Mirefen Dulları bile Derinbataklık Sığlıkları'nın yakınına ağlarını germez. O sular onun hükmünde ve bataklık suyu da tam olarak bir Demir Makaralı Olta ister; benim tezgahım onlardan satar. Birini eline geçir, o ihtiyar şeytanı sularından çekip çıkar, ben de aileye katıldığını kabul edeyim.",
+        "text": "Codfather sıradan bir balık değil, {playerName}, soğukkanlı bir katil. Eskiler, kahvaltıda Bataklık Avcıları yediğine yemin eder ve Mirefen Dulları bile katıksız bir dehşetle Deepfen Sığlıkları'nın yakınında ağ örmez. O sulara o hükmediyor. Bir olta kap, o yaşlı şeytanı sularından çek çıkar, ben de aileye katıldığını kabul edeyim.",
         "completion": "Rutubetli azizler aşkına... Codfather'ın ta kendisi. Şu bıyıklara bak. Fenbridge bu avın hikâyesini bir yıl boyunca dilinden düşürmez, {playerName}.",
         "objectives": {
           "0": {
             "label": "Codfather"
+          }
+        }
+      },
+      "q_save_cainhurst": {
+        "title": "Save Cainhurst the Sage",
+        "text": "Old Cainhurst - the sage who reads the deep maps - went down the well a week past and never came up. The thing below took him, and bound him with three cursed wards: one struck among the graves, one buried in the mine, one drowned at the docks. Break all three wards, {playerName}, and you'll break his chains. Bring them to me as proof.",
+        "completion": "The three wards, all snuffed cold. Cainhurst has crawled free - he waits at the well now, and swears the Hellmaw is open to you. He warns of something at the bottom he calls The Render.",
+        "objectives": {
+          "0": {
+            "label": "Hellmaw binding ward broken"
           }
         }
       },
@@ -13239,7 +13700,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_nythraxis_graves": {
         "title": "Unutulmuşların Mezarları",
-        "text": "Bu işaretleri daha önce görmüştüm; kuzeydeki savaş alanının çevresindeki üç eski mezarın üzerinde. Yüzbaşı Aldren batı yamacında yatıyor, Başrahip Malric batı sınırı boyunca daha güneyde, Kraliyet Suikastçısı Voss ise doğudaki uçurumun dibinde. Her mezara dokun ve kulak ver, {playerName}. Ölüler, yaşayanların unuttuğunu hatırlıyor olabilir.",
+        "text": "Bu işaretleri daha önce gördüm; kuzeydeki savaş meydanının çevresindeki üç eski mezarda. Yüzbaşı Aldren doğudaki yükseltide yatıyor, Başrahip Malric ortadaki kırık yolun yakınında ve Kraliyet Suikastçısı Voss batıdaki uçurumun kenarında. Her mezara dokun ve dinle, {playerName}. Ölüler, dirilerin unuttuğunu hatırlıyor olabilir.",
         "completion": "Aldren sadık kaldı, Malric ölümü kabul etmeyi reddetti ve Voss tehlikeyi herkesten önce gördü. Üçü de aynı unutulmuş krala hizmet etmişti.",
         "objectives": {
           "0": {
@@ -13255,7 +13716,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_nythraxis_sealed_crypt": {
         "title": "Terk Edilmiş Mahzen",
-        "text": "İmgeler doğudaki uçurumda bulunan terk edilmiş mahzeni işaret ediyor. Mahzenin bir kralı barındırdığına dair eski bir efsane var. Belki de Malric'in ayini onu ölümsüz bir şeye dönüştürdükten sonra Dikenzirve onu aşağıya mühürledi. Mahzene gir ve içeride ne kaldığını gör.",
+        "text": "İmgeler batıdaki uçurumda bulunan terk edilmiş mahzeni işaret ediyor. Mahzenin bir kralı barındırdığına dair eski bir efsane var. Belki de Malric'in ayini onu ölümsüz bir şeye dönüştürdükten sonra Dikenzirve onu aşağıya mühürledi. Mahzene gir ve içeride ne kaldığını gör.",
         "completion": "Kilittaşının yarımları birbirine oturuyor ve Voss'un günlüğü neyi mühürlediklerini adlandırıyor: Kral Nythraxis'in mühür yüzüğü. Günlük doğruysa, o mühür yüzüğü mezarının anahtarı.",
         "objectives": {
           "0": {
@@ -13297,7 +13758,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_mogger": {
         "title": "Mogger Düşmeli",
-        "text": "Mogger arabaları parçaladı, çitleri yerle bir etti ve Vadi'nin yarısını boşaltacak kadar çiftlik hayvanı öldürdü. Onunla yalnız yüzleşme. İki güçlü yoldaşı yanına alıp batıdaki çayıra git ve o canavarı temelli yere ser.",
+        "text": "Mogger arabaları parçaladı, çitleri yerle bir etti ve Vadi'nin yarısını boşaltacak kadar çiftlik hayvanı öldürdü. Onunla yalnız yüzleşme. İki güçlü yoldaşı yanına alıp doğudaki çayıra git ve o canavarı temelli yere ser.",
         "completion": "Mogger sonunda öldü. Doğudere'nin tarlaları artık daha güvenli ve Vadi'den anlatılmaya değer bir hikâye daha bırakarak ayrılıyorsun.",
         "objectives": {
           "0": {
@@ -13357,7 +13818,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_prof_amends_outfitter": {
         "title": "Yeniden Bağlanan İplikler",
-        "text": "Demek tezgahıma döndün sonunda. Kırgınlık beslemem, {playerName}, ama iplik bırakıp giden eli hatırlar ve onu yeniden almak her seferinde daha uzun ölçülür. Doğu ormanlarını sıkan ağ ağacı örümceklerini imha et; bu emek, ellerin iyi ipliğe değmeden önce onları yerli yerine oturtur.",
+        "text": "Demek tezgahıma döndün sonunda. Kırgınlık beslemem, {playerName}, ama iplik bırakıp giden eli hatırlar ve onu yeniden almak her seferinde daha uzun ölçülür. Batı ormanlarını sıkan ağ ağacı örümceklerini imha et; bu emek, ellerin iyi ipliğe değmeden önce onları yerli yerine oturtur.",
         "completion": "Yeniden sabit. Deri İşleme ve Terzilik yeniden ellerinde ana dal olarak. Başıboş dolaşmadan önce bu sefer iki kez düşün.",
         "objectives": {
           "0": {
@@ -13367,7 +13828,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_prof_amends_apothecary": {
         "title": "Yeniden Ocakta",
-        "text": "Bak bak, kim geldi mutfağıma. Kırgınlık yok, {playerName}, bir mutfağın her zaman yeri vardır, ama bilirsin ki her defasında dışarı çıkıp geri dönersen hesap birikir. Git batı çayırındaki yaban domuzlarını azalt, çünkü dürüst ter ilk malzemedir ve bu, ellerini işe alıştırır.",
+        "text": "Bak bak, kim geldi mutfağıma. Kırgınlık yok, {playerName}, bir mutfağın her zaman yeri vardır, ama bilirsin ki her defasında dışarı çıkıp geri dönersen hesap birikir. Git doğu çayırındaki yaban domuzlarını azalt, çünkü dürüst ter ilk malzemedir ve bu, ellerini işe alıştırır.",
         "completion": "Eski lezzet geri geldi. Simya ve Aşçılık yeniden ana dalın olarak ocağında. Bu sefer kal bir süre.",
         "objectives": {
           "0": {
@@ -14551,6 +15012,26 @@ export const tr_TR: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Kendinize Ait Bir Zanaat",
+        "text": "Eastbrook'un her zanaatkarı eninde sonunda kendilerine ait bir zanaatta karar kılıyor. Tek bir hareketle kendinizi kanıtlayın, {playerName}, ve yolunuzu ilan edin.",
+        "completion": "Yolunuz seçilmiştir; iyi yürü.",
+        "objectives": {
+          "0": {
+            "label": "Orman kurdu öldürüldü"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Değişiklikler Yapmak",
+        "text": "Bir zanaatı diğerine ayırmak için, bir zanaatkarın öncelikle yürümediği yolu telafi etmesi gerekir, {playerName}.",
+        "completion": "Değişiklikler yapıldı; önünüze yeni bir yol açılıyor.",
+        "objectives": {
+          "0": {
+            "label": "Orman kurdu öldürüldü"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Boğulmuş Koro",
         "text": "Su yürüyücüleri tek başına hareket etmiyor. Aralarında Boğulmuş Müritler yürüyor — tapınakla birlikte batan tarikat, hâlâ çürümüş cüppeleri içinde, hâlâ kıyı kayalarından duayı söyleyerek. Sekizini sustur ve bana taşıdıkları adaklardan altısını getir. Tanrıçalarına ne sunmak istediklerini öğrenmek istiyorum.",
@@ -14655,6 +15136,48 @@ export const tr_TR: EnTranslations = {
           },
           "11": {
             "label": "Uzak Kıyı Geçidi"
+          },
+          "12": {
+            "label": "Wolf Run"
+          },
+          "13": {
+            "label": "Boar Meadow"
+          },
+          "14": {
+            "label": "Mirror Lake"
+          },
+          "15": {
+            "label": "Sableweb"
+          },
+          "16": {
+            "label": "Copper Dig"
+          },
+          "17": {
+            "label": "Bandit Camp"
+          },
+          "18": {
+            "label": "Fallen Chapel"
+          },
+          "19": {
+            "label": "Reliquary Hill"
+          },
+          "20": {
+            "label": "Brightwood Glade"
+          },
+          "21": {
+            "label": "The Sowfield"
+          },
+          "22": {
+            "label": "Thornwheel Circuit"
+          },
+          "23": {
+            "label": "The Boarpit"
+          },
+          "24": {
+            "label": "Eastbrook Homes"
+          },
+          "25": {
+            "label": "The Farshore Causeway"
           }
         }
       },
@@ -15071,6 +15594,11 @@ export const tr_TR: EnTranslations = {
         "name": "Boğulmuş Litanya",
         "enterText": "Bataklığın kıyısındaki boğulmuş mabede inersin.",
         "leaveText": "Bataklığın kıyısında Birader Halven'in yanına tırmanıp geri dönersin."
+      },
+      "hellmaw_well": {
+        "name": "The Hellmaw Well",
+        "enterText": "The well mouth yawns into red dark - and the Hellmaw swallows you down.",
+        "leaveText": "You haul yourself back up the well shaft, the Hellmaw seething below."
       }
     },
     "letters": {
@@ -15278,7 +15806,7 @@ export const tr_TR: EnTranslations = {
       },
       "necromancers": {
         "name": "Mournweave Giysileri",
-        "bonus2": "Büyü gücünü 20 artırır. Alınan hasar artık büyü yapmanı geciktirmez (%100 büyü gecikme direnci).",
+        "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
         "bonus3": "Zekayı 10 ve dayanıklılığı 10 artırır.",
         "bonus4": "Büyülerinin %10 ihtimalle Berrak Büyü kazandırır, bir sonraki büyünü bedava yapar."
       },
@@ -15290,13 +15818,13 @@ export const tr_TR: EnTranslations = {
       },
       "soulflame": {
         "name": "Wraithfire Kıyafetleri",
-        "bonus2": "Büyü gücünü 20 artırır. Alınan hasar artık büyü yapmanı geciktirmez (%100 büyü gecikme direnci).",
+        "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
         "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır.",
         "bonus4": "Büyülerinin %10 ihtimalle Ruhalazı kazandırır, 10 sn boyunca büyü gücünü 40 artırır."
       },
       "stormcallers": {
         "name": "Galecall Cübbeleri",
-        "bonus2": "Büyü gücünü 20 artırır. Alınan hasar artık büyü yapmanı geciktirmez (%100 büyü gecikme direnci).",
+        "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
         "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır.",
         "bonus4": "Büyülerinin %10 ihtimalle Ruhalazı kazandırır, 10 sn boyunca büyü gücünü 40 artırır."
       },
@@ -15357,5 +15885,67 @@ export const tr_TR: EnTranslations = {
     "delveRiteShrineSkullInteract": "Kafatası Sunağı: Dokunmak için F'ye bas",
     "mailboxName": "Posta Kutusu",
     "noticeboardName": "İlan Tahtası"
+  },
+  "contributions": {
+    "cAdminB": "Account review, chat moderation, report queues, role-gated dashboards, and better status panels.",
+    "cAdminT": "Admin & Moderator Tools",
+    "cAuthB": "OIDC wiring, optional TOTP login hardening, safer login throttles, clearer dashboard sessions.",
+    "cAuthT": "Auth & Account Safety",
+    "cOpsB": "Auto-update maintenance mode, static cache policy, API health checks, and safer server restarts.",
+    "cOpsT": "Updates & Operations",
+    "cTestB": "Security tests, OAuth tests, realm tests, launcher tests, and visual smoke scripts.",
+    "cTestT": "Test Coverage",
+    "cUiB": "Camera options, mobile layout fixes, clearer landing flows, and performance guidance.",
+    "cUiT": "Game UI Quality",
+    "cWikiB": "Public wiki hub fallback, release/news feed, launcher status page, and improved nav consistency.",
+    "cWikiT": "Wiki & Public Hubs",
+    "lead": "Cryptic Realm is its own game, but it can still send practical engine improvements back upstream. This separates shared ClaudeCraft-friendly work from private Cryptic Realm features.",
+    "privateBody": "These stay in the independent track because they define this game and are not handed over as generic upstream value.",
+    "privateTitle": "Cryptic Realm-Only Work",
+    "sharedBody": "Clean, generic improvements offered upstream because they help the base project without giving away Cryptic Realm-only economy, realm, or lore systems.",
+    "sharedTitle": "Shared Upstream Candidates",
+    "tagCustody": "Private custody runbooks",
+    "tagExchange": "Exchange realm",
+    "tagLore": "Cryptic Realm lore",
+    "tagMinigames": "Original mini-games",
+    "tagPlatinum": "Platinum economy",
+    "tagRealms": "Hellmaw / Classic / Dominion / Arcane realms",
+    "title": "Contributions"
+  },
+  "coop": {
+    "accountOther": "Different account",
+    "accountThis": "This account",
+    "createCharacter": "Create a character",
+    "createError": "Could not create the character. Try a different name.",
+    "createName": "Character name",
+    "createTitle": "Name your new hero and pick a class",
+    "hintJoin": "Press Start on another controller to add a player (up to 4).",
+    "hintLeave": "Hold Start on a controller to drop that player.",
+    "joinCancel": "Cancel",
+    "joinConfirm": "Join",
+    "joinNow": "Join now",
+    "joinTitle": "Player {slot}: press to join",
+    "keyboardJoin": "Press F2 to add a local player",
+    "loggingIn": "Signing in...",
+    "loginError": "Sign-in failed. Check the username and password.",
+    "loginPass": "Password",
+    "loginSubmit": "Sign in and join",
+    "loginTitle": "Sign in Player {slot}'s account",
+    "loginUser": "Username",
+    "noOtherCharacters": "This account has no other characters to bring in.",
+    "pickCharacter": "Choose a character",
+    "pickClass": "Choose a class",
+    "reconnecting": "Player {slot} reconnecting",
+    "reviving": "Reviving in {seconds}s",
+    "slotEmpty": "Open",
+    "slotLabel": "Player {slot}",
+    "stripTitle": "Local players"
+  },
+  "links": {
+    "loading": "Loading official channels…",
+    "title": "Official Links"
+  },
+  "whitepaper": {
+    "loading": "Loading the white paper…"
   }
 };

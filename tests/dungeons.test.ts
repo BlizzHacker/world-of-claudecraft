@@ -18,9 +18,9 @@ import {
 } from '../src/sim/data';
 import { spawnNythraxisAdds } from '../src/sim/encounters/nythraxis';
 import { COMBAT_EXIT_MEMORY_SECONDS } from '../src/sim/instance_exit_memory';
+import { d2MobDmgMult, d2MobHpMult } from '../src/sim/realms/registry';
 import {
   awardHeroicMarks,
-import { d2MobDmgMult, d2MobHpMult } from '../src/sim/realms/registry';
   enterDungeon,
   instanceKeyFor,
   instanceLockoutMetas,

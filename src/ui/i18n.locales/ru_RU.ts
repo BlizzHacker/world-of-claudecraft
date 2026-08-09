@@ -4244,14 +4244,12 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     'Этот почерк я видел в гримуаре Мортена. Одна рука вела каждую могилу, {playerName}.',
   'entities.quests.q_cult_orders.objectives.0.label': 'Фанатик Культа Вирма: убито',
-  'entities.quests.q_cult_orders.objectives.1.label': 'Приказы Культа Вирма',
   'entities.quests.q_necromancers.title': 'Кольцо филактерий',
   'entities.quests.q_necromancers.text':
     'В приказах сказано о кольце филактерий, сосудах душ, {playerName}, вокруг святилища. Убейте 8 некромантов и принесите 3 целыми.',
   'entities.quests.q_necromancers.completion':
     'Свет, прости нас. В них мертвые долины и топи. Это была не армия, {playerName}. Это была десятина.',
   'entities.quests.q_necromancers.objectives.0.label': 'Некромант Культа Вирма: убито',
-  'entities.quests.q_necromancers.objectives.1.label': 'Ритуальная филактерия',
   'entities.quests.q_revenants.title': 'Поля ревенантов',
   'entities.quests.q_revenants.text':
     'К востоку от дороги старое поле боя. Культ поднял кости в ржавых латах. Верните 12 в землю, {playerName}.',
@@ -5659,9 +5657,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': 'Колосс',
   'fiesta.powerup.pow_moon_boots.name': 'Лунные сапоги',
   'fiesta.powerup.pow_speed_demon.name': 'Демон скорости',
-  'fiesta.practice': '🎉 Тренировка с ботами',
-  'fiesta.practiceNote':
-    'Тренировка офлайн: создаёт 3 ботов с ИИ и записывает вас на Fiesta 2 на 2. Нажмите снова, чтобы остановить.',
   'fiesta.queue.join': 'Вы встаёте в очередь Fiesta 2 на 2. Готовьтесь ЗАЖИГАТЬ…',
   'fiesta.queue.leave': 'Вы покидаете очередь Fiesta 2 на 2.',
   'fiesta.queue.teamLeave': 'Ваша команда покидает очередь Fiesta 2 на 2.',
@@ -6706,8 +6701,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.thunder_clap': 'Бьет по всем вокруг вас и замедляет их атаки.',
   'guide.abilityHook.wrath':
     'Удар силами природы, запущенный в цель с дистанции, ваш основной способ бить.',
-  'guide.arenaPage.augmentsNote':
-    'Улучшения и усиления действуют только в рамках матча. Они нужны для забавных импровизированных сборок, а не для постоянного превосходства, так что никто не сможет купить себе победу.',
   'guide.arenaPage.coliseumBody':
     'Coliseum — это арена королевства, где вы сражаетесь с другими игроками в рейтинговых матчах: один на один или два на два. У каждой категории своя таблица рейтинга, так что победа поднимает вас по этой лестнице на виду у всего королевства.',
   'guide.arenaPage.coliseumHeading': 'Пепельный Колизей',
@@ -6899,21 +6892,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Три зоны, с юга на север, каждая на ступень выше по уровню. Следуйте за цепочкой заданий, и сама земля проведет вас от долины к вершинам.',
   'guide.worldPage.places': 'Примечательные места',
   'guide.worldPage.residents': 'Кого вы встретите',
-  'guide.arenaPage.powerupsBody':
-    'Прямо посреди схватки на арену падают и светящиеся сферы, доступные тому, кто доберётся до них первым. Они нарочно сделаны вызывающе яркими и держатся лишь короткий миг: Демон скорости дарит вспышку слепящей прыти, Колосс раздувает вас в неповоротливого великана, Лунные ботинки превращают шаг в прыжок при пониженной гравитации, а Берсерк дарует внезапный прилив неистовства.',
-  'guide.arenaPage.powerupsTitle': 'Усиления на ринге',
-  'guide.arenaPage.waveGoldBody':
-    'Средняя волна: двусторонние сочетания, в которых ваша сборка начинает обретать форму и звучать в полную силу.',
-  'guide.arenaPage.waveGoldTitle': 'Золото',
-  'guide.arenaPage.wavePrismaticBody':
-    'Финальная волна: определяющие сборку, выжигающие экран всплески, которым положено казаться нелепо мощными в самом лучшем смысле.',
-  'guide.arenaPage.wavePrismaticTitle': 'Радужный',
-  'guide.arenaPage.waveSilverBody':
-    'Первая волна: чистые усиления одной характеристики, что оттачивают основы вашего класса.',
-  'guide.arenaPage.waveSilverTitle': 'Серебро',
-  'guide.arenaPage.wavesBody':
-    'Каждый раунд Фиесты предлагает вам свежий выбор, и эти варианты становятся всё смелее по ходу матча. Вы выстраиваете сборку от волны к волне, каждый раз беря один из нескольких вариантов и оставляя его до конца боя.',
-  'guide.arenaPage.wavesTitle': 'Улучшения приходят волнами',
   'guide.bestiary.flavor.gravecaller_cultist':
     'Облачённые в рясы прислужники культа смерти, чьи труды оскверняют могилы от Долины до самых вершин. Там, где они собираются, мёртвым нет покоя.',
   'guide.bestiary.flavor.grubjaw':
@@ -8031,8 +8009,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.cameraPrompt.changeLater': 'Это можно изменить позже в меню Esc, раздел «Клавиши».',
   'hudChrome.cameraPrompt.confirm': 'Подтвердить',
   'desktop.update.downloading': 'Загрузка обновления {version}...',
-  'desktop.update.ready':
-    'Обновление {version} готово. Оно установится при выходе из игры, либо перезапустите сейчас.',
   'desktop.update.checkingTitle': 'Проверка обновлений...',
   'desktop.update.checkingBody': 'Игра обновляется автоматически.',
   'desktop.update.uptodateTitle': 'У вас последняя версия игры.',
@@ -9075,9 +9051,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   // Protect Yumi locale fill (M16 wordy-key floor).
   'yumi.hud.collapse': 'Свернуть полосы Protect Yumi',
   'yumi.hud.expand': 'Развернуть полосы Protect Yumi',
-  'guide.arenaPage.yumiHeading': 'Защитите Yumi',
-  'guide.arenaPage.yumiBody':
-    'Protect Yumi: командный режим с целью, который разыгрывается в лабиринте. Каждая команда защищает свою кошку-фамильяра и охотится на чужую. Время от времени обе кошки переносятся в новые углы лабиринта, и бой качается между защитой, охотой и поиском. Очередь на 3 на 3 или 5 на 5; павший лишь ненадолго садится на скамью.',
   'yumi.queue.join': 'Вы встаёте в очередь Protect Yumi. Берегите своего фамильяра…',
   'yumi.queue.leave': 'Вы покидаете очередь Protect Yumi.',
   'yumi.queue.teamLeave': 'Ваша команда покидает очередь Protect Yumi.',
@@ -11384,9 +11357,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.provenanceHeading': 'Подписанные работы',
   'guide.profPages.econ.provenanceBody':
     'Изделия и находки редкого качества и выше несут подпись мастера, и одинаково подписанные вещи по-прежнему складываются в стопки.',
-  'guide.profPages.econ.throttleHeading': 'Ограничение действий',
-  'guide.profPages.econ.throttleBody':
-    'Создание, распыление, наложение чар и утилизация делят одно ограничение: не более {actions} действий за {seconds} секунд.',
   'guide.profPages.econ.doctrineHeading': 'Игроки торгуют с игроками',
   'guide.profPages.econ.doctrineBody':
     'Сила созданных вещей всегда ниже рейдового порога, а перечисленные пошлины гонят товары в обмен между игроками, а не по кругу торговцев.',

@@ -14,35 +14,8 @@ import {
   isEastbrookGrandArmoury,
 } from './building_layout';
 import { MOUNT_RACE_JUMP_FIXTURES, raceGateSegment } from './content/mounts';
-import {
-  arenaOriginAt,
-  BG_SLOT_COUNT,
-  BUILTIN_WORLD,
-  battlegroundOrigin,
-  DUNGEON_FLOOR_Y,
-  DUNGEON_LIST,
-  DUNGEON_X_THRESHOLD,
-  DUNGEONS,
-  defaultDelveModules,
-  delveAt,
-  delveModuleLocal,
-  GATHER_NODES,
-  getActiveWorldContent,
-  INSTANCE_SLOT_COUNT,
 import { getActiveRealm } from './realms/registry';
-  instanceOrigin,
-  isArenaPos,
-  isBgPos,
-  isDelvePos,
-  isRiftPos,
-  isYumiMazePos,
-  PORTALS,
-  RIFT_REGION_HALF_X,
-  RIFT_REGION_HALF_Z,
-  STRIP_MAX_X,
-  STRIP_MIN_X,
-  yumiMazeOriginAt,
-} from './data';
+import { arenaOriginAt, battlegroundOrigin, dungeonAt, BG_SLOT_COUNT, BUILTIN_WORLD, defaultDelveModules, delveAt, delveModuleLocal, DUNGEON_FLOOR_Y, DUNGEON_LIST, DUNGEON_X_THRESHOLD, DUNGEONS, GATHER_NODES, getActiveWorldContent, INSTANCE_SLOT_COUNT, instanceOrigin, interiorOriginAt, isArenaPos, isBgPos, isDelvePos, isInteriorPos, isRiftPos, isYumiMazePos, PORTALS, RIFT_REGION_HALF_X, RIFT_REGION_HALF_Z, STRIP_MAX_X, STRIP_MIN_X, yumiMazeOriginAt } from './data';
 import {
   ROCK_COLLIDER_MIN_SCALE,
   ROCK_RADIUS_PER_SCALE,
@@ -115,6 +88,9 @@ import {
   waterLevelAt,
 } from './world';
 import { yumiMazeColliders } from './yumi_maze_layout';
+import { boarpitColliders } from './boarpit_layout';
+import { derbyColliders } from './derby_layout';
+import { homesColliders } from './homes_layout';
 
 // Static world collision. Prop placement comes from the per-zone content
 // modules (merged into PROPS by sim/data.ts): the renderer builds its meshes
@@ -122,6 +98,8 @@ import { yumiMazeColliders } from './yumi_maze_layout';
 // Sim layer: no three.js imports.
 
 export interface CircleCollider {
+  /** Hidden from the camera (props.ts occluder-fade) instead of pulling the camera in. */
+  camGhost?: boolean;
   type: 'circle';
   x: number;
   z: number;
@@ -157,6 +135,8 @@ export interface ObbCollider {
   rot: number; // yaw, three.js rotation.y convention
   /** Absolute world-space visual top used by sight checks; movement ignores it. */
   cameraTopY?: number;
+  /** See {@link CircleCollider.camGhost}. */
+  camGhost?: boolean;
   /** See {@link CircleCollider.moveTopY}. */
   moveTopY?: number;
   /** See {@link CircleCollider.standable}. */
@@ -330,18 +310,6 @@ export function mineMoundFootprint(m: {
 // ---------------------------------------------------------------------------
 
 // Positions no prop may stand on: authored NPCs, plus every overworld
-
-  // The Thornwheel Circuit sleeper fences, infield ring, and podium (the
-  // Derby). Same single-layout-module rule: derby_layout.ts drives this set,
-  // the terrain flatten, the race checkpoints, and the render dressing.
-  out.push(...derbyColliders());
-
-  // The Boarpit stake ring (knockout brawls): same single-layout-module rule
-  // (boarpit_layout.ts drives this set, the flatten, and the render).
-  out.push(...boarpitColliders());
-
-  // Homestead Lane foundations + sale boards (Eastbrook Homes premium).
-  out.push(...homesColliders());
 // graveyard anchor, where a Spirit Healer is spawned at runtime rather than
 // being an authored NPC record. Reads the ACTIVE content (byte-identical on
 // shipped hosts) so a custom map's furniture is vetoed against ITS npcs and
@@ -1194,6 +1162,18 @@ function staticWorldColliders(seed: number): Collider[] {
   // must not be jump-through mid-match (the north gate is the way in). Applies
   // for any active content, matching the flatten arm (crater-precedent leak).
   out.push(...valeCupColliders());
+
+  // The Thornwheel Circuit sleeper fences, infield ring, and podium (the
+  // Derby). Same single-layout-module rule: derby_layout.ts drives this set,
+  // the terrain flatten, the race checkpoints, and the render dressing.
+  out.push(...derbyColliders());
+
+  // The Boarpit stake ring (knockout brawls): same single-layout-module rule
+  // (boarpit_layout.ts drives this set, the flatten, and the render).
+  out.push(...boarpitColliders());
+
+  // Homestead Lane foundations + sale boards (Eastbrook Homes premium).
+  out.push(...homesColliders());
 
   // The banker's strongbox, LAST: its placement algorithm samples the chest
   // footprint against every collider above (the same choice the renderer used

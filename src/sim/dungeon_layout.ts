@@ -60,25 +60,7 @@ export const DAIS_HEIGHT = 0.6;
 // line and falls to a 1.10 plinth at the sides; the decorated one crests
 // 1.17 over a 0.71 plinth. Ridge runs along the coffin's LENGTH (local z).
 export const TOMB_COFFIN_PLAIN_TOP = 1.72;
-  /**
-   * Connected-floor rooms: cut a central DOORWAY opening (half-width `doorway.hw`)
-   * into the front (zMin) and/or back (zMax) end walls instead of a solid slab, so
-   * the player can walk between stacked rooms through the inter-module corridor. The
-   * wall becomes two segments flanking a central gap. Used by the Durance of Hate
-   * open-floor delve; unset elsewhere (solid end walls, sequential crawl).
-   */
-  doorway?: {
-    front?: boolean;
-    back?: boolean;
-    hw?: number;
-    /** Off-centre door x for the FRONT (zMin) opening. Default 0 (centred). The
-     *  corridor funnel + floor south of zMin follow this x. MUST equal the
-     *  previous room's `backX` so the shared corridor lines up. */
-    frontX?: number;
-    /** Off-centre door x for the BACK (zMax) opening. Default 0 (centred). */
-    backX?: number;
-  };
-export const TOMB_COFFIN_PLAIN_EAVE = 1.1;
+  export const TOMB_COFFIN_PLAIN_EAVE = 1.1;
 export const TOMB_COFFIN_DECORATED_TOP = 1.17;
 export const TOMB_COFFIN_DECORATED_EAVE = 0.71;
 // Sunken Bastion cargo. The stacks are TWO TIERS, a natural staircase: a
@@ -174,6 +156,24 @@ export interface DungeonLayout {
   rooms?: AuthoredRoom[];
   doors?: AuthoredDoor[];
   decor?: AuthoredDecor[];
+  /**
+   * Connected-floor rooms: cut a central DOORWAY opening (half-width `doorway.hw`)
+   * into the front (zMin) and/or back (zMax) end walls instead of a solid slab, so
+   * the player can walk between stacked rooms through the inter-module corridor. The
+   * wall becomes two segments flanking a central gap. Used by the Durance of Hate
+   * open-floor delve; unset elsewhere (solid end walls, sequential crawl).
+   */
+  doorway?: {
+    front?: boolean;
+    back?: boolean;
+    hw?: number;
+    /** Off-centre door x for the FRONT (zMin) opening. Default 0 (centred). The
+     *  corridor funnel + floor south of zMin follow this x. MUST equal the
+     *  previous room's `backX` so the shared corridor lines up. */
+    frontX?: number;
+    /** Off-centre door x for the BACK (zMax) opening. Default 0 (centred). */
+    backX?: number;
+  };
 }
 
 // The four hand-authored KayKit interior "kits" a procedural rift can build on.

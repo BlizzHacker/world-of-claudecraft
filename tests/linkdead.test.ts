@@ -209,7 +209,7 @@ describe('planJoin couch co-op arm (same-account household sessions)', () => {
         ...coopBase,
         liveOtherSessions: 1,
         liveOtherSessionsSameIp: 1,
-        sameCharacter: { accountId: 7, linkdead: false, left: false },
+        sameCharacter: { accountId: 7, linkdead: false, left: false, escrowQuarantined: false },
       }),
     ).toEqual({ action: 'reject', error: 'character already in world' });
   });

@@ -17,25 +17,7 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { arenaOriginAt, DELVE_MODULE_GAP, instanceOrigin } from '../sim/data';
 import type { DelveModuleId } from '../sim/delve_layout';
 import { isLitanyModuleId, polygonWallSegments } from '../sim/delve_litany_layout';
-import {
-  arenaMapForSlot,
-  CRYPT_LAYOUT,
-  DAIS_HEIGHT,
-  DUNGEON_END_WALL_HW,
-  DUNGEON_WALL_HEIGHT,
-  DUNGEON_WALL_HW,
-  DUNGEON_WALL_X,
-  type DungeonLayout,
-  type GridPoint,
-  type InteriorStyle,
-  LASTKEEP_LAYOUT,
-  NYTHRAXIS_LAYOUT,
-  SANCTUM_LAYOUT,
-  TEMPLE_LAYOUT,
-  TOMB_HD,
-  tombSlotRoll,
-  type WallStub,
-} from '../sim/dungeon_layout';
+import { arenaMapForSlot, CRYPT_LAYOUT, DAIS_HEIGHT, DUNGEON_DOORWAY_HW, DUNGEON_END_WALL_HW, DUNGEON_WALL_HEIGHT, DUNGEON_WALL_HW, DUNGEON_WALL_X, LASTKEEP_LAYOUT, NYTHRAXIS_LAYOUT, SANCTUM_LAYOUT, TEMPLE_LAYOUT, TOMB_HD, tombSlotRoll, type DungeonLayout, type GridPoint, type InteriorStyle, type WallStub } from '../sim/dungeon_layout';
 import { polygonContainsPoint, polygonXAtZ } from '../sim/geometry2d';
 import {
   authoredLiftAt,
@@ -65,6 +47,7 @@ import { buildInfernalDecor, ensureInfernalDecorAssets } from './rift_decor';
 import { radialGlowTexture } from './textures';
 import { buildWildheartFieldInterior } from './wildheart_props';
 import { applySurfaceDetail } from './worn_stone';
+import { isHellmawModuleId, placeHellmawInfernalDressing } from './delve_hellmaw_dressing';
 
 const FLAME_EMISSIVE_HIGH = EMISSIVE_LIGHT;
 // dungeon torch point lights: pumped + hung low so warm pools break up the

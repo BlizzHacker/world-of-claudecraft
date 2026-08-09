@@ -1,3 +1,7 @@
+import { createMinigameSession } from '../src/sim/minigames/session';
+import { createZombieDefenseSession } from '../src/sim/minigames/zombie_session';
+import { createArcadeState } from '../src/sim/minigames/arcade';
+import { realmClassVisualKey } from '../src/sim/realms/class_visuals';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';

@@ -400,8 +400,8 @@ export const en_CA: EnTranslations = {
       "loading": "Loading daily rewards...",
       "error": "Could not load daily rewards.",
       "disabled": "Daily Rewards is currently disabled. We will announce updates to this feature in the Discord channel.",
-      "intro": "Hold enough WOC in your verified wallet to unlock daily rewards. Earn points with one daily spin and rotating tasks, then climb the daily leaderboard for a share of the prize pool.",
-      "disclaimer": "WOC price can move quickly. We recommend holding more than the $20 USD minimum so normal price swings do not lock you out. This is not financial advice.",
+      "intro": "Hold enough $CR in your verified wallet to unlock daily rewards. Earn points with one daily spin and rotating tasks, then climb the daily leaderboard for a share of the prize pool.",
+      "disclaimer": "$CR price can move quickly. We recommend holding more than the $20 USD minimum so normal price swings do not lock you out. This is not financial advice.",
       "prize": "Prize Pool",
       "reset": "Reset",
       "endsIn": "Ends in {time}",
@@ -410,7 +410,7 @@ export const en_CA: EnTranslations = {
       "remainingHoursMinutes": "{hours}h {minutes}m",
       "remainingDaysHours": "{days}d {hours}h",
       "score": "Score",
-      "walletValue": "Wallet Value (WOC)",
+      "walletValue": "Wallet Value ($CR)",
       "usd": "{amount} USD",
       "sol": "{amount} SOL",
       "unknown": "Unknown",
@@ -438,16 +438,16 @@ export const en_CA: EnTranslations = {
       "noLeaders": "No points yet.",
       "noHistory": "No payouts yet.",
       "walletConnectTitle": "Verify Wallet",
-      "walletConnectBody": "Verify a Solana wallet with WOC to unlock daily rewards.",
+      "walletConnectBody": "Verify a Solana wallet with $CR to unlock daily rewards.",
       "walletConnectButton": "Verify Wallet",
-      "walletHoldTitle": "Hold WOC",
-      "walletHoldBody": "Hold at least {amount} USD in WOC to unlock daily rewards.",
-      "walletPriceBody": "WOC pricing is unavailable right now. Check back shortly.",
+      "walletHoldTitle": "Hold $CR",
+      "walletHoldBody": "Hold at least {amount} USD in $CR to unlock daily rewards.",
+      "walletPriceBody": "$CR pricing is unavailable right now. Check back shortly.",
       "reason": {
         "eligible": "Rewards unlocked.",
-        "no_wallet": "Connect a wallet with at least $20 USD in WOC.",
-        "under_minimum": "Wallet is below the $20 USD WOC minimum.",
-        "price_unavailable": "WOC price is unavailable, rewards are temporarily locked.",
+        "no_wallet": "Connect a wallet with at least $20 USD in $CR.",
+        "under_minimum": "Wallet is below the $20 USD $CR minimum.",
+        "price_unavailable": "$CR price is unavailable, rewards are temporarily locked.",
         "banned": "You are banned from Daily Rewards. Reason: {reason}",
         "bannedUntil": "You are banned from Daily Rewards for another {remaining}. Access returns {until}. Reason: {reason}"
       }
@@ -826,7 +826,10 @@ export const en_CA: EnTranslations = {
       "targetCycleShort": "Target",
       "spellbookPageLabel": "Page {page}",
       "hideKeyboard": "Hide keyboard",
-      "chatPlaceholder": "Say something... (! for community commands)"
+      "chatPlaceholder": "Say something... (! for community commands)",
+      "autorun": "Auto",
+      "hideMenuButtons": "Hide menu buttons",
+      "showMenuButtons": "Show menu buttons"
     },
     "tutorial": {
       "moveBodyTouch": "Use the movement stick to move and drag the screen to look around. Take a few steps to begin.",
@@ -849,8 +852,8 @@ export const en_CA: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "Update Available",
-      "body": "A new version of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
-      "bodyWithVersion": "Version {version} of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
+      "body": "A new version of Cryptic Realm is available. Update now for the latest fixes and improvements.",
+      "bodyWithVersion": "Version {version} of Cryptic Realm is available. Update now for the latest fixes and improvements.",
       "notNow": "Not now",
       "update": "Update"
     },
@@ -1340,7 +1343,84 @@ export const en_CA: EnTranslations = {
       "showAttackButton": "Show Attack Button",
       "showDailyRewardsChest": "Show Daily Rewards Chest",
       "mobileCameraJoystick": "Camera joystick",
-      "mobileLeftHanded": "Left-handed layout"
+      "mobileLeftHanded": "Left-handed layout",
+      "changed": "{count} changed",
+      "changedSummary": "{count} changed from defaults",
+      "conflictDot": "Binding conflict",
+      "done": "Done",
+      "keybindCleared": "Cleared {action}",
+      "keybindEvicted": "Bound {key} to {action}; removed from {evicted}",
+      "keybindModifierHint": "Tip: you can bind modifier combinations. Hold Shift, Ctrl, or Alt while pressing a key to capture the combo (for example Shift+1).",
+      "keybindRebinding": "Rebinding {action}. Press a key, or Escape to cancel.",
+      "keybindTaken": "Key removed",
+      "keybindUnbound": "{action} has no key",
+      "modeOffline": "Offline",
+      "modeOnline": "Online",
+      "overviewConflictAlert": "Some key bindings conflict or are unbound.",
+      "resetAllBody": "This restores every setting to its default. This cannot be undone.",
+      "resetAllTitle": "Reset all settings?",
+      "searchEmpty": "No settings match your search.",
+      "searchGoTo": "Go to {category}",
+      "searchPlaceholder": "Search settings",
+      "searchScopeAll": "All settings",
+      "searchScopeThis": "This section",
+      "ia": {
+        "catAccessibilityName": "Accessibility",
+        "catAccessibilitySub": "Motion, contrast, and content comfort.",
+        "catAudioSub": "Volume and sound toggles.",
+        "catControllerSub": "Gamepad feel and button layout.",
+        "catControlsName": "Controls",
+        "catControlsSub": "Camera, movement, combat, and feedback.",
+        "catGraphicsSub": "Quality, view, and world visuals.",
+        "catInterfaceSub": "HUD scale, panels, chat, and unit frames.",
+        "catKeybindsSub": "Bind keys for every action.",
+        "catOverviewName": "Overview",
+        "catOverviewSub": "Pinned essentials, quick actions, and what changed.",
+        "catSystemName": "System",
+        "catSystemSub": "Performance, support, and about.",
+        "catTouchName": "Touch",
+        "catTouchSub": "On-screen sticks, look, and buttons.",
+        "railDisplay": "Display",
+        "railInput": "Input",
+        "railSystem": "System"
+      },
+      "legend": {
+        "back": "Back",
+        "category": "Category",
+        "clear": "Clear",
+        "navigate": "Navigate",
+        "page": "Page",
+        "reset": "Reset",
+        "select": "Select"
+      },
+      "sec": {
+        "about": "About",
+        "actionBars": "Action Bars",
+        "buttons": "Buttons",
+        "camera": "Camera",
+        "chat": "Chat",
+        "combat": "Combat",
+        "combatTooltips": "Combat and Tooltips",
+        "content": "Content",
+        "feedback": "Feedback",
+        "feel": "Feel",
+        "general": "General",
+        "hudExtras": "HUD Extras",
+        "inputMode": "Input Mode",
+        "look": "Look",
+        "motionContrast": "Motion and Contrast",
+        "movement": "Movement",
+        "panels": "Panels",
+        "performance": "Performance",
+        "quality": "Quality",
+        "scaleText": "Scale and Text",
+        "sticks": "Sticks",
+        "support": "Support",
+        "toggles": "Toggles",
+        "unitFrames": "Unit Frames",
+        "view": "View",
+        "volume": "Volume"
+      }
     },
     "talentRows": {
       "tab": "Choices",
@@ -1375,7 +1455,8 @@ export const en_CA: EnTranslations = {
       "menuAction": "Game Menu",
       "zoomIn": "Zoom In",
       "zoomOut": "Zoom Out",
-      "help": "Left stick moves, right stick looks. Open a window to use the on-screen pointer."
+      "help": "Left stick moves, right stick looks. Open a window to use the on-screen pointer.",
+      "duplicate": "Also bound to {buttons}"
     },
     "perf": {
       "title": "Performance Overlay",
@@ -1606,7 +1687,11 @@ export const en_CA: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "Build {n}"
+      "defaultBuildName": "Build {n}",
+      "choicesTab": "Choices",
+      "resetChoices": "Reset choices",
+      "tierLevel": "Level {n}",
+      "tierLevelLabel": "Level"
     },
     "tips": {
       "joinChannels": "Tip: type /join world or /join lfg to chat with players across the world."
@@ -1709,7 +1794,7 @@ export const en_CA: EnTranslations = {
       "loggedOutPrompt": "Log in to manage your account.",
       "memberSince": "Member since {date}",
       "sectionSettings": "Account Settings",
-      "sectionWallet": "$WOC Wallet",
+      "sectionWallet": "$CR Wallet",
       "sectionCharacters": "Characters",
       "sectionDanger": "Danger Zone",
       "changePassword": "Change Password",
@@ -1782,7 +1867,15 @@ export const en_CA: EnTranslations = {
       "exportHint": "Download a copy of your account and characters as a JSON file. We also email you a confirmation.",
       "exportBtn": "Download My Data",
       "exportDone": "Your data was downloaded. We emailed you a confirmation.",
-      "exportFailed": "Could not export your data. Try again in a moment."
+      "exportFailed": "Could not export your data. Try again in a moment.",
+      "connectionsSummary": "Link Google, Facebook, or Plex so you can sign in with them.",
+      "sectionConnections": "Connected Accounts",
+      "ssoLink": "Link Google / Facebook / Plex",
+      "ssoLinkConflict": "That account is already linked to a different Cryptic Realm login.",
+      "ssoLinked": "Linked — you can sign in with Google, Facebook, or Plex.",
+      "ssoNotLinked": "Not linked.",
+      "ssoUnlink": "Unlink",
+      "ssoUnlinkNeedsPassword": "Set a password first — SSO is currently your only way to sign in."
     },
     "masterLoot": {
       "title": "Master Loot",
@@ -1830,7 +1923,8 @@ export const en_CA: EnTranslations = {
         "tusk": "Tusk",
         "meat": "Meat",
         "cloth": "Cloth"
-      }
+      },
+      "concentrateHint": "Fewer chosen components yield a higher tier each."
     },
     "townFocus": {
       "title": "Town Focus",
@@ -2087,7 +2181,9 @@ export const en_CA: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "AFK"
+      "afkTag": "AFK",
+      "mob": "[{level}] {name}",
+      "mobElite": "[{level}+] {name}"
     },
     "mobTooltip": {
       "levelFamily": "Level {level} {family}",
@@ -2160,7 +2256,7 @@ export const en_CA: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "Close",
       "keybind": "Discord Panel",
@@ -2555,6 +2651,10 @@ export const en_CA: EnTranslations = {
         "moongateCommunion": {
           "title": "Moongate Communion",
           "note": "Pilgrims gather at the temple moongate under the mid-month moon."
+        },
+        "fiestaNight": {
+          "note": "The 2v2 Fiesta ring draws its loudest crowds tonight.",
+          "title": "Fiesta Night"
         }
       }
     },
@@ -2678,7 +2778,17 @@ export const en_CA: EnTranslations = {
     "archetypeTitle": {
       "label": "Title",
       "none": "None",
-      "hobbyLabel": "Hobby"
+      "hobbyLabel": "Hobby",
+      "alchemy": "Alchemist",
+      "armorcrafting": "Armorer",
+      "cooking": "Chef",
+      "enchanting": "Enchanter",
+      "engineering": "Tinkerer",
+      "inscription": "Scribe",
+      "jewelcrafting": "Jeweler",
+      "leatherworking": "Leathercrafter",
+      "tailoring": "Tailor",
+      "weaponcrafting": "Weaponsmith"
     },
     "archetypePair": {
       "engineering+alchemy": "Bombardier",
@@ -2937,7 +3047,10 @@ export const en_CA: EnTranslations = {
       "commissionToggle": "Commission piece",
       "commissionToggleHint": "Binds to the first character to receive it in a trade.",
       "commissionUnbound": "Commission piece: binds to the first recipient",
-      "commissionBound": "Commission piece: bound to its recipient"
+      "commissionBound": "Commission piece: bound to its recipient",
+      "craft": "Craft",
+      "notAtHub": "You must be at the crafting hub, at the required level, to craft that.",
+      "throttled": "You are crafting too quickly. Wait a moment and try again."
     },
     "itemMenu": {
       "use": "Use",
@@ -3002,7 +3115,10 @@ export const en_CA: EnTranslations = {
       "replaceConfirmKeepsBond": "Commission bond",
       "replaceConfirmCost": "Cost: {cost}",
       "replaceConfirmCostItem": "{name} x{count}",
-      "replaceConfirmAccept": "Replace"
+      "replaceConfirmAccept": "Replace",
+      "disenchantThrottled": "You are disenchanting too quickly. Wait a moment and try again.",
+      "enchantThrottled": "You are enchanting too quickly. Wait a moment and try again.",
+      "salvageThrottled": "You are salvaging too quickly. Wait a moment and try again."
     },
     "training": {
       "title": "Training: {name}",
@@ -3273,6 +3389,66 @@ export const en_CA: EnTranslations = {
       "toZone": "Zone map",
       "toggleAria": "Switch between the world map and the zone map",
       "levels": "Levels {min} to {max}"
+    },
+    "arcade": {
+      "abort": "Leave session",
+      "active": "Game active",
+      "brawler": "Four-player Brawl",
+      "build": "Build",
+      "choose": "Choose a game",
+      "close": "Close games",
+      "code": "Session code",
+      "controls": "Controls: arrows/WASD to steer or move, Space to drift or jump, J/K to attack, E to use an item.",
+      "create": "Create session",
+      "finished": "Game finished",
+      "housing": "Eastbrook Homes",
+      "invite": "Invite party member",
+      "inviteHint": "Enter a party member player ID.",
+      "join": "Join by code",
+      "place": "Place piece",
+      "racing": "Cryptic Circuit",
+      "ready": "Ready",
+      "solo": "Solo vs NPCs",
+      "start": "Start",
+      "title": "Realm Games",
+      "townRts": "Eastbrook Command",
+      "train": "Train guard",
+      "unavailable": "This game is not enabled on this server.",
+      "unready": "Unready",
+      "waiting": "Waiting for players"
+    },
+    "zombie": {
+      "abort": "Abandon session",
+      "active": "The wave is active. Place towers or hold the line.",
+      "board": "Board",
+      "buildAt": "Build at {x}, {z}",
+      "claim": "Claim reward",
+      "close": "Close town defense",
+      "copyCode": "Share this code with your party",
+      "create": "Create defense session",
+      "defeat": "The town fell. Abandon the session and try again.",
+      "intro": "Build defenses, hold the road, and survive ten deterministic waves with your party.",
+      "invite": "{name} invited you to {kind}.",
+      "inviteHint": "Enter a party member's player ID.",
+      "invitePlayer": "Invite party member",
+      "join": "Join session",
+      "joinInvite": "Join game",
+      "lives": "Lives {lives}",
+      "ready": "Ready up",
+      "readyDone": "Ready",
+      "resources": "Resources {resources}",
+      "roster": "Roster",
+      "sessionCode": "Session code",
+      "startWave": "Start wave",
+      "status": "Status: {status}",
+      "title": "Eastbrook Town Defense",
+      "towerArrow": "Arrow tower",
+      "towerCannon": "Cannon tower",
+      "towerSlow": "Frost tower",
+      "unavailable": "Town Defense is still being staged. Check back after its QA checkpoint.",
+      "victory": "Eastbrook stands. Claim your reward.",
+      "waiting": "Waiting for the party to ready up.",
+      "wave": "Wave {wave}"
     }
   },
   "gatherEvent": {
@@ -3405,8 +3581,8 @@ export const en_CA: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
-    "brandShort": "ClaudeCraft",
+    "brand": "Cryptic Realm",
+    "brandShort": "Cryptic",
     "tagline": "A classic-style MMO you play free in your browser.",
     "skipToContent": "Skip to main content",
     "loading": "Loading...",
@@ -3467,12 +3643,12 @@ export const en_CA: EnTranslations = {
       "heading": "On this page"
     },
     "footer": {
-      "blurb": "An open-source, classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.",
+      "blurb": "A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.",
       "playNow": "Play Now",
       "github": "Source on GitHub",
       "discord": "Join the Discord",
       "communityWiki": "Community Wiki",
-      "rights": "World of ClaudeCraft",
+      "rights": "Cryptic Realm",
       "linksLabel": "Play and community links"
     },
     "language": {
@@ -3495,7 +3671,7 @@ export const en_CA: EnTranslations = {
     },
     "home": {
       "eyebrow": "Classic-style browser MMO",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "Quest, group up, and explore a hand-built world, free in your browser.",
       "ctaPlay": "Play Now",
       "ctaLearn": "How to Play",
@@ -3803,7 +3979,7 @@ export const en_CA: EnTranslations = {
       "q7": "Will my character be saved?",
       "a7": "Online characters are saved on the server automatically. Offline characters live in your browser for quick sessions and testing.",
       "q8": "Can I host my own copy?",
-      "a8": "Yes. The project is open source, so you can run your own server. See the GitHub repository.",
+      "a8": "Private realms are operated through verified Cryptic Realm channels.",
       "q9": "Is there PvP?",
       "a9": "Yes. Duel anyone for fun, or step into the Ashen Coliseum to fight other players. PvP is opt in, so you are never forced into it.",
       "q10": "What is there to do at max level?",
@@ -3936,7 +4112,9 @@ export const en_CA: EnTranslations = {
       "mark_of_the_wild": "A lasting blessing you put on yourself or an ally before a fight.",
       "moonfire": "Hits instantly and leaves the target burning, good while moving.",
       "rejuvenation": "Casts instantly and heals an ally over time, so you can keep acting.",
-      "thorns": "Wards an ally so melee attackers hurt themselves for striking."
+      "thorns": "Wards an ally so melee attackers hurt themselves for striking.",
+      "commanding_shout": "Bolsters stamina so everyone has more staying power in a fight.",
+      "rend": "Opens a bleed that wears the target down over time."
     },
     "petHook": {
       "emberkin": "A ranged firebolt demon that chips at enemies from a safe distance.",
@@ -4015,7 +4193,7 @@ export const en_CA: EnTranslations = {
     },
     "worldPage": {
       "heading": "The world",
-      "intro": "World of ClaudeCraft is one continuous land you cross on foot, three zones laid south to north. There is no fast travel, so the journey is part of the adventure.",
+      "intro": "Cryptic Realm is one continuous land you cross on foot, three zones laid south to north. There is no fast travel, so the journey is part of the adventure.",
       "hub": "Home base",
       "mapHeading": "The road north",
       "mapSub": "Three zones, south to north, each a step higher in level. Follow the quest trail and the land carries you from the valley to the peaks.",
@@ -4060,7 +4238,7 @@ export const en_CA: EnTranslations = {
       "jungleGreeter": "The harbormistress, Drifthaven",
       "gardenGreeting": "Someone is still trimming the hedges, though no gardener has been seen for a hundred years. Mind the maze: it minds you back.",
       "gardenGreeter": "The gatekeeper, Hedgewick",
-      "valePlaceNotes": "Eastbrook is your first home base. Wolf Run and Boar Meadow are gentle hunting ground; Mirror Lake is fine fishing water, though mudfins swarm its shallows; the Sableweb and the Copper Dig hide spiders and ore-greedy diggers; a Bandit Camp and the Fallen Chapel hold rougher work; Reliquary Hill drops into the Collapsed Reliquary, the realm's first delve; Brightwood Glade is a quiet, sunlit grove to the north; and the Sowfield is Eastbrook's walled boarball ground, where the Vale Cup plays under a harvest truce.",
+      "valePlaceNotes": "Eastbrook is your first home base. Wolf Run and Boar Meadow are gentle hunting ground; Mirror Lake is quiet water to fish; the Sableweb and the Copper Dig hide spiders and ore-greedy diggers; a Bandit Camp and the Fallen Chapel hold rougher work; Reliquary Hill drops into the Collapsed Reliquary, the realm's first delve; and Brightwood Glade is a quiet, sunlit grove to the north.",
       "marshPlaceNotes": "Fenbridge guards the only dry road. The Prowler Reeds and Deepfen Shallows teem with marsh beasts and mudfins; the Widow Thicket is spun thick with web; the Drowned Chapel and the Troll Mounds keep older dangers, with The Drowned Litany, the marsh's own delve, opening just north of the mounds; the Gravecaller Encampment is the cult dug in, and the Sunken Bastion is the marsh's instanced heart.",
       "peaksPlaceNotes": "Highwatch holds the wall. Stalker Ridge and the Deeprock Burrows belong to ridge cats and burrowers; the Ogre Foothills and Drogmar's War-Camp to brutes for hire; Stormcrag crackles with elementals, and below it glows the Glimmermere, the tarn whose shore keeps the gate of pale light down to the Drowned Temple; the Wyrmcult Tents and Revenant Fields ring the cult's high ground, with Gravewyrm Sanctum at its peak.",
       "duskPlaceNotes": "Eldergleam gathers beneath the great tree. The Duskfall Cave and its overlook are the way in and the first sight of the valley; Elder Grove and Starfall Basin keep the quiet south; the Sunken Court holds overgrown ruins in the east; and the Gleaming Deep and Crystalline Shallows glow across the north.",
@@ -4082,7 +4260,7 @@ export const en_CA: EnTranslations = {
       "heading": "Quests",
       "intro": "Quests are the heart of the world and the fastest way to level. Here is how they work.",
       "acceptTitle": "Finding and accepting",
-      "acceptBody": "People with a marker over their head have work for you. Talk to them to accept a quest. In Eastbrook, Marshal Redbrook is waiting with Wolves at the Door, one of the first quests you can take.",
+      "acceptBody": "People with a marker over their head have work for you. Talk to them to accept a quest. Your very first is Wolves at the Door, from Marshal Redbrook in Eastbrook.",
       "objectivesTitle": "Objectives",
       "objectivesBody": "Slay certain enemies, gather items, or interact with something in the world. The on-screen tracker counts your progress as you go. If you change your mind, you can drop a quest from your quest log and pick it up again from its giver later.",
       "turninTitle": "Turning in",
@@ -4095,7 +4273,7 @@ export const en_CA: EnTranslations = {
       "typesTitle": "The kinds of quest you will see",
       "typesBody": "Most quests are one of a few familiar shapes. The on-screen tracker spells out exactly what each one wants, so you are never left guessing.",
       "typeSlayTitle": "Slay",
-      "typeSlayBody": "Thin out a pack of beasts or break a cult's hold by defeating a set number of a marked enemy. One of your first quests, clearing wolves off the Eastbrook road, is one of these.",
+      "typeSlayBody": "Thin out a pack of beasts or break a cult's hold by defeating a set number of a marked enemy. The first quest in the game, clearing wolves off the Eastbrook road, is one of these.",
       "typeGatherTitle": "Gather",
       "typeGatherBody": "Collect items from the world or from what enemies drop: herbs, ore, a cult's grim reagents. Some pieces only fall from a particular foe, so the hunt and the haul go together.",
       "typeInteractTitle": "Interact",
@@ -4188,7 +4366,7 @@ export const en_CA: EnTranslations = {
       "marksHeading": "Delve Marks",
       "marksBody": "Clearing delves earns Delve Marks, a currency kept apart from your coin. Spend them at the keeper to strengthen your companion and pick up gear you will not find anywhere else.",
       "whereHeading": "Where to find one",
-      "whereBody": "The first delve, the Collapsed Reliquary, opens at Reliquary Hill in the starting valley of Eastbrook Vale. Brother Halven keeps the board there, and he will send you down once you are ready. His rounds do not end there: past the Troll Mounds at the northern edge of Mirefen Marsh, the same keeper opens The Drowned Litany for delvers who have found their feet."
+      "whereBody": "The first delve, the Collapsed Reliquary, opens at Reliquary Hill in the starting valley of Eastbrook Vale. Brother Halven keeps the board there, and he will send you down once you are ready."
     },
     "talentsPage": {
       "heading": "Talents and specializations",
@@ -4212,6 +4390,8 @@ export const en_CA: EnTranslations = {
       "coliseumHeading": "The Ashen Coliseum",
       "coliseumBody": "The Coliseum is the realm's arena, where you face other players in ranked matches, one on one or two on two. Each bracket keeps its own standing, so a win lifts you up that ladder for the whole realm to see. Open the Arena window to sign up for a bracket, alone or with your partner.",
       "ladderHeading": "Climbing the ladder",
+      "fiestaHeading": "Two versus two Fiesta",
+      "fiestaBody": "Fiesta is a fast, two-on-two brawl fought as one continuous bout, with every fighter brought to an even footing. As the fight runs you draft augments, quick boosts that reshape your kit on the fly, so no two matches play quite the same.",
       "ladderBody": "Ranked play tracks your standing over time. Check the leaderboard to see where you sit and who holds the top of the realm."
     },
     "thornhollowPage": {
@@ -4394,6 +4574,7 @@ export const en_CA: EnTranslations = {
     "professions": {
       "intro": "Beyond combat and quests, the world rewards you for working the land and the forge: gathering raw materials, turning them into gear and goods across ten crafting trades, and settling into an identity as one of the ten archetypes those trades represent.",
       "harvestTitle": "Harvesting the hunt itself",
+      "harvestBody": "Gathering does not stop at nodes. Many slain beasts can be harvested once each, first come first served, for hides, fangs, silk, and meat, straight from the corpse alongside its ordinary loot; one press opens both. The choice is yours each time, too: strip everything the corpse offers, or concentrate on fewer components and take a measurably finer grade of what you do take.",
       "harvestBodyChoice": "Gathering does not stop at nodes. Many slain beasts can be harvested once each, first come first served, for hides, fangs, silk, and meat, straight from the corpse alongside its ordinary loot; one press opens both. Where a beast carries more than one workable component, the choice is yours: take everything it can give, or concentrate on fewer components and take a measurably finer grade of what you do take.\n\nA rare or better harvest roll on a specimen-bearing family also grants a signed perfect specimen (a Pristine Hide, Pristine Silk, Pristine Venom Gland, or Prime Cut) on top of the ordinary yield, and records A Perfect Specimen in your Book of Deeds. Any character can harvest, no training required, and any gathering tool you own counts toward the premium arm, whichever trade it belongs to.",
       "focusTitle": "Town Focus",
       "focusBody": "Every hub town keeps a Town Focus panel for visiting harvesters: stand in town, open it from beside the minimap, and spread a budget of 10 focus points across the component types you care about. Every 5 points on a component raises its harvest grade one step (two steps at most), and each point adds 10 percent to its yield; unfocused components are never made worse. Your allocation follows your character everywhere and can be reworked, free, on any later visit to town.",
@@ -4428,7 +4609,28 @@ export const en_CA: EnTranslations = {
       "colStation": "Station",
       "colHub": "Hub",
       "colMaster": "Master",
-      "masterCellFmt": "{name}, {title}"
+      "masterCellFmt": "{name}, {title}",
+      "archetypeIdentityBody": "Your active archetype is a statement about who your character is in the world, recognized in how others and the world address you. The exact rewards and recognition that come with it are still being finalized; check back as the system fills in.",
+      "archetypeIdentityTitle": "What your archetype means",
+      "archetypeIntro": "Each of the ten crafts also stands for an archetype, a broader identity you can adopt beyond just working that trade. Your active archetype is a single choice at a time, not a checklist: you carry one, and can change which one later if you choose to.",
+      "archetypeSwitchTitle": "Changing your mind",
+      "archetypeTitle": "The ten archetypes",
+      "craftComboBody": "Beyond a single craft's own recipe list, the wheel also supports combination recipes that call on two neighboring crafts at once, rewarding a character (or a pair of trading partners) who has invested in adjacent trades on the ring rather than one in isolation.",
+      "craftComboTitle": "Combination recipes",
+      "craftIntro": "Ten crafting trades turn gathered materials into finished gear and goods: Armorcrafting, Weaponcrafting, and Jewelcrafting shape raw matter into wearable gear; Alchemy and Engineering are driven by trial and error; Cooking, Inscription, and Enchanting each touch other crafts' output; Tailoring and Leatherworking work from exact patterns. Together they form a wheel, with each craft sitting next to two neighbors and opposite one other.",
+      "craftRecipesBody": "Every craft has its own recipes, each calling for specific reagents you gather or buy. The most basic recipes in each craft ask for nothing but common materials and are craftable from the very start, so you can begin working a trade the moment you pick it up rather than waiting to unlock it.",
+      "craftRecipesTitle": "Recipes and reagents",
+      "craftRingBody": "The ten crafts are arranged in a fixed ring, and where a craft sits on that ring matters: crafts next to each other on the wheel share more in common with each other than crafts on opposite sides do. Committing to one craft is meant to feel like joining a family of related trades, not picking an isolated skill.",
+      "craftRingTitle": "A wheel of specialties",
+      "craftTitle": "The ten crafts",
+      "gatherIntro": "Three gathering trades let you pull raw materials straight out of the world: Mining strikes ore and stone from veins, Logging fells timber from stands of trees, and Herbalism collects herbs and plants growing wild. Each is tracked separately, so working one never slows your progress in another.",
+      "gatherProficiencyBody": "Every successful harvest builds your proficiency in that gathering trade. A higher proficiency shifts what you pull out of a node toward rarer grades of material, from common on up, though the rarest grades stay rare even at high proficiency. More practice never hurts your odds, it only ever improves them.",
+      "gatherProficiencyTitle": "Proficiency and material quality",
+      "gatherTitle": "Gathering: Mining, Logging, and Herbalism",
+      "gatherToolsBody": "Vendors sell basic tools for each gathering trade, and better ones can be crafted, so working a resource node is meant to feel more capable as you gear up for it rather than staying static. Higher-tier tools are the intended way to unlock access to richer nodes and to work them more efficiently over a long session.",
+      "gatherToolsTitle": "Tools of the trade",
+      "gatherWhatBody": "Ore veins, wood stands, and herb patches are placed out in the zones as visible, unowned fixtures. Walk up to one and interact with it to harvest whatever it holds. Once you have harvested a node, it needs time to recover before you personally can harvest it again, though it never blocks anyone else: another player can harvest the very same node in the meantime.",
+      "gatherWhatTitle": "Resource nodes"
     },
     "profPages": {
       "back": "Back to Professions",
@@ -4855,7 +5057,7 @@ export const en_CA: EnTranslations = {
   },
   "editor": {
     "appTitle": "Map Editor",
-    "docTitle": "Map Editor - World of ClaudeCraft",
+    "docTitle": "Map Editor - Cryptic Realm",
     "untitledMap": "Untitled Map",
     "playtestPlayerName": "Mapmaker",
     "topbar": {
@@ -5322,7 +5524,9 @@ export const en_CA: EnTranslations = {
     "loginRegister": "Login/Register",
     "account": "Account",
     "logout": "Logout",
-    "donate": "Donate"
+    "donate": "Donate",
+    "contributions": "Contributions",
+    "whitepaper": "White Paper"
   },
   "stats": {
     "title": "World Status",
@@ -5332,9 +5536,9 @@ export const en_CA: EnTranslations = {
     "realmName": "World Name"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "Open Source Project",
+    "copyright": "2026 Cryptic Realm",
+    "githubLink": "/contributions.html",
+    "githubLabel": "Contributions",
     "whitepaper": "Whitepaper",
     "terms": "Terms of Service",
     "privacy": "Privacy Policy",
@@ -5356,14 +5560,24 @@ export const en_CA: EnTranslations = {
   },
   "news": {
     "title": "News & Updates",
-    "desc": "Read the latest patch notes, events, and community updates.",
+    "desc": "Read Cryptic Realm work logs, realm rollout notes, upstream kindness PRs, and release updates.",
     "loading": "Loading the latest updates…",
     "error": "Couldn't load updates. Please try again later.",
     "empty": "No updates yet — check back soon.",
     "prerelease": "Pre-release",
-    "viewOnGithub": "View on GitHub",
+    "viewOnGithub": "View update",
     "new": "New",
-    "viewAll": "View all updates on GitHub"
+    "viewAll": "View all updates",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "officialLog": "Official Work Log",
+    "openLink": "Open",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "prTitle": "Upstream Kindness Track",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links.",
+    "proofTitle": "$CR Proof",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap"
   },
   "download": {
     "title": "Download Desktop Launcher",
@@ -5390,13 +5604,13 @@ export const en_CA: EnTranslations = {
     "serverOnline": "Online",
     "serverOffline": "Offline",
     "play": "Play",
-    "playAria": "Play World of ClaudeCraft",
+    "playAria": "Play Cryptic Realm",
     "serverLabel": "Choose your world",
     "serverAria": "Select world: Online or Offline",
     "serverOfflineSub": "Instant local world",
-    "caLabel": "$WOC Contract Address",
+    "caLabel": "$CR Contract Address",
     "caCopyAria": "Copy contract address",
-    "caNote": "WOC is our community token. It is not needed to play. Join Discord to discuss the WOC utility and flywheel."
+    "caNote": "$CR is the Cryptic Realm Solana SPL token for gameplay utility, cosmetics, achievements, and account records. It is not needed to play."
   },
   "auth": {
     "enterRealm": "Enter the World",
@@ -5635,10 +5849,17 @@ export const en_CA: EnTranslations = {
       "logOut": "Log out",
       "invalid": "Please enter a valid email address.",
       "failed": "Could not save your email. Please try again."
-    }
+    },
+    "hardcoreChar": "Hardcore character",
+    "hardcoreHint": "Permadeath. If this character dies, it is permanently retired and can no longer be played. There is no resurrection.",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress).",
+    "ssoButton": "Continue with Google, Facebook, or Plex",
+    "ssoMoveweight": "Sign in with MoveWeight",
+    "ssoProviders": "Continue with Google, Facebook, Plex, or Discord"
   },
   "wallet": {
-    "label": "$WOC Wallet",
+    "label": "$CR Wallet",
     "connect": "Verify Wallet",
     "connectTitle": "Connect a Solana wallet",
     "connectAria": "Connect a Solana wallet",
@@ -5671,11 +5892,11 @@ export const en_CA: EnTranslations = {
     "linkedDisconnectedAria": "Wallet remains verified for your account. Reconnect to manage the wallet app.",
     "linkTitle": "Click to sign and link this wallet to your account.",
     "connectedTitle": "Connected. Log in to link this wallet to your account.",
-    "balanceTitle": "Verified Solana wallet $WOC balance",
+    "balanceTitle": "Verified Solana wallet $CR balance",
     "balanceAria": "Verified Solana wallet balance: {balance}",
-    "balancePreviewTitle": "Connected wallet $WOC balance preview",
+    "balancePreviewTitle": "Connected wallet $CR balance preview",
     "balancePreviewAria": "Connected wallet balance preview: {balance}. Link the wallet to verify holder flair.",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "bagConnect": "Link wallet",
     "bagLink": "Verify wallet",
     "bagReconnect": "Reconnect wallet",
@@ -5695,12 +5916,12 @@ export const en_CA: EnTranslations = {
     "extensionHelp": "Choose an installed browser wallet, or open Reown AppKit for Phantom, Solflare, Backpack, and more.",
     "mobileAppHelp": "Choose Phantom or Solflare. Your wallet app will ask for approval. Keep this game open and return to it when finished.",
     "seekerAppHelp": "Continue with Seed Vault Wallet. Review the connection and verification requests in Seed Vault, then return to the game.",
-    "standaloneAppHelp": "Wallet connections are not available in the Home Screen app yet. Open World of ClaudeCraft in Safari or Chrome to use Phantom or Solflare.",
+    "standaloneAppHelp": "Wallet connections are not available in the Home Screen app yet. Open Cryptic Realm in Safari or Chrome to use Phantom or Solflare.",
     "openAppTitle": "Continue in {wallet}",
     "openAppHelp": "Open {wallet} to review this request. Keep this game tab open while the wallet app is active.",
     "openAppButton": "Open {wallet}",
     "manualReturnBrowserHelp": "After approval, return to this game tab. If iOS opens another browser, close it and return to the original browser manually.",
-    "manualReturnStandaloneHelp": "After approval, return to World of ClaudeCraft from your Home Screen. If iOS opens a browser, close it and reopen the Home Screen app manually.",
+    "manualReturnStandaloneHelp": "After approval, return to Cryptic Realm from your Home Screen. If iOS opens a browser, close it and reopen the Home Screen app manually.",
     "preparingAppButton": "Preparing {wallet}...",
     "walletAppUnavailable": "{wallet} could not be prepared. Close this window and try again.",
     "flowConnect": "Choose a wallet. Verification continues automatically.",
@@ -5715,18 +5936,18 @@ export const en_CA: EnTranslations = {
       "linkBody": "Choose a wallet extension in this browser. You will sign a verification message, then return to the desktop app.",
       "paymentBody": "Choose the wallet linked to your account and approve the transaction in this browser.",
       "extensionHelp": "No compatible wallet extension was found. Install or unlock Phantom, Solflare, or another Solana browser wallet, then retry.",
-      "safety": "World of ClaudeCraft never asks for your recovery phrase or private key.",
+      "safety": "Cryptic Realm never asks for your recovery phrase or private key.",
       "continueWith": "Continue with {wallet}",
       "reviewTitle": "Review in your wallet",
       "reviewBody": "Follow the prompt from {wallet}. Keep this browser page open.",
       "completeTitle": "Wallet authorization complete",
-      "completeBody": "You can return to the World of ClaudeCraft desktop app.",
+      "completeBody": "You can return to the Cryptic Realm desktop app.",
       "returnButton": "Return to desktop app",
       "failed": "Wallet authorization failed or expired. Return to the desktop app and try again.",
       "retry": "Retry"
     },
-    "holder": "$WOC holder",
-    "holderTierTitle": "{tier} $WOC holder",
+    "holder": "$CR holder",
+    "holderTierTitle": "{tier} $CR holder",
     "holderTiers": {
       "ember": {
         "name": "Ember",
@@ -5750,7 +5971,7 @@ export const en_CA: EnTranslations = {
       },
       "vaultwarden": {
         "name": "Vaultwarden",
-        "flavor": "Guarding a real vault now: 0.01% of all $WOC."
+        "flavor": "Guarding a real vault now: 0.01% of all $CR."
       },
       "whale": {
         "name": "Whale",
@@ -5818,16 +6039,16 @@ export const en_CA: EnTranslations = {
     "levelClass": "Level {level} - {className}",
     "topPercent": "TOP {percent}%",
     "realmSubtitle": "{realm} World",
-    "defaultRealm": "World of ClaudeCraft",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "defaultRealm": "Cryptic Realm",
+    "brandWordmark": "CRYPTIC REALM",
     "recruited": "{count} recruited",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Forge your legend: {siteUrl}",
     "arenaStat": "Arena",
-    "shareTierBit": ", {tier}-rank $WOC holder",
-    "shareText": "I'm forging my legend in World of ClaudeCraft: Level {level} {className}{tierBit}. Join my world:",
-    "nativeShareTitle": "World of ClaudeCraft",
+    "shareTierBit": ", {tier}-rank $CR holder",
+    "shareText": "I'm forging my legend in Cryptic Realm: Level {level} {className}{tierBit}. Join my realm:",
+    "nativeShareTitle": "Cryptic Realm",
     "fileNameFallback": "player",
     "actionShareX": "Share to X",
     "actionCopyReferral": "Copy Referral Link",
@@ -6025,6 +6246,71 @@ export const en_CA: EnTranslations = {
       "toolSlips": "That tool slips off this lock.",
       "lockJammed": "The lock is jammed beyond picking. Clear the delve again for another attempt.",
       "lastPickSnaps": "The last pick snaps. The lock jams. The chest is lost unless you clear the delve again."
+    },
+    "venues": {
+      "derbyErrFull": "The grid is full for the next race.",
+      "derbyErrMarshal": "Sign up with the Race Marshal at the Thornwheel gate.",
+      "derbyErrRunning": "A race is already running. Wait for the next grid.",
+      "derbyFinish": "Checkered flag! You finish in {place} place.",
+      "derbyFinishPurse": "Checkered flag! You take {place} place and a {silver}s purse.",
+      "derbyGreen": "GREEN FLAG! Go go go!",
+      "derbyGrid": "Grid position {slot}. {laps} laps: follow the flags. Green in {seconds}...",
+      "derbyQueued": "You are signed up for the Thornwheel Derby ({count} on the grid).",
+      "derbyTimeUp": "Time! The Marshal waves you in.",
+      "homeDeed": "The deed to {name} is yours. Welcome home.",
+      "homeErrEntitlement": "A deed on Homestead Lane costs {price} $CR — settle the deed payment first.",
+      "homeErrHaveDeed": "You already hold a deed on Homestead Lane.",
+      "homeErrOwned": "That home already has an owner.",
+      "homeErrRealtor": "See Realtor Maribel on Homestead Lane to buy a home.",
+      "homeForSale": "That plot is still for sale.",
+      "homeShownDoor": "You are shown to the door.",
+      "hordeAlarm": "THE HORDE ALARM SOUNDS! The dead march on Eastbrook from the north road!",
+      "hordeBreach": "The dead break into the square! Wards left: {wards}.",
+      "hordeErrBoard": "Sound the alarm from the town defense board.",
+      "hordeErrBuildCost": "Raising a watch post costs 15s in timber and bowstrings.",
+      "hordeErrBuildMidWave": "Build between waves, not while the dead are inside the walls.",
+      "hordeErrCost": "Fortifying the town costs 20s in timber and nails.",
+      "hordeErrMaxWards": "The town is fortified to the rafters already.",
+      "hordeErrMidWave": "Fortify between waves, not while the dead are inside the walls.",
+      "hordeErrRunning": "The horde alarm is already sounding.",
+      "hordeFortified": "You fortify the town. Wards: {wards}. The line stands taller.",
+      "hordeLoss": "The last ward falls. The dead have Eastbrook tonight.",
+      "hordePostMax": "The watch posts are built out.",
+      "hordePostReinforced": "A watch post is reinforced to strength {level}.",
+      "hordePostUp": "A watch post rises on the line ({built} of {total}).",
+      "hordeWave": "WAVE {wave} of {waves}: {count} of the dead are on the road!",
+      "hordeWaveDown": "Wave {wave} is down. Fortify while you can — the next comes soon.",
+      "hordeWin": "The town stands! The bursar counts out your share: 80s.",
+      "pitBellMissed": "The bell rang without you. Your Boarpit card spot is forfeit.",
+      "pitDraw": "The Pit Master calls it a draw.",
+      "pitEnter": "Into the pit! {count} fighters. Fists in {seconds}...",
+      "pitErrFull": "The card is full for the next bout.",
+      "pitErrMaster": "Sign up with the Pit Master at the Boarpit gate.",
+      "pitErrRunning": "A bout is on. Wait for the next bell.",
+      "pitFight": "FIGHT!",
+      "pitForfeit": "You forfeit the bout.",
+      "pitKo": "Knocked out! You are hauled to the rail.",
+      "pitQueued": "You are on the card for the next Boarpit bout ({count} signed).",
+      "pitWin": "Last one standing! You take the pot: {silver}s.",
+      "skAxe": "Your builder shoulders the axe.",
+      "skBarracksUp": "Your barracks stands. Footmen may muster.",
+      "skBuilderDead": "Your camp builder has fallen.",
+      "skErrBusy": "You can't muster a warcamp right now.",
+      "skErrCost": "Not enough timber and stone for that.",
+      "skErrFull": "The muster roll is full.",
+      "skFootmanUp": "A footman answers the muster.",
+      "skHasBarracks": "Your camp already has a barracks.",
+      "skLoss": "The warband overruns the field. The skirmish is lost.",
+      "skNeedBarracks": "Footmen need a barracks.",
+      "skPick": "Your builder hefts the pick.",
+      "skQueued": "You are on the muster roll for a Warcamp Skirmish ({count} of 4).",
+      "skRally": "Your footmen march on the rally point.",
+      "skStart": "WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!",
+      "skTentDown": "Your Command Tent has fallen. Your camp is out.",
+      "skTowerUp": "A watchtower rises over your camp.",
+      "skTowersMax": "Your camp has all its watchtowers.",
+      "skWave": "Warband wave {wave} rides for the camps!",
+      "skWin": "The warband banner falls! The field is yours: 120s the commander."
     }
   },
   "lockpickUi": {
@@ -6170,7 +6456,8 @@ export const en_CA: EnTranslations = {
       "riteChoose": "Approach the Drowned Reliquary and press F to begin the rite",
       "ritePlayback": "Watch the shrines: memorize the order they light up",
       "riteInput": "Press F at each shrine in the order they lit ({current}/{total})",
-      "riteOpen": "The reliquary is open: press F on it to claim your spoils"
+      "riteOpen": "The reliquary is open: press F on it to claim your spoils",
+      "descend": "Descend the Hellmaw"
     },
     "objective": {
       "kill_boss": "Slay {boss}",
@@ -6322,6 +6609,7 @@ export const en_CA: EnTranslations = {
   "yumi": {
     "bracket3": "Yumi 3v3",
     "bracket5": "Yumi 5v5",
+    "enterQueue": "Join Protect Yumi!",
     "queue": {
       "join": "You join the Protect Yumi queue. Guard your familiar…",
       "leave": "You leave the Protect Yumi queue.",
@@ -6359,6 +6647,7 @@ export const en_CA: EnTranslations = {
   },
   "fiesta": {
     "bracket": "Fiesta",
+    "enterQueue": "Join the Fiesta!",
     "banner": {
       "wave": "WAVE {wave}/{total} — CHOOSE AN AUGMENT!",
       "augmentGained": "Augment gained: {name}!",
@@ -6523,14 +6812,14 @@ export const en_CA: EnTranslations = {
     }
   },
   "seo": {
-    "title": "World of ClaudeCraft: Classic-Style Web MMO",
-    "description": "Embark on an epic adventure in World of ClaudeCraft, a classic-style micro-MMO playable directly in your browser. Join a persistent shared world, level up classes, and defeat enemies!",
+    "title": "Cryptic Realm: Classic-Style Web MMO",
+    "description": "Enter Cryptic Realm, a classic-style browser MMO with shared realms, optional $CR utility, platinum rewards, cosmetics, and persistent character progression.",
     "genre": "MMORPG",
     "playMode": "Multiplayer",
     "applicationCategory": "Game",
     "operatingSystem": "Web browser",
-    "officialLabel": "Official World of ClaudeCraft website",
-    "officialBody": "worldofclaudecraft.com is the official free browser MMO for the Claudemoon world. Play online with a persistent character, explore solo offline, read the wiki, and follow verified community links from this site."
+    "officialLabel": "Official Cryptic Realm website",
+    "officialBody": "This is the official free browser MMO for the shared realms. Play online with a persistent character, explore solo offline, read the wiki, and follow verified community links from this site."
   },
   "a11y": {
     "goHome": "Go to homepage",
@@ -6538,9 +6827,9 @@ export const en_CA: EnTranslations = {
     "mainNavigation": "Main navigation",
     "languageSelection": "Language selection",
     "characterActions": "Character actions",
-    "githubProject": "Open the World of ClaudeCraft GitHub project",
-    "discordCommunity": "Join the World of ClaudeCraft Discord community",
-    "donateProject": "Donate to support World of ClaudeCraft"
+    "githubProject": "Open Cryptic Realm contributions",
+    "discordCommunity": "Join the Cryptic Realm Discord community",
+    "donateProject": "Tip $CR or SOL to support Cryptic Realm"
   },
   "entryGuard": {
     "title": "Graphics lowered",
@@ -6573,7 +6862,8 @@ export const en_CA: EnTranslations = {
       "professions": "Tip: gathering and crafting professions can be trained alongside your combat class.",
       "loadouts": "Tip: save more than one talent loadout to swap between builds without spending points twice.",
       "pvp": "Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build."
-    }
+    },
+    "reconnecting": "Connection lost. Reconnecting..."
   },
   "errors": {
     "nothingInteract": "Nothing to interact with.",
@@ -6615,6 +6905,7 @@ export const en_CA: EnTranslations = {
   },
   "desktop": {
     "update": {
+      "downloading": "Downloading update {version}...",
       "checkingTitle": "Checking for updates...",
       "checkingBody": "New versions download while you play.",
       "uptodateTitle": "You're up to date",
@@ -6627,11 +6918,11 @@ export const en_CA: EnTranslations = {
       "dismiss": "Dismiss"
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "body": "The game view stopped working. Reload it?",
       "reload": "Reload",
       "quit": "Quit",
-      "fatalBody": "World of ClaudeCraft hit an unexpected error and needs to close."
+      "fatalBody": "Cryptic Realm hit an unexpected error and needs to close."
     }
   },
   "gpuNotice": {
@@ -6666,7 +6957,9 @@ export const en_CA: EnTranslations = {
     "characterCountOther": "{count} characters",
     "selectedRealm": "World: {name}",
     "statsOffline": "Offline",
-    "statsRealmOffline": "{realm} (Offline)"
+    "statsRealmOffline": "{realm} (Offline)",
+    "enter": "Enter Realm",
+    "exchangeNote": "The Exchange is the only realm where items move between realms."
   },
   "character": {
     "loading": "Loading...",
@@ -6770,17 +7063,17 @@ export const en_CA: EnTranslations = {
     "iosStandaloneDetail": "You are in home-screen fullscreen mode. Keep the device in landscape.",
     "iosInstallDetail": "For true fullscreen on iPhone or iPad, install this page to your Home Screen first.",
     "iosShareStep": "In Safari, tap Share, then Add to Home Screen.",
-    "iosOpenStep": "Open World of ClaudeCraft from the new Home Screen icon.",
+    "iosOpenStep": "Open Cryptic Realm from the new Home Screen icon.",
     "androidStandaloneDetail": "You are in fullscreen app mode. Keep the device in landscape.",
     "androidInstallDetail": "For fullscreen on Android, install this page or add it to your Home screen first.",
     "androidInstallStep": "In Chrome, tap the menu, then Install app or Add to Home screen.",
-    "androidOpenStep": "Open World of ClaudeCraft from the new icon.",
+    "androidOpenStep": "Open Cryptic Realm from the new icon.",
     "otherStandaloneDetail": "Keep your device in landscape fullscreen.",
     "otherInstallDetail": "Install or add this page to your Home screen for the best fullscreen mobile experience."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - World Unavailable",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - Realm Unavailable",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "World maintenance",
     "heading": "The world is temporarily unavailable.",
     "body": "We are restarting the game service and expect Claudemoon to return shortly. This page will keep checking automatically.",
@@ -6849,7 +7142,8 @@ export const en_CA: EnTranslations = {
       "zoomIn": "Zoom in",
       "zoomOut": "Zoom out",
       "mapCanvasLabel": "Map",
-      "mapSummary": "Map of {zone}."
+      "mapSummary": "Map of {zone}.",
+      "mobileArena": "Arena"
     },
     "options": {
       "gameMenu": "Game Menu",
@@ -6926,6 +7220,34 @@ export const en_CA: EnTranslations = {
       "primary": "Primary",
       "alternate": "Alternate",
       "unbound": "Unbound",
+      "arcforge": "ArcForge",
+      "controller": "Controller",
+      "controllerDisconnected": "Not connected",
+      "coop": "Join Co-Op",
+      "customization": "Customization",
+      "mods": "Mods",
+      "padA": "A",
+      "padAttackTarget": "Attack nearest · target",
+      "padB": "B",
+      "padBack": "Back / View",
+      "padCursorNote": "When a menu, quest dialog, or chat opens, the on-screen cursor arms automatically — move it with a stick and press A to click (accept quests, send chat, use menus).",
+      "padCursorToggle": "Toggle mouse cursor",
+      "padDpad": "D-Pad",
+      "padInteract": "Interact / talk to NPC",
+      "padJumpClick": "Jump · click in cursor mode",
+      "padLbRb": "LB / RB",
+      "padLeftStick": "Left Stick",
+      "padLookCursor": "Look / move cursor",
+      "padLtRt": "LT / RT (hold)",
+      "padMenu": "Open game menu",
+      "padMove": "Move",
+      "padRightStick": "Right Stick",
+      "padSkillChords": "Hold + A/B/X/Y for skills 9–16",
+      "padSkills12": "Skills 1 & 2",
+      "padSkills47": "Skills 5–8",
+      "padStart": "Start / Menu",
+      "padXY": "X / Y",
+      "reportBug": "Report Bug",
       "mouseCamera": "Mouse Camera",
       "keybindHelpMouseCamera": "Mouse Camera off: A/D turns, drag to orbit (classic). On: camera-relative WASD, A/D strafes. Click a key cell to rebind; Esc cancels."
     },
@@ -7644,8 +7966,8 @@ export const en_CA: EnTranslations = {
       "cannotVendor": "Cannot be sold to merchants",
       "clickDestroy": "Click to destroy",
       "useFishing": "Use: Fish in nearby waters.",
-      "useHealingPotion": "Use: Instantly restores {amount} health. Usable in combat. 2 min cooldown.",
-      "useManaPotion": "Use: Instantly restores {amount} mana. Usable in combat. 2 min cooldown.",
+      "useHealingPotion": "Use: Instantly restores {amount} health. Usable in combat. 1 min cooldown.",
+      "useManaPotion": "Use: Instantly restores {amount} mana. Usable in combat. 1 min cooldown.",
       "clickUseInstant": "Click to use instantly in combat",
       "clickUse": "Click to use",
       "clickBuyback": "Click to buy back",
@@ -7897,6 +8219,14 @@ export const en_CA: EnTranslations = {
       "battle_shout": {
         "name": "Iron Bellow",
         "description": "A shout that increases the attack power of all party members by {buff}% for 30 min."
+      },
+      "commanding_shout": {
+        "name": "Bolstering Cry",
+        "description": "Increases your Stamina by {buff} for 2 min."
+      },
+      "rend": {
+        "name": "Deep Gash",
+        "description": "Wounds the target, causing them to bleed for {damage} damage over {duration} sec."
       },
       "demoralizing_shout": {
         "name": "Direhowl",
@@ -9201,6 +9531,18 @@ export const en_CA: EnTranslations = {
       },
       "gravecaller_sigil": {
         "name": "Gravecaller's Sigil"
+      },
+      "binding_ward": {
+        "name": "Hellmaw Binding Ward"
+      },
+      "renders_hateforged_cleaver": {
+        "name": "The Render's Hateforged Cleaver"
+      },
+      "sigilbrand_of_the_durance": {
+        "name": "Brand of the Hellmaw"
+      },
+      "hollow_fang_of_hate": {
+        "name": "Hollow Fang of the Well"
       },
       "blessed_wax": {
         "name": "Blessed Tallow"
@@ -10720,6 +11062,15 @@ export const en_CA: EnTranslations = {
       "simple_fishing_pole": {
         "name": "Simple Fishing Pole"
       },
+      "mount_forest_stag": {
+        "name": "Forest Stag Bridle"
+      },
+      "mount_swamp_raptor": {
+        "name": "Spearjaw Saddle"
+      },
+      "mount_emerald_wyrm": {
+        "name": "Emerald Wyrm Reins"
+      },
       "tangled_weed": {
         "name": "Tangled Weed"
       },
@@ -11625,6 +11976,36 @@ export const en_CA: EnTranslations = {
       "vale_cup_ball": {
         "name": "Boarball"
       },
+      "hellmaw_charred_husk": {
+        "name": "Charred Husk"
+      },
+      "hellmaw_cinder_acolyte": {
+        "name": "Cinder Acolyte"
+      },
+      "hellmaw_cursed_knight": {
+        "name": "Cursed Iron Knight"
+      },
+      "hellmaw_ember_behemoth": {
+        "name": "Ember Behemoth"
+      },
+      "hellmaw_inferno_dragon": {
+        "name": "Inferno Dragon"
+      },
+      "hellmaw_lava_fiend": {
+        "name": "Lava Fiend"
+      },
+      "hellmaw_primal_beast": {
+        "name": "Primal Emberbeast"
+      },
+      "hellmaw_sigilbound_warlock": {
+        "name": "Sigil-Bound Warlock"
+      },
+      "hellmaw_the_render": {
+        "name": "The Render"
+      },
+      "hellmaw_wailing_spectre": {
+        "name": "Wailing Spectre"
+      },
       "thunzharr_waking_peak": {
         "name": "Thunzharr, the Waking Peak"
       },
@@ -12217,6 +12598,41 @@ export const en_CA: EnTranslations = {
         "title": "Reliquary Keeper",
         "greeting": "The trail led north. Another reliquary, another rite. Choose your tier, and I'll hold the rope until you return."
       },
+      "cainhurst_sage": {
+        "name": "Cainhurst the Sage",
+        "title": "Keeper of the Hellmaw",
+        "greeting": "You pulled me from the Hellmaw, friend - I do not forget it. The well is open to you now. Steel yourself: The Render waits at the bottom."
+      },
+      "stable_master_wren": {
+        "name": "Wren Saddleworth",
+        "title": "Stable Master",
+        "greeting": "Every hero needs a steed, {className}. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies."
+      },
+      "mercenary_kael": {
+        "name": "Kael the Sellsword",
+        "title": "Wandering Mercenary",
+        "greeting": "Coin's coin, {className}. Lend a blade and the beast's yours to loot."
+      },
+      "huntress_verr": {
+        "name": "Huntress Verr",
+        "title": "Boar-Culler",
+        "greeting": "These tuskers won't thin themselves. Wade in - the kill counts for you."
+      },
+      "interior_merchant": {
+        "name": "Merchant",
+        "title": "Shopkeeper",
+        "greeting": "Wares for a wanderer? Take a look."
+      },
+      "interior_innkeeper": {
+        "name": "Innkeeper",
+        "title": "Host",
+        "greeting": "Rest your boots, traveller. The fire's warm."
+      },
+      "interior_villager": {
+        "name": "Villager",
+        "title": "Resident",
+        "greeting": "Oh - a visitor! Mind the mess."
+      },
       "spirit_healer": {
         "name": "The Pale Keeper",
         "title": "Warden of the Dead",
@@ -12511,6 +12927,41 @@ export const en_CA: EnTranslations = {
         "name": "Alchemist Verane",
         "title": "Master of the Apothecary",
         "greeting": "Measure twice and pour once, {className}. The apothecary has no patience for spilled reagents."
+      },
+      "town_defense_board": {
+        "name": "Town Defense Board",
+        "title": "Keeper of the Eastbrook Watch",
+        "greeting": "The road needs a watch. Gather your party and hold Eastbrook against the dead."
+      },
+      "race_marshal_pip": {
+        "name": "Race Marshal Pip",
+        "title": "Keeper of the Thornwheel",
+        "greeting": "Six karts, three laps, and no brakes worth the name, {className}. Sign the book and take a grid slot?"
+      },
+      "pit_master_grott": {
+        "name": "Pit Master Grott",
+        "title": "Keeper of the Boarpit",
+        "greeting": "Fists, feet, and whatever the vale gave you, {className}. Nobody dies in my pit - the stakes see to that. Care to sign the card?"
+      },
+      "realtor_maribel": {
+        "name": "Realtor Maribel",
+        "title": "Eastbrook Homes",
+        "greeting": "Four fine lots, {className}, and the vale air is free - the deeds are not. A home on Homestead Lane is for our patrons, and deeds settle in CR coin."
+      },
+      "skirmish_post": {
+        "name": "Warcamp Structure",
+        "title": "Warcamp Skirmish",
+        "greeting": "The warcamp holds."
+      },
+      "skirmish_builder": {
+        "name": "Camp Builder",
+        "title": "Warcamp Skirmish",
+        "greeting": "Axe or pick, commander - just point."
+      },
+      "skirmish_footman": {
+        "name": "Camp Footman",
+        "title": "Warcamp Skirmish",
+        "greeting": "Point me at the warband."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -13224,6 +13675,16 @@ export const en_CA: EnTranslations = {
         "objectives": {
           "0": {
             "label": "The Codfather"
+          }
+        }
+      },
+      "q_save_cainhurst": {
+        "title": "Save Cainhurst the Sage",
+        "text": "Old Cainhurst - the sage who reads the deep maps - went down the well a week past and never came up. The thing below took him, and bound him with three cursed wards: one struck among the graves, one buried in the mine, one drowned at the docks. Break all three wards, {playerName}, and you'll break his chains. Bring them to me as proof.",
+        "completion": "The three wards, all snuffed cold. Cainhurst has crawled free - he waits at the well now, and swears the Hellmaw is open to you. He warns of something at the bottom he calls The Render.",
+        "objectives": {
+          "0": {
+            "label": "Hellmaw binding ward broken"
           }
         }
       },
@@ -14551,6 +15012,26 @@ export const en_CA: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "A Craft to Call Your Own",
+        "text": "Every artisan of Eastbrook eventually settles on one craft to call their own. Prove yourself with a single deed, {playerName}, and declare your path.",
+        "completion": "Your path is chosen; walk it well.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Making Amends",
+        "text": "To set aside one craft for another, an artisan must first make amends for the path not walked, {playerName}.",
+        "completion": "Amends made; a new path is open to you.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "The Drowned Choir",
         "text": "The waders do not act alone. Among them walk the Drowned Votaries — the cult that sank with the temple, still in their rotted vestments, still singing the prayer from the shore-rocks. Silence eight of them, and bring me six of the offerings they carry. I would know what they mean to give their goddess.",
@@ -14654,6 +15135,48 @@ export const en_CA: EnTranslations = {
             "label": "The Sowfield"
           },
           "11": {
+            "label": "Eastbrook"
+          },
+          "12": {
+            "label": "Wolf Run"
+          },
+          "13": {
+            "label": "Boar Meadow"
+          },
+          "14": {
+            "label": "Mirror Lake"
+          },
+          "15": {
+            "label": "Sableweb"
+          },
+          "16": {
+            "label": "Copper Dig"
+          },
+          "17": {
+            "label": "Bandit Camp"
+          },
+          "18": {
+            "label": "Fallen Chapel"
+          },
+          "19": {
+            "label": "Reliquary Hill"
+          },
+          "20": {
+            "label": "Brightwood Glade"
+          },
+          "21": {
+            "label": "The Sowfield"
+          },
+          "22": {
+            "label": "Thornwheel Circuit"
+          },
+          "23": {
+            "label": "The Boarpit"
+          },
+          "24": {
+            "label": "Eastbrook Homes"
+          },
+          "25": {
             "label": "The Farshore Causeway"
           }
         }
@@ -15071,6 +15594,11 @@ export const en_CA: EnTranslations = {
         "name": "The Drowned Litany",
         "enterText": "You descend into the drowned shrine at the marsh's edge.",
         "leaveText": "You climb back to Brother Halven at the marsh's edge."
+      },
+      "hellmaw_well": {
+        "name": "The Hellmaw Well",
+        "enterText": "The well mouth yawns into red dark - and the Hellmaw swallows you down.",
+        "leaveText": "You haul yourself back up the well shaft, the Hellmaw seething below."
       }
     },
     "letters": {
@@ -15357,5 +15885,67 @@ export const en_CA: EnTranslations = {
     "delveRiteShrineSkullInteract": "Skull Shrine: Press F to touch it",
     "mailboxName": "Mailbox",
     "noticeboardName": "Notice Board"
+  },
+  "contributions": {
+    "cAdminB": "Account review, chat moderation, report queues, role-gated dashboards, and better status panels.",
+    "cAdminT": "Admin & Moderator Tools",
+    "cAuthB": "OIDC wiring, optional TOTP login hardening, safer login throttles, clearer dashboard sessions.",
+    "cAuthT": "Auth & Account Safety",
+    "cOpsB": "Auto-update maintenance mode, static cache policy, API health checks, and safer server restarts.",
+    "cOpsT": "Updates & Operations",
+    "cTestB": "Security tests, OAuth tests, realm tests, launcher tests, and visual smoke scripts.",
+    "cTestT": "Test Coverage",
+    "cUiB": "Camera options, mobile layout fixes, clearer landing flows, and performance guidance.",
+    "cUiT": "Game UI Quality",
+    "cWikiB": "Public wiki hub fallback, release/news feed, launcher status page, and improved nav consistency.",
+    "cWikiT": "Wiki & Public Hubs",
+    "lead": "Cryptic Realm is its own game, but it can still send practical engine improvements back upstream. This separates shared ClaudeCraft-friendly work from private Cryptic Realm features.",
+    "privateBody": "These stay in the independent track because they define this game and are not handed over as generic upstream value.",
+    "privateTitle": "Cryptic Realm-Only Work",
+    "sharedBody": "Clean, generic improvements offered upstream because they help the base project without giving away Cryptic Realm-only economy, realm, or lore systems.",
+    "sharedTitle": "Shared Upstream Candidates",
+    "tagCustody": "Private custody runbooks",
+    "tagExchange": "Exchange realm",
+    "tagLore": "Cryptic Realm lore",
+    "tagMinigames": "Original mini-games",
+    "tagPlatinum": "Platinum economy",
+    "tagRealms": "Hellmaw / Classic / Dominion / Arcane realms",
+    "title": "Contributions"
+  },
+  "coop": {
+    "accountOther": "Different account",
+    "accountThis": "This account",
+    "createCharacter": "Create a character",
+    "createError": "Could not create the character. Try a different name.",
+    "createName": "Character name",
+    "createTitle": "Name your new hero and pick a class",
+    "hintJoin": "Press Start on another controller to add a player (up to 4).",
+    "hintLeave": "Hold Start on a controller to drop that player.",
+    "joinCancel": "Cancel",
+    "joinConfirm": "Join",
+    "joinNow": "Join now",
+    "joinTitle": "Player {slot}: press to join",
+    "keyboardJoin": "Press F2 to add a local player",
+    "loggingIn": "Signing in...",
+    "loginError": "Sign-in failed. Check the username and password.",
+    "loginPass": "Password",
+    "loginSubmit": "Sign in and join",
+    "loginTitle": "Sign in Player {slot}'s account",
+    "loginUser": "Username",
+    "noOtherCharacters": "This account has no other characters to bring in.",
+    "pickCharacter": "Choose a character",
+    "pickClass": "Choose a class",
+    "reconnecting": "Player {slot} reconnecting",
+    "reviving": "Reviving in {seconds}s",
+    "slotEmpty": "Open",
+    "slotLabel": "Player {slot}",
+    "stripTitle": "Local players"
+  },
+  "links": {
+    "loading": "Loading official channels…",
+    "title": "Official Links"
+  },
+  "whitepaper": {
+    "loading": "Loading the white paper…"
   }
 };

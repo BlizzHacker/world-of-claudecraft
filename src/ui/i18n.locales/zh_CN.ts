@@ -4041,14 +4041,12 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     '这笔迹...我在东溪莫森的魔典里见过。每座坟后都是同一只手，{playerName}。',
   'entities.quests.q_cult_orders.objectives.0.label': '击败龙教狂热者',
-  'entities.quests.q_cult_orders.objectives.1.label': '龙教命令',
   'entities.quests.q_necromancers.title': '护命匣之环',
   'entities.quests.q_necromancers.text':
     '命令提到一圈护命匣，{playerName}，灵魂容器围着圣所供养它。杀8名死灵法师，带回3个完整护命匣。',
   'entities.quests.q_necromancers.completion':
     '愿圣光宽恕我们。里面装着谷地和湿地的死者，所有被收割的灵魂。{playerName}，他们从来不是在组建军队，而是在征收贡赋。',
   'entities.quests.q_necromancers.objectives.0.label': '击败龙教死灵法师',
-  'entities.quests.q_necromancers.objectives.1.label': '仪式护命匣',
   'entities.quests.q_revenants.title': '亡魂战场',
   'entities.quests.q_revenants.text':
     '圣所路东有片古战场，上一支攻山军的先锋已埋两百年。邪教叫醒了他们，穿着锈甲。{playerName}，让12个归土。',
@@ -5405,8 +5403,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': '巨像',
   'fiesta.powerup.pow_moon_boots.name': '月行靴',
   'fiesta.powerup.pow_speed_demon.name': '极速恶魔',
-  'fiesta.practice': '🎉 对战机器人练习',
-  'fiesta.practiceNote': '离线练习：生成3个AI机器人并将你排入2v2 Fiesta队列。再次点击即可停止。',
   'fiesta.queue.join': '你加入了2v2 Fiesta队列。准备好狂欢吧……',
   'fiesta.queue.leave': '你离开了2v2 Fiesta队列。',
   'fiesta.queue.teamLeave': '你的队伍离开了2v2 Fiesta队列。',
@@ -6315,8 +6311,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.thorns': '守护盟友，让近战攻击者在打击时反伤自己。',
   'guide.abilityHook.thunder_clap': '打击你周围的一切，并减缓它们的攻击速度。',
   'guide.abilityHook.wrath': '从远处向目标投出一道自然箭矢，是你的常用输出。',
-  'guide.arenaPage.augmentsNote':
-    '增幅和强化只在本场比赛中有效。它们关乎的是趣味、即兴的临场构筑，而非长久的强势，因此没人能靠花钱赢得胜利。',
   'guide.arenaPage.coliseumBody':
     'the Coliseum 是这片位面的角斗场，你将在排名赛中对阵其他玩家，一对一或二对二皆可。每个组别都各自记录排名，因此一场胜利便能让你在那条天梯上攀升，让全位面的人都看得见。',
   'guide.arenaPage.coliseumHeading': '灰烬角斗场',
@@ -6493,19 +6487,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '三片区域，自南向北，每一片的等级都更高一级。跟着任务线走，这片土地便会带你从山谷一路抵达群峰。',
   'guide.worldPage.places': '值得一看的地点',
   'guide.worldPage.residents': '你将遇见的人',
-  'guide.arenaPage.powerupsBody':
-    '激战正酣时，发光的能量球还会落入竞技场，谁先抢到便归谁。它们刻意夸张到极致，且只持续片刻：极速恶魔让你瞬间快得令人目眩，巨像将你膨胀成步履蹒跚的庞然大物，月靴带来低重力的弹跳腾跃，狂战士则让你猛然涌起一股暴怒。',
-  'guide.arenaPage.powerupsTitle': '竞技场中的强化道具',
-  'guide.arenaPage.waveGoldBody': '中段一波：双刃组合，你的构筑在此开始成型、绽放光彩。',
-  'guide.arenaPage.waveGoldTitle': '黄金',
-  'guide.arenaPage.wavePrismaticBody':
-    '最后一波：足以定义构筑、炸裂屏幕的爆发，意在以最酣畅淋漓的方式让你直呼离谱。',
-  'guide.arenaPage.wavePrismaticTitle': '棱彩',
-  'guide.arenaPage.waveSilverBody': '开场一波：干净利落的单项属性提升，磨砺你职业的基本功。',
-  'guide.arenaPage.waveSilverTitle': '白银',
-  'guide.arenaPage.wavesBody':
-    '嘉年华的每一回合都会递给你一次全新的选择，随着比赛推进，可选的强化也愈发大胆。你从一波构筑到下一波，每次从寥寥几个选项中挑选其一，并在余下的对局中一直保留它。',
-  'guide.arenaPage.wavesTitle': '增幅分波登场',
   'guide.bestiary.flavor.gravecaller_cultist':
     '死亡邪教身披长袍的仆从，他们的勾当玷污了从谷地到峰巅的每一处坟墓。他们聚集之处，死者难以安息。',
   'guide.bestiary.flavor.grubjaw':
@@ -7578,7 +7559,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.cameraPrompt.changeLater': '稍后可在 Esc 菜单的“按键绑定”中更改。',
   'hudChrome.cameraPrompt.confirm': '确认',
   'desktop.update.downloading': '正在下载更新 {version}...',
-  'desktop.update.ready': '更新 {version} 已就绪。退出游戏时将自动安装，也可立即重启。',
   'desktop.update.checkingTitle': '正在检查更新...',
   'desktop.update.checkingBody': '游戏会自动保持最新版本。',
   'desktop.update.uptodateTitle': '当前已是最新版本。',
@@ -8522,9 +8502,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   // Protect Yumi locale fill (M16 wordy-key floor).
   'yumi.hud.collapse': '折叠Protect Yumi血条',
   'yumi.hud.expand': '展开Protect Yumi血条',
-  'guide.arenaPage.yumiHeading': '守护Yumi',
-  'guide.arenaPage.yumiBody':
-    'Protect Yumi是一种在迷宫中进行的团队目标模式：每队守护自己的猫咪使魔，同时猎杀对方的。两只猫咪会不时闪现到迷宫的新角落，战斗在防守、追猎与寻回之间不断摇摆。可选择3对3或5对5排队；阵亡只会让你短暂离场。',
   'yumi.queue.join': '你加入了Protect Yumi队列。守好你的使魔……',
   'yumi.queue.leave': '你离开了Protect Yumi队列。',
   'yumi.queue.teamLeave': '你的队伍离开了Protect Yumi队列。',
@@ -10689,9 +10666,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.provenanceHeading': '署名作品',
   'guide.profPages.econ.provenanceBody':
     '精良及以上的成品与发现都带有制作者的署名，而署名完全相同的物品仍可堆叠。',
-  'guide.profPages.econ.throttleHeading': '操作限频',
-  'guide.profPages.econ.throttleBody':
-    '制作、分解、附魔与回收共用一个限频：每{seconds}秒最多{actions}次操作。',
   'guide.profPages.econ.doctrineHeading': '玩家与玩家交易',
   'guide.profPages.econ.doctrineBody':
     '制作装备的强度始终低于团队副本的底线，而上述费用会把货物推向玩家之间的交易，而非商店循环。',

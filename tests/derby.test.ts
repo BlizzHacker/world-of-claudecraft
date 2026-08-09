@@ -9,7 +9,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { MOUNTS } from '../src/sim/content/mounts';
+import { LEGACY_MOUNTS } from '../src/sim/content/mounts';
 import {
   DERBY_CHECKPOINTS,
   DERBY_GRID,
@@ -130,7 +130,7 @@ describe('a Derby race', () => {
     expect(Math.hypot(ea.pos.x - DERBY_GRID[0].x, ea.pos.z - DERBY_GRID[0].z)).toBeLessThan(1);
     expect(ea.auras.some((au) => au.id === 'mount_derby_kart')).toBe(true);
     expect(ea.auras.find((au) => au.id === 'mount_derby_kart')?.value).toBe(
-      MOUNTS.derby_kart.speedMult,
+      LEGACY_MOUNTS.derby_kart.speedMult,
     );
     // green flag
     tickUntil(sim, () => sim.derby.race?.phase === 'racing', 20 * (DERBY_GRID_COUNTDOWN + 2));

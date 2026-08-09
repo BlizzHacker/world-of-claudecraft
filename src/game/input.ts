@@ -604,10 +604,10 @@ export class Input {
   // caller that abandons a pending capture (Done / Reset confirm) does not
   // leave a stale one-shot handler in place to swallow the player's next
   // real keypress.
-  captureNextKey(cb: ((code: string | null) => void) | null): void {
+  captureNextKey(cb: ((code: string | null) => void) | null): () => void {
     this.captureCb = cb;
     return () => {
-      if (this.captureCb === cb) {
+      if (cb !== null && this.captureCb === cb) {
         this.captureCb = null;
         cb(null);
       }

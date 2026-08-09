@@ -1231,9 +1231,6 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.collectorsHeading': 'Sběratelé, trofeje a cena příběhu',
   'guide.profPages.econ.collectorsBody':
     'Prodejci jsou slepí k původu: podepsaný předmět prodáš NPC přesně za jeho základní cenu. Příplatek za podpis existuje pouze mezi hráči, a právě to je zajímavé: hromada rudy z nečekaného nálezu podepsaná slavným sběračem, Prvotřídní výřez ze šťastné sklizně, mistrovská čepel nesoucí jméno kováře, který od té doby odešel do ústraní, všechno stojí tolik, co si paměť lidí řekne, že jsou hodné.\n\nKniha skutků vychází vstříc témuž instinktu: Nedotčená rudná žíla, Prastaré jádrové dřevo, Měsíční květ, Dokonalý exemplář a Záblesk naděje jsou sběratelské záznamy bez Věhlasu, které existují výhradně jako důkaz, že se ti něco přihodilo. Uchovej předmět, který získání skutku vynesl, a máš v rukou potvrzení. Nic z toho není výkon; původ nekupuje statistiky ani nevyhrává souboje, je to papírová stopa hry o povedených dnech.',
-  'guide.profPages.econ.throttleHeading': 'Omezení akcí',
-  'guide.profPages.econ.throttleBody':
-    'Výstup má strop: výroba, rozzačarování, okouzlování a rozebírání sdílejí jeden rozpočet {actions} úspěšných akcí za klouzavých {seconds} sekund. Odmítnutý pokus nestojí nic a nečerpá rozpočet. V normální hře to nikdy nepocítíš; existuje to proto, aby maximálně vystupňovaný specialista s plnou bankou nemohl zaplavit Trh bez ohledu na svou dovednost nebo zásoby.',
   'guide.profPages.econ.doctrineHeading': 'Hráči obchodují s hráči',
   'guide.profPages.econ.doctrineBody':
     'Řemeslná ekonomika stojí na jediné myšlence: hráči zásobují hráče. Sběrači živí řemeslníky, řemeslníci živí hráče plnící úkoly a nájezdníky a rozebíratelé živí okouzlovatele, přičemž prodejci a správci stanic stojí na okraji, aby pohlcovali smetí a mince, nikoli aby s tebou soutěžili. Chceš-li vydělávat mince z profese, tvůj zákazník je osoba: zjisti, co ostatní hráči rychle spotřebují, porovnej ceny se Světovým trhem a chovej se k NPC systémům jako k podlaze pod svými cenami, ne jako k trhu samotnému.\n\nVybavení z řemesel je laděno tak, aby zůstávalo pod úrovní nájezdové hranice: i mistrovské dílo je vždy jen o jeden stupeň kvality nad svým receptem, nikdy ne přes legendární, a jeho rozpočet statistik zůstává pod pásmem nájezdové kořisti. Kovárna tě připraví na nejtěžší obsah; nenahrazuje ho. To udržuje řemeslníky, nájezdníky a trh ve stabilním trojúhelníku: nájezdové kusy zůstávají aspiračním cílem a řemeslné kusy nejlepším vybavením, které lze skutečně koupit za mince.',
@@ -3355,8 +3352,6 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'desktop.update.downloading': 'Stahuje se aktualizace {version}...',
   'desktop.update.downloadingTitle': 'Stahuje se aktualizace {version}...',
   'desktop.update.later': 'Později',
-  'desktop.update.ready':
-    'Aktualizace {version} je připravena. Nainstaluje se při ukončení, nebo restartuj hned.',
   'desktop.update.readyTitle': 'Aktualizace {version} je připravena',
   'desktop.update.readyBody': 'Nainstaluje se při ukončení, nebo restartuj hned.',
   'desktop.update.restart': 'Restartovat hned',
@@ -3560,9 +3555,6 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': 'Kolos',
   'fiesta.powerup.pow_moon_boots.name': 'Měsíční boty',
   'fiesta.powerup.pow_speed_demon.name': 'Démon rychlosti',
-  'fiesta.practice': 'Trénink proti botům',
-  'fiesta.practiceNote':
-    'Offline trénink: vytvoří 3 AI boty a zařadí tě do 2v2 Fiesty. Klikni znovu pro zastavení.',
   'fiesta.queue.join': 'Připojuješ se do fronty 2v2 Fiesty. Připrav se na PÁRTY...',
   'fiesta.queue.leave': 'Opouštíš frontu 2v2 Fiesty.',
   'fiesta.queue.teamLeave': 'Tvůj tým opouští frontu 2v2 Fiesty.',
@@ -7236,7 +7228,6 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     'Tohle písmo... podobné jsem naposledy viděl v Morthenově grimoáru v Eastbrooku. Stejná ruka vedla každý hrob, o který jsme bojovali, {playerName}.',
   'entities.quests.q_cult_orders.objectives.0.label': 'Fanatik kultu draka zabit',
-  'entities.quests.q_cult_orders.objectives.1.label': 'Rozkazy kultu draka',
   'entities.quests.q_cult_orders.text':
     'Fanatici se teď pohybují cíleně, staví hlídky, počítají zásoby, jako vojáci před obléháním. Kultisté, kteří se organizují, jsou kultisté s rozkazy, {playerName}. Zabij dalších osm a přines mi čtyři sady jejich psaných rozkazů. Chci znát ruku, která jim velí.',
   'entities.quests.q_cult_orders.title': 'Rozkazy zdola',
@@ -7410,7 +7401,6 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_necromancers.completion':
     'Světlo nám odpusť. Tohle drží mrtvé údolí i močálu, každou mrtvolu, kterou kdy Hrobovolající vztyčili, sklizenou. Nikdy nebudovali armádu, {playerName}. Shromažďovali desátek.',
   'entities.quests.q_necromancers.objectives.0.label': 'Nekromant kultu draka zabit',
-  'entities.quests.q_necromancers.objectives.1.label': 'Rituální fylakterie',
   'entities.quests.q_necromancers.text':
     'Rozkazy mluví o "kruhu fylakterií", nádobách duší, {playerName}, rozmístěných kolem svatyně, aby ji krmily. Nekromanti kultu je nosí jako svaté relikvie. Zabij osm nekromantů a přines mi tři neporušené fylakterie. Musím vědět, čí duše drží.',
   'entities.quests.q_necromancers.title': 'Kruh fylakterií',
@@ -8458,23 +8448,6 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'guide.arenaPage.fiestaHeading': 'Fiesta dva na dva',
   'guide.arenaPage.fiestaBody':
     'Fiesta je rychlý režim dva na dva hraný v krátkých kolech. Mezi koly draftuješ augmenty, rychlá posílení, která za běhu přetvarují tvůj kit, takže žádné dva zápasy nehrají stejně.',
-  'guide.arenaPage.augmentsNote':
-    'Augmenty a power-upy trvají jen pro zápas. Jsou o hravých, okamžitých buildech, ne o trvalé síle, takže si nikdo nekoupí cestu k výhře.',
-  'guide.arenaPage.wavesTitle': 'Augmenty přicházejí ve vlnách',
-  'guide.arenaPage.wavesBody':
-    'Každé kolo Fiesty ti dá čerstvou volbu a volby jsou s postupem zápasu odvážnější. Stavíš od jedné vlny k další, pokaždé vybíráš jednu z několika možností a necháváš si ji do konce souboje.',
-  'guide.arenaPage.waveSilverTitle': 'Stříbrná',
-  'guide.arenaPage.waveSilverBody':
-    'Úvodní vlna: čistá posílení jedné statistiky, která zostří základy třídy.',
-  'guide.arenaPage.waveGoldTitle': 'Zlatá',
-  'guide.arenaPage.waveGoldBody':
-    'Prostřední vlna: dvousečné kombinace, kde se build začíná tvarovat a zpívat.',
-  'guide.arenaPage.wavePrismaticTitle': 'Prizmatická',
-  'guide.arenaPage.wavePrismaticBody':
-    'Závěrečná vlna: build určující, obrazovku tavící špičky, které mají působit směšně tím nejlepším způsobem.',
-  'guide.arenaPage.powerupsTitle': 'Power-upy v ringu',
-  'guide.arenaPage.powerupsBody':
-    'Do arény během boje padají také zářící orby, volné pro toho, kdo k nim doběhne první. Záměrně přehánějí a trvají jen krátce: Rychlostní démon pro záblesk oslepujícího tempa, Kolos pro nabobtnání v těžkopádného obra, Měsíční boty pro skákavý skok s nízkou gravitací a Berserker pro náhlý příval zuřivosti.',
   'guide.arenaPage.ladderHeading': 'Stoupání po žebříku',
   'guide.arenaPage.ladderBody':
     'Hodnocené hraní sleduje tvoje postavení v čase. Podívej se na žebříček, kde sedíš a kdo drží vrchol světa.',
@@ -8821,9 +8794,6 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'entities.items.sunpetal_herb.name': 'Sluncokvět',
   'entities.mobs.training_dummy.name': 'Cvičný panák',
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'guide.arenaPage.yumiBody':
-    'Ochraňte Yumi je týmový objektivní režim, který se hraje v bludišti: každá strana hlídá svého vlastního kočičího společníka a zároveň loví toho druhého. Čas od času se obě kočky přenesou do nových koutů bludiště, takže se boj přelévá mezi obranou, lovem a závodem o to, kdo je najde dřív. Zařaď se do fronty jako tři na tři nebo pět na pět; pád v boji tě odstaví jen na okamžik.',
-  'guide.arenaPage.yumiHeading': 'Ochraňte Yumi',
   'hudChrome.archetypeTitle.hobbyLabel': 'Koníček',
   'hudChrome.auraEffect.armorPct': 'Snižuje brnění o {pct} %',
   'hudChrome.auraEffect.armorPctStacks': 'Snižuje brnění o {pct} % ({stacks} stacků)',

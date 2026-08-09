@@ -697,7 +697,7 @@ export const nl_NL: EnTranslations = {
       "railSol": "SOL",
       "railUsdc": "USDC",
       "railWoc": "WOC",
-      "railWocDiscount": "{percent}% korting",
+      "railWocDiscount": "{percent}% off",
       "railWocUnavailable": "WOC-prijzen zijn momenteel niet beschikbaar.",
       "railNativeUnavailable": "SOL/WOC staat uit.",
       "amountLabel": "Hoeveelheid",
@@ -809,7 +809,7 @@ export const nl_NL: EnTranslations = {
     "mobile": {
       "jump": "Springen",
       "leaderboard": "Ranglijst",
-      "dailyRewards": "Winkel",
+      "dailyRewards": "Beloningen",
       "deeds": "Daden",
       "mounts": "Rijdieren",
       "professions": "Beroepen",
@@ -826,7 +826,10 @@ export const nl_NL: EnTranslations = {
       "targetCycleShort": "Doel",
       "spellbookPageLabel": "Pagina {page}",
       "hideKeyboard": "Toetsenbord verbergen",
-      "chatPlaceholder": "Zeg iets..."
+      "chatPlaceholder": "Zeg iets...",
+      "autorun": "Auto",
+      "hideMenuButtons": "Menuknoppen verbergen",
+      "showMenuButtons": "Menuknoppen tonen"
     },
     "tutorial": {
       "moveBodyTouch": "Gebruik de bewegingsstick om te bewegen en sleep over het scherm om rond te kijken. Zet een paar stappen om te beginnen.",
@@ -849,8 +852,8 @@ export const nl_NL: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "Update beschikbaar",
-      "body": "Er is een nieuwe versie van World of ClaudeCraft beschikbaar. Werk nu bij voor de nieuwste oplossingen en verbeteringen.",
-      "bodyWithVersion": "Versie {version} van World of ClaudeCraft is beschikbaar. Werk nu bij voor de nieuwste oplossingen en verbeteringen.",
+      "body": "Er is een nieuwe versie van Cryptic Realm beschikbaar. Werk nu bij voor de nieuwste oplossingen en verbeteringen.",
+      "bodyWithVersion": "Versie {version} van Cryptic Realm is beschikbaar. Werk nu bij voor de nieuwste oplossingen en verbeteringen.",
       "notNow": "Niet nu",
       "update": "Bijwerken"
     },
@@ -1340,7 +1343,84 @@ export const nl_NL: EnTranslations = {
       "showAttackButton": "Aanvalsknop Tonen",
       "showDailyRewardsChest": "Kist met dagelijkse beloningen tonen",
       "mobileCameraJoystick": "Camerajoystick",
-      "mobileLeftHanded": "Linkshandige indeling"
+      "mobileLeftHanded": "Linkshandige indeling",
+      "changed": "{count} gewijzigd",
+      "changedSummary": "{count} gewijzigd ten opzichte van de standaardwaarden",
+      "conflictDot": "Toewijzingsconflict",
+      "done": "Klaar",
+      "keybindCleared": "Toewijzing voor {action} gewist",
+      "keybindEvicted": "{key} toegewezen aan {action}; verwijderd van {evicted}",
+      "keybindModifierHint": "Tip: je kunt combinaties met modificatietoetsen toewijzen. Houd Shift, Ctrl of Alt ingedrukt terwijl je op een toets drukt om de combinatie vast te leggen, bijvoorbeeld Shift+1.",
+      "keybindRebinding": "{action} opnieuw toewijzen. Druk op een toets of op Escape om te annuleren.",
+      "keybindTaken": "Toets verwijderd",
+      "keybindUnbound": "{action} heeft geen toets",
+      "modeOffline": "Zonder verbinding",
+      "modeOnline": "Met verbinding",
+      "overviewConflictAlert": "Sommige toetstoewijzingen conflicteren of zijn niet ingesteld.",
+      "resetAllBody": "Hiermee worden alle instellingen naar hun standaardwaarden hersteld. Dit kan niet ongedaan worden gemaakt.",
+      "resetAllTitle": "Alle instellingen herstellen?",
+      "searchEmpty": "Geen instellingen komen overeen met je zoekopdracht.",
+      "searchGoTo": "Ga naar {category}",
+      "searchPlaceholder": "Instellingen zoeken",
+      "searchScopeAll": "Alle instellingen",
+      "searchScopeThis": "Dit onderdeel",
+      "ia": {
+        "catAccessibilityName": "Toegankelijkheid",
+        "catAccessibilitySub": "Beweging, contrast en prettige inhoud.",
+        "catAudioSub": "Volume en geluidsopties.",
+        "catControllerSub": "Gamepadgevoel en knopindeling.",
+        "catControlsName": "Besturing",
+        "catControlsSub": "Camera, beweging, gevechten en feedback.",
+        "catGraphicsSub": "Kwaliteit, zicht en wereldweergave.",
+        "catInterfaceSub": "HUD-schaal, panelen, chat en eenheidsframes.",
+        "catKeybindsSub": "Stel toetsen in voor elke actie.",
+        "catOverviewName": "Overzicht",
+        "catOverviewSub": "Vastgezette basisinstellingen, snelle acties en wijzigingen.",
+        "catSystemName": "Systeeminstellingen",
+        "catSystemSub": "Prestaties, hulp en informatie.",
+        "catTouchName": "Aanraakbediening",
+        "catTouchSub": "Schermsticks, kijkbediening en knoppen.",
+        "railDisplay": "Weergave",
+        "railInput": "Invoer",
+        "railSystem": "Systeeminstellingen"
+      },
+      "legend": {
+        "back": "Terug",
+        "category": "Categorie",
+        "clear": "Wissen",
+        "navigate": "Navigeren",
+        "page": "Pagina",
+        "reset": "Herstellen",
+        "select": "Selecteren"
+      },
+      "sec": {
+        "about": "Informatie",
+        "actionBars": "Actiebalken",
+        "buttons": "Knoppen",
+        "camera": "Camerabediening",
+        "chat": "Gesprekken",
+        "combat": "Gevecht",
+        "combatTooltips": "Gevecht en hulpteksten",
+        "content": "Inhoud",
+        "feedback": "Terugkoppeling",
+        "feel": "Gevoel",
+        "general": "Algemeen",
+        "hudExtras": "HUD-extra’s",
+        "inputMode": "Invoermodus",
+        "look": "Kijkbediening",
+        "motionContrast": "Beweging en contrast",
+        "movement": "Beweging",
+        "panels": "Panelen",
+        "performance": "Prestaties",
+        "quality": "Kwaliteit",
+        "scaleText": "Schaal en tekst",
+        "sticks": "Stuurknuppels",
+        "support": "Hulp",
+        "toggles": "Schakelaars",
+        "unitFrames": "Eenheidsframes",
+        "view": "Zicht",
+        "volume": "Geluidssterkte"
+      }
     },
     "talentRows": {
       "tab": "Keuzes",
@@ -1375,7 +1455,8 @@ export const nl_NL: EnTranslations = {
       "menuAction": "Spelmenu",
       "zoomIn": "Inzoomen",
       "zoomOut": "Uitzoomen",
-      "help": "Linkerstick beweegt, rechterstick kijkt rond. Open een venster om de aanwijzer op het scherm te gebruiken."
+      "help": "Linkerstick beweegt, rechterstick kijkt rond. Open een venster om de aanwijzer op het scherm te gebruiken.",
+      "duplicate": "Ook toegewezen aan {buttons}"
     },
     "perf": {
       "title": "Prestatie-overlay",
@@ -1606,7 +1687,11 @@ export const nl_NL: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "Build {n}"
+      "defaultBuildName": "Build {n}",
+      "choicesTab": "Keuzes",
+      "resetChoices": "Keuzes herstellen",
+      "tierLevel": "Niveau {n}",
+      "tierLevelLabel": "Niveau"
     },
     "tips": {
       "joinChannels": "Tip: typ /join world of /join lfg om te chatten met spelers over de hele wereld."
@@ -1709,7 +1794,7 @@ export const nl_NL: EnTranslations = {
       "loggedOutPrompt": "Log in om je account te beheren.",
       "memberSince": "Lid sinds {date}",
       "sectionSettings": "Accountinstellingen",
-      "sectionWallet": "$WOC Wallet",
+      "sectionWallet": "$CR Wallet",
       "sectionCharacters": "Personages",
       "sectionDanger": "Gevarenzone",
       "changePassword": "Wachtwoord Wijzigen",
@@ -1782,7 +1867,15 @@ export const nl_NL: EnTranslations = {
       "exportHint": "Download een kopie van je account en personages als JSON-bestand. We mailen je ook een bevestiging.",
       "exportBtn": "Mijn Gegevens Downloaden",
       "exportDone": "Je gegevens zijn gedownload. We hebben je een bevestiging gemaild.",
-      "exportFailed": "Je gegevens konden niet worden geëxporteerd. Probeer het zo dadelijk opnieuw."
+      "exportFailed": "Je gegevens konden niet worden geëxporteerd. Probeer het zo dadelijk opnieuw.",
+      "connectionsSummary": "Link Google, Facebook, or Plex so you can sign in with them.",
+      "sectionConnections": "Connected Accounts",
+      "ssoLink": "Link Google / Facebook / Plex",
+      "ssoLinkConflict": "That account is already linked to a different Cryptic Realm login.",
+      "ssoLinked": "Linked — you can sign in with Google, Facebook, or Plex.",
+      "ssoNotLinked": "Not linked.",
+      "ssoUnlink": "Unlink",
+      "ssoUnlinkNeedsPassword": "Set a password first — SSO is currently your only way to sign in."
     },
     "masterLoot": {
       "title": "Meesterbuit",
@@ -1830,7 +1923,8 @@ export const nl_NL: EnTranslations = {
         "tusk": "Slagtand",
         "meat": "Vlees",
         "cloth": "Stof"
-      }
+      },
+      "concentrateHint": "Hoe minder delen je kiest, hoe hoger de kwaliteit van elk deel."
     },
     "townFocus": {
       "title": "Stadsfocus",
@@ -1897,7 +1991,7 @@ export const nl_NL: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Dit voorwerp kan niet worden vernietigd.",
-      "rightClickDestroy": "Klik met rechts om te vernietigen",
+      "rightClickDestroy": "Rechtsklik om te vernietigen",
       "dragEquipHint": "Sleep naar je personage om uit te rusten",
       "dragDestroyHint": "Sleep naar buiten in de wereld om te vernietigen",
       "reorderNeedsRecent": "Verwijder het filter en sorteer op Recent om je tassen opnieuw te rangschikken",
@@ -2087,7 +2181,9 @@ export const nl_NL: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "AFK"
+      "afkTag": "AFK",
+      "mob": "[{level}] {name}",
+      "mobElite": "[{level}+] {name}"
     },
     "mobTooltip": {
       "levelFamily": "Niveau {level} {family}",
@@ -2160,7 +2256,7 @@ export const nl_NL: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "Sluiten",
       "keybind": "Discord-paneel",
@@ -2407,8 +2503,8 @@ export const nl_NL: EnTranslations = {
       }
     },
     "marketIndicator": {
-      "aria": "Wereldmarkt-opbrengst of voorwerpen wachten",
-      "tip": "Verkoopopbrengst of teruggekeerde voorwerpen wachten op je bij de Koopman."
+      "aria": "Ophaling wacht bij de Wereldmarkt",
+      "tip": "Goud of voorwerpen wachten op je bij de Koopman."
     },
     "noticeboard": {
       "empty": "Er lijkt niets opgehangen te zijn."
@@ -2555,6 +2651,10 @@ export const nl_NL: EnTranslations = {
         "moongateCommunion": {
           "title": "Maanpoort-Communie",
           "note": "Pelgrims verzamelen zich bij de maanpoort van de tempel onder de maan van halverwege de maand."
+        },
+        "fiestaNight": {
+          "note": "De 2v2 Fiesta-ring trekt vanavond zijn luidruchtigste publiek.",
+          "title": "Fiesta-avond"
         }
       }
     },
@@ -2678,7 +2778,17 @@ export const nl_NL: EnTranslations = {
     "archetypeTitle": {
       "label": "Titel",
       "none": "Geen",
-      "hobbyLabel": "Liefhebberij"
+      "hobbyLabel": "Liefhebberij",
+      "alchemy": "Alchemist",
+      "armorcrafting": "Harnasmaker",
+      "cooking": "Kok",
+      "enchanting": "Betoveraar",
+      "engineering": "Knutselaar",
+      "inscription": "Schrijver",
+      "jewelcrafting": "Juwelier",
+      "leatherworking": "Leerbewerker",
+      "tailoring": "Kleermaker",
+      "weaponcrafting": "Wapensmid"
     },
     "archetypePair": {
       "engineering+alchemy": "Bommenwerper",
@@ -2937,7 +3047,10 @@ export const nl_NL: EnTranslations = {
       "commissionToggle": "Opdrachtsstuk",
       "commissionToggleHint": "Bindt aan het eerste personage dat het via een ruil ontvangt.",
       "commissionUnbound": "Opdrachtsstuk: bindt aan de eerste ontvanger",
-      "commissionBound": "Opdrachtstuk: gebonden aan de ontvanger"
+      "commissionBound": "Opdrachtstuk: gebonden aan de ontvanger",
+      "craft": "Ambacht",
+      "notAtHub": "Je moet bij de werkbank zijn, op het vereiste niveau, om dat te maken.",
+      "throttled": "Je maakt te snel. Wacht even en probeer het opnieuw."
     },
     "itemMenu": {
       "use": "Gebruiken",
@@ -3002,7 +3115,10 @@ export const nl_NL: EnTranslations = {
       "replaceConfirmKeepsBond": "Opdrachtbinding",
       "replaceConfirmCost": "Kosten: {cost}",
       "replaceConfirmCostItem": "{name} x{count}",
-      "replaceConfirmAccept": "Vervangen"
+      "replaceConfirmAccept": "Vervangen",
+      "disenchantThrottled": "Je onbetoverd te snel. Wacht even en probeer het opnieuw.",
+      "enchantThrottled": "Je betoverd te snel. Wacht even en probeer het opnieuw.",
+      "salvageThrottled": "Je salvaged te snel. Wacht even en probeer het opnieuw."
     },
     "training": {
       "title": "Opleiding: {name}",
@@ -3263,7 +3379,7 @@ export const nl_NL: EnTranslations = {
       "lbSelfAccount": "Jouw account: rang {rank}, top {percent} procent, {renown} Roem",
       "lbSelfRank": "Jouw account: rang {rank}, top {percent} procent",
       "lbEmpty": "Nog geen kroniekschrijvers op de ranglijst.",
-      "broadcastsLabel": "Deel behaalde daden met gildeleden en volgers, en daad- en meesterwerkkaarten met de Discord-feed",
+      "broadcastsLabel": "Deel behaalde daden met je gilde en vrienden",
       "titledName": "{name} [{title}]"
     },
     "continentMap": {
@@ -3273,6 +3389,66 @@ export const nl_NL: EnTranslations = {
       "toZone": "Gebiedskaart",
       "toggleAria": "Schakel tussen de wereldkaart en de gebiedskaart",
       "levels": "Niveaus {min} tot {max}"
+    },
+    "arcade": {
+      "abort": "Leave session",
+      "active": "Game active",
+      "brawler": "Four-player Brawl",
+      "build": "Build",
+      "choose": "Choose a game",
+      "close": "Close games",
+      "code": "Session code",
+      "controls": "Controls: arrows/WASD to steer or move, Space to drift or jump, J/K to attack, E to use an item.",
+      "create": "Create session",
+      "finished": "Game finished",
+      "housing": "Eastbrook Homes",
+      "invite": "Invite party member",
+      "inviteHint": "Enter a party member player ID.",
+      "join": "Join by code",
+      "place": "Place piece",
+      "racing": "Cryptic Circuit",
+      "ready": "Ready",
+      "solo": "Solo vs NPCs",
+      "start": "Start",
+      "title": "Realm Games",
+      "townRts": "Eastbrook Command",
+      "train": "Train guard",
+      "unavailable": "This game is not enabled on this server.",
+      "unready": "Unready",
+      "waiting": "Waiting for players"
+    },
+    "zombie": {
+      "abort": "Abandon session",
+      "active": "The wave is active. Place towers or hold the line.",
+      "board": "Board",
+      "buildAt": "Build at {x}, {z}",
+      "claim": "Claim reward",
+      "close": "Close town defense",
+      "copyCode": "Share this code with your party",
+      "create": "Create defense session",
+      "defeat": "The town fell. Abandon the session and try again.",
+      "intro": "Build defenses, hold the road, and survive ten deterministic waves with your party.",
+      "invite": "{name} invited you to {kind}.",
+      "inviteHint": "Enter a party member's player ID.",
+      "invitePlayer": "Invite party member",
+      "join": "Join session",
+      "joinInvite": "Join game",
+      "lives": "Lives {lives}",
+      "ready": "Ready up",
+      "readyDone": "Ready",
+      "resources": "Resources {resources}",
+      "roster": "Roster",
+      "sessionCode": "Session code",
+      "startWave": "Start wave",
+      "status": "Status: {status}",
+      "title": "Eastbrook Town Defense",
+      "towerArrow": "Arrow tower",
+      "towerCannon": "Cannon tower",
+      "towerSlow": "Frost tower",
+      "unavailable": "Town Defense is still being staged. Check back after its QA checkpoint.",
+      "victory": "Eastbrook stands. Claim your reward.",
+      "waiting": "Waiting for the party to ready up.",
+      "wave": "Wave {wave}"
     }
   },
   "gatherEvent": {
@@ -3405,7 +3581,7 @@ export const nl_NL: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Cryptic Realm",
     "brandShort": "ClaudeCraft",
     "tagline": "Een MMO in klassieke stijl die je gratis in je browser speelt.",
     "skipToContent": "Ga naar hoofdinhoud",
@@ -3472,7 +3648,7 @@ export const nl_NL: EnTranslations = {
       "github": "Broncode op GitHub",
       "discord": "Word lid van de Discord",
       "communityWiki": "Community-wiki",
-      "rights": "World of ClaudeCraft",
+      "rights": "Cryptic Realm",
       "linksLabel": "Speel- en communitylinks"
     },
     "language": {
@@ -3495,7 +3671,7 @@ export const nl_NL: EnTranslations = {
     },
     "home": {
       "eyebrow": "Klassieke MMO in je browser",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "Quest, sluit je aaneen en verken een handgebouwde wereld, gratis in je browser.",
       "ctaPlay": "Speel nu",
       "ctaLearn": "Hoe te spelen",
@@ -3551,7 +3727,7 @@ export const nl_NL: EnTranslations = {
         "q1": "Is het gratis te spelen?",
         "a1": "Ja. Het hele spel is gratis tot het maximale niveau, en het is open source op GitHub.",
         "q2": "Heb ik een crypto-wallet nodig?",
-        "a2": "Nee. Het spel is volledig speelbaar zonder. Het optionele community-token voegt alleen cosmetische opsmuk en een aandeel in de prijzenpot van de dagelijkse beloningen toe, en heeft nooit invloed op kracht.",
+        "a2": "Nee. Het spel is volledig speelbaar zonder. Het optionele community-token ontgrendelt alleen cosmetische opsmuk en heeft nooit invloed op kracht.",
         "q3": "Kan ik offline spelen?",
         "a3": "Ja. Er is een directe singleplayermodus in je browser, plus de gedeelde online wereld.",
         "q4": "Hoe lang duurt het om het maximale niveau te bereiken?",
@@ -3571,7 +3747,7 @@ export const nl_NL: EnTranslations = {
       "step1Title": "Maak een personage",
       "step1Body": "Kies een klasse en een uiterlijk, geef je held een naam en betreed de wereld. Je kunt later meer personages maken.",
       "step2Title": "Vind je eerste quest",
-      "step2Body": "Maarschalk Redbrook wacht in het startdorp met Wolven aan de Deur, en Voorman Odell in de buurt heeft ook werk. Praat met een van beiden om je eerste quest aan te nemen.",
+      "step2Body": "Maarschalk Redbrook wacht in het startdorp. Praat met hem en accepteer Wolven aan de Deur.",
       "step3Title": "Bewegen en rondkijken",
       "step3Body": "Beweeg met W, A, S, D. Houd de rechtermuisknop ingedrukt en sleep om rond te kijken. Dat is het grootste deel.",
       "step4Title": "Vecht ergens tegen",
@@ -3588,16 +3764,16 @@ export const nl_NL: EnTranslations = {
       "questsTitle": "Quests",
       "questsBody": "Accepteer quests van mensen met een markering boven hun hoofd, voltooi het doel en lever ze in voor ervaring, munten en uitrusting. De tracker op je scherm houdt je doelen in beeld.",
       "deathTitle": "De dood is niet het einde",
-      "deathBody": "Als je valt, blijft je lichaam liggen waar je viel en herrijs je als een geest bij de dichtstbijzijnde begraafplaats. Loop je geest terug naar je lichaam om ter plekke te herleven, zonder enige straf, of neem de Bleke Hoeder bij de begraafplaats aan voor een onmiddellijke herrijzenis tegen de prijs van een voorbijgaande verzwakking. Gloednieuwe helden blijft die verzwakking helemaal bespaard, en niets van wat je bezit of hebt verdiend gaat ooit verloren.",
+      "deathBody": "Als je valt, laat je je geest los en herleef je bij de dichtstbijzijnde begraafplaats, terug op volle gezondheid, en loop je vervolgens terug naar waar je was. Er gaat geen ervaring verloren.",
       "groupingTitle": "Samen spelen",
       "groupingBody": "Nodig anderen uit voor een groep om questvoortgang te delen en kerkers aan te pakken. Het grootste deel van de wereld is solo te spelen, dus groeperen is een keuze, geen verplichting.",
       "onlineTitle": "Online of offline",
       "onlineBody": "Speel de gedeelde online wereld met iedereen, of start een directe offline wereld in je browser om de kneepjes te leren.",
-      "reassure": "Talenten ontgrendelen op niveau 10 en kunnen op elk moment buiten gevecht opnieuw worden ingesteld, dus je vroege keuzes zijn nooit permanent. Experimenteer naar hartenlust.",
+      "reassure": "Talenten ontgrendelen op niveau 10 en kunnen altijd opnieuw worden ingesteld, dus je vroege keuzes zijn nooit permanent. Experimenteer naar hartenlust.",
       "controlsLink": "Bekijk de volledige besturingsnaslag"
     },
     "controls": {
-      "intro": "Standaardtoetsen voor desktop. Elke toewijzing kun je aanpassen in de opties van het spel, behalve Esc, die altijd het spelmenu opent, en een toewijzing kan een combinatie met een modificatietoets zijn, zoals Shift+Z.",
+      "intro": "Standaardtoetsen voor desktop. Elke toewijzing kun je aanpassen in de opties van het spel.",
       "keyHeader": "Toets",
       "actionHeader": "Actie",
       "groupMovement": "Beweging",
@@ -3628,14 +3804,14 @@ export const nl_NL: EnTranslations = {
       "petBar": "Huisdierbalk: Aanvallen, Stoppen, Provoceren, Defensief, Agressief (met een huisdier van een jager of heksenmeester actief)",
       "attackMoveNote": "Nog eentje, standaard uit: schakel Aanvalsbeweging in de opties in om een toets te reserveren (A, zolang de optie aanstaat) die je naar je cursor toe laat lopen en het vuur opent op de vijand eronder, of de eerste die je onderweg tegenkomt.",
       "mobileHeading": "Op mobiel",
-      "mobileBody": "Aanraakbediening verschijnt automatisch op telefoons en tablets: een bewegingsstick aan de linkerkant, sleep ergens anders om rond te kijken, knijp met twee vingers om de camera te zoomen, en knoppen op het scherm voor je vaardigheden en menu's. Een klein pijltje in de linkerbovenhoek toont of verbergt de menuknoppen, en de knop Meer daar bevat de rest van je vensters.",
+      "mobileBody": "Aanraakbediening verschijnt automatisch op telefoons en tablets: een bewegingsstick aan de linkerkant, sleep ergens aan de rechterkant om rond te kijken, en knoppen op het scherm voor je vaardigheden en menu's.",
       "controllerHeading": "Op een controller",
-      "controllerBody": "Gamepads werken ook, en controllerondersteuning staat standaard aan. De linkerstick beweegt, de rechterstick richt de camera, en de gezichts- en schouderknoppen dekken je vaardigheden, springen en interageren. Open een venster zoals je tassen om een aanwijzer op het scherm op te roepen, en door het spelmenu navigeer je rechtstreeks met de D-pad en de gezichtsknoppen. Je kunt de knoppen opnieuw toewijzen en de stickdeadzone, camerasnelheid, trilling en omgekeerd kijken aanpassen bij de controllerinstellingen in de opties."
+      "controllerBody": "Gamepads werken ook, en controllerondersteuning staat standaard aan. De linkerstick beweegt, de rechterstick richt de camera, en de gezichts- en schouderknoppen dekken je vaardigheden, springen en interageren. Open een venster om een aanwijzer op het scherm op te roepen voor menu's. Je kunt de knoppen opnieuw toewijzen en de stickdeadzone, camerasnelheid, trilling en omgekeerd kijken aanpassen bij de controllerinstellingen in de opties."
     },
     "settingsPage": {
       "heading": "Instellingen en prestaties",
       "intro": "Zorg ervoor dat het spel er op zijn best uitziet of het snelst werkt. Drie kant-en-klare configuraties, plus wat elke grafische optie werkelijk doet.",
-      "wherePath": "Alles op deze pagina leeft in het spel: druk op Esc om de opties te openen. Het menu opent op een Overview met vastgezette essentiële instellingen, met de categorieën op een balk ernaast: de onderstaande instellingen vind je onder Graphics, Interface en Accessibility in de groep Display, en de Performance Overlay onder System. Nog sneller: typ een naam in het zoekvak bovenaan en spring er meteen naartoe.",
+      "wherePath": "Alles op deze pagina leeft in het spel: druk op Esc en kijk in Graphics, Interface en Performance Overlay.",
       "fairnessTitle": "Eerlijk door ontwerp",
       "fairnessBody": "Geen enkele optie hier ruilt schoonheid in voor macht. De instellingen van Lower geven alleen cosmetisch poetsmiddel af, nooit informatie waarmee je vecht: je debuffs, cast bars, party health en schadecijfers zijn identiek van Low tot Ultra. Spelen op een bescheiden machine is nooit een handicap.",
       "loadoutsHeading": "Drie kant-en-klare uitrustingen",
@@ -3669,7 +3845,7 @@ export const nl_NL: EnTranslations = {
       "advancedHeading": "De geavanceerde preset: mix je eigen preset",
       "advancedBody": "Geavanceerd begint vanaf het niveau High en ontgrendelt vier extra keuzemogelijkheden, zodat u uw frames kunt besteden waar u ze daadwerkelijk opmerkt: terreindetail, bladdichtheid, effecten en belichting en schaduwkwaliteit. Net als Grafische kwaliteit zijn ze van toepassing na een herlaadbeurt.",
       "advancedMixes": "Twee favoriete mixen: houd Schaduwkwaliteit op High en stel Effecten en belichting in op Low voor een heldere, gloedvrije look die licht is, of doe het omgekeerde om de bloei te behouden en de schaduwen te verzachten.",
-      "tableHeading": "Elke grafische optie, uitgelegd",
+      "tableHeading": "Elke optie uitgelegd",
       "colSetting": "Instelling",
       "colDoes": "Wat het doet",
       "colImpact": "FPS impact",
@@ -3707,15 +3883,15 @@ export const nl_NL: EnTranslations = {
       "resourcesTitle": "Elke klasse heeft zijn eigen ritme",
       "resourcesBody": "Krijgers bouwen Rage op in het strijdgewoel, schurken besteden Energie die gestaag terugkeert, en spreukenwevers beheren een poel van Mana. Je hulpbron leren is de helft van je klasse goed spelen.",
       "growTitle": "Je wordt sterker met elk niveau",
-      "growBody": "Elk niveau maakt je taaier en ontgrendelt nieuwe vaardigheden, helemaal tot aan de limiet van niveau {cap}. Quests doen is de snelste weg omhoog; jagen, kerkerruns en delves maken het compleet.",
+      "growBody": "Elk niveau maakt je taaier en ontgrendelt nieuwe vaardigheden, helemaal tot aan de limiet van niveau {cap}. Quests doen is de snelste weg omhoog; kerkers en verkenning maken het compleet.",
       "effectsTitle": "Buffs, debuffs en crowd control",
-      "effectsBody": "Veel vaardigheden brengen een effect aan dat blijft hangen. Behulpzame (buffs) verhogen je statistieken, beschermen je, of helen je beetje bij beetje; schadelijke (debuffs) tappen je gezondheid af met schade na verloop van tijd of verzwakken je. Let op de kleine icoontjes in de bovenhoek van het scherm, naast de minimap, om te zien wat er op je ligt en hoe lang het duurt.",
-      "ccBody": "Crowd control is een speciaal soort debuff die beperkt wat een doelwit kan doen: verdovingen, wortels en vertragingen, stiltes die het spreuken stilleggen, ontwapeningen, angsten, en transformaties die een vijand even ongevaarlijk maken. Tegen andere spelers slijt controle door herhaling: dezelfde soort te snel opnieuw toegepast verzwakt en faalt dan volledig, en een verdoving die vanuit sluipmodus opent wordt apart geteld van de verdovingen die erop volgen, zodat niemand voor eeuwig weerloos aaneengeregen kan worden. De wezens van de wereld koesteren zulke wrok niet: bij hen verzwakt controle nooit door herhaling, al kunnen veel van de machtigste vijanden, benoemde elites en de sterkste bazen onder hen, helemaal niet worden gecontroleerd.",
+      "effectsBody": "Veel vaardigheden brengen een effect aan dat blijft hangen. Behulpzame (buffs) verhogen je statistieken, beschermen je, of helen je beetje bij beetje; schadelijke (debuffs) tappen je gezondheid af met schade na verloop van tijd of verzwakken je. Let op de kleine icoontjes bij je actiebalk om te zien wat er op je ligt en hoe lang het duurt.",
+      "ccBody": "Crowd control is een speciaal soort debuff die beperkt wat een doelwit kan doen: verdovingen, wortels en vertragingen, stiltes die het spreuken stilleggen, ontwapeningen, angsten, en transformaties die een vijand even ongevaarlijk maken. Sommige hiervan, zoals wortels, angsten en transformaties, verliezen hun greep wanneer ze te snel opnieuw worden toegepast, zodat ze niet eindeloos kunnen worden aaneengeregen.",
       "metersBody": "Benieuwd hoe een gevecht verliep? Druk op Shift+H om de groepsmeters te openen, die schade, genezing en dreiging voor je groep bijhouden, gevecht na gevecht.",
       "queueTitle": "Je volgende zet staat al geladen",
       "queueBody": "Je hoeft je toetsdrukken niet exact op het frame te timen. Druk je volgende vaardigheid in de laatste ogenblikken van de lopende cast en hij wordt in de wachtrij gezet, om af te vuren zodra de cast klaar is, zodat geoefend spel zonder gaten verloopt. Een druk die te vroeg komt, wordt simpelweg geweigerd, zodat er niets verloren gaat. Sommige melee-aanvallen werken op dezelfde manier en rijden mee op je volgende wapenzwaai.",
       "deathTitle": "Wanneer je valt",
-      "deathBody": "Als je gezondheid nul bereikt, ga je neer waar je staat, en je lichaam blijft daar liggen. Laat je geest los en je herrijst als een geest bij de dichtstbijzijnde begraafplaats: sneller ter been dan de levenden, buiten het bereik van je vijanden, maar niet in staat om te vechten, te plunderen of met iemand te spreken behalve de Bleke Hoeder die boven de stenen zweeft. Vanaf daar kies je. Loop je geest terug naar je lichaam en je herleeft ter plekke, met een deel van je gezondheid en mana hersteld en zonder enige straf. Of neem de Bleke Hoeder aan voor een onmiddellijke herrijzenis waar je staat, tegen de prijs van de Tol van de Hoeder: een tijdelijke verzwakking van alles wat je bent, die langer duurt naarmate je meer ervaren bent, en gloednieuwe personages helemaal bespaard blijft. Val je in een kerker, dan wacht je geest bij de begraafplaats buiten; loop je geest terug door de deur en je herleeft bij de ingang. Delves zijn de uitzondering: val je daar, dan word je simpelweg weer op je benen gezet bij de ingang van de delve, al beëindigt een tweede val de run. Welke weg je ook kiest, je verliest geen ervaring, uitrusting of munten. Ga tussen gevechten zitten om te eten en te drinken zodat je het volgende op volle kracht begint."
+      "deathBody": "Als je gezondheid nul bereikt, ga je neer. Laat je geest los om bij de dichtstbijzijnde begraafplaats te herleven op volle gezondheid, en loop dan terug, dus een dood kost je een beetje tijd, niet je voortgang. Ga tussen gevechten zitten om te eten en te drinken zodat je het volgende op volle kracht begint."
     },
     "glossary": {
       "intro": "Een snelle naslag voor de termen die in deze gids en in de chat worden gebruikt.",
@@ -3791,11 +3967,11 @@ export const nl_NL: EnTranslations = {
       "q1": "Is het echt gratis?",
       "a1": "Ja. Het hele spel is gratis te spelen tot aan de niveaulimiet, en de broncode is openbaar op GitHub.",
       "q2": "Heb ik een crypto-wallet of tokens nodig?",
-      "a2": "Nee. Het spel is volledig speelbaar zonder. Het optionele community-token voegt alleen cosmetische opsmuk en een aandeel in de prijzenpot van de dagelijkse beloningen toe, en heeft nooit invloed op kracht of voortgang.",
+      "a2": "Nee. Het spel is volledig speelbaar zonder. De optionele community-token ontgrendelt alleen cosmetische opsmuk en heeft nooit invloed op kracht of voortgang.",
       "q3": "Kan ik op mijn telefoon spelen?",
       "a3": "Ja. Het spel draait in een mobiele browser met aanraakbediening, en er is ook een desktop-starter.",
       "q4": "Kan ik offline of solo spelen?",
-      "a4": "Ja. Er is een directe offline modus voor één speler, en de online wereld is volledig solo speelbaar, behalve kerkers, de raid en de wereldbaas.",
+      "a4": "Ja. Er is een directe offline modus voor één speler, en de online wereld is volledig solo speelbaar, behalve kerkers en de raid.",
       "q5": "Hoeveel klassen zijn er?",
       "a5": "Negen, die de klassieke rollen van tank, genezer en damage dekken, elk met een bronsysteem (woede, mana of energie) en hun eigen kenmerkende vaardigheden.",
       "q6": "Wat is de niveaulimiet?",
@@ -3807,7 +3983,7 @@ export const nl_NL: EnTranslations = {
       "q9": "Is er PvP?",
       "a9": "Ja. Daag iedereen uit voor de lol, of stap het Asgrauwe Colosseum binnen om tegen andere spelers te vechten. PvP is naar keuze, dus je wordt er nooit toe gedwongen.",
       "q10": "Wat is er te doen op het maximale niveau?",
-      "a10": "De limiet is niveau {cap}. Vanaf daar speel je de kerkers voor vijf spelers en de raid voor tien, neem je ze opnieuw op in heroïsche modus voor betere buit, treed je de wereldbaas tegemoet wanneer hij verrijst, stel je jezelf op de proef in de arena, duik je in delves met een metgezel aan je zijde, en jaag je op daden in het Boek der Daden om in de rijksstand te klimmen.",
+      "a10": "De limiet is niveau {cap}. Vanaf daar speel je de kerkers voor vijf spelers en de raid voor tien, jaag je op betere uitrusting en stel je jezelf op de proef in de arena.",
       "q11": "Hoe vind ik een groep?",
       "a11": "Nodig iedereen die je tegenkomt uit voor een groep, vraag het in de chat, of werk samen bij een kerker. Het grootste deel van de wereld is solo speelbaar, dus groepen is een keuze, geen vereiste."
     },
@@ -3834,7 +4010,7 @@ export const nl_NL: EnTranslations = {
       "abilitiesNote": "Een voorproefje van de kit. Je leert meer naarmate je levelt, en talenten hervormen hoe het allemaal speelt.",
       "masteryLabel": "Meesterschap",
       "fullKitHeading": "De volledige kit",
-      "fullKitNote": "De uitrusting die deze klasse leert terwijl ze levelt, in de volgorde waarin ze beschikbaar komt. Talenten schenken nog een paar vaardigheden en bepalen welke je build dragen.",
+      "fullKitNote": "Elke vaardigheid die deze klasse kan leren, in de volgorde waarin ze beschikbaar komt. Talenten bepalen welke je build dragen.",
       "petsHeading": "Demonen",
       "petsNote": "Heksenmeesters roepen demonen op om naast hen te vechten, elk geschikt voor een andere taak."
     },
@@ -3936,7 +4112,9 @@ export const nl_NL: EnTranslations = {
       "mark_of_the_wild": "Een blijvende zegening die je op jezelf of een bondgenoot legt voor een gevecht.",
       "moonfire": "Raakt direct en laat het doelwit branden, goed terwijl je beweegt.",
       "rejuvenation": "Wordt direct uitgesproken en geneest een bondgenoot na verloop van tijd, zodat je kunt blijven handelen.",
-      "thorns": "Beschermt een bondgenoot zodat melee-aanvallers zichzelf bezeren bij het toeslaan."
+      "thorns": "Beschermt een bondgenoot zodat melee-aanvallers zichzelf bezeren bij het toeslaan.",
+      "commanding_shout": "Versterkt uithoudingsvermogen zodat iedereen meer staande blijft in een gevecht.",
+      "rend": "Opent een bloeding die het doelwit na verloop van tijd uitput."
     },
     "petHook": {
       "emberkin": "Een demon op afstand die met vuurbouten vijanden bestookt vanaf een veilige afstand.",
@@ -3949,7 +4127,7 @@ export const nl_NL: EnTranslations = {
     },
     "bestiary": {
       "heading": "Bestiarium",
-      "intro": "De wezens van de wereld, gegroepeerd per familie. Dit zijn de alledaagse vijanden die je in de open lucht tegenkomt. Elite-vijanden en hun krijgsheren houden zich buiten deze bladzijden, en de dodelijkste dingen van allemaal wachten achter kerkerdeuren.",
+      "intro": "De wezens van de wereld, gegroepeerd per familie. Dit zijn de vijanden die je in de open lucht tegenkomt. De dodelijkste dingen wachten, ongenoemd, achter kerkerdeuren.",
       "rare": "Zeldzaam",
       "levels": "Niveau {min} tot {max}",
       "levelsSame": "Niveau {min}",
@@ -4015,7 +4193,7 @@ export const nl_NL: EnTranslations = {
     },
     "worldPage": {
       "heading": "De wereld",
-      "intro": "World of ClaudeCraft is één aaneengesloten land dat je te voet doorkruist, drie zones van zuid naar noord. Er is geen snelreizen, dus de reis is onderdeel van het avontuur.",
+      "intro": "Cryptic Realm is één aaneengesloten land dat je te voet doorkruist, drie zones van zuid naar noord. Er is geen snelreizen, dus de reis is onderdeel van het avontuur.",
       "hub": "Thuisbasis",
       "mapHeading": "De weg naar het noorden",
       "mapSub": "Drie zones, van zuid naar noord, elk een stap hoger in niveau. Volg het questspoor en het land draagt je van het dal naar de toppen.",
@@ -4060,9 +4238,9 @@ export const nl_NL: EnTranslations = {
       "jungleGreeter": "De havenmeesteres, Drijfhaven",
       "gardenGreeting": "Iemand snoeit nog altijd de heggen, hoewel er al honderd jaar geen tuinman is gezien. Let op met het doolhof: het let op jou terug.",
       "gardenGreeter": "De poortwachter, Haagwijk",
-      "valePlaceNotes": "Oostbeek is je eerste thuisbasis. Wolvenloop en Everweide zijn rustig jachtgebied; Spiegelmeer is fijn viswater, al krioelen modderfinnen in de ondiepten; het Sableweb en de Kopergroeve verbergen spinnen en ertsbeluste delvers; een Bandietenkamp en de Gevallen Kapel bieden ruwer werk; Reliekschrijnheuvel leidt naar het Ingestorte Reliekschrijn, de eerste delve van het rijk; Lichtwoudgaarde is een kalm, zonovergoten bosje in het noorden; en het Zeugveld is Oostbeeks ommuurde zwijnenbalveld, waar De Dalbeker onder een oogstbestand wordt gespeeld.",
-      "marshPlaceNotes": "Veenbrug bewaakt de enige droge weg. Het Sluipersriet en de Diepveen-Ondiepten wemelen van moerasbeesten en mudfins; het Weduwestruweel zit dik onder het web; de Verdronken Kapel en de Trollenheuvels bergen oudere gevaren, met De Verdronken Litanie, de eigen delve van het moeras, die net ten noorden van de heuvels opengaat; het Grafroeper-Kampement is de ingegraven sekte, en het Verzonken Bastion is het instantiehart van het moeras.",
-      "peaksPlaceNotes": "Highwatch houdt de muur. Stalker Ridge en de Dieprots-Holen behoren tot bergkatten en gravers; de Ogre Foothills en Drogmar's War-Camp tot ingehuurde bruten; Stormcrag knettert van de elementalen, en daaronder gloeit De Glinstermeer, het bergmeer waarvan de oever de poort van bleek licht bewaart naar De Verdronken Tempel; de Wyrmcult Tents en Revenant Fields omsluiten het hoge terrein van de sekte, met het Grafwurm-Heiligdom op de top.",
+      "valePlaceNotes": "Eastbrook is je eerste thuisbasis. Wolf Run en Boar Meadow zijn rustig jachtgebied; Mirror Lake is stil water om te vissen; het Sableweb en de Copper Dig verbergen spinnen en ertsbeluste delvers; een Bandit Camp en de Fallen Chapel bieden ruwer werk; Reliquary Hill leidt naar de Collapsed Reliquary, de eerste delve van het rijk; en Brightwood Glade is een kalm, zonovergoten bosje in het noorden.",
+      "marshPlaceNotes": "Fenbridge bewaakt de enige droge weg. Het Prowler Reeds en de Deepfen Shallows wemelen van moerasbeesten en mudfins; het Widow Thicket zit dik onder het web; de Drowned Chapel en de Troll Mounds bergen oudere gevaren; het Gravecaller Encampment is de ingegraven sekte, en het Verzonken Bastion is het instantiehart van het moeras.",
+      "peaksPlaceNotes": "Highwatch houdt de muur. Stalker Ridge en de Dieprots-Holen behoren tot bergkatten en gravers; de Ogre Foothills en Drogmar's War-Camp tot ingehuurde bruten; Stormcrag knettert van de elementalen en de Glimmermere gloeit eronder; de Wyrmcult Tents en Revenant Fields omsluiten het hoge terrein van de sekte, met het Grafwurm-Heiligdom op de top.",
       "duskPlaceNotes": "Ouderglans verzamelt zich onder de grote boom. De Schemerval-Grot en haar uitkijkpunt vormen de weg naar binnen en het eerste zicht op de vallei; het Ouderwoud en het Sterrenvalbekken bewaren de stille zuidkant; het Verzonken Hof herbergt overwoekerde ruines in het oosten; en de Glanzende Diepte en de Kristallen Ondiepten gloeien door het hele noorden.",
       "emberPlaceNotes": "Wurmwacht bewaakt de poort. Het Poortwoud is het laatste groen voor de wildernis; de Sintelduinen waaien met as en erger; de Trollenraad is waar de duintrollen hun vuren verzamelen; de Bloedglasvelden glinsteren met scheermesscherven; en de Drakenmuil-Caldera is de rokende kroon waar de draken omheen cirkelen.",
       "frostPlaceNotes": "IJsmantel bewaart de laatste warme haard. De Sneeuwlijn markeert waar de sneeuwjachten het overnemen; het Gletsjermeer is zwart, stil water onder het ijs; de Aurora-Trappen klimmen onder de dansende lichten; het Rilveen is een bevroren moeras dat nooit helemaal slaapt; en de Huilende Terrassen verdienen hun naam elke nacht.",
@@ -4082,22 +4260,22 @@ export const nl_NL: EnTranslations = {
       "heading": "Quests",
       "intro": "Quests zijn het hart van de wereld en de snelste manier om te levelen. Zo werken ze.",
       "acceptTitle": "Vinden en aannemen",
-      "acceptBody": "Mensen met een markering boven hun hoofd hebben werk voor je. Praat met hen om een quest aan te nemen. In Oostbeek wacht Maarschalk Redbrook met Wolven aan de Deur, een van de eerste quests die je kunt aannemen.",
+      "acceptBody": "Mensen met een markering boven hun hoofd hebben werk voor je. Praat met hen om een quest aan te nemen. Je allereerste is Wolven aan de Deur, van Maarschalk Redbrook in Oostbeekdal.",
       "objectivesTitle": "Doelen",
       "objectivesBody": "Versla bepaalde vijanden, verzamel voorwerpen of gebruik iets in de wereld. De tracker op je scherm telt je voortgang terwijl je bezig bent. Als je van gedachten verandert, kun je een quest uit je questlogboek laten vallen en hem later weer oppakken bij de gever.",
       "turninTitle": "Inleveren",
       "turninBody": "Breng een voltooide quest naar zijn inlevermarkering, de kaart wijst je waar, voor ervaring, geld en vaak een stuk uitrusting gekozen om bij je klasse te passen. Dat is meestal degene die hem aan je gaf, hoewel sommige quests je doorsturen naar iemand anders.",
       "partyTitle": "Questen in een groep",
-      "partyBody": "Groepsleden in de buurt delen kill- en doelkrediet, dus samen questen is sneller, nooit langzamer. Je kunt ook een quest met je groep delen: plaats hem in de chat als een klikbare link met het commando /share, en elk lid dat in aanmerking komt, kan dezelfde quest met één klik oppakken.",
+      "partyBody": "Groepsleden in de buurt delen kill- en doelkrediet, dus samen questen is sneller, nooit langzamer. Je kunt ook een quest met je groep delen: plaats hem in de chat als een klikbare link met het commando /share, en elk lid in de buurt dat in aanmerking komt, kan dezelfde quest met één klik oppakken.",
       "storyTitle": "Een rode draad loopt overal doorheen",
       "storyBody": "Vanaf je eerste klusjes in Oostbeekdal is er iets mis met de doden. Een cultus is aan het werk, en het spoor leidt naar het noorden door elk gebied. Volg het om te ontdekken wie erachter zit.",
       "soloNote": "Het hoofdverhaal is solo te doen tot aan de finale van elk hoofdstuk, die een dungeon voor vijf spelers is.",
       "typesTitle": "De soorten quests die je tegenkomt",
       "typesBody": "De meeste quests hebben een van een paar vertrouwde vormen. De tracker op je scherm legt precies uit wat elke quest van je vraagt, zodat je nooit hoeft te gissen.",
       "typeSlayTitle": "Verslaan",
-      "typeSlayBody": "Dun een roedel beesten uit of breek de greep van een cultus door een vast aantal van een gemarkeerde vijand te verslaan. Een van je eerste quests, het verjagen van wolven van de weg bij Oostbeek, is er zo een.",
+      "typeSlayBody": "Dun een roedel beesten uit of breek de greep van een cultus door een vast aantal van een gemarkeerde vijand te verslaan. De eerste quest in het spel, het verjagen van wolven van de Oostbeekdal-weg, is er zo een.",
       "typeGatherTitle": "Verzamelen",
-      "typeGatherBody": "Verzamel voorwerpen uit de wereld of uit wat vijanden laten vallen: kruiden, erts, de grimmige reagentia van een cultus. Sommige stukken vallen alleen van een bepaalde vijand, dus de jacht en de buit horen bij elkaar.",
+      "typeGatherBody": "Verzamel voorwerpen uit de wereld of uit wat vijanden laten vallen: kruiden, erts, verloren brieven, de grimmige reagentia van een cultus. Sommige stukken vallen alleen van een bepaalde vijand, dus de jacht en de buit horen bij elkaar.",
       "typeInteractTitle": "Interageren",
       "typeInteractBody": "Gebruik, reinig of lees iets dat vaststaat in de wereld: een geschonden graf, een waarschuwing gekerfd in een kustrots, een verzegelde cryptedeur. Loop naar de markering toe en handel ernaar.",
       "typeMusterTitle": "Verzamel de verdediging",
@@ -4184,11 +4362,11 @@ export const nl_NL: EnTranslations = {
       "tiersHeading": "Moeilijkheidsgraad",
       "tiersBody": "Een delve biedt meer dan één moeilijkheidsgraad. De hogere maakt de vijanden sterker en rolt een tochtmodifier mee, en betaalt in ruil meer uit. Hij vraagt ook dat je een paar niveaus op zak hebt voordat hij je binnenlaat.",
       "affixesHeading": "Tochtmodifiers",
-      "affixesBody": "Zwaardere tochten rollen een modifier die verandert hoe de afdaling speelt, van rusteloze doden tot bedorven lucht tot bezwijkend dakwerk. Ze verhogen het gevaar en de beloning samen. Elke delve put uit de modifiers die bij zijn thema passen; over het hele rijk ziet de verzameling er zo uit:",
+      "affixesBody": "Zwaardere tochten rollen een modifier die verandert hoe de afdaling speelt, van rusteloze doden tot bedorven lucht tot bezwijkend dakwerk. Ze verhogen het gevaar en de beloning samen. Een delve met een cryptethema kan elk van deze rollen:",
       "marksHeading": "Delve-Tekens",
       "marksBody": "Delves voltooien levert Delve-Tekens op, een valuta die los staat van je munten. Geef ze uit bij de bewaarder om je metgezel te versterken en uitrusting op te pikken die je nergens anders vindt.",
       "whereHeading": "Waar je er een vindt",
-      "whereBody": "De eerste delve, het Ingestorte Reliekschrijn, gaat open bij Reliekschrijnheuvel in de beginvallei Oostbeekdal. Broeder Halven houdt daar het bord bij, en hij stuurt je naar beneden zodra je er klaar voor bent. Zijn ronde eindigt daar niet: voorbij de Trollenheuvels aan de noordrand van het Slijkveenmoeras opent dezelfde bewaarder De Verdronken Litanie voor delvers die hun draai hebben gevonden."
+      "whereBody": "De eerste delve, het Ingestorte Reliekschrijn, gaat open bij Reliekschrijnheuvel in de beginvallei Oostbeekdal. Broeder Halven houdt daar het bord bij, en hij stuurt je naar beneden zodra je er klaar voor bent."
     },
     "talentsPage": {
       "heading": "Talenten en specialisaties",
@@ -4196,13 +4374,13 @@ export const nl_NL: EnTranslations = {
       "whatHeading": "Wat talenten doen",
       "whatBody": "Naarmate je in niveau stijgt, verdien je talentpunten om te besteden aan kleine, permanente verbeteringen van je vaardigheden en attributen. Ze bepalen hoe een klasse aanvoelt en buigen die naar meer schade, stevigere verdediging of sterkere genezing.",
       "howHeading": "Hoe ze werken",
-      "howBody": "Talenten gaan open op niveau 10, en je blijft punten verdienen terwijl je richting het maximum klimt. Je besteedt ze in het talentpaneel van je klasse, waar diepere rijen opengaan naarmate je investeert en levelt, en je kunt meer dan één indeling opslaan om tussen builds te wisselen.",
+      "howBody": "Talenten gaan open op niveau 10, en je blijft punten verdienen terwijl je richting het maximum klimt. Je besteedt ze in het talentpaneel van je klasse, en je kunt meer dan één indeling opslaan om tussen builds te wisselen.",
       "shareNote": "Een afgeronde build kun je kopiëren naar een korte deelbare code en aan een vriend geven, die hem rechtstreeks in zijn eigen talentenpaneel plakt om hem te laden.",
       "choiceNote": "Een paar punten op elke boom zijn een kruispunt in plaats van een aankoop: de node biedt twee of drie opties en je verbindt je aan één ervan. Je volgende reset heropent de keuze, net als al het andere op de boom.",
       "resetTitle": "Niets is permanent",
-      "resetNote": "Je kunt je talenten resetten op elk moment dat je buiten gevecht bent en niet in een arenawedstrijd zit, dus een vroege keuze is nooit een valkuil. Probeer dingen uit, kijk wat je bevalt en verander vrijuit van gedachten.",
+      "resetNote": "Je kunt je talenten op elk moment dat je buiten gevecht bent resetten, dus een vroege keuze is nooit een valkuil. Probeer dingen uit, kijk wat je bevalt en verander vrijuit van gedachten.",
       "specsHeading": "Specialisaties per klasse",
-      "specsBody": "Elke klasse heeft een handvol specialisaties, elk met een eigen rol en een kenmerkende focus. Er een kiezen in het talentpaneel schenkt een kenmerkende vaardigheid en een blijvend eigen meesterschap. Hier zie je de vorm van allemaal. Open een klasse voor de volledige uitrusting."
+      "specsBody": "Elke klasse heeft een handvol specialisaties, elk met een eigen rol en een kenmerkende focus. Hier zie je de vorm van allemaal. Open een klasse voor de volledige uitrusting."
     },
     "arenaPage": {
       "heading": "Arena en PvP",
@@ -4210,8 +4388,10 @@ export const nl_NL: EnTranslations = {
       "duelsHeading": "Duels",
       "duelsBody": "Daag elke speler die je tegenkomt uit voor een vriendschappelijk duel. Er staat niets op het spel behalve trots, dus het is de makkelijkste manier om een matchup te leren of een vriendschappelijk meningsverschil te beslechten.",
       "coliseumHeading": "Het Asgrauwe Colosseum",
-      "coliseumBody": "Het Coliseum is de arena van het rijk, waar je andere spelers tegemoet treedt in ranglijstwedstrijden, één tegen één of twee tegen twee. Elke categorie heeft zijn eigen ranglijst, dus een overwinning tilt je hoger op die ladder, zichtbaar voor het hele rijk. Open het Arenavenster om je in te schrijven voor een categorie, alleen of met je partner.",
+      "coliseumBody": "Het Coliseum is de arena van het rijk, waar je andere spelers tegemoet treedt in ranglijstwedstrijden, één tegen één of twee tegen twee. Elke categorie heeft zijn eigen ranglijst, dus een overwinning tilt je hoger op die ladder, zichtbaar voor het hele rijk.",
       "ladderHeading": "De ladder beklimmen",
+      "fiestaHeading": "Twee tegen twee Fiesta",
+      "fiestaBody": "Fiesta is een snelle, twee-tegen-twee modus die in korte rondes wordt gespeeld. Tussen rondes draft je augments, snelle boosts die je kit gaandeweg hervormen, zodat geen twee wedstrijden helemaal hetzelfde spelen.",
       "ladderBody": "Ranglijstspel volgt je positie over de tijd. Bekijk het scorebord om te zien waar je staat en wie de top van het rijk bezit."
     },
     "thornhollowPage": {
@@ -4257,9 +4437,9 @@ export const nl_NL: EnTranslations = {
       "nationMoon": "Violet en zilver onder de maansikkel: nachtspelers, licht op de voeten.",
       "nationCopperdig": "Koper en bruin met het houweel: delvers die nooit stoppen met rennen.",
       "rolesHeading": "Sportrollen",
-      "rolesBody": "Je rol bepaalt de uitrusting die je het veld op draagt. Iedereen trapt; de rest is temperament. In de categorieën één-tegen-één en twee-tegen-twee speelt iedereen de allrounder-uitrusting, dus rolkeuzes komen pas vanaf drie-tegen-drie tot hun recht.",
+      "rolesBody": "Je rol bepaalt de uitrusting die je het veld op draagt. Iedereen trapt; de rest is temperament.",
       "rewardsHeading": "Bestandsregels",
-      "rewardsBody": "Bestandsregels betekenen geen ervaring en geen buit: een besliste wedstrijd telt mee voor je staat van dienst en het winnaarsbord, en een overwinning telt ook mee voor de beloningstaken van de dag. Wie een wedstrijd in de steek laat, zet zijn plek op de bank, en de Terreinmeester onthoudt het."
+      "rewardsBody": "Bestandsregels betekenen geen ervaring en geen buit: een besliste wedstrijd telt mee voor je staat van dienst en het winnaarsbord, en er komen punten voor dagelijkse beloningen bij. Wie een wedstrijd verlaat, zet zijn plek op de bank, en de Terreinmeester onthoudt het."
     },
     "deedsPage": {
       "intro": "In het Boek der Daden houdt de wereld de stand bij van alles wat je hebt verricht, van je eerste stappen buiten het dal waar je begon tot de zwaarste gevechten die het rijk te bieden heeft. Behaal daden terwijl je speelt, draag de titels die ze schenken en zie je Roem stijgen.",
@@ -4301,9 +4481,9 @@ export const nl_NL: EnTranslations = {
       "i1Title": "Je kunt geen verkeerde klasse kiezen",
       "i1Body": "Elke klasse kan zich staande houden en het maximum bereiken. Kies de fantasie die je leuk vindt, niet die een ander de beste noemt.",
       "i2Title": "Sterven kost je nauwelijks iets",
-      "i2Body": "Wanneer je valt, herrijs je als een geest bij de dichtstbijzijnde begraafplaats. Loop terug naar je lichaam om gratis te herleven, of neem de onmiddellijke herrijzenis van de Bleke Hoeder aan en draag voor het gemak een kortstondige verzwakking. Er gaat nooit ervaring, uitrusting of munten verloren, dus het is veilig om risico's te nemen en te leren.",
+      "i2Body": "Wanneer je sneuvelt, laat je je geest los en herleef je bij de dichtstbijzijnde begraafplaats, en loop je vervolgens terug. Er gaat geen ervaring verloren, dus het is veilig om risico's te nemen en te leren.",
       "i3Title": "Talenten zijn geen valkuil",
-      "i3Body": "Ze gaan open op niveau 10 en resetten wanneer je maar wilt, buiten gevecht, dus je vroege keuzes zijn nooit permanent.",
+      "i3Body": "Ze gaan open op niveau 10 en resetten wanneer je maar wilt, dus je vroege keuzes zijn nooit permanent.",
       "i4Title": "Volg het questspoor",
       "i4Body": "Quests zijn de snelste manier om in niveau te stijgen en ze leiden je over de hele wereld. Als je niet zeker weet waar je heen moet, zoek dan de volgende markering.",
       "i5Title": "Houd je uitrusting actueel",
@@ -4342,7 +4522,7 @@ export const nl_NL: EnTranslations = {
     "gear": {
       "intro": "Uitrusting is de wapenrusting die je personage draagt en de voorwerpen die je meedraagt. Betere uitrusting is de gestaagste manier om sterker te worden, en het meeste pik je vanzelf op door te spelen.",
       "slotsTitle": "Wat je kunt uitrusten",
-      "slotsBody": "Je hebt een wapengleuf, zeven pantsergleuven en drie sieraadgleuven: een hals en twee vingers. Elke klasse kan slechts bepaalde wapens gebruiken en draagt pantser tot zijn eigen gewicht, stof, leer of maliën, dus de verbeteringen die bij je passen zijn die welke voor jouw klasse zijn gemaakt. Sieraden hebben helemaal geen gewicht: elke klasse draagt wat ze ook verdient. Vul daarbinnen elke gleuf met het beste stuk dat je vindt.",
+      "slotsBody": "Je hebt een wapengleuf en zeven pantsergleuven. Elke klasse kan slechts bepaalde wapens gebruiken en draagt pantser tot zijn eigen gewicht, stof, leer of maliën, dus de verbeteringen die bij je passen zijn die welke voor jouw klasse zijn gemaakt. Vul daarbinnen elke gleuf met het beste stuk dat je vindt.",
       "slotMainhand": "Wapen",
       "slotHelmet": "Hoofd",
       "slotNeck": "Nek",
@@ -4356,7 +4536,7 @@ export const nl_NL: EnTranslations = {
       "bagsTitle": "Tassen en draagruimte",
       "bagsBody": "Alles wat je oppakt, reist mee in één gedeelde rugzak, en die vergroot je door tassen uit te rusten. Je tassenvenster heeft vier tassloten: klik op een tas in je rugzak om hem in een vrij slot te steken, en elke tas die je draagt, voegt zijn eigen ruimte toe. Eenvoudige tassen zijn goedkope handelswaar, ruimere vallen van beesten, en de fraaiste komen van kerkerbazen, zodat je draagruimte netjes meegroeit met je uitrusting.",
       "qualityTitle": "Kwaliteit, in één oogopslag",
-      "qualityBody": "Elk voorwerp heeft een kwaliteit en de naam krijgt de bijbehorende kleur, zodat je de waarde in één oogopslag ziet. Van gewoon tot kostbaar:",
+      "qualityBody": "Elk voorwerp heeft een kwaliteit, en zijn naam is gekleurd om die te tonen, zodat je zijn waarde in één oogopslag kunt aflezen. Van meest gewoon tot meest gewild:",
       "qualityPoor": "Pover",
       "qualityCommon": "Gewoon",
       "qualityUncommon": "Ongewoon",
@@ -4366,22 +4546,22 @@ export const nl_NL: EnTranslations = {
       "qualityNote": "Hogere kwaliteit betekent meestal betere statistieken, maar kwaliteit is een hint, geen regel. Een goed passend stuk voor jouw klasse en niveau kan een flitsender exemplaar verslaan.",
       "upgradeTitle": "Houd je uitrusting actueel",
       "upgradeBody": "Een oud stuk vervangen door een verse verbetering doet meer voor je dan perfect spelen in uitrusting die je ontgroeid bent. Wanneer er iets beters valt of een quest het aanbiedt, neem het. Bewaar je goede voorwerpen niet voor later.",
-      "itemLevelBody": "Schakel Itemniveau tonen in de opties in om twee stukken snel te vergelijken. Uitrusting met een bekende bron, van vijanden, quests en ambachten, toont dan een itemniveau: één getal dat de kracht op basis van de herkomst benadert en upgrades zelfs tussen verschillende vakken vergelijkbaar maakt. Stukken zonder zo’n bron, zoals eenvoudige handelswaar en startuitrusting, tonen geen itemniveau; een ontbrekend getal is normaal.",
+      "itemLevelBody": "Wil je een snelle manier om twee stukken te vergelijken, zet dan Itemniveau Tonen aan in de opties. Elk wapen en pantserstuk toont dan een itemniveau, een enkel getal voor hoe krachtig het ongeveer is op basis van waar het vandaan komt, zodat je in één oogopslag ziet welke upgrade meer gewicht in de schaal legt, zelfs tussen verschillende slots.",
       "sourcesTitle": "Waar uitrusting vandaan komt",
-      "sourcesBody": "De meeste van je vroege verbeteringen zijn questbeloningen, dus het loont om quests af te ronden in plaats van te grinden. Vijanden laten uitrusting vallen wanneer je ze verslaat, verkopers in de stad verkopen degelijke basisspullen, ambachtslieden maken van verzamelde materialen draagbare stukken, en op de spelersmarkt kun je van andere avonturiers kopen. Bovenaan de heuvel kopen twee merkvaluta uitrusting die nergens anders te vinden is: Delve-Merken bij de delvebewaarder, en Heroïsche Merken bij de heroïsche kwartiermeester.",
+      "sourcesBody": "De meeste van je vroege verbeteringen zijn questbeloningen, dus het loont om quests af te ronden in plaats van te grinden. Vijanden laten uitrusting vallen wanneer je ze verslaat, verkopers in de stad verkopen degelijke basisspullen, en op de spelersmarkt kun je van andere avonturiers kopen.",
       "soulboundTitle": "Zielgebonden: van jou en jou alleen",
       "soulboundBody": "Een paar bijzondere beloningen zijn zielgebonden, verbonden aan je personage vanaf het moment dat je ze verdient. Een zielgebonden voorwerp kun je niet verhandelen, versturen, aan een verkoper verkopen of op de markt zetten; het is van jou en jou alleen. Vandaag beschermt dat prijzentokens zoals Heroïsche Merken, terwijl de uitrusting die je wint van jou is om vrijelijk te verhandelen, verkopen of delen.",
       "uniqueTitle": "Uniek-Uitgerust: één legendarisch voorwerp van een soort",
       "uniqueBody": "Legendarische voorwerpen zijn uniek-uitgerust: je personage kan slechts één exemplaar van een gegeven legendarisch voorwerp tegelijk dragen, en de heroïsche versie ervan telt als hetzelfde voorwerp. Een tweede exemplaar kan meerijden in je tassen, in de bank, of op de markt, maar proberen beide tegelijk te dragen wordt geweigerd, en de tooltip draagt een gouden Uniek-Uitgerust-label zodat je de regel ziet voordat je een build rond twee ervan plant.",
       "setsTitle": "Sets en setbonussen",
-      "setsBody": "Sommige pantsers komen in bij elkaar passende families, meerdere stukken die zo gesneden zijn dat ze er als één uitzien en als één vechten. Draag er genoeg van een familie tegelijk en de set ontwaakt, en geeft bonussen bovenop de eigen statistieken van elk stuk, en hoe meer stukken je draagt, hoe sterker hij wordt. Een paar van zulke families duiken op als gewilde drops terwijl je levelt; de grootste ervan komen uit de zwaarste groepscontent vlak bij de levelcap, dus jagen op een volledige set is een klassiek eindspeldoel.",
+      "setsBody": "De zeldzaamste pantsers komen in bij elkaar passende families, meerdere stukken die zo gesneden zijn dat ze er als één uitzien en als één vechten. Draag er genoeg van een familie tegelijk en de set ontwaakt, en geeft bonussen bovenop de eigen statistieken van elk stuk, en hoe meer stukken je draagt, hoe sterker hij wordt. Deze vallen uit de zwaarste groepscontent vlak bij de levelcap, dus jagen op een volledige set is een klassiek eindspeldoel.",
       "consumablesTitle": "Verbruiksartikelen",
       "consumablesIntro": "Sommige voorwerpen worden eenmalig gebruikt voor een snel voordeel. Het is goedkope verzekering, dus houd er een paar bij de hand.",
       "consumablesPotions": "Toverdranken herstellen levenskracht of mana op het moment dat je ze gebruikt, zelfs midden in een gevecht, wat ze tot een reddende greep maakt als een aanval misgaat. Ze delen een korte afkoeltijd, dus plan één goed moment om ze te gebruiken.",
       "consumablesFood": "Eten en drinken herstellen je terwijl je zit en rust tussen gevechten. Eten herstelt levenskracht, drinken herstelt mana, en zo rusten is gratis. Ga na een zwaar gevecht een paar seconden zitten in plaats van half geheeld het volgende in te rennen.",
       "consumablesElixirs": "Elixers geven een tijdelijke buff terwijl je avontuurt, een klein voordeel dat helpt wanneer je net iets verder wilt doorzetten.",
       "fishingTitle": "Vissen",
-      "fishingBody": "Vissen is een rustige afwisseling. Draag een hengel, gebruik hem naast open water, en haal binnen wat bijt. Je vangt vooral vis die voedsel is dat je kunt eten, af en toe wat rommel om voor een paar munten te verkopen, en zo nu en dan een gewilde zeldzame vangst. Wat je vindt, hangt af van het water waarin je vist.",
+      "fishingBody": "Vissen is een rustige afwisseling. Rust een hengel uit, werp uit in open water en haal binnen wat bijt. Je vangt vooral vis die voedsel is dat je kunt eten, af en toe wat rommel om voor een paar munten te verkopen, en zo nu en dan een gewilde zeldzame vangst. Wat je vindt, hangt af van het water waarin je vist.",
       "fishingFood": "De vis die je binnenhaalt is voedsel: eet er een terwijl je gaat zitten om te rusten en het herstelt je gezondheid, met de stevigere vis afkomstig uit de koudere, diepere wateren in het noorden. Een lijn in het meer is een rustige manier om je pak gevuld te houden tussen gevechten.",
       "fishingRare": "Zo nu en dan vangt je lijn iets veel beters dan avondeten: een glinsterende gewilde vis die elke visser in elk water met geluk kan binnenhalen. Haak er een en je logboek licht op met de vangst. Het is het soort gelukkige vangst dat een ledige middag aan het meer het vertellen waard maakt.",
       "cosmeticsTitle": "Uiterlijken en cosmetica",
@@ -4392,19 +4572,20 @@ export const nl_NL: EnTranslations = {
       "cosmeticsApply": "Stel je actieve uiterlijk in vanaf de uiterlijkrij op je personagescherm, en wissel vrij tussen alles wat je hebt ontgrendeld."
     },
     "professions": {
-      "intro": "Naast gevecht en quests beloont de wereld je voor het bewerken van het land en de smidse: grondstoffen verzamelen, ze in tien ambachtsvakken tot uitrusting en goederen maken, en een identiteit aannemen als een van de tien archetypen die deze vakken vertegenwoordigen.",
+      "intro": "Naast gevecht en quests beloont de wereld je voor het bewerken van het land en de smidse: grondstoffen verzamelen, ze aan de werkbanken van tien verschillende vakken tot uitrusting maken, en een identiteit aannemen als een van de tien archetypen die deze vakken vertegenwoordigen.",
       "harvestTitle": "De jacht zelf oogsten",
+      "harvestBody": "Verzamelen stopt niet bij bronpunten. Veel gevelde beesten kunnen eenmalig worden geoogst, wie het eerst komt wie het eerst maalt, voor huid, tanden, zijde en vlees, rechtstreeks van het karkas naast de gewone buit; een druk opent beide. De keuze is ook elke keer aan jou: strip alles wat het karkas biedt, of concentreer je op minder componenten en neem een meetbaar betere kwaliteit van wat je wel neemt.\n\nEen zeldzame of betere oogstrol op een specimenfamilie geeft ook een gesigneerd perfect exemplaar (een Ongeschonden Huid, Ongeschonden Zijde, Ongeschonden Gifklier of Stuk Ossenhaas) bovenop de gewone opbrengst, en registreert Een Perfect Exemplaar in je Boek der Daden. Elk personage kan oogsten, geen training vereist, en elk gereedschap dat je bezit telt mee voor de premiumerkenning, tot welk beroep het ook behoort.",
       "harvestBodyChoice": "Verzamelen stopt niet bij bronpunten. Veel gevelde beesten kunnen eenmalig worden geoogst, wie het eerst komt wie het eerst maalt, voor huid, tanden, zijde en vlees, rechtstreeks van het karkas naast de gewone buit; een druk opent beide. Waar een beest meer dan één bruikbare component draagt, is de keuze aan jou: neem alles wat het te bieden heeft, of concentreer je op minder componenten en neem een meetbaar betere kwaliteit van wat je wel neemt.\n\nEen zeldzame of betere oogstrol op een specimenfamilie geeft ook een gesigneerd perfect exemplaar (een Ongeschonden Huid, Ongeschonden Zijde, Ongeschonden Gifklier of Stuk Ossenhaas) bovenop de gewone opbrengst, en registreert Een Perfect Exemplaar in je Boek der Daden. Elk personage kan oogsten, geen training vereist, en elk gereedschap dat je bezit telt mee voor de premiumerkenning, tot welk beroep het ook behoort.",
       "focusTitle": "Stadsfocus",
       "focusBody": "Elke hoofdplaats heeft een Stadsfocus-paneel voor oogsters op bezoek: sta in de stad, open het naast de minimap, en richt een klein budget aan focuspunten op de componenttypen die je belangrijk vindt. Hoe meer focus je aan een component geeft, hoe fijner en rijker het van elk later lijk komt; je toewijzing volgt je personage waar het ook zwerft, en je kunt haar gratis herzien bij elk later bezoek aan de stad.",
       "craftHowTitle": "Het vervaardigingsvenster",
-      "craftMasteryTitle": "Hoe lang meesterschap duurt",
-      "craftMasteryBody": "Eerlijke verwachtingen: de klim naar de grens van 125 in een ambacht vereist minimaal 125 geslaagde vervaardigingen, want elke volledige winst verplaatst je precies een punt, en in de praktijk iets meer naarmate recepten vervagen tussen de treden van de trainer. Het vervaardigen zelf gaat snel; het voeden ervan is de echte reis, dus reken op een paar toegewijde avonden verzamelen en maken per ambacht.\n\nDe verzamelberoepen bereiken hun grens van 100 gedurende een normale levelreis als je oogst tijdens het reizen, al wil het laatste stuk de hogetier-bronnen van het verre noorden. Vissen is de lange weg by design: op grond van zijn eigen winstschema zijn 200 punten meer dan drieduizend vangsten. Meesterhengelaar is een titel die je verdient in een seizoen van stille avonden, niet over een weekend.",
-      "archetypeChooseTitle": "De Gildebrief, en van gedachten veranderen",
-      "archetypeChooseBody": "Je hoeft hier niets actief voor op te zoeken. Beoefen je ambachten, en zodra je vaardigheden voor het eerst een duidelijke voorkeur tonen voor een paar, neemt het Ambachtsgilde dat op en stuurt een Ravenpostbrief met de naam van de meester die je moet bezoeken en de quest die je moet aannemen. Die brief komt eenmalig per personage, en alleen als je jezelf nog niet aan een paar hebt verbonden.",
-      "archetypeSwitchBody": "Een verklaring is bovendien geen levenslange straf. Een paar dat je nooit hebt gehad is gewoon een nieuwe afstemmingsquest, terwijl terugkeren naar een paar dat je hebt verlaten je eerst om boete vraagt: vijf opdrachten de eerste keer, en drie extra voor elke terugkeer die je al hebt gemaakt (een gloednieuw paar opnemen verhoogt dat aantal nooit). De keuze blijft betekenisvol zonder ooit een deur voorgoed op slot te doen.",
+      "craftMasteryTitle": "Vaardigheid en meesterschap",
+      "craftMasteryBody": "Succesvol iets maken bouwt vaardigheid op in dat vak, en rijkere recepten zitten achter een hogere vaardigheid: de basisrecepten staan voor iedereen open, terwijl steeds geavanceerdere recepten steeds meer meesterschap vragen om te proberen. Je vaardigheid in een ambacht laten groeien is de weg van eenvoudige beginnerswaren naar de ambitieuzere recepten.",
+      "archetypeChooseTitle": "Je archetype kiezen",
+      "archetypeChooseBody": "Je eerste archetype kies je via een vroege verhaalquest in het eerste gebied, die je formeel in die identiteit opneemt. Zolang je die quest niet hebt voltooid, heb je nog helemaal geen archetype gekozen.",
+      "archetypeSwitchBody": "Dat je ooit een archetype hebt gekozen, legt je niet voorgoed vast. Overstappen naar een ander archetype betekent eerst een herhaalbare \"goedmaak\"-quest voltooien voor je oude archetype, en elke keer dat je wisselt wordt wat er de volgende keer van je wordt verwacht iets zwaarder, zodat wisselen betekenisvol blijft in plaats van gratis.",
       "whatHeading": "Een vak naast het zwaard",
-      "whatBody": "Beroepen zijn het werkende leven van de wereld: vier verzamelvakken die grondstof recht uit het land halen, en een ring van tien ambachten die dat omzetten in uitrusting, maaltijden, drankjes en gereedschap. Alles voedt hier iets anders. Het erts dat je delft wordt een kling, de kling krijgt een betovering, en de betovering vraagt stof dat uit oude uitrusting is gebroken, dus een verzamelaar, een ambachtsman en een knutselaar zijn allemaal schakels in één keten.\n\nEr is geen beroepslimiet om je zorgen over te maken. Elk personage kan zeven van de acht ambachten die vandaag inhoud hebben en alle vier de verzamelberoepen naast elkaar verhogen (Knutselwerk is de ene uitzondering: zijn recepten beginnen allemaal boven het vrije plafond, dus zijn ladder wacht op de eed van de Bombardier); de enige exclusieve keuze is je archetype, de identiteit waaraan je uiteindelijk trouw zweert, al klimmen de ambachten die daarachter slapend worden na je afstemming alleen nog op hun gewone recepten, en voorbij vaardigheid 75 helemaal niet meer. Vaardigheid gaat nooit omlaag, en niets wat je leert wordt je ooit afgenomen.",
+      "whatBody": "Beroepen zijn het werkende leven van de wereld: vier verzamelberoepen die ruwe grondstoffen rechtstreeks uit het land halen, en een ring van tien ambachten die ze omzetten in uitrusting, maaltijden, drankjes en gereedschap. Alles voedt hier iets anders. Het erts dat je mijnt wordt een zwaard, het zwaard krijgt een betovering, en de betovering heeft stof nodig dat uit oud uitrusting wordt gebroken, zodat een verzamelaar, een maker en een knutselaar allemaal schakels in een keten zijn.\n\nEr is geen beroepslimiet om over na te denken. Elk personage kan alle acht ambachten die vandaag inhoud hebben en alle vier verzamelberoepen naast elkaar opbouwen; de enige exclusieve keuze is je archetype, de identiteit waaraan je uiteindelijk zweert, hoewel zodra je je afstemt de ambachten die erachter sluimeren stoppen met stijgen. Vaardigheid daalt nooit, en niets wat je leert wordt ooit weggenomen.",
       "ringHeading": "Het ambachtswiel",
       "ringBody": "Elk ambacht met inhoud vandaag bereikt een grens van 125 vaardigheid: Wapensmeden, Harnasmaken, Kleermaken, Leerbewerken, Koken, Alchemie, Knutselwerk en Betovering. Op een grens blijft het beroep werken, oogsten leveren nog op, vervaardigingen worden nog opgelost en meesterwerken kunnen nog gebeuren; alleen het getal stopt met stijgen. Kies hieronder een kaart voor de volledige receptentabellen en cijfers van een ambacht.",
       "ringWaveNote": "Twee ambachten op het wiel, Sieradenmaken en Inscriptie, houden hun plaatsen maar sturen nog geen recepten. Dat is opzettelijk en geen vergissing: hun inhoud arriveert met toekomstige zones, en de grenzen hierboven stijgen op dezelfde manier, zodat een afgetopt ambacht van vandaag een voorsprong is, geen eindstreep.",
@@ -4413,7 +4594,7 @@ export const nl_NL: EnTranslations = {
       "gatherHubHeading": "Verzamelen",
       "gatherHubBody": "Vier verzamelberoepen voeden de ring vanuit het veld: Mijnbouw, Houtkap en Kruidenkunde halen erts, hout en kruiden uit het land en bereiken een grens van 100 vaardigheid, terwijl Vissen op zijn eigen aas-en-optrekken-ritme doorloopt tot 200. Elke pagina hieronder bevat de exacte grondstofkaarten, gereedschapsladders en kansen.",
       "archetypesHeading": "Het wiel en zijn archetypen",
-      "archetypesBody": "De tien ambachten staan op een vast wiel, en de ligging op dat wiel doet ertoe. Elke twee buren vormen een paar met een naam: de Smid voor Wapensmeden en Harnasmaken, de Uitrusser voor Leerbewerken en Kleermaken, de Apotheker voor Alchemie en Koken, de Bombardier voor Knutselwerk en Alchemie, en nog zes meer rond de ring.\n\nAfstemmen op een paar is een quest, geen muisklik in een menu. Vier paren kun je vandaag aangaan (Smid, Uitrusser, Apotheker en Bombardier), elk verankerd door een vaste meester in Oostbeek wiens aannamequest de hele afspraak vooraf uitspreekt voordat je hem aanneemt. Tot je je verklaart, klimt elk ambacht vrij op recepten tot en met de zeldzame rang (elk recept dat vaardigheid 74 of minder vraagt), zodat je bijna alles kunt uitproberen voordat je kiest (alleen Knutselwerk heeft geen enkel recept dat laag ligt, dus zijn getal wacht).\n\nZodra je afstemt, worden je twee paarambachten je hoofdambachten, zonder ander plafond dan de grens. De rest van het wiel gaat niet op zwart: één ambacht tegenover je hoofdambachten blijft aan als liefhebberij die door de zeldzame rang heen blijft klimmen (een herhaalbare quest bij de smidse van Smid Haldren laat je wisselen welk ambacht dat is), en elk ander ambacht wordt slapend. Een slapend ambacht behoudt zijn vaardigheid en zijn gewone recepten, die het op de normale curve blijven bijleren tot ze bij 75 grijs worden; alles boven gewoon stopt onmiddellijk met betalen, en een slapend ambacht levert nooit een meesterwerk op zolang het rust.",
+      "archetypesBody": "De tien ambachten zitten op een vast wiel, en geografie op dat wiel is van belang. Elke twee buren vormen een benoemd paar: Smid voor Wapensmeden en Harnasmaken, Uitrusser voor Leerbewerken en Kleermaken, Apotheker voor Alchemie en Koken, Bommenwerper voor Knutselwerk en Alchemie, en zes meer rond de ring.\n\nAfstemmen op een paar is een quest, geen menuklik. Vier paren kunnen vandaag worden betreden (Smid, Uitrusser, Apotheker en Bommenwerper), elk verankerd door een vaste meester in Eastbrook wiens acceptatiequest de hele afspraak vooraf uitlegt. Totdat je je verklaart, vordert elk ambacht vrij op recepten tot en met de zeldzame rang, zodat je alles kunt proberen voordat je kiest.\n\nZodra je je afstemt, worden je twee paarambachten je hoofdvakken, zonder plafond behalve de grens. De rest van het wiel wordt niet donker: een ambacht tegenover je hoofdvakken blijft als hobby die doorstijgt tot de zeldzame rang (een herhaalbare quest bij de smederij van Smid Haldren laat je wisselen welke dat is), en elk ander ambacht gaat sluimeren. Een sluimerend ambacht behoudt zijn vaardigheid en zijn gewone recepten; het stijgt gewoon niet meer en produceert geen meesterwerken zolang het rust.",
       "pairFmt": "{a} en {b}",
       "curveHeading": "De Meesterschapscurve",
       "curveBody": "Vaardigheidswinst volgt overal dezelfde regel, de vierstanden Meesterschapscurve. Elke {step} punten vaardigheid is een rang, en elk recept wordt gescoord op waar het staat ten opzichte van de jouwe: op of boven je rang geeft volledige winst, een rang eronder de helft, twee eronder een kwart, en drie of meer eronder niets.\n\nHet vervaardigingsvenster schildert dit direct op de receptenlijst in de klassieke kleuren: oranje voor volledige winst, geel voor verminderd, groen voor een druppel, grijs voor niets. Winsten zijn deterministisch, nooit een vaardigheidsrol, zodat dezelfde vervaardiging op dezelfde rang je vaardigheid altijd met exact dezelfde hoeveelheid verplaatst, en een recept dat geel wordt is je signaal om de volgende trede te trainen.\n\nVerzamelen werkt op dezelfde curve met dezelfde randstap, gescoord tegen het grondstoffenpunt in plaats van een recept: gemakkelijke grondstoffenpunten worden grijs naarmate je ze voorbijgaat, en de rijkere grondstoffenpunten van latere zones zijn wat een klim afmaakt. Vissen houdt zijn eigen schema aan: een vol punt per vangst tot 50 vaardigheid, half tot 100, een tiende tot 150, en een trage staart helemaal tot 200, waarbij rommelopbrengsten vanaf 100 niets meer leren.",
@@ -4424,11 +4605,32 @@ export const nl_NL: EnTranslations = {
       "deedsHeading": "Daden die de reis herinneren",
       "deedsBody": "Het Boek der Daden loopt naast elke stap hiervan mee. Je eerste afstemming verdient Ambachtsgetrouwe en je eerste meesterwerk verdient Meestersmaker, beide te dragen als titels. Elk van de acht te verdienen ambachten markeert een mijlpaaldaad bij vaardigheid 50 en kroont zijn grens met een Grootmeesters-titel, terwijl Vissen Oude Zout krijgt bij 100 vaardigheid en de titel Meesterhengelaar bij 200.\n\nEr zijn ook stillere pagina's: daden voor je eerste oogst en eerste vervaardiging, voor de zeldzame vondsten die geluk in het veld oplevert, en voor het oppakken van salvage. Dit alles is cosmetisch, alleen titels en Roem. Een daad schenkt nooit macht; het bewijst alleen dat je er was.",
       "startHeading": "Waar te beginnen",
-      "startBody": "Net van de weg gestapt in Oostbeek? Zoek Voorman Odell op en neem Een Vak voor Elke Hand aan: hij wijst je naar de ertsaders rond de Kopergroeve ten zuidoosten van de stad en bezorgt je je eerste eelt. Pas op met de groeve zelf: de Dieprots-Gravers die erop gekampeerd zijn staan een paar niveaus boven een verse aankomst, dus bewerk eerst de buitenste aders en bewaar het hart van het kamp tot je een beetje geleveld bent. Vanaf dan oogst je elke ader, elke houtopstand en elk kruidenveld dat je tijdens het questen passeert; vaardigheid komt reizigers vanzelf aanwaaien.\n\nTerug in de stad druk je op T om het vervaardigingsvenster te openen en werk je de gewone recepten die elk personage vanaf het begin kent. Bezoek de meesters bij de smidse, de keukens, het weefgetouw en de gereedschapsmakerij om te zien wat zij onderwijzen, en neem hun werkopdrachten aan voor gestage munt. Tegen de tijd dat de brief van het Gilde je vindt, weet je al welk paar als thuis voelt.",
+      "startBody": "Vers van de weg in Eastbrook? Vind Voorman Odell en neem Een Vak voor Elke Hand: hij wijst je op de ertsaders rondom de Kopergat ten zuidwesten van de stad en geeft je je eerste eelt. Oogst daarna elke ader, boomstand en kruidentuin die je tegenkomt tijdens het questen; vaardigheid komt vanzelf aan reizigers.\n\nTerug in de stad druk je op T om het vervaardigingsvenster te openen en werk je de gewone recepten die elk personage al kent vanaf het begin. Bezoek de meesters bij de smederij, keukens, weefgetouw en gereedschapsmakerij om te zien wat ze leren, en neem hun werkopdrachten voor een stabiel inkomen. Tegen de tijd dat de brief van het Gilde je bereikt, weet je al welk paar als thuis aanvoelt.",
       "colStation": "Station",
       "colHub": "Hub",
       "colMaster": "Meester",
-      "masterCellFmt": "{name}, {title}"
+      "masterCellFmt": "{name}, {title}",
+      "archetypeIdentityBody": "Je actieve archetype is een uitspraak over wie je personage in de wereld is, herkenbaar in hoe anderen en de wereld je aanspreken. De precieze beloningen en erkenning die erbij horen worden nog uitgewerkt; kom later terug naarmate het systeem zich vult.",
+      "archetypeIdentityTitle": "Wat je archetype betekent",
+      "archetypeIntro": "Elk van de tien ambachten staat ook voor een archetype, een bredere identiteit die je kunt aannemen en die verder gaat dan alleen dat vak uitoefenen. Je actieve archetype is één keuze tegelijk, geen afvinklijst: je draagt er één, en kunt later van keuze veranderen als je dat wilt.",
+      "archetypeSwitchTitle": "Van gedachten veranderen",
+      "archetypeTitle": "De tien archetypen",
+      "craftComboBody": "Naast de eigen receptenlijst van een ambacht ondersteunt het wiel ook combinatierecepten die twee naburige ambachten tegelijk aanspreken, als beloning voor een personage (of een paar handelspartners) dat in aangrenzende vakken op de ring heeft geïnvesteerd in plaats van in één vak alleen.",
+      "craftComboTitle": "Combinatierecepten",
+      "craftIntro": "Tien ambachten maken van verzamelde materialen afgewerkte uitrusting en goederen: Harnasmaken, Wapensmeden en Juwelenmaken vormen ruwe grondstoffen om tot draagbare uitrusting; Alchemie en Knutselwerk draaien op vallen en opstaan; Koken, Inscriptie en Betoveren raken elk het werk van andere ambachten; Kleermaken en Leerbewerken werken naar exacte patronen. Samen vormen ze een wiel, waarbij elk ambacht naast twee buren zit en tegenover één ander.",
+      "craftRecipesBody": "Elk ambacht heeft zijn eigen recepten, elk met specifieke reagentia die je verzamelt of koopt. De meest eenvoudige recepten van elk ambacht vragen niets anders dan gewone materialen en zijn vanaf het allereerste begin te maken, zodat je een vak meteen kunt gaan uitoefenen zodra je het oppakt in plaats van te wachten tot het is ontgrendeld.",
+      "craftRecipesTitle": "Recepten en reagentia",
+      "craftRingBody": "De tien ambachten staan in een vaste ring, en waar een ambacht op die ring zit doet ertoe: ambachten die naast elkaar op het wiel liggen hebben meer met elkaar gemeen dan ambachten die tegenover elkaar liggen. Je aan één ambacht verbinden moet voelen als toetreden tot een familie van verwante vakken, niet als het kiezen van een losstaande vaardigheid.",
+      "craftRingTitle": "Een wiel van specialiteiten",
+      "craftTitle": "De tien ambachten",
+      "gatherIntro": "Drie verzamelvakken laten je grondstoffen rechtstreeks uit de wereld halen: Mijnbouw slaat erts en steen uit aders, Houtkap velt timmerhout uit bomengroepen, en Kruidenkunde plukt kruiden en planten die in het wild groeien. Elk wordt apart bijgehouden, dus aan het ene werken vertraagt nooit je voortgang in het andere.",
+      "gatherProficiencyBody": "Elke geslaagde oogst bouwt je bedrevenheid in dat verzamelvak op. Een hogere bedrevenheid verschuift wat je uit een bron haalt richting zeldzamere kwaliteiten materiaal, van gewoon opwaarts, al blijven de zeldzaamste kwaliteiten zeldzaam, ook bij hoge bedrevenheid. Meer oefening schaadt je kansen nooit, ze worden er alleen maar beter van.",
+      "gatherProficiencyTitle": "Bedrevenheid en materiaalkwaliteit",
+      "gatherTitle": "Verzamelen: Mijnbouw, Houtkap en Kruidenkunde",
+      "gatherToolsBody": "Handelaren verkopen basisgereedschap voor elk verzamelvak, en beter gereedschap kan worden gemaakt, zodat het werken van een grondstofbron capabeler moet gaan voelen naarmate je je ervoor uitrust, in plaats van statisch te blijven. Gereedschap van hogere rang is de bedoelde weg om rijkere bronnen te ontsluiten en ze over een lange sessie efficiënter te bewerken.",
+      "gatherToolsTitle": "Gereedschap van het vak",
+      "gatherWhatBody": "Ertsaders, bomengroepen en kruidenveldjes staan in de gebieden als zichtbare, onbeheerde vaste punten. Loop ernaartoe en gebruik ze om te oogsten wat ze bevatten. Heb je een bron eenmaal geoogst, dan heeft die tijd nodig om te herstellen voordat jij persoonlijk er opnieuw kunt oogsten, maar niemand anders wordt geblokkeerd: een andere speler kan intussen precies dezelfde bron oogsten.",
+      "gatherWhatTitle": "Grondstofbronnen"
     },
     "profPages": {
       "back": "Terug naar Beroepen",
@@ -4469,27 +4671,27 @@ export const nl_NL: EnTranslations = {
         "leatherworking": "Leerbewerken looiT uitrusting met Behendigheid en Uithoudingsvermogen voor de klassen die ontwijken in plaats van blokkeren, van basis Fenbruggen-leer tot de zeldzame moeraswachterset, en het is het ene diepe ambacht dat buiten de stad wordt geleerd.",
         "cooking": "Koken verandert de vangst van de dag in maaltijden waarbij je 18 seconden rust genezing ontvangt, de goedkoopste genezing in het spel, van Gezouten Boemdrogen tot Marlows Grootse Braadstuk. Iedereen eet, dus geen ambacht is meer universeel welkom in een groep.",
         "alchemy": "Alchemie verandert kruiden, klieren en glas in flesjes die gevechten winnen: genezende en mana-dranken voor het moment dat het misgaat, en uithoudingselixers die de hele kerker op je buffbalk blijven staan.",
-        "engineering": "Knutselwerk bouwt het gereedschap dat elke serieuze verzamelaar uiteindelijk wil hebben: de rang 4- en rang 5-houwelen, bijlen, sikkels en hengels die geen enkele balie ooit voor munt verkoopt, elk met verbruik van het gereedschap eronder.",
-        "enchanting": "Betovering haalt uitrusting uit elkaar en stopt de kracht er weer in: breek ongewenste stukken tot arcane materialen en geef die vervolgens uit aan een blijvende statistiekbonus voor een stuk dat je wilt houden. Breken en betoveren vragen geen station en geen leermeester, en iedereen kan er op dag één mee beginnen; alleen de twee bedelrecepten vragen meer, en die worden bij de gereedschapswerkplaats onderwezen."
+        "engineering": "Knutselwerk bouwt de gereedschappen die elke serieuze verzamelaar uiteindelijk wil: de rang 4- en rang 5-pikhouwelen, bijlen en sikkels die geen handelaar ooit op voorraad heeft, elk verbruikt het gereedschap eronder.",
+        "enchanting": "Betovering haalt uitrusting uit elkaar en stopt de kracht er weer in: breek ongewenste stukken af tot arcanematerialen, besteed ze dan aan een permanente statsbonus voor een stuk dat je wilt houden. Geen werkbank, geen leermeester, en iedereen kan op dag een beginnen."
       },
       "craftProse": {
         "weaponcrafting": {
           "identityHeading": "Het mes dat elke vechter zoekt",
           "identityBody": "Iemand in elke groep wil het werk van dit ambacht, want de zeldzame trede alleen al dekt alle drie de smaken: het Osmium Strijdkling voor Kracht-melee, het Glyfstaal Oorlogsbijl voor Behendigheids-vechters, en de Hoogden Gevechts-Staf, een Intellect- en Geeststaf voor de gewaden-menigte.\n\nOp de ambachtsring staat het tussen Harnasmaken en Juwelenmaken. Zijn levende identiteit is de Smid, het Wapensmeden- en Harnasmaken-paar, gezworen voor Smidse-meesteres Darva bij de smidse door eigenhandig drie ertsslagaders te bewerken; het Kling-smid-paar met Juwelenmaken staat ook op de ring, maar kan nog niet worden gezworen, omdat Juwelenmaken geen recepten heeft tot een latere zone-uitbreiding.",
           "materialsHeading": "Wat de smidse nodig heeft",
-          "materialsBody": "Mijnbouw is de ruggengraat. Kopererts komt van de rang 1-aders van Oostbeekdal, ijzererts uit Slijkveenmoeras, en osmiumerts uit Doorntop-Hoogten, en elke trede van de ladder stapt op dezelfde manier omhoog. Houtkap telt zwaarder dan je zou denken: ijzerschors levert de steel van de everzwijnspeer, essenhout draagt de knuist, en één enkel ouderhoutblok vormt de gevechtsstaf.\n\nDe rest komt van de jacht en van de balie. Ruwe huid voor de grepen oogst je rechtstreeks van wolven- en everzwijnlijken, botfragmenten komen van de rusteloze doden of uit gesalvagede gewone uitrusting, en de smidseladder verstookt Smedervloeistof, 20 koper per pot bij Darva zelf. Loopt je eigen mijnbouw achter, dan redt geen enkele balie je aan het erts zelf: osmium komt van de aders van Doorntop, van de beginaders van elke jongere zone behalve De Verrekust (waarvan de aders ijzer opleveren), of uit de stapel van een andere speler, via ruil of de Wereldmarkt. Alleen de Glyfstalen Staaf koop je voor munt, bij Knutselaar Gizzel in de gereedschapswerkplaats of bij Kwartiermeester Bree in Highwatch.",
+          "materialsBody": "Mijnbouw is de ruggengraat. Kopererts komt van de rang-1-aders in Oostbeekdal, ijzererts uit Slijkveenmoeras, en osmiumerts uit Doorntop-Hoogten; elke trede van de ladder loopt op dezelfde manier. Houtkap telt zwaarder dan je zou verwachten: ijzerbast schacht de everzwijn-speer, essenhout draagt de knots, en een enkele hoogdenblok vormt de gevechtsstaf.\n\nDe rest komt van de jacht en de toonbank. Ruw leer voor handgrepen wordt rechtstreeks van wolf- en everzwijnlijken afgestroopt, botfragmenten vallen van gewone kills, en de smidseladder verbrandt Smedervloeistof, 20 koper per pot bij Darva zelf. Als je eigen mijnbouw achterblijft, verkoopt Darva osmiumerts bij de smidse en Tinker Gizzel levert glyfstaalbaren bij de gereedschapsmakerij, tegen een premie die verzamelende vrienden goedkoop laat lijken.",
           "ladderHeading": "De ladder, trede voor trede",
           "ladderBody": "Een veldrecept, het Oostbeekse Wapenmes, is iedereen van het begin bekend en kan overal worden gemaakt uit jachtloot (een paar wolfstanden en botfragmenten) plus zes Smedervloeistof van de smidse-balie. De echte ladder bestaat uit negen leermeesters-recepten in drie treden, allemaal smidse-gebonden: de koperen trede (bebaarde bijl, geflensde knots, everzwijn-speer) is gratis te leren op vaardigheid 0, de ijzeren trede (lang mes, strijdknots, dolk) opent op vaardigheid 25 voor 25 zilver per recept, en de osmium-trede (oorlogsmes, oorlogsbijl, gevechts-staf) opent op vaardigheid 50 voor 1 goud elk. Darva leert een recept zodra jouw rang in het ambacht zijn eigen rang bereikt, dus elke trede opent precies wanneer zijn vaardigheidsband begint.\n\nNog een recept rijdt het paar mee: de Gravewyrm-Handschoenen, een door de leermeester onderwezen combinatiestuk dat alleen een afgestemde Smid met zowel Wapensmeden als Harnasmaken op vaardigheid 25 kan maken, en het heeft helemaal geen werkbank nodig.",
           "routeHeading": "Meesterwerken, en een werkroute naar 125",
-          "routeBody": "Elk stuk met een echte statistiekreeks, wat op deze ladder de ijzeren trede en hoger betekent, kan als meesterwerk van het aambeeld komen, zolang de fijnere kwaliteit binnen je rangplafond past; de statloze koperen gewone stukken procen nooit, want er valt niets aan te verbeteren. IJzer en osmium tellen als rang 1-materialen voor de meesterwerkbonus, ouderhout en glyfstaal als rang 2, en vaardigheid boven de eigen rang van een recept voegt zijn eigen punt per rang toe, dus van de osmium-drie zijn het de oorlogsbijl en de gevechtsstaf die de materiaalvoorsprong dragen, en een trede blijft beter procen nadat je eroverheen gegroeid bent.\n\nRijd de koperen trede tot 25, train de ijzeren trede op de dag dat die opengaat en rijd hem tot 50, en dan de osmium-trede tot 75. Voorbij 75 wordt er nog niets hogers geleverd, dus de osmium-recepten vervagen naar halve en daarna kwart winst: reken op ruwweg 150 vervaardigingen meer om de limiet van 125 te halen, en denk aan de gedeelde begrenzing van tien ambachtsacties per minuut wanneer je gaat batchen.\n\nFinancier de klim onderweg: Darva's smidsewerkopdracht neemt elke 30 minuten acht kopererts van je over voor wat munt en XP, en de ijzeren en osmium-treden verkopen eerlijk aan levelende meleespelers. Het Boek der Daden markeert Snede en Harding op vaardigheid 50 en kroont Grootmeester-Wapensmeden op 125."
+          "routeBody": "Elk stuk met een echte statslijn, wat op deze ladder de ijzertrede en hoger inhoudt, kan van het aambeeld komen als meesterwerk; de statloze kopergewone varianten procen nooit, want er valt in hen niets te verbeteren. IJzer telt als rang-1-materiaal voor de meesterwerkbonus, hoogden en glyfstaal als rang 2, dus de bovenste trede procet iets vaker.\n\nRijd de kopertreden tot 25, train de ijzertrede op de dag dat die opengaat en rijd hem tot 50, dan de osmium-trede tot 75. Voorbij 75 is er nog niets hogers beschikbaar, dus de osmiumrecepten zakken naar half en dan kwart winst: reken ruwweg 150 extra vervaardigingen om de cap van 125 te bereiken, en vergeet de gedeelde begrenzing van tien vervaardigingsacties per minuut niet wanneer je in bulk gaat smeden.\n\nBekostig de klim terwijl je onderweg bent: Darva's smidsewerkopdracht neemt elke 30 minuten acht brokken kopererts van je handen voor een beetje munt en ervaringspunten, en de ijzer- en osmiumtreden verkopen eerlijk aan nivellerend melee. Het Boek der Daden markeert Snijvlak en Warmte op vaardigheid 50 en kroont Grootmeester-Wapensmeden op 125."
         },
         "armorcrafting": {
           "identityHeading": "Maliën voor de frontlinie",
-          "identityBody": "De ladder van Harnasmaken leest als de loopbaan van een soldaat: om te beginnen de eenvoudige geklonken koperen gordel, sabatons en handschoenen, dan het ijzerschakel-borstharnas, de beenbeschermers en schouderstukken met hun eerste echte statistiekreeksen, en ten slotte de zeldzame osmiumschubben-groothelm, -kuras en -beenstukken: Kracht- en Uithoudingsvermogen-stukken met pantserwaarden aan de absolute top van het vakmanschap.\n\nEr is ook een stillere kant: de Beschermde Beenstukken uit Oostbeek, een veldgewoon stuk met tovenaarsstatistieken, en de Ovenschubben-Mantel, een zeldzaam maliënschouderstuk met Intellect en Geest op vaardigheid 75, houden de spreukgezinde maliëndragers op de klantenlijst. Op het wiel staat het tussen Wapensmeden en Knutselwerk; het Smid-paar met Wapensmeden wordt gezworen voor Smeedmeesteres Darva, terwijl het Tandwielsmid-paar met Knutselwerk wel een naam heeft maar nog geen eedquest.",
+          "identityBody": "De ladder van Harnasmaken leest als de loopbaan van een soldaat: de gewone geklonken koperen gordel, laarzen en handschoenen om te beginnen, de ijzerschakel-maliënkolder, beenstukken en schouderstukken met hun eerste echte statistiekregels, en de zeldzame osmiumschubben-helm, kuras en beenstukken, Kracht- en Uithoudingsvermogenstukken met de grootste pantsercijfers die een vakman kan maken.\n\nHet heeft ook een rustige kant: de Oostbeekse Beschermde Beenstukken, een tovenaar-gestatte veldgewone, en de Ovenschubben-Mantel, een zeldzame Intellect- en Geest-maliënschouder op vaardigheid 75, houden de magiegerichte maliëndragers op de klantenlijst. Op de ring staat het tussen Wapensmeden en Knutselwerk; het Smid-paar met Wapensmeden wordt gezworen voor Smidse-meesteres Darva, terwijl het Tandwielsmid-paar met Knutselwerk als naam bestaat maar nog geen eedquest heeft.",
           "materialsHeading": "Erts bij de zak",
-          "materialsBody": "Geen ambacht verslindt sneller erts. Alleen al het ijzerschakel-borstharnas vraagt vijf ijzererts, en elk osmiumschubben-stuk wil drie of vier osmium plus een glyfstalen staaf, dus een serieuze harnasmaker mijnt in Slijkveenmoeras en Doorntop-Hoogten of betaalt iemand die dat doet. Koper voedt de eerste trede, rechtstreeks uit de aders bij de Kopergroeve.\n\nRond het metaal zitten de zachte delen: ruwe huid geoogst van wolven- en everzwijnlijken, botfragmenten van de rusteloze doden (of gesalvaged uit gewone uitrusting), en potten Smedervloeistof (20 koper per stuk bij de smidse) in bijna elk recept. Geen enkele balie verkoopt osmium: wie ongeduldig is koopt het van andere spelers of mijnt het zelf, op Doorntop of in de beginaders van tien van de elf jongere zones (alleen De Verrekust levert ijzer).",
+          "materialsBody": "Geen ambacht verbruikt erts sneller. De ijzerschakel-maliënkolder alleen vraagt al vijf ijzererts, en elk osmiumschubbenstuk wil drie of vier osmium plus een glyfstaalstaaf, dus een serieuze harnasmmaker mijnt Slijkveenmoeras en Doorntop-Hoogten of betaalt iemand die dat doet. Koper voedt de eerste trede, rechtstreeks uit de aderen bij de Kopergat.\n\nRondom het metaal gaan de zachte onderdelen: ruwe huid geoogst van wolf- en everzwijnlijken, botfragmenten en linnenresten van gewone jacht, en een pot Smedervloeistof (20 koper bij de smidse) in bijna elk recept. Darva verkoopt osmiumerts aan de balie voor de ongeduldigsten.",
           "ladderHeading": "Leren bij Darva's smidse",
-          "ladderBody": "Twee veldgewone stukken, het Oostbeek-Maliënvest en de Beschermde Beenstukken, zijn van het begin af aan bekend en kunnen overal worden gemaakt. De leermeestersladder telt negen recepten in drie treden bij de smidse van Oostbeek: de koperen trede is gratis op vaardigheid 0, de ijzerschakel-trede kost 25 zilver per recept op vaardigheid 25, en de osmiumschubben-trede kost 1 goud per stuk op vaardigheid 50, waarbij elke trede te leren is zodra jouw rang die bereikt.\n\nNaast de ladder staan twee bijzonderheden. De Bandsteen-Helm is een van de twee Smid-combinatierecepten (de Gravewyrm-Handschoenen zijn zijn tegenhanger aan de kant van Wapensmeden), door de leermeester onderwezen, stationsvrij, en alleen te bewerken door een afgestemde Smid met beide ambachten op vaardigheid 25. De Ovenschubben-Mantel heeft helemaal geen leermeester nodig: iedereen kent hem van het begin af aan, en niets anders dan de smidse en de materialen houdt het bewerken tegen. De vermelde vaardigheid 75 gaat over winst, niet over toestemming: met Harnasmaken als hoofdambacht levert hij volle vaardigheidswinst op vanaf de allereerste hamerslag tot 99, dus een Smid met osmium over kan er vroeg op leunen. Onder het plafond van een hoofdambacht leert het rang 3-recept niets, dus een niet-afgestemde harnasmaker of een liefhebber bewerkt het voor het stuk, niet voor de punten.",
+          "ladderBody": "Twee veldgewone stukken, het Oostbeekse Maliënhemd en de Beschermde Beenstukken, zijn van het begin bekend en kunnen overal worden gemaakt. De leermeesters-ladder bestaat uit negen recepten in drie treden bij de Oostbeekse smidse: de koperen trede is gratis op vaardigheid 0, de ijzerschakel-trede kost 25 zilver per recept op vaardigheid 25, en de osmiumschubben-trede kost 1 goud elk op vaardigheid 50, waarbij elke trede leerloos is zodra jouw rang die bereikt.\n\nBuiten de ladder staan twee specials. De Grensteen-Helm is het Smid-combinatierecept, door de leermeester onderwezen, zonder werkbank, en alleen werkbaar door een afgestemde Smid met beide ambachten op vaardigheid 25. De Ovenschubben-Mantel heeft helemaal geen leermeester nodig: iedereen kent hem, maar op vaardigheid 75 en smidsegebonden is het het rang 3-sluitstuk van het ambacht.",
           "routeHeading": "Meesterwerken, en een werkbare weg naar 125",
           "routeBody": "Vanaf de ijzerschakel-trede omhoog gooit elke vervaardiging de meesterwerkskans; de pantsers-gewone koperen stukken kunnen niet procen, omdat een meesterwerk stats verbetert en die hebben zij niet. IJzer telt als rang 1-materiaal voor de proc en glyfstaal als rang 2.\n\nDe klim is de standaard drie-trede-rit: koper tot 25, ijzerschakel tot 50, osmiumschubben tot 75, waarbij elke trede wordt geleerd op de dag dat die opengaat. Waar Harnasmaken geluk heeft, is de etappe na 75: de Ovenschubben-Mantel is een rang 3-recept, dus het levert volle winst op tot 99 en de helft daarna, wat betekent dat de laatste vijftig punten ongeveer 75 vervaardigingen kosten in plaats van de 150 die een vervaardiging zonder sluitstuk nodig heeft. Elke mantel kost zeven osmiumerts en vijf Smedervloeistof, dus sla op in Doorntop en bij de smidsebalie voordat je de run begint.\n\nDarva's werkopdracht koopt acht kopererts elke 30 minuten voor munt en XP, een fijne put voor het laag-rang erts dat je ontgroeit. Het Boek der Daden markeert Hamer en Plaat op vaardigheid 50, en Grootmeester-Harnasmaken wacht bij de limiet van 125."
         },
@@ -4507,61 +4709,61 @@ export const nl_NL: EnTranslations = {
           "identityHeading": "Leer voor de snellen",
           "identityBody": "De ladder klimt van de gewone Fenbruggen-leren beenstukken, laarzen en riem door het ongewone moerasspeurder-wambuis, kap en schouderstukken tot de zeldzame moeraswachterset, het beste leer dat een vakman kan snijden. Twee tovenaarsstukken ronden het af: het Oostbeekse Druide-Leer als veldgewone en de Schemerleer-Wikkelaars op vaardigheid 75.\n\nOp de ring staat het tussen Koken en Kleermaken. Zijn levende paar is de Uitrusser, Leerbewerken en Kleermaken, gezworen voor Weefster Ottilie in Oostbeek; het Jager-paar met Koken staat op de ring als naam maar heeft nog geen eedquest.",
           "materialsHeading": "De jacht is de oogst",
-          "materialsBody": "Leerbewerken is het ambacht waar je levelroute en je bevoorradingslijn hetzelfde zijn: ruwe huid oogst je rechtstreeks van lijken die huid dragen, wolven en everzwijnen bovenal, en elk lijk bedient maar één oogster, wie het eerst komt wie het eerst maalt. Een zeldzame of betere oogstrol geeft daarnaast een Ongeschonden Huid, een gesigneerd exemplaar waar het Moeraswachterwambuis om vraagt, dus zet elke huid die je vindt op de bank.\n\nDe bijrol is klein: spinnenpoten en spinnenzijde, huisgesponnen doek van humanoïden, één osmiumerts in elk zeldzaam moeraswachter-stuk (zes in het sluitstuk Schemerleer-Wikkelaars), en een Looimiddel voor 16 koper aan de balie van de looierij. Osmium zelf koop je nooit aan een balie: mijn het zelf, op Doorntop of in de beginaders van bijna elke jongere zone (alleen De Verrekust levert ijzer), of koop het van een andere speler.",
+          "materialsBody": "Leerbewerken is het ambacht waarbij je levelroute en je aanvoerlijn hetzelfde zijn: ruwe huid wordt rechtstreeks geoogst van lijken die huid dragen, wolven en everzwijnen bovenal, en elk lijk dient slechts een verzamelaar, wie er als eerste bij is. Een zeldzame of betere oogstrol geeft ook een Ongeschonden Huid, een gesigneerd exemplaar dat de Moeraswachter-Wambuis oproept, dus sla er elk op dat je vindt.\n\nDe ondersteunende rolbezetting is klein: spin-poten en -zijde, homespun-doek van humanoidvijanden, een enkel osmiumerts in elk zeldzaam moeraswachter-stuk (zes in het Schemerleer-Wikkelaars-sluitstuk), en een Looiersmiddel voor 16 koper van de leerlooijeribalie. Looier Hesk verkoopt ook osmiumerts, als je liever niet mijnt.",
           "ladderHeading": "Geleerd in Fenbridge",
-          "ladderBody": "Hier zit de kronkel: de looierij staat in Fenbridge, aan de weg door Slijkveenmoeras, waardoor Leerbewerken het enige diepe ambacht is dat buiten de stad in het moeras wordt onderwezen. Leerlooier Hesk onderwijst de ladder bij zijn kuipen: de Fenbruggen-leren trede gratis op vaardigheid 0, de moerasspeurder-trede voor 25 zilver per recept vanaf vaardigheid 25, en de moeraswachter-trede voor 1 goud per stuk vanaf vaardigheid 50, waarbij elke trede opengaat zodra jouw rang die bereikt.\n\nDrie recepten slaan de leermeester over: de veldgewone stukken (het Gelooid Leren Wambuis en het Oostbeekse Druide-Leer) maak je vanaf het begin overal, en de Schemerleer-Wikkelaars kent iedereen, maar die staan op vaardigheid 75 en zijn gebonden aan de looierij. Let op: de Uitrusser-eed zelf wordt terug in Oostbeek bij Ottilie gezworen; alleen het onderricht gebeurt in het moeras.",
+          "ladderBody": "Hier is het addertje: de leerlooierij staat in Fenbridge, aan de weg naar Slijkveenmoeras, waardoor Leerbewerken het ene diepe ambacht is dat buiten Oostbeek wordt geleerd. Looier Hesk onderwijst de ladder bij zijn kuipen: de Fenbruggen-leren trede gratis op vaardigheid 0, de moerasspeurder-trede voor 25 zilver per recept vanaf vaardigheid 25, en de moeraswachter-trede voor 1 goud elk vanaf vaardigheid 50, waarbij elke trede opengaat zodra je rang die bereikt.\n\nTwee recepten slaan de leermeester over: de veldgewone stukken (het Gelooid Leren Wambuis en het Druide-Leer) worden overal gemaakt vanaf het begin, en de Schemerleer-Wikkelaars zijn iedereen bekend maar staan op vaardigheid 75 en zijn leerlooierij-gebonden. Merk op dat de Uitrusser-eed zelf terug in Oostbeek bij Ottilie wordt gezworen; alleen het onderwijs vindt in het moeras plaats.",
           "routeHeading": "Meesterwerken, en een werkbare weg naar 125",
-          "routeBody": "Elk stuk met echte statistieken gooit de meesterwerkkans, zolang de fijnere kwaliteit binnen je rangplafond past, het Oostbeekse Druide-Leer met zijn statistieken inbegrepen, en een gesigneerde Ongeschonden Huid in een Moeraswachterwambuis levert de gesigneerde-reagens-bonus vanzelf; osmium telt als rang 1-materiaal voor de proc. De statloze gewone lerenstukken kunnen niet procen.\n\nLevel het op de natuurlijke manier: oogst vanaf niveau één elke wolf en elk everzwijn dat je velt, laat de twee veldgewone stukken je overal naar 25 dragen, en train dan de lerentrede bij de kuipen wanneer de quests je toch al het moeras in trekken. Moerasspeurder brengt je naar 50 en moeraswachter naar 75; daarna leveren de Schemerleer-Wikkelaars, een rang 3-recept van zes osmiumerts, drie Ongeschonden Huid, twee ruwe huid en een Looimiddel, een afgestemde Uitrusser volle winst tot 99 en de helft daarna, ongeveer 75 vervaardigingen voor de laatste vijftig punten tot de limiet van 125; onder het plafond van een hoofdambacht leert het rang 3-recept niets.\n\nDe mobiele looierij telt voor dit ambacht zwaarder dan voor welk ander ook: specialiseer op 75 en een zadeltas vol huiden wordt bij het kampvuur afgewerkte uitrusting in plaats van een wandeling terug naar Fenbridge. Hesks looierijwerkopdracht koopt elke 30 minuten acht ruwe huiden, een nette opbrengst op vellen die je toch al verzamelde, en het Boek der Daden markeert Het Looiersvak op vaardigheid 50 met Grootmeester-Leerbewerken bij de limiet."
+          "routeBody": "Vanaf de moerasspeurder-trede omhoog gooit elke vervaardiging de meesterwerkskans, en de Ongeschonden Huid in een Moeraswachter-Wambuis levert de gesigneerde-reagens-bonus automatisch; osmium telt als rang 1-materiaal voor de proc. De statloze leergewone stukken kunnen niet procen.\n\nLevel het op de natuurlijke manier: oogst elke wolf en elk everzwijn dat je doodt vanaf niveau 1, maak de leertrede tot 25 overal waar je staat, train dan in Fenbridge terwijl de quests je toch het moeras in trekken. Moerasspeurder brengt je naar 50 en moeraswachter naar 75; daarna nemen de Schemerleer-Wikkelaars het over, een rang 3-recept van zes osmiumerts, drie Ongeschonden Huid, twee ruwe huid en een Looiersmiddel, dat volle winst betaalt tot 99 en de helft daarna, ruwweg 75 vervaardigingen voor de laatste vijftig punten tot de limiet van 125.\n\nDe mobiele leerlooierij doet er meer toe voor dit ambacht dan enig ander: specialiseer op 75 en een zadeltas vol huiden wordt afgewerkt uitrusting bij het kampvuur in plaats van een terugtocht naar Fenbridge. Hesks leerlooierij-werkopdracht koopt acht ruwe huiden elke 30 minuten, een nette opbrengst voor vellen die je toch verzamelde, en het Boek der Daden markeert Looiers-Handel op vaardigheid 50 met Grootmeester-Leerbewerken bij de limiet."
         },
         "cooking": {
           "identityHeading": "De pot die de groep voedt",
-          "identityBody": "Eet een bereide maaltijd en die geneest je gedurende 18 seconden rust, tussen twee gevechten door de goedkoopste genezing in het spel. De ladder loopt van een In de pan gebakken rivierbaars van 90 gezondheid helemaal tot Marlows Grootse Braadstuk op 980, een zitgenezing die niets in het spel overtreft.\n\nOp het wiel staat Koken tussen Alchemie en Leerbewerken. Zijn levende paar is de Apotheker, Alchemie en Koken, gezworen voor Kok Marlow bij de Oostbeekse keukens na de jacht op vier wilde everzwijnen voor de pot; het Jager-paar met Leerbewerken staat als naam op het wiel maar heeft nog geen eedquest.",
+          "identityBody": "Eet een gekookte maaltijd en die geneest je gedurende 18 seconden rust, wat tussen trekken door de goedkoopste genezing in het spel is. De ladder loopt van een Pan-Gebakken Rivierbaars van 90 gezondheid helemaal tot Marlows Grootse Braadstuk op 980, de grootste zitgenezing die bestaat.\n\nOp de ring staat Koken tussen Alchemie en Leerbewerken. Zijn levende paar is de Apotheker, Alchemie en Koken, gezworen voor Kok Marlow bij de Oostbeekse keukens na het jagen op vier wilde everzwijnen voor de pot; het Jager-paar met Leerbewerken staat op de ring als naam maar heeft nog geen eedquest.",
           "materialsHeading": "Een voorraadkast gevoed door hengel en mes",
-          "materialsBody": "Vissen levert de kenmerkende ingrediënten, zone voor zone: spiegelforel en rivierbaars uit de wateren van Oostbeekdal, moerassnoek en moerasaal uit Slijkveenmoeras, vorstkieuw-forel en slatefin-karper uit Doorntop-Hoogten. De treden mengen de zones vrijelijk (de gratis trede vraagt al om moerassnoek, de middentrede om vorstkieuw uit Doorntop, en het zeldzame avondmaal vouwt de spiegelforel uit het Dal er weer bij), dus een kok die vist waar de weg hem ook brengt komt nooit droog te staan.\n\nDe slagerskant komt van geoogste lijken: wildvlees van everzwijnen en hun verwanten, en bij een zeldzame of betere oogstrol een gesigneerd Stuk Ossenhaas, het middelpunt van het grootse braadstuk. Kruiden brengen de betere gerechten op smaak, één essenhoutblok rookt de aal, en Keukenzout kost 8 koper per zakje aan Marlows eigen kraam.",
+          "materialsBody": "Vissen levert de kenmerkende ingredienten, zone voor zone: spiegelforel en rivierbaars uit de wateren van Oostbeekdal, moerassnoek en veenaal uit Slijkveenmoeras, ijsvinnenforel en leivinkarper uit Doorntop-Hoogten. Elke trede van de ladder kookt de vis van zijn rang, dus een kok die vist droogt nooit op.\n\nDe slagerskant komt van geoogste lijken: wildvlees van everzwijnen en verwanten, en bij een zeldzame of betere oogstrol een gesigneerd Stuk Ossenhaas, het middelpunt van het grootse braadstuk. Kruiden kruiden de betere gerechten, een ashwood-blok rookt de aal, en Kookzout kost 8 koper per zakje bij Marlows eigen stalletje.",
           "ladderHeading": "Van boemdrogen tot het grootse braadstuk",
-          "ladderBody": "Gezouten Boemdrogen is het veldrecept: van het begin bekend, een spin-poot, overal te craftten, het reisvoor van elke verse avonturier. De leermeesters-ladder kookt bij de Oostbeekse keukens aan de oostkant van het plein: de gratis trede op vaardigheid 0 (de baars, Jager's Wildspies, Gekruidde Moerassnoek), de midtrede op vaardigheid 25 voor 25 zilver per recept (Ashwood Gerookte Aal, Goudblad-Wildstoofpot, Ijsvinnen-Vissoep), en de zeldzame trede op vaardigheid 50 voor 1 goud elk (Zilverkarper-Maaltijd, Hengelaar's Feestschotel, Marlows Grootse Braadstuk).\n\nBatchgerechten strekken je ingredienten: de gerookte aal en de wildstoofpot serveren twee per bereiding, en de feestschotel drie. Marlow leert elke trede zodra jouw rang in Koken die bereikt.",
+          "ladderBody": "Gezouten Boemdrogen is het veldrecept: van het begin bekend, een spin-poot, overal te craftten, het reisvoor van elke verse avonturier. De leermeesters-ladder kookt bij de Oostbeekse keukens aan de westkant van het plein: de gratis trede op vaardigheid 0 (de baars, Jager's Wildspies, Gekruidde Moerassnoek), de midtrede op vaardigheid 25 voor 25 zilver per recept (Ashwood Gerookte Aal, Goudblad-Wildstoofpot, Ijsvinnen-Vissoep), en de zeldzame trede op vaardigheid 50 voor 1 goud elk (Zilverkarper-Maaltijd, Hengelaar's Feestschotel, Marlows Grootse Braadstuk).\n\nBatchgerechten strekken je ingredienten: de gerookte aal en de wildstoofpot serveren twee per bereiding, en de feestschotel drie. Marlow leert elke trede zodra jouw rang in Koken die bereikt.",
           "routeHeading": "Specialisatie, niet meesterwerken, en de weg naar 125",
           "routeBody": "Koken is de eerlijke uitzondering op het meesterwerksverhaal: een maaltijd heeft geen statistiekreeks om te verbeteren, dus gerechten gooien er nooit een, en geen kok zou er achteraan moeten jagen. De meesterschap van het ambacht is specialisatie op 75: een vijfde minder van elk ingredient, wat snel samengesteld wordt bij batchgerechten, en een mobiele veldkeuken zodat het feest wordt gekookt bij de kerkerdeur.\n\nKook wat je vangt: combineer de klim met een vissessie en de twee vaardigheden voeden elkaar helemaal omhoog. Boemdrogen en de gratis trede brengen je naar 25 voor een punt per bereiding, de midtrede naar 50, en de zeldzame trede naar 75; voorbij 75 verschijnt er geen hoger gerecht, dus de zeldzame gerechten vervagen naar halve en daarna kwart winst, ruwweg 150 bereidingen meer tot de limiet. Behandel het als het aanleggen van voorraden, niet als grinden: een gilde eet elke portie.\n\nMarlows keukenswerkopdracht koopt acht wildvlees elke 30 minuten voor munt en XP, en het Boek der Daden markeert Ervaren Kok op vaardigheid 50 op weg naar de titel Grootmeester-Koken op 125."
         },
         "alchemy": {
           "identityHeading": "Flesjes die gevechten winnen",
-          "identityBody": "Het ambacht wordt beoefend bij de apotheek in Highwatch, het domein van Alchemist Verane, Meester van de apotheek, die de receptenladder onderwijst, Glazen flesjes verkoopt voor 12 koper en via haar werkopdracht munt betaalt voor kruiden.\n\nOp het ambachtswiel staat Alchemie bij de vallen-en-opstaan-ambachten, met Knutselwerk aan de ene kant en Koken aan de andere. Dat geeft het twee paaridentiteiten: de Bommenwerper (Knutselwerk en Alchemie, opgepakt bij Knutselaar Gizzel in Oostbeek) en de Apotheker (Alchemie en Koken, gezworen voor Kok Marlow). Stem af op een van beide paren om van Alchemie een hoofdambacht te maken en je eigen gesigneerde werk je te laten terugleren; het Bommenwerper-paar opent bovendien zijn combinatiebrouwsel, de Elixir van de Beer, terwijl het Apotheker-paar nog geen combinatierecept meebrengt. De ladder zelf wacht echter nooit, want elk Alchemie-recept valt binnen de zeldzame rang waaronder niet-afgestemde ambachten werken, dus de hele klim naar de limiet ligt open nog voor welke eed dan ook.",
+          "identityBody": "Het ambacht wordt uitgeoefend bij de apotheek in Hoogstwacht, de thuisbasis van Alchemist Verane, Meester van de Apotheek, die de receptenladder onderwijst, Glazen Flesjes verkoopt voor 12 koper, en munt betaalt voor kruiden via haar werkopdracht.\n\nOp de ambachtsring staat Alchemie bij de ambachten die van vallen en opstaan afhangen, naast Knutselwerk aan de ene kant en Koken aan de andere. Dat geeft het twee paaridentiteiten: de Bommenwerper (Knutselwerk en Alchemie, gezworen voor Tinker Gizzel in Oostbeek) en de Apotheker (Alchemie en Koken, gezworen voor Kok Marlow). Stem af op een van beide paren om Alchemie tot hoofdambacht te maken en de vaardigheid helemaal tot zijn limiet te openen; tot dan werkt het tot de zeldzame rang zoals elk ongedeclareerd ambacht.",
           "materialsHeading": "Kruiden, klieren en glas",
           "materialsBody": "Elke drank wil een Glazen Flesje plus kruiden die bij zijn trede passen: glansloofkruid groeit in Oostbeekdal, goudblad in Slijkveenmoeras, en zonnebloem in Doorntop-Hoogten, een kruid per zone, zodat je flesjes samen met jou de wereld beklimmen. Kruidenkunde is de logische partnervaardigheid, al werkt kopen bij verzamelaars of op de markt net zo goed; diepere zones herbergen patches van hogere rang die een betere sikkel vereisen, dus houd je gereedschap bij als je zelf plukt.\n\nDe elixerlijn voegt een jagersbestanddeel toe: Gifklieren geoogst van giftige lijken, en het topelixer vraagt een Ongeschonden Gifklier, het zeldzame gesigneerde exemplaar dat een geluksvondst bij een lijkoogst oplevert. Als je zelf niet oogst, zijn dat precies de goederen die het waard zijn om een jagersvriend om te vragen.",
           "ladderHeading": "De receptenladder",
-          "ladderBody": "Iedereen kent de Kleine Genezingsdrank van het begin af aan en kan hem overal mengen, geen station nodig. De echte ladder bestaat uit negen recepten die Verane bij de apotheek onderwijst, drie per trede: de recepten op vaardigheid 0 zijn gratis, de trede op vaardigheid 25 kost 25 zilver per recept, en de trede op vaardigheid 50 kost 1 goud per recept. Elke trede bestaat uit een genezingsdrank, een manadrank en een uithoudingselixer, oplopend van gewone glansloof-flesjes (120 gezondheid, 160 mana) via ongewoon goudblad (200 gezondheid, 260 mana) naar zeldzame zonnebloem (280 gezondheid, 360 mana).\n\nDe elixers klimmen op dezelfde manier: het Elixer van het zwijn geeft 6 Uithoudingsvermogen voor 10 minuten, het Gifvuur-Elixir 9 voor 15 minuten, en het Elixer van de slang 12 voor 15 minuten, waarbij alleen de slang twee flesjes per bereiding oplevert. Eén recept staat er los naast: de Elixir van de Beer, een combinatiebrouwsel dat Verane voor 25 zilver onderwijst zodra je Alchemie 25 bereikt, overal te mengen, maar alleen door een afgestemde Bommenwerper met zowel Alchemie als Knutselwerk op 25.",
+          "ladderBody": "Iedereen kent het Kleine Geneesmiddel van het begin en kan het overal mengen, geen werkbank nodig. De echte ladder bestaat uit negen recepten die Verane bij de apotheek onderwijst, drie op elke trede: de vaardigheid 0-recepten zijn gratis, de trede van vaardigheid 25 kost 25 zilver per recept, en de trede van vaardigheid 50 kost 1 goud per recept. Elke trede bevat een genezende drank, een manadrank en een uithoudingselixer, opklimmend van gewone glansloofkruid-flesjes (120 gezondheid, 160 mana) via ongewone goudblad (200 gezondheid, 260 mana) tot zeldzame zonnebloem (280 gezondheid, 360 mana).\n\nDe elixers klimmen op dezelfde manier: het Elixer van het Everzwijn verleent 6 Uithoudingsvermogen gedurende 10 minuten, het Gifvuur-Elixer 9 gedurende 15 minuten, en het Elixer van de Slang 12 gedurende 15 minuten, waarbij twee flesjes per bereiding worden gebrouwen. Nog een recept staat apart: het Elixer van de Beer, een combinatiebrew dat Verane leert voor 25 zilver zodra je Alchemie 25 bereikt, overal mengbaar, maar alleen door een afgestemde Bommenwerper met zowel Alchemie als Knutselwerk op 25.",
           "routeHeading": "De weg van een brouwer naar 125",
-          "routeBody": "Dranken en elixers gooien nooit een meesterwerk; dat proc hoort bij uitrusting met statistieken. Toch reist je naam mee: de zeldzame zonnebloem-dranken arriveren gesigneerd met een makersmerk, en dat geldt voor elk flesje van het dubbele brouwsel Elixer van de slang, dus niets zeldzaams verlaat in dit ambacht ongesigneerd de werkbank. Op vaardigheid 75 specialiseer je je, en vanaf dan kost elk Alchemie-recept 20 procent minder materialen.\n\nNeem Kruidenkunde vroeg en pluk terwijl je levelt: glansloof groeit overal in het Dal, en zodra je bij Veranes werkbank staat brengt de gratis trede je moeiteloos naar vaardigheid 25 op kruiden die je toch al had geplukt. Leer de trede van 25 op het moment dat die aangaat, verleg je plukwerk naar het moeras voor goudblad, en laat Veranes werkopdracht (zes Goudbladkruiden voor 45 koper, herhaalbaar elke 30 minuten) onderweg wat munt teruggeven.\n\nVanaf 50 brouw je zonnebloem-dranken en Slang-batches uit zonnebloem van Doorntop, met nog een beetje groen uit het Dal en het moeras ertussendoor. Het laatste stuk van 100 naar 125 is met opzet een druppel, dus brouw wat daadwerkelijk verkoopt in plaats van kruiden te verbranden voor het getal, en onthoud dat verbruiksartikelen het enige vervaardigde goed zijn dat iedereen eeuwig opnieuw koopt. Het Boek der Daden markeert Vreemde Brouwsels op vaardigheid 50 en Grootmeester-Alchemie bij de limiet."
+          "routeBody": "Dranken en elixers gooien nooit meesterwerken; dat proc behoort toe aan uitrusting met stats. Je naam reist toch mee: de zeldzame zonnebloem-dranken worden fles voor fles gebrouwen en geleverd met het merkteken van de maker, terwijl het dubbelbatch Elixer van de Slang zonder signatuur blijft. Op vaardigheid 75 specialiseer je, en elk Alchemierecept kost daarna 20 procent minder materialen.\n\nNeem Kruidenkunde vroeg op en pluk terwijl je levelt: glansloofkruid is overal in het Dal, en zodra je bij Veranes apotheek aankomt, draagt de gratis trede je netjes naar vaardigheid 25 op kruiden die je toch al had geplukt. Leer de trede van 25 zodra die opengaat, verschuif je pluk naar het moeras voor goudblad, en laat Veranes werkopdracht (zes Goudblad-Kruiden voor 45 koper, herhaalbaar elke 30 minuten) onderweg wat munt teruggeven.\n\nVanaf 50 brouw je zonnebloemdranken en Slangenbatches van Doorntop-kruiden. De laatste etappe van 100 tot 125 druipt bewust langzaam, dus brouw wat daadwerkelijk verkoopt in plaats van kruiden te verbranden voor het getal, en onthoud dat verbruiksgoederen de ene vervaardigde waar zijn die iedereen voor altijd blijft kopen. Het Boek der Daden markeert Vreemde Brouwsels op vaardigheid 50 en Grootmeester-Alchemie bij de limiet."
         },
         "engineering": {
           "identityHeading": "Het monopolie van de gereedschapsmaker",
-          "identityBody": "Het ambacht wordt beoefend bij de gereedschapswerkplaats in de zuidwesthoek van het plein van Oostbeek, het domein van Knutselaar Gizzel, Meester van de gereedschapswerken. De rangen 1 tot en met 3 van elke gereedschapslijn zijn gewone handelaarsvoorraad; de rangen 4 en 5 komen van de werkbank van een knutselaar, of uit de delvebalie van De Verdronken Litanie voor Delve-Merken achter zijn drempels van voltooide runs, en nooit uit welke kassa dan ook voor munt.\n\nOp het wiel staat het bij de vallen-en-opstaan-ambachten, naast Alchemie en Harnasmaken, wat het twee paaridentiteiten geeft: de Bommenwerper (Knutselwerk en Alchemie, opgepakt bij Gizzel zelf) en de Tandwielsmid (Harnasmaken en Knutselwerk, wel benoemd maar nog niet te zweren). Eén waarschuwing telt hier zwaarder dan waar ook: elke receptentrede van Knutselwerk ligt boven het plafond van de zeldzame rang waaronder liefhebberijen en niet-afgestemde makers werken, dus het vaardigheidsgetal beweegt alleen voor een maker met Knutselwerk onder zijn hoofdambachten, wat vandaag de Bommenwerper betekent. Iedereen kan de landgereedschappen nog steeds bouwen; een niet-afgestemde maker leert er alleen niets van, en de twee hengelrecepten vragen bovendien om Gizzels onderricht.",
+          "identityBody": "Het ambacht wordt uitgeoefend bij de gereedschapsmakerij in de zuidoostelijke hoek van het Oostbeek-plein, thuisbasis van Tinker Gizzel, Meester van de Gereedschapsmakerij. Rang 1 tot en met 3 van elke gereedschapslijn zijn gewone verkopersvoorraad; rang 4 en 5 bestaan alleen via een knutselaar.\n\nOp de ring staat het bij de ambachten die van vallen en opstaan afhangen, naast Alchemie en Harnasmaken, wat hem twee paaridentiteiten geeft: de Bommenwerper (Knutselwerk en Alchemie, gezworen voor Gizzel zelf) en de Tandwielsmid (Harnasmaken en Knutselwerk, als naam maar nog niet zweerbaar). Een waarschuwing is hier belangrijker dan ergens anders: beide receptentreden van Knutselwerk liggen boven het zeldzaam-rang-plafond dat hobbys en ongedeclareerde vakmannen onder werken, dus het vaardigheidsgetal beweegt alleen voor een vakman wiens hoofdambachten Knutselwerk bevatten, wat vandaag de Bommenwerper betekent. Iedereen kan de gereedschappen nog steeds bouwen; een niet-afgestemde vakman leert er gewoon niets van.",
           "materialsHeading": "Reagenten en vorige gereedschappen",
-          "materialsBody": "Elk recept voor landgereedschap verbruikt het gereedschap één rang lager plus een FIJN materiaal, en dat koppel is de hele landladder: vier Fijn Ijzererts en een Hemelzilver-Mijnhouweel worden het Osmium-Mijnhouweel, en daarna worden twee Glyfstalen Staven, twee Fijn Thoriumerts en dat osmiumhouweel het Glyfstalen Mijnhouweel. De bijl- en sikkellijnen spiegelen dezelfde vorm van fijn-plus-vorig-gereedschap met Fijn Essenhout Blok en Fijn Ouderhoutblok, Fijn Goudbladkruid en Fijn Zonnepetaalkruid, al vragen hun rang 5-treden geen Glyfstalen Staven: het houweel is de enige lijn die aan de top duurder wordt. De twee hengelrecepten breken het patroon met opzet: de Stormmolen-hengel vraagt vier Zonglinstering-Koi en een Zilverbeek-hengel, de Getijgesmede hengel twee Koi, acht Rauwe Slatefin-Karper en die Stormmolen-hengel, dus de top van de hengelaarsladder wordt op het water betaald in plaats van bij een ader.\n\nEen fijn materiaal wordt nergens verkocht en valt niet uit een gewone oogst: je krijgt het door een van de volwaardige aders van een zone te bewerken met gereedschap van een hogere rang dan het materiaal zelf, wat in de praktijk het gereedschap één trede onder het stuk betekent dat je wilt bouwen (de makkelijkere aders die een zone voor reizigers bewaart geven het gewone materiaal, waar je ook mee zwaait). Dat is opzet. Op de ambachtsroute komt een rang 5-gereedschap voort uit het daadwerkelijk zwaaien met het rang 4-exemplaar, niet uit een winkeltocht; de balie voor Delve-Merken is de enige omweg. De enige uitzondering is de Glyfstalen Staaf, geraffineerd en alleen bij handelaren te krijgen, 1 zilver 60 koper per staaf bij Kwartiermeester Bree in Highwatch of aan Gizzels eigen balie, zodat alleen het Glyfstalen Mijnhouweel een vaste muntbodem in zijn kostprijs draagt.",
+          "materialsBody": "Elk gereedschapsrecept verbruikt het gereedschap een rang eronder plus een premium-materiaal: vier Osmiumerts en een Hemelzilver Mijnpik worden de Osmium Mijnpik, dan twee Glyfstaalbaren en die osmium-pik worden de Glyfstaal Mijnpik, en de bijl- en sikkellijnen spiegelen dezelfde vorm met Essenhout- en Hoogdenblokken, Goudblad- en Zonnebloem-kruiden.\n\nGizzel verkoopt alle zes premium-reagenten bij de gereedschapsmakerij voor wie snelheid boven marge stelt, maar het erts, de blokken en de kruiden zijn allemaal te verzamelen in Slijkveenmoeras en Doorntop-Hoogten, en verzamelde voorraad is waar de winst ligt. De ene uitzondering is de Glyfstaalstaaf, die alleen bij verkopers beschikbaar is, dus elk glyfstaal-rang-gereedschap heeft een vaste muntbodem ingebouwd in zijn kosten.",
           "ladderHeading": "De gereedschappenladder",
-          "ladderBody": "De ladder telt acht recepten, allemaal gebonden aan het station van de gereedschapswerkplaats. De zes recepten voor landgereedschap ken je automatisch, nooit enige leermeestersvergoeding: het houweel, de bijl en de sikkel van rang 4 op vaardigheid 75, en de versies van rang 5 op vaardigheid 150. Dat tweede getal is geen tikfout, en het ligt met opzet boven de huidige limiet van 125: vaardigheidsvereisten sluiten hier nooit een vervaardiging af, ze vormen alleen de vaardigheidswinst, dus je kunt een rang 5-gereedschap bouwen op de dag dat je zijn reagentia en zijn rang 4-voorganger in handen hebt. De twee vervaardigde hengels zijn de onderwezen uitzondering: Gizzel onderwijst de Stormmolen-hengel op vaardigheid 75 voor 4 goud en de Getijgesmede hengel op vaardigheid 125 voor 16 goud, elk zodra jouw rang in het ambacht die van het recept bereikt.\n\nElk afgewerkt gereedschap is van zeldzame of epische kwaliteit en komt gesigneerd uit de werkbank, dus jouw naam reist door de zones aan de gereedschapsriemen van andere spelers. Knutselwerk draagt daarnaast de helft van één combinatierecept: de Elixir van de Beer, gebrouwen door een afgestemde Bommenwerper met zowel Knutselwerk als Alchemie op 25.",
+          "ladderBody": "De gehele ladder bestaat uit zes recepten, allemaal gebonden aan de gereedschapsmakerij en allemaal automatisch bekend, nooit een leermeestersvergoeding: de rang 4-pik, bijl en sikkel op vaardigheid 75, en de rang 5-versies op vaardigheid 150. Dat tweede getal is geen tikfout en staat met opzet boven de huidige limiet van 125: vaardigheidsvereisten blokkeren hier nooit een vervaardiging, ze bepalen alleen de vaardigheidswinst, dus je kunt een rang 5-gereedschap bouwen op de dag dat je zijn reagenten en rang 4-voorganger bezit.\n\nElk afgewerkt gereedschap is van zeldzame of epische kwaliteit en komt gesigneerd uit, dus je naam reist op de gereedschapsriemen van andere spelers door de zones. Knutselwerk ondersteunt ook de helft van een combinatierecept: het Elixer van de Beer, gebrouwen door een afgestemde Bommenwerper met zowel Knutselwerk als Alchemie op 25.",
           "routeHeading": "De weg van een knutselaar naar 125",
           "routeBody": "Gereedschappen dragen geen gevechtsstats, dus ze gooien nooit meesterwerken; dat proc behoort toe aan uitrusting met stats. Specialisatie landt nog op vaardigheid 75: 20 procent minder materialen per vervaardiging, en een tijdelijke veldgereedschapsmakerij die elke verzameltrip in een werkplaats verandert. De winstberekening vervaagt hier nauwelijks: de vaardigheid 75-recepten leveren volle winst op tot 100 en de helft daarna, en de vaardigheid 150-recepten leveren volle winst op helemaal tot de limiet van 125, dus de echte beperking zijn reagenten en munt, nooit grijze recepten.\n\nKies eerst je paar, want niets beweegt zonder: neem de Bommenwerper-afstemming van Tinker Gizzel. Voed dan de ladder: level Mijnbouw, Houtkap of Kruidenkunde zelf of bevriend verzamelaars, koop de rang 3-gereedschappen bij verkopers, en behandel Gizzels werkopdracht (acht Ijzerbastblokken voor 16 koper, herhaalbaar elke 30 minuten) als zakgeld.\n\nKnutselwerk is een laagvolumig prestige-ambacht, ruwweg een vaardigheidspunt per afgewerkt gereedschap, dus behandel elke vervaardiging als voorraad voor verkoop. Het verkooppraatje aan je klanten schrijft zichzelf: elke gereedschapsrang boven het eigen niveau van een grondstoffenpunt knipt 0,4 seconden af van de 2,5 seconde verzamelworp (tot een minimum van 1,5 seconde), dus een rang 5-gereedschap is een snelheidsupgrade op elk grondstoffenpunt in de wereld, en alleen jij kunt er een maken. Het Boek der Daden markeert Tandraderen en Veren op vaardigheid 50 en Grootmeester-Knutselwerk op 125."
         },
         "enchanting": {
           "identityHeading": "Uitrusting uit elkaar, kracht er weer in",
-          "identityBody": "Elke betovering is van het begin af aan bekend, iedereen kan vanaf dag één onbetoveren, en geen van beide vraagt ooit een station; de vaardigheid loopt tot een limiet van 125, net als bij elk ambacht. De enige onderwezen hoek van het vak is zijn tweetal bedelrecepten: Knutselaar Gizzel onderwijst de Buidel van de Verzamelaar en het Oog van de Ambachtsman bij de gereedschapswerkplaats in de zuidwesthoek van het plein van Oostbeek, voor de gewone rangvergoeding zodra je Betovering 25 bereikt, en de bedels zelf worden aan zijn station bewerkt.\n\nOp het wiel staat het tussen Inscriptie en Sieradenmaken, dus zijn twee paaridentiteiten zijn de Arcaneschrijver (Inscriptie en Betovering) en de Edelsteenbezweerder (Betovering en Sieradenmaken). Geen van beide kan al gezworen worden, want beide buren wachten nog op hun eerste recepten, dus vandaag klimt Betovering als ieders ambacht: vrij tot de zeldzame rang nog voor welke eed dan ook, en een vanzelfsprekende liefhebberij voor een Bommenwerper of een Apotheker. Betoveraars houden bovendien de verzamelwereld draaiende: de twee inzetbare gereedschapseffecten zijn werk van een betoveraar, en de oorspronkelijke maker laadt zijn eigen effecten met korting bij, en na specialisatie nog dieper.",
+          "identityBody": "Er is geen werkbank, geen leermeester en geen te kopen receptenlijst: elke betovering is van het begin bekend, iedereen kan van dag een ontbetoveren, en de vaardigheid heeft zijn limiet op 125 zoals elk ambacht.\n\nOp de ring staat het tussen Inscriptie en Juwelenmaken, dus zijn twee paaridentiteiten zijn de Arcaneschrijver (Inscriptie en Betovering) en de Edelsteenbezweerder (Betovering en Juwelenmaken). Geen van beide kan al worden gezworen, omdat beide buren hun eerste recepten nog afwachten, dus vandaag klimt Betovering als ieders ambacht: gratis tot de zeldzame rang voor elke eed, en een logische hobbyvoorkeur voor een Bommenwerper of een Apotheker. Betoveraars houden ook de verzamelwereld draaiende: de drie plaatsbare gereedschapseffecten zijn Betoverings-werk, en een oorspronkelijke vakman herlaadt zijn eigen effecten met korting, nog dieper na specialisatie.",
           "levelingHeading": "Hoe Betovering omhoog gaat",
-          "levelingBody": "Drie handelingen bewegen de vaardigheid: een stuk onbetoveren, een betovering aanbrengen, en de twee bedels maken, die de gewone vervaardigingscurve volgen. Elk succes is maximaal één punt waard, geschaald naar hoe serieus het werk is: de zeldzaamheid van het stuk dat je breekt, of de reagensrang van de betovering die je aanbrengt. Gewone onbetoveringen en betoveringen met enkel stof tellen als gewoon werk; ongewone onbetoveringen en essentiebetoveringen als ongewoon; zeldzame onbetoveringen en elke Gerunede of Grotere betovering als zeldzaam; epische en legendarische onbetoveringen staan nog hoger op de tabel, al reikt geen enkele betoveringsidentiteit vandaag voorbij de zeldzame trede, dus in de praktijk betalen ze hetzelfde als zeldzaam werk. Eén eerlijkheid regeert de breekbank: een stuk dat van een spelerswerkbank kwam (gemaakt, gesigneerd of als meesterwerk) vermaalt nog steeds tot materialen maar leert je niets, dus een maak-en-breek-lus levelt niemand, en de lessen zitten in uitrusting die je in de wereld vindt.\n\nDe vertrouwde meesterschapsvervaging werkt in rangen van 25 punten, dus werk van gewone kwaliteit wordt grijs op vaardigheid 75, ongewoon werk op 100, en werk van de zeldzame rang precies bij de limiet van 125. Betovering kent daarnaast één eigen vriendelijkheid: invoer boven het plafond van je archetype wordt naar dat plafond afgerond in plaats van op nul gezet, dus voordat je afstemt telt een episch onbetoveren gewoon als zeldzaam in plaats van je niets te leren. Belandt Betovering slapend achter een andere identiteit, dan tellen breken en aanbrengen als gewoon werk en stokt de klim op 75, terwijl de twee bedels, die de vervaardigingscurve boven het gewone plafond volgen, een slapende betoveraar helemaal niets leren; houd het als liefhebberij en werk van de zeldzame rang betaalt nog steeds, alleen trager voorbij 75.",
+          "levelingBody": "Twee acties bewegen de vaardigheid: het ontbetoveren van een stuk, en het aanbrengen van een betovering. Elk succes is tot een punt waard, geschaald naar hoe serieus het werk is: de zeldzaamheid van het stuk dat je afbreekt, of de reagenstrang van de betovering die je aanbrengt. Gewone ontbetoveringen en alleen-stof-betoveringen scoren als gewoon werk; ongewone ontbetoveringen en essentiebetoveringen als ongewoon; zeldzame ontbetoveringen en elke Geruned of Grotere betovering als zeldzaam; epische en legendarische ontbetoveringen nog hoger.\n\nDe bekende meesterschapsvervaging geldt op 25-puntsintervallen, dus gewoon-gradige werk wordt grijs op vaardigheid 75, ongewoon werk op 100, en zeldzaam-gradige werk precies bij de limiet van 125. Betovering heeft ook een eigen vriendelijkheid: input boven je archetypenplafond wordt afgerond naar dat plafond in plaats van nul te worden, dus voor je afstemt scoort een epische ontbetovering gewoon als zeldzaam in plaats van niets te leren. Als Betovering slapend achter een andere identiteit eindigt, scoort alles als gewoon werk en stagneert de klim bij 75; houd het als hobby en zeldzaam-gradig werk levert nog op, alleen trager voorbij 75.",
           "marketHeading": "Betoverde exemplaren, herkomst en de markt",
-          "marketBody": "Een betovering aanbrengen verbruikt de reagentia en merkt één specifieke kopie van het voorwerp. Richt hem op een kopie in je tas en je krijgt een aparte betoverde kopie terug; richt hem op een stuk dat je al draagt en het wordt ter plekke betoverd, precies waar het zit, zonder gedoe van uitrusten en weer aantrekken. Hoe dan ook volgt de bonus dat stuk voor altijd, door uitrusten, bankbezoeken en ruilen heen. Eén betovering per stuk: een andere betovering aanbrengen op een betoverde kopie vraagt om bevestiging en vervangt daarna de oude betovering volledig, waarbij die vernietigd wordt zonder teruggave van haar materialen. Verkopen, weggooien en onbetoveren geven allemaal eerst de voorkeur aan gewone kopieën, zodat je afgewerkte stuk niet per ongeluk wordt opgegeten.\n\nMeesterwerkuitrusting en Betovering zijn vrienden: een meesterwerkstuk blijft volledig te betoveren, en de betovering komt boven op de meesterwerkbonus zonder die of de handtekening van de maker te verstoren. Alle bronnen bij elkaar opgeteld is een gesigneerd meesterwerk met een Grotere betovering het beste dat een vervaardigd stuk kan worden, en het blijft met opzet onder raidbuit zitten.\n\nOp de markt wordt een betoverd of gesigneerd stuk net als al het andere aangeboden: het gaat erop als zijn eigen plaatsing van één kopie, de tooltip toont de betovering en het makersmerk, en de Ravenpost draagt het even trouw. De materialen blijven de stabiele helft van het ambacht: Stof, Essentie en Scherven zijn vrij te plaatsen, plaatsen kost niets, en de Koopman neemt alleen 5 procent van een voltooide verkoop. Daarmee zijn de twee klassieke inkomsten van een betoveraar het verkopen van materialen en het verkopen van afgewerkt werk: via de markt, per raaf, of van aangezicht tot aangezicht in een ruilvenster."
+          "marketBody": "Het aanbrengen van een betovering verbruikt de reagenten en markeert een specifiek exemplaar van het item. Richt je op een exemplaar in de tas, dan krijg je een apart betoverd exemplaar terug; richt je op een stuk dat je al draagt, dan wordt het ter plekke betoverd, zonder af te doen en weer aan te trekken. Hoe dan ook volgt de bonus het stuk voor altijd, door uitkleedmomenten, bankbezoeken en ruilingen. Een betovering per stuk: een andere betovering aanbrengen op een betoverd exemplaar vraagt eerst om bevestiging en vervangt dan de oude betovering meteen; die wordt vernietigd zonder terugbetaling van de materialen. Verkopen, weggooien en ontbetoveren geven de voorkeur eerst aan gewone exemplaren, zodat je afgewerkte stuk niet per ongeluk wordt opgevreten. Identiek betoverde exemplaren stapelen zelfs samen in je tassen.\n\nMeesterwerkuitrusting en betovering zijn vrienden: een meesterwerkstuk blijft volledig betoverbaar, en de betovering telt op bij de meesterwerkbonus zonder hem of de signatuur van de maker te verstoren. Door elke bron te stapelen is een gesigneerd meesterwerk met een Grotere betovering het beste wat een gemaakt stuk kan bereiken, en het zit nog steeds onder de raidvloer.\n\nOp de markt brokeert de Wereld Markt alleen gewone, ongewijzigde voorraad, dus betoverde en gesigneerde stukken wisselen van hand via het ruilvenster. De materialen zijn de vermarktbare helft van het ambacht: Stof, Essentie en Scherven worden vrij genoteerd, notering kost niets, en de Koopman neemt slechts 5 procent van een voltooide verkoop. Dat maakt de twee klassieke betoverings-inkomens: materialen verkopen op de markt, en het stuk van een klant in ruil nemen, het betoveren en teruggeven."
         }
       },
       "howHeading": "Hoe vervaardiging werkt",
-      "howBody": "Open het vervaardigingsvenster (standaardtoets T) en elk recept dat je kent staat er, met wat het nodig heeft en wat je bij de hand hebt. Stationsgebonden recepten vragen je binnen 20 meter van het juiste station in de stad te staan, veldrecepten maak je overal, en het breken en betoveren van Betovering hebben helemaal geen station nodig (alleen de twee amuletrecepten zijn stationswerk, bij de gereedschapsmakerij). Er is geen faalrol: een vervaardiging met de materialen in de hand slaagt altijd.\n\nTwee kleine wrijvingen houden de economie eerlijk. Elke geslaagde vervaardiging betaalt een vergoeding van 2 koper per punt van het statistiekenbudget van het voorwerp, en ambachtsacties delen één tempo: hoogstens 10 vervaardigingen, onbetoveringen, betoveringen, salvages of gereedschapsopladingen per venster van 60 seconden. Geen van beide zal een normale sessie hinderen; samen beletten ze een afgetopte specialist de markt te overspoelen.",
+      "howBody": "Open het vervaardigingsvenster (standaardtoets T) en elk recept dat je kent staat vermeld met wat je nodig hebt en wat je bij de hand hebt. Stationsgebonden recepten vragen je binnen 20 meter van het juiste station in de stad te staan, veldrecepten kun je overal maken, en Betovering heeft nooit een station nodig. Er is geen mislukkingskans: een vervaardiging met de materialen bij de hand slaagt altijd.\n\nTwee kleine wrijvingen houden de economie eerlijk. Elke geslaagde vervaardiging betaalt een vergoeding van 2 koper per punt van het statistiekbudget van het voorwerp, en vervaardigingsacties delen een tempo: maximaal 10 vervaardigingen, onttoveringen, betoveringen of salvages in elke 60 seconden. Geen van beide zal een normale sessie hinderen; beide voorkomen dat een gemaximaliseerde specialist de markt overspoelt.",
       "recipesHeading": "Recepten",
       "recipesNote": "Elk recept van het ambacht: het exacte vaardigheidsvereiste en de materialen, waar het geleerd wordt en voor welke vergoeding, en de drie vaardigheidswaarden waarbij de winst daalt naar de helft, een kwart en niets.",
       "masteryHeading": "Vaardigheidswinst",
       "masteryBody": "Elk recept in het venster draagt zijn winstkleur in de klassieke kleuren: oranje betekent volledige winst, geel de helft, groen een kwart, grijs niets. De grenzen zijn exact, elke {step} vaardigheid is een rang, en een recept vervaagt een kleur voor elke rang dat het onder de jouwe valt.\n\nOmdat winsten deterministisch zijn (een vervaardiging met volledige winst verplaatst je altijd precies een punt), kun je een hele klim plannen vanuit de lijst: werk een trede terwijl die oranje is, train de volgende trede zodra die geel wordt, en verspil nooit materialen aan een grijze vervaardiging in de hoop op vooruitgang. Op de grens van {cap} stopt het getal, maar de recepten, de meesterwerkkans en de winsten blijven werken.",
       "masterworkHeading": "Meesterwerken",
-      "masterworkBody": "Elke geslaagde vervaardiging is precies wat het recept belooft, en soms een beetje meer: een meesterwerk maakt hetzelfde stuk een kwaliteitsrang fijner af, met de bonusstatistieken ingebakken op het moment van maken. Het voegt alleen toe, degradeert nooit, en het blijft onder de raidgrens, zodat gemaakte uitrusting uitstekend kan zijn zonder een raid-drop te vervangen.\n\nDe kans is gepubliceerd, niet mystiek: {base}% basis, plus {perTier}% per rang die je vaardigheid boven het recept ligt, plus {signed}% wanneer er een gesigneerd reagens in gaat, plus {spec}% zodra je gespecialiseerd bent, waarbij materialen van hogere rang er nog 1 tot 2% bovenop leggen, alles begrensd op {cap}%. Alleen een stuk met echte statistieken kan verbeteren, dus statloze gewone voorwerpen, gereedschap en verbruiksartikelen procen nooit; een slapend ambacht levert er nooit een op, en een liefhebberij-ambacht kan niet meesterwerken voorbij zijn zeldzame plafond.\n\nFijn werk draagt zijn maker. Zeldzame en betere opbrengsten zijn gesigneerd, elke kopie (Gemaakt door; verzamelde materialen dragen Verzameld door), en een meesterwerk is altijd gesigneerd, welke kwaliteit het ook heeft. Een handtekening is herkomst, geen slot: gesigneerde goederen ruilen, versturen en plaatsen vrij op de Wereldmarkt.",
+      "masterworkBody": "Elke geslaagde vervaardiging levert precies wat het recept belooft, en soms iets meer: een meesterwerk maakt hetzelfde stuk een kwaliteitsrang fijner af, met de bonusstatistieken ingebakken bij het maken. Het is altijd een toevoeging, nooit een verslechtering, en het blijft onder de raidvloer, zodat gemaakte uitrusting uitstekend kan zijn zonder een raidloot te vervangen.\n\nDe kans is gepubliceerd, niet mysterieus: {base}% basis, plus {perTier}% per rang dat je vaardigheid boven het recept zit, plus {signed}% wanneer een gesigneerd reagens wordt ingevoerd, plus {spec}% zodra je gespecialiseerd bent, waarbij hogere materialen 1 tot 2% extra toevoegen, alles gemaximeerd op {cap}%. Alleen een stuk met echte statistieken kan verbeteren, dus naamloze gewone voorwerpen, gereedschap en verbruiksartikelen produceren er nooit een; een sluimerende vervaardiging produceert er nooit een, en een hobbyvervaardiging kan niet boven zijn zeldzame plafond meesterwerken.\n\nFijn werk draagt zijn maker. Zeldzame en betere enkelvoudige producten zijn gesigneerd (Gemaakt door; verzamelde materialen dragen Verzameld door), een meesterwerk is altijd gesigneerd ongeacht de kwaliteit, en identiek gesigneerde stukken kunnen nog steeds stapelen. Een handtekening is herkomst, geen vergrendeling: gesigneerde goederen worden vrij verhandeld.",
       "trainingHeading": "Training",
-      "trainingBody": "Leermeestersrecepten komen van de vaste meesters, onderwezen bij hun stations. De regel past op één zin: een meester leert je een recept zodra jouw rang in het ambacht de eigen rang van het recept heeft bereikt, en verder grendelt niets het af, niet je niveau, niet je archetype. De uitrustings- en verbruiksladders leggen hun treden op vaardigheid 0, 25 en 50; de twee hengellessen van Knutselwerk zetten de ladder voort op 75 en 125, en de twee amuletrecepten van Betovering staan op de trede van 25, zodat er telkens een verse trede opengaat naarmate je rangen klimmen.\n\nVergoedingen zijn eenmalig en vast per trede: de starttrede is gratis, de trede van vaardigheid 25 kost {tier1} per recept, de trede van vaardigheid 50 {tier2}, en de hengellessen daarboven dragen hun eigen vergoedingen, vermeld naast elk recept in de tabel. Je moet bij het echte station van de meester staan om te trainen, en een mobiel station telt nooit. De gewone veldrecepten en de zes gemaakte landgereedschapsrecepten vragen helemaal geen training; elk personage kent ze vanaf het begin.",
+      "trainingBody": "Trainerrecepten komen van de vaste meesters, onderwezen bij hun stations. De regel is een zinnetje: een meester leert een recept zodra je rang in het ambacht de eigen rang van het recept heeft bereikt, en niets anders blokkeert het, niet je niveau, niet je archetype. De trainerladder heeft treden op vaardigheid 0, 25 en 50 vandaag, dus een nieuwe trede opent bij elke rang die je klimt.\n\nVergoedingen zijn eenmalig en vast per trede: de begintrede is gratis, de vaardigheid-25-trede kost {tier1} per recept, en de vaardigheid-50-trede kost {tier2}. Je moet bij het werkelijke station van de meester staan om te trainen, en een mobiel station telt nooit mee. De gewone veldrecepten en de gereedschapsrecepten hebben helemaal geen training nodig; elk personage kent ze al vanaf het begin.",
       "specializationHeading": "Specialisatie",
       "specializationBody": "Bij vaardigheid {at} specialiseert dit ambacht je, geen quest vereist: recepten kosten vanaf dan {pct}% minder materialen, en specialisatie voegt zijn eigen bonus toe aan de meesterwerkkans.\n\nGespecialiseerden leren ook de werkplaats mee te nemen: een gespecialiseerde maker kan tien minuten per keer een mobiel station in het veld opzetten, zodat stationsgebonden recepten bij de mijnmond bewerkt kunnen worden in plaats van terug in de stad. De beperkingen zijn bewust: het telt nooit mee voor training bij een meester of voor het ontbinden van een opdrachtstuk, en het verloopt op zijn timer of je het nu gebruikt of niet.",
       "ench": {
@@ -4573,7 +4775,7 @@ export const nl_NL: EnTranslations = {
         "meleeWeapons": "Meleewapens",
         "timberWeapons": "Staven, stokken, bogen en kruisbogen",
         "enchantsHeading": "Betoveringen",
-        "enchantsNote": "Betoveringen komen in drie rangen. De basisrang draait op Chimestof (met een beetje Essentie aan de bovenkant) en dekt het wapenslot plus elk wapenrustingsslot behalve de off-hand, met genoeg statistiekassen dat elke build voor elk slot iets vindt. De Grotere rang kost één Chimescherf plus Essentie: sterkere bonussen op de slots met de meeste impact. Scherven voeden daarnaast nog twee afvoerputten, de twee amuletrecepten voor vijf per stuk en de hoogste trede van de gereedschapseffect-opladingen, dus leg er een paar opzij voordat je uitgeeft.\n\nDaartussenin zitten de vijf Gerunede betoveringen, één afnemer per getypte secondaire, zodat niets wat je vermaalt ooit een doodlopende weg is: Gerund Snijvlak (wapen, Kracht, verbruikt Resonerend Staal), Geruned Teken (wapen, Intellect, Resonerend Hout), Runeweefsel (torso, Geest, Resonerende Draad), Gerunede Huid (beenstukken, Behendigheid, Resonerende Huid) en Geruned Maliën (helm, Uithoudingsvermogen, Resonerende Schakels). Elk vraagt daarnaast twee Chimessentie; waar een slot en statistiek zowel een basis- als een Grotere betovering hebben, landt de Gerunede bonus daartussenin, terwijl Runeweefsel ronduit de sterkste Geest-betovering voor de torso is en Gerunede Huid überhaupt de enige Behendigheids-betovering voor beenstukken is. De exacte bonussen staan allemaal in de tabel hieronder.",
+        "enchantsNote": "Betoveringen komen in drie lagen. De basislaag draait op Chimestof (met een beetje Essentie aan het hoge einde) en bestrijkt het wapenslot plus elk wapenrustingslot, met genoeg statistiek-asopties dat elke build iets vindt voor elk slot. De Grotere laag kost één Chimescherf plus Essentie en is het enige waarvoor Scherven zijn: sterkere bonussen op de hoogst-impactsslots.\n\nDaartussenin zitten de vijf Gerunede betoveringen, één verbruiker per getypte secondaire, zodat niets wat je vermaalt ooit een doodlopende weg is: Gerund Snijvlak (wapen, Kracht, verbruikt Resonant Staal), Geruned Focus (wapen, Intellect, Resonant Hout), Runeweefsel (torso, Geest, Resonant Draad), Gerunede Huid (beenstukken, Behendigheid, Resonante Huid), en Geruned Maliën (helm, Uithoudingsvermogen, Resonante Maliën). Elk neemt ook twee Chimessentie en zit qua sterkte tussen zijn basis- en Grotere-broers; de exacte bonussen staan allemaal in de tabel hieronder.",
         "colEnchant": "Betovering",
         "colSlot": "Slot",
         "colTier": "Rang",
@@ -4588,62 +4790,62 @@ export const nl_NL: EnTranslations = {
         "bonusFmt": "+{value} {stat}"
       },
       "gatherIntro": {
-        "mining": "Mijnbouw haalt erts recht uit het gesteente van de wereld: koper in Oostbeekdal, ijzer in Slijkveenmoeras en osmium hoog in Doorntop-Hoogten, met startaders verspreid door elke jongere zone daarbuiten, die de smidse-ambachten voeden. Vanaf niveau 1 voor iedereen open: een mijnhouweel van 20 koper aan een balie in Oostbeek, Fenbridge of Highwatch opent elke startader, en de hogere treden van de houweelladder ontwaken zodra je eigen teller ze verdient. Bijgehouden op een eigen teller tot een grens van 100.",
-        "logging": "Houtkap velt hout uit houtopstanden over de hele wereld: ijzerschors in Oostbeekdal, essenhout in Slijkveenmoeras, hoogden in Doorntop-Hoogten, en startopstanden in elke jongere zone, de ruwe voorraad voor stelen, staven en de werkbank van de knutselaar. Vanaf niveau 1 voor iedereen open met een kapbijl in je tassen (20 koper aan de balies van Oostbeek, Fenbridge en Highwatch), bijgehouden op een eigen teller tot een grens van 100.",
-        "herbalism": "Kruidenkunde verzamelt wat in het wild groeit: glansloofkruid in Oostbeekdal, goudblad in Slijkveenmoeras, zonnebloem in Doorntop-Hoogten, en startvelden in elke jongere zone, het blad en de stengel die de apothekersvakken aan het brouwen houden. Vanaf niveau 1 voor iedereen open met een kruidenkunde-sikkel in je tassen (20 koper aan de balies van Oostbeek, Fenbridge en Highwatch), bijgehouden op een eigen teller tot een grens van 100.",
-        "fishing": "Vissen is de vreemde eend onder de verzamelvakken, en het diepste: een echt aanslaan-en-inhalen-minispel, eigen vangsttabellen in elk van de drie kernlandzones (de jonge wateren daarbuiten bedienen voorlopig allemaal de tabel van het Dal), en een vaardigheidsgrens van 200, het dubbele van de rest. Koop een hengel, keer je naar open water, en werp uit."
+        "mining": "Mijnbouw haalt erts rechtstreeks uit het gesteente: koper in Oostbeekdal, ijzer in Slijkveenmoeras, en osmium in Doorntop-Hoogten, als voeding voor de smeedambachten. Open voor iedereen vanaf niveau 1: je hebt alleen een mijnhouweel in je tassen nodig, 20 koper bij elke zonehub. Bijgehouden op zijn eigen teller tot een grens van 100.",
+        "logging": "Houtkap velt hout uit houtopstanden in alle drie zones: ijzerschors in Oostbeekdal, essenhout in Slijkveenmoeras, en hoogden in Doorntop-Hoogten, de ruwe grondstof voor schachten, staven en de gereedschapsmakerij. Open voor iedereen vanaf niveau 1 met een kapbijl in je tassen (20 koper bij elke zonehub), bijgehouden op zijn eigen teller tot een grens van 100.",
+        "herbalism": "Kruidenkunde verzamelt wat wild groeit: glansloofkruid in Oostbeekdal, goudblad in Slijkveenmoeras, en zonnepetaal in Doorntop-Hoogten, het blad en de stengel die de apotheekambachten draaiende houden. Open voor iedereen vanaf niveau 1 met een kruidenkunde-sikkel in je tassen (20 koper bij elke zonehub), bijgehouden op zijn eigen teller tot een grens van 100.",
+        "fishing": "Vissen is de vreemde eend onder de verzamelberoepen, en het diepste: een echt aas-en-optrekken-minispel, eigen vangsttabellen in elke zone, en een vaardigheidsgrens van 200, het dubbele van de anderen. Koop een hengel, kijk naar open water, en gooi."
       },
       "rhythmHeading": "Het verzamelritme",
-      "rhythmBody": "Een oogst is een korte zichtbare worp, geen directe greep: {base} seconden basis, nooit onder een ondergrens van {floor} seconde. Gereedschap dragen boven de rang van het grondstoffenpunt, dat je vaardigheid je laat hanteren, versnelt je met {tool} seconde per rang daarboven, en elke vaardigheidsband die je passeert knipt er nog {band} seconde af; de rang van het grondstoffenpunt alleen maar evenaren brengt je door de deur, het zijn de rangen daarboven die je snel maken.\n\nEen volle tas weigert de worp beleefd voordat die begint, zodat er niets halverwege de zwaai verloren gaat, en elke oogst betaalt een klein plakje personage-XP, geschaald naar het niveau van het grondstoffenpunt tegenover het jouwe zoals kill-XP schaalt: een triviaal grijs grondstoffenpunt leert een afgetopt personage niets.",
-      "gainBody": "Winst is deterministisch, nooit een vaardigheidsrol: een grondstoffenpunt op of boven je winstrang leert je een vol punt per oogst, en elke {step} vaardigheid is één rang die tegen het grondstoffenpunt wordt gescoord. Rang 1-grondstoffenpunten betalen volledig onder 25, de helft tot 49, een kwart tot 74, en niets vanaf 75; rang 2-grondstoffenpunten betalen volledig tot 49; de twee rang 3-grondstoffenpunten van elk vak betalen volledig tot 74 en de helft tot aan de grens van {cap}.\n\nDe bedoelde route is eenvoudig: leer op de startgrondstoffenpunten van het Dal, trek door naar het moeras, en maak de klim af op het hoge terrein van Doorntop-Hoogten. Bij de grens stopt het leren, maar de opbrengsten niet: een afgetopte verzamelaar blijft voor altijd de beste kansen rollen die het vak te bieden heeft.",
+      "rhythmBody": "Een oogst is een korte zichtbare cast, geen onmiddellijke greep: {base} seconden basis, nooit onder een vloer van {floor} seconde. Het bezitten van gereedschap boven de rang van het grondstoffenpunt versnelt je met {tool} seconden per rang daarboven, en elke vaardigheidsband die je overschrijdt snoeit nog eens {band} seconden; het grondstoffenpunt precies matchen geeft je toegang, maar het zijn de rangen daarboven die je snel maken.\n\nEen volle tas weigert beleefd de cast voordat die begint, zodat er niets midden in een oogst verspild wordt, en elke oogst betaalt een klein deel personage-XP, geschaald naar het niveau van het grondstoffenpunt ten opzichte van het jouwe, net zoals kill-XP schaalt: een triviaal grijs grondstoffenpunt leert een afgetopte speler niets.",
+      "gainBody": "Winst is deterministisch, nooit een vaardigheidsrol: een grondstoffenpunt op of boven je winstniveau leert een vol punt per oogst, en elke {step} vaardigheid is een niveau gescoord tegen het grondstoffenpunt. Niveau 1-punten betalen volledig tot 25, half tot 49, een kwart tot 74, en niets vanaf 75; niveau 2-punten betalen volledig tot 49; het ene niveau 3-punt betaalt volledig tot 74 en half helemaal tot de grens van {cap}.\n\nDe bedoelde route is duidelijk: leer op de startpunten van het Dal, ga naar het moeras, en maak de klim af op het hogere terrein van Doorntop-Hoogten. Op de grens stopt het leren, maar de opbrengsten niet: een verzamelaar op de grens blijft voor altijd materialen van maximale kwaliteit binnenhalen.",
       "nodesHeading": "Grondstoffenpunten per zone",
       "nodesNote": "Waar de grondstoffenpunten zijn, hun rang, het gereedschap dat ze nodig hebben en wat ze opleveren. Elk grondstoffenpunt hergroeit voor jou {respawn} seconden na je eigen oogst, en die timer is alleen van jou: een andere verzamelaar die hetzelfde grondstoffenpunt bewerkt vertraagt de jouwe nooit, dus er is geen wedloop om grondstoffenpunten en geen kamperen. Elke zone hoger op de ladder brengt een beter materiaal op uit zwaarder terrein.",
       "toolsHeading": "Gereedschap",
-      "toolsNote": "Elk grondstoffenpunt vraagt het gereedschap van zijn vak in je tassen, rang 1 inbegrepen: geen houweel, geen erts, en geen hengel, geen vis. De verkopersladder dekt de rangen 1 tot en met 3 over de drie kernlandhubs: het rang 1-gereedschap wordt bij alle drie verkocht, de treden daarboven daar waar het terrein dat ze gebruikt begint (Fenbridge voegt rang 2 toe, Highwatch rang 3), en de jongere nederzettingen daarbuiten voeren helemaal geen gereedschap, dus rust je uit voordat je op reis gaat. Elke balie verkoopt vrijelijk elke trede die zij op voorraad heeft, en elk gereedschap gaat over via directe ruil; elke trede staat ook op de Markt en reist per post, behalve de drie landstarters van 20 koper: die koop je aan een balie of geef je van hand tot hand door, en ze worden nooit terugverkocht, verstuurd of geplaatst. Wat wél is afgegrendeld, is het hanteren. Landgereedschap boven rang 1 werkt pas zodra je vaardigheid in zijn eigen vak het heeft verdiend, {tier2Prof} voor rang 2, {tier3Prof} voor rang 3, en 85 en 100 voor de twee gemaakte treden, en de verkopersregel, de tooltip en de tabel hieronder noemen de eis alle drie vooraf. Tot dan wacht vooruit gekocht gereedschap simpelweg in je tassen, opent het geen terrein, koopt het geen snelheid en slaat het geen fijne kwaliteiten, om te worden gehanteerd op het moment dat je teller zijn getal raakt. Hengels zijn de ene uitzondering: geen enkele hengel draagt een hanteringseis, en Handelaar Wilkes in Oostbeek voert bewust de rang 2- en rang 3-hengels voor hengelaars die vooruit kopen. Gereedschap bezet nooit een uitrustingsslot en slijt nooit, dus elk stuk is een eenmalige aankoop, en alleen de rang telt voor de grendel: zeldzamer gereedschap van dezelfde rang opent niets extra's. Zeldzaamheid is echter niet alleen kleur. Ze laat een geplaatst gereedschapseffect langer duren, en op een hengel verbreedt ze het inhaalvenster.\n\nBeter gereedschap koopt drie dingen, geen twee. Het opent terrein van hogere rang, het verkort de worp, en het verbetert wat eruit komt: bewerk een ader met gereedschap dat BOVEN het eigen materiaal van de zone is gerangschikt, en de oogst levert de fijne kwaliteit ervan op in plaats van de gewone. De ader moet er een van volle kwaliteit van de zone zijn, dus de makkelijkere aders die een zone voor reizigers bewaart, leveren nog steeds het gewone materiaal. Fijne materialen zijn wat de gemaakte gereedschapsrecepten verbruiken, en een fijne kwaliteit telt als zijn gewone versie overal waar een recept of een werkopdracht erom vraagt, dus opwaarderen laat je nooit stranden: het betekent alleen dat je kopererts binnenkomt als Fijn Kopererts.\n\nBoven de verkopersladder heeft elk vak twee gemaakte gereedschappen, rang 4 en rang 5, gemaakt bij de gereedschapsmakerij (elk personage kent de landrecepten; de vaardigheid die voor het werk klimt is die van Knutselwerk), of gekocht met Delve-Tekens aan de balie van De Verdronken Litanie zodra aan haar voltooiingsdrempels is voldaan: de tabel hieronder draagt de Tekenprijs en de voltooiingen die elke trede vraagt. Geen enkele handelaar verkoopt ze ooit voor munt. Vissen heeft zijn eigen paar, en die worden bij de gereedschapsmaker geleerd in plaats van vanaf het begin gekend. Geen enkel grondstoffenpunt en geen enkel water vraagt vandaag meer dan rang 3, dus de bovenste twee treden kopen snelheid, kwaliteit en een vriendelijker inhaalvenster in plaats van toegang, en zij zullen het toegangsbewijs zijn wanneer terrein van hogere rang arriveert.",
+      "toolsNote": "Every node needs its trade's tool in your bags, tier 1 included: no pick, no ore, and no pole, no fish. The vendor ladder covers tiers 1 to 3 across the three heartland hubs: the tier-1 tool is sold at all three, the rungs above it where the ground that uses them begins (Fenbridge adds tier 2, Highwatch tier 3), and the younger settlements beyond them stock no tools at all, so kit up before you travel. Every counter sells every rung it stocks freely, and any tool passes by direct trade; every rung also lists on the Market and travels by mail except the three 20-copper land starters: those are bought at a counter or passed hand to hand, and never sold back, mailed, or listed. What is gated is the wielding. A land tool above tier 1 works only once your proficiency in its own trade has earned it, {tier2Prof} for tier 2, {tier3Prof} for tier 3, and 85 and 100 for the two crafted rungs, and the vendor row, the tooltip, and the table below all name the requirement up front. Until then a tool bought ahead simply waits in your bags, opening no ground, buying no speed, and minting no fine grades, then wields the moment your counter touches its number. Fishing rods are the one exception: no rod carries a wield requirement, and Trader Wilkes in Eastbrook deliberately stocks the tier 2 and tier 3 rods for anglers buying ahead. A tool never occupies an equip slot and never wears out, so each is a one-time purchase, and only the tier matters to the gate: a rarer tool of the same tier opens nothing extra. Rarity is not only colour, though. It makes a slotted tool effect last longer, and on a rod it widens the reel window.\n\nA better tool buys three things, not two. It opens higher-tier ground, it shortens the cast, and it improves what comes out: work a vein with a tool ranked ABOVE the zone's own material and the harvest yields the fine grade of it instead of the plain one. The vein has to be one of the zone's full-grade ones, so the easier veins a zone keeps for travellers still yield the ordinary material. Fine materials are what the crafted tool recipes consume, and a fine grade counts as its ordinary version anywhere a recipe or a work order asks for one, so upgrading never strands you: it just means your copper ore arrives as Fine Copper Ore.\n\nAbove the vendor ladder each trade has two crafted tools, tier 4 and tier 5, made at the toolworks (every character knows the land recipes; the skill that climbs for the work is Engineering's), or bought with Delve Marks at the Drowned Litany counter once its clears gates are met: the table below carries the Marks price and the clears each rung asks. No merchant ever sells them for coin. Fishing has its own pair, and they are learned from the toolmaker rather than known from the start. No node and no water today needs more than tier 3, so the top two rungs buy speed, grade and a kinder reel window rather than access, and they will be the entry ticket when higher-tier ground arrives.",
       "toolCrafted": "Gemaakt ({craft})",
       "toolCraftedOrMarks": "Gemaakt ({craft}) of {marks} Delve-Tekens na drie voltooiingen van De Verdronken Litanie",
       "toolCraftedOrMarksHeroic": "Gemaakt ({craft}) of {marks} Delve-Tekens na een Heroïsche voltooiing van De Verdronken Litanie",
       "toolVendor": "{name} ({hub})",
       "toolUnavailable": "Niet verkocht",
-      "priceNone": "Niet verkocht voor munt",
+      "priceNone": "Niet verkocht",
       "toolTierReq": "Rang {tier} gereedschap",
       "colWield": "Bruikbaar vanaf",
       "wieldNone": "Geen eis",
       "yieldsHeading": "Wat een oogst oplevert",
       "yieldsBody": "Elke oogst rolt een kwaliteit voor wat het oplevert, en je vaardigheid is het hele verhaal van die rol. Een splinternieuwe verzamelaar haalt altijd gewoon materiaal op; elk punt vaardigheid verschuift gewicht gestaag van gewoon naar de hogere kwaliteiten en nooit terug, totdat op de grens van 100 de gewone kwaliteit volledig verdwijnt: 60 procent ongewoon, 30 procent zeldzaam, 8 procent episch en 2 procent legendarisch, elke keer.\n\nKwaliteit betekent ook hoeveelheid: een gewone rol levert 1 eenheid, ongewoon en zeldzaam leveren 2, episch 3, en legendarisch 4. Elke zeldzame, epische of legendarische opbrengst arriveert als een gesigneerde instantie gestempeld Verzameld door jou: op de grens draagt dat vier van de tien oogsten jouw naam, en de herkomstregels op de Ambachtseconomiepagina leggen uit waarom makers extra betalen voor precies die stapels.",
       "bandsHeading": "Vaardigheidsbanden",
-      "bandsBody": "Vaardigheidsbanden vormen de gedeelde 0/100/200-ladder boven de teller van een beroep. Bij de landberoepen kort de band die je op 100 oversteekt de verzamelworp in, en hun limiet maakt band 1 het plafond. De banden van Vissen korten niets in: zij kiezen de vangsttabellen (met een bijpassende hengel), alleen Vissen haalt band 2, en de klim zelf is wat een hengelaar naar dieper water trekt, waar de betere tabellen en de verdere lessen allebei wonen.",
+      "bandsBody": "Vaardigheidsbanden zijn de gedeelde 0/100/200-ladder over de teller van een ambacht: elke band die je passeert verkort de verzamelworp, en bij vissen bepalen de banden ook de vangsttabellen (met een bijpassende hengel). De landambachten hebben een limiet van 100, dus band 1 is hun plafond; alleen vissen bereikt band 2.",
       "bandFmt": "Band {band}: vanaf vaardigheid {at}",
       "rareHeading": "Zeldzame vondsten",
       "rareBody": "Elke oogst, ongeacht je vaardigheid, heeft een kans van 1 op {oneIn} op een zeldzame vondst: een ongerept ertsader in erts, oud kernhout in hout, een maanverlichte bloem tussen de kruiden. De vondst vermenigvuldigt de opbrengst van die oogst {mult} keer, elke eenheid arriveert gesigneerd met jouw naam ongeacht de gerolde kwaliteit, en de hele zone hoort er bij naam over. Elk type legt ook zijn eigen daad zonder Roem vast in je Boek der Daden, een verzamelaarsmerk dat alleen bestaat om te bewijzen dat het jou is overkomen.",
-      "specimenBody": "Houd wat tasruimte vrij wanneer je farmt: een gesigneerde meevaller heeft een eigen slot nodig of een bijpassende gesigneerde stapel om in te landen, en past er niets, dan komt de opbrengst nog steeds binnen maar gaat de handtekening verloren. Ook lijkoogst heeft zijn eigen jackpotarm: ongeveer {pct}% van elk geoogst component komt zeldzaam of beter uit. Een familie die een perfect exemplaar te geven heeft (huid, zijde, gif, vlees) houdt haar gewone opbrengst gewoon en slaat het gesigneerde exemplaar ernaast; elke andere familie signeert de opbrengst zelf.",
+      "specimenBody": "Houd wat bagageruimte vrij wanneer je farmt: een buitenkansje heeft open sloten nodig om gesigneerd te landen, en als er niets past arriveert de opbrengst toch maar gaat de handtekening verloren. Lijkoogst heeft ook zijn eigen jackpotarm: ongeveer {pct}% van de lijkoogsten rolt zeldzaam of beter, de opbrengst signerend en, bij specimenfamilies, een gesigneerd perfect exemplaar verlenenend.",
       "gatherDeedsHeading": "Daden onderweg",
       "gatherDeeds": {
         "mining": "Je eerste grondstoffenpunt van een beroep verdient Vruchten van het Veld, en de grens van 100 in Mijnbouw schrijft Erts in het Bloed in. 100 bereiken in drie van Mijnbouw, Houtkap, Kruidenkunde en Vissen voegt Meesterverzamelaar toe bij 25 Roem, en het kraken van een ongerept ertsader legt zijn eigen verzamelaarsmerk vast. Niets hiervan schenkt macht: daden zijn titels en Roem, een verslag van de wegen die je bewandeld hebt.",
         "logging": "Je eerste grondstoffenpunt van een beroep verdient Vruchten van het Veld, en de grens van 100 in Houtkap schrijft Kernhouthakker in. 100 bereiken in drie van Mijnbouw, Houtkap, Kruidenkunde en Vissen voegt Meesterverzamelaar toe bij 25 Roem, en een slag in oud kernhout legt zijn eigen verzamelaarsmerk vast. Daden zijn titels en Roem, nooit macht.",
         "herbalism": "Je eerste grondstoffenpunt van een beroep verdient Vruchten van het Veld, en de grens van 100 in Kruidenkunde schrijft Meester van de Weide in. 100 bereiken in drie van Mijnbouw, Houtkap, Kruidenkunde en Vissen voegt Meesterverzamelaar toe bij 25 Roem, en een maanverlichte bloem legt zijn eigen verzamelaarsmerk vast. Daden zijn titels en Roem, nooit macht.",
-        "fishing": "De mijlpaal van 100 schrijft Oude Zout in en 200 schrijft Meesterhengelaar in met zijn titel, de absolute top van de hengelaarskunst; Vissen telt ook mee voor Meesterverzamelaar, verdiend bij 100 in drie willekeurige verzamelvakken. Een eerste vis uit de wateren van elk van zes zones vult een eigen pagina, de drie kernlandzones en daarbuiten Het Wilgenveen, De Windkam en De Verrekust, en de Zonglinstering-Koi legt Glinstering van Hoop vast, dus reizigers met een hengel in hun bagage vullen hun boek sneller dan ze verwachten."
+        "fishing": "De mijlpaal van 100 schrijft Oude Zout in en 200 schrijft Meesterhengelaar in met zijn titel, het absolute toppunt van de visserskunst; Vissen telt ook mee voor Meesterverzamelaar, verdiend bij 100 in drie verzamelberoepen. Een eerste vis uit het water van elke zone vult zijn eigen pagina, en de Zonglinstering-Koi legt Sprankje Hoop vast, zodat reizigers met een hengel in hun rugzak hun boek sneller vullen dan verwacht."
       },
       "fish": {
         "startHeading": "Aan de slag",
-        "startBody": "Een Eenvoudige Hengel kost 20 koper bij Visser Brandt in Oostbeek (zoek de Oude Zout aan de oostrand van de stad, bij de weg naar het Spiegelmeer); ook Knutselaar Gizzel, Proviandmeester Hale in Fenbridge en Kwartiermeester Bree in Highwatch hebben hengels op voorraad. Gebruik de hengel terwijl je naar water kijkt dat diep genoeg is om vis te herbergen, tot ongeveer 24 meter voor je, en je dobber vliegt uit.\n\nJe kunt niet werpen tijdens een gevecht, tijdens het zwemmen of terwijl je dood bent: werpen vanaf de oever is de bedoelde houding. Het water wordt wel zwaarder naarmate het land dat doet: het moeras wil minstens de rang 2 Hengel met ijzeren molen en de toppen de rang 3 Zilverbeek-hengel, en een lijn die wordt geworpen zonder de hengel die dat water vraagt, verlaat je hand nooit. Daarboven staan nog twee hengels, de Stormmolen-hengel en de Getijsmeed-hengel: knutselaars maken ze bij de gereedschapsmakerij uit wat een lijn ophaalt, en de delve-balie van De Verdronken Litanie verkoopt ze voor Delve-Tekens achter haar voltooiingsdrempels, zij het nooit voor munt. Geen enkel water vraagt erom, dus ze kopen een kortere wachttijd en een breder inhaalvenster in plaats van toegang, wat op de hoogste trede een beet in een strakke drie seconden betekent.",
+        "startBody": "Een Eenvoudige Hengel kost 20 koper bij Visser Brandt in Eastbrook (zoek de Oude Zout die vanuit de oostrand van de stad op Spiegelmeer staat te staren); Knutselaar Gizzel, Leverancier Hale in Fenbridge en Kwartiermeester Bree in Highwatch hebben ook hengels in de aanbieding. Gebruik de hengel terwijl je naar water kijkt dat diep genoeg is voor vissen, tot circa 24 meter voor je, en je dobber vliegt eruit.\n\nJe kunt niet gooien terwijl je in gevecht bent, terwijl je zwemt of terwijl je dood bent: gooien vanaf de oever is de bedoelde houding, en elk visbaar water werkt, in iedere zone.",
         "biteHeading": "Aanslaan en inhalen",
-        "biteBody": "Na de worp komt de beet op een verborgen moment tussen {min} en {max} seconden; de vertraging wordt bepaald op het ogenblik dat de lijn landt, dus geen twee worpen voelen helemaal hetzelfde. Wanneer de dobber aanslaat heb je een venster van {reel} seconde om de hengel opnieuw in te drukken en binnen te halen: haal je binnen dat venster in, dan landt de vangst; aarzel je te lang, dan ontsnapt de vis en houd je niets over. Een hele sessie wordt begrensd op {cap} seconden, dus zelfs een stille worp is snel afgehandeld.\n\nBetere hengels scherpen beide kanten van het minispel aan: elke hengelrang boven de eerste knipt {rod} seconde van de langst mogelijke wachttijd, nooit onder de ondergrens van drie seconden die de tophengel al schampt, en voegt {reelRod} seconde toe aan het inhaalvenster, zodat de Hengel met ijzeren molen de ergste wachttijd terugbrengt tot 6,5 seconde met een venster van 3,25 seconde, en de Zilverbeek-hengel tot 5 met een venster voorbij 4, waarbij zijn zeldzaamheid het inhalen nog iets verder verbreedt dan de rang alleen betaalt. De snelste beten veranderen nooit, wat je ook vasthoudt, en een hengel hoeft alleen in je tassen te zitten om mee te tellen.",
+        "biteBody": "Na de worp komt er een beet op een verborgen moment tussen {min} en {max} seconden; de vertraging wordt bepaald wanneer de lijn landt, zodat geen twee worpen hetzelfde aanvoelen. Wanneer de dobber aanslaat, heb je een venster van {reel} seconde om de hengel opnieuw in te drukken en binnen te halen: reel je binnen dat venster in, dan landt de vangst; aarzel je er voorbij, dan ontsnapt de vis zonder iets te tonen. Een hele sessie heeft een maximum van {cap} seconden, zodat zelfs een stille worp snel wordt afgerond.\n\nBetere hengels verscherpen beide uiteinden van het minigame: elke hengelrang boven de eerste snoeit {rod} seconden van de langst mogelijke wachttijd en voegt {reelRod} seconden toe aan het inhalenvenster, zodat de Hengel met ijzeren molen de langste wachttijd terugbrengt naar 6,5 seconden met een venster van 3,75 seconden, en de Zilverbeek-hengel naar 5 en 4,5. De snelste beten veranderen nooit wat je ook vasthoudt, en een hengel hoeft alleen in je tassen te zitten om mee te tellen.",
         "earlyReelNote": "Een waarschuwing voor haastige duimen: druk de hengel opnieuw in voordat er iets aanslaat en je haalt een lege lijn binnen, wat de worp beëindigt (een kort moment van clementie vlak na het werpen vergeeft een per ongeluk dubbele druk). Geduld is het hele spel: wacht op de beet, sla dan toe.",
         "scheduleHeading": "Vaardigheidswinst",
-        "scheduleNote": "Visvaardigheidswinst volgt een vast schema zonder dobbelsteen: een vol punt per vangst onder vaardigheid 50, een half punt onder 100, een tiende onder 150, en een traag straaltje van 0,02 van 150 tot 200. Dat laatste stuk is met opzet een reis van duizenden vangsten: 200 is een statement, geen halte op weg naar iets anders.\n\nRommel stopt volledig met leren bij {cutoff}: vanaf dat punt zijn wier en laarzen gewoon wier en laarzen. Ook het water zelf begrenst de les: de rang 1-wateren van het Dal (en elke jonge kust voorbij het kernland) leren je niets meer voorbij 100, die van het moeras stoppen bij 150, en alleen die van Doorntop scholen een hengelaar de hele weg tot 200. Elke gelande vangst levert verder winst op volgens het schema, dus wanneer de teller vastloopt, zegt het schema je dat je dieper water moet zoeken.",
+        "scheduleNote": "Vaardigheidswinst bij vissen verloopt volgens een vast schema zonder kans: een vol punt per vangst tot 50 vaardigheid, een half punt tot 100, een tiende tot 150, en een traag getrickle van 0,02 van 150 tot 200. Dat laatste stuk is expres een reis van duizenden vangsten: 200 is een prestatieverklaring, geen tussenstop op weg naar iets anders.\n\nRommel houdt helemaal op te leren bij {cutoff}: daarna zijn wier en laarzen gewoon wier en laarzen. Elke andere gemaakte vangst levert op het geplande tempo winst op, dus vis waar je toch al zou vissen en laat de teller stijgen.",
         "colProficiency": "Vaardigheid",
         "colGain": "Winst per vangst",
         "belowFmt": "Onder {below}",
         "tablesHeading": "Vangsttabellen",
-        "tablesNote": "Je vaardigheid kiest een van drie vangstbanden: band 0 vanaf het begin, band 1 bij 100, band 2 bij 200, elk verschuift gewicht van rommel en lege haken naar echte vis, zone voor zone. Elke band boven de eerste vraagt ook een hengel: band 1 wil de rang 2 Hengel met ijzeren molen, band 2 de rang 3 Zilverbeek-hengel. Je effectieve band is de laagste van wat je vaardigheid heeft verdiend en wat je hengel ondersteunt, en die begrenzing is stil: met een mindere hengel vang je nog steeds, alleen uit de tabel van de lagere band, dus als je vangsten vastzitten terwijl je vaardigheid klimt, controleer dan eerst je hengel.\n\nDe wateren van elke zone herbergen hun eigen paar voedselvissen, die meer genezen naarmate de zone dieper ligt, allemaal kookingrediënten en prima zit-en-eet-voedsel rauw van de lijn. De rest van de tabel is de belasting van de hengelaar: wier, af en toe een laars, en de lege haak, die nooit helemaal verdwijnt. Hoeveel je betaalt hangt af van het water waarin je dobber landt, niet van waar je staat: een worp reikt tot 24 meter, en de hengel die het water vraagt, de tabel waaruit het trekt, de daad die het bijschrijft en hoe ver het leert, antwoorden allemaal op de zone waartoe dat water behoort, bepaald op het moment dat de lijn landt. Het water van elke zone is voor een eigen band geschreven, het Dal voor band 0, het moeras voor band 1, de toppen voor band 2, en één band daaronder vissen verandert ruwweg een derde van je worpen in lege haken, twee banden eronder meer dan de helft. De hengel brengt je bij het water; de vaardigheid is wat het laat lonen, en de klim is wat een hengelaar dieper trekt, want betere banden zijn niet alleen betere betaling: voorbij het Dal zijn zij de enige wateren die blijven leren. De {rare} is de ene rij die alleen op je vangstband antwoordt en op niets anders: dezelfde kansen in elke zone, en zes keer waarschijnlijker op band 2 dan op band 0, dus het zeldzaamste ding aan de steiger is precies datgene waar een Meesterhengelaar echt beter in is.",
+        "tablesNote": "Je vaardigheid bepaalt een van drie vangstbanden: band 0 vanaf het begin, band 1 bij 100, band 2 bij 200, waarbij elke band gewicht verschuift van rommel en lege haken naar echte vissen, zone voor zone. Elke band boven de eerste vereist ook een hengel: band 1 wil de rang 2 Hengel met ijzeren molen, band 2 de rang 3 Zilverbeek-hengel. Je effectieve band is de laagste van wat je vaardigheid heeft verdiend en wat je hengel ondersteunt, en het plafond is stil: met een mindere hengel vang je nog steeds, maar van de lagere bandtabel, dus als je vangsten vastgelopen aanvoelen terwijl je vaardigheid stijgt, controleer dan eerst je hengel.\n\nHet water van elke zone herbergt zijn eigen paar voedselvissen die meer genezen naarmate de zone dieper is, allemaal kookingredienten en prima rauwe eetklare vis van de lijn. De rest van de tabel is de belasting van de hengelaar: wier, de occasionele laars en de lege haak, die nooit volledig verdwijnt. De {rare} is dezelfde kleine kans op elke lijn, met vaste kansen die nooit veranderen met vaardigheid, dus de nieuwste hengelaar op de steiger heeft dezelfde kans als een Meesterhengelaar.",
         "bandHeading": "Band {band}: vaardigheid {at} en hoger, hengelrang {rod}",
         "colCatch": "Vangst",
         "colOdds": "Kansen",
         "pctFmt": "{pct}%",
         "emptyHook": "Niets bijt",
         "koiHeading": "De Zonglinstering-Koi",
-        "koiBody": "Elk water in het spel verbergt dezelfde prijs: de Zonglinstering-Koi, een ongewone glans aan de lijn die 75 koper waard is bij een handelaar en aanzienlijk meer voor je trots. Zijn kansen antwoorden op je vangstband en op niets anders, in elke zone hetzelfde: een rij van 1 procent van de vangsttabel op band 0, 3 op band 1 en 6 op band 2, getrokken bij elke binnengehaalde worp, dus de koi komt naar de hengelaar die de diepe tabellen heeft verdiend. Er een landen legt Glinstering van Hoop vast in je Boek der Daden, een verzamelaarsmerk zonder Roem. Wanneer het gebeurt, zorgt het logboek ervoor dat je het weet."
+        "koiBody": "Elk waterlichaam in het spel verbergt hetzelfde hoofdprijsje: de Zonglinstering-Koi, een ongewone glinstering aan de lijn waard 75 koper bij een handelaar en behoorlijk meer voor je trots. De kansen zijn een vaste 3 procent per geland gevangen exemplaar (4 procent in het koude water van Doorntop) bij elke band, en er een landen registreert Sprankje Hoop in je Boek der Daden, een nul-Roem verzamelaarsdaad. Als het gebeurt, zorg het logboek ervoor dat je het weet."
       },
       "econ": {
         "title": "Ambachteconomie",
@@ -4659,7 +4861,7 @@ export const nl_NL: EnTranslations = {
         "feeUnbind": "Ontbindingsvergoeding",
         "feeUnbindValue": "{uncommon} ongewoon, {rare} zeldzaam, {epic} episch",
         "trainingHeading": "Trainingsvergoedingen",
-        "trainingNote": "Eén vast bedrag per receptentrede, eenmalig in rekening gebracht wanneer een meester het je leert; elke trede van de tabel hieronder is vandaag in gebruik, van de gratis startrecepten tot de hengellessen van de gereedschapsmaker bovenaan.",
+        "trainingNote": "Één vaste vergoeding per recepttrede, eenmalig in rekening gebracht wanneer een meester die onderwijst; de hogere lagen van de tabel wachten op toekomstige inhoud.",
         "trainingTierFmt": "Rang {tier}: {fee}",
         "free": "Gratis",
         "sellsHeading": "Wat verkoopt, en waarom",
@@ -4675,7 +4877,7 @@ export const nl_NL: EnTranslations = {
         "commissionsHeading": "Opdrachten en de Makersbond",
         "commissionsBody": "Een opdracht is een vervaardiging gemaakt voor iemand anders. Wanneer je een wapen, wapenrustingsstuk of gehouden off-hand maakt (een drankje kan geen band dragen), kan de ambachtsman de vervaardiging aanmerken als opdracht: het afgewerkte stuk gedraagt zich normaal in de handen van de maker, maar het moment dat het van eigenaar wisselt in een ruil, bindt het aan de ontvanger. Dat is de Makersbond: de koper krijgt zijn stuk, en het stuk kan niet verder worden doorgegeven of doorverkocht.\n\nBonds zijn niet voor altijd, alleen kostbaar. Elke stationsmeester verbindt een gebonden stuk los terwijl je bij zijn station staat (een mobiel station biedt de dienst nooit aan), voor een bedrag bepaald door de kwaliteit van het voorwerp: 25 zilver ongewoon, 1 goud zeldzaam, 4 goud episch, waarbij een legendarisch het epische tarief betaalt en een gewoon opdrachtsstuk het ongewone.\n\nHet bedrag koopt een schone lei, geen genezing: het stuk is nog steeds een opdracht, dus het bindt opnieuw aan wie het in de volgende ruil ontvangt, en al het andere, handtekening, meesterwerk en betoveringen, blijft ongewijzigd.",
         "provenanceHeading": "Ondertekend werk",
-        "provenanceBody": "Sommige voorwerpen dragen een naam. Zweef eroverheen en de tooltip zegt Verzameld door die-en-die op een grondstof, of Gemaakt door die-en-die op een afgewerkt stuk: hetzelfde merk, geformuleerd naar hoe het voorwerp is ontstaan. Een handtekening is onderdeel van het voorwerp zelf, reist ermee mee door ruilen, de bank, de post, de Wereldmarkt en zelfs een terugkoop bij een handelaar, en vervaagt nooit.\n\nVerzamelen signeert zijn beste werk vanzelf: elke oogst die zeldzaam of beter rolt komt gesigneerd binnen, en zeldzame vondsten signeren hun hele vijfvoudige buitenkans. De gelukkige rol van een lijkoogst signeert de opbrengst waar de familie geen exemplaar te geven heeft, en waar dat wel zo is, houdt hij de opbrengst gewoon en slaat er het gesigneerde ongeschonden exemplaar naast. Vervaardigen signeert langs dezelfde lijn: elke kopie van een zeldzame of betere uitkomst wordt gesigneerd geslagen, en een meesterwerk signeert altijd, welke kwaliteit het ook heeft, zodat de fijnste versie van elk stuk altijd zijn maker noemt. Het enige dat je een handtekening kan kosten is een volle tas: een gesigneerde eenheid heeft eigen ruimte nodig, of een bijpassende gesigneerde stapel om in te landen.\n\nEen stapel voorwerpen deelt één identiteit, dus twee kopieën smelten alleen samen wanneer elk merk exact overeenkomt: hetzelfde voorwerp, dezelfde ondertekenaar, dezelfde meesterwerkstatistieken, dezelfde betovering, dezelfde band. Een gesigneerd blok voegt zich nooit bij een gewone hoop, in geen van beide richtingen (samenvoegen zou iemands naam wissen), maar identieke inhoud smelt vrolijk samen, dus twintig erts gesigneerd door dezelfde verzamelaar zitten in één stapel en een buitenkans versnippert je tassen niet.\n\nHandtekeningen betalen makers terug: een gesigneerde kopie van een benodigd reagens aan de werkbank hebben, door wie dan ook gesigneerd, voegt 2 procentpunt meesterwerkkans toe, en een reagens in handen hebben dat je met eigen hand hebt gesigneerd verlaagt de vereiste hoeveelheid van dat reagens met één (nooit tot onder één). Je eigen gesigneerde werk van zeldzaam of beter blijft je zelfs leren, vandaag alleen nog via het flesje: drink een drank die je zelf hebt gesigneerd en er sijpelt een beetje vaardigheid terug naar het ambacht dat hem brouwde, zolang dat ambacht een van je actieve hoofdambachten is.",
+        "provenanceBody": "Sommige voorwerpen dragen een naam. Beweeg er overheen en de tooltip zegt Verzameld door zus-en-zo op een ruwe grondstof, of Gemaakt door zus-en-zo op een afgewerkt stuk: hetzelfde stempel, anders geformuleerd naar hoe het voorwerp tot stand is gekomen. Een handtekening is onderdeel van het voorwerp zelf, reist mee door ruilen en de bank, en vervaagt nooit.\n\nVerzamelen ondertekent zijn beste werk automatisch: elke oogst die zeldzaam of beter gooit, arriveert ondertekend; zeldzame vondsten ondertekenen hun volledige vijfvoudige windfall, en een lijkoogst's geluksrol ondertekent zijn opbrengst, ongerepte exemplaren inbegrepen. Vervaardiging ondertekent langs dezelfde lijn: een enkelvoudig-exemplaar output van zeldzame of betere kwaliteit wordt ondertekend geslagen, en een meesterwerk ondertekent altijd wat zijn kwaliteit ook is, zodat de fijnste versie van elk stuk altijd zijn maker noemt. Het enige dat je een handtekening kan kosten, is een volle tas: een ondertekende eenheid heeft eigen ruimte nodig, of een overeenkomstige ondertekende stapel, om te landen.\n\nEen stapel voorwerpen deelt één identiteit, dus twee kopieën smelten alleen samen wanneer elk teken exact overeenkomt: zelfde voorwerp, zelfde ondertekenaar, zelfde meesterwerkstatistieken, zelfde betovering, zelfde band. Een ondertekend stuk hout sluit nooit aan bij een gewone stapel in welke richting dan ook (samenvoegen zou iemands naam wissen), maar identieke inhoud smelt graag samen, zodat twintig erts ondertekend door dezelfde verzamelaar in één stapel zit en een windfall je tassen niet kapot maakt.\n\nHandtekeningen betalen ambachtslieden terug: elk ondertekend reagens verbruiken, wie het ook heeft ondertekend, voegt 2 procentpunten meesterwerkskans toe, en het bezitten van een reagens ondertekend door je eigen hand vermindert de vereiste hoeveelheid van dat reagens met één (nooit onder één). Je eigen ondertekende zeldzaam-of-beter werk blijft je zelfs iets leren: wanneer een stuk dat jij hebt ondertekend presteert in je eigen handen, een drankje gedronken op het juiste moment, een dodelijke slag geland, wapenrusting gedragen bij een kill, stroomt er een klein straaltje vaardigheid terug naar het ambacht dat het heeft gemaakt, zolang dat ambacht een van je actieve hoofdambachten is.",
         "collectorsHeading": "Verzamelaars, trofees en de prijs van een verhaal",
         "collectorsBody": "Handelaren zijn blind voor herkomst: een gesigneerd voorwerp verkoopt aan een NPC voor precies zijn gewone prijs. De premie op een handtekening bestaat alleen tussen spelers, en dat is precies wat het interessant maakt: een stapel windfall-erts gesigneerd door een beroemde verzamelaar, een Prime Cut van een gelukkige oogst, een meesterwerkling met de naam van een ambachtsman die inmiddels gestopt is, ze kosten wat iemands geheugen zegt dat ze waard zijn.\n\nHet Boek der Daden speelt op hetzelfde instinct in: Ongerept Ader, Oud Hardhout, Maanbloesem, Een Perfect Exemplaar en Glinstering van Hoop zijn nul-Roem verzamelaarsdaden die puur bestaan om te bewijzen dat een moment jou is overkomen. Bewaar het voorwerp dat de daad verdiende en je hebt het bewijs. Niets hiervan is macht; herkomst koopt geen statistieken en wint geen gevechten, het is het papieren spoor van het spel van goede dagen.",
         "castPaceHeading": "Bereidingstijd en de goudput",
@@ -4701,15 +4903,15 @@ export const nl_NL: EnTranslations = {
         "q3": "Wat is het verschil tussen een lijk looten en oogsten?",
         "a3": "Één druk op de knop dekt beide. Alles wat een lijk vasthoudt, munt en buit plus alle oogstbare componenten, opent in hetzelfde venster: looten volgt de normale lootregels, en oogsten is de ambachtenkant, die materialen van het karkas zelf afstript.\n\nOogsten is wie-het-eerst-komt, eenmalig gebruik: elk lijk kan precies eenmaal worden geoogst, door wie het als eerste claimt, ook online. Je Stadsfocus bepaalt wat je krijgt: terwijl je in een stadshub staat, kun je 10 focuspunten spreiden over de componenttypen die je interesseren, en elk gefocust component rolt een betere rang (elke 5 punten verhoogt het een stap, maximaal twee stappen) en levert meer op (10 procent per punt). Ongefocuste componenten worden nooit slechter.",
         "q4": "Waarom is mijn IJzerbastblok ondertekend?",
-        "a4": "Je hebt een meevaller te pakken. Ruwweg 1 op de 90 oogsten zet een zeldzame verzamelgebeurtenis in gang (oud kernhout bij een boom, een ongerepte ader bij erts, een maanverlichte bloem tussen de kruiden): die vermenigvuldigt de opbrengst vijf keer, signeert elke eenheid met jouw naam, en kondigt de vondst aan de hele zone aan. Een zeldzame of betere kwaliteitsrol bij een gewone oogst signeert de opbrengst ook.\n\nGesigneerde materialen zijn het waard om te bewaren of duur te verkopen: een gesigneerde kopie van een benodigd reagens bij de werkbank in handen hebben voegt 2 procentpunten toe aan de meesterwerkkans. Onthoud alleen dat ze uitsluitend stapelen met identiek gesigneerde kopieën, dus ze houden hun eigen tasslot.",
+        "a4": "Je hebt een windfall getrokken. Ruwweg 1 oogst op 90 activeert een zeldzame verzamelgebeurtenis (oud hardhout bij een boom, een ongerept ader bij erts, een maanbloesem bij kruiden): het vermenigvuldigt de opbrengst vijf keer, ondertekent elke eenheid met je naam, en kondigt de vondst aan aan de hele zone. Een zeldzame of betere kwaliteitsrol op een gewone oogst ondertekent de opbrengst eveneens.\n\nOndertekende materialen zijn het waard te bewaren of duur te verkopen: elk ondertekend reagens verbruiken in een vervaardiging voegt 2 procent toe aan de meesterwerkskans. Onthoud alleen dat ze alleen stapelen met identiek ondertekende kopieën, dus ze houden hun eigen tasvak.",
         "q5": "Hoe maak ik een opdrachtsstuk los, en wat kost dat?",
         "a5": "Loop naar een willekeurig ambachtsstation met het stuk in je tassen en betaal de meester. De vergoeding volgt de kwaliteit van het voorwerp: 25 zilver voor een ongewoon stuk, 1 goud voor een zeldzaam, 4 goud voor een episch; een legendarisch betaalt het epische tarief, en een gewoon opdrachtsstuk betaalt het ongewone tarief. Het moet een echt station zijn: een mobiel station biedt de dienst nooit aan.\n\nDe vergoeding koopt een schone lei, geen genezing: het stuk blijft een opdracht, dus het bindt opnieuw aan wie het in de volgende ruil ontvangt. Als verschillende gebonden kopieën een stapel delen, wordt per betaling één kopie afgeschild en losgemaakt.",
         "q6": "Waar leer ik recepten, en wat kosten ze?",
-        "a6": "De negen gewone veldrecepten en de zes gemaakte landgereedschapsrecepten kent iedereen vanaf het begin, en dat geldt ook voor drie stationsgebonden sluitstukken (de Ovenschubben-Mantel, de Kap van beschermweefsel en de Schemerhuid-wikkels), die geen leermeester nodig hebben, alleen hun station. Al het overige wordt onderwezen door de vaste meesters bij hun stations in de drie stadshubs: de meesten staan in Oostbeek, de leerlooier houdt de leerlooierij in Fenbridge, en de alchemist houdt de apotheek in Highwatch.\n\nLeermeestersrecepten lopen in treden: vaardigheid 0, 25 en 50 voor de uitrustings- en verbruiksambachten, geprijsd als gratis, 25 zilver en 1 goud aan eenmalige vergoedingen; de twee amuletrecepten van Betovering staan op de trede van 25, en de gereedschapsmaker leert de twee gemaakte hengels op 75 en 125 voor 4 en 16 goud. Een meester leert je een recept zodra jouw band in dat ambacht de eigen band van het recept heeft bereikt, en je moet bij zijn station staan om te leren: een mobiel station telt niet.",
+        "a6": "De negen gewone veldrecepten en de gereedschapsrecepten zijn iedereen vanaf het begin bekend, en dat geldt ook voor drie stationsgebonden hoogtepunten (de Ovenschubben-Mantel, de Wardweef-Kap en de Schemerleer-Wikkelaars), die geen trainer nodig hebben, alleen hun station. Al het andere wordt onderwezen door de resident-meesters bij hun stations in de drie hubsteden: de meeste staan in Oostbeek, de leerlooier houdt de leerlooierij in Fenbridge, en de alchemist houdt de apotheek in Highwatch.\n\nTrainerrecepten komen in treden op vaardigheid 0, 25 en 50, geprijsd als gratis, 25 zilver en 1 goud als eenmalige vergoeding. Een meester onderwijst een recept zodra je band in dat ambacht de band van het recept heeft bereikt, en je moet bij zijn station staan om te leren: een mobiel station telt niet.",
         "q7": "Waarom ging mijn verzamelen ineens langzamer?",
-        "a7": "De verzamelworp begint op 2,5 seconde en wordt op twee manieren afgeknipt: 0,4 seconde voor elke gereedschapsrang die je draagt en kunt hanteren boven de eigen rang van het grondstoffenpunt, en 0,15 seconde zodra de teller van je vak zijn band van 100 passeert, met een ondergrens van 1,5 seconde. Ga van rang 1-grondstoffenpunten naar rang 3-grondstoffenpunten en je overschot verdwijnt, dus dezelfde houweel zwaait weer trager. Precies de vereiste rang in handen hebben koopt geen snelheid; het opent alleen het grondstoffenpunt.\n\nVaardigheidswinst vervaagt op dezelfde manier als bij vervaardigen: een grondstoffenpunt wordt grijs naarmate je vaardigheid zijn rang voorbijklimt (rang 1-grondstoffenpunten leren je vanaf vaardigheid 75 niets meer), dus het antwoord op trage winst zijn grondstoffenpunten van hogere rang. Die vragen minstens gereedschap van hun eigen rang in je tassen (geen enkel grondstoffenpunt wordt ooit met blote handen bewerkt, rang 1 inbegrepen), en landgereedschap boven rang 1 wil eerst ook zijn hanteringsmerk, 40/70/85/100 in zijn eigen vak voor de rangen 2 tot en met 5. Vissen volgt zijn eigen aflopende schema: volle winst onder vaardigheid 50, de helft onder 100, een druppel van 0,1 onder 150 en 0,02 onder 200, rommelvangsten leren vanaf 100 helemaal niets meer, en het water zelf begrenst de les (rang 1-wateren stoppen met leren bij 100, het moeras bij 150), dus een vastgelopen teller kan ook betekenen dat je het water ontgroeid bent.",
+        "a7": "De verzamelworp begint op 2,5 seconden en wordt op twee manieren ingekort: 0,4 seconden voor elke gereedschapsrang die je bezit boven de eigen rang van het grondstoffenpunt, en 0,15 seconden voor elke vaardigheidsband die je hebt overschreden (bij 100 en 200), met een vloer van 1,5 seconden. Stap over van rang-1-punten naar rang-3-punten en je surplus verdwijnt, zodat dezelfde houweel weer langzamer zwaait. Precies de vereiste rang bezitten levert geen snelheid op; het opent alleen het punt.\n\nVaardigheidswinst vervalt op dezelfde manier als bij vervaardiging: een grondstoffenpunt wordt grijs naarmate je vaardigheid voorbij zijn rang klimt (rang-1-punten leren je niets meer vanaf vaardigheid 75), dus het antwoord op trage winsten zijn hogere-rang-punten, die een gereedschap van ten minste hun rang vereisen (blote handen tellen als rang 1). Vissen volgt zijn eigen afname: volledige winst onder vaardigheid 50, half onder 100, een straaltje van 0,1 onder 150 en 0,02 onder 200, en rommelgevangsten leren je helemaal niets vanaf 100 vaardigheid.",
         "q8": "Kan ik buiten de stad ambachten maken?",
-        "a8": "Gedeeltelijk. De negen gewone veldrecepten (de basiswapens, wapenrusting, voedsel en drankjes voor beginners) maak je overal en altijd, en dat geldt ook voor de drie combinatierecepten van de gezworen paren. Alles daarboven is gebonden aan een stationstype: smederij, keukens, apotheek, leerlooierij, weefgetouw of gereedschapsmakerij, en je moet binnen 20 meter van het station staan om de vervaardiging te laten doorgaan.\n\nBij vaardigheid 75 in een ambacht specialiseer je je, en samen met 20 procent materiaalkorting krijg je een mobiel station: zet het neer in het veld en het blijft 10 minuten staan, waarbij het de recepten van dat ambacht bedient alsof je bij het echte station stond. Het mobiele station is er alleen om te vervaardigen: recepten leren en opdrachtstukken losmaken vereisen altijd het echte station in de stad."
+        "a8": "Deels. De negen gewone veldrecepten (de starterwapen, wapenrusting, voedsel en drankjesstaples) maak je overal, op elk moment. Alles daarboven is gebonden aan een stationstype: smidse, keukens, apotheek, leerlooierij, weefgetouw of gereedschapsmakerij, en je moet binnen 20 meter van het station zijn wil de vervaardiging doorgaan.\n\nOp vaardigheid 75 in een ambacht specialiseer je je, en naast een materiaalkorting van 20 procent krijg je een mobiel station: plaats het in het veld en het staat 10 minuten, en bedient de recepten van dat ambacht alsof je bij het echte station bent. Het mobiele station is alleen voor vervaardiging: recepten leren en opdrachten losmaken vereisen altijd het echte station in de stad."
       }
     },
     "economy": {
@@ -4718,16 +4920,16 @@ export const nl_NL: EnTranslations = {
       "coinBody": "Geld bestaat uit drie munten. Honderd koper maken een zilver, en honderd zilver maken een goud, dus je beurs vult zich eerst met de kleinste munt. Je verdient het met questbeloningen, met het plunderen van gevallen vijanden, en met het verkopen van wat je niet langer nodig hebt.",
       "vendorsTitle": "Verkopers en wat ze voeren",
       "vendorsBody": "Steden en buitenposten zijn bezaaid met handelaren, elk met hun eigen vak. Proviandeurs hebben eten en drinken, wapensmeden en pantsersmeden voeren uitrusting, en een kwartiermeester houdt praktische reisuitrusting bij. Loop er een tegemoet om te zien wat ze verkopen.",
-      "marksTitle": "Merken: de valuta naast munten",
-      "marksBody": "Munten zijn niet het enige dat je opspaart. Delves keren Delve-Merken uit, alleen te besteden bij de delvebewaarder aan metgezelupgrades en uitrusting die je nergens anders vindt. Heroïsche kerkertochten laten Heroïsche Merken achter op de eindbaas, te besteden bij de heroïsche kwartiermeester in Hoogwacht aan sieraden die geen andere uithoek van het rijk verkoopt. Geen van beide vermengt zich ooit met je munten.",
+      "marksTitle": "Een tweede valuta: Delve-Tekens",
+      "marksBody": "Munten zijn niet het enige dat je opspaart. Delves keren Delve-Tekens uit, een aparte valuta die je alleen bij de delvebewaarder uitgeeft, aan metgezelupgrades en uitrusting die je nergens anders vindt. Ze vermengen zich nooit met je munten.",
       "bankTitle": "De bank",
       "bankBody": "Elke hoofdplaats heeft een filiaal van De Vergulde Geldkist, het bankhuis van het rijk. Spreek daar met de thesaurier om je kluis te openen: een eigen bergruimte naast je tassen die je personage levenslang behoudt. Wat je bij hen achterlaat, wacht veilig op je, welk filiaal je daarna ook bezoekt.",
       "bankHow": "Met de kluis open klik je op een voorwerp in je tassen om het te storten, en klik je erop in de kluis om het terug te nemen. De kluis bewaart alleen waren, nooit geld, en questvoorwerpen blijven bij je. Raken je tassen onderweg vol, dan veegt één knop al je ambachtsmaterialen in één keer naar binnen.",
       "bankSlots": "Een nieuwe kluis begint klein en groeit met je mee. De thesaurier verkoopt extra vakken voor geld tegen steeds hogere prijzen, en online spelen levert daarbovenop bonusruimte op, voor zaken als een geverifieerd e-mailadres, gekoppelde accounts en vrienden die je naar het spel brengt.",
       "buyingTitle": "Kopen en verkopen",
-      "buyingBody": "Spreek een handelaar aan en kies om zijn waar te bekijken, en zijn winkel opent met drie tabbladen: Bekijken, Verkopen en Terugkopen. Bekijken bevat alles wat ze op voorraad hebben, van jou als je het kunt betalen. Verkopen toont welke spullen uit je tassen zij willen kopen, en een stuk verkopen dat zijn eigen gerolde kwaliteit draagt, vraagt je eerst te bevestigen, zodat een gewild exemplaar nooit per ongeluk wegglipt. Doe je afstand van iets waar je spijt van krijgt, dan houdt het tabblad Terugkopen je recente verkopen vast zodat je ze kunt terugkopen voor de munten die je kreeg.",
+      "buyingBody": "Ga bij een handelaar staan om hun venster te openen. Je kunt alles kopen wat ze op voorraad hebben als je het kunt betalen, en het meeste uit je tassen verkopen voor munten. Als je per ongeluk iets verkoopt, houdt een verkoper je recente verkopen vast zodat je ze kunt terugkopen.",
       "junkTitle": "Rommel opruimen",
-      "junkBody": "Buit waar je niets aan hebt, verkoopt nog steeds aan elke verkoper, dus leeg je tassen telkens wanneer je door de stad komt in plaats van ze vol te laten lopen. Het verkooptabblad heeft zelfs een knop met één klik die alle prullaria van Slechte kwaliteit in één keer verkoopt. Echt waardeloze prullaria kun je ook gewoon weggooien om ruimte te maken.",
+      "junkBody": "Buit waar je niets aan hebt, verkoopt nog steeds aan elke verkoper, dus leeg je tassen telkens wanneer je door de stad komt in plaats van ze vol te laten lopen. Echt waardeloze prullaria kun je ook gewoon weggooien om ruimte te maken.",
       "tradeTitle": "Ruilen met andere spelers",
       "tradeBody": "Je kunt van aangezicht tot aangezicht ruilen met iedereen die bij je in de buurt staat. Jullie zetten beiden voorwerpen en munten in een gedeeld venster en de ruil vindt pas plaats zodra jullie het allebei bevestigen, zodat geen van beide kanten verrast kan worden. Het is de eenvoudige manier om een vriend een buit te geven of een afspraak af te sluiten.",
       "mailTitle": "De Ravenpost",
@@ -4736,7 +4938,7 @@ export const nl_NL: EnTranslations = {
       "dailyTitle": "Dagelijkse beloningen",
       "dailyBody": "Een knop met een schatkist op je scherm opent het venster met dagelijkse beloningen. Elke dag zet een handvol taken klaar, quests voltooien, vechten in het Asgrauwe Coliseum, een wedstrijd van De Dalbeker winnen, en biedt een gratis draai aan het prijzenrad, allemaal goed voor punten in de stand van die dag, en de topverdieners van de dag delen een prijzenpot voor houders van het optionele community-token. Niets daarvan geeft macht in het spel. Het venster zelf legt de regels van de dag en wie in aanmerking komt uit, toont de ranglijst en bewaart je geschiedenis.",
       "marketTitle": "De Wereldmarkt",
-      "marketBody": "De Koopman runt de Wereldmarkt, een door spelers gedreven beurs waar je kunt kopen en verkopen met mensen die je misschien nooit ontmoet. Spreek de Koopman aan in Oostbeek, of Veilingmeester Voss boven in Highwatch, om hem te openen: beide beheerders bedienen dezelfde gedeelde markt. De Koopman houdt er ook een vaste voorraad eigen goederen aangeboden, dus er is altijd iets te kopen, zelfs wanneer geen andere spelers iets hebben geplaatst.",
+      "marketBody": "De Koopman runt de Wereldmarkt, een door spelers gedreven beurs waar je kunt kopen en verkopen met mensen die je misschien nooit ontmoet. Spreek de Koopman aan om hem te openen. De Koopman houdt er ook een vaste voorraad eigen goederen aangeboden, dus er is altijd iets te kopen, zelfs wanneer geen andere spelers iets hebben geplaatst.",
       "marketBrowse": "Bladeren: scrol door de aanbiedingen of zoek op naam om te vinden wat te koop is. Elke aanbieding toont de waren, de verkoper en de vraagprijs voor de hele stapel.",
       "marketPost": "Plaatsen: kies een stapel uit je tassen, stel je prijs in en zet hem in de lijst. De waren worden door de Koopman bewaard totdat iemand ze koopt. Onverkochte aanbiedingen komen na een tijdje naar je terug, en je kunt er een vroegtijdig terugvragen als je je bedenkt.",
       "marketCollect": "Innen: wanneer je waren verkocht zijn, wacht je opbrengst op je bij de Koopman. Keer terug om de munten te innen, samen met alles wat onverkocht terugkwam. De Koopman neemt een klein deel van elke voltooide verkoop.",
@@ -4761,7 +4963,7 @@ export const nl_NL: EnTranslations = {
       "chanLfg": "Op zoek naar groep.",
       "chanLfgBody": "Een optioneel kanaal voor het hele rijk om mensen te vinden voor een dungeon. Open het tabblad om mee te doen.",
       "chanGuild": "Gilde en Officier.",
-      "chanGuildBody": "Kanalen voor je gilde. Gildechat bereikt elk lid; het officierskanaal is voor officieren en de gildeleider.",
+      "chanGuildBody": "Kanalen voor je gilde. Gildechat bereikt elk lid; het officierskanaal is alleen voor officieren.",
       "partyHeading": "Een groep vormen",
       "partyBody": "Nodig een andere speler uit door met de rechtermuisknop op hun naam te klikken en uitnodigen te kiezen. Een groep telt maximaal vijf spelers, en een van jullie is de leider.",
       "partyCredit": "Groepsleden dicht bij elkaar delen kill- en questkrediet, dus samen questen is sneller, nooit langzamer. Een groep is ook hoe je als team een dungeon binnenstapt.",
@@ -4771,7 +4973,7 @@ export const nl_NL: EnTranslations = {
       "lootCoinTitle": "Geld.",
       "lootCoinBody": "Geld van een kill kan naar degene gaan die het buitmaakt, of gelijk over de groep worden verdeeld.",
       "lootCommonTitle": "Voorwerpen.",
-      "lootCommonBody": "Gewone drops kunnen om de beurt door de groep gaan of naar wie buit maakt, terwijl betere drops voor een worp worden aangeboden zodat iedereen een eerlijke kans krijgt.",
+      "lootCommonBody": "Gewone drops kunnen naar de buitmaker gaan, terwijl betere drops voor een worp worden aangeboden zodat iedereen een eerlijke kans krijgt.",
       "lootRollTitle": "Nodig, Hebzucht of Passen.",
       "lootRollBody": "Wanneer een voorwerp voor een worp gaat, kiest elk in aanmerking komend lid Nodig als ze het willen, Hebzucht als ze het alleen als reserve zouden nemen, of Passen om af te zien. De hoogste worp wint.",
       "lootMasterTitle": "Buitmeester.",
@@ -4794,7 +4996,7 @@ export const nl_NL: EnTranslations = {
       "markersHeading": "Doelwitmarkeringen",
       "markersBody": "Richt je in een groep op een vijandig wezen en klik met rechts op zijn portret in het doelwitframe (lang indrukken op aanraak) om het te kronen met een van de acht raidsymbolen. Elk lid kan markeren, elk symbool leeft op één doelwit tegelijk, en een symbool opnieuw op zijn eigen doelwit toepassen wist het. Killvolgorde, crowd-controltoewijzingen of een simpel 'deze eerst' reizen allemaal sneller als symbool dan als zin.",
       "etiquetteHeading": "Groepsetiquette",
-      "etiquetteBody": "Groeperen is een keuze, geen verplichting. Zeg hallo wanneer je je aansluit, gooi alleen Nodig voor uitrusting die je echt gaat gebruiken, en laat het de groep weten voordat je vertrekt. Een beetje hoffelijkheid helpt enorm, en de meeste spelers waarderen het gezelschap. Moderators bewaren de vrede, en een speler die anderen het spel niet laat genieten, kan naar een cel worden verplaatst totdat een moderator hem eruit laat."
+      "etiquetteBody": "Groeperen is een keuze, geen verplichting. Zeg hallo wanneer je je aansluit, gooi alleen Nodig voor uitrusting die je echt gaat gebruiken, en laat het de groep weten voordat je vertrekt. Een beetje hoffelijkheid helpt enorm, en de meeste spelers waarderen het gezelschap."
     },
     "stats": {
       "intro": "Je personage wordt beschreven door een handvol attributen. Je hoeft ze nooit uit je hoofd te leren om goed te spelen, maar ongeveer weten wat elk doet helpt je je personageblad te lezen en de juiste upgrades te kiezen.",
@@ -4809,15 +5011,15 @@ export const nl_NL: EnTranslations = {
       "intTitle": "Intellect",
       "intBody": "Intellect vergroot de manavoorraad van een spreukmeester, verhoogt hun spreukkracht zodat hun spreuken harder aankomen, en verbetert de kans dat hun spreuken kritiek raken. Het is belangrijk voor de klassen die met mana casten; voor een Woede- of Energieklasse doet het weinig.",
       "spiTitle": "Geest",
-      "spiBody": "Geest bepaalt hoe snel de mana van een caster terugkeert telkens wanneer die het spreuken laat rusten, wat meestal tussen gevechten is. Net als Intellect dient het de manaklassen en betekent het weinig voor de andere.",
+      "spiBody": "Geest bepaalt hoe snel de mana van een caster terugkeert buiten gevecht. Net als Intellect dient het de manaklassen en betekent het weinig voor de andere.",
       "armorTitle": "Pantser",
       "armorBody": "Pantser vermindert de fysieke schade die je oploopt. Het komt vooral van wat je draagt, en de zwaardere pantserklassen dragen er veel meer van. Meer pantser tegen een vijand rond jouw niveau betekent dat elk van zijn treffers zachter aankomt.",
       "apTitle": "Aanvalskracht",
-      "apBody": "Aanvalskracht meet hoe hard je wapen toeslaat. Je primaire attributen voeden het, en uitrusting die die attributen draagt, verhoogt het verder, terwijl een sterker wapen je schade rechtstreeks verhoogt, en daarom kan een upgrade een echte sprong in schade betekenen.",
+      "apBody": "Aanvalskracht meet hoe hard je wapen toeslaat. Je primaire attributen voeden het, en sterkere wapens en uitrusting verhogen het verder, en daarom kan een upgrade een echte sprong in schade betekenen.",
       "spTitle": "Spreukkracht",
       "spBody": "Spreukkracht is de tegenhanger van aanvalskracht voor een caster: het verhoogt de schade die je spreuken aanrichten. Intellect voedt het, en casteruitrusting en buffs voegen er meer bovenop toe, dus een spreukenwerker let op spreukkracht zoals een melee-vechter op aanvalskracht let.",
       "critTitle": "Kritieke treffer",
-      "critBody": "Je kans op een kritieke treffer is hoe vaak een aanval extra schade aanricht. Iedereen begint met een kleine basiskans, en Behendigheid (plus enkele talenten en uitrusting) bouwt daarop voort. Je personageblad toont zowel de kans zelf als de crit-waardering die je uitrusting eraan bijdraagt.",
+      "critBody": "Je kans op een kritieke treffer is hoe vaak een aanval extra schade aanricht. Iedereen begint met een kleine basiskans, en Behendigheid (plus enkele talenten en uitrusting) bouwt daarop voort.",
       "dodgeTitle": "Ontwijken",
       "dodgeBody": "Ontwijken is je kans om een inkomende melee-aanval volledig te vermijden. Je begint met een kleine basiskans, en Behendigheid verhoogt deze, dus wendbare klassen ontwijken meer klappen.",
       "hasteTitle": "Haast",
@@ -4832,16 +5034,16 @@ export const nl_NL: EnTranslations = {
     "progression": {
       "intro": "Elk gevecht, elke quest en elke stap naar het noorden maakt je held sterker. Zo werkt het levelen en zo blijf je groeien wanneer je de top bereikt.",
       "xpTitle": "Hoe je ervaring opdoet",
-      "xpBody": "Je verdient ervaring door quests te voltooien, vijanden te verslaan en delves uit te spelen. Quests geven veruit het meeste, dus het questspoor volgen is de snelste manier om te stijgen. Kills en delveruns onderweg vullen de rest aan.",
+      "xpBody": "Je verdient ervaring door quests te voltooien en vijanden te verslaan. Quests geven veruit het meeste, dus het questspoor volgen is de snelste manier om te stijgen. Onderweg dingen verslaan vult de rest aan.",
       "capBody": "Elk niveau maakt je sterker en brengt nieuwe vaardigheden, helemaal tot het maximum van niveau {cap}.",
       "journeyTitle": "De reis naar het noorden",
       "journeyBody": "De wereld is één doorlopend land, drie gebieden van zuid naar noord, elk een niveaustap hoger. Je begint in de groene vallei, baant je een weg door het moeras en eindigt in de koude hoge toppen. Volg het questspoor en het land draagt je van het ene naar het andere.",
       "bandLabel": "Niveaus {min} tot {max}",
       "restedTitle": "Uitgeruste ervaring",
-      "restedBody": "Stap een herberg binnen en blijf buiten gevecht, en je personage bouwt uitgeruste ervaring op terwijl je wacht. Elke stad heeft er een. De volgende keer dat je eropuit gaat en vecht, geeft die voorraad je kills een extra impuls tot ze opraakt. Een pauze in de herberg is nooit verspilde tijd; het versnelt je volgende stuk levelen.",
+      "restedBody": "Rust op een veilige plek zoals een herberg, buiten gevecht, en je personage bouwt uitgeruste ervaring op terwijl je daar zit. De volgende keer dat je eropuit gaat en vecht, geeft die voorraad je kills een extra impuls tot ze opraakt. Een pauze in de herberg is nooit verspilde tijd; het versnelt je volgende stuk levelen.",
       "capTitle": "Niveau {cap} bereiken",
-      "capJourneyBody": "Niveau {cap} is het maximum, het einde van het levelen maar niet van het groeien. Vanaf daar loop je kerkers en de raid op normaal en heroïsch, treed je de wereldbaas tegemoet wanneer hij verrijst, jaag je op betere uitrusting en test je jezelf in de arena.",
-      "prestigeBody": "Ervaring blijft tellen, zelfs na het maximum. Het voedt een cosmetisch virtueel niveau, zodat je ervaringsbalk blijft stijgen, en een langetermijn-prestigerang die je vanaf je personageblad kunt claimen zodra je zover bent. Het passeren van grote mijlpalen in totale ervaring levert ook daden op in je Boek der Daden, met cosmetische titels en naamplaatranden die op je personageblad verschijnen. Het is allemaal puur optioneel en geeft nooit macht, alleen een teken van de weg die je hebt afgelegd.",
+      "capJourneyBody": "Niveau {cap} is het maximum, het einde van het levelen maar niet van het groeien. Vanaf daar loop je dungeons en de raid, jaag je op betere uitrusting en test je jezelf in de arena.",
+      "prestigeBody": "Ervaring blijft tellen, zelfs na het maximum. Het voedt een cosmetisch virtueel niveau, zodat je ervaringsbalk blijft stijgen, en een langetermijn-prestigerang die je voor de erkenning kunt verdienen. Het passeren van grote mijlpalen in totale ervaring ontgrendelt ook cosmetische titels en naamplaatranden die op je personageblad verschijnen. Het is allemaal puur optioneel en geeft nooit macht, alleen een teken van de weg die je hebt afgelegd.",
       "noRush": "Er is geen haast. De wereld is er om in je eigen tempo van te genieten, dus dwaal rond, pak de quests die je aanspreken en laat je held onderweg groeien."
     },
     "placeholder": {
@@ -4855,7 +5057,7 @@ export const nl_NL: EnTranslations = {
   },
   "editor": {
     "appTitle": "Kaarteditor",
-    "docTitle": "Kaarteditor - World of ClaudeCraft",
+    "docTitle": "Kaarteditor - Cryptic Realm",
     "untitledMap": "Naamloze kaart",
     "playtestPlayerName": "Kaartenmaker",
     "topbar": {
@@ -5322,7 +5524,9 @@ export const nl_NL: EnTranslations = {
     "loginRegister": "Inloggen/Registreren",
     "account": "Account",
     "logout": "Uitloggen",
-    "donate": "Doneren"
+    "donate": "Doneren",
+    "contributions": "Contributions",
+    "whitepaper": "White Paper"
   },
   "stats": {
     "title": "Wereldstatus",
@@ -5332,9 +5536,9 @@ export const nl_NL: EnTranslations = {
     "realmName": "Wereldnaam"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
+    "copyright": "2026 Cryptic Realm",
     "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "Opensourceproject",
+    "githubLabel": "Contributions",
     "whitepaper": "Whitepaper",
     "terms": "Servicevoorwaarden",
     "privacy": "Privacybeleid",
@@ -5363,7 +5567,17 @@ export const nl_NL: EnTranslations = {
     "prerelease": "Voorpublicatie",
     "viewOnGithub": "Bekijk op GitHub",
     "new": "Nieuw",
-    "viewAll": "Bekijk alle updates op GitHub"
+    "viewAll": "Bekijk alle updates op GitHub",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "officialLog": "Official Work Log",
+    "openLink": "Open",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "prTitle": "Upstream Kindness Track",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links.",
+    "proofTitle": "$CR Proof",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap"
   },
   "download": {
     "title": "Desktop-launcher downloaden",
@@ -5390,11 +5604,11 @@ export const nl_NL: EnTranslations = {
     "serverOnline": "Online",
     "serverOffline": "Offline",
     "play": "Spelen",
-    "playAria": "Speel World of ClaudeCraft",
+    "playAria": "Speel Cryptic Realm",
     "serverLabel": "Kies je wereld",
     "serverAria": "Kies wereld: Online of Offline",
     "serverOfflineSub": "Directe lokale wereld",
-    "caLabel": "$WOC Contractadres",
+    "caLabel": "$CR Contractadres",
     "caCopyAria": "Contractadres kopiëren",
     "caNote": "WOC is onze communitytoken. Het is niet nodig om te spelen. Word lid van Discord om de WOC-toepassing en het vliegwiel te bespreken."
   },
@@ -5635,10 +5849,17 @@ export const nl_NL: EnTranslations = {
       "logOut": "Uitloggen",
       "invalid": "Voer een geldig e-mailadres in.",
       "failed": "Kon je e-mailadres niet opslaan. Probeer het opnieuw."
-    }
+    },
+    "hardcoreChar": "Hardcore character",
+    "hardcoreHint": "Permadeath. If this character dies, it is permanently retired and can no longer be played. There is no resurrection.",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress).",
+    "ssoButton": "Continue with Google, Facebook, or Plex",
+    "ssoMoveweight": "Sign in with MoveWeight",
+    "ssoProviders": "Continue with Google, Facebook, Plex, or Discord"
   },
   "wallet": {
-    "label": "$WOC-portemonnee",
+    "label": "$CR-portemonnee",
     "connect": "Portemonnee verifiëren",
     "connectTitle": "Verifieer je Solana-portemonnee",
     "connectAria": "Verifieer je Solana-portemonnee",
@@ -5671,11 +5892,11 @@ export const nl_NL: EnTranslations = {
     "linkedDisconnectedAria": "De portemonnee blijft geverifieerd voor je account. Verbind opnieuw om de portemonnee-app te beheren.",
     "linkTitle": "Klik om te ondertekenen en deze portemonnee aan je account te koppelen.",
     "connectedTitle": "Verbonden. Log in om deze portemonnee aan je account te koppelen.",
-    "balanceTitle": "Geverifieerd $WOC-saldo van Solana-portemonnee",
+    "balanceTitle": "Geverifieerd $CR-saldo van Solana-portemonnee",
     "balanceAria": "Geverifieerd Solana-portemonneesaldo: {balance}",
-    "balancePreviewTitle": "Voorbeeld van $WOC-saldo van verbonden portemonnee",
+    "balancePreviewTitle": "Voorbeeld van $CR-saldo van verbonden portemonnee",
     "balancePreviewAria": "Voorbeeld van saldo van verbonden portemonnee: {balance}. Koppel de portemonnee om houderkenmerk te verifiëren.",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "bagConnect": "Portemonnee koppelen",
     "bagLink": "Portemonnee verifiëren",
     "bagReconnect": "Portemonnee opnieuw verbinden",
@@ -5695,12 +5916,12 @@ export const nl_NL: EnTranslations = {
     "extensionHelp": "Om hier een portemonnee te zien, houd je een browserextensie voor portemonnees zoals Solflare Wallet actief.",
     "mobileAppHelp": "Kies Phantom of Solflare. Je portemonnee-app vraagt om goedkeuring. Houd dit spel open en keer ernaar terug wanneer je klaar bent.",
     "seekerAppHelp": "Ga verder met Seed Vault Wallet. Bekijk de verbindings- en verificatieverzoeken in Seed Vault en keer daarna terug naar het spel.",
-    "standaloneAppHelp": "Portemonneeverbindingen zijn nog niet beschikbaar in de beginscherm-app. Open World of ClaudeCraft in Safari of Chrome om Phantom of Solflare te gebruiken.",
+    "standaloneAppHelp": "Portemonneeverbindingen zijn nog niet beschikbaar in de beginscherm-app. Open Cryptic Realm in Safari of Chrome om Phantom of Solflare te gebruiken.",
     "openAppTitle": "Doorgaan in {wallet}",
     "openAppHelp": "Open {wallet} om dit verzoek te bekijken. Houd dit speltabblad open terwijl de portemonnee-app actief is.",
     "openAppButton": "Open {wallet}",
     "manualReturnBrowserHelp": "Keer na goedkeuring terug naar dit speltabblad. Als iOS een andere browser opent, sluit die dan en keer handmatig terug naar de oorspronkelijke browser.",
-    "manualReturnStandaloneHelp": "Keer na goedkeuring terug naar World of ClaudeCraft via je beginscherm. Als iOS een browser opent, sluit die dan en open de beginscherm-app handmatig opnieuw.",
+    "manualReturnStandaloneHelp": "Keer na goedkeuring terug naar Cryptic Realm via je beginscherm. Als iOS een browser opent, sluit die dan en open de beginscherm-app handmatig opnieuw.",
     "preparingAppButton": "{wallet} voorbereiden...",
     "walletAppUnavailable": "{wallet} kon niet worden voorbereid. Sluit dit venster en probeer het opnieuw.",
     "flowConnect": "Kies een portemonnee. De verificatie gaat automatisch verder.",
@@ -5715,18 +5936,18 @@ export const nl_NL: EnTranslations = {
       "linkBody": "Kies een portemonnee-extensie in deze browser. Je tekent een verificatiebericht en keert dan terug naar de desktop-app.",
       "paymentBody": "Kies de aan je account gekoppelde portemonnee en keur de transactie goed in deze browser.",
       "extensionHelp": "Geen compatibele portemonnee-extensie gevonden. Installeer of ontgrendel Phantom, Solflare of een andere Solana-browserportemonnee en probeer het opnieuw.",
-      "safety": "World of ClaudeCraft vraagt nooit naar je herstelzin of privésleutel.",
+      "safety": "Cryptic Realm vraagt nooit naar je herstelzin of privésleutel.",
       "continueWith": "Doorgaan met {wallet}",
       "reviewTitle": "Bekijken in je portemonnee",
       "reviewBody": "Volg de aanwijzing van {wallet}. Houd deze browserpagina open.",
       "completeTitle": "Portemonnee-autorisatie voltooid",
-      "completeBody": "Je kunt terugkeren naar de World of ClaudeCraft desktop-app.",
+      "completeBody": "Je kunt terugkeren naar de Cryptic Realm desktop-app.",
       "returnButton": "Terug naar desktop-app",
       "failed": "Portemonnee-autorisatie mislukt of verlopen. Keer terug naar de desktop-app en probeer het opnieuw.",
       "retry": "Opnieuw proberen"
     },
-    "holder": "$WOC-houder",
-    "holderTierTitle": "{tier} $WOC-houder",
+    "holder": "$CR-houder",
+    "holderTierTitle": "{tier} $CR-houder",
     "holderTiers": {
       "ember": {
         "name": "Sintel",
@@ -5750,7 +5971,7 @@ export const nl_NL: EnTranslations = {
       },
       "vaultwarden": {
         "name": "Kluiswachter",
-        "flavor": "Bewaakt nu een echte kluis: 0,01% van alle $WOC."
+        "flavor": "Bewaakt nu een echte kluis: 0,01% van alle $CR."
       },
       "whale": {
         "name": "Walvis",
@@ -5818,16 +6039,16 @@ export const nl_NL: EnTranslations = {
     "levelClass": "Niveau {level} - {className}",
     "topPercent": "TOP {percent}%",
     "realmSubtitle": "Wereld {realm}",
-    "defaultRealm": "World of ClaudeCraft",
+    "defaultRealm": "Cryptic Realm",
     "brandWordmark": "WORLD OF CLAUDECRAFT",
     "recruited": "{count} geworven",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Smeed je legende: {siteUrl}",
     "arenaStat": "Arena",
-    "shareTierBit": ", {tier}-rang $WOC-houder",
-    "shareText": "Ik smeed mijn legende in World of ClaudeCraft: Niveau {level} {className}{tierBit}. Sluit je aan bij mijn wereld:",
-    "nativeShareTitle": "World of ClaudeCraft",
+    "shareTierBit": ", {tier}-rang $CR-houder",
+    "shareText": "Ik smeed mijn legende in Cryptic Realm: Niveau {level} {className}{tierBit}. Sluit je aan bij mijn wereld:",
+    "nativeShareTitle": "Cryptic Realm",
     "fileNameFallback": "speler",
     "actionShareX": "Delen op X",
     "actionCopyReferral": "Verwijzingslink Kopiëren",
@@ -6025,6 +6246,71 @@ export const nl_NL: EnTranslations = {
       "toolSlips": "Dat gereedschap glijdt van dit slot af.",
       "lockJammed": "Het slot zit muurvast en is niet meer te peuteren. Speel de delve opnieuw uit voor een nieuwe poging.",
       "lastPickSnaps": "De laatste loper breekt. Het slot klemt vast. De kist is verloren tenzij je de delve opnieuw uitspeelt."
+    },
+    "venues": {
+      "derbyErrFull": "The grid is full for the next race.",
+      "derbyErrMarshal": "Sign up with the Race Marshal at the Thornwheel gate.",
+      "derbyErrRunning": "A race is already running. Wait for the next grid.",
+      "derbyFinish": "Checkered flag! You finish in {place} place.",
+      "derbyFinishPurse": "Checkered flag! You take {place} place and a {silver}s purse.",
+      "derbyGreen": "GREEN FLAG! Go go go!",
+      "derbyGrid": "Grid position {slot}. {laps} laps: follow the flags. Green in {seconds}...",
+      "derbyQueued": "You are signed up for the Thornwheel Derby ({count} on the grid).",
+      "derbyTimeUp": "Time! The Marshal waves you in.",
+      "homeDeed": "The deed to {name} is yours. Welcome home.",
+      "homeErrEntitlement": "A deed on Homestead Lane costs {price} $CR — settle the deed payment first.",
+      "homeErrHaveDeed": "You already hold a deed on Homestead Lane.",
+      "homeErrOwned": "That home already has an owner.",
+      "homeErrRealtor": "See Realtor Maribel on Homestead Lane to buy a home.",
+      "homeForSale": "That plot is still for sale.",
+      "homeShownDoor": "You are shown to the door.",
+      "hordeAlarm": "THE HORDE ALARM SOUNDS! The dead march on Eastbrook from the north road!",
+      "hordeBreach": "The dead break into the square! Wards left: {wards}.",
+      "hordeErrBoard": "Sound the alarm from the town defense board.",
+      "hordeErrBuildCost": "Raising a watch post costs 15s in timber and bowstrings.",
+      "hordeErrBuildMidWave": "Build between waves, not while the dead are inside the walls.",
+      "hordeErrCost": "Fortifying the town costs 20s in timber and nails.",
+      "hordeErrMaxWards": "The town is fortified to the rafters already.",
+      "hordeErrMidWave": "Fortify between waves, not while the dead are inside the walls.",
+      "hordeErrRunning": "The horde alarm is already sounding.",
+      "hordeFortified": "You fortify the town. Wards: {wards}. The line stands taller.",
+      "hordeLoss": "The last ward falls. The dead have Eastbrook tonight.",
+      "hordePostMax": "The watch posts are built out.",
+      "hordePostReinforced": "A watch post is reinforced to strength {level}.",
+      "hordePostUp": "A watch post rises on the line ({built} of {total}).",
+      "hordeWave": "WAVE {wave} of {waves}: {count} of the dead are on the road!",
+      "hordeWaveDown": "Wave {wave} is down. Fortify while you can — the next comes soon.",
+      "hordeWin": "The town stands! The bursar counts out your share: 80s.",
+      "pitBellMissed": "The bell rang without you. Your Boarpit card spot is forfeit.",
+      "pitDraw": "The Pit Master calls it a draw.",
+      "pitEnter": "Into the pit! {count} fighters. Fists in {seconds}...",
+      "pitErrFull": "The card is full for the next bout.",
+      "pitErrMaster": "Sign up with the Pit Master at the Boarpit gate.",
+      "pitErrRunning": "A bout is on. Wait for the next bell.",
+      "pitFight": "FIGHT!",
+      "pitForfeit": "You forfeit the bout.",
+      "pitKo": "Knocked out! You are hauled to the rail.",
+      "pitQueued": "You are on the card for the next Boarpit bout ({count} signed).",
+      "pitWin": "Last one standing! You take the pot: {silver}s.",
+      "skAxe": "Your builder shoulders the axe.",
+      "skBarracksUp": "Your barracks stands. Footmen may muster.",
+      "skBuilderDead": "Your camp builder has fallen.",
+      "skErrBusy": "You can't muster a warcamp right now.",
+      "skErrCost": "Not enough timber and stone for that.",
+      "skErrFull": "The muster roll is full.",
+      "skFootmanUp": "A footman answers the muster.",
+      "skHasBarracks": "Your camp already has a barracks.",
+      "skLoss": "The warband overruns the field. The skirmish is lost.",
+      "skNeedBarracks": "Footmen need a barracks.",
+      "skPick": "Your builder hefts the pick.",
+      "skQueued": "You are on the muster roll for a Warcamp Skirmish ({count} of 4).",
+      "skRally": "Your footmen march on the rally point.",
+      "skStart": "WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!",
+      "skTentDown": "Your Command Tent has fallen. Your camp is out.",
+      "skTowerUp": "A watchtower rises over your camp.",
+      "skTowersMax": "Your camp has all its watchtowers.",
+      "skWave": "Warband wave {wave} rides for the camps!",
+      "skWin": "The warband banner falls! The field is yours: 120s the commander."
     }
   },
   "lockpickUi": {
@@ -6170,7 +6456,8 @@ export const nl_NL: EnTranslations = {
       "riteChoose": "Ga naar het Verdronken Reliekschrijn en druk op F om het ritueel te beginnen",
       "ritePlayback": "Kijk naar de schrijnen: onthoud de volgorde waarin ze oplichten",
       "riteInput": "Druk op F bij elk schrijn in de volgorde waarin ze oplichtten ({current}/{total})",
-      "riteOpen": "Het reliekschrijn is open: druk op F om je buit op te eisen"
+      "riteOpen": "Het reliekschrijn is open: druk op F om je buit op te eisen",
+      "descend": "Descend the Hellmaw"
     },
     "objective": {
       "kill_boss": "Versla {boss}",
@@ -6322,6 +6609,7 @@ export const nl_NL: EnTranslations = {
   "yumi": {
     "bracket3": "Bescherm Yumi 3v3",
     "bracket5": "Bescherm Yumi 5v5",
+    "enterQueue": "Doe mee met Bescherm Yumi!",
     "queue": {
       "join": "Je sluit je aan bij de Bescherm Yumi-wachtrij. Bewaak je metgezel…",
       "leave": "Je verlaat de Bescherm Yumi-wachtrij.",
@@ -6359,6 +6647,7 @@ export const nl_NL: EnTranslations = {
   },
   "fiesta": {
     "bracket": "Fiesta",
+    "enterQueue": "Doe mee aan de Fiesta!",
     "banner": {
       "wave": "GOLF {wave}/{total}, KIES EEN VERSTERKING!",
       "augmentGained": "Versterking verkregen: {name}!",
@@ -6523,14 +6812,14 @@ export const nl_NL: EnTranslations = {
     }
   },
   "seo": {
-    "title": "World of ClaudeCraft: Web-MMO in Klassieke Stijl",
-    "description": "Begin aan een episch avontuur in World of ClaudeCraft, een micro-MMO in klassieke stijl die je rechtstreeks in je browser kunt spelen. Sluit je aan bij een blijvende gedeelde wereld, level je klassen op en versla vijanden!",
+    "title": "Cryptic Realm: Web-MMO in Klassieke Stijl",
+    "description": "Begin aan een episch avontuur in Cryptic Realm, een micro-MMO in klassieke stijl die je rechtstreeks in je browser kunt spelen. Sluit je aan bij een blijvende gedeelde wereld, level je klassen op en versla vijanden!",
     "genre": "MMORPG",
     "playMode": "Multiplayer",
     "applicationCategory": "Spel",
     "operatingSystem": "Webbrowser",
-    "officialLabel": "Officiële website van World of ClaudeCraft",
-    "officialBody": "worldofclaudecraft.com is de officiële gratis browser-MMO voor de Claudemoon-wereld. Speel online met een blijvend personage, verken solo offline, lees de wiki en volg geverifieerde communitylinks vanaf deze site."
+    "officialLabel": "Officiële website van Cryptic Realm",
+    "officialBody": "crypticrealm.com is de officiële gratis browser-MMO voor de Claudemoon-wereld. Speel online met een blijvend personage, verken solo offline, lees de wiki en volg geverifieerde communitylinks vanaf deze site."
   },
   "a11y": {
     "goHome": "Ga naar de startpagina",
@@ -6538,9 +6827,9 @@ export const nl_NL: EnTranslations = {
     "mainNavigation": "Hoofdnavigatie",
     "languageSelection": "Taalkeuze",
     "characterActions": "Personageacties",
-    "githubProject": "Open het World of ClaudeCraft GitHub-project",
-    "discordCommunity": "Word lid van de World of ClaudeCraft Discord-community",
-    "donateProject": "Doneer om World of ClaudeCraft te steunen"
+    "githubProject": "Open het Cryptic Realm GitHub-project",
+    "discordCommunity": "Word lid van de Cryptic Realm Discord-community",
+    "donateProject": "Doneer om Cryptic Realm te steunen"
   },
   "entryGuard": {
     "title": "Grafische kwaliteit verlaagd",
@@ -6573,7 +6862,8 @@ export const nl_NL: EnTranslations = {
       "professions": "Tip: verzamel- en ambachtsberoepen kunnen naast je gevechtsklasse worden geleerd.",
       "loadouts": "Tip: sla meer dan één talentuitrusting op om tussen builds te wisselen zonder punten dubbel uit te geven.",
       "pvp": "Tip: daag een andere speler uit voor een vriendschappelijk duel, of sluit je aan bij de wachtrij voor de arena van het Asgrauwe Colosseum om je build te testen."
-    }
+    },
+    "reconnecting": "Verbinding verbroken. Opnieuw verbinding maken..."
   },
   "errors": {
     "nothingInteract": "Niets om mee te interacteren.",
@@ -6615,6 +6905,7 @@ export const nl_NL: EnTranslations = {
   },
   "desktop": {
     "update": {
+      "downloading": "Update {version} wordt gedownload...",
       "checkingTitle": "Controleren op updates...",
       "checkingBody": "Nieuwe versies worden gedownload terwijl je speelt.",
       "uptodateTitle": "Je hebt de nieuwste versie",
@@ -6627,11 +6918,11 @@ export const nl_NL: EnTranslations = {
       "dismiss": "Sluiten"
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "body": "De spelweergave werkt niet meer. Opnieuw laden?",
       "reload": "Opnieuw laden",
       "quit": "Afsluiten",
-      "fatalBody": "World of ClaudeCraft is op een onverwachte fout gestuit en moet worden afgesloten."
+      "fatalBody": "Cryptic Realm is op een onverwachte fout gestuit en moet worden afgesloten."
     }
   },
   "gpuNotice": {
@@ -6666,7 +6957,9 @@ export const nl_NL: EnTranslations = {
     "characterCountOther": "{count} personages",
     "selectedRealm": "Wereld: {name}",
     "statsOffline": "Offline",
-    "statsRealmOffline": "{realm} (Offline)"
+    "statsRealmOffline": "{realm} (Offline)",
+    "enter": "Enter Realm",
+    "exchangeNote": "The Exchange is the only realm where items move between realms."
   },
   "character": {
     "loading": "Laden...",
@@ -6770,17 +7063,17 @@ export const nl_NL: EnTranslations = {
     "iosStandaloneDetail": "Je bent in de volledig-scherm-modus vanaf het beginscherm. Houd het apparaat in liggende stand.",
     "iosInstallDetail": "Voor echt volledig scherm op iPhone of iPad moet je deze pagina eerst aan je beginscherm toevoegen.",
     "iosShareStep": "Tik in Safari op Deel en daarna op Zet op beginscherm.",
-    "iosOpenStep": "Open World of ClaudeCraft vanaf het nieuwe pictogram op het beginscherm.",
+    "iosOpenStep": "Open Cryptic Realm vanaf het nieuwe pictogram op het beginscherm.",
     "androidStandaloneDetail": "Je bent in de volledig-scherm-appmodus. Houd het apparaat in liggende stand.",
     "androidInstallDetail": "Voor volledig scherm op Android moet je deze pagina eerst installeren of aan je beginscherm toevoegen.",
     "androidInstallStep": "Tik in Chrome op het menu en daarna op App installeren of Toevoegen aan beginscherm.",
-    "androidOpenStep": "Open World of ClaudeCraft vanaf het nieuwe pictogram.",
+    "androidOpenStep": "Open Cryptic Realm vanaf het nieuwe pictogram.",
     "otherStandaloneDetail": "Houd je apparaat in liggend volledig scherm.",
     "otherInstallDetail": "Installeer of voeg deze pagina toe aan je beginscherm voor de beste mobiele ervaring met volledig scherm."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Wereld niet beschikbaar",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - Wereld niet beschikbaar",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "Wereldonderhoud",
     "heading": "De wereld is tijdelijk niet beschikbaar.",
     "body": "We herstarten de gameservice en verwachten dat Claudemoon binnenkort weer terug is. Deze pagina blijft automatisch controleren.",
@@ -6849,7 +7142,8 @@ export const nl_NL: EnTranslations = {
       "zoomIn": "Inzoomen",
       "zoomOut": "Uitzoomen",
       "mapCanvasLabel": "Kaart",
-      "mapSummary": "Kaart van {zone}."
+      "mapSummary": "Kaart van {zone}.",
+      "mobileArena": "Arena"
     },
     "options": {
       "gameMenu": "Spelmenu",
@@ -6926,6 +7220,34 @@ export const nl_NL: EnTranslations = {
       "primary": "Primair",
       "alternate": "Alternatief",
       "unbound": "Niet gebonden",
+      "arcforge": "ArcForge",
+      "controller": "Controller",
+      "controllerDisconnected": "Not connected",
+      "coop": "Join Co-Op",
+      "customization": "Customization",
+      "mods": "Mods",
+      "padA": "A",
+      "padAttackTarget": "Attack nearest · target",
+      "padB": "B",
+      "padBack": "Back / View",
+      "padCursorNote": "When a menu, quest dialog, or chat opens, the on-screen cursor arms automatically — move it with a stick and press A to click (accept quests, send chat, use menus).",
+      "padCursorToggle": "Toggle mouse cursor",
+      "padDpad": "D-Pad",
+      "padInteract": "Interact / talk to NPC",
+      "padJumpClick": "Jump · click in cursor mode",
+      "padLbRb": "LB / RB",
+      "padLeftStick": "Left Stick",
+      "padLookCursor": "Look / move cursor",
+      "padLtRt": "LT / RT (hold)",
+      "padMenu": "Open game menu",
+      "padMove": "Move",
+      "padRightStick": "Right Stick",
+      "padSkillChords": "Hold + A/B/X/Y for skills 9–16",
+      "padSkills12": "Skills 1 & 2",
+      "padSkills47": "Skills 5–8",
+      "padStart": "Start / Menu",
+      "padXY": "X / Y",
+      "reportBug": "Report Bug",
       "mouseCamera": "Muiscamera",
       "keybindHelpMouseCamera": "Muiscamera uit: A/D draait, sleep om te draaien (klassiek). Aan: cameragerichte WASD, A/D zijwaarts. Klik op een toetscel om opnieuw te binden; Esc annuleert."
     },
@@ -6956,7 +7278,7 @@ export const nl_NL: EnTranslations = {
         "nameplates": "Naamplaatjes aan/uit",
         "meters": "Schademeters",
         "social": "Vrienden & Gilde",
-        "arena": "PvP (Doornholte-Velden en Arena's)",
+        "arena": "Arena (Ashen Coliseum)",
         "chat": "Chat openen",
         "attack": "Aanvallen",
         "actionBarSlot": "Actiebalk {slot}"
@@ -7273,7 +7595,7 @@ export const nl_NL: EnTranslations = {
       "defensiveDesc": "Valt vijanden aan die jou of je huisdier verwonden.",
       "aggressiveDesc": "Valt vijandige tegenstanders in de buurt aan.",
       "rename": "Huisdier hernoemen",
-      "revive": "Oplappen",
+      "revive": "Huisdier herleven",
       "abandon": "Huisdier achterlaten",
       "cancel": "Annuleren",
       "renameLabel": "Kies een nieuwe naam voor je huisdier.",
@@ -7839,7 +8161,7 @@ export const nl_NL: EnTranslations = {
         "description": "Houd ingedrukt om kracht op te bouwen, laat los om op doel te schieten. Te veel kracht en hij zeilt eroverheen."
       },
       "sport_pass": {
-        "name": "Passen",
+        "name": "Pass",
         "description": "Speel een strakke pass naar je aangewezen teamgenoot, in de loop."
       },
       "sport_boot": {
@@ -7897,6 +8219,14 @@ export const nl_NL: EnTranslations = {
       "battle_shout": {
         "name": "IJzeren Gebrul",
         "description": "Een kreet die de aanvalskracht van alle groepsleden met {buff}% verhoogt gedurende 30 min."
+      },
+      "commanding_shout": {
+        "name": "Versterkende Kreet",
+        "description": "Verhoogt je Uithoudingsvermogen met {buff} gedurende 2 min."
+      },
+      "rend": {
+        "name": "Diepe Snee",
+        "description": "Verwondt het doelwit, waardoor het {damage} schade bloedt gedurende {duration} sec."
       },
       "demoralizing_shout": {
         "name": "Grimmig Gehuil",
@@ -7976,7 +8306,7 @@ export const nl_NL: EnTranslations = {
       },
       "greater_invisibility": {
         "name": "Grotere onzichtbaarheid",
-        "description": "Verdwijn 20 sec. en verwijder 2 effecten met schade over tijd. Wanneer de onzichtbaarheid eindigt, krijg je 2 sec. lang 90% minder schade. (magiërstalent)"
+        "description": "Verdwijn gedurende 20 sec.: verwijdert 2 effecten met schade over tijd en je loopt 90% minder schade op terwijl je onzichtbaar bent en kort daarna. (magiërstalent)"
       },
       "hot_streak": {
         "name": "Hete reeks",
@@ -8076,7 +8406,7 @@ export const nl_NL: EnTranslations = {
       },
       "frost_nova": {
         "name": "IJsboei",
-        "description": "Bevriest alle nabije vijanden ter plaatse gedurende maximaal 8 sec en brengt {damage} Vorstschade toe. Het worteleffect breekt na cumulatieve schade gelijk aan 15% van de maximale gezondheid van het doelwit, met een minimum van 20 en een maximum van 60 schade."
+        "description": "Bevriest alle nabije vijanden ter plaatse gedurende maximaal 8 sec en brengt {damage} Vorstschade toe."
       },
       "arcane_explosion": {
         "name": "Aetherbarst",
@@ -8131,7 +8461,7 @@ export const nl_NL: EnTranslations = {
         "description": "Overval het doelwit voor 250% wapenschade plus {damage}. Je moet onzichtbaar zijn en achter het doelwit staan. Vereist een dolk. Levert 1 combopunt op."
       },
       "stealth": {
-        "name": "Schemersluier",
+        "name": "Duskveil",
         "description": "Verbergt je in de schaduwen: vijanden merken je nauwelijks op, maar je beweegt 50% trager. Aanvallen of schade oplopen verbreekt Duskveil. Bezweer opnieuw om eruit te stappen."
       },
       "adrenaline_rush": {
@@ -8191,7 +8521,7 @@ export const nl_NL: EnTranslations = {
         "description": "Verhoogt je pantser met {buff} gedurende 30 min."
       },
       "judgement": {
-        "name": "Vonnis",
+        "name": "Verdict",
         "description": "Ontketent je actieve Zegel op de vijand en verbruikt het om de opgeslagen Heilige schade toe te brengen."
       },
       "blessing_of_might": {
@@ -8363,7 +8693,7 @@ export const nl_NL: EnTranslations = {
         "description": "Doordringt je wapen met bijtende vorst: elke slag brengt {damage} extra schade toe gedurende 5 min."
       },
       "ghost_wolf": {
-        "name": "Schaduwwolf",
+        "name": "Shadewolf",
         "description": "Verandert je in een Shadewolf en verhoogt de bewegingssnelheid met 40% gedurende 10 min."
       },
       "stormstrike": {
@@ -8440,7 +8770,7 @@ export const nl_NL: EnTranslations = {
       },
       "bear_form": {
         "name": "Bruingedaante",
-        "description": "Verander in een beer: pantser +130%, sterk verhoogde aanvalskracht, je aanvallen bouwen woede op en genereren 30% meer dreiging. Spreek opnieuw om terug te keren naar je oorspronkelijke gedaante."
+        "description": "Verander in een beer: pantser +90%, sterk verhoogde aanvalskracht, je aanvallen bouwen woede op en genereren 30% meer dreiging. Spreek opnieuw om terug te keren naar je oorspronkelijke gedaante."
       },
       "maul": {
         "name": "Botverbrijzelen",
@@ -8520,7 +8850,7 @@ export const nl_NL: EnTranslations = {
       },
       "tigers_fury": {
         "name": "Wolvenbloed",
-        "description": "Verhoogt de aanvalskracht met {buff} gedurende {duration} sec. Alleen in Wolfsgedaante."
+        "description": "Increases attack power by {buff} for {duration} sec. Wolf Form only."
       },
       "rip": {
         "name": "Verscheuren",
@@ -9059,8 +9389,8 @@ export const nl_NL: EnTranslations = {
         "description": "Een sluipopener die de vijand harkt voor wapenschade plus {damage} en bloedingsschade veroorzaakt gedurende 9 sec. Levert 1 combopunt op. Alleen in Wolfsgedaante."
       },
       "revive_pet": {
-        "name": "Oplappen",
-        "description": "Lapt je huisdier op. Als het leeft, herstelt het in totaal {overTime} gezondheid gedurende 12 sec., met elke 3 sec. een tik. Als het dood is, wordt het met 35% gezondheid tot leven gewekt."
+        "name": "Huisdier Herleven",
+        "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
       }
     },
     "items": {
@@ -9202,6 +9532,18 @@ export const nl_NL: EnTranslations = {
       "gravecaller_sigil": {
         "name": "Grafroepers Zegel"
       },
+      "binding_ward": {
+        "name": "Hellmaw Binding Ward"
+      },
+      "renders_hateforged_cleaver": {
+        "name": "The Render's Hateforged Cleaver"
+      },
+      "sigilbrand_of_the_durance": {
+        "name": "Brand of the Hellmaw"
+      },
+      "hollow_fang_of_hate": {
+        "name": "Hollow Fang of the Well"
+      },
       "blessed_wax": {
         "name": "Gezegend Talk"
       },
@@ -9251,13 +9593,13 @@ export const nl_NL: EnTranslations = {
         "name": "Linnen Lap"
       },
       "arcane_dust": {
-        "name": "Arcaan Stof"
+        "name": "Arcaan stof"
       },
       "arcane_essence": {
-        "name": "Arcanessentie"
+        "name": "Arcane essentie"
       },
       "arcane_shard": {
-        "name": "Arcanescherf"
+        "name": "Arcane scherf"
       },
       "fen_muster_order": {
         "name": "Veenbrug-Mobilisatiebevel"
@@ -9518,7 +9860,7 @@ export const nl_NL: EnTranslations = {
         "name": "Topwol-Gewaad"
       },
       "stalkerhide_jerkin": {
-        "name": "Sluiphuid-Wambuis"
+        "name": "Sluiperhuid-Wambuis"
       },
       "cragwalker_boots": {
         "name": "Rotsloperlaarzen"
@@ -9689,7 +10031,7 @@ export const nl_NL: EnTranslations = {
         "name": "Essenhouten Bijl"
       },
       "elderwood_axe": {
-        "name": "Ouderhout Bijl"
+        "name": "Oudhouten Bijl"
       },
       "goldleaf_sickle": {
         "name": "Goudbladsikkel"
@@ -9701,13 +10043,13 @@ export const nl_NL: EnTranslations = {
         "name": "Thoriumerts"
       },
       "arcanite_bar": {
-        "name": "Arcanietstaaf"
+        "name": "Arcaniet Staaf"
       },
       "ashwood_log": {
         "name": "Essenhout Blok"
       },
       "elderwood_log": {
-        "name": "Ouderhoutblok"
+        "name": "Oud Vlierhout Blok"
       },
       "goldleaf_herb": {
         "name": "Goudbladkruid"
@@ -10720,6 +11062,15 @@ export const nl_NL: EnTranslations = {
       "simple_fishing_pole": {
         "name": "Eenvoudige Hengel"
       },
+      "mount_forest_stag": {
+        "name": "Woudhert-hoofdstel"
+      },
+      "mount_swamp_raptor": {
+        "name": "Speerkaak-zadel"
+      },
+      "mount_emerald_wyrm": {
+        "name": "Smaragdwyrm-teugels"
+      },
       "tangled_weed": {
         "name": "Verstrengeld Onkruid"
       },
@@ -11625,6 +11976,36 @@ export const nl_NL: EnTranslations = {
       "vale_cup_ball": {
         "name": "Zwijnenbal"
       },
+      "hellmaw_charred_husk": {
+        "name": "Charred Husk"
+      },
+      "hellmaw_cinder_acolyte": {
+        "name": "Cinder Acolyte"
+      },
+      "hellmaw_cursed_knight": {
+        "name": "Cursed Iron Knight"
+      },
+      "hellmaw_ember_behemoth": {
+        "name": "Ember Behemoth"
+      },
+      "hellmaw_inferno_dragon": {
+        "name": "Inferno Dragon"
+      },
+      "hellmaw_lava_fiend": {
+        "name": "Lava Fiend"
+      },
+      "hellmaw_primal_beast": {
+        "name": "Primal Emberbeast"
+      },
+      "hellmaw_sigilbound_warlock": {
+        "name": "Sigil-Bound Warlock"
+      },
+      "hellmaw_the_render": {
+        "name": "The Render"
+      },
+      "hellmaw_wailing_spectre": {
+        "name": "Wailing Spectre"
+      },
       "thunzharr_waking_peak": {
         "name": "Thunzharr, de Ontwakende Piek"
       },
@@ -12217,6 +12598,41 @@ export const nl_NL: EnTranslations = {
         "title": "Reliekbewaarder",
         "greeting": "Het spoor leidde noordwaarts. Weer een reliekschrijn, weer een ritueel. Kies je moeilijkheid, en ik houd het touw vast tot je terugkeert."
       },
+      "cainhurst_sage": {
+        "name": "Cainhurst the Sage",
+        "title": "Keeper of the Hellmaw",
+        "greeting": "You pulled me from the Hellmaw, friend - I do not forget it. The well is open to you now. Steel yourself: The Render waits at the bottom."
+      },
+      "stable_master_wren": {
+        "name": "Wren Saddleworth",
+        "title": "Stalmeester",
+        "greeting": "Elke held heeft een rijdier nodig, {className}. Het hert is betrouwbaar, de raptor is snel, en de wyrm... de wyrm vliegt."
+      },
+      "mercenary_kael": {
+        "name": "Kael the Sellsword",
+        "title": "Wandering Mercenary",
+        "greeting": "Coin's coin, {className}. Lend a blade and the beast's yours to loot."
+      },
+      "huntress_verr": {
+        "name": "Huntress Verr",
+        "title": "Boar-Culler",
+        "greeting": "These tuskers won't thin themselves. Wade in - the kill counts for you."
+      },
+      "interior_merchant": {
+        "name": "Merchant",
+        "title": "Shopkeeper",
+        "greeting": "Wares for a wanderer? Take a look."
+      },
+      "interior_innkeeper": {
+        "name": "Innkeeper",
+        "title": "Host",
+        "greeting": "Rest your boots, traveller. The fire's warm."
+      },
+      "interior_villager": {
+        "name": "Villager",
+        "title": "Resident",
+        "greeting": "Oh - a visitor! Mind the mess."
+      },
       "spirit_healer": {
         "name": "De Bleke Hoeder",
         "title": "Wachter van de Doden",
@@ -12512,6 +12928,41 @@ export const nl_NL: EnTranslations = {
         "title": "Meester van de apotheek",
         "greeting": "Meet twee keer en giet één keer, {className}. De apotheker heeft geen geduld voor gemorste reagentia."
       },
+      "town_defense_board": {
+        "name": "Town Defense Board",
+        "title": "Keeper of the Eastbrook Watch",
+        "greeting": "The road needs a watch. Gather your party and hold Eastbrook against the dead."
+      },
+      "race_marshal_pip": {
+        "name": "Racemarshal Pip",
+        "title": "Hoedster van het Doornwiel",
+        "greeting": "Zes karts, drie ronden en remmen die de naam niet waard zijn, {className}. Teken het boek en neem een startplek?"
+      },
+      "pit_master_grott": {
+        "name": "Putmeester Grott",
+        "title": "Hoeder van de Zwijnenkuil",
+        "greeting": "Vuisten, voeten en wat het dal je verder gaf, {className}. In mijn kuil sterft niemand — daar zorgen de palen voor. Zet je je op de kaart?"
+      },
+      "realtor_maribel": {
+        "name": "Makelaar Maribel",
+        "title": "Eastbrook Homes",
+        "greeting": "Vier fraaie kavels, {className}, en de dallucht is gratis — de aktes niet. Een huis aan het Hoevelaantje is voor onze begunstigers, voldaan in CR-munt."
+      },
+      "skirmish_post": {
+        "name": "Krijgskampbouwwerk",
+        "title": "Krijgskamp-schermutseling",
+        "greeting": "Het krijgskamp houdt stand."
+      },
+      "skirmish_builder": {
+        "name": "Kampbouwer",
+        "title": "Krijgskamp-schermutseling",
+        "greeting": "Bijl of houweel, commandant — wijs maar aan."
+      },
+      "skirmish_footman": {
+        "name": "Kampvoetknecht",
+        "title": "Krijgskamp-schermutseling",
+        "greeting": "Wijs me de krijgsbende."
+      },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
         "title": "Tijwachter",
@@ -12521,11 +12972,11 @@ export const nl_NL: EnTranslations = {
     "quests": {
       "q_prof_intro": {
         "title": "Een ambacht voor iedere hand",
-        "text": "Elke ziel in Oostbeekdal beoefent een ambacht naast het zwaard, {playerName}. Er zijn ertsslagaders in de rotsen rond de Kopergat, ten zuidoosten van de stad. Ga zelf een houweel zwaaien en bewerk er 5; ik zie het verschil.",
+        "text": "Iedereen in Oostbeek beoefent naast het zwaard een ambacht, {playerName}. Er liggen ertsaders rond de stad, dus zwaai met een pikhouweel en breng me 5 brokken. Delf ze zelf, hoor; ik merk het verschil.",
         "completion": "Zie je? Erts verzameld en eelt op je handen. Ga door met het mijnen, houtkappen en kruidenplukken terwijl je de wegen afloopt, en als je terug in de stad bent, let dan op het Stadsfocusbord bij de markt en de nabijgelegen knutselbank. Er zit een eerlijke handel in dit alles, als je dat wilt.",
         "objectives": {
           "0": {
-            "label": "Ertsslagader geoogst"
+            "label": "Brok erts"
           }
         }
       },
@@ -12604,7 +13055,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_supplies": {
         "title": "Gestolen Voorraden",
-        "text": "Die bandieten overvielen mijn laatste wagen en gingen ervandoor met vier kratten goederen - gereedschap, zout, goed Eastbrook-linnen. De kratten staan opgestapeld rond hun kamp in de zuidwestelijke heuvels. Steel ze voor me terug, wil je?",
+        "text": "Die bandieten overvielen mijn laatste wagen en gingen ervandoor met vier kratten goederen - gereedschap, zout, goed Eastbrook-linnen. De kratten staan opgestapeld rond hun kamp in de zuidoostelijke heuvels. Steel ze voor me terug, wil je?",
         "completion": "Mijn kratten! Amper een schram erop. Je bent een wonder.",
         "objectives": {
           "0": {
@@ -12833,7 +13284,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_no_rest": {
         "title": "Geen Rust in het Riet",
-        "text": "De rite op die wierookvaten dwingt de verdronkenen om op te staan, en nu heeft ze er een opgewekt die sterk genoeg is om hen te leiden. De wachters noemen hem de Verdronken Krijgsheer, en zolang hij de Verdronken Kapel in bezit houdt, blijven de doden in het gelid. Breek hem, {playerName}, en de rest stuift uiteen, terug het moeras in.",
+        "text": "The rite on those censers binds the drowned to rise, and now it has raised one strong enough to lead them. The wardens call him the Drowned Warlord, and while he holds the Drowned Chapel the dead keep their ranks. Break him, {playerName}, and the rest will scatter back into the mire.",
         "completion": "Je geeft de doden meer genade dan hun meesters ooit deden. Neem dit aan - je hebt het meer dan verdiend.",
         "objectives": {
           "0": {
@@ -12955,7 +13406,7 @@ export const nl_NL: EnTranslations = {
         }
       },
       "q_stalker_pelts": {
-        "title": "Eerste Vorst op Hoogwacht",
+        "title": "De Winter Komt naar Highwatch",
         "text": "De winter op deze berg klopt niet aan, {playerName} - hij trapt de deur in. Acht richelstruiner-huiden voeren genoeg mantels om de muur door de eerste sneeuw te helpen. De beesten struinen de richels langs de weg naar het zuiden.",
         "completion": "Dik als mijn arm, deze. De wacht zal dit jaar niet bevriezen - neem deze laarzen voor je moeite.",
         "objectives": {
@@ -12986,7 +13437,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_old_cragmaw": {
         "title": "Oude Cragmaw",
-        "text": "Het bergvolk gaf een naam aan de afdrukken die mijn verkenner vond: Oude Cragmaw, een tiran van een kat met een littekenvacht, die drie generaties van zijn eigen roedel heeft overleefd. Hij is de reden dat de sluipers mijn weg overspoelen, {playerName}. Zijn leger ligt op de oostelijke bergkam boven de zuidelijke weg. Neem een vriend mee en leg de oude duivel om.",
+        "text": "Het bergvolk gaf een naam aan de afdrukken die mijn verkenner vond: Oude Cragmaw, een tiran van een kat met een littekenvacht, die drie generaties van zijn eigen roedel heeft overleefd. Hij is de reden dat de sluipers mijn weg overspoelen, {playerName}. Zijn leger ligt op de westelijke bergkam boven de zuidelijke weg. Neem een vriend mee en leg de oude duivel om.",
         "completion": "Eindelijk geveld. Het bergvolk zwoer dat die kat de muur zelf zou overleven. De sluipers houden zich nu bij hun hoge sneeuw, {playerName}, en mijn patrouilles lopen de weg zonder ervoor te bloeden. De hele bergkam is stiller door jouw werk.",
         "objectives": {
           "0": {
@@ -13219,11 +13670,21 @@ export const nl_NL: EnTranslations = {
       },
       "q_the_codfather": {
         "title": "De Codfather",
-        "text": "De Codfather is niet zomaar een vis, {playerName}, hij is een koelbloedige moordenaar. Oudgedienden zweren dat hij Moerassluipers als ontbijt verorbert, en zelfs de Slijkveen-Weduwen spinnen hun webben van pure schrik niet in de buurt van de Diepveen-Ondiepten. Hij heerst over dat water, en moeraswater vraagt op zijn minst om een Hengel met ijzeren molen; mijn balie verkoopt ze. Zorg dat je er een in handen krijgt, sleep die ouwe duivel uit zijn water, en dan geef ik toe dat je bij de familie hoort.",
+        "text": "De Codfather is niet zomaar een vis, {playerName}, hij is een koelbloedige moordenaar. Oudgedienden zweren dat hij Veensluipers als ontbijt eet, en zelfs de Slijkveen-Weduwen weven hun webben niet in de buurt van de Deepfen-Ondiepten uit pure angst. Hij heerst over die wateren. Pak een hengel, sleep die oude duivel uit zijn wateren, en ik zal toegeven dat je bij de familie hoort.",
         "completion": "Bij de vochtige heiligen... De Codfather zelf. Kijk naar die snorharen. Fenbridge zal een jaar lang verhalen smullen van deze vangst, {playerName}.",
         "objectives": {
           "0": {
             "label": "De Codfather"
+          }
+        }
+      },
+      "q_save_cainhurst": {
+        "title": "Save Cainhurst the Sage",
+        "text": "Old Cainhurst - the sage who reads the deep maps - went down the well a week past and never came up. The thing below took him, and bound him with three cursed wards: one struck among the graves, one buried in the mine, one drowned at the docks. Break all three wards, {playerName}, and you'll break his chains. Bring them to me as proof.",
+        "completion": "The three wards, all snuffed cold. Cainhurst has crawled free - he waits at the well now, and swears the Hellmaw is open to you. He warns of something at the bottom he calls The Render.",
+        "objectives": {
+          "0": {
+            "label": "Hellmaw binding ward broken"
           }
         }
       },
@@ -13239,7 +13700,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_nythraxis_graves": {
         "title": "Graven van de Vergetenen",
-        "text": "Deze tekens heb ik eerder gezien, op drie oude graven rond het noordelijke slagveld. Kapitein Aldren ligt op de westelijke helling, Hogepriester Malric verder naar het zuiden langs de westelijke rand, en Koninklijke Sluipmoordenaar Voss bij de oostelijke klif. Raak elk graf aan en luister, {playerName}. De doden herinneren zich misschien wat de levenden vergeten zijn.",
+        "text": "Ik heb deze tekens eerder gezien, op drie oude graven rond het noordelijke slagveld. Kapitein Aldren ligt op de oostelijke heuvel, Hogepriester Malric bij de centrale gebroken weg, en Koninklijke Sluipmoordenaar Voss bij de westelijke klif. Raak elk graf aan en luister, {playerName}. De doden herinneren zich misschien wat de levenden vergaten.",
         "completion": "Aldren bleef trouw, Malric weigerde de dood te aanvaarden, en Voss zag het gevaar eerder dan wie ook. Alle drie dienden ze dezelfde vergeten koning.",
         "objectives": {
           "0": {
@@ -13255,7 +13716,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_nythraxis_sealed_crypt": {
         "title": "De Verlaten Crypte",
-        "text": "De visioenen wijzen naar de verlaten crypte in de oostelijke klif. Er bestaat een oude legende dat de crypte een koning herbergde. Misschien verzegelde Doorntop hem eronder nadat Malrics ritueel hem in iets dodeloos veranderde. Betreed de crypte en zie wat er binnen overblijft.",
+        "text": "De visioenen wijzen naar de verlaten crypte in de westelijke klif. Er bestaat een oude legende dat de crypte een koning herbergde. Misschien verzegelde Doorntop hem eronder nadat Malrics ritueel hem in iets dodeloos veranderde. Betreed de crypte en zie wat er binnen overblijft.",
         "completion": "De helften van de sluitsteen passen samen, en Voss' dagboek noemt wat ze verzegelden: de zegelring van Koning Nythraxis. Als het dagboek waar is, is die zegelring de sleutel tot zijn tombe.",
         "objectives": {
           "0": {
@@ -13297,7 +13758,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_mogger": {
         "title": "Mogger Moet Vallen",
-        "text": "Mogger heeft karren gespleten, hekken platgewalst en genoeg vee gedood om het halve Dal leeg te maken. Sta hem niet alleen tegenover. Neem twee sterke metgezellen mee de westelijke weide in en leg het beest voorgoed neer.",
+        "text": "Mogger heeft karren gespleten, hekken platgewalst en genoeg vee gedood om het halve Dal leeg te maken. Sta hem niet alleen tegenover. Neem twee sterke metgezellen mee de oostelijke weide in en leg het beest voorgoed neer.",
         "completion": "Mogger is eindelijk dood. De velden van Eastbrook zijn veiliger, en je verlaat het Dal met nog een verhaal dat het navertellen waard is.",
         "objectives": {
           "0": {
@@ -13357,7 +13818,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_prof_amends_outfitter": {
         "title": "Draden Hernomen",
-        "text": "Toch terug bij mijn weefgetouw. Ik koester geen wrok, {playerName}, maar de draad herinnert een hand die hem losliet, en de kosten om hem weer op te pakken worden elke keer gemeten aan een langere maat. Maai de webhoutspin nen die het oostelijke woud verdringen, en de inspanning zal je handen kalmeren voordat ze goede zijde aanraken.",
+        "text": "Toch terug bij mijn weefgetouw. Ik koester geen wrok, {playerName}, maar de draad herinnert een hand die hem losliet, en de kosten om hem weer op te pakken worden elke keer gemeten aan een langere maat. Maai de webhoutspin nen die het westelijke woud verdringen, en de inspanning zal je handen kalmeren voordat ze goede zijde aanraken.",
         "completion": "Stabiel weer. Leerbewerking en Kleermakerij keren terug naar je handen als hoofdvakken. Meet twee keer voordat je weer gaat dwalen.",
         "objectives": {
           "0": {
@@ -13367,7 +13828,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_prof_amends_apothecary": {
         "title": "Terug op het Fornuis",
-        "text": "Wel, kijk wie er terug is bij mijn pot. Geen wrok, {playerName}, een keuken heeft altijd ruimte, maar weet dat de rekening langer wordt elke keer dat je weggaat. Ga de wilde everzwijnen in het westelijke weide uitdunnen, want eerlijk zweet is het eerste ingrediënt, en het zal je handen herinneren aan het werk.",
+        "text": "Wel, kijk wie er terug is bij mijn pot. Geen wrok, {playerName}, een keuken heeft altijd ruimte, maar weet dat de rekening langer wordt elke keer dat je weggaat. Ga de wilde everzwijnen in het oostelijke weide uitdunnen, want eerlijk zweet is het eerste ingrediënt, en het zal je handen herinneren aan het werk.",
         "completion": "Dat is de oude smaak. Alchemie en Koken zijn weer als hoofdvakken op je fornuis. Blijf deze keer wat langer.",
         "objectives": {
           "0": {
@@ -14551,6 +15012,26 @@ export const nl_NL: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Een ambacht dat u het uwe kunt noemen",
+        "text": "Elke ambachtsman van Eastbrook kiest uiteindelijk voor één ambacht dat hij zijn eigen ambacht noemt. Bewijs jezelf met één enkele daad, {playerName}, en geef je pad aan.",
+        "completion": "Jouw pad is gekozen; loop er goed mee.",
+        "objectives": {
+          "0": {
+            "label": "Boswolf gedood"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Het goedmaken",
+        "text": "Om het ene vaartuig voor het andere opzij te zetten, moet een ambachtsman eerst het niet bewandelde pad goedmaken, {playerName}.",
+        "completion": "Wijzigingen aangebracht; er ligt een nieuw pad voor je open.",
+        "objectives": {
+          "0": {
+            "label": "Boswolf gedood"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Het Verdronken Koor",
         "text": "De waders handelen niet alleen. Tussen hen lopen de Verdronken Aanbidders, de sekte die met de tempel zonk, nog in hun verrotte gewaden, nog steeds het gebed zingend vanaf de oeverrotsen. Breng er acht tot zwijgen, en breng me zes van de offergaven die ze dragen. Ik wil weten wat ze hun godin willen geven.",
@@ -14655,6 +15136,48 @@ export const nl_NL: EnTranslations = {
           },
           "11": {
             "label": "De Verrekust-Dam"
+          },
+          "12": {
+            "label": "Wolf Run"
+          },
+          "13": {
+            "label": "Boar Meadow"
+          },
+          "14": {
+            "label": "Mirror Lake"
+          },
+          "15": {
+            "label": "Sableweb"
+          },
+          "16": {
+            "label": "Copper Dig"
+          },
+          "17": {
+            "label": "Bandit Camp"
+          },
+          "18": {
+            "label": "Fallen Chapel"
+          },
+          "19": {
+            "label": "Reliquary Hill"
+          },
+          "20": {
+            "label": "Brightwood Glade"
+          },
+          "21": {
+            "label": "The Sowfield"
+          },
+          "22": {
+            "label": "Thornwheel Circuit"
+          },
+          "23": {
+            "label": "The Boarpit"
+          },
+          "24": {
+            "label": "Eastbrook Homes"
+          },
+          "25": {
+            "label": "The Farshore Causeway"
           }
         }
       },
@@ -15071,6 +15594,11 @@ export const nl_NL: EnTranslations = {
         "name": "De Verdronken Litanie",
         "enterText": "Je daalt af in het verdronken heiligdom aan de rand van het moeras.",
         "leaveText": "Je klimt terug omhoog naar Broeder Halven aan de rand van het moeras."
+      },
+      "hellmaw_well": {
+        "name": "The Hellmaw Well",
+        "enterText": "The well mouth yawns into red dark - and the Hellmaw swallows you down.",
+        "leaveText": "You haul yourself back up the well shaft, the Hellmaw seething below."
       }
     },
     "letters": {
@@ -15278,7 +15806,7 @@ export const nl_NL: EnTranslations = {
       },
       "necromancers": {
         "name": "Mournweave-Gewaden",
-        "bonus2": "Verhoogt spreukkracht met 20. Opgelopen schade vertraagt je spreuken niet meer (100% weerstand tegen spreukvertraging).",
+        "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
         "bonus3": "Verhoogt intellect met 10 en uithoudingsvermogen met 10.",
         "bonus4": "Je spreuken hebben 10% kans om Helder Bezweren te verlenen, waardoor je volgende spreuk gratis is."
       },
@@ -15290,13 +15818,13 @@ export const nl_NL: EnTranslations = {
       },
       "soulflame": {
         "name": "Wraithfire-Regalia",
-        "bonus2": "Verhoogt spreukkracht met 20. Opgelopen schade vertraagt je spreuken niet meer (100% weerstand tegen spreukvertraging).",
+        "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
         "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%.",
         "bonus4": "Je spreuken hebben 10% kans om Zielevlam te verlenen, waardoor je spreukkracht met 40 toeneemt gedurende 10 sec."
       },
       "stormcallers": {
         "name": "Galecall-Gewaden",
-        "bonus2": "Verhoogt spreukkracht met 20. Opgelopen schade vertraagt je spreuken niet meer (100% weerstand tegen spreukvertraging).",
+        "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
         "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%.",
         "bonus4": "Je spreuken hebben 10% kans om Zielevlam te verlenen, waardoor je spreukkracht met 40 toeneemt gedurende 10 sec."
       },
@@ -15357,5 +15885,67 @@ export const nl_NL: EnTranslations = {
     "delveRiteShrineSkullInteract": "Schedelschrijn: druk op F om het aan te raken",
     "mailboxName": "Brievenbus",
     "noticeboardName": "Mededelingenbord"
+  },
+  "contributions": {
+    "cAdminB": "Account review, chat moderation, report queues, role-gated dashboards, and better status panels.",
+    "cAdminT": "Admin & Moderator Tools",
+    "cAuthB": "OIDC wiring, optional TOTP login hardening, safer login throttles, clearer dashboard sessions.",
+    "cAuthT": "Auth & Account Safety",
+    "cOpsB": "Auto-update maintenance mode, static cache policy, API health checks, and safer server restarts.",
+    "cOpsT": "Updates & Operations",
+    "cTestB": "Security tests, OAuth tests, realm tests, launcher tests, and visual smoke scripts.",
+    "cTestT": "Test Coverage",
+    "cUiB": "Camera options, mobile layout fixes, clearer landing flows, and performance guidance.",
+    "cUiT": "Game UI Quality",
+    "cWikiB": "Public wiki hub fallback, release/news feed, launcher status page, and improved nav consistency.",
+    "cWikiT": "Wiki & Public Hubs",
+    "lead": "Cryptic Realm is its own game, but it can still send practical engine improvements back upstream. This separates shared ClaudeCraft-friendly work from private Cryptic Realm features.",
+    "privateBody": "These stay in the independent track because they define this game and are not handed over as generic upstream value.",
+    "privateTitle": "Cryptic Realm-Only Work",
+    "sharedBody": "Clean, generic improvements offered upstream because they help the base project without giving away Cryptic Realm-only economy, realm, or lore systems.",
+    "sharedTitle": "Shared Upstream Candidates",
+    "tagCustody": "Private custody runbooks",
+    "tagExchange": "Exchange realm",
+    "tagLore": "Cryptic Realm lore",
+    "tagMinigames": "Original mini-games",
+    "tagPlatinum": "Platinum economy",
+    "tagRealms": "Hellmaw / Classic / Dominion / Arcane realms",
+    "title": "Contributions"
+  },
+  "coop": {
+    "accountOther": "Different account",
+    "accountThis": "This account",
+    "createCharacter": "Create a character",
+    "createError": "Could not create the character. Try a different name.",
+    "createName": "Character name",
+    "createTitle": "Name your new hero and pick a class",
+    "hintJoin": "Press Start on another controller to add a player (up to 4).",
+    "hintLeave": "Hold Start on a controller to drop that player.",
+    "joinCancel": "Cancel",
+    "joinConfirm": "Join",
+    "joinNow": "Join now",
+    "joinTitle": "Player {slot}: press to join",
+    "keyboardJoin": "Press F2 to add a local player",
+    "loggingIn": "Signing in...",
+    "loginError": "Sign-in failed. Check the username and password.",
+    "loginPass": "Password",
+    "loginSubmit": "Sign in and join",
+    "loginTitle": "Sign in Player {slot}'s account",
+    "loginUser": "Username",
+    "noOtherCharacters": "This account has no other characters to bring in.",
+    "pickCharacter": "Choose a character",
+    "pickClass": "Choose a class",
+    "reconnecting": "Player {slot} reconnecting",
+    "reviving": "Reviving in {seconds}s",
+    "slotEmpty": "Open",
+    "slotLabel": "Player {slot}",
+    "stripTitle": "Local players"
+  },
+  "links": {
+    "loading": "Loading official channels…",
+    "title": "Official Links"
+  },
+  "whitepaper": {
+    "loading": "Loading the white paper…"
   }
 };

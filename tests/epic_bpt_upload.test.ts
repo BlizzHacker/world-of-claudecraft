@@ -9,7 +9,6 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-// @ts-expect-error untyped zero-dependency ops tool (scripts/*.mjs convention)
 import * as rawBpt from '../scripts/epic-bpt-upload.mjs';
 
 type BptHelpers = {

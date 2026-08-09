@@ -8,8 +8,8 @@ import { buildingCameraHeight } from '../sim/building_layout';
 import { mineMoundFootprint, STALL_HALF_D, STALL_HALF_W } from '../sim/colliders';
 import { MOUNT_RACE_JUMP_FIXTURES } from '../sim/content/mounts';
 import { BUILTIN_WORLD, getActiveWorldContent, WORLD_MIN_Z } from '../sim/data';
-import {
 import { getActiveRealm } from '../sim/realms/registry';
+import {
   DOCK_SECTION_LOCAL_Z,
   DOCK_SECTION_SURFACE_Y,
   dockSurfaceLine,

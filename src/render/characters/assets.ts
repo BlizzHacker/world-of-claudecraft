@@ -26,6 +26,7 @@ import { backGripFor } from './back_grips';
 import { dequantizeAttribute } from './dequantize_attribute';
 import { type HandGrip, KAYKIT_SHIELD_ACCESSORIES, KAYKIT_SHIELD_GRIPS } from './held_item_grips';
 import { buildMakeupDecal } from './makeup';
+import { chooseExternalPreviewClipName } from './preview_clip';
 import {
   type AttachDef,
   characterPreloadUrls,
@@ -37,7 +38,6 @@ import {
   SKINS,
   VISUALS,
   type VisualDef,
-import { chooseExternalPreviewClipName } from './preview_clip';
   visibleAttachmentsForGraphics,
   visualAssetUrlForGraphics,
   weaponSkinModelUrl,

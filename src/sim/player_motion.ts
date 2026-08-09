@@ -46,8 +46,9 @@ import {
   terrainSteepnessAt,
   terrainWallStandoff,
   waterLevelAt,
-export const FLYING_VERTICAL_SPEED = 8;
 } from './world';
+
+export const FLYING_VERTICAL_SPEED = 8;
 
 export const BACKPEDAL_MULT = 0.65;
 export const GRAVITY = 16;
@@ -384,6 +385,7 @@ export function stepPlayerMotion(deps: PlayerMotionDeps, p: Entity, inp: MoveInp
     wishSpeed = speed;
   }
 
+  const flying = isFlying(p);
   if (flying) {
     if (moving) {
       const nx = p.pos.x + wishX * wishSpeed * DT;

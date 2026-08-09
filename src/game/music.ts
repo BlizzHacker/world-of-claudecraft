@@ -48,7 +48,7 @@ export type MusicZone =
 
 // Friendly track names for the now-playing UI. Procedural themes, so these
 // name the composed mood/zone rather than a file.
-const MUSIC_ZONE_LABELS: Record<MusicZone, string> = {
+const MUSIC_ZONE_LABELS: Partial<Record<MusicZone, string>> = {
   town_eastbrook: 'Eastbrook Vale (Town)',
   town_fenbridge: 'Fenbridge (Town)',
   town_highwatch: 'Highwatch (Town)',

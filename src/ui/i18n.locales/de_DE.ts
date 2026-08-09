@@ -1242,9 +1242,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.collectorsHeading': 'Sammler, TrophÃ¤en und der Preis einer Geschichte',
   'guide.profPages.econ.collectorsBody':
     'HÃ¤ndler sind blind fÃ¼r Provenienz: Ein signierter Gegenstand verkauft sich an einen NSC fÃ¼r genau seinen schlichten Preis. Der Aufpreis fÃ¼r eine Signatur besteht nur zwischen Spielern, und genau das macht ihn interessant: ein Stapel GlÃ¼ckserz, signiert von einem berÃ¼hmten Sammler, ein Erstklassiges StÃ¼ck aus einer glÃ¼cklichen Ernte, eine Meisterwerksklinge mit dem Namen eines lÃ¤ngst zurÃ¼ckgezogenen Schmieds, all das kostet, was jemandes Erinnerung sagt, dass es wert ist.\n\nDas Buch der Taten spielt mit demselben Instinkt: Makellose Ader, Altes Herzholz, MondlichtblÃ¼te, Ein Makelloses Exemplar und Schimmer der Hoffnung sind Sammlertaten mit null Ansehen, die einzig dazu da sind, zu beweisen, dass dir ein Moment passiert ist. Behalte den Gegenstand, der die Tat verdient hat, und du hÃ¤ltst den Beleg. Das ist keine Macht; Provenienz kauft keine Attributpunkte und gewinnt keine KÃ¤mpfe, sie ist die Papierspur der Welt an guten Tagen.',
-  'guide.profPages.econ.throttleHeading': 'Die Aktionsdrosselung',
-  'guide.profPages.econ.throttleBody':
-    'Der AusstoÃŸ hat eine Obergrenze: Herstellen, Entzaubern, Verzaubern und Zerlegen teilen sich ein Budget von {actions} erfolgreichen Aktionen pro rollenden {seconds} Sekunden. Ein abgelehnter Versuch kostet nichts und verbraucht kein Budget. Du wirst es im normalen Spiel nie bemerken; es existiert, damit ein ausgemaxter Spezialist mit einer vollen Bank den Markt nicht Ã¼berschwemmen kann, egal wie hoch seine Fertigkeit oder sein Vorrat ist.',
   'guide.profPages.econ.doctrineHeading': 'Spieler handeln mit Spielern',
   'guide.profPages.econ.doctrineBody':
     'Die Handwerkswirtschaft beruht auf einem Gedanken: Spieler versorgen Spieler. Sammler beliefern Handwerker, Handwerker versorgen Quester und SchlachtzÃ¼gler, und Zerbrecher beliefern Verzauberer, wÃ¤hrend HÃ¤ndler und Stationsmeister an den RÃ¤ndern stehen, um Plunder und MÃ¼nzen aufzunehmen, anstatt mit dir zu konkurrieren. Wenn du mit einem Beruf Geld verdienen willst, ist dein Kunde ein Mensch: Lerne, was andere Spieler verbrauchen, richte deine Preise am Weltmarkt aus und behandle die NSC-Systeme als Boden unter deinen Preisen, nicht als den Markt selbst.\n\nGefertigte AusrÃ¼stung ist so ausgewogen, dass sie unterhalb des Schlachtzugbodens liegt: Selbst ein Meisterwerk ist immer nur eine QualitÃ¤tsstufe Ã¼ber seinem Rezept, nie jenseits von LegendÃ¤r, und sein Attributbudget bleibt unter dem Schlachtzugsbeute-Band. Die Schmiede macht dich bereit fÃ¼r den hÃ¤rtesten Inhalt; sie ersetzt ihn nicht. Das hÃ¤lt Handwerker, SchlachtzÃ¼gler und den Markt in einem stabilen Dreieck: Schlachtzugsbeute bleibt erstrebenswert, und gefertigte StÃ¼cke bleiben die beste AusrÃ¼stung, die man fÃ¼r Geld kaufen kann.',
@@ -6137,14 +6134,12 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     'Diese Schrift kenne ich aus Morthens Grimoire. Dieselbe Hand fÃ¼hrte jedes Grab, {playerName}.',
   'entities.quests.q_cult_orders.objectives.0.label': 'Wyrmkult-Eiferer getÃ¶tet',
-  'entities.quests.q_cult_orders.objectives.1.label': 'Befehle des Wyrmkults',
   'entities.quests.q_necromancers.title': 'Der Ring der Phylakterien',
   'entities.quests.q_necromancers.text':
     'Die Befehle nennen einen Ring von Phylakterien, {playerName}, SeelengefÃ¤ÃŸe um das Heiligtum. TÃ¶te 8 Nekromanten und bring 3 unversehrt.',
   'entities.quests.q_necromancers.completion':
     'Licht, vergib uns. Darin sind die Toten aus Tal und Moor; sie bauten nie ein Heer, {playerName}. Sie sammelten einen Zehnt.',
   'entities.quests.q_necromancers.objectives.0.label': 'Wyrmkult-Nekromant getÃ¶tet',
-  'entities.quests.q_necromancers.objectives.1.label': 'Rituelles SeelengefÃ¤ÃŸ',
   'entities.quests.q_revenants.title': 'Die WiedergÃ¤ngerfelder',
   'entities.quests.q_revenants.text':
     'Ã–stlich der StraÃŸe liegt ein altes Schlachtfeld. Der Kult hob die Knochen in rostiger RÃ¼stung. Leg 12 zurÃ¼ck in die Erde, {playerName}.',
@@ -6563,9 +6558,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': 'Koloss',
   'fiesta.powerup.pow_moon_boots.name': 'Mondstiefel',
   'fiesta.powerup.pow_speed_demon.name': 'GeschwindigkeitsdÃ¤mon',
-  'fiesta.practice': 'ðŸŽ‰ Ãœbung gegen Bots',
-  'fiesta.practiceNote':
-    'Offline-Ãœbung: erzeugt 3 KI-Bots und meldet Euch fÃ¼r eine 2-gegen-2-Fiesta an. Klickt erneut zum Beenden.',
   'fiesta.queue.join':
     'Ihr tretet der Warteschlange fÃ¼r die 2-gegen-2-Fiesta bei. Macht Euch bereit zum FEIERNâ€¦',
   'fiesta.queue.leave': 'Ihr verlasst die Warteschlange fÃ¼r die 2-gegen-2-Fiesta.',
@@ -7396,8 +7388,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.thunder_clap': 'Trifft alles um dich herum und verlangsamt deren Angriffe.',
   'guide.abilityHook.wrath':
     'Ein Naturblitz, den du aus der Distanz auf ein Ziel schleuderst, dein erster Schadenszauber.',
-  'guide.arenaPage.augmentsNote':
-    'Augmentierungen und VerstÃ¤rkungen halten nur fÃ¼r das Match. Es geht um verspielte Builds aus dem Moment heraus, nicht um anhaltende Macht, sodass sich niemand den Sieg erkaufen kann.',
   'guide.arenaPage.coliseumBody':
     'Das Kolosseum ist die Arena des Reichs, wo du in gewerteten Matches gegen andere Spieler antrittst, eins gegen eins oder zwei gegen zwei. Jede Wertungsklasse hat ihre eigene Rangliste, ein Sieg hebt dich also auf dieser Leiter empor, fÃ¼r das ganze Reich sichtbar.',
   'guide.arenaPage.coliseumHeading': 'Das Aschene Kolosseum',
@@ -7565,21 +7555,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
     'Drei Gebiete, von SÃ¼den nach Norden, jedes eine Stufe hÃ¶her im Level. Folge der Questspur, und das Land trÃ¤gt dich vom Tal bis zu den Gipfeln.',
   'guide.worldPage.places': 'Bemerkenswerte Orte',
   'guide.worldPage.residents': 'Wem du begegnen wirst',
-  'guide.arenaPage.powerupsBody':
-    'Mitten im Kampf fallen auÃŸerdem leuchtende Kugeln in die Arena, frei fÃ¼r den, der sie zuerst erreicht. Sie sind absichtlich vÃ¶llig Ã¼bertrieben und halten nur kurz an: GeschwindigkeitsdÃ¤mon fÃ¼r einen Wimpernschlag blendenden Tempos, Koloss, um dich zu einem schwerfÃ¤lligen Riesen anschwellen zu lassen, Mondstiefel fÃ¼r einen federnden Sprung bei niedriger Schwerkraft und Berserker fÃ¼r einen plÃ¶tzlichen Schub an Raserei.',
-  'guide.arenaPage.powerupsTitle': 'Powerups im Ring',
-  'guide.arenaPage.waveGoldBody':
-    'Die mittlere Welle: zweischneidige Kombinationen, in denen dein Build allmÃ¤hlich Gestalt annimmt und zu glÃ¤nzen beginnt.',
-  'guide.arenaPage.waveGoldTitle': 'Gold',
-  'guide.arenaPage.wavePrismaticBody':
-    'Die letzte Welle: build-prÃ¤gende, bildschirmschmelzende AusschlÃ¤ge, die sich auf die beste Art lÃ¤cherlich anfÃ¼hlen sollen.',
-  'guide.arenaPage.wavePrismaticTitle': 'Prismatisch',
-  'guide.arenaPage.waveSilverBody':
-    'Die ErÃ¶ffnungswelle: klare Boosts auf einen einzelnen Wert, die die Grundlagen deiner Klasse schÃ¤rfen.',
-  'guide.arenaPage.waveSilverTitle': 'Silber',
-  'guide.arenaPage.wavesBody':
-    'Jede Runde einer Fiesta reicht dir eine frische Auswahl, und die AuswahlmÃ¶glichkeiten werden mutiger, je lÃ¤nger das Match dauert. Du baust von einer Welle zur nÃ¤chsten auf, wÃ¤hlst jedes Mal eine von wenigen Optionen und behÃ¤ltst sie fÃ¼r den Rest des Gefechts.',
-  'guide.arenaPage.wavesTitle': 'Augmentierungen kommen in Wellen',
   'guide.bestiary.flavor.gravecaller_cultist':
     'Gewandete Diener des Todeskults, deren Treiben die GrÃ¤ber vom Tal bis zu den Gipfeln schÃ¤ndet. Wo sie sich versammeln, ruhen die Toten nicht.',
   'guide.bestiary.flavor.grubjaw':
@@ -8517,8 +8492,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'desktop.update.downloading': 'Update {version} wird heruntergeladen...',
   'desktop.update.downloadingTitle': 'Update {version} wird heruntergeladen...',
   'desktop.update.later': 'SpÃ¤ter',
-  'desktop.update.ready':
-    'Update {version} ist bereit. Es wird beim Beenden installiert, oder starte jetzt neu.',
   'desktop.update.readyTitle': 'Update {version} ist bereit',
   'desktop.update.readyBody': 'Es wird beim Beenden installiert, oder starte jetzt neu.',
   'desktop.update.restart': 'Jetzt neu starten',
@@ -8859,9 +8832,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
     'Spaltet die RÃ¼stung des Ziels und verringert sie pro Anwendung um {damage}%. Stapelt sich bis zu 5-mal. Erzeugt sehr viel Bedrohung.',
   'entities.mobs.training_dummy.name': 'Trainingspuppe',
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'guide.arenaPage.yumiBody':
-    'Yumi beschÃ¼tzen ist ein Team-Zielmodus, der in einem Labyrinth ausgetragen wird: Jede Seite bewacht ihren eigenen Katzenbegleiter und jagt zugleich den der Gegner. Immer wieder blinzeln beide Katzen in neue Ecken des Labyrinths, sodass der Kampf zwischen Verteidigen, Jagen und dem Wettlauf, sie erneut aufzuspÃ¼ren, hin und her schwingt. Melde dich als drei gegen drei oder fÃ¼nf gegen fÃ¼nf an; wer im Kampf fÃ¤llt, muss nur einen Moment pausieren.',
-  'guide.arenaPage.yumiHeading': 'Yumi beschÃ¼tzen',
   'entities.mobs.water_elemental.name': 'Wasserelementar',
   'hudChrome.archetypeTitle.hobbyLabel': 'Freizeit',
   'hudChrome.auraEffect.armorPct': 'Verringert RÃ¼stung um {pct}%',

@@ -1,3 +1,4 @@
+import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
 import * as THREE from 'three';
 import { CLASSES } from '../../sim/data';
 import type { PlayerClass } from '../../sim/types';
@@ -18,6 +19,8 @@ import {
 import { PREVIEW_FRAMING, type PreviewFramingName } from './preview_framing';
 import { characterPreviewFrameVisible, resolveCharacterPreviewPolicy } from './preview_policy';
 import { CharacterVisual } from './visual';
+import { chooseExternalPreviewClipName } from './preview_clip';
+import { loadGltf } from '../assets/loader';
 export type ExternalPreviewState = 'idle' | 'loading' | 'ready' | 'error';
 
 

@@ -46,6 +46,7 @@ import { battlefieldExperienceTrickle } from './professions/battlefield_xp';
 import { useGatherToolItem } from './professions/gathering';
 import type { ItemUseResult, PlayerMeta } from './sim';
 import type { SimContext } from './sim_context';
+import { groundHeight } from './world';
 import {
   ALL_EQUIP_SLOTS,
   CONSUME_DURATION,
@@ -56,7 +57,6 @@ import {
   type EquipSlot,
   INTERACT_RANGE,
   type InventoryUnit,
-import { groundHeight } from './world';
   type ItemDef,
   type ItemInstancePayload,
   isNonSpellCast,

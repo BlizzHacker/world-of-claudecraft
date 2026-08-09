@@ -4213,14 +4213,12 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     'この筆跡はモーセンの魔導書と同じです。すべての墓を導いた同じ手です、{playerName}。',
   'entities.quests.q_cult_orders.objectives.0.label': 'ワーム教団の狂信者を討伐',
-  'entities.quests.q_cult_orders.objectives.1.label': 'ワーム教団の命令書',
   'entities.quests.q_necromancers.title': '経箱の輪',
   'entities.quests.q_necromancers.text':
     '命令は経箱の輪を語っています。{playerName}、聖所を養う魂の器です。死霊術師を8人倒し、3つを壊さず持ってきてください。',
   'entities.quests.q_necromancers.completion':
     '光よ、赦したまえ。谷と湿地の死者が入っています。{playerName}、これは軍ではなく、貢ぎ物でした。',
   'entities.quests.q_necromancers.objectives.0.label': 'ワーム教団の死霊術師を討伐',
-  'entities.quests.q_necromancers.objectives.1.label': '儀式の経箱',
   'entities.quests.q_revenants.title': '亡霊の野',
   'entities.quests.q_revenants.text':
     '聖所道の東には古い戦場があります。教団は錆びた甲冑の骨を起こしました。{playerName}、12体を土へ戻してください。',
@@ -5611,9 +5609,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': '巨像',
   'fiesta.powerup.pow_moon_boots.name': 'ムーンブーツ',
   'fiesta.powerup.pow_speed_demon.name': 'スピードデーモン',
-  'fiesta.practice': '🎉 ボットとの練習',
-  'fiesta.practiceNote':
-    'オフライン練習：AIボットを3体出現させ、2v2 Fiestaのキューに登録します。もう一度クリックで停止。',
   'fiesta.queue.join': '2v2 Fiestaのキューに参加しました。パーティの準備を…',
   'fiesta.queue.leave': '2v2 Fiestaのキューを離れました。',
   'fiesta.queue.teamLeave': 'あなたのチームは2v2 Fiestaのキューを離れました。',
@@ -6608,8 +6603,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.thorns': '味方を守り、近接で攻撃してきた相手に反射ダメージを与えます。',
   'guide.abilityHook.thunder_clap': '周囲のすべてに当たり、相手の攻撃を遅くします。',
   'guide.abilityHook.wrath': '遠距離から標的に放つネイチャーのボルト。主力の火力です。',
-  'guide.arenaPage.augmentsNote':
-    'オーグメントやパワーアップはそのマッチの間だけ続きます。持続的な強さではなく、その場で組む遊び心のあるビルドが目的なので、課金で勝ちを買えるわけではありません。',
   'guide.arenaPage.coliseumBody':
     'Coliseumはレルムのアリーナで、ランクマッチで他のプレイヤーと対戦します。一対一、あるいは二対二です。各ブラケットはそれぞれ独自の順位を保つので、勝てばそのラダーを駆け上がり、レルム全体に見てもらえます。',
   'guide.arenaPage.coliseumHeading': '灰のコロシアム',
@@ -6797,21 +6790,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '南から北へ三つのゾーンが並び、それぞれレベルが一段ずつ上がります。クエストの道筋をたどれば、土地が谷から峰々へとあなたを運んでいきます。',
   'guide.worldPage.places': '注目の場所',
   'guide.worldPage.residents': '出会う者たち',
-  'guide.arenaPage.powerupsBody':
-    '戦いの最中、光り輝くオーブがアリーナに落ちてきます。先に取った者の自由になり、しかも狙い通りに度を越していて、効果はほんの一瞬だけ。スピードデーモンは目もくらむ速さへ、コロッサスはのっそりと歩く巨人へ、ムーンブーツは低重力で跳ね回るジャンプへ、バーサーカーは突如あふれる怒りへとあなたを変えます。',
-  'guide.arenaPage.powerupsTitle': 'リングのパワーアップ',
-  'guide.arenaPage.waveGoldBody':
-    '中盤のウェーブ。両刃の組み合わせが並び、あなたのビルドが形を成して輝き始めます。',
-  'guide.arenaPage.waveGoldTitle': 'ゴールド',
-  'guide.arenaPage.wavePrismaticBody':
-    '最後のウェーブ。ビルドを決定づける、画面を溶かすほどのスパイク。最高の意味でばかげていると感じられるよう作られています。',
-  'guide.arenaPage.wavePrismaticTitle': 'プリズマティック',
-  'guide.arenaPage.waveSilverBody':
-    '最初のウェーブ。単一ステータスを伸ばすシンプルな強化で、クラスの基本を研ぎ澄まします。',
-  'guide.arenaPage.waveSilverTitle': 'シルバー',
-  'guide.arenaPage.wavesBody':
-    'Fiestaの各ラウンドでは新たな一手が手に入り、試合が進むにつれてその一手は大胆になっていきます。一つのウェーブから次へとビルドを築き上げ、毎回いくつかの候補から一つを選び、残りの試合の間はそれを持ち続けます。',
-  'guide.arenaPage.wavesTitle': 'オーグメントはウェーブで訪れる',
   'guide.bestiary.flavor.gravecaller_cultist':
     '死のカルトに仕えるローブ姿の僕たち。その業は渓谷から高地まで墓を汚し、彼らが集う場所では死者が安らぎません。',
   'guide.bestiary.flavor.grubjaw':
@@ -7910,8 +7888,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.cameraPrompt.changeLater': 'この設定は後で Esc の「キー割り当て」から変更できます。',
   'hudChrome.cameraPrompt.confirm': '決定',
   'desktop.update.downloading': 'アップデート {version} をダウンロード中...',
-  'desktop.update.ready':
-    'アップデート {version} の準備ができました。ゲーム終了時に自動でインストールされます。今すぐ再起動もできます。',
   'desktop.update.checkingTitle': 'アップデートを確認中...',
   'desktop.update.checkingBody': 'ゲームは自動的に最新の状態に保たれます。',
   'desktop.update.uptodateTitle': 'お使いのバージョンは最新です。',
@@ -8939,9 +8915,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   // Protect Yumi locale fill (M16 wordy-key floor).
   'yumi.hud.collapse': 'Protect Yumiのバーを折りたたむ',
   'yumi.hud.expand': 'Protect Yumiのバーを展開する',
-  'guide.arenaPage.yumiHeading': 'Yumiを守れ',
-  'guide.arenaPage.yumiBody':
-    'Protect Yumiは迷路で行うチーム目標モード。各チームは自分の猫の使い魔を守りながら、敵の使い魔を狙います。二匹の猫は時折迷路の別の場所へ転移するため、防衛、追撃、捜索の間で戦況が揺れ動きます。3対3か5対5でキューに参加でき、倒れても少しの間ベンチに下がるだけです。',
   'yumi.queue.join': 'Protect Yumiのキューに参加しました。使い魔を守りましょう…',
   'yumi.queue.leave': 'Protect Yumiのキューを離れました。',
   'yumi.queue.teamLeave': 'チームがProtect Yumiのキューを離れました。',
@@ -11203,9 +11176,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.provenanceHeading': '署名入りの品',
   'guide.profPages.econ.provenanceBody':
     'レア以上の製作品と発見には作り手の署名が入り、署名が完全に一致する品は今でもスタックできます。',
-  'guide.profPages.econ.throttleHeading': '行動の制限',
-  'guide.profPages.econ.throttleBody':
-    '製作・分解・エンチャント・サルベージはひとつの制限を共有します。{seconds}秒あたり最大{actions}回です。',
   'guide.profPages.econ.doctrineHeading': 'プレイヤー同士の取引',
   'guide.profPages.econ.doctrineBody':
     '製作装備の強さは常にレイドの下限を下回り、上記の費用は品物を商店の循環ではなくプレイヤー間の取引へと押し出します。',

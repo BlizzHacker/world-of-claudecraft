@@ -697,7 +697,7 @@ export const zh_CN: EnTranslations = {
       "railSol": "SOL",
       "railUsdc": "USDC",
       "railWoc": "WOC",
-      "railWocDiscount": "优惠 {percent}%",
+      "railWocDiscount": "{percent}% off",
       "railWocUnavailable": "WOC 定价暂时不可用。",
       "railNativeUnavailable": "SOL/WOC 不可用",
       "amountLabel": "数量",
@@ -809,7 +809,7 @@ export const zh_CN: EnTranslations = {
     "mobile": {
       "jump": "跳跃",
       "leaderboard": "排行榜",
-      "dailyRewards": "商店",
+      "dailyRewards": "奖励",
       "deeds": "功绩",
       "mounts": "坐骑",
       "professions": "专业",
@@ -826,7 +826,10 @@ export const zh_CN: EnTranslations = {
       "targetCycleShort": "目标",
       "spellbookPageLabel": "页{page}",
       "hideKeyboard": "隐藏键盘",
-      "chatPlaceholder": "说点什么...（! 显示社区指令）"
+      "chatPlaceholder": "说点什么...",
+      "autorun": "Auto",
+      "hideMenuButtons": "隐藏菜单按钮",
+      "showMenuButtons": "显示菜单按钮"
     },
     "tutorial": {
       "moveBodyTouch": "使用摇杆移动，拖动屏幕环顾四周。先走几步开始吧。",
@@ -849,8 +852,8 @@ export const zh_CN: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "有可用更新",
-      "body": "World of ClaudeCraft 有新版本可用。立即更新以获取最新修复和改进。",
-      "bodyWithVersion": "World of ClaudeCraft {version} 版本已可用。立即更新以获取最新修复和改进。",
+      "body": "Cryptic Realm 有新版本可用。立即更新以获取最新修复和改进。",
+      "bodyWithVersion": "Cryptic Realm {version} 版本已可用。立即更新以获取最新修复和改进。",
       "notNow": "暂不",
       "update": "更新"
     },
@@ -1340,7 +1343,84 @@ export const zh_CN: EnTranslations = {
       "showAttackButton": "显示攻击按钮",
       "showDailyRewardsChest": "显示每日奖励宝箱",
       "mobileCameraJoystick": "摄像机摇杆",
-      "mobileLeftHanded": "左手布局"
+      "mobileLeftHanded": "左手布局",
+      "changed": "已更改 {count} 项",
+      "changedSummary": "已更改 {count} 项（相对默认）",
+      "conflictDot": "按键冲突",
+      "done": "完成",
+      "keybindCleared": "已清除 {action}",
+      "keybindEvicted": "已将 {key} 绑定到 {action}；已从 {evicted} 移除。",
+      "keybindModifierHint": "提示：你可以绑定组合键。按住 Shift、Ctrl 或 Alt 的同时按下某个键即可录制组合键（例如 Shift+1）。",
+      "keybindRebinding": "正在重绑定 {action}。请按一个键，或按 Esc 取消。",
+      "keybindTaken": "按键已移除",
+      "keybindUnbound": "{action} 尚未绑定按键",
+      "modeOffline": "离线",
+      "modeOnline": "在线",
+      "overviewConflictAlert": "部分按键绑定存在冲突或未绑定。",
+      "resetAllBody": "这会将每项设置恢复为默认值。此操作无法撤销。",
+      "resetAllTitle": "重置所有设置？",
+      "searchEmpty": "没有符合搜索的设置。",
+      "searchGoTo": "前往{category}",
+      "searchPlaceholder": "搜索设置",
+      "searchScopeAll": "所有设置",
+      "searchScopeThis": "当前分区",
+      "ia": {
+        "catAccessibilityName": "无障碍",
+        "catAccessibilitySub": "动态效果、对比度与内容舒适度。",
+        "catAudioSub": "音量与声音开关。",
+        "catControllerSub": "手柄手感与按键布局。",
+        "catControlsName": "控制",
+        "catControlsSub": "镜头、移动、战斗与反馈。",
+        "catGraphicsSub": "画质、视野与世界画面。",
+        "catInterfaceSub": "界面缩放、面板、聊天与单位框体。",
+        "catKeybindsSub": "为每个操作绑定按键。",
+        "catOverviewName": "概览",
+        "catOverviewSub": "固定的常用项、快捷操作，以及已更改的内容。",
+        "catSystemName": "系统",
+        "catSystemSub": "性能、支持与关于。",
+        "catTouchName": "触控",
+        "catTouchSub": "屏幕摇杆、视角与按钮。",
+        "railDisplay": "显示",
+        "railInput": "输入",
+        "railSystem": "系统"
+      },
+      "legend": {
+        "back": "返回",
+        "category": "分类",
+        "clear": "清除",
+        "navigate": "导航",
+        "page": "页面",
+        "reset": "重置",
+        "select": "选择"
+      },
+      "sec": {
+        "about": "关于",
+        "actionBars": "动作条",
+        "buttons": "按钮",
+        "camera": "镜头",
+        "chat": "聊天",
+        "combat": "战斗",
+        "combatTooltips": "战斗与提示",
+        "content": "内容",
+        "feedback": "反馈",
+        "feel": "操作感",
+        "general": "通用",
+        "hudExtras": "HUD 附加项",
+        "inputMode": "输入模式",
+        "look": "视角",
+        "motionContrast": "动态与对比度",
+        "movement": "移动",
+        "panels": "面板",
+        "performance": "性能",
+        "quality": "画质",
+        "scaleText": "缩放与文字",
+        "sticks": "摇杆",
+        "support": "支持",
+        "toggles": "开关",
+        "unitFrames": "单位框体",
+        "view": "视野",
+        "volume": "音量"
+      }
     },
     "talentRows": {
       "tab": "抉择",
@@ -1375,7 +1455,8 @@ export const zh_CN: EnTranslations = {
       "menuAction": "游戏菜单",
       "zoomIn": "放大",
       "zoomOut": "缩小",
-      "help": "左摇杆移动，右摇杆控制镜头。打开窗口即可使用屏幕指针。"
+      "help": "左摇杆移动，右摇杆控制镜头。打开窗口即可使用屏幕指针。",
+      "duplicate": "也绑定到 {buttons}"
     },
     "perf": {
       "title": "性能监视器",
@@ -1606,7 +1687,11 @@ export const zh_CN: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "配置 {n}"
+      "defaultBuildName": "配置 {n}",
+      "choicesTab": "天赋选择",
+      "resetChoices": "重置选择",
+      "tierLevel": "等级 {n}",
+      "tierLevelLabel": "等级"
     },
     "tips": {
       "joinChannels": "提示：输入 /join world 或 /join lfg，与全服玩家聊天。"
@@ -1709,7 +1794,7 @@ export const zh_CN: EnTranslations = {
       "loggedOutPrompt": "登录以管理您的账户。",
       "memberSince": "注册于 {date}",
       "sectionSettings": "账户设置",
-      "sectionWallet": "$WOC 钱包",
+      "sectionWallet": "$CR 钱包",
       "sectionCharacters": "角色",
       "sectionDanger": "危险区域",
       "changePassword": "修改密码",
@@ -1782,7 +1867,15 @@ export const zh_CN: EnTranslations = {
       "exportHint": "将你的账号和角色数据下载为一个 JSON 文件。我们也会向你发送一封确认邮件。",
       "exportBtn": "下载我的数据",
       "exportDone": "你的数据已下载。我们已向你发送确认邮件。",
-      "exportFailed": "无法导出你的数据。请稍后重试。"
+      "exportFailed": "无法导出你的数据。请稍后重试。",
+      "connectionsSummary": "Link Google, Facebook, or Plex so you can sign in with them.",
+      "sectionConnections": "Connected Accounts",
+      "ssoLink": "Link Google / Facebook / Plex",
+      "ssoLinkConflict": "That account is already linked to a different Cryptic Realm login.",
+      "ssoLinked": "Linked — you can sign in with Google, Facebook, or Plex.",
+      "ssoNotLinked": "Not linked.",
+      "ssoUnlink": "Unlink",
+      "ssoUnlinkNeedsPassword": "Set a password first — SSO is currently your only way to sign in."
     },
     "masterLoot": {
       "title": "队长分配",
@@ -1830,7 +1923,8 @@ export const zh_CN: EnTranslations = {
         "tusk": "獠牙",
         "meat": "兽肉",
         "cloth": "布"
-      }
+      },
+      "concentrateHint": "选择的部位越少，每个部位的品质越高。"
     },
     "townFocus": {
       "title": "城镇专注",
@@ -2087,7 +2181,9 @@ export const zh_CN: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "暂离"
+      "afkTag": "暂离",
+      "mob": "[{level}] {name}",
+      "mobElite": "[{level}+] {name}"
     },
     "mobTooltip": {
       "levelFamily": "等级 {level} {family}",
@@ -2160,7 +2256,7 @@ export const zh_CN: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "关闭",
       "keybind": "Discord 面板",
@@ -2407,8 +2503,8 @@ export const zh_CN: EnTranslations = {
       }
     },
     "marketIndicator": {
-      "aria": "世界市场收益或物品待领取",
-      "tip": "销售收益或退回物品正在商人处等待你领取。"
+      "aria": "世界市场待领取物品",
+      "tip": "有金币或物品正在商人处等待你领取。"
     },
     "noticeboard": {
       "empty": "看起来没有张贴任何内容。"
@@ -2555,6 +2651,10 @@ export const zh_CN: EnTranslations = {
         "moongateCommunion": {
           "title": "月门共祷",
           "note": "朝圣者在月中之月下聚于神庙月门。"
+        },
+        "fiestaNight": {
+          "note": "今晚 2v2 狂欢擂台的人气最旺。",
+          "title": "狂欢之夜"
         }
       }
     },
@@ -2678,7 +2778,17 @@ export const zh_CN: EnTranslations = {
     "archetypeTitle": {
       "label": "称号",
       "none": "无",
-      "hobbyLabel": "爱好"
+      "hobbyLabel": "爱好",
+      "alchemy": "炼金师",
+      "armorcrafting": "锻甲师",
+      "cooking": "厨师",
+      "enchanting": "附魔师",
+      "engineering": "工程师",
+      "inscription": "铭文师",
+      "jewelcrafting": "珠宝匠",
+      "leatherworking": "制皮师",
+      "tailoring": "裁缝",
+      "weaponcrafting": "武器匠"
     },
     "archetypePair": {
       "engineering+alchemy": "爆破师",
@@ -2937,7 +3047,10 @@ export const zh_CN: EnTranslations = {
       "commissionToggle": "委托制品",
       "commissionToggleHint": "将绑定给交易中第一个收到它的角色。",
       "commissionUnbound": "委托制品：将绑定给第一位收货人",
-      "commissionBound": "委托制品：已绑定给收货人"
+      "commissionBound": "委托制品：已绑定给收货人",
+      "craft": "制作",
+      "notAtHub": "必须达到所需等级并位于制作站，才能制作该物品。",
+      "throttled": "你制作得太快了，请稍等片刻后再试。"
     },
     "itemMenu": {
       "use": "使用",
@@ -3002,7 +3115,10 @@ export const zh_CN: EnTranslations = {
       "replaceConfirmKeepsBond": "委托绑定",
       "replaceConfirmCost": "费用：{cost}",
       "replaceConfirmCostItem": "{name} {count} 个",
-      "replaceConfirmAccept": "替换"
+      "replaceConfirmAccept": "替换",
+      "disenchantThrottled": "你分解得太快了，请稍等片刻后再试。",
+      "enchantThrottled": "你附魔得太快了，请稍等片刻后再试。",
+      "salvageThrottled": "你拆解得太快了，请稍等片刻后再试。"
     },
     "training": {
       "title": "训练：{name}",
@@ -3263,7 +3379,7 @@ export const zh_CN: EnTranslations = {
       "lbSelfAccount": "你的账号：第 {rank} 名，位居前 {percent}%，名望 {renown}",
       "lbSelfRank": "你的账号：第 {rank} 名，位居前 {percent}%",
       "lbEmpty": "暂无上榜的编年史家。",
-      "broadcastsLabel": "与公会成员和关注者分享功绩达成，并向 Discord 动态分享功绩与杰作卡片",
+      "broadcastsLabel": "与公会和好友分享功绩达成",
       "titledName": "{name}【{title}】"
     },
     "continentMap": {
@@ -3273,6 +3389,66 @@ export const zh_CN: EnTranslations = {
       "toZone": "地区地图",
       "toggleAria": "在世界地图和地区地图之间切换",
       "levels": "等级 {min} 到 {max}"
+    },
+    "arcade": {
+      "abort": "Leave session",
+      "active": "Game active",
+      "brawler": "Four-player Brawl",
+      "build": "Build",
+      "choose": "Choose a game",
+      "close": "Close games",
+      "code": "Session code",
+      "controls": "Controls: arrows/WASD to steer or move, Space to drift or jump, J/K to attack, E to use an item.",
+      "create": "Create session",
+      "finished": "Game finished",
+      "housing": "Eastbrook Homes",
+      "invite": "Invite party member",
+      "inviteHint": "Enter a party member player ID.",
+      "join": "Join by code",
+      "place": "Place piece",
+      "racing": "Cryptic Circuit",
+      "ready": "Ready",
+      "solo": "Solo vs NPCs",
+      "start": "Start",
+      "title": "Realm Games",
+      "townRts": "Eastbrook Command",
+      "train": "Train guard",
+      "unavailable": "This game is not enabled on this server.",
+      "unready": "Unready",
+      "waiting": "Waiting for players"
+    },
+    "zombie": {
+      "abort": "Abandon session",
+      "active": "The wave is active. Place towers or hold the line.",
+      "board": "Board",
+      "buildAt": "Build at {x}, {z}",
+      "claim": "Claim reward",
+      "close": "Close town defense",
+      "copyCode": "Share this code with your party",
+      "create": "Create defense session",
+      "defeat": "The town fell. Abandon the session and try again.",
+      "intro": "Build defenses, hold the road, and survive ten deterministic waves with your party.",
+      "invite": "{name} invited you to {kind}.",
+      "inviteHint": "Enter a party member's player ID.",
+      "invitePlayer": "Invite party member",
+      "join": "Join session",
+      "joinInvite": "Join game",
+      "lives": "Lives {lives}",
+      "ready": "Ready up",
+      "readyDone": "Ready",
+      "resources": "Resources {resources}",
+      "roster": "Roster",
+      "sessionCode": "Session code",
+      "startWave": "Start wave",
+      "status": "Status: {status}",
+      "title": "Eastbrook Town Defense",
+      "towerArrow": "Arrow tower",
+      "towerCannon": "Cannon tower",
+      "towerSlow": "Frost tower",
+      "unavailable": "Town Defense is still being staged. Check back after its QA checkpoint.",
+      "victory": "Eastbrook stands. Claim your reward.",
+      "waiting": "Waiting for the party to ready up.",
+      "wave": "Wave {wave}"
     }
   },
   "gatherEvent": {
@@ -3405,7 +3581,7 @@ export const zh_CN: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Cryptic Realm",
     "brandShort": "ClaudeCraft",
     "tagline": "一款可在浏览器中免费畅玩的经典风格 MMO。",
     "skipToContent": "跳至正文",
@@ -3472,7 +3648,7 @@ export const zh_CN: EnTranslations = {
       "github": "GitHub 上的源代码",
       "discord": "加入 Discord",
       "communityWiki": "社区维基",
-      "rights": "World of ClaudeCraft",
+      "rights": "Cryptic Realm",
       "linksLabel": "游玩与社区链接"
     },
     "language": {
@@ -3495,7 +3671,7 @@ export const zh_CN: EnTranslations = {
     },
     "home": {
       "eyebrow": "经典风格浏览器 MMO",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "在你的浏览器中免费接受任务、组队、探索一个纯手工打造的世界。",
       "ctaPlay": "立即游玩",
       "ctaLearn": "游戏入门",
@@ -3551,7 +3727,7 @@ export const zh_CN: EnTranslations = {
         "q1": "游戏免费吗?",
         "a1": "是的。整个游戏在满级之前完全免费,并且在 GitHub 上开源。",
         "q2": "我需要加密货币钱包吗?",
-        "a2": "不需要。没有钱包也能完整畅玩游戏。可选的社区代币仅增添外观装饰，以及每日奖励奖池的一份分成，绝不影响战力。",
+        "a2": "不需要。没有钱包也能完整畅玩游戏。可选的社区代币仅用于解锁外观装饰,绝不影响战力。",
         "q3": "可以离线游玩吗?",
         "a3": "可以。浏览器中有即开即玩的单人模式，此外还有共享的在线世界。",
         "q4": "升到满级要多久?",
@@ -3571,7 +3747,7 @@ export const zh_CN: EnTranslations = {
       "step1Title": "创建角色",
       "step1Body": "选择一个职业和外观,为你的英雄取个名字,然后进入游戏世界。之后还可以创建更多角色。",
       "step2Title": "找到你的第一个任务",
-      "step2Body": "红溪元帅正在新手镇等候，手上有一个任务《门前之狼》，附近的工头奥德尔也有活儿要交给你。与两人中的任意一位交谈，即可接下你的第一个任务。",
+      "step2Body": "红溪元帅正在新手镇等候。与他交谈,接受任务《门前之狼》。",
       "step3Title": "移动与环顾四周",
       "step3Body": "使用 W、A、S、D 移动。按住鼠标右键拖动即可环顾四周。基本操作就这些了。",
       "step4Title": "投入战斗",
@@ -3588,16 +3764,16 @@ export const zh_CN: EnTranslations = {
       "questsTitle": "任务",
       "questsBody": "从头顶带有标记的人物处接取任务,完成目标,再交还任务以获得经验、金币和装备。屏幕上的任务追踪器会让你随时看清目标。",
       "deathTitle": "死亡并非终点",
-      "deathBody": "若你倒下，你的身体会留在倒下之处，而你会化作鬼魂在最近的墓地复起。让灵魂跑回你的身体旁，即可就地复活、毫无惩罚；也可以接受墓地的灵魂医者，以一阵短暂的虚弱为代价立即复生。全新的英雄可以完全免除这份虚弱，而你所拥有或挣得的一切，永远不会失去。",
+      "deathBody": "若你倒下，你会释放灵魂，在最近的墓地以满血复活，然后返回你之前所在之处。不会损失任何经验。",
       "groupingTitle": "携手同行",
       "groupingBody": "邀请他人组队,即可共享任务进度并挑战地下城。世界中的大部分内容都可单人完成,因此组队是一种选择,而非负担。",
       "onlineTitle": "在线或离线",
       "onlineBody": "在共享的在线世界与其他所有人一同游玩，或在浏览器中开启一个即开即玩的离线世界来熟悉门道。",
-      "reassure": "天赋在 10 级解锁，只要脱离战斗便可随时重置，所以你早期的选择绝非一成不变。放心大胆地尝试吧。",
+      "reassure": "天赋在 10 级解锁,并且随时可以重置,所以你早期的选择绝非一成不变。放心大胆地尝试吧。",
       "controlsLink": "查看完整操作键参考"
     },
     "controls": {
-      "intro": "电脑端的默认按键。除了始终用于打开游戏菜单的 Esc 之外，每一项绑定都可以在游戏选项中更改，而且一项绑定可以是像 Shift+Z 这样的修饰键组合。",
+      "intro": "电脑端的默认按键。每一项绑定都可以在游戏选项中更改。",
       "keyHeader": "按键",
       "actionHeader": "操作",
       "groupMovement": "移动",
@@ -3628,14 +3804,14 @@ export const zh_CN: EnTranslations = {
       "petBar": "宠物栏：攻击、停止、嘲讽、防御、攻击性（猎人或术士的宠物在场时可用）",
       "attackMoveNote": "还有一项默认关闭的功能：在选项中启用攻击移动后，会保留一个按键（选项开启时为 A），按下它便会朝你的光标走去，并对光标下的敌人，或途中遇到的第一个敌人展开攻击。",
       "mobileHeading": "移动端操作",
-      "mobileBody": "在手机和平板上会自动出现触控操作：左侧是移动摇杆，在其他任意位置拖动即可环顾四周，用两根手指捏合可缩放镜头，屏幕上还有用于使用技能和打开菜单的按钮。左上角的一个小箭头可以显示或隐藏菜单按钮，那里的“更多”按钮则收纳着你其余的窗口。",
+      "mobileBody": "在手机和平板上会自动出现触控操作:左侧是移动摇杆,在右侧任意位置拖动即可环顾四周,屏幕上还有用于使用技能和打开菜单的按钮。",
       "controllerHeading": "使用手柄",
-      "controllerBody": "手柄同样可用，且默认开启手柄支持。左摇杆控制移动，右摇杆控制镜头，正面按键与肩部按键则负责你的技能、跳跃和互动。打开像背包这样的窗口即可调出屏幕指针，而游戏菜单则可用方向键和正面按键直接操作。你可以在选项的手柄设置中重新映射按键，并调整摇杆死区、镜头速度、震动以及反转视角，还可以将一个按键绑定为拉近或拉远镜头（默认未绑定）。"
+      "controllerBody": "手柄同样可用，且默认开启手柄支持。左摇杆控制移动，右摇杆控制镜头，正面按键与肩部按键则负责你的技能、跳跃和互动。打开任意窗口，即可调出用于操作菜单的屏幕指针。你可以在选项的手柄设置中重新映射按键，并调整摇杆死区、镜头速度、震动以及反转视角。"
     },
     "settingsPage": {
       "heading": "设置和性能",
       "intro": "把画面调到最美，或把帧数拉到最高。三套现成方案，外加每个图形选项的真实作用。",
-      "wherePath": "本页的一切都在游戏里：按 Esc 打开选项。菜单会以一个汇集要点的概览页打开，各个类别列在旁边的导轨上：下面提到的设置位于“显示”组中的“图形”、“界面”和“辅助功能”之下，而“性能监视器”则在“系统”之下。更快的办法是，在顶部的搜索框中输入名称，直接跳转过去。",
+      "wherePath": "本页的一切都在游戏里：按 Esc，到图形、界面和性能监视器中查看。",
       "fairnessTitle": "公平源自设计",
       "fairnessBody": "这里没有任何选项会拿画面换战力。调低设置只会舍弃视觉上的修饰，绝不会砍掉你作战所需的信息：从“低”到“超高”，你的减益效果、施法条、队伍血量和伤害数字完全一致。用配置一般的机器游玩，绝不会吃亏。",
       "loadoutsHeading": "三套现成方案",
@@ -3669,7 +3845,7 @@ export const zh_CN: EnTranslations = {
       "advancedHeading": "“高级”预设：自由搭配",
       "advancedBody": "“高级”以“高”档位为起点，额外解锁四个独立选项，让你把帧数花在真正看得出差别的地方：地形细节、植被密度、特效和光照，以及阴影质量。这些选项和图形质量一样，重新加载后才会生效。",
       "advancedMixes": "两套人气搭配：把阴影质量保持在“高”、特效和光照调到“低”，画面干净利落、没有泛光，跑起来也轻快；或者反过来，保留泛光，让阴影更柔和。",
-      "tableHeading": "每个图形选项，逐一说明",
+      "tableHeading": "每个选项，逐一说明",
       "colSetting": "选项",
       "colDoes": "作用",
       "colImpact": "FPS 影响",
@@ -3707,15 +3883,15 @@ export const zh_CN: EnTranslations = {
       "resourcesTitle": "每个职业都有自己的节奏",
       "resourcesBody": "战士在激战中积攒怒气,潜行者消耗稳步回复的能量,施法者则管理着一池法力。掌握自己的资源,便是玩好职业的一半。",
       "growTitle": "你每升一级都会变得更强",
-      "growBody": "每次升级都会让你更加坚韧，并解锁新的技能，一路直至 {cap} 级的等级上限。做任务是升级最快的途径；狩猎、地下城与探秘则能加以补充。",
+      "growBody": "每次升级都会让你更加坚韧,并解锁新的技能,一路直至 {cap} 级的等级上限。做任务是升级最快的途径,地下城与探索则能加以补充。",
       "effectsTitle": "增益、减益与控制",
-      "effectsBody": "许多技能会施加持续存在的效果。有益的（增益）会提升你的属性、为你护盾，或一点点地治疗你；有害的（减益）则以持续伤害消耗你的生命，或削弱你。留意屏幕顶角、小地图旁的那些小图标，便能看清你身上有哪些效果、还能持续多久。",
-      "ccBody": "控制是一类特殊的减益，会限制目标能做的事：眩晕、定身与减速，让人无法施法的沉默，缴械，恐惧，以及能让敌人暂时无害的变形。对其他玩家使用时，控制会随着重复而失去锋芒：同一类控制若重复施加得太快，效果会先减弱、继而彻底失效；而从潜行中打出的开场眩晕，会与其后的眩晕分开计算，因此没有人能被无休止地连控。这个世界的生物则没有这般记性：控制落在它们身上，每一次都是十足威力；不过许多最强大的敌人，包括有名的精英和其中最强的首领，则根本无法被控制。",
+      "effectsBody": "许多技能会施加持续存在的效果。有益的（增益）会提升你的属性、为你护盾，或一点点地治疗你；有害的（减益）则以持续伤害消耗你的生命，或削弱你。留意动作条附近的小图标，便能看清你身上有哪些效果、还能持续多久。",
+      "ccBody": "控制是一类特殊的减益，会限制目标能做的事：眩晕、定身与减速，让人无法施法的沉默，缴械，恐惧，以及能让敌人暂时无害的变形。其中一些，比如定身、恐惧和变形，若施加得太过频繁就会失效，因此无法被无限连控。",
       "metersBody": "想知道一场战斗打得如何？按 Shift+H 打开小队仪表盘，它会逐场统计你队伍的伤害、治疗与威胁。",
       "queueTitle": "你的下一招已经就绪",
       "queueBody": "你不必把按键时机掐到毫厘。当前技能还在施放时按下下一个技能，它便会进入队列，在施法完成的那一刻立即发动，让娴熟的操作行云流水、毫无间隙。一些近战打击也是同理，会随你的下一次武器挥击一并打出。",
       "deathTitle": "当你倒下时",
-      "deathBody": "若你的生命值归零，你便会当场倒下，你的身体会留在那里。释放你的灵魂，你会化作鬼魂在最近的墓地复起：比生者的脚步更快，敌人无法伤及，却也无法战斗、拾取，或与悬浮在墓碑上方的灵魂医者以外的任何人交谈。接下来由你选择。让鬼魂跑回你的身体旁，你便会就地复活，恢复部分生命与法力，毫无任何惩罚。或者接受灵魂医者的立即复生，就地起身，代价是复活后遗症：一段对你全身的暂时削弱，你越是历练深厚，它持续得越久，而全新的角色则完全免受其扰。若你倒在地下城之中，你的灵魂会在门外的墓地等候；让鬼魂走回门口，你便会在入口处复活。探秘则是例外：在那里倒下，你只会被重新扶起、置于探秘的入口处，不过第二次倒下就会结束这趟探秘。无论走哪条路，你都不会损失经验、装备或钱币。战斗间隙，坐下来进食饮水，让下一场战斗从满状态开始。"
+      "deathBody": "若你的生命值归零，你便会倒下。释放你的灵魂，便能在最近的墓地以满血复活，再返回原处，因此一次死亡只会耗去你些许时间，而非你的进度。两场战斗之间，坐下进食饮水，让自己以满状态迎接下一战。"
     },
     "glossary": {
       "intro": "本指南及聊天中所用术语的快速参考。",
@@ -3791,11 +3967,11 @@ export const zh_CN: EnTranslations = {
       "q1": "真的免费吗?",
       "a1": "是的。整个游戏在满级之前完全免费畅玩,源代码也在 GitHub 上开源。",
       "q2": "我需要加密货币钱包或任何代币吗?",
-      "a2": "不需要。没有它也能完整畅玩游戏。可选的社区代币仅增添外观装饰，以及每日奖励奖池的一份分成，绝不影响战力或进度。",
+      "a2": "不需要。没有它也能完整畅玩游戏。可选的社区代币仅用于解锁外观装饰,绝不影响战力或进度。",
       "q3": "可以在手机上玩吗?",
       "a3": "可以。游戏可在移动端浏览器中通过触控操作运行,同时也提供桌面端启动器。",
       "q4": "可以离线或单人游玩吗?",
-      "a4": "可以。有即开即玩的单人离线模式，而除地下城、团队副本和世界首领之外，在线世界也完全可以单人通关。",
+      "a4": "可以。有即开即玩的单人离线模式,除地下城和团队副本外,在线世界也完全可以单人通关。",
       "q5": "一共有多少个职业?",
       "a5": "九个，涵盖经典的坦克、治疗与输出定位，每个职业都拥有一套资源系统（怒气、法力或能量）以及各自的招牌技能。",
       "q6": "等级上限是多少?",
@@ -3807,7 +3983,7 @@ export const zh_CN: EnTranslations = {
       "q9": "有 PvP 吗？",
       "a9": "有。可以与任何人决斗取乐，也可以踏入灰烬角斗场与其他玩家交锋。PvP 是自愿参与的，你绝不会被强迫卷入。",
       "q10": "满级之后有什么可做的？",
-      "a10": "等级上限为 {cap} 级。从那时起，你可以打五人地下城和十人团队副本，再以英雄模式重新挑战它们以换取升级版战利品，在世界首领崛起时与他一战，在竞技场中检验自己，带着一位伙伴一同深入探秘，并在功绩之书中追逐功绩，以攀升王国的排名。",
+      "a10": "等级上限为 {cap} 级。从那时起，你可以打五人地下城和十人团队副本、追逐更好的装备，并在竞技场中检验自己。",
       "q11": "我该如何找队伍？",
       "a11": "邀请你遇到的任何人组队，在聊天中询问，或在地下城门口组队。世界的大部分内容都可以单人完成，所以组队是一种选择，而非要求。"
     },
@@ -3834,7 +4010,7 @@ export const zh_CN: EnTranslations = {
       "abilitiesNote": "这只是技能组合的冰山一角。随着等级提升你会学到更多,天赋还会重塑整套玩法。",
       "masteryLabel": "精通",
       "fullKitHeading": "全部技能",
-      "fullKitNote": "这个职业随着升级学到的整套技能，按其解锁的顺序排列。天赋会再赋予几项技能，并决定哪些技能撑起你的构筑。",
+      "fullKitNote": "这个职业能学到的每一项技能，按解锁顺序排列。天赋决定哪些技能撑起你的构筑。",
       "petsHeading": "恶魔",
       "petsNote": "术士召唤恶魔与自己并肩作战，每一只都擅长不同的活儿。"
     },
@@ -3936,7 +4112,9 @@ export const zh_CN: EnTranslations = {
       "mark_of_the_wild": "开战前为自己或盟友施加的持续祝福。",
       "moonfire": "瞬间命中并让目标持续燃烧，移动时也很好用。",
       "rejuvenation": "瞬发施放，持续治疗盟友，让你可以继续行动。",
-      "thorns": "守护盟友，让近战攻击者在打击时反伤自己。"
+      "thorns": "守护盟友，让近战攻击者在打击时反伤自己。",
+      "commanding_shout": "提升耐力，让所有人在战斗中更耐打。",
+      "rend": "造成一道流血，让目标随时间逐渐被消耗。"
     },
     "petHook": {
       "emberkin": "一只远程火焰箭恶魔，从安全距离外消磨敌人。",
@@ -3949,7 +4127,7 @@ export const zh_CN: EnTranslations = {
     },
     "bestiary": {
       "heading": "怪物图鉴",
-      "intro": "世界中的各类生物，按种族分门别类。这些是你在野外会遇到的日常敌人。精英敌人及其首领不会出现在这些页面上，而最致命之物则潜伏在地下城的门后。",
+      "intro": "世界中的各类生物，按种族分门别类。这些是你在野外会遇到的敌人。最致命之物则未列于此，潜伏在地下城的门后。",
       "rare": "稀有",
       "levels": "等级 {min} 至 {max}",
       "levelsSame": "{min} 级",
@@ -4015,7 +4193,7 @@ export const zh_CN: EnTranslations = {
     },
     "worldPage": {
       "heading": "世界",
-      "intro": "World of ClaudeCraft 是一片连绵不绝、需你徒步穿越的大陆，三大区域由南向北依次铺展。这里没有快速旅行，因此旅途本身便是冒险的一部分。",
+      "intro": "Cryptic Realm 是一片连绵不绝、需你徒步穿越的大陆，三大区域由南向北依次铺展。这里没有快速旅行，因此旅途本身便是冒险的一部分。",
       "hub": "大本营",
       "mapHeading": "向北之路",
       "mapSub": "三片区域，自南向北，每一片的等级都更高一级。跟着任务线走，这片土地便会带你从山谷一路抵达群峰。",
@@ -4060,9 +4238,9 @@ export const zh_CN: EnTranslations = {
       "jungleGreeter": "港务长，漂流港",
       "gardenGreeting": "树篱仍有人在修剪，可百年来无人见过园丁。当心迷宫：它也在留意你。",
       "gardenGreeter": "守门人，篱苑镇",
-      "valePlaceNotes": "东溪镇是你的第一个大本营。狼奔谷与野猪草甸是温和的狩猎场；镜湖是供垂钓的好水域，只是浅滩处泥鳍鱼成群；墨网林与铜矿坑藏着蜘蛛和贪婪掘矿的家伙；一处强盗营地与陷落礼拜堂里有更棘手的活儿；圣物库山丘向下通往坍塌的圣物库，这是王国的第一座探秘；明木林地是北方一片宁静、阳光普照的林地；而母猪场则是东溪镇有围墙的野猪球场，溪谷杯就在丰收休战的庇护下在那里开赛。",
-      "marshPlaceNotes": "芬桥守着唯一一条干燥的道路。潜行者芦苇荡与深沼浅滩里满是沼泽野兽和泥鳍；寡妇密林被蛛网织得密不透风；溺亡礼拜堂与巨魔土丘藏着更古老的危险，而这片湿地自己的探秘，溺亡连祷，就在土丘以北不远处开放；唤墓者营地是邪教的盘踞之处，沉没堡垒则是这片湿地的副本核心。",
-      "peaksPlaceNotes": "高守哨站扼守着城墙。潜猎者山脊与深岩洞穴属于山脊猫和穴居者；食人魔丘陵与卓格玛的战营属于受雇的莽夫；风暴岩中元素噼啪作响，其下方泛着微光的便是微光湖，这座山中小湖的湖畔守着一道通往溺亡神殿的苍白之光之门；蜿龙教帐篷与亡魂之野环绕着邪教的制高点，墓龙圣所则居于其巅。",
+      "valePlaceNotes": "东溪镇是你的第一个大本营。狼奔谷与野猪草甸是温和的狩猎场；镜湖是供垂钓的静水；墨网林与铜矿坑藏着蜘蛛和贪婪掘矿的家伙；一处强盗营地与陷落礼拜堂里有更棘手的活儿；圣物丘向下通往坍塌圣物库，这是这片位面的首个探险地；而明林空地则是北方一片宁静、阳光普照的林地。",
+      "marshPlaceNotes": "芬桥守着唯一一条干燥的道路。潜行者芦苇荡与深沼浅滩里满是沼泽野兽和泥鳍；寡妇密林被蛛网织得密不透风；溺亡礼拜堂与巨魔土丘藏着更古老的危险；唤墓者营地是邪教的盘踞之处，沉没堡垒则是这片湿地的副本核心。",
+      "peaksPlaceNotes": "高守哨站扼守着城墙。潜猎者山脊与深岩洞穴属于山脊猫和穴居者；食人魔丘陵与卓格玛的战营属于受雇的莽夫；风暴岩中元素噼啪作响，饮月之池在它下方泛着微光；蜿龙教帐篷与亡魂之野环绕着邪教的制高点，墓龙圣所则居于其巅。",
       "duskPlaceNotes": "古辉镇聚居在巨树之下。暮落洞穴与其瞭望台是入口，也是初见山谷的地方；古木林地与星落盆地守着宁静的南方；沉没王庭在东面藏着草木蔓生的废墟；辉光深处与水晶浅滩则在北方闪着微光。",
       "emberPlaceNotes": "望龙哨扼守着大门。门林是荒漠前最后一片绿意；烬沙丘随风飘着灰烬，还有更糟的东西；巨魔集会是沙丘巨魔燃起篝火聚集之处；血玻璃原野闪烁着锋利的碎片；而龙喉火山口则是群龙盘旋其上的冒烟王冠。",
       "frostPlaceNotes": "冰幔镇守着最后一座温暖的炉火。雪线隘口标记着积雪接管一切的地方；冰川湖是冰层之下漆黑而静止的水；极光台阶在舞动的光芒下向上攀升；颤栗沼泽是一片从未真正沉睡的冰封泥沼；而呼啸台地每到夜里都名副其实。",
@@ -4082,22 +4260,22 @@ export const zh_CN: EnTranslations = {
       "heading": "任务",
       "intro": "任务是这个世界的核心，也是升级最快的途径。下面介绍它们的运作方式。",
       "acceptTitle": "寻找与接受",
-      "acceptBody": "头顶带有标记的人物有活儿要交给你。与他们对话即可接受任务。在东溪镇，红溪元帅正等着交付《门前之狼》，这是你最早能接取的任务之一。",
+      "acceptBody": "头顶带有标记的人物有活儿要交给你。与他们对话即可接受任务。你的第一个任务是“狼患当前”，由东溪镇的雷德布鲁克元帅发布。",
       "objectivesTitle": "目标",
       "objectivesBody": "击杀特定敌人、收集物品，或与世界中的某物互动。屏幕上的追踪器会随你的行动记录进度。若你改变主意，可以从任务日志中放弃一个任务，之后再从其发布者处重新接取。",
       "turninTitle": "交还任务",
       "turninBody": "把完成的任务带到它的交付标记处（地图会指明位置），即可获得经验、金币，以及通常会有的一件契合你职业的装备。那通常就是把任务交给你的人，不过有些任务会让你转去找另一个人。",
       "partyTitle": "组队做任务",
-      "partyBody": "附近的队员会共享击杀和目标进度，因此组队做任务只会更快，绝不会更慢。你还可以与你的小队分享任务：用 /share 命令把它作为可点击的链接发到聊天中，任何符合条件的成员都能一键接取同一个任务。",
+      "partyBody": "附近的队员会共享击杀和目标进度，因此组队做任务只会更快，绝不会更慢。你还可以与你的小队分享任务：用 /share 命令把它作为可点击的链接发到聊天中，任何符合条件的附近队员都能一键接取同一个任务。",
       "storyTitle": "一条主线贯穿始终",
       "storyBody": "从你在东溪镇的第一批差事起，死者便有了异样。一个邪教正在暗中行动，线索向北贯穿每一个区域。循迹而行，揭开幕后黑手的真面目。",
       "soloNote": "主线剧情一直到每个章节的高潮之前都可单人完成，而那场高潮是一座五人地下城。",
       "typesTitle": "你将遇到的任务种类",
       "typesBody": "大多数任务都属于几种熟悉的样式之一。屏幕上的追踪器会清楚地说明每个任务的要求，让你绝不会一头雾水。",
       "typeSlayTitle": "讨伐",
-      "typeSlayBody": "击败一定数量的指定敌人，以此疏散一群野兽，或瓦解一个邪教的盘踞。你最早的任务之一，清除东溪路上的野狼，便属于此类。",
+      "typeSlayBody": "击败一定数量的指定敌人，疏散一群野兽，或瓦解一个邪教的盘踞。游戏中的第一个任务，清除东溪路上的野狼，便是其中之一。",
       "typeGatherTitle": "采集",
-      "typeGatherBody": "从世界中或敌人的掉落里收集物品：草药、矿石、邪教阴森的材料。有些物件只会从特定的敌人身上掉落，所以狩猎与搜罗总是相伴而行。",
+      "typeGatherBody": "从世界中或敌人的掉落里收集物品：草药、矿石、遗失的信件、邪教阴森的材料。有些物件只会从特定的敌人身上掉落，所以狩猎与搜罗往往相伴而行。",
       "typeInteractTitle": "互动",
       "typeInteractBody": "使用、净化或读取世界中某个固定之物：一座被玷污的坟墓、一块刻在岸边岩石上的警示、一扇封印的地穴之门。走到标记处，对它采取行动。",
       "typeMusterTitle": "召集防御",
@@ -4184,11 +4362,11 @@ export const zh_CN: EnTranslations = {
       "tiersHeading": "难度",
       "tiersBody": "一座探秘提供不止一档难度。更高的那档会让敌人更强，并随机附带一种词缀，作为回报，产出也更丰厚。它还要求你先积累几个等级，才会放你进入。",
       "affixesHeading": "探秘词缀",
-      "affixesBody": "难度更高的探秘会随机附带一种词缀，改变下潜的玩法走向，从不安的亡者，到污浊的浊气，再到摇摇欲坠的顶棚。它们会让危险与回报一同提升。每座探秘只从契合自身主题的词缀中抽取；就整个王国而言，词缀池如下：",
+      "affixesBody": "难度更高的探秘会随机附带一种词缀，改变下潜的玩法走向，从不安的亡者，到污浊的浊气，再到摇摇欲坠的顶棚。它们会让危险与回报一同提升。一座以墓穴为主题的探秘，可能出现以下任意一种词缀：",
       "marksHeading": "探秘印记",
       "marksBody": "完成探秘会获得探秘印记，这是一种与你的钱币分开存放的货币。在看守人处花费它们，即可强化你的同伴，并取得别处遍寻不见的装备。",
       "whereHeading": "在哪里找到探秘",
-      "whereBody": "第一座探秘，坍塌的圣物库，位于东溪谷地起始山谷的圣物库山丘。哈尔文修士在那里看守面板，只要你准备好了，他便会送你下去。他的巡守并未止步于此：越过泥沼湿地北缘的巨魔土丘，这位看守人又为已经站稳脚跟的探秘者开放了溺亡连祷。"
+      "whereBody": "第一座探秘，坍塌的圣物库，位于东溪谷地起始山谷的圣物库山丘。哈尔文修士在那里看守面板，只要你准备好了，他便会送你下去。"
     },
     "talentsPage": {
       "heading": "天赋与专精",
@@ -4196,13 +4374,13 @@ export const zh_CN: EnTranslations = {
       "whatHeading": "天赋的作用",
       "whatBody": "随着你升级，你会获得天赋点，用于为技能和属性投入细小而永久的强化。它们塑造一个职业的手感，使其倾向于更高的输出、更坚实的防御，或更强的治疗。",
       "howHeading": "它们如何运作",
-      "howBody": "天赋在 10 级开放，随着你向等级上限攀升，会持续获得天赋点。你在职业的天赋面板中分配它们，越深的层级会随着你的投入和升级而解锁，你还可以保存多套配置，在不同构筑之间切换。",
+      "howBody": "天赋在 10 级开放，随着你向等级上限攀升，会持续获得天赋点。你在职业的天赋面板中分配它们，还可以保存多套配置，在不同构筑之间切换。",
       "shareNote": "一套完成的构筑可以复制为一段简短、可分享的代码交给朋友，对方将其直接粘贴进自己的天赋面板即可载入。",
       "choiceNote": "每棵天赋树上都有那么几点是一个岔路口，而非单纯的买入：节点会给出两三个选项，由你择一而定。下一次重置会重新打开这个选择，就像树上的其他一切一样。",
       "resetTitle": "一切都不是永久的",
-      "resetNote": "只要脱离战斗、且不在竞技场比赛中，你随时都可以重置天赋，所以早期的选择绝不会成为陷阱。尽管尝试，看看你喜欢什么，随心改主意。",
+      "resetNote": "只要脱离战斗，你随时都可以重置天赋，所以早期的选择绝不会成为陷阱。尽管尝试，看看你喜欢什么，随心改主意。",
       "specsHeading": "各职业的专精",
-      "specsBody": "每个职业都有几种专精，各有自己的定位和标志性的侧重。在天赋面板中选择其一，会授予一项标志性技能，以及一份属于它自己的持久精通。这里是它们全部的大致面貌。打开某个职业可查看其全部技能。"
+      "specsBody": "每个职业都有几种专精，各有自己的定位和标志性的侧重。这里是它们全部的大致面貌。打开某个职业可查看其全部技能。"
     },
     "arenaPage": {
       "heading": "竞技场与 PvP",
@@ -4210,8 +4388,10 @@ export const zh_CN: EnTranslations = {
       "duelsHeading": "决斗",
       "duelsBody": "可以向你遇到的任何玩家发起一场友好的决斗。除了荣誉，没有任何东西被押上，因此这是了解某种对局，或友好地一较高下的最简单方式。",
       "coliseumHeading": "灰烬角斗场",
-      "coliseumBody": "斗技场是王国的竞技场，你将在排名赛中对阵其他玩家，一对一或二对二皆可。每个组别都各自记录排名，因此一场胜利便能让你在那条天梯上攀升，让全王国的人都看得见。打开竞技场窗口，即可独自或与你的搭档一同报名参加某个组别。",
+      "coliseumBody": "the Coliseum 是这片位面的角斗场，你将在排名赛中对阵其他玩家，一对一或二对二皆可。每个组别都各自记录排名，因此一场胜利便能让你在那条天梯上攀升，让全位面的人都看得见。",
       "ladderHeading": "攀登天梯",
+      "fiestaHeading": "二对二嘉年华",
+      "fiestaBody": "嘉年华是一种快节奏的二对二模式，以短回合进行。每回合之间，你可以选取增幅，即时重塑你套路的快速强化，让没有两场比赛玩法完全相同。",
       "ladderBody": "排名对战会长期追踪你的排名。查看排行榜，看看你身处何处，以及谁占据着这片位面的榜首。"
     },
     "thornhollowPage": {
@@ -4257,9 +4437,9 @@ export const zh_CN: EnTranslations = {
       "nationMoon": "紫与银，弯月旗下：夜行的球员，脚步轻盈。",
       "nationCopperdig": "铜与褐，别着镐头：跑不停歇的矿工。",
       "rolesHeading": "运动位置",
-      "rolesBody": "你的位置决定你带上球场的技能。人人都会踢球；其余看性情。在一人组和二人组的对局中，所有人都使用全能型的技能套装，因此位置选择要从三人组往上才真正发挥作用。",
+      "rolesBody": "你的位置决定你带上球场的技能。人人都会踢球；其余看性情。",
       "rewardsHeading": "休战规矩",
-      "rewardsBody": "休战规矩意味着没有经验也没有战利品：一场分出胜负的比赛会计入你的战绩和优胜者榜，而一场胜利也会计入当天的奖励任务。中途弃赛会让你的位置空缺，而场地管理员记着呢。"
+      "rewardsBody": "休战规矩意味着没有经验也没有战利品：一场分出胜负的比赛会计入你的战绩和优胜者榜，并附带每日奖励点数。中途弃赛会让你的位置空缺，而场地管理员记着呢。"
     },
     "deedsPage": {
       "intro": "功绩之书记录着你在这个世界所做的一切，从走出新手山谷的第一步，到王国所能提供的最艰难的战斗。一边游玩一边赢得功绩，佩戴它们授予的头衔，看着你的名望不断攀升。",
@@ -4301,9 +4481,9 @@ export const zh_CN: EnTranslations = {
       "i1Title": "你不会选错职业",
       "i1Body": "每个职业都能独当一面并抵达等级上限。选你喜欢的那种幻想，而不是别人口中所谓最强的那个。",
       "i2Title": "死亡几乎不会让你付出代价",
-      "i2Body": "当你倒下时，你会化作鬼魂在最近的墓地复起。跑回你的身体旁即可免费复活，或者接受灵魂医者的立即复生，以一阵短暂的虚弱换取这份便利。经验、装备和钱币都绝不会损失，所以放心去冒险、去学习。",
+      "i2Body": "当你倒下时，你会释放灵魂，在最近的墓地复活，然后返回原处。不会损失经验，所以放心去冒险、去学习。",
       "i3Title": "天赋不是陷阱",
-      "i3Body": "它们在 10 级解锁，只要脱离战斗便可随时重置，所以你早期的选择绝不是永久的。",
+      "i3Body": "它们在 10 级解锁，随时都能重置，所以你早期的选择绝不是永久的。",
       "i4Title": "跟着任务线走",
       "i4Body": "任务是升级最快的途径，还会带你走遍整个世界。当你不确定该去哪里时，找到下一个标记。",
       "i5Title": "保持装备常新",
@@ -4342,7 +4522,7 @@ export const zh_CN: EnTranslations = {
     "gear": {
       "intro": "装备是你角色身上穿戴的行头，以及你随身携带的物品。更好的装备是变强最稳妥的途径，而其中大部分只需游玩便能到手。",
       "slotsTitle": "你能装备什么",
-      "slotsBody": "你有一个武器栏、七个护甲栏和三个珠宝栏：一个颈部和两个手指。每个职业只能使用特定的武器，并穿戴不超过其自身重量级别的护甲，即布甲、皮甲或锁甲，因此适合你的升级装备，正是为你的职业打造的那些。珠宝则完全没有重量之分：任何职业都能佩戴自己挣得的任何珠宝。在此之内，用你找到的最好物件填满每一个栏位。",
+      "slotsBody": "你有一个武器栏和七个护甲栏。每个职业只能使用特定的武器，并穿戴不超过其自身重量级别的护甲，即布甲、皮甲或锁甲，因此适合你的升级装备，正是为你的职业打造的那些。在此之内，用你找到的最好物件填满每一个栏位。",
       "slotMainhand": "武器",
       "slotHelmet": "头部",
       "slotNeck": "颈部",
@@ -4366,15 +4546,15 @@ export const zh_CN: EnTranslations = {
       "qualityNote": "品质越高，属性通常越好，但品质只是参考，并非定律。一件契合你职业与等级的装备，可能胜过一件更华丽的。",
       "upgradeTitle": "让装备保持更新",
       "upgradeBody": "用一件全新的升级换下旧装备，比你穿着已经过时的行头打得再完美都更有意义。当有更好的东西掉落或任务给予时，拿下它。别把好物品留到以后。",
-      "itemLevelBody": "如果你想快速比较两件装备，可以在选项中开启“显示物品等级”。有明确来源的装备，无论来自敌人、任务还是制作专业，都会显示一个物品等级，一个根据其来源大致衡量强度的单一数值，让你一眼就能看出哪件升级更有分量，即便是不同部位之间也能比较。没有这类来源的物品，比如普通的商人基础货和新手装备，则不显示物品等级，因此没有数值是正常现象，并非缺陷。",
+      "itemLevelBody": "如果你想快速比较两件装备，可以在选项中开启“显示物品等级”。这样每件武器和护甲都会显示一个物品等级，一个根据来源大致衡量其强度的单一数值，让你一眼就能看出哪件升级更有分量，即便是不同部位之间也能比较。",
       "sourcesTitle": "装备从何而来",
-      "sourcesBody": "早期的升级大多来自任务奖励，所以与其刷怪，不如完成任务更划算。敌人被击败时会掉落装备，城镇里的商人贩售扎实的基础货色，制作者能把采集来的材料打造成可穿戴的装备，玩家市场则让你能从其他冒险者那里买东西。而在山顶，两种特殊货币能买到别处绝无仅有的装备：探秘看守人处的探秘印记，以及英雄军需官处的英雄徽记。",
+      "sourcesBody": "早期的升级大多来自任务奖励，所以与其刷怪，不如完成任务更划算。敌人被击败时会掉落装备，城镇里的商人贩售扎实的基础货色，玩家市场则让你能从其他冒险者那里买东西。",
       "soulboundTitle": "灵魂绑定：唯你独有",
       "soulboundBody": "许多珍贵的装备都是灵魂绑定的，从你获得的那一刻起便与你的角色绑定。灵魂绑定的物品无法交易、无法邮寄、无法卖给商人，也无法在市场上挂单；它如今是你故事的一部分，无人能替你携带。",
       "uniqueTitle": "装备唯一：同一件传说只能穿一件",
       "uniqueBody": "传说物品是装备唯一的：你的角色同一时间只能穿戴某件传说物品的一份，其英雄版本也算作同一件物品。第二份可以放在背包、银行或市场里，但试图同时穿戴两份会被拒绝。物品提示上还带有金色的\"装备唯一\"标签，让你在围绕两件传说规划配装之前就能看到这条规则。",
       "setsTitle": "套装与套装效果",
-      "setsBody": "有些护甲成套出现，数件装备在外观与战斗风格上浑然一体。同时穿戴足够多的同套部件，套装便会苏醒，在每件单品自身属性之外额外授予加成，而你穿的部件越多，加成就越强。少数这样的套系会在你升级途中作为珍贵掉落现身；其中最了不起的那些则来自接近等级上限的最高难度组队内容，因此凑齐一整套是经典的终局目标。",
+      "setsBody": "最稀有的护甲成套出现，数件装备在外观与战斗风格上浑然一体。同时穿戴足够多的同套部件，套装便会被激活，在每件单品自身属性之外额外授予加成，而你穿的部件越多，加成就越强。它们掉落自接近等级上限的最高难度组队内容，因此凑齐一整套是经典的终局目标。",
       "consumablesTitle": "消耗品",
       "consumablesIntro": "有些物品一次性使用，换来即时的好处。它们是廉价的保险，不妨随身备上几个。",
       "consumablesPotions": "药水在你使用的那一刻便能恢复生命或法力，即便在激战中也可以，这让它们成为开怪失误时的救命稻草。它们共享一段较短的冷却，所以要选好一个绝佳时机来用。",
@@ -4392,17 +4572,18 @@ export const zh_CN: EnTranslations = {
       "cosmeticsApply": "在角色界面的外观一栏设置你当前的造型，并在已解锁的所有外观之间自由切换。"
     },
     "professions": {
-      "intro": "除了战斗和任务之外，这个世界还会奖励你耕耘土地与执掌熔炉：采集原材料，通过十种制作行业将其打造成装备与货物，并在这些行业所代表的十种命途之一中确立自己的身份。",
+      "intro": "除了战斗和任务之外，这个世界还会奖励你耕耘土地与锻造：采集原材料，在十种不同行业的制作站中将其打造成装备，并在这些行业所代表的十种命途之一中确立自己的身份。",
       "harvestTitle": "收获狩猎本身",
+      "harvestBody": "采集并不止步于资源节点。有些被击杀的野兽也可以从尸体上采集出材料：兽皮、尖牙、丝线，以及更稀奇的东西，与它的普通战利品一并直接取自尸体。每具尸体只容一位收获者：谁先采集，就归谁所有。每次如何取舍也由你决定：把尸体能给的全部取走，或专注于单一一种材料，换取它更精细的品级。任何角色都可以采集，无需行业也无需训练，而一件格外精良的材料上，甚至会带着采集者的名字。",
       "harvestBodyChoice": "采集并不止步于资源节点。许多被击杀的野兽都可以被采集一次，先到先得：兽皮、尖牙、丝线与兽肉，与它的普通战利品一并直接取自尸体，一次按键就会同时打开两者。当一头野兽身上不止一种可用材料时，如何取舍便由你决定：把它能给的全部取走，或专注于更少的材料，换取你所取之物明显更精细的品级。\n\n在能产出标本的族群身上掷出精良或更高的采集品质时，除普通产出之外还会额外获得一件署名的完美标本（一块Pristine Hide、一块Pristine Silk、一枚Pristine Venom Gland或一份Prime Cut），并在你的功绩之书中记下A Perfect Specimen。任何角色都可以采集，无需训练；而你拥有的任何采集工具，无论属于哪一门行业，都会计入最上等材料的判定。",
       "focusTitle": "城镇专注",
       "focusBody": "每座主城都为过路的采集者备有一块城镇专注面板：站在城镇里，从小地图旁打开它，把一小笔专注点数投向你在意的那些材料种类。此后每具尸体上产出的受专注材料都会精细一个品级、也略微丰厚一些；你的分配会跟随你的角色走遍各地，而且日后任何一次回到城镇，都可以免费重新调整。",
       "craftHowTitle": "制作窗口",
       "craftMasteryTitle": "技能与精通",
-      "craftMasteryBody": "成功制作会提升你在该行业的技能，而技能绝不会把某个行业的配方锁起来：只要你知道一个配方并持有它的材料，你就可以尝试制作。每个配方产出的都是它所承诺的那件成品，而熟练的手艺偶尔能打造出一件杰作：同样的成品，做工更精，并蕴含一丝额外的力量。唯一的例外是组合配方：只有调谐到连接这两门行业的原型、并在两门行业都证明过技艺的制作者，才能使用它们。",
+      "craftMasteryBody": "成功制作会提升你在该行业的技能，而更丰富的配方需要更高的技能才能解锁：基础配方对所有人开放，而越进阶的配方则需要越高的精通程度才能尝试。提升你在某行业的技能，是从简单的入门物品通往其更具野心的配方的必经之路。",
       "archetypeChooseTitle": "选择你的命途",
-      "archetypeChooseBody": "宣告命途是一个剧情时刻：一个正式接纳你进入该身份的任务。在你宣告之前，每种行业的技能都能提升到稀有层级。一旦你选定一对行业，这两门行业便完全放开；轮盘对侧的一门行业会作为爱好留在你身边，仍能练到稀有层级；而在你保有这一身份期间，其余所有行业都停留在普通层级。",
-      "archetypeSwitchBody": "宣告也不会是一纸终身判决。按照规划，在改投新的命途之前，你需要先向旧行业完成一次可重复的赎罪，而每转换一次，下一次赎罪的代价都会更沉，因此这个选择始终有分量，而非毫无代价。与宣告本身一样，它也仍在路上。",
+      "archetypeChooseBody": "你需要通过第一区域中一个正式接纳你进入该身份的早期剧情任务，来宣告你的第一个命途。在完成该任务之前，你尚未选择任何命途。",
+      "archetypeSwitchBody": "一旦宣告过一种命途，并不意味着你会永远被束缚其中。改换成另一种命途，需要先为你的旧命途完成一个可重复的赎罪任务，而且每次转换后，下一次所需的赎罪都会略微加重，因此转换命途始终有意义，而不是毫无代价。",
       "whatHeading": "剑之外的一门手艺",
       "whatBody": "专业是这个世界的营生：四种采集行业从大地中获取原料，十种制作行业把它们变成装备、饭菜、药水与工具。万物环环相扣：你挖出的矿石成为刀剑，刀剑接受附魔，而附魔又需要从旧装备中分解出的粉尘。这里没有专业数量限制：每个角色都能同时修习全部八种已有内容的制作行业与全部四种采集行业，唯一的排他选择是你最终宣誓的命途，而一旦宣誓，落入休眠的制作行业便不再上升。技能永不下降，学会的东西也永远不会被夺走。",
       "ringHeading": "制作之轮",
@@ -4424,11 +4605,32 @@ export const zh_CN: EnTranslations = {
       "deedsHeading": "铭记旅程的功业",
       "deedsBody": "功业之书伴随这一切：首次调谐获得Craftsworn，首次杰作获得Masterwright，均可作为头衔佩戴。八种可修行业各在技能50设有里程碑功业，并在上限125加冕Grandmaster头衔；钓鱼在100熟练获得Old Salt，200获得Master Angler头衔。\n\n此外还有更静默的篇章：首次采集与首次制作的功业、野外奇遇中的意外收获，以及拾起拆解之路的印记。这一切皆为装饰，只有头衔与声望。功业永不赋予力量，它只证明你曾在场。",
       "startHeading": "从哪里开始",
-      "startBody": "初到Eastbrook？找Foreman Odell接下A Trade for Every Hand，他会指给你镇东南Copper Dig一带的矿脉。此后旅途中经过的每处矿脉、树木与草药都值得采集。回到镇上按T打开制作窗口，先做人人都会的普通配方，再去锻造坊、厨房、织机与工坊拜访诸位大师，顺便接下他们的工作订单换取稳定的铜板。等公会的信找到你时，你早已知道哪一对行业才是归宿。",
+      "startBody": "初到Eastbrook？找Foreman Odell接下A Trade for Every Hand，他会指给你镇西南Copper Dig一带的矿脉。此后旅途中经过的每处矿脉、树木与草药都值得采集。回到镇上按T打开制作窗口，先做人人都会的普通配方，再去锻造坊、厨房、织机与工坊拜访诸位大师，顺便接下他们的工作订单换取稳定的铜板。等公会的信找到你时，你早已知道哪一对行业才是归宿。",
       "colStation": "工位",
       "colHub": "主城",
       "colMaster": "大师",
-      "masterCellFmt": "{name}（{title}）"
+      "masterCellFmt": "{name}（{title}）",
+      "archetypeIdentityBody": "你当前的命途，是关于你的角色在这个世界中是谁的一种宣告，会体现在他人与世界如何称呼你之中。它所附带的具体奖励与认可仍在完善之中；请随着系统的完善持续关注。",
+      "archetypeIdentityTitle": "你的命途意味着什么",
+      "archetypeIntro": "十种行业各自也代表一种命途，一种超越单纯从事该行业本身的更广阔身份。你的当前命途一次只能有一个，而非一份清单：你只承载一个命途，但如果愿意，之后可以更改。",
+      "archetypeSwitchTitle": "回心转意",
+      "archetypeTitle": "十大命途",
+      "craftComboBody": "除了单一行业自身的配方列表之外，这个轮环还支持需要同时调用两个相邻行业的组合配方，用以奖励那些（或是一对交易伙伴）投入了轮环上相邻行业的角色，而非只专精孤立的一项。",
+      "craftComboTitle": "组合配方",
+      "craftIntro": "十种制作行业将采集到的材料转化为成品装备与物品：制甲、制械与珠宝加工将原材料塑形为可穿戴装备；炼金术与工程学依靠反复试验；烹饪、铭文与附魔各自作用于其他行业的产出；裁缝与制皮则依照精确的图样进行。它们共同构成一个轮环，每种行业都与两个邻居相邻，并与另一种行业相对。",
+      "craftRecipesBody": "每种行业都有自己的配方，各自需要你采集或购买的特定材料。每种行业中最基础的配方只需要普通材料即可制作，从一开始就可以上手，因此你拿起一门行业后即可立刻开始制作，而无需等待解锁。",
+      "craftRecipesTitle": "配方与材料",
+      "craftRingBody": "十种行业排列在一个固定的轮环上，行业在轮环上的位置很重要：相邻的行业彼此之间的共通之处比处于对面的行业更多。专注于一种行业应当让人感觉像是加入了一个相关行业组成的家族，而不是选择了一项孤立的技能。",
+      "craftRingTitle": "专精之轮",
+      "craftTitle": "十大制作行业",
+      "gatherIntro": "三种采集行业让你从世界中直接获取原材料：采矿从矿脉中开采矿石与石料，伐木从林地中砍伐木材，草药学采集野生生长的草药与植物。三者分别计算进度，从事其中一项不会拖慢你在另一项上的进展。",
+      "gatherProficiencyBody": "每次成功采集都会提升你在该采集行业的熟练度。更高的熟练度会让你从节点中获得更稀有品级材料的几率提高，从普通往上依次递增，不过最稀有的品级即便在高熟练度下依然稀少。多加练习永远不会降低你的几率，只会不断提升它。",
+      "gatherProficiencyTitle": "熟练度与材料品质",
+      "gatherTitle": "采集：采矿、伐木与草药学",
+      "gatherToolsBody": "商人出售各采集行业的基础工具，更好的工具则可以被制作出来，因此为节点采集做准备应当让人感觉自己在不断变强，而不是原地踏步。更高级的工具是解锁更丰富节点、并在长时间游玩中更高效采集的既定途径。",
+      "gatherToolsTitle": "行业工具",
+      "gatherWhatBody": "矿脉、林地与药草丛作为可见、无主的地物分布在各个区域中。走近并与之互动即可采集其中的资源。采集过一个节点后，它需要一段时间才能恢复供你本人再次采集，但这从不会阻挡其他玩家：其他人可以在此期间采集同一个节点。",
+      "gatherWhatTitle": "资源节点"
     },
     "profPages": {
       "back": "返回专业总览",
@@ -4519,7 +4721,7 @@ export const zh_CN: EnTranslations = {
           "materialsHeading": "钓竿与猎刀供养的食柜",
           "materialsBody": "钓鱼按区域供应招牌食材：Eastbrook Vale的镜鳟与河鲈，Mirefen Marsh的沼狗鱼与泥鳗，Thornpeak Heights的霜鳃鳟与板鳍鲤，每一档都烹本档的鱼。屠夫的一侧来自尸体采集：野味肉，以及精良采集掷出的署名Prime Cut（大烤肉的核心）。草药调味，梣木熏鳗，Cooking Salt在Marlow摊位8铜一袋。",
           "ladderHeading": "从肉干到大烤肉",
-          "ladderBody": "Salted Jerky是野外配方：初始即会、一条蛛腿、随处可做。训练师梯子在广场东侧的Eastbrook厨房：免费档技能0（河鲈、Hunter's Game Skewer、Herbed Marsh Pike），中档技能25每个25银（Ashwood Smoked Eel、Goldleaf Game Stew、Frostgill Chowder），精良档技能50每个1金（Silvered Carp Supper、Angler's Feast Platter、Marlow's Grand Roast）。批量菜省料：熏鳗与炖肉每次两份，宴会拼盘三份。",
+          "ladderBody": "Salted Jerky是野外配方：初始即会、一条蛛腿、随处可做。训练师梯子在广场西侧的Eastbrook厨房：免费档技能0（河鲈、Hunter's Game Skewer、Herbed Marsh Pike），中档技能25每个25银（Ashwood Smoked Eel、Goldleaf Game Stew、Frostgill Chowder），精良档技能50每个1金（Silvered Carp Supper、Angler's Feast Platter、Marlow's Grand Roast）。批量菜省料：熏鳗与炖肉每次两份，宴会拼盘三份。",
           "routeHeading": "专精而非杰作，以及通往125之路",
           "routeBody": "烹饪是杰作故事里诚实的例外：菜肴没有属性可提升，永不触发，也不必追。这门手艺的精通在于75的专精：每样食材省五分之一（批量菜上叠加极快），外加移动野外厨房，让宴席在副本门口出锅。边钓边做，两门技能互相供养：免费档到25，中档到50，精良档到75；此后精良菜衰减为半速与四分之一，到上限约再做150次。Marlow的订单每30分钟收八块野味肉。技能50记下Seasoned Chef，125是Grandmaster Cooking头衔。"
         },
@@ -4549,7 +4751,7 @@ export const zh_CN: EnTranslations = {
           "levelingHeading": "附魔如何升级",
           "levelingBody": "两种行动推动技能：分解与施加附魔，每次成功最多一点，按工作的分量折算：普通分解与纯粉尘附魔算普通活；优秀分解与精华附魔算优秀活；精良分解与所有Runed或Greater附魔算精良活；史诗与传说分解更高。熟悉的精通衰减按25点层级作用：普通活在技能75变灰，优秀活在100，精良活恰在125上限。附魔另有一份仁慈：高于命途上限的输入向下取整而非归零，宣誓前史诗分解按精良计而非一无所获；若附魔沦为休眠，一切按普通活计，爬升停在75；作为爱好则精良活仍有收益，只是75之后变慢。",
           "marketHeading": "附魔副本、出处与市场",
-          "marketBody": "施加附魔消耗材料并标记特定的一件副本。用在背包中的副本上，交还一件独立的附魔副本；用在已穿戴的装备上，则就地附魔，无需脱下再穿上。无论哪种，加成都永远跟随。一件一附魔：对附魔副本施加另一个附魔会先要求确认，然后直接替换旧附魔，旧附魔被摧毁且不退还材料；出售、丢弃与分解都优先取用普通副本，成品不会被误吞；完全相同的附魔副本还能叠放。杰作与附魔是朋友：杰作完全可附魔，附魔叠加在杰作加成与署名之上互不干扰；署名杰作配Greater附魔是工艺品的极致，仍按设计低于团本战利品。附魔与署名件如今也能上架：每件以单件挂单出售，物品提示会显示附魔与制作者印记，渡鸦邮驿同样可以寄送；材料依旧是稳定的一半：粉尘、精华与碎片自由挂单，挂单免费，成交才抽5%。"
+          "marketBody": "施加附魔消耗材料并标记特定的一件副本。用在背包中的副本上，交还一件独立的附魔副本；用在已穿戴的装备上，则就地附魔，无需脱下再穿上。无论哪种，加成都永远跟随。一件一附魔：对附魔副本施加另一个附魔会先要求确认，然后直接替换旧附魔，旧附魔被摧毁且不退还材料；出售、丢弃与分解都优先取用普通副本，成品不会被误吞；完全相同的附魔副本还能叠放。杰作与附魔是朋友：杰作完全可附魔，附魔叠加在杰作加成与署名之上互不干扰；署名杰作配Greater附魔是工艺品的极致，仍按设计低于团本战利品。世界市场只经手无标记的普通货，附魔与署名件都面对面交易；材料才是可上市的一半：粉尘、精华与碎片自由挂单，挂单免费，成交才抽5%。"
         }
       },
       "howHeading": "制作流程",
@@ -4599,7 +4801,7 @@ export const zh_CN: EnTranslations = {
       "nodesHeading": "各区域节点",
       "nodesNote": "节点的位置、阶级、所需工具与产出；每个节点在你采集后{respawn}秒才会为你本人刷新。",
       "toolsHeading": "工具",
-      "toolsNote": "每处资源点都需要对应行业的工具放在背包里，第 1 级也不例外：没有镐就采不到矿，没有鱼竿就钓不到鱼。商人阶梯覆盖第 1 到 3 级，每个聚落只出售自己周边地形用得上的等级，因此第 1 级工具在每个区域聚落都有售，更高的等级则在需要它们的矿脉附近出售。购买这些更高等级时，商人还会要求你在该行业中具备熟练度，第 2 级需要 {tier2Prof}，第 3 级需要 {tier3Prof}，商品行会注明该要求。工具只需放在背包中即可，没有装备栏也没有耐久度，因此每件都是一次性购买，你已经拥有的工具会一直有效。只有等级会影响限制：同等级中更稀有的工具并不会多开放任何东西。不过稀有度并不只是颜色，它会让镶嵌的工具效果持续更久，装在鱼竿上还会加宽收线时机。\n\n更好的工具带来三样东西，而不是两样。它开放更高等级的地形，缩短采集时间，还会提升产出：用等级高于该区域自身材料的工具开采矿脉，收获的将是精制品级而非普通品级。该矿脉必须是这个区域的完整品级矿脉，因此区域为旅行者保留的简易矿脉依然产出普通材料。精制材料正是制作工具配方所消耗的东西，而且在任何配方或工单要求普通版本的地方，精制品级都可以顶替，所以升级永远不会让你陷入困境：只是你的铜矿石会以精制铜矿石的形式到手。\n\n在商人阶梯之上，每个行业还有两件制作工具，第 4 级和第 5 级，由工程师在工具工坊制作，或在溺诵秘所的柜台用秘境印记购买。任何商人都不会用金币出售它们。钓鱼有自己的一对鱼竿，它们需要向工具匠学习，而非一开始就会。目前没有任何资源点或水域需要超过第 3 级，因此最高的两级买到的是速度、品级和更宽松的收线时机而非准入资格，等更高等级的地形出现时，它们将成为入场券。",
+      "toolsNote": "Every node needs its trade's tool in your bags, tier 1 included: no pick, no ore, and no pole, no fish. The vendor ladder covers tiers 1 to 3 across the three heartland hubs: the tier-1 tool is sold at all three, the rungs above it where the ground that uses them begins (Fenbridge adds tier 2, Highwatch tier 3), and the younger settlements beyond them stock no tools at all, so kit up before you travel. Every counter sells every rung it stocks freely, and any tool passes by direct trade; every rung also lists on the Market and travels by mail except the three 20-copper land starters: those are bought at a counter or passed hand to hand, and never sold back, mailed, or listed. What is gated is the wielding. A land tool above tier 1 works only once your proficiency in its own trade has earned it, {tier2Prof} for tier 2, {tier3Prof} for tier 3, and 85 and 100 for the two crafted rungs, and the vendor row, the tooltip, and the table below all name the requirement up front. Until then a tool bought ahead simply waits in your bags, opening no ground, buying no speed, and minting no fine grades, then wields the moment your counter touches its number. Fishing rods are the one exception: no rod carries a wield requirement, and Trader Wilkes in Eastbrook deliberately stocks the tier 2 and tier 3 rods for anglers buying ahead. A tool never occupies an equip slot and never wears out, so each is a one-time purchase, and only the tier matters to the gate: a rarer tool of the same tier opens nothing extra. Rarity is not only colour, though. It makes a slotted tool effect last longer, and on a rod it widens the reel window.\n\nA better tool buys three things, not two. It opens higher-tier ground, it shortens the cast, and it improves what comes out: work a vein with a tool ranked ABOVE the zone's own material and the harvest yields the fine grade of it instead of the plain one. The vein has to be one of the zone's full-grade ones, so the easier veins a zone keeps for travellers still yield the ordinary material. Fine materials are what the crafted tool recipes consume, and a fine grade counts as its ordinary version anywhere a recipe or a work order asks for one, so upgrading never strands you: it just means your copper ore arrives as Fine Copper Ore.\n\nAbove the vendor ladder each trade has two crafted tools, tier 4 and tier 5, made at the toolworks (every character knows the land recipes; the skill that climbs for the work is Engineering's), or bought with Delve Marks at the Drowned Litany counter once its clears gates are met: the table below carries the Marks price and the clears each rung asks. No merchant ever sells them for coin. Fishing has its own pair, and they are learned from the toolmaker rather than known from the start. No node and no water today needs more than tier 3, so the top two rungs buy speed, grade and a kinder reel window rather than access, and they will be the entry ticket when higher-tier ground arrives.",
       "toolCrafted": "制作获得（{craft}）",
       "toolCraftedOrMarks": "由{craft}制作，或用 {marks} 秘境印记购买",
       "toolCraftedOrMarksHeroic": "由{craft}制作，或在溺亡连祷英雄难度通关后用 {marks} 秘境印记购买",
@@ -4665,7 +4867,7 @@ export const zh_CN: EnTranslations = {
         "sellsHeading": "什么好卖，为什么",
         "sellsBody": "最稳的生意是消耗品，因为用掉就要再买：药水、熟食与附魔都随使用而消失。杰作是高端市场：无法定制，想要的人只能出高价，而上面的署名就是行走的招牌。原料是第三支柱：分解所得的奥术材料、直接从拆解者流向附魔师的各类Resonant次级材料，以及追逐杰作触发的工匠愿意溢价收购的署名采集品。",
         "marketHeading": "世界市场与抽成",
-        "marketBody": "世界市场是全服交易所，由Eastbrook的Merchant与Highwatch的Auctioneer Voss主持。挂单免费，没有押金，流拍原样退回；只在成交时抽取5%。特殊物品同样欢迎：署名、杰作或附魔的副本会以单件挂单上架，提示中带着完整的身份与署名，且绝不与普通堆叠混同。唯一拒收的是已绑定的副本：被制作者之约锁定（或仍待绑定）的物品既不能上市也不能邮寄，绑定无法被洗白。特殊物品请自行定价；普通挂单只能告诉你普通版的行情。",
+        "marketBody": "世界市场是全服交易所，由Eastbrook的Merchant与Highwatch的Auctioneer Voss主持。挂单免费，没有押金，流拍原样退回；只在成交时抽取5%。重要限制：市场只经手无标记的普通货，署名、杰作、附魔或已绑定的副本一律不收，这些特殊物品只能面对面通过交易窗口转手。",
         "workOrdersHeading": "工作订单",
         "workOrdersNote": "每位大师都会以商店价的{pct}%收购一批本行常用材料，每{minutes}分钟可重复一次。",
         "colOrder": "工作订单",
@@ -4718,25 +4920,25 @@ export const zh_CN: EnTranslations = {
       "coinBody": "货币分为三种。一百铜币兑换一银币，一百银币兑换一金币，因此你的钱袋会从最小的铜币开始往上累积。你可以从任务奖励、击杀敌人后的拾取，以及变卖闲置之物中赚取它们。",
       "vendorsTitle": "商人与他们的存货",
       "vendorsBody": "城镇与哨站里星罗棋布地分布着商人，各有各的营生。补给商贩备有食物与饮品，武器匠与护甲匠经营装备，军需官则备有实用的旅行用具。走到其中一位面前，便能看到他们出售的东西。",
-      "marksTitle": "印记与徽记：钱币之外的货币",
-      "marksBody": "你存下的不只有钱币。探秘会产出探秘印记，只能在探秘看守人处花费，用于同伴升级和别处找不到的装备。英雄难度的地下城则会在最终首领身上留下英雄徽记，在高守哨站的英雄军需官处花费，换取这个王国其他任何角落都买不到的珠宝。这两者都绝不会与你的钱币混在一起。",
+      "marksTitle": "第二种货币：探秘印记",
+      "marksBody": "你存下的不只有钱币。探秘会产出探秘印记，这是一种独立的货币，只能在探秘看守人处花费，用于同伴升级和别处找不到的装备。它们绝不会与你的钱币混在一起。",
       "bankTitle": "银行",
       "bankBody": "每座主城都设有镀金保险箱的分号，它是这片大陆的银行商号。与那里的司库交谈即可打开你的保险库：一处背包之外的私人储物空间，伴随角色终身。无论你下次造访哪家分号，寄存的物品都会安然等候。",
       "bankHow": "保险库打开后，点击背包中的物品即可存入，点击保险库中的物品即可取回。保险库只存放物品，不存放钱币，任务物品也会留在你身上。旅途中背包装满时，还有一个按钮可将全部制造材料一键存入。",
       "bankSlots": "新开的保险库空间不大，但会随你一同成长。司库出售更多格位，价格逐级走高；在线游玩还能获得额外空间，例如验证邮箱、关联账号，以及引荐好友加入游戏。",
       "buyingTitle": "买入与卖出",
-      "buyingBody": "与商人交谈并选择浏览他的货物，他的商店便会打开，分为三个标签页：浏览、出售和买回。浏览页陈列着他的全部存货，只要付得起钱就归你。出售页列出你背包中他愿意收购的物品，而出售一件带有自身随机品质的物品时会先请你确认，这样一件珍视的物品就绝不会因失误而溜走。若你卖掉了让自己后悔的东西，买回标签页会保留你近期的售出记录，让你能按当初卖出的价钱把它们买回来。",
+      "buyingBody": "站到商人身旁即可打开他的窗口。只要付得起钱，你就能买下他所贩售的任何东西，也能把背包里的大部分物品卖掉换取钱币。若你不小心卖错了东西，商人会保留你近期售出的物品，让你可以买回。",
       "junkTitle": "清理废品",
-      "junkBody": "你用不上的掉落物依然能卖给任何商人，所以每次路过城镇都顺手清空背包，别让它们堆满。商人的出售标签页甚至有一个一键按钮，可以一次性卖掉所有劣质品质的零碎物品。真正毫无价值的零碎杂物也可以直接丢弃以腾出空间。",
+      "junkBody": "你用不上的掉落物依然能卖给任何商人，所以每次路过城镇都顺手清空背包，别让它们堆满。真正毫无价值的零碎杂物也可以直接丢弃以腾出空间。",
       "tradeTitle": "与其他玩家交易",
       "tradeBody": "你可以与站在身旁的任何人面对面交易。双方将物品与钱币放入一个共享窗口，唯有两人都确认后才会完成交换，因此谁也不会吃亏。这是把掉落物递给朋友或敲定一笔买卖最简单的方式。",
       "mailTitle": "渡鸦邮驿",
       "mailBody": "每座主城都立着一根雕成渡鸦的石柱：那是渡鸦邮驿的邮箱，这个王国的信件服务。站在柱旁，便可按名字写信给任何角色，无论对方在线还是久未登录，并支付少许邮资，在信中附上钱币或货物。渡鸦要飞上一小段时间；当它降落时，一个信封指示标会提醒收件人有东西在等着。",
-      "mailHow": "领取则是同样的流程反过来：站在任意石柱旁阅读你的信件，把信中所附收入钱袋与背包。信件不会永远等候，所以要赶在渡鸦对你失去耐心之前领取。有几样东西邮驿一概拒收：灵魂绑定的物品、任务物品，以及已绑定或将随交易绑定的物品，它们只随你本人同行。另外，漂亮地交还一个任务之后，记得留意石柱；有些任务发布者是会写信的。",
+      "mailHow": "领取则是同样的流程反过来：站在任意石柱旁阅读你的信件，把信中所附收入钱袋与背包。信件不会永远等候，所以要赶在渡鸦对你失去耐心之前领取。有两样东西邮驿一概拒收：灵魂绑定的物品与任务物品，它们只随你本人同行。另外，漂亮地交还一个任务之后，记得留意石柱；有些任务发布者是会写信的。",
       "dailyTitle": "每日奖励",
       "dailyBody": "屏幕上有一个宝箱按钮，点击即可打开每日奖励窗口。每天都会列出几项任务：完成任务、在灰烬斗技场中作战、赢下一场溪谷杯比赛，还提供一次免费的转盘抽奖，这些都能为当天的排名累积积分；当日积分最高者会共享一个奖池，面向持有可选社区代币的玩家。这一切都不会赋予游戏中的战力。窗口本身会写明当天的规则与参赛资格，展示排行榜，并保留你的历史记录。",
       "marketTitle": "世界市场",
-      "marketBody": "商人经营着世界市场，这是一个由玩家驱动的交易所，你可以在此与素未谋面的人买卖。与东溪镇的商人交谈，或与高守哨站上的拍卖师沃斯交谈，即可将它打开：两位管理者服务于同一个共享市场。商人还会在那里长期挂售自己的一批货物，因此即便没有其他玩家上架，也总有东西可买。",
+      "marketBody": "the Merchant 经营着世界市场，这是一个由玩家驱动的交易所，你可以在此与素未谋面的人买卖。与 the Merchant 对话即可将其打开。the Merchant 还会在那里长期挂售自己的一批货物，因此即便没有其他玩家上架，也总有东西可买。",
       "marketBrowse": "浏览：翻看列表或按名称搜索，找到正在出售的商品。每条挂单都会显示货物、卖家，以及整组货物的要价。",
       "marketPost": "挂单：从背包中选一组货物，定下价格并挂出。在有人买下之前，货物会由商人代为保管。未售出的挂单过一段时间后会退还给你，若你改变主意，也可以提前取回其中一件。",
       "marketCollect": "收取：当你的货物售出后，所得钱款会在商人处等你领取。回去收取钱币，连同任何未售出而退回的货物。商人会从每笔成交中抽取少许佣金。",
@@ -4761,7 +4963,7 @@ export const zh_CN: EnTranslations = {
       "chanLfg": "寻求组队。",
       "chanLfgBody": "一个需自行加入、覆盖全服的频道，用于寻找一起打地下城的人。打开它的标签页即可加入。",
       "chanGuild": "公会与官员。",
-      "chanGuildBody": "属于你公会的频道。公会聊天可触及每一位成员；官员频道则供官员和会长使用。",
+      "chanGuildBody": "属于你公会的频道。公会聊天可触及每一位成员；官员频道则只供官员使用。",
       "partyHeading": "组建小队",
       "partyBody": "右键点击另一位玩家的名字并选择邀请，即可邀请对方组队。一支小队最多容纳五名玩家，其中一人是队长。",
       "partyCredit": "彼此靠近的队员会共享击杀与任务进度，所以一起做任务只会更快，绝不会更慢。组队也是你们作为一支队伍踏入地下城的方式。",
@@ -4771,7 +4973,7 @@ export const zh_CN: EnTranslations = {
       "lootCoinTitle": "钱币。",
       "lootCoinBody": "击杀所得的钱可以归拾取者，也可以在整支队伍间平均分配。",
       "lootCommonTitle": "物品。",
-      "lootCommonBody": "普通掉落物可以在队伍中轮流分配，或归拾取者所有，而更好的掉落物则会拿出来掷骰，让每个人都有公平的机会。",
+      "lootCommonBody": "普通掉落物可以归拾取者，而更好的掉落物则会拿出来掷骰，让每个人都有公平的机会。",
       "lootRollTitle": "需求、贪婪或放弃。",
       "lootRollBody": "当一件物品进入掷骰时，每位有资格的成员若想要它便选“需求”，若只是顺手收着便选“贪婪”，不想要则选“放弃”退出。点数最高者胜出。",
       "lootMasterTitle": "队长分配。",
@@ -4794,7 +4996,7 @@ export const zh_CN: EnTranslations = {
       "markersHeading": "目标标记",
       "markersBody": "组队时，右键点击一个敌对生物，即可为它戴上八种团队标记之一。任何队员都可以做标记，每个标记同一时间只落在一个目标上，对同一目标再次使用同一标记则会将其清除。击杀顺序、控场分工，或者一句简单的“先打这个”，化作一个标记，都比一句话传达得更快。",
       "etiquetteHeading": "组队礼仪",
-      "etiquetteBody": "组队是一种选择，而非负担。加入时打声招呼，只对你真正会用的装备掷“需求”，离开前先知会队伍一声。一点点礼貌大有裨益，而且大多数玩家都乐于有伴同行。管理员会维持秩序，而不肯让他人好好享受游戏的玩家，可能会被关进牢房，直到管理员放他出来。"
+      "etiquetteBody": "组队是一种选择，而非负担。加入时打声招呼，只对你真正会用的装备掷“需求”，离开前先知会队伍一声。一点点礼貌大有裨益，而且大多数玩家都乐于有伴同行。"
     },
     "stats": {
       "intro": "你的角色由寥寥几项属性来描述。你无需把它们背得滚瓜烂熟也能玩得很好，但大致了解每一项的作用，有助于你读懂角色面板并挑选合适的升级。",
@@ -4809,15 +5011,15 @@ export const zh_CN: EnTranslations = {
       "intTitle": "智力",
       "intBody": "智力会扩大施法者的法力池，提升其法术强度从而让法术打得更狠，还会提高其法术暴击的几率。它对那些消耗法力施法的职业至关重要；对怒气或能量职业来说则作用甚微。",
       "spiTitle": "精神",
-      "spiBody": "精神主宰施法者在停下施法时（也就是战斗间隙的大部分时间）法力回复的快慢。与智力一样，它服务于法力职业，对其他职业则意义不大。",
+      "spiBody": "精神主宰施法者在脱离战斗时法力回复的快慢。与智力一样，它服务于法力职业，对其他职业则意义不大。",
       "armorTitle": "护甲",
       "armorBody": "护甲能减轻你受到的物理伤害。它大多来自你身上的穿戴，越重甲的职业携带得越多。面对一个与你等级相近的敌人时，护甲越高，它的每一次打击落下时就越轻。",
       "apTitle": "攻击强度",
-      "apBody": "攻击强度衡量你的武器打击有多沉重。你的主属性会注入它，携带这些属性的装备会进一步提升它，而更强的武器则直接提高你的伤害，这正是为何一次升级可能带来伤害的真正飞跃。",
+      "apBody": "攻击强度衡量你的武器打击有多沉重。你的主属性会注入它，更强的武器与装备则会进一步提升它，这正是为何一次升级可能带来伤害的真正飞跃。",
       "spTitle": "法术强度",
       "spBody": "法术强度是施法者与攻击强度相对应的属性：它会提升你法术造成的伤害。智力为其供能，施法者装备与增益还会在此之上额外叠加，因此施法者关注法术强度，正如近战斗士关注攻击强度。",
       "critTitle": "暴击",
-      "critBody": "你的暴击几率是攻击打出额外伤害的频率。每个人都从一个较低的基础几率起步，敏捷（外加一些天赋和装备）则在此之上叠加。你的面板会同时显示这个几率本身，以及你的装备为它贡献的暴击等级。",
+      "critBody": "你的暴击几率是攻击打出额外伤害的频率。每个人都从一个较低的基础几率起步，敏捷（外加一些天赋和装备）则在此之上叠加。",
       "dodgeTitle": "躲闪",
       "dodgeBody": "躲闪是你完全闪避一次来袭近战攻击的几率。你从一个较低的基础几率起步，敏捷会提升它，所以身手敏捷的职业能躲过更多打击。",
       "hasteTitle": "急速",
@@ -4832,16 +5034,16 @@ export const zh_CN: EnTranslations = {
     "progression": {
       "intro": "每一场战斗、每一个任务、每一步北行，都会让你的英雄更强。这里讲的是升级如何运作，以及登顶之后是什么让你持续成长。",
       "xpTitle": "如何获得经验",
-      "xpBody": "你通过完成任务、击败敌人以及通关探秘来赚取经验。任务给的经验远多于其他途径，所以循着任务指引走是升级最快的方式。沿途的击杀与探秘则补足其余部分。",
+      "xpBody": "你通过完成任务和击败敌人来赚取经验。任务给的经验远多于其他途径，所以循着任务指引走是升级最快的方式。沿途击杀则补足其余部分。",
       "capBody": "每升一级都会让你更加坚韧，并带来新的技能，一路直至 {cap} 级的等级上限。",
       "journeyTitle": "北行之旅",
       "journeyBody": "整个世界是一片连绵不绝的大陆，三大区域由南向北铺展，每一处的等级都更高一层。你从翠绿的山谷启程，一路穿过湿地，最终止步于寒冷的高耸峰巅。循着任务指引而行，这片土地便会带你从一处走向下一处。",
       "bandLabel": "{min} 至 {max} 级",
       "restedTitle": "充分休息的经验",
-      "restedBody": "走进客栈并保持脱离战斗，你的角色便会在等待时积攒充分休息的经验。每座城镇都有一间客栈。下次你外出作战时，那一池经验会为你的击杀带来额外加成，直至耗尽。在客栈里稍作停留从来都不是浪费时间，它会加快你接下来一段的升级。",
+      "restedBody": "在客栈这样脱离战斗的安全之地休息，当你坐在那里时，你的角色便会积攒充分休息的经验。下次你外出作战时，那一池经验会为你的击杀带来额外加成，直至耗尽。在客栈里稍作停留从来都不是浪费时间，它会加快你接下来一段的升级。",
       "capTitle": "抵达 {cap} 级",
-      "capJourneyBody": "{cap} 级是上限，是升级的终点，却非成长的尽头。从那时起，你可以打普通与英雄难度的地下城和团队副本，在世界首领崛起时与他一战，追逐更好的装备，并在竞技场中检验自己。",
-      "prestigeBody": "即便到了等级上限，经验依然在累积。它会注入一个纯装饰性的虚拟等级，让你的经验条不断攀升，也会注入一个长期的威望等级，只要你到了那一步，就可以从角色面板中领取。跨过累计经验的重大里程碑，还会在你的功绩之书中赢得功绩，并附带会显示在角色面板上的装饰性称号与姓名板边框。这一切都纯属可选，绝不赋予战力，只是你走过这条路的印记。",
+      "capJourneyBody": "{cap} 级是上限，是升级的终点，却非成长的尽头。从那时起，你可以打地下城和团队副本、追逐更好的装备，并在竞技场中检验自己。",
+      "prestigeBody": "即便到了等级上限，经验依然在累积。它会注入一个纯装饰性的虚拟等级，让你的经验条不断攀升，也会注入一个可供长期赢取、以彰显荣誉的声望等级。跨过累计经验的重大里程碑，还会解锁会在你角色面板上显示的装饰性称号与姓名板边框。这一切都纯属可选，绝不赋予战力，只是你走过这条路的印记。",
       "noRush": "不必着急。这个世界供你按自己的节奏尽情享受，所以尽管漫步，接下吸引你的任务，让你的英雄在旅途中渐渐成长。"
     },
     "placeholder": {
@@ -4855,7 +5057,7 @@ export const zh_CN: EnTranslations = {
   },
   "editor": {
     "appTitle": "地图编辑器",
-    "docTitle": "地图编辑器 - World of ClaudeCraft",
+    "docTitle": "地图编辑器 - Cryptic Realm",
     "untitledMap": "未命名地图",
     "playtestPlayerName": "制图师",
     "topbar": {
@@ -5322,7 +5524,9 @@ export const zh_CN: EnTranslations = {
     "loginRegister": "登录/注册",
     "account": "账户",
     "logout": "退出登录",
-    "donate": "捐赠"
+    "donate": "捐赠",
+    "contributions": "Contributions",
+    "whitepaper": "White Paper"
   },
   "stats": {
     "title": "服务器状态",
@@ -5332,9 +5536,9 @@ export const zh_CN: EnTranslations = {
     "realmName": "服务器名称"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
+    "copyright": "2026 Cryptic Realm",
     "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "开源项目",
+    "githubLabel": "Contributions",
     "whitepaper": "白皮书",
     "terms": "服务条款",
     "privacy": "隐私政策",
@@ -5363,7 +5567,17 @@ export const zh_CN: EnTranslations = {
     "prerelease": "预发布",
     "viewOnGithub": "在 GitHub 上查看",
     "new": "新",
-    "viewAll": "在 GitHub 上查看全部更新"
+    "viewAll": "在 GitHub 上查看全部更新",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "officialLog": "Official Work Log",
+    "openLink": "Open",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "prTitle": "Upstream Kindness Track",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links.",
+    "proofTitle": "$CR Proof",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap"
   },
   "download": {
     "title": "下载电脑版启动器",
@@ -5390,11 +5604,11 @@ export const zh_CN: EnTranslations = {
     "serverOnline": "在线",
     "serverOffline": "离线",
     "play": "开始游戏",
-    "playAria": "开始游玩 World of ClaudeCraft",
+    "playAria": "开始游玩 Cryptic Realm",
     "serverLabel": "选择你的世界",
     "serverAria": "选择世界：在线或离线",
     "serverOfflineSub": "即时本地世界",
-    "caLabel": "$WOC 合约地址",
+    "caLabel": "$CR 合约地址",
     "caCopyAria": "复制合约地址",
     "caNote": "WOC 是我们的社区代币。游玩游戏并不需要它。加入 Discord 一起讨论 WOC 的用途与飞轮效应。"
   },
@@ -5635,10 +5849,17 @@ export const zh_CN: EnTranslations = {
       "logOut": "退出登录",
       "invalid": "请输入有效的邮箱地址。",
       "failed": "无法保存您的邮箱，请重试。"
-    }
+    },
+    "hardcoreChar": "Hardcore character",
+    "hardcoreHint": "Permadeath. If this character dies, it is permanently retired and can no longer be played. There is no resurrection.",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress).",
+    "ssoButton": "Continue with Google, Facebook, or Plex",
+    "ssoMoveweight": "Sign in with MoveWeight",
+    "ssoProviders": "Continue with Google, Facebook, Plex, or Discord"
   },
   "wallet": {
-    "label": "$WOC 钱包",
+    "label": "$CR 钱包",
     "connect": "验证钱包",
     "connectTitle": "验证你的 Solana 钱包",
     "connectAria": "验证你的 Solana 钱包",
@@ -5671,11 +5892,11 @@ export const zh_CN: EnTranslations = {
     "linkedDisconnectedAria": "钱包仍为你的账号保持验证。重新连接以管理钱包应用。",
     "linkTitle": "点击签名并将此钱包绑定到你的账号。",
     "connectedTitle": "已连接。登录后可将此钱包绑定到你的账号。",
-    "balanceTitle": "已验证 Solana 钱包的 $WOC 余额",
+    "balanceTitle": "已验证 Solana 钱包的 $CR 余额",
     "balanceAria": "已验证 Solana 钱包余额：{balance}",
-    "balancePreviewTitle": "已连接钱包的 $WOC 余额预览",
+    "balancePreviewTitle": "已连接钱包的 $CR 余额预览",
     "balancePreviewAria": "已连接钱包余额预览：{balance}。绑定钱包即可验证持有者标识。",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "bagConnect": "绑定钱包",
     "bagLink": "验证钱包",
     "bagReconnect": "重新连接钱包",
@@ -5695,12 +5916,12 @@ export const zh_CN: EnTranslations = {
     "extensionHelp": "若要在此处看到钱包，请保持 Solflare Wallet 等浏览器钱包扩展处于启用状态。",
     "mobileAppHelp": "选择 Phantom 或 Solflare。钱包应用会请求批准。请保持游戏打开，完成后返回游戏。",
     "seekerAppHelp": "使用 Seed Vault Wallet 继续。在 Seed Vault 中查看连接和验证请求，然后返回游戏。",
-    "standaloneAppHelp": "主屏幕应用暂不支持连接钱包。若要使用 Phantom 或 Solflare，请在 Safari 或 Chrome 中打开 World of ClaudeCraft。",
+    "standaloneAppHelp": "主屏幕应用暂不支持连接钱包。若要使用 Phantom 或 Solflare，请在 Safari 或 Chrome 中打开 Cryptic Realm。",
     "openAppTitle": "在 {wallet} 中继续",
     "openAppHelp": "打开 {wallet} 查看此请求。钱包应用处于活动状态时，请保持此游戏标签页打开。",
     "openAppButton": "打开 {wallet}",
     "manualReturnBrowserHelp": "批准后请返回此游戏标签页。如果 iOS 打开了其他浏览器，请将其关闭并手动返回原浏览器。",
-    "manualReturnStandaloneHelp": "批准后请从主屏幕返回 World of ClaudeCraft。如果 iOS 打开了浏览器，请将其关闭并重新打开主屏幕应用。",
+    "manualReturnStandaloneHelp": "批准后请从主屏幕返回 Cryptic Realm。如果 iOS 打开了浏览器，请将其关闭并重新打开主屏幕应用。",
     "preparingAppButton": "正在准备 {wallet}...",
     "walletAppUnavailable": "无法准备 {wallet}。请关闭此窗口并重试。",
     "flowConnect": "选择一个钱包。验证会自动继续。",
@@ -5715,18 +5936,18 @@ export const zh_CN: EnTranslations = {
       "linkBody": "在此浏览器中选择钱包扩展。签署验证消息后返回桌面应用。",
       "paymentBody": "选择已关联到账号的钱包，并在此浏览器中批准交易。",
       "extensionHelp": "未找到兼容的钱包扩展。请安装或解锁 Phantom、Solflare 或其他 Solana 浏览器钱包，然后重试。",
-      "safety": "World of ClaudeCraft 绝不会索要助记词或私钥。",
+      "safety": "Cryptic Realm 绝不会索要助记词或私钥。",
       "continueWith": "使用 {wallet} 继续",
       "reviewTitle": "在钱包中查看",
       "reviewBody": "按照 {wallet} 中的提示操作。请保持此浏览器页面打开。",
       "completeTitle": "钱包授权完成",
-      "completeBody": "现在可以返回 World of ClaudeCraft 桌面应用。",
+      "completeBody": "现在可以返回 Cryptic Realm 桌面应用。",
       "returnButton": "返回桌面应用",
       "failed": "钱包授权失败或已过期。请返回桌面应用并重试。",
       "retry": "重试"
     },
-    "holder": "$WOC 持有者",
-    "holderTierTitle": "{tier} $WOC 持有者",
+    "holder": "$CR 持有者",
+    "holderTierTitle": "{tier} $CR 持有者",
     "holderTiers": {
       "ember": {
         "name": "余烬",
@@ -5750,7 +5971,7 @@ export const zh_CN: EnTranslations = {
       },
       "vaultwarden": {
         "name": "宝库守望者",
-        "flavor": "如今守护着真正的宝库：全部 $WOC 的 0.01%。"
+        "flavor": "如今守护着真正的宝库：全部 $CR 的 0.01%。"
       },
       "whale": {
         "name": "巨鲸",
@@ -5825,8 +6046,8 @@ export const zh_CN: EnTranslations = {
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "铸就你的传说：{siteUrl}",
     "arenaStat": "竞技场",
-    "shareTierBit": "，{tier}级 $WOC 持有者",
-    "shareText": "我正在 World of ClaudeCraft 中铸就传说：{level}级 {className}{tierBit}。加入我的世界：",
+    "shareTierBit": "，{tier}级 $CR 持有者",
+    "shareText": "我正在 Cryptic Realm 中铸就传说：{level}级 {className}{tierBit}。加入我的世界：",
     "nativeShareTitle": "ClaudeCraft 世界",
     "fileNameFallback": "玩家",
     "actionShareX": "分享到 X",
@@ -6025,6 +6246,71 @@ export const zh_CN: EnTranslations = {
       "toolSlips": "这件工具在这把锁上打滑了。",
       "lockJammed": "锁已卡死，无法撬开，请再次通关探秘以获得新的尝试机会。",
       "lastPickSnaps": "最后一根撬锁器折断了。锁卡死了，除非再次通关探秘，否则这只宝箱就此失去。"
+    },
+    "venues": {
+      "derbyErrFull": "The grid is full for the next race.",
+      "derbyErrMarshal": "Sign up with the Race Marshal at the Thornwheel gate.",
+      "derbyErrRunning": "A race is already running. Wait for the next grid.",
+      "derbyFinish": "Checkered flag! You finish in {place} place.",
+      "derbyFinishPurse": "Checkered flag! You take {place} place and a {silver}s purse.",
+      "derbyGreen": "GREEN FLAG! Go go go!",
+      "derbyGrid": "Grid position {slot}. {laps} laps: follow the flags. Green in {seconds}...",
+      "derbyQueued": "You are signed up for the Thornwheel Derby ({count} on the grid).",
+      "derbyTimeUp": "Time! The Marshal waves you in.",
+      "homeDeed": "The deed to {name} is yours. Welcome home.",
+      "homeErrEntitlement": "A deed on Homestead Lane costs {price} $CR — settle the deed payment first.",
+      "homeErrHaveDeed": "You already hold a deed on Homestead Lane.",
+      "homeErrOwned": "That home already has an owner.",
+      "homeErrRealtor": "See Realtor Maribel on Homestead Lane to buy a home.",
+      "homeForSale": "That plot is still for sale.",
+      "homeShownDoor": "You are shown to the door.",
+      "hordeAlarm": "THE HORDE ALARM SOUNDS! The dead march on Eastbrook from the north road!",
+      "hordeBreach": "The dead break into the square! Wards left: {wards}.",
+      "hordeErrBoard": "Sound the alarm from the town defense board.",
+      "hordeErrBuildCost": "Raising a watch post costs 15s in timber and bowstrings.",
+      "hordeErrBuildMidWave": "Build between waves, not while the dead are inside the walls.",
+      "hordeErrCost": "Fortifying the town costs 20s in timber and nails.",
+      "hordeErrMaxWards": "The town is fortified to the rafters already.",
+      "hordeErrMidWave": "Fortify between waves, not while the dead are inside the walls.",
+      "hordeErrRunning": "The horde alarm is already sounding.",
+      "hordeFortified": "You fortify the town. Wards: {wards}. The line stands taller.",
+      "hordeLoss": "The last ward falls. The dead have Eastbrook tonight.",
+      "hordePostMax": "The watch posts are built out.",
+      "hordePostReinforced": "A watch post is reinforced to strength {level}.",
+      "hordePostUp": "A watch post rises on the line ({built} of {total}).",
+      "hordeWave": "WAVE {wave} of {waves}: {count} of the dead are on the road!",
+      "hordeWaveDown": "Wave {wave} is down. Fortify while you can — the next comes soon.",
+      "hordeWin": "The town stands! The bursar counts out your share: 80s.",
+      "pitBellMissed": "The bell rang without you. Your Boarpit card spot is forfeit.",
+      "pitDraw": "The Pit Master calls it a draw.",
+      "pitEnter": "Into the pit! {count} fighters. Fists in {seconds}...",
+      "pitErrFull": "The card is full for the next bout.",
+      "pitErrMaster": "Sign up with the Pit Master at the Boarpit gate.",
+      "pitErrRunning": "A bout is on. Wait for the next bell.",
+      "pitFight": "FIGHT!",
+      "pitForfeit": "You forfeit the bout.",
+      "pitKo": "Knocked out! You are hauled to the rail.",
+      "pitQueued": "You are on the card for the next Boarpit bout ({count} signed).",
+      "pitWin": "Last one standing! You take the pot: {silver}s.",
+      "skAxe": "Your builder shoulders the axe.",
+      "skBarracksUp": "Your barracks stands. Footmen may muster.",
+      "skBuilderDead": "Your camp builder has fallen.",
+      "skErrBusy": "You can't muster a warcamp right now.",
+      "skErrCost": "Not enough timber and stone for that.",
+      "skErrFull": "The muster roll is full.",
+      "skFootmanUp": "A footman answers the muster.",
+      "skHasBarracks": "Your camp already has a barracks.",
+      "skLoss": "The warband overruns the field. The skirmish is lost.",
+      "skNeedBarracks": "Footmen need a barracks.",
+      "skPick": "Your builder hefts the pick.",
+      "skQueued": "You are on the muster roll for a Warcamp Skirmish ({count} of 4).",
+      "skRally": "Your footmen march on the rally point.",
+      "skStart": "WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!",
+      "skTentDown": "Your Command Tent has fallen. Your camp is out.",
+      "skTowerUp": "A watchtower rises over your camp.",
+      "skTowersMax": "Your camp has all its watchtowers.",
+      "skWave": "Warband wave {wave} rides for the camps!",
+      "skWin": "The warband banner falls! The field is yours: 120s the commander."
     }
   },
   "lockpickUi": {
@@ -6170,7 +6456,8 @@ export const zh_CN: EnTranslations = {
       "riteChoose": "靠近沉溺圣物匣并按 F 开始仪式",
       "ritePlayback": "注视神龛：记住它们亮起的顺序",
       "riteInput": "按亮起的顺序在每座神龛前按 F（{current}/{total}）",
-      "riteOpen": "圣物匣已开启：在它面前按 F 领取战利品"
+      "riteOpen": "圣物匣已开启：在它面前按 F 领取战利品",
+      "descend": "Descend the Hellmaw"
     },
     "objective": {
       "kill_boss": "击杀{boss}",
@@ -6322,6 +6609,7 @@ export const zh_CN: EnTranslations = {
   "yumi": {
     "bracket3": "Yumi 3v3",
     "bracket5": "Yumi 5v5",
+    "enterQueue": "加入Protect Yumi！",
     "queue": {
       "join": "你加入了Protect Yumi队列。守好你的使魔……",
       "leave": "你离开了Protect Yumi队列。",
@@ -6359,6 +6647,7 @@ export const zh_CN: EnTranslations = {
   },
   "fiesta": {
     "bracket": "Fiesta",
+    "enterQueue": "加入Fiesta！",
     "banner": {
       "wave": "第{wave}/{total}波——选择一项强化！",
       "augmentGained": "获得强化：{name}！",
@@ -6523,14 +6812,14 @@ export const zh_CN: EnTranslations = {
     }
   },
   "seo": {
-    "title": "World of ClaudeCraft：经典风格网页 MMO",
-    "description": "在 World of ClaudeCraft 展开史诗冒险。这是一款可直接在浏览器中游玩的经典风格微型 MMO。加入持续共享的世界，提升职业等级，击败敌人！",
+    "title": "Cryptic Realm：经典风格网页 MMO",
+    "description": "在 Cryptic Realm 展开史诗冒险。这是一款可直接在浏览器中游玩的经典风格微型 MMO。加入持续共享的世界，提升职业等级，击败敌人！",
     "genre": "MMORPG",
     "playMode": "多人游戏",
     "applicationCategory": "游戏",
     "operatingSystem": "网页浏览器",
-    "officialLabel": "World of ClaudeCraft 官方网站",
-    "officialBody": "worldofclaudecraft.com 是 Claudemoon 世界的官方免费浏览器 MMO。你可以用持久角色在线游玩，也可以离线单人探索，阅读 wiki，并从本站访问已验证的社区链接。"
+    "officialLabel": "Cryptic Realm 官方网站",
+    "officialBody": "crypticrealm.com 是 Claudemoon 世界的官方免费浏览器 MMO。你可以用持久角色在线游玩，也可以离线单人探索，阅读 wiki，并从本站访问已验证的社区链接。"
   },
   "a11y": {
     "goHome": "前往主页",
@@ -6538,9 +6827,9 @@ export const zh_CN: EnTranslations = {
     "mainNavigation": "主导航",
     "languageSelection": "语言选择",
     "characterActions": "角色操作",
-    "githubProject": "打开 World of ClaudeCraft 的 GitHub 项目",
-    "discordCommunity": "加入 World of ClaudeCraft 的 Discord 社区",
-    "donateProject": "捐赠支持 World of ClaudeCraft"
+    "githubProject": "打开 Cryptic Realm 的 GitHub 项目",
+    "discordCommunity": "加入 Cryptic Realm 的 Discord 社区",
+    "donateProject": "捐赠支持 Cryptic Realm"
   },
   "entryGuard": {
     "title": "已降低图形设置",
@@ -6573,7 +6862,8 @@ export const zh_CN: EnTranslations = {
       "professions": "提示：采集与制造类生活技能可以与你的战斗职业同时培养。",
       "loadouts": "提示：保存多套天赋配置，即可在不同 build 间切换而无需重新分配天赋点。",
       "pvp": "提示：向其他玩家发起友谊决斗，或报名灰烬竞技场，来检验你的 build。"
-    }
+    },
+    "reconnecting": "连接已断开。正在重新连接..."
   },
   "errors": {
     "nothingInteract": "附近没有可互动目标。",
@@ -6615,6 +6905,7 @@ export const zh_CN: EnTranslations = {
   },
   "desktop": {
     "update": {
+      "downloading": "正在下载更新 {version}...",
       "checkingTitle": "正在检查更新...",
       "checkingBody": "游戏会自动保持最新版本。",
       "uptodateTitle": "当前已是最新版本。",
@@ -6627,11 +6918,11 @@ export const zh_CN: EnTranslations = {
       "dismiss": "关闭"
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "body": "游戏画面已停止响应。要重新加载吗？",
       "reload": "重新加载",
       "quit": "退出",
-      "fatalBody": "World of ClaudeCraft 遇到意外错误，需要关闭。"
+      "fatalBody": "Cryptic Realm 遇到意外错误，需要关闭。"
     }
   },
   "gpuNotice": {
@@ -6658,15 +6949,17 @@ export const zh_CN: EnTranslations = {
     "medium": "中",
     "low": "低",
     "popTipLow": "人数较少：当前在线玩家不足 15 人。空间充足，适合全新开始。",
-    "popTipMedium": "人数适中：当前在线玩家 15 至 79 人。健康活跃的服务器。",
-    "popTipHigh": "人数较多：当前在线玩家 80 人以上。繁忙，玩家众多。",
-    "popTipFull": "人数已满：当前服务器已达到玩家上限。在有玩家退出之前，新的登录会被拒绝。",
+    "popTipMedium": "人数适中：当前在线玩家 15 至 39 人。健康活跃的服务器。",
+    "popTipHigh": "人数较多：当前在线玩家 40 至 79 人。繁忙，玩家众多。",
+    "popTipFull": "人数已满：当前在线玩家 80 人或以上。非常繁忙；登录时可能需要排队。",
     "popTipOffline": "离线：此服务器当前无法连接，无法加入。",
     "characterCountOne": "{count} 个角色",
     "characterCountOther": "{count} 个角色",
     "selectedRealm": "服务器：{name}",
     "statsOffline": "离线",
-    "statsRealmOffline": "{realm}（离线）"
+    "statsRealmOffline": "{realm}（离线）",
+    "enter": "Enter Realm",
+    "exchangeNote": "The Exchange is the only realm where items move between realms."
   },
   "character": {
     "loading": "正在加载...",
@@ -6770,17 +7063,17 @@ export const zh_CN: EnTranslations = {
     "iosStandaloneDetail": "你正在从主屏幕以全屏模式运行。请保持横屏。",
     "iosInstallDetail": "若要在 iPhone 或 iPad 上获得真正全屏，请先将此页面添加到主屏幕。",
     "iosShareStep": "在 Safari 中点击分享，然后选择添加到主屏幕。",
-    "iosOpenStep": "从新的主屏幕图标打开 World of ClaudeCraft。",
+    "iosOpenStep": "从新的主屏幕图标打开 Cryptic Realm。",
     "androidStandaloneDetail": "你正在全屏应用模式中。请保持横屏。",
     "androidInstallDetail": "若要在 Android 上全屏，请先安装此页面或将其添加到主屏幕。",
     "androidInstallStep": "在 Chrome 中点击菜单，然后选择安装应用或添加到主屏幕。",
-    "androidOpenStep": "从新图标打开 World of ClaudeCraft。",
+    "androidOpenStep": "从新图标打开 Cryptic Realm。",
     "otherStandaloneDetail": "请保持设备处于横屏全屏。",
     "otherInstallDetail": "安装此页面或将其添加到主屏幕，以获得最佳移动端全屏体验。"
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - 服务器不可用",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - 服务器不可用",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "服务器维护",
     "heading": "服务器暂时不可用。",
     "body": "我们正在重启游戏服务，Claudemoon 应会很快恢复。此页面会自动继续检查。",
@@ -6812,7 +7105,7 @@ export const zh_CN: EnTranslations = {
       "releaseSpirit": "释放灵魂",
       "chatTab": "聊天",
       "combatLogTab": "战斗记录",
-      "chatPlaceholder": "说点什么...（/s 说话，/w 名字 密语，/r 回复，/p 队伍，/gu 公会，/o 官员，/general 综合，! 显示社区指令）",
+      "chatPlaceholder": "说点什么...（/s 说话，/w 名字 密语，/r 回复，/p 队伍，/gu 公会，/o 官员，/general 综合）",
       "chatChannels": {
         "add": "添加聊天频道",
         "addTitle": "添加频道",
@@ -6849,7 +7142,8 @@ export const zh_CN: EnTranslations = {
       "zoomIn": "放大",
       "zoomOut": "缩小",
       "mapCanvasLabel": "地图",
-      "mapSummary": "{zone}的地图。"
+      "mapSummary": "{zone}的地图。",
+      "mobileArena": "竞技场"
     },
     "options": {
       "gameMenu": "游戏菜单",
@@ -6926,6 +7220,34 @@ export const zh_CN: EnTranslations = {
       "primary": "主键",
       "alternate": "备用键",
       "unbound": "未绑定",
+      "arcforge": "ArcForge",
+      "controller": "Controller",
+      "controllerDisconnected": "Not connected",
+      "coop": "Join Co-Op",
+      "customization": "Customization",
+      "mods": "Mods",
+      "padA": "A",
+      "padAttackTarget": "Attack nearest · target",
+      "padB": "B",
+      "padBack": "Back / View",
+      "padCursorNote": "When a menu, quest dialog, or chat opens, the on-screen cursor arms automatically — move it with a stick and press A to click (accept quests, send chat, use menus).",
+      "padCursorToggle": "Toggle mouse cursor",
+      "padDpad": "D-Pad",
+      "padInteract": "Interact / talk to NPC",
+      "padJumpClick": "Jump · click in cursor mode",
+      "padLbRb": "LB / RB",
+      "padLeftStick": "Left Stick",
+      "padLookCursor": "Look / move cursor",
+      "padLtRt": "LT / RT (hold)",
+      "padMenu": "Open game menu",
+      "padMove": "Move",
+      "padRightStick": "Right Stick",
+      "padSkillChords": "Hold + A/B/X/Y for skills 9–16",
+      "padSkills12": "Skills 1 & 2",
+      "padSkills47": "Skills 5–8",
+      "padStart": "Start / Menu",
+      "padXY": "X / Y",
+      "reportBug": "Report Bug",
       "mouseCamera": "鼠标镜头",
       "keybindHelpMouseCamera": "鼠标镜头关闭：A/D 转向，拖动环绕（经典）。开启：WASD 按镜头方向移动，A/D 平移。点击按键格可重新绑定；Esc 取消。"
     },
@@ -6956,7 +7278,7 @@ export const zh_CN: EnTranslations = {
         "nameplates": "切换姓名板",
         "meters": "伤害统计",
         "social": "好友与公会",
-        "arena": "PvP(荆谷原野与竞技场)",
+        "arena": "竞技场（灰烬斗技场）",
         "chat": "打开聊天",
         "attack": "攻击",
         "actionBarSlot": "动作条 {slot}"
@@ -7273,7 +7595,7 @@ export const zh_CN: EnTranslations = {
       "defensiveDesc": "攻击伤害你或你宠物的敌人。",
       "aggressiveDesc": "攻击附近的敌对敌人。",
       "rename": "重命名宠物",
-      "revive": "修补",
+      "revive": "复活宠物",
       "abandon": "放弃宠物",
       "cancel": "取消",
       "renameLabel": "选择一个新的宠物名称。",
@@ -7898,6 +8220,14 @@ export const zh_CN: EnTranslations = {
         "name": "铁血怒吼",
         "description": "发出一声怒吼，使所有队伍成员的攻击强度提高 {buff}%，持续 30 分钟。"
       },
+      "commanding_shout": {
+        "name": "鼓舞呐喊",
+        "description": "使你的耐力提高 {buff}，持续 2 分钟。"
+      },
+      "rend": {
+        "name": "深创",
+        "description": "撕裂目标，使其流血，在 {duration} 秒内受到 {damage} 点伤害。"
+      },
       "demoralizing_shout": {
         "name": "恐怖嚎叫",
         "description": "发出可怕的怒吼，使附近所有敌人造成的伤害降低 {buff}%，持续 20 秒。"
@@ -7976,7 +8306,7 @@ export const zh_CN: EnTranslations = {
       },
       "greater_invisibility": {
         "name": "强效隐形术",
-        "description": "消失 20 秒并移除 2 个持续伤害效果。隐形结束时，受到的伤害降低 90%，持续 2 秒。（法师天赋）"
+        "description": "消失 20 秒：移除 2 个持续伤害效果，并使你在隐形期间及结束后短时间内受到的伤害降低 90%。（法师天赋）"
       },
       "hot_streak": {
         "name": "炽热连击",
@@ -8076,7 +8406,7 @@ export const zh_CN: EnTranslations = {
       },
       "frost_nova": {
         "name": "冰缚",
-        "description": "将附近所有敌人冻结在原地，最多持续 8 秒，并造成 {damage} 点冰霜伤害。定身效果会在累计受到相当于目标最大生命值15%的伤害后解除，伤害阈值最低为20点，最高为60点。"
+        "description": "将附近所有敌人冻结在原地，最多持续 8 秒，并造成 {damage} 点冰霜伤害。"
       },
       "arcane_explosion": {
         "name": "以太爆发",
@@ -8440,7 +8770,7 @@ export const zh_CN: EnTranslations = {
       },
       "bear_form": {
         "name": "巨熊形态",
-        "description": "变形为熊：护甲 +130%，攻击强度大幅提高，你的攻击会产生怒气并额外产生 30% 威胁值。再次施放可返回施法者形态。"
+        "description": "变形为熊：护甲 +90%，攻击强度大幅提高，你的攻击会产生怒气并额外产生 30% 威胁值。再次施放可返回施法者形态。"
       },
       "maul": {
         "name": "碎骨击",
@@ -8520,7 +8850,7 @@ export const zh_CN: EnTranslations = {
       },
       "tigers_fury": {
         "name": "狼血",
-        "description": "使攻击强度提高 {buff}，持续 {duration} 秒。仅限狼形态。"
+        "description": "Increases attack power by {buff} for {duration} sec. Wolf Form only."
       },
       "rip": {
         "name": "割裂",
@@ -9059,8 +9389,8 @@ export const zh_CN: EnTranslations = {
         "description": "一记潜行起手技，以武器伤害外加{damage}撕抓敌人，并造成持续9秒的流血伤害。获得1点连击点数。仅限狼形态使用。"
       },
       "revive_pet": {
-        "name": "修补",
-        "description": "修补你的宠物。若其存活，在12秒内每3秒恢复一次生命值，共恢复{overTime}点；若其死亡，则以35%生命值将其复活。"
+        "name": "复活宠物",
+        "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
       }
     },
     "items": {
@@ -9202,6 +9532,18 @@ export const zh_CN: EnTranslations = {
       "gravecaller_sigil": {
         "name": "唤墓者徽记"
       },
+      "binding_ward": {
+        "name": "Hellmaw Binding Ward"
+      },
+      "renders_hateforged_cleaver": {
+        "name": "The Render's Hateforged Cleaver"
+      },
+      "sigilbrand_of_the_durance": {
+        "name": "Brand of the Hellmaw"
+      },
+      "hollow_fang_of_hate": {
+        "name": "Hollow Fang of the Well"
+      },
       "blessed_wax": {
         "name": "祝福油脂"
       },
@@ -9251,13 +9593,13 @@ export const zh_CN: EnTranslations = {
         "name": "亚麻碎布"
       },
       "arcane_dust": {
-        "name": "铃音之尘"
+        "name": "奥术之尘"
       },
       "arcane_essence": {
-        "name": "铃音精华"
+        "name": "奥术精华"
       },
       "arcane_shard": {
-        "name": "铃音碎片"
+        "name": "奥术碎片"
       },
       "fen_muster_order": {
         "name": "芬桥集结令"
@@ -9518,7 +9860,7 @@ export const zh_CN: EnTranslations = {
         "name": "峰羊毛长袍"
       },
       "stalkerhide_jerkin": {
-        "name": "巡猎皮甲"
+        "name": "潜猎者皮甲"
       },
       "cragwalker_boots": {
         "name": "岩行者长靴"
@@ -9659,7 +10001,7 @@ export const zh_CN: EnTranslations = {
         "name": "铁制采矿镐"
       },
       "mithril_mining_pick": {
-        "name": "天银采矿镐"
+        "name": "秘银采矿镐"
       },
       "handaxe": {
         "name": "手斧"
@@ -9677,19 +10019,19 @@ export const zh_CN: EnTranslations = {
         "name": "青铜镰刀"
       },
       "silverleaf_sickle": {
-        "name": "润光叶镰刀"
+        "name": "银叶镰刀"
       },
       "thorium_mining_pick": {
-        "name": "锇金采矿镐"
+        "name": "钍矿采矿镐"
       },
       "arcanite_mining_pick": {
-        "name": "铭钢采矿镐"
+        "name": "秘法采矿镐"
       },
       "ashwood_axe": {
         "name": "白蜡木斧"
       },
       "elderwood_axe": {
-        "name": "高松斧"
+        "name": "古木斧"
       },
       "goldleaf_sickle": {
         "name": "金叶镰刀"
@@ -9698,16 +10040,16 @@ export const zh_CN: EnTranslations = {
         "name": "阳瓣镰刀"
       },
       "thorium_ore": {
-        "name": "锇矿石"
+        "name": "瑟银矿石"
       },
       "arcanite_bar": {
-        "name": "铭钢锭"
+        "name": "秘银锭"
       },
       "ashwood_log": {
         "name": "灰木原木"
       },
       "elderwood_log": {
-        "name": "高松原木"
+        "name": "古老接骨木原木"
       },
       "goldleaf_herb": {
         "name": "金叶草"
@@ -10720,6 +11062,15 @@ export const zh_CN: EnTranslations = {
       "simple_fishing_pole": {
         "name": "简易鱼竿"
       },
+      "mount_forest_stag": {
+        "name": "森林雄鹿缰辔"
+      },
+      "mount_swamp_raptor": {
+        "name": "枪颚迅猛龙鞍"
+      },
+      "mount_emerald_wyrm": {
+        "name": "翡翠巨龙缰绳"
+      },
       "tangled_weed": {
         "name": "缠结水草"
       },
@@ -10748,7 +11099,7 @@ export const zh_CN: EnTranslations = {
         "name": "夜牙足垫"
       },
       "glimmerfin_koi": {
-        "name": "日辉锦鲤"
+        "name": "微光鳍锦鲤"
       },
       "raw_bog_eel": {
         "name": "生沼泽鳗鱼"
@@ -11625,6 +11976,36 @@ export const zh_CN: EnTranslations = {
       "vale_cup_ball": {
         "name": "野猪皮球"
       },
+      "hellmaw_charred_husk": {
+        "name": "Charred Husk"
+      },
+      "hellmaw_cinder_acolyte": {
+        "name": "Cinder Acolyte"
+      },
+      "hellmaw_cursed_knight": {
+        "name": "Cursed Iron Knight"
+      },
+      "hellmaw_ember_behemoth": {
+        "name": "Ember Behemoth"
+      },
+      "hellmaw_inferno_dragon": {
+        "name": "Inferno Dragon"
+      },
+      "hellmaw_lava_fiend": {
+        "name": "Lava Fiend"
+      },
+      "hellmaw_primal_beast": {
+        "name": "Primal Emberbeast"
+      },
+      "hellmaw_sigilbound_warlock": {
+        "name": "Sigil-Bound Warlock"
+      },
+      "hellmaw_the_render": {
+        "name": "The Render"
+      },
+      "hellmaw_wailing_spectre": {
+        "name": "Wailing Spectre"
+      },
       "thunzharr_waking_peak": {
         "name": "桑扎尔，觉醒之峰"
       },
@@ -12217,6 +12598,41 @@ export const zh_CN: EnTranslations = {
         "title": "圣物库守护人",
         "greeting": "小径向北延伸。又一座圣物库，又一场仪式。选择你的难度，我会为你守住绳索，直到你归来。"
       },
+      "cainhurst_sage": {
+        "name": "Cainhurst the Sage",
+        "title": "Keeper of the Hellmaw",
+        "greeting": "You pulled me from the Hellmaw, friend - I do not forget it. The well is open to you now. Steel yourself: The Render waits at the bottom."
+      },
+      "stable_master_wren": {
+        "name": "雷恩·鞍值",
+        "title": "马厩总管",
+        "greeting": "每位英雄都需要坐骑，{className}。雄鹿沉稳，迅猛龙迅捷，而巨龙……巨龙会飞。"
+      },
+      "mercenary_kael": {
+        "name": "Kael the Sellsword",
+        "title": "Wandering Mercenary",
+        "greeting": "Coin's coin, {className}. Lend a blade and the beast's yours to loot."
+      },
+      "huntress_verr": {
+        "name": "Huntress Verr",
+        "title": "Boar-Culler",
+        "greeting": "These tuskers won't thin themselves. Wade in - the kill counts for you."
+      },
+      "interior_merchant": {
+        "name": "Merchant",
+        "title": "Shopkeeper",
+        "greeting": "Wares for a wanderer? Take a look."
+      },
+      "interior_innkeeper": {
+        "name": "Innkeeper",
+        "title": "Host",
+        "greeting": "Rest your boots, traveller. The fire's warm."
+      },
+      "interior_villager": {
+        "name": "Villager",
+        "title": "Resident",
+        "greeting": "Oh - a visitor! Mind the mess."
+      },
       "spirit_healer": {
         "name": "灵魂医者",
         "title": "亡者的守护者",
@@ -12512,6 +12928,41 @@ export const zh_CN: EnTranslations = {
         "title": "药坊大师",
         "greeting": "量两次，倒一次，{className}。药坊里容不得洒掉的药剂。"
       },
+      "town_defense_board": {
+        "name": "Town Defense Board",
+        "title": "Keeper of the Eastbrook Watch",
+        "greeting": "The road needs a watch. Gather your party and hold Eastbrook against the dead."
+      },
+      "race_marshal_pip": {
+        "name": "赛事总管皮普",
+        "title": "荆棘车轮看守",
+        "greeting": "六辆矿车、三圈赛道，刹车更是徒有其名，{className}。要在登记簿上签个名，占个发车位吗？"
+      },
+      "pit_master_grott": {
+        "name": "斗坑之主格罗特",
+        "title": "野猪坑看守",
+        "greeting": "拳头、脚，还有山谷赋予你的一切都能用，{className}。我的坑里没人会死——木桩会保证这一点。要在出场名单上签名吗？"
+      },
+      "realtor_maribel": {
+        "name": "房产经纪玛丽贝尔",
+        "title": "东溪家园",
+        "greeting": "四块上好的地皮，{className}。山谷的空气免费，地契可不免费。家园巷的宅子只属于我们的赞助人，以 CR 币结算。"
+      },
+      "skirmish_post": {
+        "name": "营垒建筑",
+        "title": "战地营垒遭遇战",
+        "greeting": "营垒依然坚守。"
+      },
+      "skirmish_builder": {
+        "name": "营地建造者",
+        "title": "战地营垒遭遇战",
+        "greeting": "斧头还是镐子，指挥官——指个方向就行。"
+      },
+      "skirmish_footman": {
+        "name": "营地步兵",
+        "title": "战地营垒遭遇战",
+        "greeting": "给我指出匪帮的方向。"
+      },
       "tidewatcher_ondrel": {
         "name": "翁德雷尔·凡恩",
         "title": "守潮者",
@@ -12521,11 +12972,11 @@ export const zh_CN: EnTranslations = {
     "quests": {
       "q_prof_intro": {
         "title": "人人都有一技之长",
-        "text": "东溪人人除了舞刀弄剑，还得有门手艺，{playerName}。镇子东南的铜矿坑周围岩石里有矿脉。拿起矿镐，亲手开采5处；别想蒙我，我看得出差别。",
+        "text": "伊斯特布鲁克的每个人都有除了剑术之外的手艺，{playerName}。镇子周围散落着矿脉，去挥镐采上5块矿石带给我。要亲自采，别耍花招，我看得出来。",
         "completion": "看吧？矿石采到了，手上也磨出了茧。赶路时继续采矿、伐木和采药；回城后，别忘了市场旁的城镇专注告示板和附近的制作台。只要你愿意，这些手艺都能换来公道的生计。",
         "objectives": {
           "0": {
-            "label": "已开采矿脉"
+            "label": "矿石块"
           }
         }
       },
@@ -12604,7 +13055,7 @@ export const zh_CN: EnTranslations = {
       },
       "q_supplies": {
         "title": "被盗的补给",
-        "text": "强盗抢走了我的最后一辆货车，工具、盐和东溪亚麻都在里面。去西南山丘的营地夺回4个补给箱。",
+        "text": "强盗抢走了我的最后一辆货车，工具、盐和东溪亚麻都在里面。去东南山丘的营地夺回4个补给箱。",
         "completion": "我的箱子！几乎没有划痕。你真让人惊喜。",
         "objectives": {
           "0": {
@@ -12833,7 +13284,7 @@ export const zh_CN: EnTranslations = {
       },
       "q_no_rest": {
         "title": "芦苇中不得安息",
-        "text": "香炉上的仪式会让溺亡者复起，如今它已唤起一个强大到足以统领他们的存在。守望者称他为溺亡督军，只要他还占据沉没的礼拜堂，死者便阵列不散。打倒他，{playerName}，其余的自会溃散回泥沼。",
+        "text": "The rite on those censers binds the drowned to rise, and now it has raised one strong enough to lead them. The wardens call him the Drowned Warlord, and while he holds the Drowned Chapel the dead keep their ranks. Break him, {playerName}, and the rest will scatter back into the mire.",
         "completion": "你给了死者比他们主人更多的怜悯。拿着，你早已应得。",
         "objectives": {
           "0": {
@@ -12955,7 +13406,7 @@ export const zh_CN: EnTranslations = {
         }
       },
       "q_stalker_pelts": {
-        "title": "初霜降临高望",
+        "title": "冬日将至高望",
         "text": "{playerName}，这座山的冬天不会敲门，它会踹门。8张山脊潜猎者皮能为守墙披风加衬。",
         "completion": "厚得像我的手臂。今年守望者不会冻死。",
         "objectives": {
@@ -12986,7 +13437,7 @@ export const zh_CN: EnTranslations = {
       },
       "q_old_cragmaw": {
         "title": "老裂颚",
-        "text": "山民给我斥候找到的爪印起过名字：老裂颚，一只满身伤疤的暴君巨猫，熬死了自己族群的三代。潜猎者涌上我的道路，就是因为它，{playerName}。它的巢穴在南路上方的东侧山脊。带个帮手去，了结那老魔头。",
+        "text": "山民给我斥候找到的爪印起过名字：老裂颚，一只满身伤疤的暴君巨猫，熬死了自己族群的三代。潜猎者涌上我的道路，就是因为它，{playerName}。它的巢穴在南路上方的西侧山脊。带个帮手去，了结那老魔头。",
         "completion": "它终于倒下了。山民曾发誓那只猫会比城墙活得还久。如今潜猎者会守在高处的雪原了，{playerName}，我的巡逻队走这条路也不必再流血。整条山脊都因你安静了下来。",
         "objectives": {
           "0": {
@@ -13219,11 +13670,21 @@ export const zh_CN: EnTranslations = {
       },
       "q_the_codfather": {
         "title": "鳕鱼教父",
-        "text": "鳕鱼教父不只是一条鱼，{playerName}，它是个冷血杀手。老人们发誓说它拿湿地徘徊者当早饭，就连米尔芬寡妇也会因恐惧而不敢在深沼浅滩附近结网。那片水域归它统治，而沼泽水域非得用一根铁轮钓竿不可，我柜台上就有卖。拿上一根，把那个老恶魔从它的水域里拖出来，我就承认你入了这个家族。",
+        "text": "鳕鱼教父不只是一条鱼，{playerName}，它是个冷血杀手。老人们发誓说它拿湿地徘徊者当早饭，就连米尔芬寡妇也会因恐惧而不敢在深沼浅滩附近结网。那片水域归它统治。拿上鱼竿，把那个老恶魔从它的水域里拖出来，我就承认你入了这个家族。",
         "completion": "湿地诸圣在上……鳕鱼教父本尊。看看那些胡须。芬桥会把这次收获讲上一整年，{playerName}。",
         "objectives": {
           "0": {
             "label": "鳕鱼教父"
+          }
+        }
+      },
+      "q_save_cainhurst": {
+        "title": "Save Cainhurst the Sage",
+        "text": "Old Cainhurst - the sage who reads the deep maps - went down the well a week past and never came up. The thing below took him, and bound him with three cursed wards: one struck among the graves, one buried in the mine, one drowned at the docks. Break all three wards, {playerName}, and you'll break his chains. Bring them to me as proof.",
+        "completion": "The three wards, all snuffed cold. Cainhurst has crawled free - he waits at the well now, and swears the Hellmaw is open to you. He warns of something at the bottom he calls The Render.",
+        "objectives": {
+          "0": {
+            "label": "Hellmaw binding ward broken"
           }
         }
       },
@@ -13239,7 +13700,7 @@ export const zh_CN: EnTranslations = {
       },
       "q_nythraxis_graves": {
         "title": "被遗忘者的坟墓",
-        "text": "我以前见过这些标记，就在北方战场周围的三座旧坟上。奥德伦队长葬在西侧高地，马尔里克大祭司在西侧边缘更往南处，皇家刺客沃斯则在东侧峭壁边。触碰每座坟墓并倾听，{playerName}。死者或许记得生者遗忘的事。",
+        "text": "我以前见过这些标记，就在北方战场周围的三座旧坟上。奥德伦队长葬在东侧高地，马尔里克大祭司在中央破路旁，皇家刺客沃斯则在西侧峭壁边。触碰每座坟墓并倾听，{playerName}。死者或许记得生者遗忘的事。",
         "completion": "奥德伦依旧忠诚，马尔里克拒绝接受死亡，而沃斯比任何人都更早看见危险。他们三人都侍奉同一位被遗忘的国王。",
         "objectives": {
           "0": {
@@ -13255,7 +13716,7 @@ export const zh_CN: EnTranslations = {
       },
       "q_nythraxis_sealed_crypt": {
         "title": "废弃墓穴",
-        "text": "幻象指向东侧峭壁中的废弃墓穴。古老传说称，那座墓穴曾安置一位国王。也许在马尔里克的仪式把他扭曲成不死之物后，荆峰将他封在了下面。进入墓穴，看看里面还剩下什么。",
+        "text": "幻象指向西侧峭壁中的废弃墓穴。古老传说称，那座墓穴曾安置一位国王。也许在马尔里克的仪式把他扭曲成不死之物后，荆峰将他封在了下面。进入墓穴，看看里面还剩下什么。",
         "completion": "钥石的两半合在了一起，而沃斯的日记写明了它们封印之物：尼思拉克西斯国王的印戒。如果日记属实，那枚印戒就是通往他陵墓的钥匙。",
         "objectives": {
           "0": {
@@ -13297,7 +13758,7 @@ export const zh_CN: EnTranslations = {
       },
       "q_mogger": {
         "title": "莫格必须倒下",
-        "text": "莫格劈裂货车，踏平栅栏，杀死的牲口足以让半个谷地空掉。不要独自面对它。带两名强壮同伴去西边草地，把那蛮兽彻底放倒。",
+        "text": "莫格劈裂货车，踏平栅栏，杀死的牲口足以让半个谷地空掉。不要独自面对它。带两名强壮同伴去东边草地，把那蛮兽彻底放倒。",
         "completion": "莫格终于死了。东溪的田地更安全了，而你离开谷地时又多了一个值得传颂的故事。",
         "objectives": {
           "0": {
@@ -13357,7 +13818,7 @@ export const zh_CN: EnTranslations = {
       },
       "q_prof_amends_outfitter": {
         "title": "重续经纬",
-        "text": "到底还是回到我的织机前了。我不记恨，{playerName}，可丝线记得那只放它走的手，而重新拾起的代价，每一次都量得更长。去剿除挤满东边树林的墨网潜伏者，这份苦工会在你的手再次触到好丝之前，先把它安顿稳当。",
+        "text": "到底还是回到我的织机前了。我不记恨，{playerName}，可丝线记得那只放它走的手，而重新拾起的代价，每一次都量得更长。去剿除挤满西边树林的墨网潜伏者，这份苦工会在你的手再次触到好丝之前，先把它安顿稳当。",
         "completion": "又稳了。制皮和裁缝作为主修技艺回到你手中。这一次，在你游荡之前先量两次。",
         "objectives": {
           "0": {
@@ -13367,7 +13828,7 @@ export const zh_CN: EnTranslations = {
       },
       "q_prof_amends_apothecary": {
         "title": "重回灶台",
-        "text": "瞧瞧，谁又回到我的锅边了。不计前嫌，{playerName}，厨房里总有位置，可你知道，你每撂挑子走一回，这笔账就赊得更长。去西边草地里把野猪清一清，因为实打实的汗水是第一味料，它会让你的手重新记起这份活计。",
+        "text": "瞧瞧，谁又回到我的锅边了。不计前嫌，{playerName}，厨房里总有位置，可你知道，你每撂挑子走一回，这笔账就赊得更长。去东边草地里把野猪清一清，因为实打实的汗水是第一味料，它会让你的手重新记起这份活计。",
         "completion": "这才是那股老味道。炼金术和烹饪重新回到你的灶台上，成为主修技艺。这一次多留一阵吧。",
         "objectives": {
           "0": {
@@ -14551,6 +15012,26 @@ export const zh_CN: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "属于你自己的技艺",
+        "text": "东溪的每一位匠人最终都会选定一门属于自己的技艺。用一件事证明自己吧，{playerName}，宣告你的道路。",
+        "completion": "你的道路已经选定；愿你走得稳当。",
+        "objectives": {
+          "0": {
+            "label": "击败森林之狼"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "弥补",
+        "text": "若要放下一门技艺、转投另一门，匠人必须先为放弃的道路做出弥补，{playerName}。",
+        "completion": "弥补已经完成；一条新的道路已向你敞开。",
+        "objectives": {
+          "0": {
+            "label": "击败森林之狼"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "溺亡唱诗班",
         "text": "那些涉行者并非孤身行动。它们之中游走着溺亡信徒——随神殿一同沉没的邪教徒，至今仍披着腐烂的法衣，仍在岸边礁石上吟唱祷词。让其中八名永远噤声，再为我带回它们随身携带的六件祭品。我想知道它们打算献给女神什么。",
@@ -14655,6 +15136,48 @@ export const zh_CN: EnTranslations = {
           },
           "11": {
             "label": "远岸沙洲堤道"
+          },
+          "12": {
+            "label": "Wolf Run"
+          },
+          "13": {
+            "label": "Boar Meadow"
+          },
+          "14": {
+            "label": "Mirror Lake"
+          },
+          "15": {
+            "label": "Sableweb"
+          },
+          "16": {
+            "label": "Copper Dig"
+          },
+          "17": {
+            "label": "Bandit Camp"
+          },
+          "18": {
+            "label": "Fallen Chapel"
+          },
+          "19": {
+            "label": "Reliquary Hill"
+          },
+          "20": {
+            "label": "Brightwood Glade"
+          },
+          "21": {
+            "label": "The Sowfield"
+          },
+          "22": {
+            "label": "Thornwheel Circuit"
+          },
+          "23": {
+            "label": "The Boarpit"
+          },
+          "24": {
+            "label": "Eastbrook Homes"
+          },
+          "25": {
+            "label": "The Farshore Causeway"
           }
         }
       },
@@ -15071,6 +15594,11 @@ export const zh_CN: EnTranslations = {
         "name": "溺亡连祷",
         "enterText": "你潜入沼泽边缘，进入那座溺亡的神殿。",
         "leaveText": "你爬回沼泽边缘，回到哈尔文修士身边。"
+      },
+      "hellmaw_well": {
+        "name": "The Hellmaw Well",
+        "enterText": "The well mouth yawns into red dark - and the Hellmaw swallows you down.",
+        "leaveText": "You haul yourself back up the well shaft, the Hellmaw seething below."
       }
     },
     "letters": {
@@ -15278,7 +15806,7 @@ export const zh_CN: EnTranslations = {
       },
       "necromancers": {
         "name": "哀织法衣",
-        "bonus2": "法术强度提高 20 点。受到伤害不再延迟你的施法（施法延迟抗性 100%）。",
+        "bonus2": "你不会被击退（击退抗性 100%）。",
         "bonus3": "智力提高 10 点，耐力提高 10 点。",
         "bonus4": "你的法术有 10% 的几率触发“清晰施法”，使你的下一个法术免费施放。"
       },
@@ -15290,13 +15818,13 @@ export const zh_CN: EnTranslations = {
       },
       "soulflame": {
         "name": "魂焰法衣",
-        "bonus2": "法术强度提高 20 点。受到伤害不再延迟你的施法（施法延迟抗性 100%）。",
+        "bonus2": "你不会被击退（击退抗性 100%）。",
         "bonus3": "智力提高 15 点，精神提高 15 点，攻击速度和施法速度提高 15%。",
         "bonus4": "你的法术有 10% 的几率触发“灼魂之焰”，使法术强度提高 40 点，持续 10 秒。"
       },
       "stormcallers": {
         "name": "唤风法衣",
-        "bonus2": "法术强度提高 20 点。受到伤害不再延迟你的施法（施法延迟抗性 100%）。",
+        "bonus2": "你不会被击退（击退抗性 100%）。",
         "bonus3": "智力提高 15 点，精神提高 15 点，攻击速度和施法速度提高 15%。",
         "bonus4": "你的法术有 10% 的几率触发“灼魂之焰”，使法术强度提高 40 点，持续 10 秒。"
       },
@@ -15357,5 +15885,67 @@ export const zh_CN: EnTranslations = {
     "delveRiteShrineSkullInteract": "骷髅神龛：按 F 触碰",
     "mailboxName": "邮箱",
     "noticeboardName": "告示板"
+  },
+  "contributions": {
+    "cAdminB": "Account review, chat moderation, report queues, role-gated dashboards, and better status panels.",
+    "cAdminT": "Admin & Moderator Tools",
+    "cAuthB": "OIDC wiring, optional TOTP login hardening, safer login throttles, clearer dashboard sessions.",
+    "cAuthT": "Auth & Account Safety",
+    "cOpsB": "Auto-update maintenance mode, static cache policy, API health checks, and safer server restarts.",
+    "cOpsT": "Updates & Operations",
+    "cTestB": "Security tests, OAuth tests, realm tests, launcher tests, and visual smoke scripts.",
+    "cTestT": "Test Coverage",
+    "cUiB": "Camera options, mobile layout fixes, clearer landing flows, and performance guidance.",
+    "cUiT": "Game UI Quality",
+    "cWikiB": "Public wiki hub fallback, release/news feed, launcher status page, and improved nav consistency.",
+    "cWikiT": "Wiki & Public Hubs",
+    "lead": "Cryptic Realm is its own game, but it can still send practical engine improvements back upstream. This separates shared ClaudeCraft-friendly work from private Cryptic Realm features.",
+    "privateBody": "These stay in the independent track because they define this game and are not handed over as generic upstream value.",
+    "privateTitle": "Cryptic Realm-Only Work",
+    "sharedBody": "Clean, generic improvements offered upstream because they help the base project without giving away Cryptic Realm-only economy, realm, or lore systems.",
+    "sharedTitle": "Shared Upstream Candidates",
+    "tagCustody": "Private custody runbooks",
+    "tagExchange": "Exchange realm",
+    "tagLore": "Cryptic Realm lore",
+    "tagMinigames": "Original mini-games",
+    "tagPlatinum": "Platinum economy",
+    "tagRealms": "Hellmaw / Classic / Dominion / Arcane realms",
+    "title": "Contributions"
+  },
+  "coop": {
+    "accountOther": "Different account",
+    "accountThis": "This account",
+    "createCharacter": "Create a character",
+    "createError": "Could not create the character. Try a different name.",
+    "createName": "Character name",
+    "createTitle": "Name your new hero and pick a class",
+    "hintJoin": "Press Start on another controller to add a player (up to 4).",
+    "hintLeave": "Hold Start on a controller to drop that player.",
+    "joinCancel": "Cancel",
+    "joinConfirm": "Join",
+    "joinNow": "Join now",
+    "joinTitle": "Player {slot}: press to join",
+    "keyboardJoin": "Press F2 to add a local player",
+    "loggingIn": "Signing in...",
+    "loginError": "Sign-in failed. Check the username and password.",
+    "loginPass": "Password",
+    "loginSubmit": "Sign in and join",
+    "loginTitle": "Sign in Player {slot}'s account",
+    "loginUser": "Username",
+    "noOtherCharacters": "This account has no other characters to bring in.",
+    "pickCharacter": "Choose a character",
+    "pickClass": "Choose a class",
+    "reconnecting": "Player {slot} reconnecting",
+    "reviving": "Reviving in {seconds}s",
+    "slotEmpty": "Open",
+    "slotLabel": "Player {slot}",
+    "stripTitle": "Local players"
+  },
+  "links": {
+    "loading": "Loading official channels…",
+    "title": "Official Links"
+  },
+  "whitepaper": {
+    "loading": "Loading the white paper…"
   }
 };

@@ -522,7 +522,7 @@ export async function dailyRewardRuntimeConfig(
     // leaves wocUsdPrice null (rewards read 'price_unavailable', never a crash).
     const config = fallbackRuntimeConfig();
     config.wocUsdPrice = await fetchCrUsdPriceDirect();
-    runtimeConfigCache = { day, config, at: now };
+    runtimeConfigCache.set(day, { config, at: now });
     return config;
   }
   try {

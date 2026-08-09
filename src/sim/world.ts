@@ -65,8 +65,7 @@ import type { BiomeId, HeightStamp, ZoneDef } from './types';
 import { BOARPIT_FLAT, isInBoarpitShell } from './boarpit_layout';
 import { isInThornwheelShell, THORNWHEEL_FLAT } from './derby_layout';
 import { HOMES_FLAT, isInHomesShell } from './homes_layout';
-import { fbm2, hash2 } from './rng';
-import type { BiomeId, HeightStamp, WorldContent } from './types';
+import type { WorldContent } from './types';
 import { isInSowfieldShell, SOWFIELD_FLAT, sowfieldStandLift } from './vale_cup_layout';
 import { wildheartFieldHeight } from './wildheart_field';
 
@@ -3674,6 +3673,11 @@ export function stableFlattenWeight(x: number, z: number): number {
   const dx = Math.max(0, f.x1 - x, x - f.x2);
   const dz = Math.max(0, f.z1 - z, z - f.z2);
   if (dx === 0 && dz === 0) return 1;
+  const d = Math.sqrt(dx * dx + dz * dz);
+  if (d >= f.falloff) return 0;
+  return 1 - smoothstep(0, 1, d / f.falloff);
+}
+
 // The Thornwheel Circuit kart ground (src/sim/derby_layout.ts): the east-bluff
 // shelf leveled the same way (rectangle + smoothstep apron). Its apron ends at
 // x = THORNWHEEL_FLAT.xMax + falloff (152): the rim rise only STARTS at
@@ -3711,15 +3715,6 @@ export function boarpitFlattenWeight(x: number, z: number): number {
   if (d >= f.falloff) return 0;
   return 1 - smoothstep(0, 1, d / f.falloff);
 }
-
-export function mirefenImpactCraterOffset(x: number, z: number): number {
-  const dx = x - MIREFEN_IMPACT_CRATER.x;
-  const dz = z - MIREFEN_IMPACT_CRATER.z;
-  const d = Math.sqrt(dx * dx + dz * dz);
-  if (d >= f.falloff) return 0;
-  return 1 - smoothstep(0, 1, d / f.falloff);
-}
-
 // The renderer seats each dock section relative to its shore anchor, then uses
 // the plank top as a raised walkable surface. Return the matching absolute
 // surface height, or -Infinity outside every deck footprint.
@@ -4606,50 +4601,6 @@ function terrainHeightUnpadded(x: number, z: number, seed: number, skipEdits = f
       if (dP < p.r) {
         const t = smoothstep(p.r * 0.55, p.r, dP);
         h = h * t + p.h * (1 - t);
-  // The Sowfield plateau (Vale Cup). Runs between the camp flatten and the
-  // ridge/rim walls: a LEVEL pull toward the pitch height, so it must land
-  // before the additive walls; its influence never reaches the rim band (see
-  // sowfieldFlattenWeight), so the rim still wins everywhere it exists.
-  const sow = sowfieldFlattenWeight(x, z);
-  if (sow > 0) h = lerp(h, SOWFIELD_FLAT.height, sow);
-
-  // The Thornwheel Circuit plateau (kart derby): the identical level pull on
-  // the east bluffs, same ordering rules as the Sowfield arm above.
-  const wheel = thornwheelFlattenWeight(x, z);
-  if (wheel > 0) h = lerp(h, THORNWHEEL_FLAT.height, wheel);
-
-  // The Boarpit pad (knockout brawls), same ordering rules again.
-  const pitW = boarpitFlattenWeight(x, z);
-  if (pitW > 0) h = lerp(h, BOARPIT_FLAT.height, pitW);
-
-  // Homestead Lane (Eastbrook Homes), same ordering rules again.
-  const homesW = homesFlattenWeight(x, z);
-  if (homesW > 0) h = lerp(h, HOMES_FLAT.height, homesW);
-
-  // Mountain ridge walls between zones, pierced by the road pass
-  let mountainAdd = 0;
-  for (const ridge of w.ridges) {
-    const dz = Math.abs(z - ridge.z);
-    if (dz < RIDGE_SIGMA * 3) {
-      const pass = smoothstep(PASS_HALF_WIDTH, PASS_SHOULDER, Math.abs(x - ridge.passX));
-      // Inside the road pass `pass` is exactly 0, which zeroes the whole term
-      // (RIDGE_HEIGHT * crest * profile * pass), so skip the two crest fbm2
-      // there. The dropped term is a positive product times +0 = +0, and
-      // mountainAdd only ever accumulates >= 0, so this stays bit-identical.
-      if (pass > 0) {
-        const profile = Math.exp(-(dz * dz) / (2 * RIDGE_SIGMA * RIDGE_SIGMA));
-        // jagged crest so the wall reads as mountains, not a berm: a coarse layer
-        // for peak/saddle shape plus a finer layer for crag/shoulder detail.
-        // Combined variance kept tight so the lowest saddle still beats the
-        // climb limit (tests/terrain_walls.test.ts).
-        // (each noise term is scaled by mountainDetail separately: multiplying
-        // by an exact 1 keeps in-world samples bit-identical, where regrouping
-        // the sum would drift them by ULPs and desync the parity goldens)
-        const crest =
-          1 +
-          (fbm2(x * 0.03, ridge.z * 0.03, seed + 19, 2) - 0.5) * 0.4 * mountainDetail +
-          (fbm2(x * 0.11, ridge.z * 0.11, seed + 23, 2) - 0.5) * 0.14 * mountainDetail;
-        mountainAdd += RIDGE_HEIGHT * crest * profile * pass;
       }
     }
   }
@@ -4692,6 +4643,15 @@ function terrainHeightUnpadded(x: number, z: number, seed: number, skipEdits = f
     ? sowfieldFlattenWeight(x, z)
     : 0;
   if (sow > 0) h = lerp(h, SOWFIELD_FLAT.height, sow);
+  // Cryptic Realm venue plateaus: the same authored level pulls for the
+  // Thornwheel Circuit kart ground, the Boarpit pad, and Homestead Lane. Each
+  // weight self-gates to 0 outside its apron, so no region entry is needed.
+  const wheel = thornwheelFlattenWeight(x, z);
+  if (wheel > 0) h = lerp(h, THORNWHEEL_FLAT.height, wheel);
+  const pitW = boarpitFlattenWeight(x, z);
+  if (pitW > 0) h = lerp(h, BOARPIT_FLAT.height, pitW);
+  const homesW = homesFlattenWeight(x, z);
+  if (homesW > 0) h = lerp(h, HOMES_FLAT.height, homesW);
   // The Highwatch paddock is another authored level pull. It sits deep inside
   // Thornpeak, so it does not compete with a realm border or coast.
   const stable = terrainRegionHas(region, TERRAIN_APPLIER.stableFlatten)
@@ -5252,90 +5212,6 @@ function decorationAt(seed: number, gx: number, gz: number): Decoration | null {
       const cdx = x - camp.x,
         cdz = z - camp.z;
       if (cdx * cdx + cdz * cdz < 13 * 13) return null;
-export function generateDecorations(seed: number): Decoration[] {
-  const w = world();
-  const out: Decoration[] = [];
-  const step = 10;
-  const xHalf = WORLD_MAX_X - 14;
-  for (let gx = -xHalf; gx < xHalf; gx += step) {
-    for (let gz = w.minZ + 14; gz < w.maxZ - 14; gz += step) {
-      const r = hash2(Math.round(gx), Math.round(gz), seed + 31);
-      // biomeAt so painted areas grow the right mix; without paint this is the
-      // zone-band biome exactly (byte-identical built-in world).
-      const biome = biomeAt(gx, gz);
-      // density gate + kind mix per biome
-      let kind: Decoration['kind'] | null = null;
-      if (biome === 'vale') {
-        if (r > 0.48) continue;
-        kind = r < 0.3 ? 'tree' : r < 0.4 ? 'tree2' : 'rock';
-      } else if (biome === 'marsh') {
-        if (r > 0.34) continue;
-        kind = r < 0.08 ? 'tree' : r < 0.26 ? 'tree2' : 'rock';
-      } else if (biome === 'beach') {
-        if (r > 0.14) continue;
-        kind = r < 0.05 ? 'tree' : r < 0.08 ? 'tree2' : 'rock';
-      } else if (biome === 'desert') {
-        if (r > 0.1) continue;
-        kind = r < 0.025 ? 'tree2' : 'rock';
-      } else if (biome === 'volcano') {
-        if (r > 0.2) continue;
-        kind = 'rock';
-      } else if (biome === 'cave') {
-        if (r > 0.16) continue;
-        kind = 'rock';
-      } else {
-        if (r > 0.44) continue;
-        kind = r < 0.2 ? 'tree' : r < 0.24 ? 'tree2' : 'rock';
-      }
-      const ox = (hash2(Math.round(gx), Math.round(gz), seed + 57) - 0.5) * step;
-      const oz = (hash2(Math.round(gx), Math.round(gz), seed + 91) - 0.5) * step;
-      const x = gx + ox,
-        z = gz + oz;
-      if (isExcludedDecoration(x, z)) continue;
-      // The Sowfield stadium footprint grows no trees or rocks (hash-based
-      // placement, so skipping here shifts no other decoration or rng draw).
-      if (isInSowfieldShell(x, z)) continue;
-      // Same rule for the Thornwheel Circuit's racing ground.
-      if (isInThornwheelShell(x, z)) continue;
-      // And for the Boarpit's fighting ground.
-      if (isInBoarpitShell(x, z)) continue;
-      // And for Homestead Lane's yards.
-      if (isInHomesShell(x, z)) continue;
-      let inHub = false;
-      for (const zone of w.content.zones) {
-        const dx = x - zone.hub.x,
-          dz = z - zone.hub.z;
-        if (Math.sqrt(dx * dx + dz * dz) < zone.hub.radius + 4) {
-          inHub = true;
-          break;
-        }
-      }
-      if (inHub) continue;
-      if (terrainHeight(x, z, seed) < waterLevel() + 1) continue;
-      if (roadDistance(x, z) < 5) continue;
-      let inCamp = false;
-      for (const c of w.content.camps) {
-        const dx = x - c.center.x,
-          dz = z - c.center.z;
-        if (Math.sqrt(dx * dx + dz * dz) < c.radius + 3) {
-          inCamp = true;
-          break;
-        }
-      }
-      if (inCamp) continue;
-      // no scatter on cliff faces: a prop anchored to the surface here floats
-      // off the wall (and large ones would be phantom colliders). Checked last,
-      // after the cheaper gates, so the four-sample steepness only runs for
-      // candidates that survive everything else.
-      if (terrainSteepness(x, z, seed) > DECORATION_MAX_SLOPE) continue;
-      out.push({
-        kind,
-        x,
-        z,
-        scale: 0.7 + hash2(Math.round(gx), Math.round(gz), seed + 13) * 0.9,
-        variant: Math.floor(hash2(Math.round(gx), Math.round(gz), seed + 77) * 3),
-        biome,
-      });
     }
   }
   for (const zone of ZONES) {

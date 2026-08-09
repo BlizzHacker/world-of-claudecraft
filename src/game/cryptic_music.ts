@@ -12,7 +12,7 @@ const BASE = '/audio/cryptic';
 
 // Each zone's signature track. Town themes, overworld biomes, dungeon moods, and
 // a boss cue — drawn from the Cryptic Realm MP3 set.
-const ZONE_TRACK: Record<MusicZone, string> = {
+const ZONE_TRACK: Partial<Record<MusicZone, string>> = {
   town_eastbrook: 'welcome-home-cryptic-realm.mp3',
   town_fenbridge: 'town-hall-cryptic-realm.mp3',
   town_highwatch: 'the-journey-begins-cryptic-realm.mp3',

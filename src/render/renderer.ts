@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
 import { NumberSampleRing } from '../game/sample_ring';
 import { coerceFxTier, nameplateIntervalSec } from '../game/ui_tier_knobs';
-import { cameraOcclusion, supportHeightAt } from '../sim/colliders';
+import { supportHeightAt } from '../sim/colliders';
 import {
   ABILITIES,
   ARENA_SLOT_COUNT,
@@ -193,7 +193,7 @@ import { buildEastbrookHomes, type EastbrookHomesView } from './eastbrook_homes'
 import { buildDerbyTrack, type DerbyTrackView } from './derby_track';
 import { buildDoorBody } from './door_portal';
 import { detailHorizonStarved } from './detail_horizon_core';
-import { buildDoorBody, buildRiftGateBody, buildRiftPuzzleProp } from './door_portal';
+import { buildRiftGateBody, buildRiftPuzzleProp } from './door_portal';
 import { createLogicalFrameDrawStats, type LogicalFrameDrawStats } from './draw_stats_core';
 import { DungeonInteriors, dungeonDaisHasRaisedPlatform, ensureDungeonAssets } from './dungeon';
 import {
@@ -358,6 +358,7 @@ import { npcStructureObjectId } from './npc_structures';
 import { isOwnedPetHostile } from './reaction';
 import { remotePropRef } from './remote_prop';
 import { RenderBudgetGovernor, type RenderBudgetState } from './render_budget';
+import {
   boundedPrewarmVisibility,
   runBackgroundPrewarm,
   withHiddenPrewarmGroups,
@@ -383,15 +384,11 @@ import {
   resumeDroppedPrewarmEntries,
   settlePrewarmBeforePublish,
 } from './prewarm_resume';
-import { buildPropMaterialPrewarmGroup, buildProps, propResidencySources } from './props';
-import { buildGroundQuestObject } from './quest_objects';
+import { propResidencySources } from './props';
 import { RaceLine } from './race_line';
-import { isOwnedPetHostile } from './reaction';
 import { buildRealmFlora, type RealmFloraView } from './realm_flora';
 import {
-  RenderBudgetGovernor,
   type RenderBudgetSample,
-  type RenderBudgetState,
 } from './render_budget';
 import {
   beginRendererFrameTelemetry,
@@ -490,7 +487,6 @@ import { buildWorldAmbientSources, crowdAmbienceAt, footstepSurfaceAt } from './
 import { surfaceDetailPrewarmTextures } from './worn_stone';
 import { buildYumiMaze, type YumiMazeView } from './yumi_maze';
 import { YumiTeamMarkers } from './yumi_team_markers';
-import { constrainedEntryViewCreateBudget, interactionLandmarkViewPriority, mandatoryLandmarkViewsReady, orderedPrewarmIds, partitionMandatoryLandmarkCandidates, prewarmEntryRuns, PrewarmPolicy, remainingPrewarmViewBudget, resolvePrewarmPolicy } from './prewarm_policy';
 import { loadGltf } from './assets/loader';
 import {
   type FeatureFootprint,
@@ -1027,12 +1023,8 @@ function selfSnapshotAlpha(alpha: number, lead: number): number {
 }
 
 export interface EntityView {
-  mountKey: string | null; // which mount rig mountVisual holds (rebuilt on swap)
   skin: number; // last-rendered appearance skin — diffed each frame for live swaps
   mainhandItemId: string | null; // last-rendered equipped weapon — diffed for live held-weapon swaps
-  /** unscaled height — nameplate/vfx anchor reads height * e.scale */
-  height: number;
-  mountVisual: CharacterVisual | null; // rideable mount body (stag/raptor/wyrm), built lazily
   group: THREE.Group;
   /** rigged glTF visual for characters; null for object views (doors/crates) */
   visual: CharacterVisual | null;
@@ -5002,10 +4994,10 @@ export class Renderer {
         // GLB isn't in the boot sweep, so building one here throws "asset not
         // preloaded" and crashes the renderer. They warm up on demand at delve entry.
         if (isVisualLazy(vkey)) {
-          builtModels.add(vkey);
+          this.prewarmedNpcModels.add(vkey);
           continue;
         }
-        builtModels.add(vkey);
+        this.prewarmedNpcModels.add(vkey);
         const visual = createCharacterVisual(entity);
         // Assets unavailable: skip the seed so a later zone preparation can retry it.
         if (!visual) continue;
@@ -7588,8 +7580,6 @@ export class Renderer {
       visual,
       visualKey: visual ? visualKeyFor(e) : null,
       visualPoolKey,
-      mountVisual: null,
-      mountKey: null,
       sheepVisual: null,
       bearVisual: null,
       catVisual: null,
@@ -8569,7 +8559,7 @@ export class Renderer {
       const key = `interior:${o.typeIndex}:${o.slot}`;
       if (!this.builtInteriors.has(key)) {
         this.builtInteriors.add(key);
-        this.buildInterior('sanctum', o.x, o.z, INTERIOR_ROOM_LAYOUT);
+        this.buildInterior('sanctum', o.x, o.z, { layout: INTERIOR_ROOM_LAYOUT });
       }
     } else if (isDelvePos(px) && !inPractice) {
       this.ensureDelveInteriorsNear(px, pz);
@@ -9545,7 +9535,6 @@ export class Renderer {
       const cat = !polyed && !bear && (ghostWolf || hasCatForm);
       const travel = !polyed && !bear && !cat && hasTravelForm;
       const fireballForm = !polyed && !bear && !cat && !travel && hasFireballForm;
-      const mountKey = !polyed && !bear && !cat && !travel ? mountVisualKey : null;
 
       const _stealthed = hasStealth;
       const hasSoulRend = hasCharacterEffect(characterEffects, CHARACTER_EFFECT_SOUL_REND);
@@ -11808,11 +11797,9 @@ export class Renderer {
     mirror.pitch = this.camPitch;
     mirror.dist = this.camDist;
 
-    // The camera ORBITS the lagged/led pivot, but the occlusion ray and the
-    // pull-in anchor stay on the AVATAR's eye: the avatar is collision
-    // resolved so the ray origin can never sit inside a collider's pad
-    // (which would blind the sweep and let the camera see through the wall),
-    // and the min-distance clamp stays avatar-relative.
+    // The camera orbits the lagged/led pivot at the player's requested
+    // distance. Scene geometry never changes that distance; registered
+    // obstructors fade through their subsystem's occluder-fade pass.
     // Couch co-op override: anchor on the shared party centroid at the fit
     // distance (both pre-smoothed by main.ts). Solo play leaves these null, so
     // the boom/feel origin and the player's own zoom are used exactly as upstream.
@@ -11822,59 +11809,9 @@ export class Renderer {
     const pz = (anchor ? anchor.z : this.camBoom.z) + this.camFeel.leadZ;
     const camDist = anchor && this.coopCameraDist !== null ? this.coopCameraDist : pose.dist;
     const eyeY = py + 2.0;
-    const ax = selfPos.x;
-    const ay = selfPos.y + 2.0;
-    const az = selfPos.z;
-    let cx = px - Math.sin(pose.yaw) * Math.cos(pose.pitch) * camDist;
+    const cx = px - Math.sin(pose.yaw) * Math.cos(pose.pitch) * camDist;
     let cy = eyeY + Math.sin(pose.pitch) * camDist;
-    let cz = pz - Math.cos(pose.yaw) * Math.cos(pose.pitch) * camDist;
-    if (isArenaPos(p.pos.x)) {
-      // Arena walls hide from the camera like buildings, so the chase camera
-      // stays at the player's requested zoom instead of clamping inside the pit.
-      this.camOcclusion.pullT = 1;
-      this.camOcclusion.lensT = 1;
-      this.camOcclusion.fov = CAMERA_BASE_FOV;
-    } else {
-      // Camera collision for non-hideable blockers. Camera-ghost props are left
-      // at the requested zoom and hidden in props.ts while keeping their shadows.
-      // Thread the active run's module chain so camera collision matches the
-      // delve's actual (possibly Heroic/varied) layout, not just the default.
-      const delveMods = this.sim.delveRun?.modules;
-      let hardT = cameraOcclusion(seed, ax, ay, az, cx, cy, cz, CAMERA_COLLIDER_PAD, delveMods);
-      let softT = cameraOcclusion(
-        seed,
-        ax,
-        ay,
-        az,
-        cx,
-        cy,
-        cz,
-        CAMERA_SOFT_COLLIDER_PAD,
-        delveMods,
-      );
-      const segLen = Math.hypot(cx - ax, cy - ay, cz - az);
-      if (segLen > 1e-3) {
-        const minT = CAMERA_MIN_DIST / segLen;
-        hardT = Math.min(1, Math.max(hardT, minT));
-        softT = Math.min(1, Math.max(softT, minT));
-      }
-      stepCameraOcclusion(
-        this.camOcclusion,
-        hardT,
-        softT,
-        dt,
-        CAMERA_PULL_IN_RATE,
-        CAMERA_PULL_OUT_RATE,
-        CAMERA_SOFT_PULL_WEIGHT,
-        CAMERA_BASE_FOV,
-        CAMERA_MAX_COMP_FOV,
-      );
-    // Pull-in slides along the swept avatar-eye ray, so the resolved point is
-    // exactly what the occlusion pass certified clear.
-    const ct = this.camOcclusion.pullT;
-    cx = ax + (cx - ax) * ct;
-    cy = ay + (cy - ay) * ct;
-    cz = az + (cz - az) * ct;
+    const cz = pz - Math.cos(pose.yaw) * Math.cos(pose.pitch) * camDist;
     // Follow a submerged swimmer UNDER the surface (upstream v0.35): a height
     // ceiling on the resolved camera, so diving shows the underwater pass while
     // the ground clamp below still keeps the camera off the lake bed.
@@ -11896,7 +11833,7 @@ export class Renderer {
     groundY += gardenMazeCameraLift(cx, cz);
     this.camera.position.set(cx, Math.max(cy, groundY), cz);
     // Base FOV plus the feel kicks; the latter are zero under reduced motion.
-    const fovTarget = Math.min(100, Math.max(50, this.camOcclusion.fov + cameraFovOffset(this.camFeel)));
+    const fovTarget = Math.min(100, Math.max(50, CAMERA_BASE_FOV + cameraFovOffset(this.camFeel)));
     if (Math.abs(this.camera.fov - fovTarget) > 0.01) {
       this.camera.fov = fovTarget;
       this.camera.updateProjectionMatrix();

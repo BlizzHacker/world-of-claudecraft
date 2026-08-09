@@ -266,16 +266,6 @@ const fakeGameState = {
   adminGuildBankState: vi.fn((_guildId: number): Record<string, unknown> | null => null),
   adminCharacterState: vi.fn((): Record<string, unknown> | null => ({})),
   adminCharacterOnline: vi.fn(() => true),
-  vi.mocked(accountAndScopeForToken).mockImplementation(async (token: string) => {
-    const accountId = await accountForToken(token);
-    return accountId === null || accountId === undefined
-      ? null
-      : { accountId, scope: 'full' as const };
-  });
-  vi.mocked(accountTotpState).mockResolvedValue({ enabled: false, configured: false, secret: null });
-  vi.mocked(adminRolesForAccount).mockImplementation(async (accountId: number) =>
-    (await isAdminAccount(accountId)) ? { username: 'admin', roles: ['superadmin'] } : null,
-  );
   adminRestoreItem: vi.fn((): 'ok' | 'offline' | 'invalid_item' => 'ok'),
   adminRestoreToolEffectSlot: vi.fn(
     (): 'ok' | 'offline' | 'invalid_request' | 'no_tool' | 'already_slotted' => 'ok',

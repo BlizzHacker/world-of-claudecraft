@@ -1209,9 +1209,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.collectorsHeading': 'Samlare, trofeer, och priset pa en historia',
   'guide.profPages.econ.collectorsBody':
     'Handlare är blinda för ursprung: ett signerat föremål säljs till ett NPC för exakt sitt ordinarie pris. Premiumet på en signatur finns bara mellan spelare, vilket är precis vad som gör det intressant: en stapel vindfallsmalm signerad av en berömd samlare, ett Primärsnitt från en lycklig insamling, ett mästerverk-svärd som namnger en hantverkare som sedan gått i pension, alla kostar vad någons minne säger att de är värda.\n\nBedrifternas bok lutar sig mot samma instinkt: Oskadd åder, Urgammalt hjärtved, Månlyst blomma, Ett perfekt exemplar och Glimmer av hopp är noll-ryktbarhetens samlarmärken som finns enbart för att bevisa att ett ögonblick hände dig. Behåll föremålet som förtjänade bedriften och du har kvittot. Inget av detta är styrka; ursprung köper inga egenskaper och vinner inga strider, det är spelets pappersspår av goda dagar.',
-  'guide.profPages.econ.throttleHeading': 'Atgärdsbegränsningen',
-  'guide.profPages.econ.throttleBody':
-    'Produktion har ett tak: tillverkning, avförtrollning, förtrollning och bärgning delar en budget pa {actions} lyckade atgärder per rullande {seconds} sekunder. Ett nekat försök kostar ingenting och förbrukar ingen budget. Du kommer aldrig känna det i normalt spel; det finns sa att en maximad specialist med en full bank inte kan översvämma Marknaden, oavsett deras skicklighet eller lager.',
   'guide.profPages.econ.doctrineHeading': 'Spelare handlar med spelare',
   'guide.profPages.econ.doctrineBody':
     'Hantverksekonomin är byggd på en idé: spelare försörjer spelare. Samlare matar hantverkare, hantverkare matar korsfarare och raidare, och avbrytare matar förtrollare, med handlare och stationsmästare på kanterna för att ta in skräp och mynt snarare än att konkurrera med dig. Om du vill tjäna pengar på ett yrke är din kund en person: lär dig vad andra spelare bränner igenom, prissätt mot Världsmarknaden, och behandla NPC-systemen som ett golv under dina priser, inte som marknaden själv.\n\nTillverkad utrustning är inställd för att ligga under raidgolvet: även ett mästerverk är alltid bara en kvalitetsnivå över sitt recept, aldrig förbi legendarisk, och dess statbudget stannar under raidlootbandet. Smedjan gör dig redo för det svåraste innehållet; den ersätter det inte. Det håller hantverkare, raidare och marknaden i en stabil triangel: raidfynd förblir aspirationsbaserade, och tillverkade pjäser förblir den bästa utrustning pengar faktiskt kan köpa.',
@@ -4652,7 +4649,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     'Denna skrift... jag såg senast något liknande i Morthens grimoar, i Östbäck. Samma hand har styrt varje grav vi har stridit om, {playerName}.',
   'entities.quests.q_cult_orders.objectives.0.label': 'Lindormskultsivrare dräpt',
-  'entities.quests.q_cult_orders.objectives.1.label': 'Lindormskultens order',
   'entities.quests.q_cult_orders.text':
     'Ivrarna rör sig med syfte nu - vakter utsatta, förråd räknade, som soldater inför en belägring. Kultister som organiserar sig är kultister som tar order, {playerName}. Döda åtta till och hämta mig fyra uppsättningar av deras skrivna order. Jag vill känna handen som befaller dem.',
   'entities.quests.q_cult_orders.title': 'Order nedifrån',
@@ -4827,7 +4823,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_necromancers.completion':
     'Ljuset förlåte oss. Dessa rymmer dalens och kärrets döda - varje lik Gravkallarna någonsin reste, skördat. De byggde aldrig en armé, {playerName}. De samlade in en tionde.',
   'entities.quests.q_necromancers.objectives.0.label': 'Lindormssektens nekromant dräpt',
-  'entities.quests.q_necromancers.objectives.1.label': 'Rituellt fylakterium',
   'entities.quests.q_necromancers.text':
     'Orderna talar om en "ring av fylakterier" - själsbehållare, {playerName}, utplacerade runt helgedomen för att nära den. Sektens nekromanter bär dem som heliga reliker. Döda åtta nekromanter och hämta tre oskadda fylakterier åt mig. Jag måste veta vilka själar de rymmer.',
   'entities.quests.q_necromancers.title': 'Fylakteriernas ring',
@@ -5320,9 +5315,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': 'Koloss',
   'fiesta.powerup.pow_moon_boots.name': 'Månstövlar',
   'fiesta.powerup.pow_speed_demon.name': 'Fartdemon',
-  'fiesta.practice': '🎉 Öva mot bottar',
-  'fiesta.practiceNote':
-    'Offlineträning: skapar 3 AI-bottar och ställer dig i kö för en 2v2-Fiesta. Klicka igen för att sluta.',
   'fiesta.queue.join': 'Du går med i 2v2-Fiestans kö. Gör dig redo att FESTA…',
   'fiesta.queue.leave': 'Du lämnar 2v2-Fiestans kö.',
   'fiesta.queue.teamLeave': 'Ditt lag lämnar 2v2-Fiestans kö.',
@@ -5564,8 +5556,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
     'Skyddar en allierad så att närstridsangripare skadar sig själva när de slår.',
   'guide.abilityHook.thunder_clap': 'Slår allt runt omkring dig och saktar ner deras attacker.',
   'guide.abilityHook.wrath': 'En naturpil kastad mot ett mål från avstånd, din förstavalskanon.',
-  'guide.arenaPage.augmentsNote':
-    'Förstärkningar och kraftuppladdningar håller bara under matchen. De handlar om lekfulla, improviserade byggen, inte varaktig makt, så ingen köper sig till en seger.',
   'guide.arenaPage.coliseumBody':
     'Coliseum är rikets arena, där du möter andra spelare i rankade matcher, en mot en eller två mot två. Varje division håller sin egen ställning, så en seger lyfter dig uppför den stegen för hela riket att se.',
   'guide.arenaPage.coliseumHeading': 'Det askgråa colosseumet',
@@ -5581,21 +5571,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'guide.arenaPage.ladderBody':
     'Rankat spel följer din ställning över tid. Kolla topplistan för att se var du befinner dig och vem som håller rikets topp.',
   'guide.arenaPage.ladderHeading': 'Klättra på rankingstegen',
-  'guide.arenaPage.powerupsBody':
-    'Glödande klot faller också ner i arenan mitt i striden, fria för den som når dem först. De är medvetet överdrivna och håller bara en kort stund: Fartdemon för en blinkning av bländande fart, Koloss för att svälla upp till en lufsande jätte, Månstövlar för ett studsande hopp med låg gravitation, och Bärsärk för en plötslig våg av ursinne.',
-  'guide.arenaPage.powerupsTitle': 'Kraftuppladdningar i ringen',
-  'guide.arenaPage.waveGoldBody':
-    'Den mellersta vågen: tveeggade kombinationer där ditt bygge börjar ta form och sjunga.',
-  'guide.arenaPage.waveGoldTitle': 'Guld',
-  'guide.arenaPage.wavePrismaticBody':
-    'Den sista vågen: byggesdefinierande, skärmsmältande toppar avsedda att kännas löjliga på bästa sätt.',
-  'guide.arenaPage.wavePrismaticTitle': 'Prismatisk',
-  'guide.arenaPage.waveSilverBody':
-    'Den inledande vågen: rena boostar för en enda egenskap som skärper grunderna i din klass.',
-  'guide.arenaPage.waveSilverTitle': 'Silver',
-  'guide.arenaPage.wavesBody':
-    'Varje runda i en Fiesta ger dig ett färskt val, och valen blir djärvare allteftersom matchen fortskrider. Du bygger från en våg till nästa, väljer ett av några få alternativ varje gång och behåller det resten av drabbningen.',
-  'guide.arenaPage.wavesTitle': 'Förstärkningar kommer i vågor',
   'guide.bestiary.flavor.gravecaller_cultist':
     'Kåpklädda tjänare till dödskulten vars verk besudlar gravarna från dalen till topparna. Där de samlas vilar inte de döda.',
   'guide.bestiary.flavor.grubjaw':
@@ -8466,8 +8441,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'desktop.update.downloading': 'Laddar ner uppdatering {version}...',
   'desktop.update.downloadingTitle': 'Laddar ner uppdatering {version}...',
   'desktop.update.later': 'Senare',
-  'desktop.update.ready':
-    'Uppdatering {version} är klar. Den installeras när du avslutar, eller starta om nu.',
   'desktop.update.readyTitle': 'Uppdatering {version} är klar',
   'desktop.update.readyBody': 'Den installeras när du avslutar, eller starta om nu.',
   'desktop.update.restart': 'Starta om nu',
@@ -8824,9 +8797,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
     'Klyver målets rustning och sänker den med {damage}% per applicering. Stackas upp till 5 gånger. Vållar en stor mängd hot.',
   'entities.mobs.training_dummy.name': 'Träningsdocka',
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'guide.arenaPage.yumiBody':
-    'Skydda Yumi är ett lagbaserat målläge som spelas i en labyrint: varje sida vaktar sin egen kattföljeslagare samtidigt som den jagar den andra. Med jämna mellanrum blinkar båda katterna till nya hörn av labyrinten, så striden pendlar mellan att försvara, jaga och kappas om att hitta dem igen. Köa som tre mot tre eller fem mot fem; att falla i strid sätter dig bara på bänken en kort stund.',
-  'guide.arenaPage.yumiHeading': 'Skydda Yumi',
   'hudChrome.archetypeTitle.hobbyLabel': 'Fritidssyssla',
   'hudChrome.auraEffect.armorPct': 'Minskar rustningen med {pct}%',
   'hudChrome.auraEffect.armorPctStacks': 'Minskar rustningen med {pct}% ({stacks} stackar)',

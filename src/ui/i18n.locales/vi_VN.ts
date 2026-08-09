@@ -1120,9 +1120,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.collectorsHeading': 'Người sưu tầm, chiến tích, và giá của một câu chuyện',
   'guide.profPages.econ.collectorsBody':
     'Người bán NPC không quan tâm xuất xứ: một vật phẩm có dấu thợ bán cho NPC vẫn đúng giá thông thường. Phần giá trị tăng thêm của dấu thợ chỉ tồn tại giữa các người chơi, và đó chính xác là điều làm nó thú vị: một đống quặng may mắn được ký bởi một thợ thu hoạch nổi tiếng, một Miếng Ngon từ vụ thu hoạch may mắn, một lưỡi kiệt tác ghi tên thợ rèn đã nghỉ hưu từ lâu, tất cả đều có giá là bao nhiêu ký ức của ai đó nói lên.\n\nSách Kỳ Công cũng dựa vào cùng cảm giác đó: Mạch Nguyên Sơ, Lõi Cây Cổ Đại, Bông Trăng, Mẫu Vật Hoàn Hảo, và Tia Hy Vọng là những dấu ấn sưu tầm không có Danh Vọng tồn tại thuần túy để chứng minh một khoảnh khắc đã xảy ra với bạn. Giữ lại vật phẩm đã kiếm được kỳ công và bạn nắm giữ biên lai. Tất cả những thứ này không phải sức mạnh; xuất xứ không mua được chỉ số và không thắng được trận chiến, đó là dấu vết giấy tờ của những ngày tốt lành trong trò chơi.',
-  'guide.profPages.econ.throttleHeading': 'Giới hạn hành động',
-  'guide.profPages.econ.throttleBody':
-    'Sản lượng có giới hạn trần: chế tác, hủy pháp khắc, pháp khắc, và tháo dỡ dùng chung một ngân sách {actions} hành động thành công trên mỗi {seconds} giây luân phiên. Một lần thử bị từ chối không tốn gì và không tiêu ngân sách. Bạn sẽ không bao giờ cảm nhận điều này khi chơi bình thường; nó tồn tại để một chuyên gia đã đạt đỉnh với ngân hàng đầy không thể làm ngập Chợ, dù kỹ năng hay kho nguyên liệu của họ thế nào.',
   'guide.profPages.econ.doctrineHeading': 'Người chơi giao dịch với người chơi',
   'guide.profPages.econ.doctrineBody':
     'Nền kinh tế chế tác được xây dựng trên một ý tưởng: người chơi cung cấp cho người chơi. Thợ thu hoạch nuôi thợ chế tác, thợ chế tác nuôi người làm nhiệm vụ và raider, còn thợ phá đồ nuôi thợ pháp khắc, với người bán NPC và chủ bàn đứng ở rìa để hấp thụ đồ rác và tiền vàng thay vì cạnh tranh với bạn. Nếu bạn muốn kiếm tiền từ một nghề, khách hàng của bạn là con người: hãy tìm hiểu những gì người chơi khác tiêu hao, định giá so với Chợ Thế Giới, và xem hệ thống NPC là sàn giá dưới mức giá của bạn, không phải là thị trường thực sự.\n\nTrang bị chế tác được cân bằng để nằm dưới ngưỡng raid: ngay cả kiệt tác cũng chỉ một bậc phẩm chất cao hơn công thức của nó, không bao giờ vượt huyền thoại, và ngân sách chỉ số của nó nằm dưới dải loot raid. Lò rèn giúp bạn sẵn sàng cho nội dung khó nhất; nó không thay thế nội dung đó. Điều này giữ thợ chế tác, raider, và thị trường trong tam giác ổn định: đồ rơi raid vẫn là mục tiêu khát khao, và đồ chế tác vẫn là trang bị tốt nhất tiền có thể mua.',
@@ -4840,7 +4837,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     'Lối chữ này... lần cuối ta thấy thứ tương tự là trong cuốn ma thư của Morthen, ở Eastbrook. Cùng một bàn tay đã dẫn dắt mọi nấm mồ mà chúng ta đã giành giật, {playerName}.',
   'entities.quests.q_cult_orders.objectives.0.label': 'Đã hạ Cuồng Tín Long Giáo',
-  'entities.quests.q_cult_orders.objectives.1.label': 'Mệnh Lệnh Long Giáo',
   'entities.quests.q_cult_orders.text':
     'Lũ cuồng tín giờ hành động có chủ đích - canh gác bố trí, quân nhu kiểm đếm, như binh lính trước một trận vây thành. Tín đồ biết tổ chức là tín đồ đang nhận lệnh, {playerName}. Hãy giết thêm tám tên nữa và mang cho ta bốn tập mệnh lệnh được viết của chúng. Ta muốn biết bàn tay nào đang chỉ huy chúng.',
   'entities.quests.q_cult_orders.title': 'Mệnh Lệnh Từ Bên Dưới',
@@ -5017,7 +5013,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_necromancers.completion':
     'Cầu Thánh Quang tha thứ cho chúng ta. Những thứ này chứa đựng người chết của Thung Lũng và đầm lầy - mọi xác chết mà bọn Kẻ Gọi Mộ từng triệu dậy, đều bị thu hoạch. Chúng chưa bao giờ xây dựng một đạo quân, {playerName}. Chúng đang gom góp một thứ cống nạp.',
   'entities.quests.q_necromancers.objectives.0.label': 'Đã hạ Pháp Sư Tử Linh Long Giáo',
-  'entities.quests.q_necromancers.objectives.1.label': 'Hồn Hộp Nghi Lễ',
   'entities.quests.q_necromancers.text':
     'Các mệnh lệnh nhắc đến một "vòng hồn hộp" - những bình chứa linh hồn, {playerName}, được đặt quanh Thánh Đường để nuôi dưỡng nó. Bọn pháp sư tử linh của giáo phái mang chúng như những thánh vật. Hãy giết tám pháp sư tử linh và mang về cho ta ba chiếc hồn hộp còn nguyên vẹn. Ta phải biết chúng giam giữ những linh hồn nào.',
   'entities.quests.q_necromancers.title': 'Vòng Hồn Hộp',
@@ -6172,9 +6167,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': 'Khổng Tượng',
   'fiesta.powerup.pow_moon_boots.name': 'Giày Mặt Trăng',
   'fiesta.powerup.pow_speed_demon.name': 'Quỷ Tốc Độ',
-  'fiesta.practice': '🎉 Luyện Tập với Bot',
-  'fiesta.practiceNote':
-    'Luyện tập ngoại tuyến: triệu hồi 3 bot AI và xếp hàng cho ngươi vào Fiesta 2v2. Bấm lần nữa để dừng.',
   'fiesta.queue.join': 'Ngươi vào hàng chờ Fiesta 2v2. Sẵn sàng QUẨY nào…',
   'fiesta.queue.leave': 'Ngươi rời hàng chờ Fiesta 2v2.',
   'fiesta.queue.teamLeave': 'Đội của ngươi rời hàng chờ Fiesta 2v2.',
@@ -6417,8 +6409,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
     'Đánh trúng mọi thứ quanh bạn và làm chậm đòn tấn công của chúng.',
   'guide.abilityHook.wrath':
     'Một tia tự nhiên ném vào mục tiêu từ xa, đòn chủ lực quen thuộc của bạn.',
-  'guide.arenaPage.augmentsNote':
-    'Cường hóa và tăng lực chỉ kéo dài trong trận đấu. Chúng là về những lối chơi ngẫu hứng, vui nhộn ngay tại chỗ, chứ không phải sức mạnh lâu dài, nên không ai mua được chiến thắng.',
   'guide.arenaPage.coliseumBody':
     'Coliseum là đấu trường của vương quốc, nơi bạn đối đầu với những người chơi khác trong các trận xếp hạng, một đấu một hoặc hai đấu hai. Mỗi hạng đấu giữ bảng xếp hạng riêng, nên một chiến thắng đưa bạn leo cao trên thang đó cho cả vương quốc cùng chiêm ngưỡng.',
   'guide.arenaPage.coliseumHeading': 'Đấu Trường Tro Tàn',
@@ -6434,21 +6424,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'guide.arenaPage.ladderBody':
     'Chế độ xếp hạng theo dõi thứ hạng của bạn theo thời gian. Xem bảng xếp hạng để biết bạn đang ở đâu và ai đang đứng đầu vương quốc.',
   'guide.arenaPage.ladderHeading': 'Leo Bảng Xếp Hạng',
-  'guide.arenaPage.powerupsBody':
-    'Những quả cầu phát sáng cũng rơi vào đấu trường giữa trận, miễn phí cho ai chạm tới đầu tiên. Chúng được thiết kế phóng đại có chủ đích và chỉ kéo dài trong chốc lát: Quỷ Tốc cho một thoáng vận tốc chói lóa, Khổng Lồ để phình to thành gã khổng lồ nặng nề, Giày Mặt Trăng cho một cú nhảy nảy bật trọng lực thấp, và Cuồng Bạo cho một đợt phẫn nộ dâng trào đột ngột.',
-  'guide.arenaPage.powerupsTitle': 'Tăng lực trong vòng đấu',
-  'guide.arenaPage.waveGoldBody':
-    'Đợt giữa: những tổ hợp hai mặt nơi lối xây dựng của bạn bắt đầu thành hình và phát huy.',
-  'guide.arenaPage.waveGoldTitle': 'Vàng',
-  'guide.arenaPage.wavePrismaticBody':
-    'Đợt cuối cùng: những đòn bùng phát định hình lối chơi, làm tan chảy màn hình, được tạo ra để cảm thấy lố bịch theo cách tuyệt vời nhất.',
-  'guide.arenaPage.wavePrismaticTitle': 'Lăng Kính',
-  'guide.arenaPage.waveSilverBody':
-    'Đợt mở màn: những đòn tăng lực đơn chỉ số gọn gàng giúp mài giũa nền tảng cơ bản của lớp nhân vật bạn.',
-  'guide.arenaPage.waveSilverTitle': 'Bạc',
-  'guide.arenaPage.wavesBody':
-    'Mỗi hiệp Fiesta trao cho bạn một lượt chọn mới, và các lựa chọn càng táo bạo hơn khi trận đấu tiếp diễn. Bạn xây dựng từ đợt này sang đợt khác, mỗi lần chọn một trong vài tùy chọn và giữ nó cho hết phần còn lại của trận.',
-  'guide.arenaPage.wavesTitle': 'Cường hóa ập đến theo từng đợt',
   'guide.bestiary.flavor.gravecaller_cultist':
     'Những kẻ phục dịch khoác áo choàng của giáo phái tử thần, kẻ mà công việc làm ô uế những nấm mồ từ Thung Lũng đến những đỉnh núi. Nơi chúng tụ họp, người chết không được yên nghỉ.',
   'guide.bestiary.flavor.grubjaw':
@@ -9265,8 +9240,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'desktop.update.downloading': 'Đang tải bản cập nhật {version}...',
   'desktop.update.downloadingTitle': 'Đang tải bản cập nhật {version}...',
   'desktop.update.later': 'Để sau',
-  'desktop.update.ready':
-    'Bản cập nhật {version} đã sẵn sàng. Sẽ tự cài khi bạn thoát, hoặc khởi động lại ngay.',
   'desktop.update.readyTitle': 'Bản cập nhật {version} đã sẵn sàng',
   'desktop.update.readyBody': 'Sẽ tự cài khi bạn thoát, hoặc khởi động lại ngay.',
   'desktop.update.restart': 'Khởi động lại ngay',
@@ -9601,9 +9574,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
     'Xẻ toạc giáp của mục tiêu, giảm {damage}% mỗi lần áp dụng. Cộng dồn tối đa 5 lần. Tạo ra lượng đe dọa lớn.',
   'entities.mobs.training_dummy.name': 'Hình Nộm Tập Luyện',
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'guide.arenaPage.yumiBody':
-    'Bảo Vệ Yumi là chế độ tranh mục tiêu theo đội chơi trong một mê cung: mỗi bên canh giữ linh thú mèo của mình trong khi săn lùng con của đối phương. Thỉnh thoảng cả hai chú mèo lại chớp dịch tới những góc mới của mê cung, nên trận đấu xoay vần giữa việc phòng thủ, săn lùng và chạy đua đi tìm lại chúng. Xếp hàng chờ theo dạng ba đấu ba hoặc năm đấu năm; gục ngã trong trận chỉ khiến bạn phải ngồi ngoài trong chốc lát.',
-  'guide.arenaPage.yumiHeading': 'Bảo Vệ Yumi',
   'hudChrome.archetypeTitle.hobbyLabel': 'Sở Thích',
   'hudChrome.auraEffect.armorPct': 'Giảm giáp đi {pct}%',
   'hudChrome.auraEffect.armorPctStacks': 'Giảm giáp đi {pct}% ({stacks} tích trữ)',

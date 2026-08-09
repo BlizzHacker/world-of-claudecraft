@@ -21,12 +21,12 @@ function fishableAhead(x: number, z: number, facing: number): boolean {
   return FISHING_SAMPLE_DISTANCES.some((d) => {
     const sx = x + sin * d;
     const sz = z + cos * d;
-    return groundHeight(sx, sz, SEED) < waterLevelAt(sx, sz) - PLAYER_SWIM_DEPTH;
+    return groundHeight(sx, sz, SEED) < waterLevelAt(sx, sz, SEED) - PLAYER_SWIM_DEPTH;
   });
 }
 
 function standing(x: number, z: number): boolean {
-  return groundHeight(x, z, SEED) >= waterLevelAt(x, z) - PLAYER_SWIM_DEPTH + 0.01;
+  return groundHeight(x, z, SEED) >= waterLevelAt(x, z, SEED) - PLAYER_SWIM_DEPTH + 0.01;
 }
 
 describe('every declared water body is fishable', () => {

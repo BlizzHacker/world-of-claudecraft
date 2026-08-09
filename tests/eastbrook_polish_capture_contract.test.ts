@@ -3,7 +3,10 @@ import { isBlocked, resolvePosition } from '../src/sim/colliders';
 import { EASTBROOK_LAYOUT } from '../src/sim/eastbrook_layout';
 
 const captureContract =
-  await import('../scripts/assets/eastbrook_grand_armoury/capture_contract.mjs');
+  (await import('../scripts/assets/eastbrook_grand_armoury/capture_contract.mjs')) as Record<
+    string,
+    any
+  >;
 const {
   assertTownCaptureMetadata,
   assertTownAttributionTargetState,

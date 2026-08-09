@@ -485,18 +485,7 @@ import { iconDataUrl, QUALITY_COLOR, raidMarkerDataUrl } from './icons';
 import { buildWarfareVendorView, warfareShopViewer } from './hud/vendor/warfare_vendor_view';
 import { renderWarfareVendorWindow } from './hud/vendor/warfare_vendor_window';
 import { unitFrameCurrentMaxText } from './hud_frames';
-import {
-  formatMoney as formatLocalizedMoney,
-  formatNumber,
-  getLanguage,
-  moneyParts,
-  type SupportedLanguage,
-  type TranslationKey,
-  t,
-  tOptional,
-  tPlural,
-} from './i18n';
-import { hasAuraRecipe, iconDataUrl, QUALITY_COLOR, raidMarkerDataUrl } from './icons';
+import { hasAuraRecipe } from './icons';
 import { InspectWindow } from './inspect_window';
 import { itemArmorTypeLabelKey } from './item_armor_type';
 import { requiredClassesForTooltip } from './item_class_restriction';
@@ -744,7 +733,7 @@ let lpAdvancedLast = -1;
 // perf_overlay_settings.ts alongside the panel that consumes it.
 export interface OptionsHooks {
   logout(): void;
-  captureKey(cb: (code: string | null) => void): () => void;
+  captureKey(cb: ((code: string | null) => void) | null): () => void;
   settings: Settings;
   onSettingChange(key: keyof GameSettings, value: GameSettings[keyof GameSettings]): void;
   /** Current renderer-bound profile. Options clones this into a disposable local draft. */
@@ -4871,6 +4860,7 @@ export class Hud {
   private readonly hordeHud = new HordeHud({
     layer: () => document.getElementById('ui'),
     writers: this.writerFacet,
+  });
 
   // Thornhollow Fields in-match scoreboard strip + wave-respawn overlay (self-mounting,
   // elided writers; hud/battleground/).
@@ -5005,23 +4995,6 @@ export class Hud {
     root: () => $('#options-menu'),
     world: () => this.sim,
     options: () => this.optionsHooks,
-    auraOverlays: () => ({
-      playerClass: () => this.sim.cfg.playerClass,
-      defs: () => this.auraOverlayController.defs(),
-      get: (id) => this.auraOverlayController.get(id),
-      patch: (id, patch) => this.auraOverlayController.patch(id, patch),
-      getLayout: () => this.auraOverlayController.getLayout(),
-      patchLayout: (patch) => this.auraOverlayController.patchLayout(patch),
-      reset: (id) => this.auraOverlayController.reset(id),
-      nudge: (id, part, deltaX, deltaY) =>
-        this.auraOverlayController.nudge(id, part, deltaX, deltaY),
-      setAll: (enabled) => this.auraOverlayController.setAll(enabled),
-      beginPlacement: (id, part) => this.auraOverlayController.beginPlacement(id, part),
-      endPlacement: () => this.auraOverlayController.endPlacement(),
-      setPlacement: (on) => this.auraOverlayController.setPlacement(on),
-      onPositionChange: (listener) => this.auraOverlayController.onPositionChange(listener),
-      onPlacementChange: (listener) => this.auraOverlayController.onPlacementChange(listener),
-    }),
     bugReport: () => this.bugReportHooks,
     keybinds: () => this.keybinds,
     slotActionName: (slot) => {
@@ -5031,13 +5004,11 @@ export class Hud {
       return item ? itemDisplayName(item) : null;
     },
     refreshKeybindLabels: () => this.refreshKeybindLabels(),
-    beginActionBarKeybindMode: () => this.beginActionBarKeybindMode(),
     buildDropdown: (options, current, onChange, placeholder, a11y) =>
       this.buildDropdown(options, current, onChange, placeholder, a11y),
     setDropdownValue: (root, value) => this.setDropdownValue(root, value),
     focusFirstInteractive: (root, preferredSelector) =>
       this.focusManager.focusFirst(root, preferredSelector),
-    openFocusTrap: (root, returnFocusTo) => this.focusManager.open({ root, returnFocusTo }),
     closeOthers: () => this.closeOtherWindows('#options-menu'),
     hideTooltip: () => this.hideTooltip(),
     ...this.windowFocus('#options-menu'),

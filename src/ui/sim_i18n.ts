@@ -10154,6 +10154,7 @@ const RULES: Rule[] = [
   {
     re: /^Your focus re-spec will complete in (\d+)s\.$/,
     build: (m) => tSim('log.townFocusRespecQueued', { seconds: m[1] }),
+  },
   {
     re: /^You can't muster a warcamp right now\.$/,
     build: () =>

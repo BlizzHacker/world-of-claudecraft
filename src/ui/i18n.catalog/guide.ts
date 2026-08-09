@@ -1154,6 +1154,9 @@ export const guideStrings = {
       "The Coliseum is the realm's arena, where you face other players in ranked matches, one on one or two on two. Each bracket keeps its own standing, so a win lifts you up that ladder for the whole realm to see. Open the Arena window to sign up for a bracket, alone or with your partner.",
 
     ladderHeading: 'Climbing the ladder',
+    fiestaHeading: 'Two versus two Fiesta',
+    fiestaBody:
+      'Fiesta is a fast, two-on-two brawl fought as one continuous bout, with every fighter brought to an even footing. As the fight runs you draft augments, quick boosts that reshape your kit on the fly, so no two matches play quite the same.',
     ladderBody:
       'Ranked play tracks your standing over time. Check the leaderboard to see where you sit and who holds the top of the realm.',
   },
@@ -1458,6 +1461,8 @@ export const guideStrings = {
     // Corpse component harvesting: open to every character, no profession gate.
     // (Rendered on the gathering detail pages.)
     harvestTitle: 'Harvesting the hunt itself',
+    harvestBody:
+      'Gathering does not stop at nodes. Many slain beasts can be harvested once each, first come first served, for hides, fangs, silk, and meat, straight from the corpse alongside its ordinary loot; one press opens both. The choice is yours each time, too: strip everything the corpse offers, or concentrate on fewer components and take a measurably finer grade of what you do take.',
     // #2514 reword, as a NEW key: the retired harvestBody promised "The choice
     // is yours each time" and set "strip everything the corpse offers" against
     // "concentrate on fewer components". After #2514 a component with nothing

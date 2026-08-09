@@ -4,7 +4,10 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const captureContract =
-  await import('../scripts/assets/eastbrook_grand_armoury/capture_contract.mjs');
+  (await import('../scripts/assets/eastbrook_grand_armoury/capture_contract.mjs')) as Record<
+    string,
+    any
+  >;
 const { POLISH_SEAL_PATH, REMINT_COMMAND } = await import(
   '../scripts/assets/eastbrook_grand_armoury/provenance_diagnostics.mjs'
 );

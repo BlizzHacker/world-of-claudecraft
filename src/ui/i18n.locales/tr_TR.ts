@@ -1209,9 +1209,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.collectorsHeading': 'Koleksiyoncular, kupalar ve bir hikayenin bedeli',
   'guide.profPages.econ.collectorsBody':
     "Satıcılar kaynağa kördür: imzalı bir eşya NPC'ye tam fiyatına satılır. İmzanın getirdiği prim yalnızca oyuncular arasında mevcuttur; bu da onu ilginç kılan şeydir: ünlü bir toplayıcı tarafından imzalanmış bir yığın beklenmedik cevher, şanslı bir hasattan gelen Prime Cut, o zamandan beri emekli olmuş bir ustanın adını taşıyan şaheser bir bıçak, bunların hepsi birinin belleğinin değer biçtiği kadar değerlidir.\n\nDeeds Kitabı da aynı içgüdüye yaslanır: Bozulmamış Damar, Kadim Kalp Ağacı, Ay Işığı Çiçeği, Mükemmel Numune ve Umut Işıltısı, tamamen bir anın sizinle gerçekleştiğini kanıtlamak için var olan sıfır Şöhretli koleksiyoncu işaretleridir. Görevi kazandıran eşyayı elinizde tutun, elinizde makbuzu tutarsınız. Bunların hiçbiri güç değildir; köken istatistik satın almaz ve savaş kazanmaz, sadece iyi günlerin oyunun kağıt izi olur.",
-  'guide.profPages.econ.throttleHeading': 'Eylem kısıtlaması',
-  'guide.profPages.econ.throttleBody':
-    'Çıktının bir tavanı vardır: zanaat, büyü bozumu, büyü ve hurda toplama her {seconds} saniyelik kayan pencerede {actions} başarılı eylemin tek bütçesini paylaşır. Reddedilen bir deneme hiçbir şeye mal olmaz ve bütçe harcamaz. Normal oyunda bunu asla hissetmezsiniz; varoluş nedeni, beceri veya stok ne olursa olsun maksimum becerili bir uzmanın tam bankasıyla Pazarı dolduramamasını sağlamaktır.',
   'guide.profPages.econ.doctrineHeading': 'Oyuncular oyuncularla alışveriş yapar',
   'guide.profPages.econ.doctrineBody':
     "Zanaat ekonomisi tek bir fikir üzerine inşa edilmiştir: oyuncular oyunculara tedarik eder. Toplayıcılar ustaları besler, ustalar görev yapan ve baskın düzenleyenleri besler, bozucular büyücüleri besler; satıcılar ve tezgah ustaları ise kenar bölgede çöp ve madeni para emmek için durur, sizinle rekabet etmek için değil. Bir meslekten para kazanmak istiyorsanız, müşteriniz bir insandır: diğer oyuncuların ne tükettiğini öğrenin, Dünya Pazarı'na göre fiyat belirleyin ve NPC sistemlerini fiyatlarınızın tabanı olarak değerlendirin, pazar olarak değil.\n\nZanaatla yapılan teçhizat baskın tabanının altına oturacak şekilde ayarlanmıştır: bir şaheser bile tarifinin yalnızca bir kalite katı üzerindedir, asla efsanevi ötesine geçemez ve istatistik bütçesi baskın ganimet bandının altında kalır. Demirhanesi sizi en zorlu içeriklere hazırlar; onun yerini almaz. Bu, ustalar, baskın düzenleyenler ve pazar arasındaki istikrarlı üçgeni korur: baskın düşen ganimet hep çekici kalır ve zanaatla yapılan parçalar gerçekten parayla satın alınabilecek en iyi teçhizat olur.",
@@ -4823,7 +4820,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     "Bu yazı... Benzerini en son Morthen'in büyü kitabında, Doğudere'de görmüştüm. Uğruna savaştığımız her mezarı aynı el yönlendirmiş, {playerName}.",
   'entities.quests.q_cult_orders.objectives.0.label': 'Ejdertarikatı Bağnazı öldürüldü',
-  'entities.quests.q_cult_orders.objectives.1.label': 'Ejdertarikatı Emirleri',
   'entities.quests.q_cult_orders.text':
     'Bağnazlar artık bir amaçla hareket ediyor, nöbetler kuruldu, erzaklar sayıldı, kuşatmadan önceki askerler gibi. Örgütlenen tarikatçılar, emir alan tarikatçılardır, {playerName}. Sekiz tane daha öldür ve bana yazılı emirlerinden dört takım getir. Onlara komuta eden eli öğrenmek istiyorum.',
   'entities.quests.q_cult_orders.title': 'Aşağıdan Gelen Emirler',
@@ -4998,7 +4994,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_necromancers.completion':
     "Işık bizi affetsin. Bunlar Vadi'nin ve bataklığın ölülerini barındırıyor; Mezarçağıranların dirilttiği her ceset, hasat edilmiş. Hiç ordu kurmuyorlarmış, {playerName}. Bir haraç topluyorlarmış.",
   'entities.quests.q_necromancers.objectives.0.label': 'Ejder Tarikatı Nekromatiği öldürüldü',
-  'entities.quests.q_necromancers.objectives.1.label': 'Ayinsel Filakter',
   'entities.quests.q_necromancers.text':
     'Emirler bir "filakter halkasından" söz ediyor; ruh kapları, {playerName}, Mabedi beslemek için çevresine yerleştirilmiş. Tarikatın nekromatikleri onları kutsal emanetler gibi taşıyor. Sekiz nekromatik öldür ve bana üç filakteri kırılmamış hâlde getir. İçlerinde hangi ruhların olduğunu bilmeliyim.',
   'entities.quests.q_necromancers.title': 'Filakter Halkası',
@@ -6140,9 +6135,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': 'Dev Heykel',
   'fiesta.powerup.pow_moon_boots.name': 'Ay Çizmeleri',
   'fiesta.powerup.pow_speed_demon.name': 'Hız Şeytanı',
-  'fiesta.practice': '🎉 Botlara Karşı Antrenman',
-  'fiesta.practiceNote':
-    'Çevrimdışı antrenman: 3 yapay zeka botu doğurur ve seni bir 2v2 Fiesta için kuyruğa sokar. Durdurmak için tekrar tıkla.',
   'fiesta.queue.join': '2v2 Fiesta kuyruğuna katılıyorsun. PARTİYE hazır ol…',
   'fiesta.queue.leave': '2v2 Fiesta kuyruğundan ayrılıyorsun.',
   'fiesta.queue.teamLeave': 'Takımın 2v2 Fiesta kuyruğundan ayrılıyor.',
@@ -6376,8 +6368,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
     'Bir dostu korur, böylece yakın dövüş saldırganları vurdukları için kendilerine zarar verir.',
   'guide.abilityHook.thunder_clap': 'Çevrendeki her şeye vurur ve saldırılarını yavaşlatır.',
   'guide.abilityHook.wrath': 'Bir hedefe menzilden fırlatılan bir doğa oku; başvuru bomban.',
-  'guide.arenaPage.augmentsNote':
-    'Güçlendirmeler ve takviyeler yalnızca maç boyunca sürer. Kalıcı güçle değil, eğlenceli, anında kurgularla ilgilidirler, yani kimse parayla zafer satın alamaz.',
   'guide.arenaPage.coliseumBody':
     'Coliseum, diyarın arenasıdır; burada dereceli maçlarda diğer oyuncularla, bire bir ya da ikiye iki karşı karşıya gelirsin. Her kademe kendi sıralamasını tutar, bu yüzden bir galibiyet seni o merdivende, tüm diyarın görmesi için yukarı taşır.',
   'guide.arenaPage.coliseumHeading': 'Kül Kolezyumu',
@@ -6393,21 +6383,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.arenaPage.ladderBody':
     'Dereceli oyun, konumunu zaman içinde takip eder. Nerede durduğunu ve diyarın zirvesini kimin tuttuğunu görmek için lider tablosuna bak.',
   'guide.arenaPage.ladderHeading': 'Merdiveni tırmanmak',
-  'guide.arenaPage.powerupsBody':
-    'Parlayan küreler de dövüşün ortasında arenaya düşer, kim önce ulaşırsa onun olur. Bilerek abartılıdırlar ve yalnızca kısa bir süre dayanırlar: bir göz kırpımlık göz kamaştırıcı hız için Hız İblisi, hantal bir deve dönüşmek için Devasa, zıplayan, düşük yerçekimli bir sıçrama için Ay Botları, ve ani bir öfke dalgası için Cinnet.',
-  'guide.arenaPage.powerupsTitle': 'Ringdeki takviyeler',
-  'guide.arenaPage.waveGoldBody':
-    'Orta dalga: kurgunun şekillenmeye ve uyum tutturmaya başladığı iki yönlü kombolar.',
-  'guide.arenaPage.waveGoldTitle': 'Altın',
-  'guide.arenaPage.wavePrismaticBody':
-    'Son dalga: kurguyu belirleyen, ekran eriten, en güzel anlamda saçma hissettirmesi amaçlanan sıçramalar.',
-  'guide.arenaPage.wavePrismaticTitle': 'Prizmatik',
-  'guide.arenaPage.waveSilverBody':
-    'Açılış dalgası: sınıfının temellerini keskinleştiren temiz, tek istatistikli takviyeler.',
-  'guide.arenaPage.waveSilverTitle': 'Gümüş',
-  'guide.arenaPage.wavesBody':
-    "Bir Fiesta'nın her raundu sana taze bir seçim sunar, ve maç ilerledikçe seçimler cüretkarlaşır. Bir dalgadan diğerine kurgunu inşa edersin, her seferinde birkaç seçenekten birini seçer ve dövüşün geri kalanı için onu elinde tutarsın.",
-  'guide.arenaPage.wavesTitle': 'Güçlendirmeler dalgalar halinde gelir',
   'guide.bestiary.flavor.gravecaller_cultist':
     'Vadiden zirvelere kadar mezarları kirleten ölüm tarikatının cüppeli hizmetkarları. Toplandıkları yerde, ölüler huzur bulmaz.',
   'guide.bestiary.flavor.grubjaw':
@@ -9281,8 +9256,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'desktop.update.downloading': '{version} güncellemesi indiriliyor...',
   'desktop.update.downloadingTitle': '{version} güncellemesi indiriliyor...',
   'desktop.update.later': 'Daha Sonra',
-  'desktop.update.ready':
-    '{version} güncellemesi hazır. Çıkış yaptığında kurulur ya da şimdi yeniden başlat.',
   'desktop.update.readyTitle': '{version} güncellemesi hazır',
   'desktop.update.readyBody': 'Çıkış yaptığında kurulur ya da şimdi yeniden başlat.',
   'desktop.update.restart': 'Şimdi Yeniden Başlat',
@@ -9620,9 +9593,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
     'Hedefin zırhını parçalar, her uygulamada %{damage} azaltır. 5 kez istiflenir. Yüksek miktarda tehdit üretir.',
   'entities.mobs.training_dummy.name': 'Antrenman Kuklası',
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'guide.arenaPage.yumiBody':
-    "Yumi'yi Koru, bir labirentte oynanan bir takım hedef modudur: her taraf kendi kedi yoldaşını korurken diğerininkini avlar. Ara sıra her iki kedi de labirentin yeni köşelerine ışınlanır, bu yüzden dövüş savunma, avlanma ve onları yeniden bulmak için yarışma arasında gidip gelir. Üçe üç ya da beşe beş olarak kuyruğa gir; dövüşte düşmek seni yalnızca kısa bir süre kenara çeker.",
-  'guide.arenaPage.yumiHeading': "Yumi'yi Koru",
   'hudChrome.archetypeTitle.hobbyLabel': 'Hobi',
   'hudChrome.auraEffect.armorPct': 'Zırhı %{pct} azaltır',
   'hudChrome.auraEffect.armorPctStacks': 'Zırhı %{pct} azaltır ({stacks} istif)',

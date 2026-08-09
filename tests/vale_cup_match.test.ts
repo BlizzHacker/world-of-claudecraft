@@ -10,10 +10,10 @@
 
 import { describe, expect, it, vi } from 'vitest';
 import { SPORT_KITS, VALE_CUP_BALL_TEMPLATE_ID } from '../src/sim/content/vale_cup';
-import { DUNGEON_X_THRESHOLD, GATHER_NODES } from '../src/sim/data';
+import { MOBS, DUNGEON_X_THRESHOLD, GATHER_NODES } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
 import { VALE_CUP_BRAM_ID, VC_DESERTER_LOCKOUT, VC_GOLDEN_CAP, VC_MATCH_DURATION, vcupPackTeams } from '../src/sim/social/vale_cup';
-import type { SimEvent } from '../src/sim/types';
+import { CRAFT_CAST_ID, isNonSpellCast, type SimEvent } from '../src/sim/types';
 import {
   GOAL_LINE_EAST_X,
   GOAL_LINE_WEST_X,

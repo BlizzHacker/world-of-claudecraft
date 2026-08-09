@@ -86,21 +86,7 @@ import { cleanContentModerationReason } from './content_moderation_db';
 import {
   currentDailyRewardDay,
 } from './daily_rewards';
-import {
-  accountAndScopeForToken,
-  accountById,
-  accountForToken,
-  accountTotpState,
-  accountMailTarget,
-  findAccount,
-  isAdminAccount,
-  loadAccountFlair,
-  pool,
-  revokeTokensExcept,
-  saveToken,
-  touchLogin,
-  updatePasswordHash,
-} from './db';
+import { accountAndScopeForToken, accountById, accountForToken, accountMailTarget, accountTotpState, findAccount, isAdminAccount, loadAccountFlair, pool, revokeTokensExcept, saveToken, setCharacterGmByName, touchLogin, updatePasswordHash } from './db';
 import { emailSecurityIncident } from './email';
 import type { GameServer } from './game';
 import { ctxAccountId } from './http/context';
@@ -355,12 +341,6 @@ async function purgeGuildBankSlotOutcome(
       guildId,
       slotIndex: rawSlot,
       itemId: result.removed.itemId,
-  const totp = await accountTotpState(account.id);
-  if (totp.enabled && !verifyTotpCode(totp.secret ?? '', body.totpCode)) {
-    return fail(res, 403, typeof body.totpCode === 'string' && body.totpCode.trim()
-      ? 'invalid two-factor code'
-      : 'two-factor code required');
-  }
       count: result.removed.count,
       audited,
     },

@@ -117,6 +117,7 @@ export const shellStrings = {
     // mirrored by electron/shell_strings.cjs DEFAULT_SHELL_STRINGS in English).
     desktop: {
       update: {
+        downloading: 'Downloading update {version}...',
         // Classic desktop-client voice (Discord / VS Code / Steam style): short
         // titles, calm bodies, primary action first on the ready card.
         checkingTitle: 'Checking for updates...',

@@ -48,6 +48,8 @@ import type { StatId } from './stat_tooltip';
 import { svgIcon } from './ui_icons';
 import { renderWindowFrame, type WindowFrameParts } from './window_frame';
 import type { WindowFrameDescriptor } from './window_frame_view';
+import { craftNameText } from './craft_name_view';
+import { gatheringProfessionNameKey } from './gathering_profession_name';
 const ARCHETYPE_TITLE_KEYS: Record<string, TranslationKey> = {
   armorcrafting: 'hudChrome.archetypeTitle.armorcrafting',
   weaponcrafting: 'hudChrome.archetypeTitle.weaponcrafting',

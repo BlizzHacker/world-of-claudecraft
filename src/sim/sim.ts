@@ -537,11 +537,6 @@ import {
   UNSTUCK_SICKNESS_ID,
 } from './spirit';
 import { spawnWaypoints, waypointTravel } from './waypoints';
-import { repairTalentLoadouts } from './talent_loadouts';
-import {
-  CURRENT_CHARACTER_CONTENT_REVISION,
-  migrateCharacterTalentsV2,
-} from './talent_save_migration';
 import * as unstuckMod from './unstuck';
 import {
   rollWorldBossLoot as rollWorldBossLootImpl,
@@ -650,16 +645,7 @@ import * as homesMod from './social/homes';
 import * as hordeMod from './social/horde';
 import * as skirmishMod from './social/skirmish';
 import * as derbyMod from './social/derby';
-import { FINDER_ACTIVITIES, type FinderListingTag } from './content/dungeon_finder';
 import { setHelmHidden as setHelmHiddenMod } from './helm_visibility';
-import {
-  partyFrameAbsorb,
-  partyFrameAggroTargets,
-  partyFrameAuras,
-  partyFrameIncomingHeals,
-  partyFrameRole,
-} from './party_frame_info';
-import { DungeonFinderMachine } from './social/dungeon_finder';
 import * as fiestaMod from './social/fiesta';
 // A3: Fiesta tuning consts moved to social/fiesta.ts; these five are read back here
 // by the fiestaMatchInfo presentation accessor (which STAYS on Sim).
@@ -1213,7 +1199,6 @@ export type JoinableChannel = (typeof JOINABLE_CHANNELS)[number];
 // Per-player progression and bags. The entity holds combat state; this holds
 // everything that belongs to the character sheet.
 export interface PlayerMeta {
-  isFiestaBot?: boolean;
   entityId: number;
   // Stable database character id when running on the server. Offline/sim-only
   // callers fall back to entityId for systems that need a rename-proof owner key.

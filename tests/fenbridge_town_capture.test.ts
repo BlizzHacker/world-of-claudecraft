@@ -5,8 +5,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const captureContract =
-  // @ts-expect-error -- the executable capture contract intentionally ships as plain Node ESM.
-  await import('../scripts/assets/fenbridge_town/capture_contract.mjs');
+  (await import('../scripts/assets/fenbridge_town/capture_contract.mjs')) as Record<string, any>;
 const {
   assertFenbridgeCaptureArtifactFiles,
   assertFenbridgeCaptureBatchMetadata,

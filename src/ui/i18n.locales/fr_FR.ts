@@ -1248,9 +1248,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.collectorsHeading': "Collectionneurs, trophées et le prix d'une histoire",
   'guide.profPages.econ.collectorsBody':
     "Les marchands sont aveugles à la provenance : un objet signé se vend à un PNJ exactement au même prix que sa version ordinaire. La prime sur une signature n'existe qu'entre joueurs, ce qui en fait précisément tout l'intérêt : une pile de minerai d'aubaine signé par un collecteur célèbre, une Coupe privilégiée issue d'une heureuse récolte, une lame chef-d'oeuvre portant le nom d'un artisan depuis retraité, tout cela vaut ce que la mémoire de quelqu'un dit qu'ils valent.\n\nLe Livre des hauts faits puise dans le même instinct : Veine vierge, Bois de cœur ancien, Floraison au clair de lune, Un spécimen parfait et Lueur d'espoir sont des marques de collection à Renom zéro qui existent uniquement pour prouver qu'un moment vous est arrivé. Gardez l'objet qui a valu le haut fait et vous en tenez la preuve. Rien de tout cela n'est de la puissance ; la provenance n'achète aucune caractéristique et ne gagne aucun combat, c'est la trace écrite du jeu sur les belles journées.",
-  'guide.profPages.econ.throttleHeading': "Le régulateur d'actions",
-  'guide.profPages.econ.throttleBody':
-    "La production a un plafond : la fabrication, le désenchantement, l'enchantement et la récupération partagent un budget de {actions} actions réussies par tranche glissante de {seconds} secondes. Une tentative refusée ne coûte rien et ne consomme aucun budget. Vous ne le ressentirez jamais en jeu normal ; cela existe pour qu'un spécialiste au maximum avec une banque pleine ne puisse pas inonder le Marché, quelle que soit sa compétence ou ses réserves.",
   'guide.profPages.econ.doctrineHeading': 'Les joueurs commercent entre eux',
   'guide.profPages.econ.doctrineBody':
     "L'économie de l'artisanat repose sur une idée : les joueurs approvisionnent les joueurs. Les collecteurs alimentent les artisans, les artisans alimentent les quêteurs et les pillards, et les démanteleurs alimentent les enchanteurs, les marchands et maîtres d'atelier se tenant en périphérie pour absorber les rebuts et les pièces plutôt que vous concurrencer. Si vous voulez gagner de l'argent avec un métier, votre client est une personne : apprenez ce que les autres joueurs consomment, fixez vos prix face au Marché mondial, et traitez les systèmes de PNJ comme un plancher sous vos prix, non comme le marché lui-même.\n\nL'équipement fabriqué est calibré pour se situer en dessous du plancher de raid : même un chef-d'oeuvre n'est jamais qu'un palier de qualité au-dessus de sa recette, jamais au-delà du légendaire, et son budget de caractéristiques reste sous la tranche de butin de raid. La forge vous prépare pour le contenu le plus difficile ; elle ne le remplace pas. Cela maintient les artisans, les pillards et le marché dans un triangle stable : les butins de raid restent aspirationnels, et les pièces fabriquées restent le meilleur équipement qu'on puisse réellement acheter.",
@@ -6584,14 +6581,12 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     'Cette écriture vient du grimoire de Morthen. La même main a guidé chaque tombe, {playerName}.',
   'entities.quests.q_cult_orders.objectives.0.label': 'Zélote du Culte du Wyrm tué',
-  'entities.quests.q_cult_orders.objectives.1.label': 'Ordres du Culte du Wyrm',
   'entities.quests.q_necromancers.title': "L'anneau des phylactères",
   'entities.quests.q_necromancers.text':
     "Les ordres parlent d'un anneau de phylactères, {playerName}, vases d'âme autour du Sanctuaire. Tuez 8 nécromanciens et rapportez-en 3 intacts.",
   'entities.quests.q_necromancers.completion':
     "Que la Lumière nous pardonne. Ils contiennent les morts du Val et du marais; ce n'était pas une armée qu'ils bâtissaient, {playerName}, c'était une dîme.",
   'entities.quests.q_necromancers.objectives.0.label': 'Nécromancien du Culte du Wyrm tué',
-  'entities.quests.q_necromancers.objectives.1.label': 'Phylactère rituel',
   'entities.quests.q_revenants.title': 'Les champs des revenants',
   'entities.quests.q_revenants.text':
     "À l'est de la route dort un vieux champ de bataille. Le culte a relevé ses os en armures rouillées. Remettez-en 12 en terre, {playerName}.",
@@ -7117,9 +7112,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': 'Colosse',
   'fiesta.powerup.pow_moon_boots.name': 'Bottes lunaires',
   'fiesta.powerup.pow_speed_demon.name': 'Démon de vitesse',
-  'fiesta.practice': '🎉 Entraînement contre des bots',
-  'fiesta.practiceNote':
-    'Entraînement hors ligne : fait apparaître 3 bots IA et vous inscrit pour une Fiesta 2c2. Cliquez à nouveau pour arrêter.',
   'fiesta.queue.join':
     "Vous rejoignez la file d'attente de la Fiesta 2c2. Préparez-vous à FAIRE LA FÊTE…",
   'fiesta.queue.leave': "Vous quittez la file d'attente de la Fiesta 2c2.",
@@ -8065,8 +8057,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     'Frappe tout autour de vous et ralentit les attaques des ennemis.',
   'guide.abilityHook.wrath':
     'Un trait de nature lancé sur une cible à distance, votre frappe de prédilection.',
-  'guide.arenaPage.augmentsNote':
-    "Les augmentations et bonus ne durent que le temps de la partie. Ils servent à des compositions ludiques et improvisées, pas à une puissance durable, pour que personne n'achète sa victoire.",
   'guide.arenaPage.coliseumBody':
     "Le Colisée est l'arène du royaume, où vous affrontez d'autres joueurs en matchs classés, en un contre un ou en deux contre deux. Chaque catégorie conserve son propre classement, si bien qu'une victoire vous fait grimper dans cette échelle, à la vue de tout le royaume.",
   'guide.arenaPage.coliseumHeading': 'Le Colisée de cendres',
@@ -8234,21 +8224,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Trois zones, du sud au nord, chacune un cran plus haut en niveau. Suivez le fil des quêtes et la contrée vous porte de la vallée jusqu'aux sommets.",
   'guide.worldPage.places': 'Lieux notables',
   'guide.worldPage.residents': 'Qui vous croiserez',
-  'guide.arenaPage.powerupsBody':
-    "Des orbes lumineux tombent aussi dans l'arène en pleine bataille, libres pour celui qui les atteint en premier. Ils sont volontairement démesurés et ne durent qu'un court instant : Démon de vitesse pour un éclair de cadence aveuglante, Colosse pour enfler en géant pataud, Bottes lunaires pour un bond rebondissant en gravité réduite, et Berserker pour un soudain accès de furie.",
-  'guide.arenaPage.powerupsTitle': "Les bonus de l'arène",
-  'guide.arenaPage.waveGoldBody':
-    'La manche intermédiaire : des combos à double tranchant où votre panoplie commence à prendre forme et à chanter.',
-  'guide.arenaPage.waveGoldTitle': 'Or',
-  'guide.arenaPage.wavePrismaticBody':
-    'La dernière manche : des pics dévastateurs qui définissent votre panoplie, faits pour paraître ridicules dans le meilleur sens du terme.',
-  'guide.arenaPage.wavePrismaticTitle': 'Prismatique',
-  'guide.arenaPage.waveSilverBody':
-    "La manche d'ouverture : des bonus simples sur une seule caractéristique qui affinent les bases de votre classe.",
-  'guide.arenaPage.waveSilverTitle': 'Argent',
-  'guide.arenaPage.wavesBody':
-    "Chaque manche d'une Fiesta vous offre un nouveau choix, et les choix se font plus audacieux au fil du match. Vous construisez d'une manche à l'autre, en retenant à chaque fois l'une des quelques options proposées et en la gardant pour le reste de la partie.",
-  'guide.arenaPage.wavesTitle': 'Les augmentations arrivent par vagues',
   'guide.bestiary.flavor.gravecaller_cultist':
     "Des serviteurs en robe du culte de la mort dont l'œuvre souille les tombes, du Val jusqu'aux sommets. Là où ils se réunissent, les morts ne reposent pas.",
   'guide.bestiary.flavor.grubjaw':
@@ -9235,8 +9210,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'desktop.update.downloading': 'Téléchargement de la mise à jour {version}...',
   'desktop.update.downloadingTitle': 'Téléchargement de la mise à jour {version}...',
   'desktop.update.later': 'Plus tard',
-  'desktop.update.ready':
-    "La mise à jour {version} est prête. Elle s'installe à la fermeture, ou redémarrez maintenant.",
   'desktop.update.readyTitle': 'La mise à jour {version} est prête',
   'desktop.update.readyBody': "Elle s'installe à la fermeture, ou redémarrez maintenant.",
   'desktop.update.restart': 'Redémarrer maintenant',
@@ -9585,9 +9558,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Cisaille l'armure de la cible, la réduisant de {damage}% par application. Cumulable jusqu'à 5 fois. Génère beaucoup de menace.",
   'entities.mobs.training_dummy.name': "Mannequin d'entraînement",
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'guide.arenaPage.yumiBody':
-    "Protégez Yumi est un mode d'objectif en équipe qui se joue dans un labyrinthe : chaque camp garde son propre familier félin tout en traquant celui de l'adversaire. De temps à autre, les deux chats se téléportent vers de nouveaux recoins du labyrinthe, si bien que le combat oscille entre défense, chasse et course pour les retrouver. Mettez-vous en file en trois contre trois ou cinq contre cinq ; tomber au combat ne vous met sur la touche qu'un instant.",
-  'guide.arenaPage.yumiHeading': 'Protégez Yumi',
   'entities.mobs.water_elemental.name': "Élémentaire d'eau",
   'entities.mobs.ancient_guardian.name': 'Gardien antique',
   'entities.mobs.apprentice_wren.name': 'Apprentie Wren',

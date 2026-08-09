@@ -1206,9 +1206,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.collectorsHeading': 'Samlere, trofæer og prisen på en historie',
   'guide.profPages.econ.collectorsBody':
     'Handlende er blinde for ophav: en signeret genstand sælger til en NPC til præcis dens ordinære pris. Præmien på en signatur eksisterer kun mellem spillere, og det er præcis det, der gør det interessant: en stak vindfaldsmalm signeret af en berømt indsamler, en Førsteklasses Udskæring fra en heldig høst, et mestervåben der nævner en håndværker, som siden er gået på pension, alt koster hvad end nogen husker at det er værd.\n\nBedrifternes Bog spiller på den samme instinkt: Uberørt Åre, Gammelt Kernetræ, måneskinsblomst, Et Perfekt Eksemplar og Et Glimt af Håb er nul-Hæder samlermærker, der udelukkende eksisterer for at bevise, at et øjeblik skete for dig. Behold den genstand der optjente bedriften, og du holder kvitteringen. Intet af dette er magt; ophav køber ingen statistikker og vinder ingen kampe, det er spillets papirspor af gode dage.',
-  'guide.profPages.econ.throttleHeading': 'Handlingsbegrænsningen',
-  'guide.profPages.econ.throttleBody':
-    'Output har et loft: håndværk, affortrylle, fortrylle og bjærge deler ét budget på {actions} vellykkede handlinger pr. rullende {seconds} sekunder. Et afvist forsøg koster intet og bruger intet budget. Du vil aldrig mærke det i normal spil; det eksisterer, så en maksimalt specialiseret med en fuld bank ikke kan oversvømme Markedet, uanset deres færdighed eller lagerbeholdning.',
   'guide.profPages.econ.doctrineHeading': 'Spillere handler med spillere',
   'guide.profPages.econ.doctrineBody':
     'Håndværksøkonomien er bygget på én idé: spillere forsyner spillere. Indsamlere fodrer håndværkere, håndværkere fodrer questere og raiders, og nedbrydere fodrer fortryllere, med handlende og stationsmestre, der står i kanten for at absorbere skrammel og mønt snarere end at konkurrere med dig. Hvis du vil tjene penge på et fag, er din kunde en person: lær hvad andre spillere brænder igennem, prissæt mod Verdensmarkedet, og behandl NPC-systemerne som et gulv under dine priser, ikke som markedet selv.\n\nFremstillet udstyr er afstemt til at ligge under raid-gulvet: selv et mesterværk er kun nogensinde ét kvalitetsniveau over sin opskrift, aldrig forbi legendarisk, og dets statistikbudget holder sig under raid-bytteområdet. Smedjen gør dig klar til det sværeste indhold; den erstatter det ikke. Det holder håndværkere, raiders og markedet i en stabil trekant: raid-bytte forbliver noget at stræbe efter, og fremstillede stykker forbliver det bedste udstyr, penge faktisk kan købe.',
@@ -4648,7 +4645,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     'Denne skrift... jeg så sidst dens lige i Morthens grimoire, i Østbæk. Den samme hånd har styret hver eneste grav, vi har kæmpet om, {playerName}.',
   'entities.quests.q_cult_orders.objectives.0.label': 'Ormekult-Zelot dræbt',
-  'entities.quests.q_cult_orders.objectives.1.label': 'Ormekult-Ordrer',
   'entities.quests.q_cult_orders.text':
     'Zeloterne bevæger sig med formål nu - vagter sat, forsyninger talt, som soldater før en belejring. Kultister, der organiserer sig, er kultister, der tager imod ordrer, {playerName}. Dræb otte til, og bring mig fire sæt af deres skrevne ordrer. Jeg vil kende den hånd, der befaler dem.',
   'entities.quests.q_cult_orders.title': 'Ordrer fra Det Dybe',
@@ -4824,7 +4820,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_necromancers.completion':
     'Lyset tilgive os. Disse rummer de døde fra Dalen og sumpen - hvert lig Gravkalderne nogensinde rejste, høstet. De byggede aldrig en hær, {playerName}. De indsamlede en tiende.',
   'entities.quests.q_necromancers.objectives.0.label': 'Ormekult-Nekromantiker dræbt',
-  'entities.quests.q_necromancers.objectives.1.label': 'Rituelt Fylakterie',
   'entities.quests.q_necromancers.text':
     'Ordrerne taler om en "ring af fylakterier" - sjælebeholdere, {playerName}, sat omkring Helligdommen for at nære den. Kultens nekromantikere bærer dem som hellige relikvier. Dræb otte nekromantikere og bring mig tre fylakterier ubrudte. Jeg må vide, hvilke sjæle de rummer.',
   'entities.quests.q_necromancers.title': 'Fylakterieringen',
@@ -5207,9 +5202,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': 'Koloss',
   'fiesta.powerup.pow_moon_boots.name': 'Månestøvler',
   'fiesta.powerup.pow_speed_demon.name': 'Fartdæmon',
-  'fiesta.practice': '🎉 Træning mod Bots',
-  'fiesta.practiceNote':
-    'Offline-træning: frembringer 3 AI-bots og sætter dig i kø til en 2v2 Fiesta. Klik igen for at stoppe.',
   'fiesta.queue.join': 'Du går i kø til 2v2 Fiesta. Gør dig klar til at FESTE…',
   'fiesta.queue.leave': 'Du forlader 2v2 Fiesta-køen.',
   'fiesta.queue.teamLeave': 'Dit hold forlader 2v2 Fiesta-køen.',
@@ -5449,8 +5441,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Beskytter en allieret så nærkampsangribere skader sig selv når de slår.',
   'guide.abilityHook.thunder_clap': 'Rammer alt omkring dig og sløver deres angreb.',
   'guide.abilityHook.wrath': 'Et naturlyn kastet mod et mål på afstand, din foretrukne bombe.',
-  'guide.arenaPage.augmentsNote':
-    'Forstærkninger og power-ups varer kun under kampen. De handler om legende, spontane builds, ikke om varig styrke, så ingen køber sig til en sejr.',
   'guide.arenaPage.coliseumBody':
     'Coliseum er rigets arena, hvor du møder andre spillere i rangerede kampe, en mod en eller to mod to. Hver kategori har sin egen placering, så en sejr løfter dig op ad den rangliste for hele riget at se.',
   'guide.arenaPage.coliseumHeading': 'Det Askegrå Colosseum',
@@ -5466,21 +5456,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.arenaPage.ladderBody':
     'Rangeret spil følger din placering over tid. Tjek ranglisten for at se hvor du ligger og hvem der holder toppen af riget.',
   'guide.arenaPage.ladderHeading': 'At klatre op ad rangstigen',
-  'guide.arenaPage.powerupsBody':
-    'Glødende kugler falder også ned i arenaen midt i kampen, gratis for den der når dem først. De er bevidst overdrevne og varer kun et kort øjeblik: Speed Demon for et glimt af blændende fart, Colossus for at svulme op til en kluntet kæmpe, Moon Boots for et hoppende, lavtyngdekrafts-hop, og Berserker for et pludseligt udbrud af raseri.',
-  'guide.arenaPage.powerupsTitle': 'Power-ups i ringen',
-  'guide.arenaPage.waveGoldBody':
-    'Den midterste bølge: tveæggede kombinationer hvor din build begynder at tage form og synge.',
-  'guide.arenaPage.waveGoldTitle': 'Guld',
-  'guide.arenaPage.wavePrismaticBody':
-    'Den sidste bølge: build-definerende, skærm-smeltende spidser der skal føles latterlige på den bedste måde.',
-  'guide.arenaPage.wavePrismaticTitle': 'Prismatisk',
-  'guide.arenaPage.waveSilverBody':
-    'Den indledende bølge: rene boosts på én egenskab der skærper grundlaget for din klasse.',
-  'guide.arenaPage.waveSilverTitle': 'Sølv',
-  'guide.arenaPage.wavesBody':
-    'Hver runde i en Fiesta giver dig et nyt valg, og valgene bliver dristigere efterhånden som kampen skrider frem. Du bygger fra én bølge til den næste, vælger en af nogle få muligheder hver gang og beholder den resten af dysten.',
-  'guide.arenaPage.wavesTitle': 'Forstærkninger ankommer i bølger',
   'guide.bestiary.flavor.gravecaller_cultist':
     'Kappeklædte tjenere af dødskulten hvis virke besudler gravene fra Dalen til toppene. Hvor de samles, hviler de døde ikke.',
   'guide.bestiary.flavor.grubjaw':
@@ -8464,8 +8439,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'desktop.update.downloading': 'Downloader opdatering {version}...',
   'desktop.update.downloadingTitle': 'Downloader opdatering {version}...',
   'desktop.update.later': 'Senere',
-  'desktop.update.ready':
-    'Opdatering {version} er klar. Den installeres, når du afslutter, eller genstart nu.',
   'desktop.update.readyTitle': 'Opdatering {version} er klar',
   'desktop.update.readyBody': 'Den installeres, når du afslutter, eller genstart nu.',
   'desktop.update.restart': 'Genstart nu',
@@ -8886,9 +8859,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Flænger målets rustning og sænker den med {damage}% pr. anvendelse. Stakker op til 5 gange. Skaber en stor mængde trussel.',
   'entities.mobs.training_dummy.name': 'Træningsdukke',
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'guide.arenaPage.yumiBody':
-    'Beskyt Yumi er en holdbaseret måltilstand, der spilles i en labyrint: hver side vogter sin egen katfølgesvend, mens den jager modstanderens. Med jævne mellemrum blinker begge katte til nye hjørner af labyrinten, så kampen svinger mellem at forsvare, jage og kapløbet om at finde dem igen. Stil op som tre mod tre eller fem mod fem; at falde i kamp sætter dig kun på bænken et øjeblik.',
-  'guide.arenaPage.yumiHeading': 'Beskyt Yumi',
   'hudChrome.archetypeTitle.hobbyLabel': 'Fritid',
   'hudChrome.auraEffect.armorPct': 'Reducerer rustning med {pct}%',
   'hudChrome.auraEffect.armorPctStacks': 'Reducerer rustning med {pct}% ({stacks} stakke)',

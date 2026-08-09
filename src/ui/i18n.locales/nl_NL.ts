@@ -1228,9 +1228,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.collectorsHeading': 'Verzamelaars, trofees en de prijs van een verhaal',
   'guide.profPages.econ.collectorsBody':
     'Handelaren zijn blind voor herkomst: een gesigneerd voorwerp verkoopt aan een NPC voor precies zijn gewone prijs. De premie op een handtekening bestaat alleen tussen spelers, en dat is precies wat het interessant maakt: een stapel windfall-erts gesigneerd door een beroemde verzamelaar, een Prime Cut van een gelukkige oogst, een meesterwerkling met de naam van een ambachtsman die inmiddels gestopt is, ze kosten wat iemands geheugen zegt dat ze waard zijn.\n\nHet Boek der Daden speelt op hetzelfde instinct in: Ongerept Ader, Oud Hardhout, Maanbloesem, Een Perfect Exemplaar en Glinstering van Hoop zijn nul-Roem verzamelaarsdaden die puur bestaan om te bewijzen dat een moment jou is overkomen. Bewaar het voorwerp dat de daad verdiende en je hebt het bewijs. Niets hiervan is macht; herkomst koopt geen statistieken en wint geen gevechten, het is het papieren spoor van het spel van goede dagen.',
-  'guide.profPages.econ.throttleHeading': 'De actiebegrenzing',
-  'guide.profPages.econ.throttleBody':
-    'De output heeft een plafond: vervaardiging, onbetoveren, betoveren en salvagen delen één budget van {actions} geslaagde acties per rollende {seconds} seconden. Een geweigerde poging kost niets en verbruikt geen budget. Je voelt het nooit bij normaal spelen; het bestaat zodat een maxed specialist met een volle bank de Markt niet kan overspoelen, ongeacht zijn vaardigheid of voorraad.',
   'guide.profPages.econ.doctrineHeading': 'Spelers handelen met spelers',
   'guide.profPages.econ.doctrineBody':
     'De ambachteconomie is gebouwd op één idee: spelers beleveren spelers. Verzamelaars voeden ambachtslieden, ambachtslieden voeden questers en raiders, en brekers voeden betoveraars, met handelaren en stationneesters aan de randen om rommel en munt op te nemen in plaats van met je te concurreren. Als je geld wilt verdienen aan een ambacht, is jouw klant een persoon: leer wat andere spelers doorheen branden, prijs je waar ten opzichte van de Wereldmarkt, en behandel de NPC-systemen als een vloer onder je prijzen, niet als de markt zelf.\n\nGevaardigde uitrusting is afgestemd om net onder de raidgrens te zitten: zelfs een meesterwerk is altijd slechts één kwaliteitstrede boven zijn recept, nooit voorbij legendarisch, en zijn statistiekenbudget blijft onder het raidlootband. De smidse maakt je klaar voor de zwaarste inhoud; hij vervangt die niet. Dat houdt ambachtslieden, raiders en de markt in een stabiele driehoek: raid-drops blijven iets om naar te streven, en ambachtswerk blijft de beste uitrusting die geld daadwerkelijk kan kopen.',
@@ -4885,7 +4882,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     'Dit schrift... Ik zag het laatst in Morthens grimoire, in Oostbeek. Dezelfde hand heeft elk graf geleid waarover wij gevochten hebben, {playerName}.',
   'entities.quests.q_cult_orders.objectives.0.label': 'Wurmsekte-Dweper gedood',
-  'entities.quests.q_cult_orders.objectives.1.label': 'Wurmsekte-Bevelen',
   'entities.quests.q_cult_orders.text':
     'De dwepers bewegen nu doelgericht, wachten uitgezet, voorraden geteld, als soldaten voor een belegering. Sektariërs die zich organiseren, zijn sektariërs die bevelen opvolgen, {playerName}. Dood er acht meer en breng me vier sets van hun geschreven bevelen. Ik wil de hand kennen die hen aanvoert.',
   'entities.quests.q_cult_orders.title': 'Bevelen van Beneden',
@@ -5062,7 +5058,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_necromancers.completion':
     'Moge het Licht ons vergeven. Deze bevatten de doden van het Dal en het veen - elk lijk dat de Grafroepers ooit hebben opgewekt, geoogst. Ze bouwden nooit een leger, {playerName}. Ze inden een tiend.',
   'entities.quests.q_necromancers.objectives.0.label': 'Wurmsekte-Necromancer gedood',
-  'entities.quests.q_necromancers.objectives.1.label': 'Rituele Phylacterie',
   'entities.quests.q_necromancers.text':
     'De bevelen spreken van een "ring van phylacterieën" - zielenvaten, {playerName}, rond het Heiligdom geplaatst om het te voeden. De necromancers van de sekte dragen ze als heilige relikwieën. Dood acht necromancers en breng me drie ongebroken phylacterieën. Ik moet weten welke zielen ze bevatten.',
   'entities.quests.q_necromancers.title': 'De Phylacterie-Ring',
@@ -5450,9 +5445,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': 'Kolos',
   'fiesta.powerup.pow_moon_boots.name': 'Maanlaarzen',
   'fiesta.powerup.pow_speed_demon.name': 'Snelheidsduivel',
-  'fiesta.practice': '🎉 Oefenen tegen Bots',
-  'fiesta.practiceNote':
-    'Offline oefenen: brengt 3 AI-bots voort en zet je in de wachtrij voor een 2v2-Fiesta. Klik nogmaals om te stoppen.',
   'fiesta.queue.join': 'Je sluit je aan bij de 2v2-Fiesta-wachtrij. Maak je klaar om te FEESTEN…',
   'fiesta.queue.leave': 'Je verlaat de 2v2-Fiesta-wachtrij.',
   'fiesta.queue.teamLeave': 'Je team verlaat de 2v2-Fiesta-wachtrij.',
@@ -5704,8 +5696,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.thunder_clap': 'Raakt alles om je heen en vertraagt hun aanvallen.',
   'guide.abilityHook.wrath':
     'Een natuurbout die van afstand op een doelwit wordt geworpen, je vertrouwde nuke.',
-  'guide.arenaPage.augmentsNote':
-    'Augments en power-ups gelden alleen voor de wedstrijd. Ze draaien om speelse, ter plekke bedachte builds, niet om blijvende macht, zodat niemand zich een weg naar de winst koopt.',
   'guide.arenaPage.coliseumBody':
     'Het Coliseum is de arena van het rijk, waar je andere spelers tegemoet treedt in ranglijstwedstrijden, één tegen één of twee tegen twee. Elke categorie heeft zijn eigen ranglijst, dus een overwinning tilt je hoger op die ladder, zichtbaar voor het hele rijk.',
   'guide.arenaPage.coliseumHeading': 'Het Asgrauwe Colosseum',
@@ -5721,21 +5711,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'guide.arenaPage.ladderBody':
     'Ranglijstspel volgt je positie over de tijd. Bekijk het scorebord om te zien waar je staat en wie de top van het rijk bezit.',
   'guide.arenaPage.ladderHeading': 'De ladder beklimmen',
-  'guide.arenaPage.powerupsBody':
-    'Gloeiende bollen vallen ook middenin het gevecht in de arena, gratis voor wie ze als eerste bereikt. Ze zijn opzettelijk over de top en duren maar even: Speed Demon voor een flits van verblindend tempo, Colossus om uit te dijen tot een logge reus, Moon Boots voor een stuiterende sprong met lage zwaartekracht, en Berserker voor een plotselinge golf van razernij.',
-  'guide.arenaPage.powerupsTitle': 'Power-ups in de ring',
-  'guide.arenaPage.waveGoldBody':
-    "De middelste golf: tweesnijdende combo's waar je build vorm begint te krijgen en gaat zingen.",
-  'guide.arenaPage.waveGoldTitle': 'Goud',
-  'guide.arenaPage.wavePrismaticBody':
-    'De laatste golf: build-bepalende, schermversmeltende pieken bedoeld om belachelijk aan te voelen op de beste manier.',
-  'guide.arenaPage.wavePrismaticTitle': 'Prismatisch',
-  'guide.arenaPage.waveSilverBody':
-    'De openingsgolf: schone, enkelvoudige statboosts die de basis van je klasse aanscherpen.',
-  'guide.arenaPage.waveSilverTitle': 'Zilver',
-  'guide.arenaPage.wavesBody':
-    'Elke ronde van een Fiesta geeft je een verse keuze, en de keuzes worden gewaagder naarmate de wedstrijd vordert. Je bouwt van de ene golf naar de volgende, kiest elke keer een van een paar opties en houdt het voor de rest van het gevecht.',
-  'guide.arenaPage.wavesTitle': 'Augments komen in golven',
   'guide.bestiary.flavor.gravecaller_cultist':
     'Gewaden dragende dienaren van de doodscultus wier werk de graven bezoedelt van het Dal tot de toppen. Waar ze samenkomen, rusten de doden niet.',
   'guide.bestiary.flavor.grubjaw':
@@ -8644,8 +8619,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'desktop.update.downloading': 'Update {version} wordt gedownload...',
   'desktop.update.downloadingTitle': 'Update {version} wordt gedownload...',
   'desktop.update.later': 'Later',
-  'desktop.update.ready':
-    'Update {version} is klaar. Deze wordt geïnstalleerd wanneer je afsluit, of herstart nu.',
   'desktop.update.readyTitle': 'Update {version} is klaar',
   'desktop.update.readyBody': 'Deze wordt geïnstalleerd wanneer je afsluit, of herstart nu.',
   'desktop.update.restart': 'Nu herstarten',
@@ -9004,9 +8977,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Scheurt het pantser van het doelwit open en verlaagt het met {damage}% per toepassing. Stapelt tot 5 keer. Genereert veel dreiging.',
   'entities.mobs.training_dummy.name': 'Oefenpop',
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'guide.arenaPage.yumiBody':
-    'Bescherm Yumi is een teamdoelspel dat in een doolhof wordt gespeeld: elke kant bewaakt zijn eigen kattenmetgezel terwijl hij die van de ander bejaagt. Zo nu en dan flitsen beide katten naar nieuwe hoeken van het doolhof, zodat het gevecht heen en weer gaat tussen verdedigen, jagen en de race om ze opnieuw te vinden. Sluit aan als drie tegen drie of vijf tegen vijf; sneuvelen in de strijd zet je maar even op de bank.',
-  'guide.arenaPage.yumiHeading': 'Bescherm Yumi',
   'hudChrome.archetypeTitle.hobbyLabel': 'Liefhebberij',
   'hudChrome.auraEffect.armorPct': 'Vermindert pantser met {pct}%',
   'hudChrome.auraEffect.armorPctStacks': 'Vermindert pantser met {pct}% ({stacks} stapels)',

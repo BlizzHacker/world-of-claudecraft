@@ -9,7 +9,6 @@ import { ITEMS, MOBS } from '../../sim/data';
 import { ALL_CLASSES, type Entity, isMechWearer, type PlayerClass } from '../../sim/types';
 import { infernalCharacterSelection } from '../../sim/realms/infernal_classes';
 import { resolveActiveRealmId } from '../../sim/realms/registry';
-import type { Entity, PlayerClass } from '../../sim/types';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
 import type { OverheadEmoteId } from '../../world_api';
 import { GENERATED_REALM_BODIES, GENERATED_VISUALS } from './manifest.generated';

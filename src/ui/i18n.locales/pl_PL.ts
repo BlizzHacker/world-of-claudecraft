@@ -1240,9 +1240,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.collectorsHeading': 'Kolekcjonerzy, trofea i cena historii',
   'guide.profPages.econ.collectorsBody':
     'Sprzedawcy są ślepi na pochodzenie: podpisany przedmiot sprzedaje się NPC za dokładnie jego zwykłą cenę. Premia za podpis istnieje wyłącznie między graczami, co sprawia, że jest właśnie interesująca: stos przypadkowo znalezionej rudy podpisany przez sławnego zbieracza, Najlepszy Kawałek ze szczęśliwego zbioru, mistrzowskie ostrze z imieniem kowala, który już dawno skończył grę, wszystko kosztuje tyle, ile czyjś sentyment mówi, że jest warte.\n\nKsięga Czynów opiera się na tym samym instynkcie: Nieskażona Żyła, Pradawne Drzewo Serca, Księżycowy Kwiat, Doskonały Okaz i Przebłysk Nadziei to znaki kolekcjonerskie bez Renomy, które istnieją wyłącznie po to, by udowodnić, że pewien moment ci się przydarzył. Zachowaj przedmiot, który przyniósł czyn, a będziesz mieć pokwitowanie. Żadna z tych rzeczy nie daje mocy; proweniencja nie kupuje statystyk i nie wygrywa walk, to papierowy ślad gry po dobrych dniach.',
-  'guide.profPages.econ.throttleHeading': 'Ogranicznik akcji',
-  'guide.profPages.econ.throttleBody':
-    'Produkcja ma pułap: wytwarzanie, rozkładanie zaklęć, zaklinanie i odzyskiwanie współdzielą jeden budżet {actions} udanych akcji na kroczące {seconds} sekund. Odrzucona próba nic nie kosztuje i nie zużywa budżetu. Nigdy tego nie poczujesz podczas normalnej gry; istnieje po to, by maksymalnie rozwinięty specjalista z pełnym bankiem nie mógł zalać Rynku, niezależnie od umiejętności czy zapasów.',
   'guide.profPages.econ.doctrineHeading': 'Gracze handlują z graczami',
   'guide.profPages.econ.doctrineBody':
     'Gospodarka wytwarzania opiera się na jednej idei: gracze zaopatrują graczy. Zbieracze karmią rzemieślników, rzemieślnicy karmią poszukiwaczy zadań i rajdowców, a rozkładacze karmią zaklinaczy, a sprzedawcy i mistrzowie stacji stoją na krawędziach, by pochłaniać rupiecie i monety, a nie konkurować z tobą. Jeśli chcesz zarabiać na profesji, twoim klientem jest człowiek: dowiedz się, co inni gracze zużywają, wyceniaj względem Rynku Świata i traktuj systemy NPC jako dolną granicę twoich cen, a nie jako sam rynek.\n\nWytwarzany ekwipunek jest dostrojony, by pozostawać poniżej progu rajdowego: nawet arcydzieło jest zawsze tylko o jeden poziom jakości powyżej swojego przepisu, nigdy nie osiągając legendarnego, a jego budżet statystyk pozostaje poniżej pasma łupów rajdowych. Kuźnia przygotowuje cię na najtrudniejszą zawartość; nie zastępuje jej. To utrzymuje rzemieślników, rajdowców i rynek w stabilnym trójkącie: łupy rajdowe pozostają aspiracyjne, a wyroby rzemieślnicze pozostają najlepszym ekwipunkiem, jaki można realnie kupić za pieniądze.',
@@ -4819,7 +4816,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     'To pismo... ostatni raz widziałem takie w grymuarze Morthena, w Eastbrook. Ta sama ręka kierowała każdym grobem, o który walczyliśmy, {playerName}.',
   'entities.quests.q_cult_orders.objectives.0.label': 'Zabity zelota Kultu Żmija',
-  'entities.quests.q_cult_orders.objectives.1.label': 'Rozkazy Kultu Żmija',
   'entities.quests.q_cult_orders.text':
     'Zeloci poruszają się teraz celowo: wystawiają warty, liczą zapasy niczym żołnierze przed oblężeniem. Kultyści, którzy się organizują, to kultyści wykonujący rozkazy, {playerName}. Zabij jeszcze ośmiu i przynieś mi cztery komplety ich pisemnych rozkazów. Chciałbym poznać rękę, która nimi dowodzi.',
   'entities.quests.q_cult_orders.title': 'Rozkazy z głębi',
@@ -4994,7 +4990,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_necromancers.completion':
     'Niech Światło nam wybaczy. Te trzymają zmarłych z Doliny i z trzęsawiska - każdego trupa, jakiego Grobozwańcy kiedykolwiek podnieśli, zebranego jak żniwo. Oni nigdy nie budowali armii, {playerName}. Oni ściągali daninę.',
   'entities.quests.q_necromancers.objectives.0.label': 'Nekromanta Kultu Żmija pokonany',
-  'entities.quests.q_necromancers.objectives.1.label': 'Rytualne filakterium',
   'entities.quests.q_necromancers.text':
     'Rozkazy mówią o "kręgu filakteriów" - naczyniach dusz, {playerName}, rozstawionych wokół Sanktuarium, by je karmić. Nekromanci kultu noszą je niczym święte relikwie. Zabij ośmiu nekromantów i przynieś mi trzy nienaruszone filakteria. Muszę wiedzieć, jakie dusze przechowują.',
   'entities.quests.q_necromancers.title': 'Krąg filakteriów',
@@ -5489,9 +5484,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': 'Kolos',
   'fiesta.powerup.pow_moon_boots.name': 'Księżycowe Buty',
   'fiesta.powerup.pow_speed_demon.name': 'Demon Prędkości',
-  'fiesta.practice': '🎉 Trening z botami',
-  'fiesta.practiceNote':
-    'Trening offline: przyzywa 3 boty SI i zapisuje cię do Fiesty 2v2. Kliknij ponownie, by przerwać.',
   'fiesta.queue.join': 'Dołączasz do kolejki Fiesty 2v2. Szykuj się na ZABAWĘ…',
   'fiesta.queue.leave': 'Opuszczasz kolejkę Fiesty 2v2.',
   'fiesta.queue.teamLeave': 'Twoja drużyna opuszcza kolejkę Fiesty 2v2.',
@@ -5729,8 +5721,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.thorns': 'Chroni sojusznika tak, że atakujący wręcz ranią się przy uderzeniu.',
   'guide.abilityHook.thunder_clap': 'Uderza we wszystko wokół ciebie i spowalnia ataki wrogów.',
   'guide.abilityHook.wrath': 'Pocisk natury ciskany w cel z dystansu, twój podstawowy atak.',
-  'guide.arenaPage.augmentsNote':
-    'Ulepszenia i wzmocnienia działają tylko podczas meczu. Chodzi w nich o swobodne, doraźne buildy, a nie o trwałą potęgę, więc nikt nie kupi sobie zwycięstwa.',
   'guide.arenaPage.coliseumBody':
     'Coliseum to arena królestwa, gdzie stajesz naprzeciw innych graczy w meczach rankingowych, jeden na jednego lub dwóch na dwóch. Każdy przedział ma własny ranking, więc zwycięstwo wynosi cię po tej drabinie na oczach całego królestwa.',
   'guide.arenaPage.coliseumHeading': 'Popielne Koloseum',
@@ -5746,21 +5736,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'guide.arenaPage.ladderBody':
     'Rozgrywka rankingowa śledzi twoją pozycję w czasie. Sprawdź ranking, by zobaczyć, gdzie jesteś i kto dzierży szczyt królestwa.',
   'guide.arenaPage.ladderHeading': 'Wspinaczka po drabinie rankingowej',
-  'guide.arenaPage.powerupsBody':
-    'Na arenę w trakcie walki spadają też świecące kule, dostępne dla tego, kto pierwszy do nich dotrze. Są celowo przesadne i działają tylko przez chwilę: Demon Prędkości dla mgnienia oślepiającego tempa, Kolos, by rozrosnąć się w ociężałego giganta, Księżycowe Buty dla skocznego susu w niskiej grawitacji oraz Berserker dla nagłego przypływu furii.',
-  'guide.arenaPage.powerupsTitle': 'Wzmocnienia na ringu',
-  'guide.arenaPage.waveGoldBody':
-    'Środkowa fala: obosieczne kombinacje, w których twój build zaczyna nabierać kształtu i rozbrzmiewać.',
-  'guide.arenaPage.waveGoldTitle': 'Złoto',
-  'guide.arenaPage.wavePrismaticBody':
-    'Ostatnia fala: definiujące build, rozsadzające ekran skoki mocy, które mają wydawać się absurdalne w najlepszym tego słowa znaczeniu.',
-  'guide.arenaPage.wavePrismaticTitle': 'Pryzmatyczny',
-  'guide.arenaPage.waveSilverBody':
-    'Pierwsza fala: czyste wzmocnienia pojedynczej cechy, które wyostrzają podstawy twojej klasy.',
-  'guide.arenaPage.waveSilverTitle': 'Srebro',
-  'guide.arenaPage.wavesBody':
-    'Każda runda Fiesty daje ci nowy wybór, a wybory stają się coraz śmielsze w miarę trwania meczu. Budujesz od fali do fali, za każdym razem wybierając jedną z kilku opcji i zachowując ją do końca starcia.',
-  'guide.arenaPage.wavesTitle': 'Ulepszenia napływają falami',
   'guide.bestiary.flavor.gravecaller_cultist':
     'Odziani w szaty słudzy kultu śmierci, których dzieło plugawi groby od Doliny po szczyty. Gdzie się gromadzą, zmarli nie zaznają spoczynku.',
   'guide.bestiary.flavor.grubjaw':
@@ -8750,8 +8725,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'desktop.update.downloading': 'Pobieranie aktualizacji {version}...',
   'desktop.update.downloadingTitle': 'Pobieranie aktualizacji {version}...',
   'desktop.update.later': 'Później',
-  'desktop.update.ready':
-    'Aktualizacja {version} jest gotowa. Zainstaluje się przy zamknięciu lub uruchom ponownie teraz.',
   'desktop.update.readyTitle': 'Aktualizacja {version} jest gotowa',
   'desktop.update.readyBody': 'Zainstaluje się przy zamknięciu lub uruchom ponownie teraz.',
   'desktop.update.restart': 'Uruchom ponownie teraz',
@@ -9089,9 +9062,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
     'Rozdziera pancerz celu, zmniejszając go o {damage}% za każde nałożenie. Kumuluje się do 5 razy. Generuje dużą ilość zagrożenia.',
   'entities.mobs.training_dummy.name': 'Manekin treningowy',
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'guide.arenaPage.yumiBody':
-    'Ochrona Yumi to drużynowy tryb z zadaniem, rozgrywany w labiryncie: każda strona strzeże własnego kociego chowańca, jednocześnie polując na cudzego. Co jakiś czas oba koty przeskakują w nowe zakątki labiryntu, więc walka waha się między obroną, polowaniem i wyścigiem, by znaleźć je na nowo. Zapisuj się w trybie trzech na trzech lub pięciu na pięciu; upadek w boju odstawia cię jedynie na chwilę.',
-  'guide.arenaPage.yumiHeading': 'Ochrona Yumi',
   'hudChrome.archetypeTitle.hobbyLabel': 'Pasja',
   'hudChrome.auraEffect.armorPct': 'Zmniejsza pancerz o {pct}%',
   'hudChrome.auraEffect.armorPctStacks': 'Zmniejsza pancerz o {pct}% ({stacks} nałożeń)',

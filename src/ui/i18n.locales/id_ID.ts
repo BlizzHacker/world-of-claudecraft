@@ -1218,9 +1218,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.collectorsHeading': 'Kolektor, piala, dan harga sebuah cerita',
   'guide.profPages.econ.collectorsBody':
     'Pedagang NPC buta terhadap asal-usul: item bertanda tangan dijual ke NPC dengan harga biasanya. Premium pada tanda tangan hanya ada di antara pemain, dan itulah yang membuatnya menarik: setumpuk bijih rejeki yang ditandatangani oleh pengumpul terkenal, Potongan Utama dari panen yang beruntung, sebuah bilah karya besar yang mencantumkan nama pembuat yang sudah pensiun, semuanya berharga sebanyak yang dikatakan ingatan seseorang.\n\nKitab Jasa bersandar pada naluri yang sama: Urat Murni, Kayu Hati Kuno, Mekar Bulan Purnama, Spesimen Sempurna, dan Kilau Harapan adalah tanda kolektor tanpa Kemasyhuran yang ada semata-mata untuk membuktikan bahwa sebuah momen pernah terjadi padamu. Simpan item yang mendapat jasa tersebut dan kamu memegang kuitansinya. Tidak ada daya di sini; asal-usul tidak membeli stat dan tidak memenangkan pertarungan, itu adalah jejak kertas permainan tentang hari-hari yang baik.',
-  'guide.profPages.econ.throttleHeading': 'Batas tindakan',
-  'guide.profPages.econ.throttleBody':
-    'Output memiliki batas: pembuatan, penghancuran mantra, pemantraan, dan salvasi berbagi satu anggaran {actions} tindakan berhasil per {seconds} detik bergulir. Percobaan yang ditolak tidak memerlukan biaya dan tidak menghabiskan anggaran. Kamu tidak akan pernah merasakannya dalam permainan normal; ini ada agar spesialis maksimal dengan bank penuh tidak bisa membanjiri Pasar, apapun keahlian atau stok mereka.',
   'guide.profPages.econ.doctrineHeading': 'Pemain berdagang dengan pemain',
   'guide.profPages.econ.doctrineBody':
     'Ekonomi kerajinan dibangun di atas satu gagasan: pemain memasok pemain. Pengumpul memberi makan pembuat, pembuat memberi makan pencari misi dan raider, dan pemecah memberi makan pemantrai, dengan pedagang dan master stasiun berdiri di tepi untuk menyerap sampah dan koin alih-alih bersaing dengan kamu. Jika ingin menghasilkan uang dari profesi, pelangganmu adalah manusia: pelajari apa yang dihabiskan pemain lain, tetapkan harga berdasarkan Pasar Dunia, dan perlakukan sistem NPC sebagai lantai di bawah hargamu, bukan pasar itu sendiri.\n\nPerlengkapan buatan disetel untuk berada di bawah batas raid: bahkan karya besar hanya satu tingkat kualitas di atas resepnya, tidak pernah melewati legendaris, dan anggaran statnya tetap di bawah pita jarahan raid. Bengkel mempersiapkanmu untuk konten tersulit; ia tidak menggantikannya. Hal itu menjaga pembuat, raider, dan pasar dalam segitiga yang stabil: item raid tetap menjadi tujuan yang diimpikan, dan item buatan tetap menjadi perlengkapan terbaik yang benar-benar bisa dibeli dengan uang.',
@@ -4872,7 +4869,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     'Aksara ini... terakhir kulihat yang serupa di grimoir Morthen, di Eastbrook. Tangan yang sama telah menuntun setiap makam yang kita perebutkan, {playerName}.',
   'entities.quests.q_cult_orders.objectives.0.label': 'Fanatik Wyrmcult terbunuh',
-  'entities.quests.q_cult_orders.objectives.1.label': 'Perintah Wyrmcult',
   'entities.quests.q_cult_orders.text':
     'Para fanatik kini bergerak dengan tujuan, jaga ditempatkan, perbekalan dihitung, bagai prajurit sebelum pengepungan. Pengikut yang terorganisir adalah pengikut yang menerima perintah, {playerName}. Bunuh delapan lagi dan bawakan padaku empat berkas perintah tertulis mereka. Aku ingin tahu tangan yang memimpin mereka.',
   'entities.quests.q_cult_orders.title': 'Perintah dari Kedalaman',
@@ -5048,7 +5044,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_necromancers.completion':
     'Semoga Cahaya mengampuni kita. Ini menampung para mati dari Lembah dan rawa - setiap mayat yang pernah dibangkitkan para Gravecaller, dipanen. Mereka tidak pernah membangun pasukan, {playerName}. Mereka sedang mengumpulkan upeti.',
   'entities.quests.q_necromancers.objectives.0.label': 'Wyrmcult Necromancer dibunuh',
-  'entities.quests.q_necromancers.objectives.1.label': 'Filakteri Ritual',
   'entities.quests.q_necromancers.text':
     'Perintah-perintah itu menyebut sebuah "cincin filakteri" - bejana jiwa, {playerName}, yang ditempatkan mengelilingi Sanktum untuk memberinya makan. Para necromancer sekte itu membawanya seperti relik suci. Bunuh delapan necromancer dan bawakan aku tiga filakteri yang utuh. Aku harus tahu jiwa siapa yang mereka tampung.',
   'entities.quests.q_necromancers.title': 'Cincin Filakteri',
@@ -6200,9 +6195,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': 'Kolosus',
   'fiesta.powerup.pow_moon_boots.name': 'Sepatu Bulan',
   'fiesta.powerup.pow_speed_demon.name': 'Iblis Kecepatan',
-  'fiesta.practice': '🎉 Latihan vs Bot',
-  'fiesta.practiceNote':
-    'Latihan offline: memunculkan 3 bot AI dan mendaftarkanmu untuk Fiesta 2v2. Klik lagi untuk berhenti.',
   'fiesta.queue.join': 'Kau bergabung ke antrean Fiesta 2v2. Bersiaplah untuk PESTA…',
   'fiesta.queue.leave': 'Kau meninggalkan antrean Fiesta 2v2.',
   'fiesta.queue.teamLeave': 'Timmu meninggalkan antrean Fiesta 2v2.',
@@ -6452,8 +6444,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
     'Menghantam segala sesuatu di sekitarmu dan melambatkan serangan mereka.',
   'guide.abilityHook.wrath':
     'Anak panah alam yang dilontarkan ke sasaran dari kejauhan, serangan andalanmu.',
-  'guide.arenaPage.augmentsNote':
-    'Augmen dan penguat hanya bertahan selama pertandingan. Semuanya tentang rakitan jenaka dan dadakan, bukan kekuatan abadi, sehingga tak seorang pun bisa membeli kemenangan.',
   'guide.arenaPage.coliseumBody':
     'Coliseum adalah arena realm, tempat kamu menghadapi pemain lain dalam pertandingan berperingkat, satu lawan satu atau dua lawan dua. Setiap bracket menyimpan peringkatnya sendiri, jadi sebuah kemenangan mengangkatmu di tangga itu untuk dilihat seluruh realm.',
   'guide.arenaPage.coliseumHeading': 'Coliseum Abu',
@@ -6469,21 +6459,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'guide.arenaPage.ladderBody':
     'Permainan berperingkat melacak kedudukanmu dari waktu ke waktu. Lihat papan peringkat untuk mengetahui posisimu dan siapa yang memuncaki realm.',
   'guide.arenaPage.ladderHeading': 'Menaiki tangga peringkat',
-  'guide.arenaPage.powerupsBody':
-    'Bola bercahaya juga jatuh ke arena di tengah pertarungan, bebas bagi siapa pun yang meraihnya lebih dulu. Sengaja dibuat berlebihan dan hanya bertahan sebentar: Speed Demon untuk laju membutakan sekejap, Colossus untuk membengkak menjadi raksasa lamban, Moon Boots untuk lompatan memantul gravitasi rendah, dan Berserker untuk lonjakan amarah mendadak.',
-  'guide.arenaPage.powerupsTitle': 'Penguat di dalam arena',
-  'guide.arenaPage.waveGoldBody':
-    'Gelombang tengah: kombo bermata dua tempat rakitanmu mulai terbentuk dan berpadu.',
-  'guide.arenaPage.waveGoldTitle': 'Emas',
-  'guide.arenaPage.wavePrismaticBody':
-    'Gelombang terakhir: lonjakan penentu-rakitan yang melelehkan layar, dirancang terasa konyol dengan cara terbaik.',
-  'guide.arenaPage.wavePrismaticTitle': 'Prismatik',
-  'guide.arenaPage.waveSilverBody':
-    'Gelombang pembuka: penguatan satu-statistik yang bersih, mempertajam dasar-dasar kelasmu.',
-  'guide.arenaPage.waveSilverTitle': 'Perak',
-  'guide.arenaPage.wavesBody':
-    'Tiap ronde Fiesta memberimu pilihan baru, dan pilihannya makin berani seiring pertandingan berjalan. Kamu membangun dari satu gelombang ke berikutnya, memilih salah satu dari beberapa opsi tiap kali dan menyimpannya sampai sisa pertarungan.',
-  'guide.arenaPage.wavesTitle': 'Augmen datang bergelombang',
   'guide.bestiary.flavor.gravecaller_cultist':
     'Pelayan berjubah dari pemuja kematian yang ulahnya mencemari kuburan dari Lembah sampai puncak. Di mana mereka berkumpul, yang mati tak beristirahat.',
   'guide.bestiary.flavor.grubjaw':
@@ -9341,8 +9316,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'desktop.update.downloading': 'Mengunduh pembaruan {version}...',
   'desktop.update.downloadingTitle': 'Mengunduh pembaruan {version}...',
   'desktop.update.later': 'Nanti',
-  'desktop.update.ready':
-    'Pembaruan {version} siap. Akan terpasang saat kamu keluar, atau mulai ulang sekarang.',
   'desktop.update.readyTitle': 'Pembaruan {version} siap',
   'desktop.update.readyBody': 'Akan terpasang saat kamu keluar, atau mulai ulang sekarang.',
   'desktop.update.restart': 'Mulai Ulang Sekarang',
@@ -9752,9 +9725,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
     'Merobek zirah target, menguranginya sebesar {damage}% per penerapan. Menumpuk hingga 5 kali. Menghasilkan ancaman dalam jumlah besar.',
   'entities.mobs.training_dummy.name': 'Boneka Latihan',
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'guide.arenaPage.yumiBody':
-    'Lindungi Yumi adalah mode objektif tim yang dimainkan di dalam labirin: masing-masing pihak menjaga peliharaan kucingnya sendiri sambil memburu milik lawan. Sesekali kedua kucing berkelebat ke sudut-sudut baru labirin, sehingga pertarungan berayun antara bertahan, memburu, dan berpacu untuk menemukannya lagi. Masuk antrean sebagai tiga lawan tiga atau lima lawan lima; tumbang dalam pertempuran hanya membuatmu absen sejenak.',
-  'guide.arenaPage.yumiHeading': 'Lindungi Yumi',
   'hudChrome.archetypeTitle.hobbyLabel': 'Hobi',
   'hudChrome.auraEffect.armorPct': 'Mengurangi zirah sebesar {pct}%',
   'hudChrome.auraEffect.armorPctStacks': 'Mengurangi zirah sebesar {pct}% ({stacks} tumpukan)',

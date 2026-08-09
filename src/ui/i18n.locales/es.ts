@@ -1241,9 +1241,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.collectorsHeading': 'Coleccionistas, trofeos y el precio de una historia',
   'guide.profPages.econ.collectorsBody':
     'Los vendedores son ciegos a la procedencia: un objeto firmado se vende a un PNJ exactamente por su precio base. La prima de una firma existe solo entre jugadores, que es precisamente lo que la hace interesante: una pila de mineral inesperado firmada por un recolector famoso, un Corte Primo de una cosecha afortunada, una hoja de obra maestra que nombra a un artesano que ya se retiró; todo vale lo que la memoria de alguien diga que vale.\n\nEl Libro de Gestas se inclina hacia el mismo instinto: Veta Prístina, Duramen Antiguo, Flor Iluminada por la Luna, Espécimen Perfecto y Destello de Esperanza son marcas de coleccionista con Renombre cero que existen únicamente para demostrar que un momento te sucedió a ti. Conserva el objeto que ganó la gesta y tienes el recibo. Nada de esto da poder; la procedencia no compra estadísticas ni gana combates, es el rastro en papel del juego de los buenos días.',
-  'guide.profPages.econ.throttleHeading': 'El límite de acciones',
-  'guide.profPages.econ.throttleBody':
-    'La producción tiene un techo: crear, desencantar, encantar y desguazar comparten un presupuesto de {actions} acciones exitosas por cada {seconds} segundos consecutivos. Un intento denegado no cuesta nada y no gasta presupuesto. Nunca lo notarás en el juego normal; existe para que un especialista al máximo con un banco lleno no pueda inundar el Mercado, independientemente de su habilidad o reservas.',
   'guide.profPages.econ.doctrineHeading': 'Los jugadores comercian con jugadores',
   'guide.profPages.econ.doctrineBody':
     'La economía de artesanía se construye sobre una idea: los jugadores abastecen a los jugadores. Los recolectores alimentan a los artesanos, los artesanos alimentan a los jugadores de misiones y bandas, y los desencantadores alimentan a los encantadores, con vendedores y maestros de estación en los bordes para absorber chatarra y monedas en lugar de competir contigo. Si quieres ganar dinero con un oficio, tu cliente es una persona: aprende lo que otros jugadores consumen, pon precio frente al Mercado Mundial y trata los sistemas de PNJ como un suelo bajo tus precios, no como el mercado en sí.\n\nEl equipo artesanal está ajustado para quedar por debajo del suelo de la banda: incluso una obra maestra siempre está solo un nivel de calidad por encima de su receta, nunca más allá de legendario, y su presupuesto de estadísticas se mantiene por debajo de la banda de botín de la banda. La forja te prepara para el contenido más difícil; no lo reemplaza. Eso mantiene a artesanos, bandas y el mercado en un triángulo estable: el botín de banda sigue siendo aspiracional, y las piezas artesanales siguen siendo el mejor equipo que el dinero puede comprar.',
@@ -5995,14 +5992,12 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     'Esta letra viene del grimorio de Morthen. La misma mano guio cada tumba, {playerName}.',
   'entities.quests.q_cult_orders.objectives.0.label': 'Fanático del Culto del Wyrm abatido',
-  'entities.quests.q_cult_orders.objectives.1.label': 'Órdenes del Culto del Wyrm',
   'entities.quests.q_necromancers.title': 'El anillo de filacterias',
   'entities.quests.q_necromancers.text':
     'Las órdenes hablan de un anillo de filacterias, vasos de alma, {playerName}, alrededor del Santuario. Mata 8 nigromantes y trae 3 intactas.',
   'entities.quests.q_necromancers.completion':
     'Que la Luz nos perdone. Guardan los muertos del Valle y la ciénaga; nunca formaban un ejército, {playerName}. Eran un diezmo.',
   'entities.quests.q_necromancers.objectives.0.label': 'Nigromante del Culto del Wyrm abatido',
-  'entities.quests.q_necromancers.objectives.1.label': 'Filacteria ritual',
   'entities.quests.q_revenants.title': 'Los campos de aparecidos',
   'entities.quests.q_revenants.text':
     'Al este del camino yace un viejo campo de batalla. El culto levantó sus huesos con armaduras oxidadas. Devuelve 12 al suelo, {playerName}.',
@@ -6506,9 +6501,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': 'Coloso',
   'fiesta.powerup.pow_moon_boots.name': 'Botas lunares',
   'fiesta.powerup.pow_speed_demon.name': 'Demonio veloz',
-  'fiesta.practice': '🎉 Práctica contra bots',
-  'fiesta.practiceNote':
-    'Práctica sin conexión: genera 3 bots con IA y te pone en cola para una Fiesta 2c2. Haz clic de nuevo para detener.',
   'fiesta.queue.join': 'Entras a la cola de la Fiesta 2c2. Prepárate para LA FIESTA…',
   'fiesta.queue.leave': 'Sales de la cola de la Fiesta 2c2.',
   'fiesta.queue.teamLeave': 'Tu equipo sale de la cola de la Fiesta 2c2.',
@@ -7350,8 +7342,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.thunder_clap': 'Golpea a los enemigos a tu alrededor y ralentiza sus ataques.',
   'guide.abilityHook.wrath':
     'Una descarga de naturaleza lanzada a un objetivo a distancia, tu hechizo de ataque habitual.',
-  'guide.arenaPage.augmentsNote':
-    'Las mejoras y potenciadores duran solo lo que dura la partida. Buscan combinaciones divertidas e improvisadas, no un poder duradero, así que nadie compra su camino a la victoria.',
   'guide.arenaPage.coliseumBody':
     'El Coliseo es la arena del reino, donde te enfrentas a otros jugadores en partidas clasificatorias, uno contra uno o dos contra dos. Cada categoría conserva su propia clasificación, así que una victoria te hace subir por esa escala a la vista del reino entero.',
   'guide.arenaPage.coliseumHeading': 'El Coliseo Ceniciento',
@@ -7517,21 +7507,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Tres zonas, de sur a norte, cada una un escalón más alta en nivel. Sigue el rastro de las misiones y la tierra te lleva del valle a los picos.',
   'guide.worldPage.places': 'Lugares destacados',
   'guide.worldPage.residents': 'A quién te encontrarás',
-  'guide.arenaPage.powerupsBody':
-    'Esferas brillantes también caen en la arena en mitad del combate, libres para quien las alcance primero. Son deliberadamente exageradas y duran solo un instante: Demonio de Velocidad para un parpadeo de paso cegador, Coloso para hincharte hasta volverte un gigante torpe, Botas Lunares para un salto rebotante de baja gravedad y Berserker para una repentina oleada de furia.',
-  'guide.arenaPage.powerupsTitle': 'Potenciadores en el ruedo',
-  'guide.arenaPage.waveGoldBody':
-    'La oleada intermedia: combinaciones de doble filo donde tu construcción empieza a tomar forma y a lucirse.',
-  'guide.arenaPage.waveGoldTitle': 'Oro',
-  'guide.arenaPage.wavePrismaticBody':
-    'La oleada final: picos que definen tu construcción y derriten la pantalla, pensados para sentirse ridículos en el mejor de los sentidos.',
-  'guide.arenaPage.wavePrismaticTitle': 'Prismático',
-  'guide.arenaPage.waveSilverBody':
-    'La oleada inicial: mejoras limpias de una sola característica que afinan lo esencial de tu clase.',
-  'guide.arenaPage.waveSilverTitle': 'Plata',
-  'guide.arenaPage.wavesBody':
-    'Cada ronda de una Fiesta te ofrece una elección nueva, y las opciones se vuelven más audaces conforme avanza la partida. Construyes de una oleada a la siguiente, eligiendo una de unas pocas opciones cada vez y conservándola durante el resto del combate.',
-  'guide.arenaPage.wavesTitle': 'Las mejoras llegan en oleadas',
   'guide.bestiary.flavor.gravecaller_cultist':
     'Sirvientes encapuchados del culto de la muerte cuya obra mancilla las tumbas desde el Valle hasta los picos. Donde se reúnen, los muertos no descansan.',
   'guide.bestiary.flavor.grubjaw':
@@ -8623,8 +8598,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'desktop.update.downloading': 'Descargando actualización {version}...',
   'desktop.update.downloadingTitle': 'Descargando actualización {version}...',
   'desktop.update.later': 'Más tarde',
-  'desktop.update.ready':
-    'La actualización {version} está lista. Se instala al salir, o reinicia ahora.',
   'desktop.update.readyTitle': 'La actualización {version} está lista',
   'desktop.update.readyBody': 'Se instala al salir, o reinicia ahora.',
   'desktop.update.restart': 'Reiniciar ahora',
@@ -8991,9 +8964,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Cizalla la armadura del objetivo y la reduce un {damage}% por aplicación. Se acumula hasta 5 veces. Genera una gran cantidad de amenaza.',
   'entities.mobs.training_dummy.name': 'Muñeco de entrenamiento',
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'guide.arenaPage.yumiBody':
-    'Protege a Yumi es un modo de objetivos por equipos que se juega en un laberinto: cada bando protege a su propio familiar felino mientras da caza al del rival. Cada cierto tiempo ambos gatos se teletransportan a nuevos rincones del laberinto, así que el combate oscila entre defender, cazar y correr para volver a encontrarlos. Entra en cola como tres contra tres o cinco contra cinco; caer en batalla solo te deja en el banquillo un instante.',
-  'guide.arenaPage.yumiHeading': 'Protege a Yumi',
   'entities.mobs.water_elemental.name': 'Elemental de agua',
   'entities.mobs.ancient_guardian.name': 'Guardián Ancestral',
   'entities.mobs.apprentice_wren.name': 'Aprendiz Wren',

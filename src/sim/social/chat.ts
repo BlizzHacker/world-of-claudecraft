@@ -36,6 +36,7 @@ import { activeMaxLevel } from '../realms/registry';
 import { GATHERING_PROFESSIONS } from '../content/professions';
 import { isGatheringProfessionId, queueGatheringGrant } from '../professions/gathering';
 import { handleDevChat } from '../dev_commands';
+import { requestUnstuck } from '../unstuck';
 
 const CHAT_BURST = 8; // messages a player may send back-to-back...
 const CHAT_REFILL = 2; // ...then this many more per second (caps spam amplifiers)

@@ -697,7 +697,7 @@ export const es: EnTranslations = {
       "railSol": "SOL",
       "railUsdc": "USDC",
       "railWoc": "WOC",
-      "railWocDiscount": "{percent} % de descuento",
+      "railWocDiscount": "{percent}% off",
       "railWocUnavailable": "Los precios en WOC no están disponibles en este momento.",
       "railNativeUnavailable": "SOL/WOC no disponible.",
       "amountLabel": "Cantidad",
@@ -809,7 +809,7 @@ export const es: EnTranslations = {
     "mobile": {
       "jump": "Saltar",
       "leaderboard": "Clasificación",
-      "dailyRewards": "Tienda",
+      "dailyRewards": "Recompensas",
       "deeds": "Gestas",
       "mounts": "Monturas",
       "professions": "Profesiones",
@@ -826,7 +826,10 @@ export const es: EnTranslations = {
       "targetCycleShort": "Objetivo",
       "spellbookPageLabel": "Página {page}",
       "hideKeyboard": "Ocultar teclado",
-      "chatPlaceholder": "Di algo..."
+      "chatPlaceholder": "Di algo...",
+      "autorun": "Auto",
+      "hideMenuButtons": "Ocultar botones de menú",
+      "showMenuButtons": "Mostrar botones de menú"
     },
     "tutorial": {
       "moveBodyTouch": "Usa el joystick de movimiento para moverte y arrastra la pantalla para mirar alrededor. Da unos pasos para empezar.",
@@ -849,8 +852,8 @@ export const es: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "Actualización disponible",
-      "body": "Ya hay disponible una nueva versión de World of ClaudeCraft. Actualiza ahora para obtener las últimas correcciones y mejoras.",
-      "bodyWithVersion": "La versión {version} de World of ClaudeCraft ya está disponible. Actualiza ahora para obtener las últimas correcciones y mejoras.",
+      "body": "Ya hay disponible una nueva versión de Cryptic Realm. Actualiza ahora para obtener las últimas correcciones y mejoras.",
+      "bodyWithVersion": "La versión {version} de Cryptic Realm ya está disponible. Actualiza ahora para obtener las últimas correcciones y mejoras.",
       "notNow": "Ahora no",
       "update": "Actualizar"
     },
@@ -1340,7 +1343,84 @@ export const es: EnTranslations = {
       "showAttackButton": "Mostrar boton de ataque",
       "showDailyRewardsChest": "Mostrar cofre de recompensas diarias",
       "mobileCameraJoystick": "Palanca de mando de la cámara",
-      "mobileLeftHanded": "Diseño para zurdos"
+      "mobileLeftHanded": "Diseño para zurdos",
+      "changed": "Cambios: {count}",
+      "changedSummary": "{count} distintos de los valores predeterminados",
+      "conflictDot": "Conflicto de asignación",
+      "done": "Listo",
+      "keybindCleared": "Se borró la asignación de {action}",
+      "keybindEvicted": "Se asignó {key} a {action} y se eliminó de {evicted}",
+      "keybindModifierHint": "Consejo: puedes asignar combinaciones con modificadores. Mantén pulsado Mayús, Ctrl o Alt mientras presionas una tecla para capturar la combinación, por ejemplo Mayús+1.",
+      "keybindRebinding": "Asignando de nuevo {action}. Pulsa una tecla o Escape para cancelar.",
+      "keybindTaken": "Tecla eliminada",
+      "keybindUnbound": "{action} no tiene ninguna tecla asignada",
+      "modeOffline": "Sin conexión",
+      "modeOnline": "En línea",
+      "overviewConflictAlert": "Algunas asignaciones de teclas entran en conflicto o no tienen tecla.",
+      "resetAllBody": "Esto restablece todos los ajustes a sus valores predeterminados. No se puede deshacer.",
+      "resetAllTitle": "¿Restablecer todos los ajustes?",
+      "searchEmpty": "Ningún ajuste coincide con tu búsqueda.",
+      "searchGoTo": "Ir a {category}",
+      "searchPlaceholder": "Buscar ajustes",
+      "searchScopeAll": "Todos los ajustes",
+      "searchScopeThis": "Esta sección",
+      "ia": {
+        "catAccessibilityName": "Accesibilidad",
+        "catAccessibilitySub": "Movimiento, contraste y comodidad del contenido.",
+        "catAudioSub": "Volumen y opciones de sonido.",
+        "catControllerSub": "Respuesta del mando y distribución de botones.",
+        "catControlsName": "Controles",
+        "catControlsSub": "Cámara, movimiento, combate y respuesta.",
+        "catGraphicsSub": "Calidad, vista y elementos visuales del mundo.",
+        "catInterfaceSub": "Escala del HUD, paneles, chat y marcos de unidades.",
+        "catKeybindsSub": "Asigna teclas a todas las acciones.",
+        "catOverviewName": "Resumen",
+        "catOverviewSub": "Elementos fijados, acciones rápidas y cambios realizados.",
+        "catSystemName": "Sistema",
+        "catSystemSub": "Rendimiento, asistencia e información.",
+        "catTouchName": "Táctil",
+        "catTouchSub": "Controles en pantalla, vista y botones.",
+        "railDisplay": "Pantalla",
+        "railInput": "Entrada",
+        "railSystem": "Sistema"
+      },
+      "legend": {
+        "back": "Atrás",
+        "category": "Categoría",
+        "clear": "Borrar",
+        "navigate": "Navegar",
+        "page": "Página",
+        "reset": "Restablecer",
+        "select": "Seleccionar"
+      },
+      "sec": {
+        "about": "Acerca de",
+        "actionBars": "Barras de acción",
+        "buttons": "Botones",
+        "camera": "Cámara",
+        "chat": "Conversación",
+        "combat": "Combate",
+        "combatTooltips": "Combate e información emergente",
+        "content": "Contenido",
+        "feedback": "Respuesta",
+        "feel": "Sensación",
+        "general": "Opciones generales",
+        "hudExtras": "Extras del HUD",
+        "inputMode": "Modo de entrada",
+        "look": "Vista",
+        "motionContrast": "Movimiento y contraste",
+        "movement": "Movimiento",
+        "panels": "Paneles",
+        "performance": "Rendimiento",
+        "quality": "Calidad",
+        "scaleText": "Escala y texto",
+        "sticks": "Palancas",
+        "support": "Asistencia",
+        "toggles": "Interruptores",
+        "unitFrames": "Marcos de unidades",
+        "view": "Vista",
+        "volume": "Volumen"
+      }
     },
     "talentRows": {
       "tab": "Opciones",
@@ -1375,7 +1455,8 @@ export const es: EnTranslations = {
       "menuAction": "Menú del juego",
       "zoomIn": "Acercar",
       "zoomOut": "Alejar",
-      "help": "El stick izquierdo mueve, el derecho controla la cámara. Abre una ventana para usar el puntero en pantalla."
+      "help": "El stick izquierdo mueve, el derecho controla la cámara. Abre una ventana para usar el puntero en pantalla.",
+      "duplicate": "También asignado a {buttons}"
     },
     "perf": {
       "title": "Superposición de rendimiento",
@@ -1606,7 +1687,11 @@ export const es: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "Configuración {n}"
+      "defaultBuildName": "Configuración {n}",
+      "choicesTab": "Opciones",
+      "resetChoices": "Restablecer opciones",
+      "tierLevel": "Nivel {n}",
+      "tierLevelLabel": "Nivel"
     },
     "tips": {
       "joinChannels": "Consejo: escribe /join world o /join lfg para chatear con jugadores de todas partes del mundo."
@@ -1709,7 +1794,7 @@ export const es: EnTranslations = {
       "loggedOutPrompt": "Inicia sesión para gestionar tu cuenta.",
       "memberSince": "Miembro desde {date}",
       "sectionSettings": "Ajustes de Cuenta",
-      "sectionWallet": "Cartera $WOC",
+      "sectionWallet": "Cartera $CR",
       "sectionCharacters": "Personajes",
       "sectionDanger": "Zona de Peligro",
       "changePassword": "Cambiar Contraseña",
@@ -1782,7 +1867,15 @@ export const es: EnTranslations = {
       "exportHint": "Descarga una copia de tu cuenta y tus personajes como un archivo JSON. También te enviamos una confirmación por correo.",
       "exportBtn": "Descargar Mis Datos",
       "exportDone": "Tus datos se descargaron. Te enviamos una confirmación por correo.",
-      "exportFailed": "No se pudieron exportar tus datos. Inténtalo de nuevo en un momento."
+      "exportFailed": "No se pudieron exportar tus datos. Inténtalo de nuevo en un momento.",
+      "connectionsSummary": "Link Google, Facebook, or Plex so you can sign in with them.",
+      "sectionConnections": "Connected Accounts",
+      "ssoLink": "Link Google / Facebook / Plex",
+      "ssoLinkConflict": "That account is already linked to a different Cryptic Realm login.",
+      "ssoLinked": "Linked — you can sign in with Google, Facebook, or Plex.",
+      "ssoNotLinked": "Not linked.",
+      "ssoUnlink": "Unlink",
+      "ssoUnlinkNeedsPassword": "Set a password first — SSO is currently your only way to sign in."
     },
     "masterLoot": {
       "title": "Botin maestro",
@@ -1830,7 +1923,8 @@ export const es: EnTranslations = {
         "tusk": "Colmillo",
         "meat": "Carne",
         "cloth": "Tela"
-      }
+      },
+      "concentrateHint": "Cuantos menos componentes elijas, mayor será la calidad de cada uno."
     },
     "townFocus": {
       "title": "Enfoque del pueblo",
@@ -2087,7 +2181,9 @@ export const es: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "AFK"
+      "afkTag": "AFK",
+      "mob": "[{level}] {name}",
+      "mobElite": "[{level}+] {name}"
     },
     "mobTooltip": {
       "levelFamily": "Nivel {level} {family}",
@@ -2160,7 +2256,7 @@ export const es: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "Cerrar",
       "keybind": "Panel de Discord",
@@ -2407,8 +2503,8 @@ export const es: EnTranslations = {
       }
     },
     "marketIndicator": {
-      "aria": "Ganancias u objetos del Mercado Mundial en espera",
-      "tip": "Las ganancias de venta u objetos devueltos te esperan en el Mercader."
+      "aria": "Recogida pendiente en el Mercado Mundial",
+      "tip": "Oro u objetos te esperan en el Mercader."
     },
     "noticeboard": {
       "empty": "Parece que no hay nada publicado."
@@ -2555,6 +2651,10 @@ export const es: EnTranslations = {
         "moongateCommunion": {
           "title": "Comunión de la Puerta Lunar",
           "note": "Los peregrinos se reúnen ante la puerta lunar del templo bajo la luna de mediados de mes."
+        },
+        "fiestaNight": {
+          "note": "El anillo de la Fiesta 2c2 reúne esta noche a su público más ruidoso.",
+          "title": "Noche de Fiesta"
         }
       }
     },
@@ -2678,7 +2778,17 @@ export const es: EnTranslations = {
     "archetypeTitle": {
       "label": "Título",
       "none": "Ninguno",
-      "hobbyLabel": "Pasatiempo"
+      "hobbyLabel": "Pasatiempo",
+      "alchemy": "Alquimista",
+      "armorcrafting": "Armero",
+      "cooking": "Cocinero",
+      "enchanting": "Encantador",
+      "engineering": "Ingeniero",
+      "inscription": "Escriba",
+      "jewelcrafting": "Joyero",
+      "leatherworking": "Peletero",
+      "tailoring": "Sastre",
+      "weaponcrafting": "Forjador de armas"
     },
     "archetypePair": {
       "engineering+alchemy": "Bombardero",
@@ -2937,7 +3047,10 @@ export const es: EnTranslations = {
       "commissionToggle": "Encargo",
       "commissionToggleHint": "Se vincula al primer personaje que lo reciba en un intercambio.",
       "commissionUnbound": "Encargo: se vincula al primer destinatario",
-      "commissionBound": "Encargo: vinculado a su destinatario"
+      "commissionBound": "Encargo: vinculado a su destinatario",
+      "craft": "Artesanía",
+      "notAtHub": "Debes estar en el centro de elaboración, con el nivel requerido, para elaborar eso.",
+      "throttled": "Estás elaborando demasiado rápido. Espera un momento e inténtalo de nuevo."
     },
     "itemMenu": {
       "use": "Usar",
@@ -3002,7 +3115,10 @@ export const es: EnTranslations = {
       "replaceConfirmKeepsBond": "Vínculo de encargo",
       "replaceConfirmCost": "Coste: {cost}",
       "replaceConfirmCostItem": "{name} x{count}",
-      "replaceConfirmAccept": "Reemplazar"
+      "replaceConfirmAccept": "Reemplazar",
+      "disenchantThrottled": "Estás desencantando demasiado rápido. Espera un momento e inténtalo de nuevo.",
+      "enchantThrottled": "Estás encantando demasiado rápido. Espera un momento e inténtalo de nuevo.",
+      "salvageThrottled": "Estás desguazando demasiado rápido. Espera un momento e inténtalo de nuevo."
     },
     "training": {
       "title": "Formación: {name}",
@@ -3263,7 +3379,7 @@ export const es: EnTranslations = {
       "lbSelfAccount": "Tu cuenta: posición {rank}, entre el {percent}% superior, {renown} de Renombre",
       "lbSelfRank": "Tu cuenta: posición {rank}, entre el {percent}% superior",
       "lbEmpty": "Aún no hay cronistas clasificados.",
-      "broadcastsLabel": "Comparte las gestas conseguidas con tus compañeros de hermandad y seguidores, y las tarjetas de gestas y obras maestras con el canal de Discord",
+      "broadcastsLabel": "Compartir las gestas conseguidas con la hermandad y los amigos",
       "titledName": "{name} [{title}]"
     },
     "continentMap": {
@@ -3273,6 +3389,66 @@ export const es: EnTranslations = {
       "toZone": "Mapa de la zona",
       "toggleAria": "Alternar entre el mapa del mundo y el mapa de la zona",
       "levels": "Niveles {min} a {max}"
+    },
+    "arcade": {
+      "abort": "Leave session",
+      "active": "Game active",
+      "brawler": "Four-player Brawl",
+      "build": "Build",
+      "choose": "Choose a game",
+      "close": "Close games",
+      "code": "Session code",
+      "controls": "Controls: arrows/WASD to steer or move, Space to drift or jump, J/K to attack, E to use an item.",
+      "create": "Create session",
+      "finished": "Game finished",
+      "housing": "Eastbrook Homes",
+      "invite": "Invite party member",
+      "inviteHint": "Enter a party member player ID.",
+      "join": "Join by code",
+      "place": "Place piece",
+      "racing": "Cryptic Circuit",
+      "ready": "Ready",
+      "solo": "Solo vs NPCs",
+      "start": "Start",
+      "title": "Realm Games",
+      "townRts": "Eastbrook Command",
+      "train": "Train guard",
+      "unavailable": "This game is not enabled on this server.",
+      "unready": "Unready",
+      "waiting": "Waiting for players"
+    },
+    "zombie": {
+      "abort": "Abandon session",
+      "active": "The wave is active. Place towers or hold the line.",
+      "board": "Board",
+      "buildAt": "Build at {x}, {z}",
+      "claim": "Claim reward",
+      "close": "Close town defense",
+      "copyCode": "Share this code with your party",
+      "create": "Create defense session",
+      "defeat": "The town fell. Abandon the session and try again.",
+      "intro": "Build defenses, hold the road, and survive ten deterministic waves with your party.",
+      "invite": "{name} invited you to {kind}.",
+      "inviteHint": "Enter a party member's player ID.",
+      "invitePlayer": "Invite party member",
+      "join": "Join session",
+      "joinInvite": "Join game",
+      "lives": "Lives {lives}",
+      "ready": "Ready up",
+      "readyDone": "Ready",
+      "resources": "Resources {resources}",
+      "roster": "Roster",
+      "sessionCode": "Session code",
+      "startWave": "Start wave",
+      "status": "Status: {status}",
+      "title": "Eastbrook Town Defense",
+      "towerArrow": "Arrow tower",
+      "towerCannon": "Cannon tower",
+      "towerSlow": "Frost tower",
+      "unavailable": "Town Defense is still being staged. Check back after its QA checkpoint.",
+      "victory": "Eastbrook stands. Claim your reward.",
+      "waiting": "Waiting for the party to ready up.",
+      "wave": "Wave {wave}"
     }
   },
   "gatherEvent": {
@@ -3405,7 +3581,7 @@ export const es: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Cryptic Realm",
     "brandShort": "ClaudeCraft",
     "tagline": "Un MMO de estilo clásico que juegas gratis en tu navegador.",
     "skipToContent": "Saltar al contenido principal",
@@ -3472,7 +3648,7 @@ export const es: EnTranslations = {
       "github": "Código en GitHub",
       "discord": "Únete al Discord",
       "communityWiki": "Wiki de la comunidad",
-      "rights": "World of ClaudeCraft",
+      "rights": "Cryptic Realm",
       "linksLabel": "Enlaces de juego y comunidad"
     },
     "language": {
@@ -3495,7 +3671,7 @@ export const es: EnTranslations = {
     },
     "home": {
       "eyebrow": "MMO de navegador de estilo clásico",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "Haz misiones, forma grupo y explora un mundo hecho a mano, gratis en tu navegador.",
       "ctaPlay": "Jugar ahora",
       "ctaLearn": "Cómo jugar",
@@ -3551,7 +3727,7 @@ export const es: EnTranslations = {
         "q1": "¿Es gratis?",
         "a1": "Sí. El juego completo es gratuito hasta el nivel máximo, y es de código abierto en GitHub.",
         "q2": "¿Necesito una cartera de criptomonedas?",
-        "a2": "No. El juego se puede jugar por completo sin ella. El token comunitario opcional solo añade adornos cosméticos y una parte del fondo de premios de las recompensas diarias, y nunca afecta al poder.",
+        "a2": "No. El juego se puede jugar por completo sin ella. El token comunitario opcional solo desbloquea adornos cosméticos y nunca afecta al poder.",
         "q3": "¿Puedo jugar sin conexión?",
         "a3": "Sí. Hay un modo de un jugador instantáneo en tu navegador, además del mundo en línea compartido.",
         "q4": "¿Cuánto se tarda en llegar al nivel máximo?",
@@ -3571,7 +3747,7 @@ export const es: EnTranslations = {
       "step1Title": "Crea un personaje",
       "step1Body": "Elige una clase y un aspecto, ponle nombre a tu héroe y entra en el mundo. Más adelante puedes crear más personajes.",
       "step2Title": "Encuentra tu primera misión",
-      "step2Body": "El mariscal Redbrook te espera en el pueblo inicial con Lobos a las puertas, y el capataz Odell, cerca, también tiene trabajo. Habla con cualquiera de los dos para aceptar tu primera misión.",
+      "step2Body": "El mariscal Redbrook te espera en el pueblo inicial. Habla con él y acepta Lobos a las puertas.",
       "step3Title": "Muévete y mira alrededor",
       "step3Body": "Muévete con W, A, S, D. Mantén pulsado el botón derecho del ratón y arrastra para mirar alrededor. Eso es casi cuanto necesitas saber.",
       "step4Title": "Lucha contra algo",
@@ -3588,16 +3764,16 @@ export const es: EnTranslations = {
       "questsTitle": "Misiones",
       "questsBody": "Acepta misiones de las personas con un marcador sobre la cabeza, completa el objetivo y entrégalas a cambio de experiencia, monedas y equipo. El rastreador en pantalla mantiene tus metas a la vista.",
       "deathTitle": "La muerte no es el final",
-      "deathBody": "Si caes, tu cuerpo queda donde cayó y te alzas como espíritu en el cementerio más cercano. Lleva tu espíritu de vuelta a tu cuerpo para revivir en el sitio, sin penalización, o acepta al Guardián Pálido en el cementerio para un alzamiento instantáneo a cambio de una debilidad pasajera. Los héroes recién creados se libran por completo de la debilidad, y nunca pierdes nada de lo que posees ni de lo que has ganado.",
+      "deathBody": "Si caes, liberas tu espíritu y resucitas en el cementerio más cercano con toda la salud, y luego regresas a donde estabas. No se pierde experiencia.",
       "groupingTitle": "Jugar juntos",
       "groupingBody": "Invita a otros a un grupo para compartir el crédito de las misiones y afrontar las mazmorras. La mayor parte del mundo se puede recorrer en solitario, así que agruparse es una elección, no una obligación.",
       "onlineTitle": "En línea o sin conexión",
       "onlineBody": "Juega en el mundo en línea compartido con todos los demás, o inicia un mundo sin conexión instantáneo en tu navegador para aprender lo básico.",
-      "reassure": "Los talentos se desbloquean al nivel 10 y se pueden restablecer en cualquier momento que estés fuera de combate, así que tus primeras decisiones nunca son permanentes. Experimenta sin miedo.",
+      "reassure": "Los talentos se desbloquean al nivel 10 y se pueden restablecer en cualquier momento, así que tus primeras decisiones nunca son permanentes. Experimenta sin miedo.",
       "controlsLink": "Consulta la referencia completa de controles"
     },
     "controls": {
-      "intro": "Teclas predeterminadas para escritorio. Cada asignación se puede cambiar en las opciones del juego, salvo Esc, que siempre abre el menú del juego, y una asignación puede ser una combinación con tecla modificadora como Shift+Z.",
+      "intro": "Teclas predeterminadas para escritorio. Cada asignación se puede cambiar en las opciones del juego.",
       "keyHeader": "Tecla",
       "actionHeader": "Acción",
       "groupMovement": "Movimiento",
@@ -3628,14 +3804,14 @@ export const es: EnTranslations = {
       "petBar": "Barra de mascota: Atacar, Detener, Provocar, Defensivo, Agresivo (con una mascota de cazador o brujo activa)",
       "attackMoveNote": "Una más, desactivada de forma predeterminada: activa Ataque en movimiento en las opciones para reservar una tecla (A, mientras la opción esté activada) que te lleva hacia tu cursor y abre fuego sobre el enemigo que haya debajo, o el primero que encuentres por el camino.",
       "mobileHeading": "En el móvil",
-      "mobileBody": "Los controles táctiles aparecen automáticamente en teléfonos y tabletas: un joystick de movimiento a la izquierda, arrastra en cualquier otro punto para mirar, pellizca con dos dedos para acercar la cámara y botones en pantalla para tus habilidades y menús. Una pequeña flecha en la esquina superior izquierda muestra u oculta los botones de menú, y el botón Más que hay ahí guarda el resto de tus ventanas.",
+      "mobileBody": "Los controles táctiles aparecen automáticamente en teléfonos y tabletas: un joystick de movimiento a la izquierda, arrastra en cualquier punto de la derecha para mirar y botones en pantalla para tus habilidades y menús.",
       "controllerHeading": "Con un mando",
-      "controllerBody": "Los mandos también funcionan, y el soporte para mando está activado de forma predeterminada. El stick izquierdo mueve, el stick derecho apunta la cámara, y los botones frontales y los gatillos cubren tus habilidades, el salto y la interacción. Abre una ventana como tus bolsas para que aparezca un puntero en pantalla, y el menú del juego se navega directamente con la cruceta y los botones frontales. Puedes reasignar los botones y ajustar la zona muerta del stick, la velocidad de la cámara, la vibración y la vista invertida desde la configuración del mando, en las opciones."
+      "controllerBody": "Los mandos también funcionan, y el soporte para mando está activado de forma predeterminada. El stick izquierdo mueve, el stick derecho controla la cámara, y los botones frontales y los gatillos cubren tus habilidades, el salto y la interacción. Abre cualquier ventana para que aparezca un puntero en pantalla con el que navegar los menús. Puedes reasignar los botones y ajustar la zona muerta del stick, la velocidad de la cámara, la vibración y la vista invertida desde la configuración del mando, en las opciones."
     },
     "settingsPage": {
       "heading": "Configuración y rendimiento",
       "intro": "Haz que el juego se vea mejor o corre más rápido. Tres equipamientos listos para usar, además de lo que realmente hace cada opción gráfica.",
-      "wherePath": "Cuanto aparece en esta página se encuentra en el juego: presiona Esc para abrir las opciones. El menú se abre en un Resumen de aspectos esenciales fijados, con las categorías en una barra al lado: los ajustes de abajo viven en Gráficos, Interfaz y Accesibilidad dentro del grupo Pantalla, y la Superposición de rendimiento en Sistema. Más rápido todavía, escribe un nombre en el cuadro de búsqueda de arriba y salta directo a él.",
+      "wherePath": "Lo que aparece en esta página se encuentra en el juego: presiona Esc y busca en Gráficos, Interfaz y Superposición de rendimiento.",
       "fairnessTitle": "Feria por diseño",
       "fairnessBody": "Ninguna opción aquí cambia la belleza por el poder. Las configuraciones de Lower solo eliminan el brillo cosmético, nunca la información con la que peleas: tus desventajas, barras de lanzamiento, salud del grupo y números de daño son idénticos de Low a Ultra. Jugar en una máquina modesta nunca es un inconveniente.",
       "loadoutsHeading": "Tres equipamientos listos para usar",
@@ -3669,7 +3845,7 @@ export const es: EnTranslations = {
       "advancedHeading": "El preset avanzado: mezcla el tuyo propio",
       "advancedBody": "Avanzado comienza desde el nivel High y desbloquea cuatro selectores adicionales, para que puedas pasar tus fotogramas donde realmente los notes: Detalle del terreno, Densidad del follaje, Efectos e iluminación y Calidad de las sombras. Al igual que la calidad de los gráficos, se aplican después de una recarga.",
       "advancedMixes": "Dos combinaciones favoritas: mantenga la Calidad de las sombras en High y configure Efectos e iluminación en Low para obtener una apariencia nítida y sin brillo que funcione con luz, o haga lo contrario para mantener el brillo y suavizar las sombras.",
-      "tableHeading": "Cada opción de gráficos, explicada",
+      "tableHeading": "Cada opción, explicada.",
       "colSetting": "Configuración",
       "colDoes": "que hace",
       "colImpact": "FPS impacto",
@@ -3707,15 +3883,15 @@ export const es: EnTranslations = {
       "resourcesTitle": "Cada clase tiene su propio ritmo",
       "resourcesBody": "Los guerreros generan Ira en lo más reñido del combate, los pícaros gastan Energía que se recupera de forma constante y los lanzadores administran una reserva de Maná. Aprender tu recurso es la mitad de jugar bien tu clase.",
       "growTitle": "Te vuelves más fuerte con cada nivel",
-      "growBody": "Cada nivel te hace más resistente y desbloquea nuevas habilidades, hasta llegar al límite de nivel {cap}. Las misiones son la vía más rápida para subir; la caza, las incursiones en mazmorra y las expediciones lo redondean.",
+      "growBody": "Cada nivel te hace más resistente y desbloquea nuevas habilidades, hasta llegar al límite de nivel {cap}. Las misiones son la vía más rápida para subir; las mazmorras y la exploración lo redondean.",
       "effectsTitle": "Mejoras, penalizadores y control de masas",
-      "effectsBody": "Muchas habilidades aplican un efecto que perdura. Los beneficiosos (mejoras) aumentan tus características, te escudan o te sanan poco a poco; los dañinos (penalizadores) merman tu salud con daño con el tiempo o te debilitan. Vigila los pequeños iconos en la esquina superior de la pantalla, junto al minimapa, para ver qué tienes encima y cuánto dura.",
-      "ccBody": "El control de masas es una clase especial de penalizador que limita lo que un objetivo puede hacer: aturdimientos, raíces y ralentizaciones, silenciamientos que cortan el lanzamiento de hechizos, desarmes, miedos y transformaciones que vuelven inofensivo a un enemigo por un momento. Contra otros jugadores, el control se desgasta con la repetición: el mismo tipo reaplicado demasiado rápido se debilita y luego falla por completo, y un aturdimiento que abre desde el sigilo se cuenta aparte de los aturdimientos que le siguen, así que nadie puede quedar encadenado e indefenso para siempre. Las criaturas del mundo no guardan tal rencor: en ellas el control nunca se debilita con la repetición, aunque muchos de los enemigos más poderosos, las élites con nombre y los jefes más fuertes entre ellos, no pueden ser controlados en absoluto.",
+      "effectsBody": "Muchas habilidades aplican un efecto que perdura. Los beneficiosos (mejoras) aumentan tus características, te escudan o te sanan poco a poco; los dañinos (penalizadores) merman tu salud con daño con el tiempo o te debilitan. Vigila los pequeños iconos junto a tu barra de acción para ver qué tienes encima y cuánto dura.",
+      "ccBody": "El control de masas es una clase especial de penalizador que limita lo que un objetivo puede hacer: aturdimientos, raíces y ralentizaciones, silenciamientos que cortan el lanzamiento de hechizos, desarmes, miedos y transformaciones que vuelven inofensivo a un enemigo por un momento. Algunos de estos, como las raíces, los miedos y las transformaciones, pierden su efecto cuando se vuelven a aplicar demasiado rápido, así que no se pueden encadenar para siempre.",
       "metersBody": "¿Con curiosidad por saber cómo fue un combate? Presiona Shift+H para abrir los medidores de grupo, que contabilizan el daño, la sanación y la amenaza de tu grupo, enfrentamiento a enfrentamiento.",
       "queueTitle": "Tu siguiente movimiento ya está cargado",
       "queueBody": "No tienes que cronometrar tus pulsaciones al instante exacto. Presiona tu siguiente habilidad en los últimos momentos del lanzamiento actual y quedará en cola, disparándose en cuanto el lanzamiento termine, para que el juego experto fluya sin huecos. Una pulsación demasiado pronto simplemente se rechaza, así que nada se desperdicia. Algunos golpes cuerpo a cuerpo funcionan igual, saliendo con tu siguiente golpe de arma.",
       "deathTitle": "Cuando caes",
-      "deathBody": "Si tu salud llega a cero, caes donde estás y tu cuerpo se queda allí. Libera tu espíritu y te alzas como espíritu en el cementerio más cercano: más veloz que los vivos, fuera del alcance de tus enemigos, pero incapaz de luchar, saquear o hablar con nadie salvo con el Guardián Pálido que flota sobre las lápidas. Desde ahí eliges. Lleva tu espíritu de vuelta a tu cuerpo y revives en el sitio, con parte de tu salud y tu maná restaurados y sin penalización alguna. O acepta del Guardián Pálido un alzamiento instantáneo donde estás, al precio del Tañido del Guardián: un debilitamiento temporal de cuanto eres que dura más cuanto más veterano seas, y que perdona por completo a los personajes recién creados. Cae dentro de una mazmorra y tu espíritu aguarda en el cementerio de fuera; lleva tu espíritu de vuelta a través de la puerta y revives en la entrada. Las expediciones son la excepción: si caes allí, simplemente vuelves a ponerte en pie en la entrada de la expedición, aunque una segunda caída termina la incursión. Por cualquiera de los dos caminos, no pierdes experiencia, equipo ni dinero. Entre combates, siéntate a comer y beber para empezar el siguiente con toda tu fuerza."
+      "deathBody": "Si tu salud llega a cero, caes. Libera tu espíritu para resucitar en el cementerio más cercano con toda la salud y luego regresa a donde estabas, así que una muerte te cuesta un poco de tiempo, no tu progreso. Entre combates, siéntate a comer y beber para empezar el siguiente con toda tu fuerza."
     },
     "glossary": {
       "intro": "Una referencia rápida de los términos que se usan en esta guía y en el chat.",
@@ -3791,11 +3967,11 @@ export const es: EnTranslations = {
       "q1": "¿Es realmente gratis?",
       "a1": "Sí. El juego completo es gratuito hasta el nivel máximo, y el código fuente es abierto en GitHub.",
       "q2": "¿Necesito una cartera de criptomonedas o algún token?",
-      "a2": "No. El juego se puede jugar por completo sin ella. El token comunitario opcional solo añade adornos cosméticos y una parte del fondo de premios de las recompensas diarias, y nunca afecta al poder ni a la progresión.",
+      "a2": "No. El juego se puede jugar por completo sin ella. El token comunitario opcional solo desbloquea adornos cosméticos y nunca afecta al poder ni a la progresión.",
       "q3": "¿Puedo jugar en mi teléfono?",
       "a3": "Sí. El juego funciona en un navegador móvil con controles táctiles, y también hay un lanzador de escritorio.",
       "q4": "¿Puedo jugar sin conexión o en solitario?",
-      "a4": "Sí. Hay un modo de un jugador sin conexión instantáneo, y el mundo en línea se puede recorrer por completo en solitario salvo las mazmorras, la banda y el jefe del mundo.",
+      "a4": "Sí. Hay un modo de un jugador sin conexión instantáneo, y el mundo en línea se puede recorrer por completo en solitario salvo las mazmorras y la banda.",
       "q5": "¿Cuántas clases hay?",
       "a5": "Nueve, que cubren los roles clásicos de tanque, sanador y daño, cada una con su propio sistema de recursos (ira, maná o energía) y sus habilidades distintivas.",
       "q6": "¿Cuál es el nivel máximo?",
@@ -3807,7 +3983,7 @@ export const es: EnTranslations = {
       "q9": "¿Hay JcJ?",
       "a9": "Sí. Reta a quien quieras por diversión, o entra en el Coliseo Ceniciento para luchar contra otros jugadores. El JcJ es opcional, así que nunca se te fuerza a él.",
       "q10": "¿Qué hay para hacer al nivel máximo?",
-      "a10": "El límite es el nivel {cap}. A partir de ahí recorres las mazmorras de cinco jugadores y la banda de diez jugadores, las afrontas de nuevo en modo heroico para conseguir botín mejorado, te enfrentas al jefe del mundo cuando se alza, te pones a prueba en la arena, te lanzas a las expediciones con un compañero a tu lado y persigues gestas en el Libro de Gestas para escalar en la clasificación del reino.",
+      "a10": "El límite es el nivel {cap}. A partir de ahí recorres las mazmorras de cinco jugadores y la banda de diez jugadores, persigues mejor equipo y te pones a prueba en la arena.",
       "q11": "¿Cómo encuentro un grupo?",
       "a11": "Invita a tu grupo a cualquiera que encuentres, pregunta por el chat o únete a otros en una mazmorra. Gran parte del mundo se puede jugar en solitario, así que agruparse es una opción, no una obligación."
     },
@@ -3834,7 +4010,7 @@ export const es: EnTranslations = {
       "abilitiesNote": "Una muestra del repertorio. Aprenderás más a medida que subas de nivel, y los talentos reconfiguran por completo su funcionamiento.",
       "masteryLabel": "Maestría",
       "fullKitHeading": "El repertorio completo",
-      "fullKitNote": "El repertorio que esta clase aprende conforme sube de nivel, en el orden en que se desbloquea. Los talentos otorgan algunas habilidades más y deciden cuáles sostienen tu build.",
+      "fullKitNote": "Todas las habilidades que esta clase puede aprender, en el orden en que se desbloquean. Los talentos deciden cuáles sostienen tu build.",
       "petsHeading": "Demonios",
       "petsNote": "Los brujos invocan demonios para luchar a su lado, cada uno indicado para una labor distinta."
     },
@@ -3936,7 +4112,9 @@ export const es: EnTranslations = {
       "mark_of_the_wild": "Una bendición duradera que pones sobre ti o un aliado antes de un combate.",
       "moonfire": "Golpea al instante y deja al objetivo ardiendo, ideal mientras te mueves.",
       "rejuvenation": "Se lanza al instante y sana a un aliado con el tiempo, para que puedas seguir actuando.",
-      "thorns": "Protege a un aliado para que los atacantes cuerpo a cuerpo se hieran al golpearlo."
+      "thorns": "Protege a un aliado para que los atacantes cuerpo a cuerpo se hieran al golpearlo.",
+      "commanding_shout": "Refuerza el aguante para que todos resistan más en combate.",
+      "rend": "Abre una hemorragia que va desgastando al objetivo con el tiempo."
     },
     "petHook": {
       "emberkin": "Un demonio de descargas de fuego a distancia que merma a los enemigos desde un lugar seguro.",
@@ -3949,7 +4127,7 @@ export const es: EnTranslations = {
     },
     "bestiary": {
       "heading": "Bestiario",
-      "intro": "Las criaturas del mundo, agrupadas por familia. Estos son los enemigos cotidianos que encuentras a campo abierto. Los enemigos de élite y sus señores de la guerra se mantienen al margen de estas páginas, y las cosas más mortíferas de todas aguardan tras las puertas de las mazmorras.",
+      "intro": "Las criaturas del mundo, agrupadas por familia. Estos son los enemigos que encuentras a campo abierto. Las cosas más mortíferas aguardan, sin figurar aquí, tras las puertas de las mazmorras.",
       "rare": "Raro",
       "levels": "Niveles {min} a {max}",
       "levelsSame": "Nivel {min}",
@@ -4015,7 +4193,7 @@ export const es: EnTranslations = {
     },
     "worldPage": {
       "heading": "El mundo",
-      "intro": "World of ClaudeCraft es una sola tierra continua que recorres a pie, tres zonas dispuestas de sur a norte. No hay viaje rápido, así que el trayecto forma parte de la aventura.",
+      "intro": "Cryptic Realm es una sola tierra continua que recorres a pie, tres zonas dispuestas de sur a norte. No hay viaje rápido, así que el trayecto forma parte de la aventura.",
       "hub": "Base de operaciones",
       "mapHeading": "El camino al norte",
       "mapSub": "Tres zonas, de sur a norte, cada una un escalón más alta en nivel. Sigue el rastro de las misiones y la tierra te lleva del valle a los picos.",
@@ -4060,9 +4238,9 @@ export const es: EnTranslations = {
       "jungleGreeter": "La capitana del puerto, Drifthaven",
       "gardenGreeting": "Alguien sigue recortando los setos, aunque no se ha visto a ningún jardinero en cien años. Cuidado con el laberinto: él también te vigila a ti.",
       "gardenGreeter": "El guardapuerta, Hedgewick",
-      "valePlaceNotes": "Eastbrook es tu primera base de operaciones. Wolf Run y el Prado de los Jabalíes son terreno de caza apacible; el Lago Espejo es buena agua para pescar, aunque los aletafango pululan por sus bajíos; el Sableweb y la Excavación de Cobre ocultan arañas y excavadores ávidos de mineral; un Campamento de Bandidos y la Capilla Caída albergan trabajos más recios; la colina del Relicario desciende hasta el Relicario Derrumbado, la primera expedición del reino; el Claro de Brightwood es una apacible arboleda soleada en el norte; y el Sembradal es el campo de balonjabalí amurallado de Eastbrook, donde se juega la Copa del Valle bajo una tregua de la cosecha.",
-      "marshPlaceNotes": "Fenbridge custodia el único camino seco. Los Juncos del Acechador y los Bajíos de Deepfen rebosan de bestias de la ciénaga y mudfins; la Espesura de la Viuda está tupida de telarañas; la Capilla Ahogada y los Túmulos de los Troles guardan peligros más antiguos, con La Letanía Ahogada, la expedición propia de la ciénaga, abriéndose justo al norte de los túmulos; el Campamento de Gravecaller es el culto atrincherado, y el Bastión Sumergido es el corazón instanciado de la ciénaga.",
-      "peaksPlaceNotes": "Highwatch defiende el muro. La Cresta del Acechador y las Galerías de Deeprock pertenecen a felinos de las crestas y madrigueros; las Estribaciones de los Ogros y el Campamento de Guerra de Drogmar, a brutos a sueldo; Stormcrag crepita de elementales, y a sus pies reluce el Glimmermere, el lago de montaña cuya orilla guarda la puerta de luz pálida que baja al Templo Ahogado; las Tiendas del Culto del Vermis y los Campos de los Resucitados rodean el bastión elevado del culto, con el Santuario del Gravewyrm en su cima.",
+      "valePlaceNotes": "Eastbrook es tu primera base de operaciones. Wolf Run y el Prado de los Jabalíes son terreno de caza apacible; el Lago Espejo es agua tranquila para pescar; el Sableweb y la Excavación de Cobre ocultan arañas y excavadores ávidos de mineral; un Campamento de Bandidos y la Capilla Caída albergan trabajos más recios; la colina del Relicario desciende hasta el Relicario Derrumbado, la primera expedición del reino; y la arboleda de Brightwood es una apacible arboleda soleada en el norte.",
+      "marshPlaceNotes": "Fenbridge custodia el único camino seco. Los Juncos del Acechador y los Bajíos de Deepfen rebosan de bestias de la ciénaga y mudfins; la Espesura de la Viuda está tupida de telarañas; la Capilla Ahogada y los Túmulos de los Troles guardan peligros más antiguos; el Campamento de Gravecaller es el culto atrincherado, y el Bastión Sumergido es el corazón instanciado de la ciénaga.",
+      "peaksPlaceNotes": "Highwatch defiende el muro. La Cresta del Acechador y las Galerías de Deeprock pertenecen a felinos de las crestas y madrigueros; las Estribaciones de los Ogros y el Campamento de Guerra de Drogmar, a brutos a sueldo; Stormcrag crepita de elementales y el Glimmermere reluce a sus pies; las Tiendas del Culto del Vermis y los Campos de los Resucitados rodean el bastión elevado del culto, con el Santuario del Gravewyrm en su cima.",
       "duskPlaceNotes": "Eldergleam se reúne bajo el gran árbol. La Cueva de Duskfall y su mirador son la entrada y la primera vista del valle; la Arboleda Anciana y la Cuenca de Starfall guardan el sur silencioso; la Corte Sumergida alberga ruinas cubiertas de maleza en el este; y el Abismo Reluciente y los Bajíos Cristalinos brillan por todo el norte.",
       "emberPlaceNotes": "Wyrmwatch sostiene la puerta. El Gatewood es el último verde antes del páramo; las Dunas de Ceniza flotan con ceniza y algo peor; el Trollmoot es donde los troles de las dunas encienden sus hogueras; los Campos de Vidrio Sangriento brillan con esquirlas afiladas; y la Caldera de Drakemaw es la corona humeante que rodean los dragones.",
       "frostPlaceNotes": "Icemantle guarda el último hogar cálido. La Línea de Nieve marca donde los ventisqueros toman el mando; el Lago del Glaciar es agua negra y quieta bajo el hielo; los Escalones de la Aurora suben bajo las luces danzantes; el Shiverfen es un cenagal congelado que nunca duerme del todo; y las Terrazas Aulladoras se ganan su nombre cada noche.",
@@ -4082,22 +4260,22 @@ export const es: EnTranslations = {
       "heading": "Misiones",
       "intro": "Las misiones son el corazón del mundo y la forma más rápida de subir de nivel. Así es como funcionan.",
       "acceptTitle": "Encontrar y aceptar",
-      "acceptBody": "Las personas con un marcador sobre la cabeza tienen trabajo para ti. Habla con ellas para aceptar una misión. En Eastbrook, el mariscal Redbrook te espera con Lobos a las puertas, una de las primeras misiones que puedes aceptar.",
+      "acceptBody": "Las personas con un marcador sobre la cabeza tienen trabajo para ti. Habla con ellas para aceptar una misión. La primera de todas es Lobos a las puertas, del mariscal Redbrook en Eastbrook.",
       "objectivesTitle": "Objetivos",
       "objectivesBody": "Da muerte a ciertos enemigos, reúne objetos o interactúa con algo del mundo. El rastreador en pantalla cuenta tu progreso a medida que avanzas. Si cambias de opinión, puedes abandonar una misión desde tu registro de misiones y retomarla más tarde con quien te la dio.",
       "turninTitle": "Entregar",
       "turninBody": "Lleva una misión terminada a su marcador de entrega, el mapa te indica dónde, a cambio de experiencia, monedas y, a menudo, una pieza de equipo elegida para tu clase. Ese suele ser quien te la dio, aunque algunas misiones te envían a otra persona.",
       "partyTitle": "Hacer misiones en grupo",
-      "partyBody": "Los miembros del grupo cercanos comparten el crédito de muertes y objetivos, así que hacer misiones juntos es más rápido, nunca más lento. También puedes compartir una misión con tu grupo: publícala en el chat como un enlace en el que se puede hacer clic con el comando /share, y cualquier miembro que cumpla los requisitos puede aceptar la misma misión con un solo clic.",
+      "partyBody": "Los miembros del grupo cercanos comparten el crédito de muertes y objetivos, así que hacer misiones juntos es más rápido, nunca más lento. También puedes compartir una misión con tu grupo: publícala en el chat como un enlace en el que se puede hacer clic con el comando /share, y cualquier miembro cercano que cumpla los requisitos puede aceptar la misma misión con un solo clic.",
       "storyTitle": "Un hilo lo recorre por entero",
       "storyBody": "Desde tus primeros recados en Eastbrook, algo va mal con los muertos. Un culto está actuando, y el rastro conduce al norte a través de cada zona. Síguelo para descubrir quién está detrás.",
       "soloNote": "La historia principal se puede hacer en solitario hasta el final de cada capítulo, que es una mazmorra para cinco jugadores.",
       "typesTitle": "Los tipos de misión que verás",
       "typesBody": "La mayoría de las misiones tienen una de unas pocas formas conocidas. El rastreador en pantalla detalla exactamente lo que pide cada una, así que nunca te quedas adivinando.",
       "typeSlayTitle": "Dar muerte",
-      "typeSlayBody": "Mengua una manada de bestias o quiebra el dominio de un culto derrotando a un número determinado de un enemigo marcado. Una de tus primeras misiones, despejar lobos del camino de Eastbrook, es una de estas.",
+      "typeSlayBody": "Mengua una manada de bestias o quiebra el dominio de un culto derrotando a un número determinado de un enemigo marcado. La primera misión del juego, despejar lobos del camino de Eastbrook, es una de estas.",
       "typeGatherTitle": "Recolectar",
-      "typeGatherBody": "Recoge objetos del mundo o de lo que sueltan los enemigos: hierbas, mineral, los lúgubres reactivos de un culto. Algunas piezas solo caen de un enemigo concreto, así que la caza y el botín van de la mano.",
+      "typeGatherBody": "Recoge objetos del mundo o de lo que sueltan los enemigos: hierbas, mineral, cartas perdidas, los lúgubres reactivos de un culto. Algunas piezas solo caen de un enemigo concreto, así que la caza y el botín van de la mano.",
       "typeInteractTitle": "Interactuar",
       "typeInteractBody": "Usa, purifica o lee algo fijo en el mundo: una tumba profanada, una advertencia tallada en una roca de la orilla, una puerta de cripta sellada. Acércate al marcador y actúa sobre él.",
       "typeMusterTitle": "Moviliza la defensa",
@@ -4184,11 +4362,11 @@ export const es: EnTranslations = {
       "tiersHeading": "Dificultad",
       "tiersBody": "Una expedición ofrece más de una dificultad. La más alta vuelve más fuertes a los enemigos y añade un modificador de partida, y paga más a cambio. También exige que tengas unos cuantos niveles a tus espaldas antes de dejarte entrar.",
       "affixesHeading": "Modificadores de partida",
-      "affixesBody": "Las expediciones más difíciles añaden un modificador que cambia cómo se juega el descenso, desde muertos inquietos hasta aire viciado o estructuras a punto de ceder. Suben a la vez el peligro y la recompensa. Cada expedición saca de los modificadores que encajan con su tema; a lo largo del reino, el conjunto es este:",
+      "affixesBody": "Las expediciones más difíciles añaden un modificador que cambia cómo se juega el descenso, desde muertos inquietos hasta aire viciado o estructuras a punto de ceder. Suben a la vez el peligro y la recompensa. Una expedición de tema cripta puede sacar cualquiera de estos:",
       "marksHeading": "Marcas de Expedición",
       "marksBody": "Completar expediciones otorga Marcas de Expedición, una moneda aparte de tu dinero. Gástalas con el guardián para reforzar a tu compañera y conseguir equipo que no encontrarás en ningún otro sitio.",
       "whereHeading": "Dónde encontrar una",
-      "whereBody": "La primera expedición, el Relicario Hundido, se abre en la Colina del Relicario, en el Valle de Eastbrook, donde comienzas tu aventura. El Hermano Halven custodia el tablón allí, y te enviará abajo en cuanto estés listo. Sus rondas no acaban ahí: pasados los Túmulos de los Troles, en el borde norte de la Ciénaga de Mirefen, el mismo guardián abre La Letanía Ahogada para los expedicionarios que ya han cogido soltura."
+      "whereBody": "La primera expedición, el Relicario Hundido, se abre en la Colina del Relicario, en el Valle de Eastbrook, donde comienzas tu aventura. El Hermano Halven custodia el tablón allí, y te enviará abajo en cuanto estés listo."
     },
     "talentsPage": {
       "heading": "Talentos y especializaciones",
@@ -4196,13 +4374,13 @@ export const es: EnTranslations = {
       "whatHeading": "Qué hacen los talentos",
       "whatBody": "A medida que subes de nivel, ganas puntos de talento para gastar en pequeñas mejoras permanentes a tus habilidades y características. Dan forma a cómo se siente una clase, orientándola hacia más daño, una defensa más sólida o una sanación más potente.",
       "howHeading": "Cómo funcionan",
-      "howBody": "Los talentos se desbloquean al nivel 10, y sigues ganando puntos a medida que asciendes hasta el límite. Los gastas en el panel de talentos de tu clase, donde las filas más profundas se abren conforme inviertes y subes de nivel, y puedes guardar más de una configuración para alternar entre builds.",
+      "howBody": "Los talentos se desbloquean al nivel 10, y sigues ganando puntos a medida que asciendes hasta el límite. Los gastas en el panel de talentos de tu clase, y puedes guardar más de una configuración para alternar entre builds.",
       "shareNote": "Una build terminada se puede copiar a un código corto para compartir y entregárselo a un amigo, que lo pega directamente en su propio panel de talentos para cargarla.",
       "choiceNote": "Unos pocos puntos de cada árbol son una encrucijada más que una compra: el nodo ofrece dos o tres opciones y te comprometes con una de ellas. Tu siguiente restablecimiento vuelve a abrir la elección, igual que el resto del árbol.",
       "resetTitle": "Nada es permanente",
-      "resetNote": "Puedes restablecer tus talentos en cualquier momento que estés fuera de combate y no en una partida de arena, así que una elección temprana nunca es una trampa. Prueba cosas, descubre lo que te gusta y cambia de opinión con libertad.",
+      "resetNote": "Puedes restablecer tus talentos en cualquier momento que estés fuera de combate, así que una elección temprana nunca es una trampa. Prueba cosas, descubre lo que te gusta y cambia de opinión con libertad.",
       "specsHeading": "Especializaciones por clase",
-      "specsBody": "Cada clase tiene unas cuantas especializaciones, cada una con su propio rol y un enfoque distintivo. Elegir una en el panel de talentos otorga una habilidad distintiva y una maestría duradera propia. Aquí tienes la forma de todas ellas. Abre una clase para ver su repertorio completo."
+      "specsBody": "Cada clase tiene unas cuantas especializaciones, cada una con su propio rol y un enfoque distintivo. Aquí tienes la forma de todas ellas. Abre una clase para ver su repertorio completo."
     },
     "arenaPage": {
       "heading": "Arena y JcJ",
@@ -4210,8 +4388,10 @@ export const es: EnTranslations = {
       "duelsHeading": "Duelos",
       "duelsBody": "Reta a un duelo amistoso a cualquier jugador que encuentres. No hay nada en juego salvo el orgullo, así que es la forma más sencilla de aprender un enfrentamiento o zanjar una discusión amistosa.",
       "coliseumHeading": "El Coliseo Ceniciento",
-      "coliseumBody": "El Coliseo es la arena del reino, donde te enfrentas a otros jugadores en partidas clasificatorias, uno contra uno o dos contra dos. Cada categoría conserva su propia clasificación, así que una victoria te hace subir por esa escala a la vista del reino entero. Abre la ventana de Arena para inscribirte en una categoría, solo o con tu compañero.",
+      "coliseumBody": "El Coliseo es la arena del reino, donde te enfrentas a otros jugadores en partidas clasificatorias, uno contra uno o dos contra dos. Cada categoría conserva su propia clasificación, así que una victoria te hace subir por esa escala a la vista del reino entero.",
       "ladderHeading": "Ascender en la clasificación",
+      "fiestaHeading": "Fiesta dos contra dos",
+      "fiestaBody": "Fiesta es un modo rápido de dos contra dos que se juega en rondas cortas. Entre ronda y ronda eliges mejoras, refuerzos rápidos que reconfiguran tu repertorio sobre la marcha, así que no hay dos partidas iguales.",
       "ladderBody": "El juego clasificatorio registra tu posición a lo largo del tiempo. Consulta la clasificación para ver dónde estás y quién ocupa la cima del reino."
     },
     "thornhollowPage": {
@@ -4257,9 +4437,9 @@ export const es: EnTranslations = {
       "nationMoon": "Violeta y plata bajo la luna creciente: jugadores nocturnos, de pies ligeros.",
       "nationCopperdig": "Cobre y marrón con el pico: excavadores que nunca dejan de correr.",
       "rolesHeading": "Roles deportivos",
-      "rolesBody": "Tu rol decide la equipación que llevas al campo. Todos patean; el resto es cuestión de temperamento. En las categorías de uno contra uno y dos contra dos todos juegan con la equipación polivalente, así que la elección de rol cobra sentido a partir de tres contra tres.",
+      "rolesBody": "Tu rol decide la equipación que llevas al campo. Todos patean; el resto es cuestión de temperamento.",
       "rewardsHeading": "Reglas de la tregua",
-      "rewardsBody": "Las reglas de la tregua implican que no hay experiencia ni botín: un partido decidido cuenta para tu historial y el tablón de vencedores, y una victoria también cuenta para las tareas de recompensa del día. Desertar de un partido suspende tu plaza, y el Guardacampo lo recuerda."
+      "rewardsBody": "Las reglas de la tregua implican que no hay experiencia ni botín: un partido decidido cuenta para tu historial y el tablón de vencedores, y trae consigo puntos de recompensa diaria. Desertar de un partido suspende tu plaza, y el Guardacampo lo recuerda."
     },
     "deedsPage": {
       "intro": "El Libro de Gestas es donde el mundo lleva la cuenta de todos tus hechos, desde tus primeros pasos fuera del valle inicial hasta los combates más duros que el reino puede ofrecer. Consigue gestas mientras juegas, luce los títulos que otorgan y mira cómo asciende tu Renombre.",
@@ -4301,9 +4481,9 @@ export const es: EnTranslations = {
       "i1Title": "No puedes elegir una clase equivocada",
       "i1Body": "Toda clase se defiende sola y puede llegar al límite. Elige la fantasía que te guste, no la que otro califique de mejor.",
       "i2Title": "Morir apenas te cuesta nada",
-      "i2Body": "Cuando caes, te alzas como espíritu en el cementerio más cercano. Vuelve corriendo a tu cuerpo para revivir gratis, o acepta el alzamiento instantáneo del Guardián Pálido y carga con una debilidad efímera a cambio de la comodidad. Nunca se pierde experiencia, equipo ni dinero, así que es seguro arriesgarse y aprender.",
+      "i2Body": "Cuando caes, liberas tu espíritu y resucitas en el cementerio más cercano, y luego regresas a donde estabas. No se pierde experiencia, así que es seguro arriesgarse y aprender.",
       "i3Title": "Los talentos no son una trampa",
-      "i3Body": "Se desbloquean al nivel 10 y se restablecen cuando quieras, estando fuera de combate, así que tus elecciones tempranas nunca son permanentes.",
+      "i3Body": "Se desbloquean al nivel 10 y se restablecen cuando quieras, así que tus elecciones tempranas nunca son permanentes.",
       "i4Title": "Sigue el rastro de las misiones",
       "i4Body": "Las misiones son la vía más rápida para subir de nivel y te llevan por el mundo entero. Cuando no sepas adónde ir, busca el siguiente marcador.",
       "i5Title": "Mantén tu equipo al día",
@@ -4342,7 +4522,7 @@ export const es: EnTranslations = {
     "gear": {
       "intro": "El equipo es lo que tu personaje viste y los objetos que llevas. Un mejor equipo es la vía más constante para volverte más fuerte, y la mayor parte lo consigues solo con jugar.",
       "slotsTitle": "Lo que puedes equipar",
-      "slotsBody": "Tienes una ranura de arma, siete ranuras de armadura y tres ranuras de joyería: un cuello y dos dedos. Cada clase solo puede usar ciertas armas y viste armadura hasta su propio peso, tela, cuero o malla, así que las mejoras que te sirven son las hechas para tu clase. La joyería no tiene peso alguno: cualquier clase lleva lo que gane. Dentro de eso, llena cada ranura con la mejor pieza que encuentres.",
+      "slotsBody": "Tienes una ranura de arma y siete ranuras de armadura. Cada clase solo puede usar ciertas armas y viste armadura hasta su propio peso, tela, cuero o malla, así que las mejoras que te sirven son las hechas para tu clase. Dentro de eso, llena cada ranura con la mejor pieza que encuentres.",
       "slotMainhand": "Arma",
       "slotHelmet": "Cabeza",
       "slotNeck": "Cuello",
@@ -4366,22 +4546,22 @@ export const es: EnTranslations = {
       "qualityNote": "Una calidad mayor suele significar mejores características, pero la calidad es una pista, no una regla. Una pieza bien ajustada a tu clase y nivel puede superar a otra más llamativa.",
       "upgradeTitle": "Mantén tu equipo al día",
       "upgradeBody": "Reemplazar una pieza vieja por una mejora reciente te aporta más que jugar a la perfección con un equipo que ya se te ha quedado pequeño. Cuando caiga algo mejor o te lo ofrezca una misión, tómalo. No guardes tus buenos objetos para más adelante.",
-      "itemLevelBody": "Para comparar rápidamente dos piezas, activa Mostrar nivel de objeto en las opciones. El equipo de origen conocido, obtenido de enemigos, misiones y profesiones de artesanía, mostrará un nivel de objeto: una cifra que aproxima su poder según su procedencia y permite ver de un vistazo qué mejora pesa más, incluso entre ranuras distintas. Las piezas sin ese origen, como los artículos básicos de vendedor y el equipo inicial, no muestran nivel de objeto; que falte la cifra es normal, no un error.",
+      "itemLevelBody": "Si quieres una forma rápida de comparar dos piezas, activa Mostrar nivel de objeto en las opciones. Cada arma y cada pieza de armadura muestra entonces un nivel de objeto, una sola cifra de lo poderosa que es, aproximadamente, según de dónde proviene, para que veas de un vistazo qué mejora pesa más, incluso entre ranuras de equipo distintas.",
       "sourcesTitle": "De dónde viene el equipo",
-      "sourcesBody": "La mayoría de tus mejoras tempranas son recompensas de misiones, así que conviene completar misiones en lugar de farmear. Los enemigos sueltan equipo cuando los derrotas, los vendedores del pueblo venden buenas piezas básicas, los artesanos convierten materiales recolectados en piezas que puedes vestir y el mercado de jugadores te permite comprar a otros aventureros. En lo más alto, dos monedas de marcas compran equipo que no se encuentra en ningún otro sitio: las Marcas de Expedición con el guardián de expediciones, y las Marcas Heroicas con el intendente heroico.",
+      "sourcesBody": "La mayoría de tus mejoras tempranas son recompensas de misiones, así que conviene completar misiones en lugar de farmear. Los enemigos sueltan equipo cuando los derrotas, los vendedores del pueblo venden buenas piezas básicas y el mercado de jugadores te permite comprar a otros aventureros.",
       "soulboundTitle": "Ligado al alma: tuyo y de nadie más",
       "soulboundBody": "Unas pocas recompensas especiales están ligadas al alma, atadas a tu personaje desde el momento en que las consigues. Un objeto ligado al alma no se puede intercambiar, enviar por correo, vender a un vendedor ni publicar en el mercado; es tuyo y de nadie más. Hoy esa protección resguarda fichas de premio como las Marcas Heroicas, mientras que el equipo que ganas es tuyo para intercambiarlo, venderlo o compartirlo con libertad.",
       "uniqueTitle": "Único al equipar: un legendario de cada tipo",
       "uniqueBody": "Los objetos legendarios son únicos al equipar: tu personaje solo puede llevar puesta una copia de un legendario dado a la vez, y su versión heroica cuenta como el mismo objeto. Una segunda copia puede viajar en tus bolsas, en el banco o en el mercado, pero intentar llevar puestas ambas a la vez se rechaza, y la información emergente lleva una etiqueta dorada de Único al equipar para que veas la regla antes de planear una configuración en torno a dos de ellos.",
       "setsTitle": "Conjuntos y bonificaciones de conjunto",
-      "setsBody": "Parte de la armadura viene en familias a juego, varias piezas talladas para verse y combatir como una sola. Lleva suficientes piezas de una familia a la vez y el conjunto despierta, otorgando bonificaciones por encima de las características propias de cada pieza, y cuantas más lleves, más fuerte se vuelve. Unas pocas de estas familias aparecen como codiciados botines mientras subes de nivel; las mejores vienen del contenido en grupo más duro cerca del nivel máximo, así que perseguir un conjunto completo es un objetivo clásico del final del juego.",
+      "setsBody": "La armadura más rara viene en familias a juego, varias piezas talladas para verse y combatir como una sola. Lleva suficientes piezas de una familia a la vez y el conjunto despierta, otorgando bonificaciones por encima de las características propias de cada pieza, y cuantas más lleves, más fuerte se vuelve. Caen del contenido en grupo más duro cerca del nivel máximo, así que perseguir un conjunto completo es un objetivo clásico del final del juego.",
       "consumablesTitle": "Consumibles",
       "consumablesIntro": "Algunos objetos se usan una sola vez para obtener un beneficio rápido. Son un seguro barato, así que ten unos cuantos a mano.",
       "consumablesPotions": "Las pociones restauran salud o maná en el momento en que las usas, incluso en mitad del combate, lo que las convierte en una salvación clave cuando un enfrentamiento se tuerce. Comparten un breve tiempo de reutilización, así que planifica un buen momento para usarlas.",
       "consumablesFood": "La comida y la bebida te reponen mientras te sientas a descansar entre combates. Comer recupera salud, beber recupera maná, y descansar así es gratis. Siéntate unos segundos tras un combate difícil en vez de lanzarte al siguiente a medio sanar.",
       "consumablesElixirs": "Los elixires conceden una mejora temporal mientras te aventuras, una pequeña ventaja que ayuda cuando quieres apretar un poco más.",
       "fishingTitle": "Pesca",
-      "fishingBody": "La pesca es un cambio de ritmo tranquilo. Lleva una caña de pescar, úsala junto a aguas abiertas y recoge lo que pique. Casi siempre pescas peces que son comida que puedes comer, alguna que otra chatarra para vender por unas monedas y, de vez en cuando, una preciada captura rara. Lo que encuentras depende de las aguas en las que pesques.",
+      "fishingBody": "La pesca es un cambio de ritmo tranquilo. Equipa una caña de pescar, lanza a aguas abiertas y recoge lo que pique. Casi siempre pescas peces que son comida que puedes comer, alguna que otra chatarra para vender por unas monedas y, de vez en cuando, una preciada captura rara. Lo que encuentras depende de las aguas en las que pesques.",
       "fishingFood": "Los peces que sacas son comida: come uno mientras te sientas a descansar y te restaura la salud, con los peces más sustanciosos saliendo de las aguas más frías y profundas del norte. Echar el sedal en el lago es una manera tranquila de mantener la mochila surtida entre combates.",
       "fishingRare": "De vez en cuando tu sedal atrapa algo mucho mejor que la cena: un reluciente pez preciado con el que cualquier pescador podría tener suerte en cualquier agua. Engancha uno y tu registro se iluminará con la captura. Es de esa clase de golpes de suerte que hacen que una tarde ociosa en el lago merezca contarse.",
       "cosmeticsTitle": "Aspecto y cosméticos",
@@ -4392,19 +4572,20 @@ export const es: EnTranslations = {
       "cosmeticsApply": "Define tu aspecto activo desde la fila de apariencia en tu pantalla de personaje, y cambia con libertad entre cuanto hayas desbloqueado."
     },
     "professions": {
-      "intro": "Más allá del combate y las misiones, el mundo te recompensa por trabajar la tierra y la fragua: recolectar materias primas, convertirlas en equipo y bienes a lo largo de diez oficios de artesanía, y asentarte en una identidad como uno de los diez arquetipos que esos oficios representan.",
+      "intro": "Más allá del combate y las misiones, el mundo te recompensa por trabajar la tierra y la fragua: recolectar materias primas, convertirlas en equipo en las estaciones de artesanía de diez oficios distintos y asentarte en una identidad como uno de los diez arquetipos que esos oficios representan.",
       "harvestTitle": "Cosechar la propia cacería",
+      "harvestBody": "La recolección no se limita a los nodos. Muchas bestias abatidas pueden cosecharse una sola vez, el primero en llegar, para obtener pieles, colmillos, seda y carne directamente del cadáver junto a su botín ordinario; con una pulsación se abre todo a la vez. La elección también es tuya cada vez: extrae todo lo que ofrece el cadáver, o concéntrate en menos componentes y obtén una calidad notablemente superior de lo que sí tomas.\n\nUna tirada de cosecha rara o mejor en una familia portadora de ejemplares también otorga un ejemplar perfecto firmado (una Piel Prístina, Seda Prístina, Glándula de Veneno Prístina o Corte Primo) además del rendimiento ordinario, y registra Espécimen Perfecto en tu Libro de Gestas. Cualquier personaje puede cosechar, sin necesidad de entrenamiento, y cualquier herramienta de recolección que poseas cuenta para el tramo de calidad superior, sea del oficio que sea.",
       "harvestBodyChoice": "La recolección no se limita a los nodos. Muchas bestias abatidas pueden cosecharse una sola vez, el primero en llegar, para obtener pieles, colmillos, seda y carne directamente del cadáver junto a su botín ordinario; con una pulsación se abre todo a la vez. Cuando una bestia porta más de un componente aprovechable, la elección es tuya: toma todo lo que pueda dar, o concéntrate en menos componentes y obtén una calidad notablemente superior de lo que sí tomas.\n\nUna tirada de cosecha rara o mejor en una familia portadora de ejemplares también otorga un ejemplar perfecto firmado (una Piel Prístina, Seda Prístina, Glándula de Veneno Prístina o Corte Primo) además del rendimiento ordinario, y registra Espécimen Perfecto en tu Libro de Gestas. Cualquier personaje puede cosechar, sin necesidad de entrenamiento, y cualquier herramienta de recolección que poseas cuenta para el tramo de calidad superior, sea del oficio que sea.",
       "focusTitle": "Enfoque del pueblo",
       "focusBody": "Cada pueblo principal mantiene un panel de Enfoque del pueblo para los recolectores de paso: párate en el pueblo, ábrelo junto al minimapa y dirige un pequeño presupuesto de puntos de enfoque hacia los tipos de componente que te interesan. Cuanto más enfoque des a un componente, más fino y rico saldrá de cada cadáver posterior; tu asignación acompaña a tu personaje dondequiera que vaya, y puedes reajustarla, gratis, en cualquier visita posterior al pueblo.",
       "craftHowTitle": "La ventana de artesanía",
-      "craftMasteryTitle": "Cuánto tarda la maestría",
-      "craftMasteryBody": "Expectativas honestas: el camino hasta el tope de 125 de un oficio requiere al menos 125 elaboraciones exitosas, ya que cada elaboración con ganancia completa avanza exactamente un punto, y en la práctica algo más a medida que las recetas pierden color entre un peldaño y otro del entrenador. La elaboración en sí es rápida; abastecerla es el viaje real, así que reserva varias tardes dedicadas a recolectar y elaborar por cada oficio.\n\nLos oficios de recolección alcanzan su tope de 100 a lo largo de un recorrido normal de subida de nivel si cosechas mientras viajas, aunque el tramo final pide los nodos de nivel superior del lejano norte. La Pesca es el camino largo por diseño: según su propio ritmo de ganancia, 200 de pericia equivale a más de tres mil capturas. El Pescador Maestro es un título que se gana durante una temporada de tardes tranquilas, no en un fin de semana.",
-      "archetypeChooseTitle": "La carta del Gremio, y cambiar de opinión",
-      "archetypeChooseBody": "No es necesario que busques nada de esto. Trabaja tus oficios, y en cuanto tus habilidades artesanales muestren claramente una inclinación hacia un par, el Gremio de Artesanos lo nota y envía una carta por cuervo nombrando al maestro que debes visitar y la misión que debes tomar. Llega una vez por personaje, y solo si aún no te has comprometido con un par.",
-      "archetypeSwitchBody": "Una declaración tampoco es una condena de por vida. Un par que nunca has tenido es simplemente una nueva misión de sintonización, mientras que volver a un par del que te alejaste te pide primero hacer enmiendas: cinco tareas la primera vez, y tres más añadidas por cada regreso que ya hayas hecho (tomar un par completamente nuevo nunca sube la cuenta). La elección sigue siendo significativa sin cerrar jamás una puerta para siempre.",
+      "craftMasteryTitle": "Habilidad y maestría",
+      "craftMasteryBody": "Fabricar con éxito aumenta tu habilidad en ese oficio, y las recetas más ricas exigen una habilidad mayor: las recetas básicas están abiertas a cualquiera, mientras que las progresivamente más avanzadas piden progresivamente más maestría para intentarlas. Aumentar tu habilidad en un oficio es el camino de los bienes sencillos de inicio a sus recetas más ambiciosas.",
+      "archetypeChooseTitle": "Elegir tu arquetipo",
+      "archetypeChooseBody": "Declaras tu primer arquetipo mediante una misión de historia temprana de la zona uno que te acepta formalmente en esa identidad. Hasta que completes esa misión, aún no has elegido ningún arquetipo.",
+      "archetypeSwitchBody": "Haber declarado un arquetipo una vez no te ata a él para siempre. Cambiar a un arquetipo distinto exige completar primero una misión repetible de \"enmendar las cosas\" con el anterior, y con cada cambio la enmienda que se te pedirá la próxima vez se vuelve un poco más exigente, de modo que cambiar siga teniendo peso en lugar de salir gratis.",
       "whatHeading": "Un oficio junto a la espada",
-      "whatBody": "Las profesiones son la vida laboral del mundo: cuatro oficios de recolección que sacan materia prima directamente de la tierra, y un anillo de diez oficios artesanales que la convierten en equipo, comidas, pociones y herramientas. Aquí todo alimenta a algo más. El mineral que extraes se vuelve una hoja, la hoja acepta un encantamiento, y el encantamiento necesita polvo desmontado de equipo viejo, así que un recolector, un artesano y un manitas son eslabones de una misma cadena.\n\nNo hay límite de profesiones por el que angustiarse. Cada personaje puede subir a la vez siete de los ocho oficios que tienen contenido hoy y las cuatro profesiones de recolección (la Ingeniería es la única que se resiste: todas sus recetas empiezan por encima del techo libre, así que su escalera espera al juramento del Bombardero); la única elección excluyente es tu arquetipo, la identidad a la que acabas jurando, aunque en cuanto te sintonizas los oficios que quedan inactivos detrás de él solo suben con sus recetas comunes, y pasada la habilidad 75 ya nada. La habilidad nunca baja, y nada de lo que aprendes se te quita jamás.",
+      "whatBody": "Los oficios son la vida laboral del mundo: cuatro oficios de recolección que sacan materia prima directamente de la tierra, y un anillo de diez oficios de artesanía que la convierten en equipo, comidas, pociones y herramientas. Todo alimenta a otra cosa aquí. El mineral que minas se convierte en una espada, la espada recibe un encanto, y el encanto necesita polvo sacado de equipo viejo, así que un recolector, un artesano y un técnico son todos eslabones de una misma cadena.\n\nNo hay un límite de profesiones con el que agonizar. Cada personaje puede subir los ocho oficios de artesanía que tienen contenido hoy y los cuatro oficios de recolección al mismo tiempo; la única elección exclusiva es tu arquetipo, la identidad a la que eventualmente te comprometes, aunque una vez que te sintonizas los oficios que quedan inactivos dejan de avanzar. La habilidad nunca baja, y nada de lo que aprendes se te quita jamás.",
       "ringHeading": "El anillo de oficios",
       "ringBody": "Cada oficio con contenido hoy llega al tope de 125 de habilidad: Fabricación de armas, Fabricación de armaduras, Sastrería, Peletería, Cocina, Alquimia, Ingeniería y Encantación. Al llegar al tope el oficio sigue funcionando, las cosechas siguen dando, las elaboraciones siguen resolviéndose y las obras maestras pueden seguir ocurriendo; solo el número deja de subir. Elige una tarjeta abajo para ver la tabla completa de recetas y números de un oficio.",
       "ringWaveNote": "Dos oficios en la rueda, Joyería e Inscripción, tienen su lugar pero aún no tienen recetas. Esto es deliberado y no un descuido: su contenido llega con las zonas futuras, y los topes de arriba suben de la misma manera, así que un oficio al tope hoy es una ventaja de salida en esa expansión, no una línea de llegada.",
@@ -4413,7 +4594,7 @@ export const es: EnTranslations = {
       "gatherHubHeading": "Recolección",
       "gatherHubBody": "Cuatro oficios de recolección alimentan el anillo desde el campo: Minería, Tala y Herboristería sacan mineral, madera y hierbas de la tierra y llegan al tope de 100 de pericia, mientras que la Pesca funciona con su propio ritmo de picar y cobrar hasta llegar a 200. Cada página abajo lleva los mapas exactos de nodos, las escaleras de herramientas y las probabilidades.",
       "archetypesHeading": "La rueda y sus arquetipos",
-      "archetypesBody": "Los diez oficios se asientan en una rueda fija, y la geografía de esa rueda importa. Cada dos vecinos forman un par con nombre: Herrero para Forja de armas y Forja de armaduras, Pertrechador para Peletería y Sastrería, Boticario para Alquimia y Cocina, Bombardero para Ingeniería y Alquimia, y seis más alrededor del anillo.\n\nSintonizarse con un par es una misión, no un clic de menú. Hoy se pueden tomar cuatro pares (Herrero, Pertrechador, Boticario y Bombardero), cada uno anclado por un maestro residente en Eastbrook cuya misión de aceptación expone todo el trato por adelantado antes de que lo aceptes. Hasta que te declares, cada oficio avanza libremente con recetas hasta el nivel raro incluido (cualquier receta que pida habilidad 74 o menos), así que puedes probar casi todo antes de elegir (solo la Ingeniería no tiene ninguna receta tan baja, de modo que su número espera).\n\nEn cuanto te sintonizas, los dos oficios de tu par se convierten en tus especializaciones principales, sin más techo que el tope. El resto de la rueda no se apaga: un oficio opuesto a tus principales sigue encendido como afición y continúa subiendo hasta el nivel raro (una misión repetible en la fragua del Herrero Haldren te permite cambiar cuál), y todos los demás oficios quedan inactivos. Un oficio inactivo conserva su habilidad y sus recetas comunes, que le siguen enseñando en la curva normal hasta que se ponen grises en 75; todo lo que está por encima de común deja de pagar de golpe, y un oficio inactivo nunca saca una obra maestra mientras descansa.",
+      "archetypesBody": "Los diez oficios de artesanía están en una rueda fija, y la geografía en esa rueda importa. Cada dos vecinos forman un par con nombre: Armero para Fabricación de armas y Fabricación de armaduras, Modisto para Peletería y Sastrería, Boticario para Alquimia y Cocina, Bombardero para Ingeniería y Alquimia, y seis más alrededor del anillo.\n\nSintonizarse con un par es una misión, no un clic en un menú. Hoy se pueden unir cuatro pares (Armero, Modisto, Boticario y Bombardero), cada uno anclado por un maestro residente en Eastbrook cuya misión de aceptación expone todo el trato antes de que lo aceptes. Hasta que declares, cada oficio avanza libremente con recetas hasta el nivel raro, así que puedes probar todo antes de elegir.\n\nUna vez que te sintonizas, tus dos oficios del par se convierten en tus especializaciones principales, sin tope hasta el máximo. El resto de la rueda no se apaga: un oficio opuesto a tus principales se queda como afición que sigue avanzando hasta el nivel raro (una misión repetible en la fragua del Armero Haldren te deja cambiar cuál es), y todos los demás oficios quedan inactivos. Un oficio inactivo conserva su habilidad y sus recetas comunes; simplemente deja de avanzar y nunca produce una obra maestra mientras descansa.",
       "pairFmt": "{a} y {b}",
       "curveHeading": "La Curva de Maestría",
       "curveBody": "La ganancia de habilidad sigue una sola regla en todas partes: la Curva de Maestría de cuatro estados. Cada {step} puntos de habilidad es un nivel, y cada receta se puntúa según donde queda respecto al tuyo: en tu nivel o por encima otorga ganancia completa, un nivel por debajo otorga la mitad, dos por debajo un cuarto, y tres o más por debajo nada.\n\nLa ventana de artesanía pinta esto directamente en la lista de recetas con los colores clásicos: naranja para ganancia completa, amarillo para reducida, verde para un goteo, gris para nada. Las ganancias son deterministas, nunca un dado de subida de habilidad, así que la misma elaboración al mismo nivel siempre mueve tu habilidad exactamente la misma cantidad, y una receta que se pone amarilla es tu señal para aprender el siguiente peldaño.\n\nLa Recolección funciona con la misma curva y el mismo paso de nivel, puntuada contra el nodo en vez de una receta: los nodos fáciles se ponen grises a medida que los superas, y los nodos más ricos de las zonas posteriores son los que terminan el ascenso. La Pesca lleva su propio programa: un punto completo por captura por debajo de 50 de pericia, la mitad hasta 100, un décimo hasta 150, y una cola lenta hasta 200, sin que las capturas de basura enseñen nada desde 100 en adelante.",
@@ -4424,11 +4605,32 @@ export const es: EnTranslations = {
       "deedsHeading": "Gestas que recuerdan el viaje",
       "deedsBody": "El Libro de Gestas acompaña cada paso de esto. Tu primera sintonización gana Juramentado del Oficio y tu primera obra maestra gana Gran Artesano, ambos usables como títulos. Cada uno de los ocho oficios con gestas marca una gesta hito a los 50 de habilidad y corona su tope con un título de Gran Maestro, mientras que la Pesca recibe Viejo Sal a los 100 de pericia y el título de Pescador Maestro a los 200.\n\nHay páginas más silenciosas también: gestas por tu primera cosecha y primera elaboración, por los hallazgos raros que la suerte te da en el campo, y por empezar el salvamento. Todo es cosmético, títulos y Renombre únicamente. Una gesta nunca otorga poder; solo prueba que estuviste allí.",
       "startHeading": "Por dónde empezar",
-      "startBody": "¿Recién llegado por el camino a Eastbrook? Busca al Capataz Odell y acepta Un oficio para cada mano: te señalará las vetas de mineral que rodean la Excavación de Cobre, al sureste del pueblo, y te regalará tus primeros callos. Ojo con la excavación en sí: los Excavadores de Deeprock acampados en ella están unos cuantos niveles por encima de un recién llegado, así que trabaja primero las vetas de las afueras y deja el corazón del campamento para cuando hayas subido un poco. A partir de ahí, cosecha cada veta, arboleda y mata de hierbas que pases mientras haces misiones; la pericia le llega sola a quien viaja.\n\nDe vuelta en el pueblo, pulsa T para abrir la ventana de elaboración y trabaja las recetas comunes que todos los personajes conocen desde el principio. Visita a los maestros de la fragua, las cocinas, el telar y el taller de herramientas para ver qué enseñan, y acepta sus órdenes de trabajo para conseguir monedas de forma constante. Para cuando la carta del Gremio te encuentre, ya sabrás qué par se siente como tu casa.",
+      "startBody": "¿Recién llegado a Eastbrook? Busca al Capataz Odell y acepta Un oficio para cada mano: te señalará las vetas de mineral alrededor de la Excavación de Cobre al suroeste del pueblo y te dará tus primeros callos. A partir de entonces, cosecha cada veta, arboleda y mata de hierba que encuentres mientras haces misiones; la pericia llega de forma natural a los viajeros.\n\nDe vuelta en el pueblo, pulsa T para abrir la ventana de artesanía y trabaja las recetas comunes que cada personaje conoce desde el principio. Visita a los maestros en la fragua, las cocinas, el telar y el taller de herramientas para ver qué enseñan, y acepta sus encargos de trabajo para obtener monedas constantes. Para cuando la carta del Gremio te encuentre, ya sabrás qué par se siente como hogar.",
       "colStation": "Estación",
       "colHub": "Centro",
       "colMaster": "Maestro",
-      "masterCellFmt": "{name}, {title}"
+      "masterCellFmt": "{name}, {title}",
+      "archetypeIdentityBody": "Tu arquetipo activo es una declaración de quién es tu personaje en el mundo, reconocida en cómo se dirigen a ti los demás y el propio mundo. Las recompensas y el reconocimiento exactos que lo acompañan aún se están definiendo; vuelve a consultar a medida que el sistema se complete.",
+      "archetypeIdentityTitle": "Qué significa tu arquetipo",
+      "archetypeIntro": "Cada uno de los diez oficios de artesanía representa también un arquetipo, una identidad más amplia que puedes adoptar más allá de ejercer ese oficio. Tu arquetipo activo es una única elección a la vez, no una lista de tareas: llevas uno, y puedes cambiarlo más adelante si así lo decides.",
+      "archetypeSwitchTitle": "Cambiar de idea",
+      "archetypeTitle": "Los diez arquetipos",
+      "craftComboBody": "Más allá de la lista de recetas propia de cada oficio, la rueda también admite recetas combinadas que recurren a dos oficios vecinos a la vez, y premian a un personaje (o a una pareja de socios comerciales) que haya invertido en oficios adyacentes del anillo en lugar de en uno aislado.",
+      "craftComboTitle": "Recetas combinadas",
+      "craftIntro": "Diez oficios de artesanía convierten los materiales recolectados en equipo y bienes acabados: la Forja de armaduras, la Forja de armas y la Joyería dan forma a la materia prima como equipo que puedes llevar; la Alquimia y la Ingeniería avanzan a base de ensayo y error; la Cocina, la Inscripción y el Encantamiento trabajan sobre la producción de otros oficios; la Sastrería y la Peletería trabajan a partir de patrones exactos. Juntos forman una rueda, con cada oficio junto a dos vecinos y frente a otro.",
+      "craftRecipesBody": "Cada oficio tiene sus propias recetas, cada una con reactivos concretos que recolectas o compras. Las recetas más básicas de cada oficio solo piden materiales comunes y pueden fabricarse desde el primer momento, así que puedes empezar a ejercer un oficio en cuanto lo adoptas, sin esperar a desbloquearlo.",
+      "craftRecipesTitle": "Recetas y reactivos",
+      "craftRingBody": "Los diez oficios están dispuestos en un anillo fijo, y el lugar que ocupa cada uno en ese anillo importa: los oficios contiguos en la rueda comparten más entre sí que los situados en lados opuestos. Comprometerse con un oficio debe sentirse como unirse a una familia de oficios afines, no como escoger una habilidad aislada.",
+      "craftRingTitle": "Una rueda de especialidades",
+      "craftTitle": "Los diez oficios de artesanía",
+      "gatherIntro": "Tres oficios de recolección te permiten extraer materias primas directamente del mundo: la Minería arranca mineral y piedra de las vetas, la Tala derriba madera de las arboledas y la Herboristería recoge hierbas y plantas silvestres. Cada uno se registra por separado, así que trabajar uno nunca frena tu progreso en otro.",
+      "gatherProficiencyBody": "Cada cosecha lograda aumenta tu pericia en ese oficio de recolección. Una pericia mayor inclina lo que extraes de un nodo hacia grados de material más raros, de lo común en adelante, aunque los grados más raros siguen siendo raros incluso con una pericia alta. Practicar más nunca perjudica tus probabilidades, solo las mejora.",
+      "gatherProficiencyTitle": "Pericia y calidad del material",
+      "gatherTitle": "Recolección: Minería, Tala y Herboristería",
+      "gatherToolsBody": "Los vendedores ofrecen herramientas básicas para cada oficio de recolección, y se pueden fabricar otras mejores, de modo que trabajar un nodo de recursos se sienta cada vez más eficaz a medida que te equipas, en lugar de quedarse estático. Las herramientas de mayor calidad son la vía prevista para acceder a nodos más ricos y trabajarlos con más eficiencia en sesiones largas.",
+      "gatherToolsTitle": "Las herramientas del oficio",
+      "gatherWhatBody": "Las vetas de mineral, las arboledas y las matas de hierbas están repartidas por las zonas como elementos visibles y sin dueño. Acércate a uno e interactúa con él para cosechar lo que contenga. Una vez que has cosechado un nodo, necesita tiempo para recuperarse antes de que tú, personalmente, puedas cosecharlo de nuevo, aunque nunca bloquea a nadie más: otro jugador puede cosechar ese mismo nodo mientras tanto.",
+      "gatherWhatTitle": "Nodos de recursos"
     },
     "profPages": {
       "back": "Volver a Oficios",
@@ -4469,27 +4671,27 @@ export const es: EnTranslations = {
         "leatherworking": "La peletería curte equipo de Agilidad y Aguante para las clases que esquivan en lugar de bloquear, desde los básicos de piel de Fenbridge hasta el raro conjunto mireguardián, y es el único oficio profundo que se entrena en el pantano.",
         "cooking": "La cocina convierte la pesca del día en comidas que curan durante 18 segundos de descanso, la curación más barata del juego, desde el Tasajo Salado hasta el Gran Asado de Marlow. Todo el mundo come, así que ningún oficio es más universalmente bienvenido en un grupo.",
         "alchemy": "La alquimia convierte hierbas, glándulas y vidrio en frascos que ganan combates: pociones de curación y maná para el momento en que las cosas salen mal, y elixires de aguante que permanecen en tu barra de mejoras durante toda una mazmorra.",
-        "engineering": "La Ingeniería fabrica las herramientas que todo recolector serio acaba queriendo: los picos, hachas, hoces y cañas de pescar de nivel 4 y nivel 5 que ningún mostrador venderá jamás por monedas, y cada una consume la herramienta inferior.",
-        "enchanting": "El Encantamiento desmonta el equipo y le devuelve el poder: rompe las piezas que no quieres para sacar materiales arcanos y luego gástalos en una bonificación de estadística permanente para una pieza que sí piensas conservar. Romper y encantar no necesitan estación ni entrenador, y cualquiera puede empezar el primer día; solo las dos recetas de talismán piden más, y se enseñan en el taller de herramientas."
+        "engineering": "La ingeniería fabrica las herramientas que todo recolector serio acaba queriendo: los picos, hachas y hoces de nivel 4 y nivel 5 que ningún vendedor tendrá en existencia, cada una consumiendo la herramienta del nivel anterior.",
+        "enchanting": "El encantamiento desmonta el equipo y devuelve el poder: destruye piezas no deseadas para obtener materiales arcanos y luego úsalos para añadir una bonificación permanente de estadísticas a una pieza que quieras conservar. Sin estación, sin entrenador, y cualquiera puede empezar desde el primer día."
       },
       "craftProse": {
         "weaponcrafting": {
           "identityHeading": "El filo que busca cada combatiente",
           "identityBody": "Alguien en cada grupo quiere el trabajo de este oficio, porque el peldaño raro solo ya cubre los tres gustos: el Mandoble de Osmio para cuerpo a cuerpo de Fuerza, el Hacha de Guerra de Glyfiacero para combatientes de Agilidad y el Báculo de Batalla de Pino Cumbre, un báculo de Intelecto y Espíritu para los de ropa.\n\nEn la rueda de oficios se sitúa entre la Forja de armaduras y la Joyería. Su identidad activa es el Herrero, el par de Forja de armas y Forja de armaduras, jurado ante la Maestra de la Fragua Darva en la fragua trabajando tres vetas de mineral con tus propias manos; el par Forjajoyero con la Joyería también está nombrado en la rueda, pero aún no puede jurarse, ya que la Joyería no tiene recetas hasta una expansión de zona posterior.",
           "materialsHeading": "Lo que bebe la forja",
-          "materialsBody": "La Minería es la columna vertebral. El mineral de cobre sale de las vetas de nivel 1 del Valle de Eastbrook, el mineral de hierro de la Ciénaga de Mirefen y el mineral de osmio de las Alturas de Thornpeak, y cada peldaño de la escalera sube del mismo modo. La Tala importa más de lo que cabría esperar: la corteza de hierro pone el astil a la lanza jabalí, la ceniza sostiene el mazo, y un único tronco de pino cumbre forma el báculo de batalla.\n\nEl resto viene de la caza y del mostrador. La piel áspera para las empuñaduras se cosecha directamente de los cadáveres de lobo y jabalí, los fragmentos de hueso salen de los muertos inquietos o del desguace de equipo común, y la escalera de la fragua quema Fundente de Forja, 20 cobres el tarro de manos de la propia Darva. Si tu propia minería se queda atrás, ningún mostrador te salvará con el mineral en sí: el osmio sale de las vetas de Thornpeak, de las vetas iniciales de todas las zonas más jóvenes salvo La Costa Lejana (cuyas vetas dan hierro), o de la pila de otro jugador, por intercambio o por el Mercado Mundial. Solo la Barra de Glyfiacero se compra con monedas, a Manitas Gizzel en el taller de herramientas o a la Intendente Bree en Highwatch.",
+          "materialsBody": "La Minería es la columna vertebral. El mineral de cobre sale de las vetas de nivel 1 del Valle de Eastbrook, el mineral de hierro del Pantano de Mirefen, y el mineral de osmio de las Alturas de Thornpeak, y cada peldaño de la escalera sube de la misma manera. La Tala importa más de lo que podrías esperar: la corteza de hierro afianza la lanza de jabalí, el fresno soporta el mazo, y un solo tronco de pino cumbre forma el bastón de batalla.\n\nEl resto viene de la caza y el mostrador. La piel áspera para los mangos se recolecta directamente de los cadáveres de lobos y jabalíes, los fragmentos de hueso caen de las muertes cotidianas, y la escalera de la forja quema Flujo de Fundición, 20 cobres el frasco donde Darva misma los vende. Si tu propia minería se retrasa, Darva vende mineral de osmio en la forja y el Artífice Gizzel tiene barras de glyfiacero en el taller de herramientas, a un precio que hace que tener amigos recolectores parezca barato.",
           "ladderHeading": "La escalera, peldaño a peldaño",
           "ladderBody": "Una receta de campo, la Espada de Armar de Eastbrook, la conoce todo el mundo desde el principio y se fabrica en cualquier lugar con botín de caza (un par de colmillos de lobo y fragmentos de hueso) más seis Fundentes de Forja del mostrador de la fragua. La escalera real son nueve recetas de entrenador en tres peldaños, todos vinculados a la fragua: el peldaño de cobre (hacha con barba, maza flangeada, lanza jabalí) es gratuito en habilidad 0, el peldaño de hierro (espada larga, mazo, daga) se abre en habilidad 25 por 25 de plata la receta y el peldaño de osmio (mandoble, hacha de guerra, báculo de batalla) se abre en habilidad 50 por 1 de oro cada uno. Darva enseña una receta en cuanto tu nivel en el oficio alcanza el suyo, así que cada peldaño se desbloquea exactamente cuando comienza su franja de habilidad.\n\nUna receta más va con el par: los Guanteletes del Dragón Sepulcro, una pieza combinada enseñada por el entrenador que solo un Herrero sintonizado con Forja de armas y Forja de armaduras ambas en habilidad 25 puede trabajar, y no necesita ninguna estación.",
           "routeHeading": "Obras maestras y una ruta de trabajo hasta 125",
-          "routeBody": "Cualquier pieza con una línea de estadísticas real, lo que en esta escalera significa el peldaño de hierro en adelante, puede salir del yunque como obra maestra siempre que la calidad superior quepa dentro del techo de tu nivel; los comunes de cobre sin estadísticas nunca se activan, porque no hay nada en ellos que mejorar. El hierro y el osmio cuentan como materiales de nivel 1 para la bonificación de obra maestra, el pino cumbre y el glyfiacero como nivel 2, y la habilidad que queda por encima del nivel propio de una receta suma su propio punto por nivel, así que entre los tres de osmio son el hacha de guerra y el báculo de batalla los que llevan la ventaja de material, y un peldaño sigue activándose mejor después de que lo hayas superado.\n\nAprovecha el peldaño de cobre hasta 25, entrena el peldaño de hierro el día que se abra y aprovéchalo hasta 50, y luego el peldaño de osmio hasta 75. Pasado 75 aún no hay nada superior, así que las recetas de osmio se reducen a la mitad y luego a un cuarto de ganancia: calcula unas 150 elaboraciones más para llegar al tope de 125, y recuerda el límite compartido de diez acciones de artesanía por minuto cuando te sientes a trabajar en lote.\n\nFinancia el ascenso sobre la marcha: la orden de trabajo de la fragua de Darva te quita de las manos ocho minerales de cobre cada 30 minutos por algo de dinero y XP, y los peldaños de hierro y de osmio se venden honradamente a los combatientes cuerpo a cuerpo que están subiendo de nivel. El Libro de Gestas marca Filo y Temple en habilidad 50 y corona la Forja de Armas del Gran Maestro en 125."
+          "routeBody": "Cualquier pieza con una línea de estadísticas real, que en esta escalera significa el peldaño de hierro en adelante, puede salir del yunque como obra maestra; los comunes de cobre sin estadísticas nunca activan el proc, porque no hay nada en ellos que mejorar. El hierro cuenta como material de nivel 1 para el bono de obra maestra, el pino cumbre y el glyfiacero como nivel 2, por lo que el peldaño superior activa el proc con un poco más de frecuencia.\n\nSube el peldaño de cobre hasta 25, aprende el peldaño de hierro el día que se abra y súbelo hasta 50, luego el peldaño de osmio hasta 75. Pasado 75 nada superior está disponible todavía, por lo que las recetas de osmio se reducen a la mitad y luego a un cuarto de ganancia: calcula aproximadamente 150 creaciones más para alcanzar el límite de 125, y recuerda el límite compartido de diez acciones de creación por minuto cuando te sientes a producir en masa.\n\nFinancia el ascenso conforme avanzas: la orden de trabajo de la forja de Darva acepta ocho minerales de cobre de tus manos cada 30 minutos a cambio de unas pocas monedas y experiencia de misión, y los peldaños de hierro y osmio se venden honestamente a los combatientes de cuerpo a cuerpo que suben de nivel. El Libro de Gestas marca Filo y Temple en habilidad 50 y corona al Gran Maestro Artesano de Armas en 125."
         },
         "armorcrafting": {
           "identityHeading": "Malla para la primera línea",
-          "identityBody": "La escalera de la Forja de armaduras se lee como la carrera de un soldado: el sencillo cinturón, los escarpes y los guanteletes de cobre remachado para empezar; el camisote, las musleras y las bufas de eslabones de hierro con sus primeras líneas de estadísticas reales; y el gran yelmo, la coraza y los leotardos de escama de osmio raros, piezas de Fuerza y Aguante con números de armadura en la cima misma del arte de un artesano.\n\nTambién tiene un lado más discreto: las Perneras protegidas de Eastbrook, un común de campo con estadísticas de lanzador, y el Manto de Escama de Horno, una hombrera de malla rara de Intelecto y Espíritu en habilidad 75, mantienen en la lista de clientes a los portadores de malla de vocación mágica. En el anillo se sitúa entre la Forja de armas y la Ingeniería; el par del Herrero con la Forja de armas se jura ante la Maestra Forjadora Darva, mientras que el par del Engranajero con la Ingeniería está nombrado pero aún no tiene misión de juramento.",
+          "identityBody": "La escalera de la forja de armaduras se lee como la carrera de un soldado: la sencilla cota de malla de cobre remachada, las grebas y los guanteletes para empezar, el peto de eslabones de hierro, los guardapiernas y las hombreras con sus primeras líneas de estadísticas reales, y el gran yelmo de escama de osmio raro, el peto y los leggings, piezas de Fuerza y Aguante con los mayores valores de armadura que un artesano puede fabricar.\n\nTiene también su lado más discreto: los Leggings Protegidos de Eastbrook, un campo común con estadísticas de lanzador, y el Manto de Escama de Horno, una rara malla de hombro con Intelecto y Espíritu en habilidad 75, mantienen a los portadores de malla de mente arcana en la lista de clientes. En la rueda se sitúa entre la Forja de armas y la Ingeniería; el par Herrero con la Forja de armas se jura ante la Maestra de la Fragua Darva, mientras que el par Engranajero con la Ingeniería está nombrado pero aún no tiene misión de juramento.",
           "materialsHeading": "Mineral a sacos",
-          "materialsBody": "Ningún oficio devora mineral más rápido. Solo el camisote de eslabones de hierro se lleva cinco minerales de hierro, y cada pieza de escama de osmio pide tres o cuatro de osmio más una Barra de Glyfiacero, así que un forjador de armaduras serio mina en la Ciénaga de Mirefen y en las Alturas de Thornpeak, o le paga a alguien que lo haga. El cobre alimenta el primer peldaño, directo de las vetas junto a la Excavación de Cobre.\n\nAlrededor del metal van las partes blandas: piel áspera cosechada de cadáveres de lobo y jabalí, fragmentos de hueso de los muertos inquietos (o recuperados del desguace de equipo común) y tarros de Fundente de Forja (20 cobres cada uno en la fragua) en casi todas las recetas. Ningún mostrador vende osmio: los impacientes se lo compran a otros jugadores o lo extraen ellos mismos, en Thornpeak o en las vetas iniciales de diez de las once zonas más jóvenes (solo La Costa Lejana da hierro).",
+          "materialsBody": "Ningún oficio consume mineral más rápido. El peto de eslabones de hierro solo ya requiere cinco minerales de hierro, y cada pieza de escama de osmio necesita tres o cuatro de osmio más una barra de glyfiacero, así que un forjador de armaduras serio extrae en el Pantano de Mirefen y las Alturas de Thornpeak o paga a quien lo hace. El cobre alimenta el primer peldaño, directamente de las vetas junto a la Excavación de Cobre.\n\nAlrededor del metal van las partes blandas: piel áspera recolectada de cadáveres de lobos y jabalíes, fragmentos de hueso y retales de lino de la caza ordinaria, y un frasco de Fundente de Forja (20 cobres en la fragua) en casi cada receta. Darva vende mineral de osmio en el mostrador para los impacientes.",
           "ladderHeading": "Aprendiendo en la fragua de Darva",
-          "ladderBody": "Dos comunes de campo, el Chaleco de cota de Eastbrook y las Perneras protegidas, se conocen desde el principio y se fabrican en cualquier lugar. La escalera del entrenador son nueve recetas en tres peldaños en la fragua de Eastbrook: el peldaño de cobre es gratuito en habilidad 0, el peldaño de eslabones de hierro cuesta 25 de plata por receta en habilidad 25, y el peldaño de escama de osmio cuesta 1 de oro cada una en habilidad 50, y cada peldaño se puede aprender en el momento en que tu nivel lo alcanza.\n\nMás allá de la escalera hay dos piezas especiales. El Yelmo Piedravínculo es una de las dos recetas combinadas del Herrero (los Guanteletes del Gravewyrm son su receta hermana del lado de la forja de armas): la enseña el entrenador, no necesita estación y solo puede trabajarla un Herrero sintonizado con ambos oficios en habilidad 25. El Manto de Escama de Horno no necesita maestro alguno: todo el mundo lo conoce desde el principio, y nada salvo la fragua y los materiales limita su elaboración. Su habilidad indicada de 75 va de ganancia, no de permiso: con la Forja de armaduras como especialización principal paga ganancia completa de habilidad desde el primerísimo martillazo hasta 99, así que un Herrero con osmio de sobra puede apoyarse en él pronto. Por debajo del techo de una especialización principal, la receta de nivel 3 no enseña nada, así que un forjador de armaduras sin declarar o de pasatiempo la trabaja por la pieza, no por los puntos.",
+          "ladderBody": "Dos campos comunes, el Chaleco de Malla de Eastbrook y los Leggings Protegidos, se conocen desde el principio y se fabrican en cualquier lugar. La escalera del entrenador son nueve recetas en tres peldaños en la fragua de Eastbrook: el peldaño de cobre es gratuito en habilidad 0, el peldaño de eslabones de hierro cuesta 25 de plata por receta en habilidad 25 y el peldaño de escama de osmio cuesta 1 de oro cada uno en habilidad 50, pudiendo enseñar cada peldaño en cuanto tu nivel llega a él.\n\nMás allá de la escalera hay dos especiales. El Yelmo de Piedralímite es la receta combinada del Herrero, enseñada por el entrenador, sin necesidad de estación y realizable solo por un Herrero sintonizado con ambos oficios en habilidad 25. El Manto de Escama de Horno no necesita entrenador: todo el mundo lo conoce, pero en habilidad 75 y vinculado a la fragua, es la piedra angular de nivel 3 del oficio.",
           "routeHeading": "Obras maestras y una ruta hasta 125",
           "routeBody": "Desde el peldaño de eslabones de hierro en adelante, cada fabricación tiene posibilidad de generar obra maestra; los campos comunes de cobre solo para armadura no pueden activarse, ya que una obra maestra mejora las estadísticas y esas piezas no tienen ninguna. El hierro cuenta como material de nivel 1 para el efecto y el glyfiacero como nivel 2.\n\nLa subida es el viaje estándar de tres peldaños: cobre hasta 25, eslabones de hierro hasta 50, escama de osmio hasta 75, entrenando cada peldaño el día que se abre. Donde la Forja de armaduras tiene suerte es en el tramo después de 75: el Manto de Escama de Horno es una receta de nivel 3, por lo que da ganancia completa hasta 99 y la mitad después, lo que significa que los últimos cincuenta puntos tardan unas 75 fabricaciones en lugar de las 150 que necesita un oficio sin piedra angular. Cada manto cuesta siete minerales de osmio y cinco de Fundente de Forja, así que abastécete en Thornpeak y en el mostrador de la fragua antes de empezar la carrera.\n\nEl pedido de trabajo de Darva compra ocho minerales de cobre cada 30 minutos por monedas y XP, un buen uso para el mineral de bajo nivel que ya no necesitas. El Libro de Gestas marca Martillo y Placa en habilidad 50, y la Forja de Armaduras del Gran Maestro espera en el tope de 125."
         },
@@ -4507,61 +4709,61 @@ export const es: EnTranslations = {
           "identityHeading": "Cuero para los veloces",
           "identityBody": "La escalera sube desde los simples leggings, botas y cinturón de piel de Fenbridge, pasando por el jubón, la capucha y las hombreras de acechodepantano infrecuentes, hasta el raro conjunto mireguardián, el mejor cuero que un artesano puede cortar. Dos piezas de lanzador lo redondean: el campo común Piel de Druida de Eastbrook y las Vendas de Cuero Crepuscular en habilidad 75.\n\nEn la rueda se sitúa entre la Cocina y la Sastrería. Su par activo es el Pertrechador, Peletería y Sastrería, jurado ante la Tejedora Ottilie en Eastbrook; el par Trampero con la Cocina está nombrado en la rueda pero aún no tiene misión de juramento.",
           "materialsHeading": "La caza es la cosecha",
-          "materialsBody": "La Peletería es el oficio donde tu ruta de subida de nivel y tu cadena de suministro son la misma cosa: la piel áspera se cosecha directamente de los cadáveres que la llevan, sobre todo lobos y jabalíes, y cada cadáver sirve a un solo recolector, por orden de llegada. Una tirada de cosecha rara o mejor otorga además una Piel Prístina, el ejemplar firmado que pide el Chaleco Mirewarden, así que guarda en el banco todas las que encuentres.\n\nEl reparto de apoyo es pequeño: patas y seda de araña, tela casera de los humanoides, un único mineral de osmio en cada pieza rara mireguardián (seis en los Vendajes de cuero crepuscular, la piedra angular) y un Agente curtiente a 16 cobres en el mostrador de la curtiduría. El osmio en sí nunca se compra en un mostrador: extráelo tú mismo, en Thornpeak o en las vetas iniciales de casi cualquier zona más joven (solo La Costa Lejana da hierro), o cómpraselo a otro jugador.",
+          "materialsBody": "La Peletería es el oficio donde tu ruta de subida de nivel y tu línea de suministro son la misma cosa: la piel áspera se recolecta directamente de los cadáveres portadores de piel, sobre todo lobos y jabalíes, y cada cadáver sirve a un solo recolector, el primero en llegar. Una tirada de cosecha rara o mejor también otorga una Piel Prístina, un ejemplar firmado que el Jubón de Mireguardián requiere, así que guarda cada una que encuentres.\n\nEl elenco de apoyo es pequeño: patas de araña y seda, tela basta de humanoides, un único mineral de osmio en cada pieza rara de mireguardián (seis en la piedra angular de las Vendas de Cuero Crepuscular), y un Agente de Curtido a 16 cobres en el mostrador de la tenería. El Curtidor Hesk también vende mineral de osmio, si prefieres no minarlo.",
           "ladderHeading": "Entrenado en Fenbridge",
-          "ladderBody": "Aquí está el detalle: la curtiduría está en Fenbridge, en el camino de la Ciénaga de Mirefen, lo que convierte a la Peletería en el único oficio profundo que se entrena fuera, en el pantano. El Curtidor Hesk enseña la escalera junto a sus cubas: el peldaño de piel de Fenbridge gratis en habilidad 0, el peldaño de acechodepantano a 25 de plata por receta desde habilidad 25, y el peldaño mireguardián a 1 de oro cada una desde habilidad 50, y cada peldaño se abre a medida que tu nivel lo alcanza.\n\nTres recetas se saltan al entrenador: los comunes de campo (el Jubón de cuero curtido y el Pellejo del druida de Eastbrook) se fabrican en cualquier lugar desde el principio, y los Vendajes de cuero crepuscular los conoce todo el mundo, pero están en habilidad 75 y atados a la curtiduría. Ten en cuenta que el juramento del Pertrechador se hace de vuelta en Eastbrook con Ottilie; en el pantano solo ocurre la enseñanza.",
+          "ladderBody": "Aquí está la particularidad: la tenería se encuentra en Fenbridge, en el camino del Pantano de Mirefen, haciendo de la Peletería el único oficio profundo entrenado fuera de Eastbrook. El Curtidor Hesk enseña la escalera en sus cubas: el peldaño de piel de Fenbridge gratuito en habilidad 0, el peldaño de acechodepantano por 25 de plata la receta desde habilidad 25 y el peldaño de mireguardián por 1 de oro cada uno desde habilidad 50, abriéndose cada peldaño cuando tu nivel lo alcanza.\n\nDos recetas se saltan el entrenador: los campos comunes (el Jubón de Cuero Curtido y la Piel de Druida) se fabrican en cualquier lugar desde el principio, y las Vendas de Cuero Crepuscular las conoce todo el mundo pero están en habilidad 75 y vinculadas a la tenería. Ten en cuenta que el propio juramento del Pertrechador se hace de vuelta en Eastbrook con Ottilie; solo la enseñanza ocurre en el pantano.",
           "routeHeading": "Obras maestras y una ruta hasta 125",
-          "routeBody": "Cualquier pieza con estadísticas reales tira la probabilidad de obra maestra siempre que la calidad superior quepa dentro del techo de tu nivel, incluido el Pellejo del druida de Eastbrook con sus estadísticas, y una Piel Prístina firmada en un Chaleco Mirewarden aporta automáticamente la bonificación de reactivo firmado; el osmio cuenta como material de nivel 1 para el efecto. Los comunes de piel sin estadísticas no pueden activarlo.\n\nSúbelo de la forma natural: cosecha cada lobo y cada jabalí que mates desde nivel uno, deja que los dos comunes de campo te lleven hasta 25 estés donde estés, y luego entrena el peldaño de piel junto a las cubas cuando las misiones te arrastren al pantano de todas formas. El acechodepantano te lleva hasta 50 y el mireguardián hasta 75; pasado eso, los Vendajes de cuero crepuscular, una receta de nivel 3 con seis minerales de osmio, tres Pieles Prístinas, dos pieles ásperas y un Agente curtiente, pagan a un Pertrechador sintonizado ganancia completa hasta 99 y la mitad después, unas 75 elaboraciones para los últimos cincuenta puntos hasta el tope de 125; por debajo del techo de una especialización principal, la receta de nivel 3 no enseña nada.\n\nLa curtiduría móvil importa más en este oficio que en ningún otro: especialízate en 75 y una alforja de pieles se convierte en equipo terminado junto a la hoguera, en vez de en una caminata de vuelta a Fenbridge. La orden de trabajo de la curtiduría de Hesk compra ocho pieles ásperas cada 30 minutos, un retorno limpio por unos cueros que ibas a recoger igualmente, y el Libro de Gestas marca El Oficio del Curtidor en habilidad 50, con la Peletería del Gran Maestro en el tope."
+          "routeBody": "Desde el peldaño de acechodepantano en adelante, cada fabricación tiene posibilidad de generar obra maestra, y la Piel Prístina en un Jubón de Mireguardián aporta la bonificación de reactivo firmado automáticamente; el osmio cuenta como material de nivel 1 para el efecto. Los campos comunes de piel sin estadísticas no pueden activarse.\n\nSúbelo de manera natural: cosecha cada lobo y jabalí que mates desde el nivel uno, fabrica el peldaño de piel hasta 25 donde estés, luego entrena en Fenbridge cuando las misiones te lleven al pantano de todos modos. El acechodepantano te lleva hasta 50 y el mireguardián hasta 75; pasado eso las Vendas de Cuero Crepuscular, una receta de nivel 3 con seis minerales de osmio, tres Pieles Prístinas, dos pieles ásperas y un Agente de Curtido, pagan ganancia completa hasta 99 y la mitad después, unas 75 fabricaciones para los últimos cincuenta puntos hasta el tope de 125.\n\nLa tenería de campo portátil importa más para este oficio que para cualquier otro: especialízate en 75 y una alforja de pieles se convierte en equipo terminado junto al fuego de campamento en lugar de un paseo de vuelta a Fenbridge. El pedido de trabajo de tenería de Hesk compra ocho pieles ásperas cada 30 minutos, un retorno ordenado por pieles que recolectabas de todos modos, y el Libro de Gestas marca el Oficio del Curtidor en habilidad 50 con la Peletería del Gran Maestro en el tope."
         },
         "cooking": {
           "identityHeading": "El puchero que alimenta al grupo",
-          "identityBody": "Come un plato cocinado y te cura a lo largo de 18 segundos de descanso, lo que entre una pelea y la siguiente es la curación más barata del juego. La escalera va desde una Perca de río a la plancha de 90 de salud hasta el Gran asado de Marlow con 980, una curación sentada que nada en el juego supera.\n\nEn el anillo, la Cocina se sitúa entre la Alquimia y la Peletería. Su par vivo es el Boticario, Alquimia y Cocina, jurado ante el cocinero Marlow en las cocinas de Eastbrook tras cazar cuatro jabalíes salvajes para el puchero; el par del Trampero con la Peletería está nombrado en el anillo pero aún no tiene misión de juramento.",
+          "identityBody": "Come una comida cocinada y te curará durante 18 segundos de descanso, que entre tirones es la curación más barata del juego. La escalera va desde un Pez de Río a la Plancha de 90 de salud hasta el Gran Asado de Marlow en 980, la mayor curación sentada que existe.\n\nEn la rueda, la Cocina se sitúa entre la Alquimia y la Peletería. Su par activo es el Boticario, Alquimia y Cocina, jurado ante la Cocinera Marlow en las cocinas de Eastbrook tras cazar cuatro jabalíes salvajes para el puchero; el par Trampero con la Peletería está nombrado en la rueda pero aún no tiene misión de juramento.",
           "materialsHeading": "Una despensa alimentada por la caña y el cuchillo",
-          "materialsBody": "La Pesca abastece los ingredientes característicos, zona por zona: trucha espejo y perca de río de las aguas del Valle de Eastbrook, lucio de marisma y anguila de ciénaga de la Ciénaga de Mirefen, trucha de agallas gélidas y carpa de aleta de pizarra de las Alturas de Thornpeak. Los peldaños mezclan las zonas con libertad (el peldaño gratuito ya pide lucio de marisma, el peldaño intermedio la trucha de agallas gélidas de Thornpeak, y la cena rara vuelve a incorporar la trucha espejo del Valle), así que un cocinero que pesca allá donde lo lleve el camino nunca se queda sin existencias.\n\nEl lado del carnicero sale de los cadáveres cosechados: carne de caza de los jabalíes y sus parientes y, con una tirada de cosecha rara o mejor, un Corte Primo firmado, la pieza central del gran asado. Las hierbas sazonan los platos mejores, un tronco de ceniza ahúma la anguila, y la Sal para cocinar cuesta 8 cobres la bolsa en el propio puesto de Marlow.",
+          "materialsBody": "La pesca abastece los ingredientes principales, zona a zona: trucha espejo y pez de río de las aguas del Valle de Eastbrook, lucio de pantano y anguila de ciénaga de Mirefen, trucha escarcha y carpa pizarra de las Alturas de Thornpeak. Cada peldaño de la escalera cocina el pescado de su nivel, así que un cocinero que pesca nunca se queda sin nada.\n\nEl lado del carnicero viene de cadáveres cosechados: carne de caza de jabalíes y sus parientes, y, en una tirada de cosecha rara o mejor, un Corte Selecto firmado, la pieza central del gran asado. Las hierbas sazonan los mejores platos, un tronco de ashwood ahuma la anguila y la Sal de Cocina cuesta 8 cobres la bolsa en el propio puesto de Marlow.",
           "ladderHeading": "Del tasajo al gran asado",
-          "ladderBody": "El Tasajo Salado es la receta de campo: conocida desde el principio, una pata de araña, elaborable en cualquier lugar, la comida de viaje de todo aventurero recién llegado. La escalera del entrenador cocina en las cocinas de Eastbrook al este de la plaza: el peldaño gratuito en habilidad 0 (el pez, el Pincho de Caza del Cazador, la Lucio de Pantano con Hierbas), el peldaño intermedio en habilidad 25 por 25 de plata la receta (Anguila Ahumada de Ashwood, Guiso de Caza con Hoja Dorada, Chowder de Trucha Escarcha), y el peldaño raro en habilidad 50 por 1 de oro cada uno (Cena de Carpa Plateada, Plato de Fiesta del Pescador, Gran Asado de Marlow).\n\nLos platos en lote estiran los ingredientes: la anguila ahumada y el guiso de caza sirven dos porciones por fabricación, y el plato de fiesta sirve tres. Marlow enseña cada peldaño en cuanto tu nivel en Cocina lo alcanza.",
+          "ladderBody": "El Tasajo Salado es la receta de campo: conocida desde el principio, una pata de araña, elaborable en cualquier lugar, la comida de viaje de todo aventurero recién llegado. La escalera del entrenador cocina en las cocinas de Eastbrook al oeste de la plaza: el peldaño gratuito en habilidad 0 (el pez, el Pincho de Caza del Cazador, la Lucio de Pantano con Hierbas), el peldaño intermedio en habilidad 25 por 25 de plata la receta (Anguila Ahumada de Ashwood, Guiso de Caza con Hoja Dorada, Chowder de Trucha Escarcha), y el peldaño raro en habilidad 50 por 1 de oro cada uno (Cena de Carpa Plateada, Plato de Fiesta del Pescador, Gran Asado de Marlow).\n\nLos platos en lote estiran los ingredientes: la anguila ahumada y el guiso de caza sirven dos porciones por fabricación, y el plato de fiesta sirve tres. Marlow enseña cada peldaño en cuanto tu nivel en Cocina lo alcanza.",
           "routeHeading": "Especialización, no obras maestras, y la ruta hasta 125",
           "routeBody": "La Cocina es la excepción honesta a la historia de las obras maestras: una comida no tiene línea de estadísticas que mejorar, así que los platos nunca la generan, y ningún cocinero debería perseguirla. La maestría del oficio es la especialización en 75: un quinto menos de cada ingrediente, que se acumula rápido en los platos en lote, y una cocina de campo portátil para cocinar el festín justo a la puerta de la mazmorra.\n\nCocina lo que pescas: combina la subida con una sesión de pesca y las dos habilidades se alimentan mutuamente hasta arriba. El tasajo y el peldaño gratuito te llevan hasta 25 a un punto por fabricación, el peldaño intermedio hasta 50 y el peldaño raro hasta 75; pasado 75 aún no hay ningún plato superior, así que los platos raros se reducen a la mitad y luego a un cuarto de ganancia, aproximadamente 150 fabricaciones más hasta el tope. Trátalo como abastecimiento, no como grindeo: una hermandad come cada ración.\n\nEl pedido de trabajo de las cocinas de Marlow compra ocho carnes de caza cada 30 minutos por monedas y XP, y el Libro de Gestas marca Chef Experimentado en habilidad 50 en el camino hacia el título de Gran Maestro de Cocina en 125."
         },
         "alchemy": {
           "identityHeading": "Frascos que ganan combates",
-          "identityBody": "El oficio se trabaja en el boticario de Highwatch, hogar de la Alquimista Verane, Maestra del boticario, que enseña la escalera de recetas, vende Viales de Vidrio a 12 cobres y paga monedas por hierbas mediante su orden de trabajo.\n\nEn el anillo de oficios, la Alquimia está con los oficios de ensayo y error, junto a la Ingeniería por un lado y la Cocina por el otro. Eso le da dos identidades de par: el Bombardero (Ingeniería y Alquimia, asumido ante Manitas Gizzel en Eastbrook) y el Boticario (Alquimia y Cocina, jurado ante el cocinero Marlow). Sintonízate con cualquiera de los dos pares para hacer de la Alquimia una especialización principal y dejar que tu propio trabajo firmado te enseñe de vuelta; el par del Bombardero abre además su brebaje combinado, el Elixir del Oso, mientras que el par del Boticario aún no trae ninguna receta combinada. La escalera en sí, eso sí, nunca espera, porque toda receta de Alquimia queda dentro del nivel raro bajo el que trabajan los oficios sin declarar, así que todo el ascenso hasta el tope está abierto antes de cualquier juramento.",
+          "identityBody": "El oficio se trabaja en el boticario de Highwatch, hogar de la Alquimista Verane, Maestra del Boticario, quien enseña la escalera de recetas, vende Viales de Vidrio a 12 cobres y paga monedas por hierbas a través de su pedido de trabajo.\n\nEn la rueda de oficios, la Alquimia se sienta con los oficios de ensayo y error, junto a la Ingeniería por un lado y la Cocina por el otro. Eso le da dos identidades de par: el Bombardero (Ingeniería y Alquimia, tomado antes de Tinker Gizzel en Eastbrook) y el Boticario (Alquimia y Cocina, jurado ante la Cocinera Marlow). Sintonízate con cualquiera de los dos pares para hacer de la Alquimia una especialización principal y abrir la habilidad hasta su tope; hasta entonces funciona hasta el nivel raro como cualquier oficio no declarado.",
           "materialsHeading": "Hierbas, glándulas y vidrio",
           "materialsBody": "Cada poción necesita un Vial de Vidrio más las hierbas correspondientes a su peldaño: la hoja de brillo crece en el Valle de Eastbrook, la hoja dorada en el Pantano de Mirefen y el pétalo de sol en las Alturas de Thornpeak, una hierba por zona, así que tus frascos suben por el mundo junto a ti. La herboristería es la habilidad complementaria natural, aunque comprar a recolectores o en el mercado funciona igual de bien; las zonas más profundas tienen parcelas de nivel superior que requieren una hoz mejor, así que mantén tu herramienta al día si recolectas tú mismo.\n\nLa línea de elixires añade un ingrediente del cazador: Glándulas de Veneno recolectadas de cadáveres venenosos, y el elixir superior requiere una Glándula de Veneno Prístina, el raro ejemplar firmado que aparece con suerte al cosechar un cadáver. Si no recolectas tú mismo, esos son exactamente los bienes que vale la pena pedirle a un amigo cazador que traiga de vuelta.",
           "ladderHeading": "La escalera de recetas",
-          "ladderBody": "Todo el mundo conoce la Poción menor de sanación desde el principio y puede mezclarla en cualquier lugar, sin necesidad de estación. La escalera de verdad son nueve recetas que Verane enseña en el boticario, tres por peldaño: las recetas de habilidad 0 son gratuitas, el peldaño de habilidad 25 cuesta 25 de plata por receta y el peldaño de habilidad 50 cuesta 1 de oro por receta. Cada peldaño lo forman un brebaje curativo, un brebaje de maná y un elixir de aguante, subiendo desde los frascos comunes de hoja de brillo (120 de salud, 160 de maná), pasando por los de hoja dorada poco comunes (200 de salud, 260 de maná), hasta los de pétalo de sol raros (280 de salud, 360 de maná).\n\nLos elixires suben igual: el Elixir del jabalí otorga 6 de Aguante durante 10 minutos, el Elixir Venenofuego 9 durante 15 minutos y el Elixir de la serpiente 12 durante 15 minutos, y solo el de la serpiente prepara dos frascos por elaboración. Una receta más queda apartada: el Elixir del Oso, un brebaje combinado que Verane enseña por 25 de plata en cuanto tu Alquimia llega a 25, mezclable en cualquier lugar, pero solo por un Bombardero sintonizado con Alquimia e Ingeniería ambas en 25.",
+          "ladderBody": "Todo el mundo conoce la Poción de Curación Menor desde el principio y puede mezclarla en cualquier lugar, sin necesitar estación. La escalera real son nueve recetas enseñadas por Verane en el boticario, tres en cada peldaño: las recetas de habilidad 0 son gratuitas, el peldaño de habilidad 25 cuesta 25 de plata por receta y el peldaño de habilidad 50 cuesta 1 de oro por receta. Cada peldaño incluye una poción de curación, una poción de maná y un elixir de aguante, escalando desde los frascos comunes de hoja de brillo (120 de salud, 160 de maná), pasando por la hoja dorada infrecuente (200 de salud, 260 de maná), hasta la pétalo de sol rara (280 de salud, 360 de maná).\n\nLos elixires suben de la misma manera: el Elixir del Jabalí otorga 6 de Aguante durante 10 minutos, el Elixir Venenofuego otorga 9 durante 15 minutos, y el Elixir de la Serpiente otorga 12 durante 15 minutos, fabricando dos frascos por elaboración. Una receta más está aparte: el Elixir del Oso, una poción combinada que Verane enseña por 25 de plata una vez que tu Alquimia alcanza 25, elaborable en cualquier lugar, pero solo por un Bombardero sintonizado con Alquimia e Ingeniería ambas en 25.",
           "routeHeading": "La ruta de un elaborador hasta 125",
-          "routeBody": "Los brebajes y los elixires nunca generan obras maestras; ese efecto corresponde al equipo con estadísticas. Aun así, tu nombre viaja: los brebajes raros de pétalo de sol llegan firmados con la marca del artesano, y también cada frasco del Elixir de la serpiente de doble lote, así que nada raro de este oficio sale de la mesa sin firmar. En habilidad 75 te especializas, y a partir de entonces cada receta de Alquimia cuesta un 20 por ciento menos de materiales.\n\nToma Herboristería pronto y recoge mientras subes de nivel: la hoja de brillo está por todo el Valle, y en cuanto llegues a la mesa de Verane el peldaño gratuito te llevará limpiamente hasta habilidad 25 con hierbas que habrías recogido de todos modos. Aprende el peldaño de 25 en cuanto se active, lleva tu recolección al pantano en busca de hoja dorada, y deja que la orden de trabajo de Verane (seis Hierbas Hoja de Oro por 45 cobres, repetible cada 30 minutos) te devuelva algo de dinero por el camino.\n\nA partir de 50, prepara brebajes de pétalo de sol y lotes de serpiente con el pétalo de sol de Thornpeak, con algo de verde del Valle y del pantano todavía en la mezcla. El último tramo de 100 a 125 es un goteo deliberado, así que prepara lo que de verdad se vende en lugar de quemar hierbas por el número, y recuerda que los consumibles son el único bien artesanal que todo el mundo vuelve a comprar para siempre. El Libro de Gestas marca Brebajes Extraños en habilidad 50 y la Alquimia del Gran Maestro en el tope."
+          "routeBody": "Las pociones y los elixires nunca generan obras maestras; ese efecto corresponde al equipo con estadísticas. Aunque tu nombre sí viaja: las raras pociones de pétalo de sol se elaboran de a un frasco y llegan firmadas con la marca del fabricante, mientras que el Elixir de la Serpiente de doble lote se queda sin firma. A habilidad 75 te especializas, y desde entonces cada receta de Alquimia cuesta un 20 por ciento menos de materiales.\n\nToma Herboristería desde temprano y recoge mientras subes de nivel: la hoja de brillo abunda en el Valle, y una vez que llegas al banco de Verane el peldaño gratuito te llevará limpiamente hasta habilidad 25 con hierbas que habrías recolectado de todos modos. Aprende el peldaño 25 en cuanto esté disponible, mueve tu recolección al pantano para la hoja dorada y deja que el pedido de trabajo de Verane (seis Hierbas de Hoja Dorada por 45 cobres, repetible cada 30 minutos) te devuelva algo de moneda mientras avanzas.\n\nDesde 50 en adelante, elabora pociones de pétalo de sol y lotes de Serpiente con hierbas de Thornpeak. El último tramo de 100 a 125 es un goteo deliberado, así que elabora lo que realmente se vende en lugar de quemar hierbas por el número, y recuerda que los consumibles son el único bien artesanal que todo el mundo vuelve a comprar para siempre. El Libro de Gestas marca Extrañas Pociones en habilidad 50 y Alquimia del Gran Maestro en el tope."
         },
         "engineering": {
           "identityHeading": "El monopolio del fabricante de herramientas",
-          "identityBody": "El oficio se trabaja en el taller de herramientas, en la esquina suroeste de la plaza de Eastbrook, hogar de Manitas Gizzel, Maestro de las herramientas. Los niveles 1 a 3 de cada línea de herramientas son existencias corrientes de vendedor; los niveles 4 y 5 salen de la mesa de un ingeniero, o del mostrador de expediciones de La Letanía Ahogada a cambio de Marcas de Expedición, tras superar sus barreras de limpiezas, y nunca de ninguna caja a cambio de monedas.\n\nEn el anillo está con los oficios de ensayo y error, junto a la Alquimia y la Forja de armaduras, lo que le da dos identidades de par: el Bombardero (Ingeniería y Alquimia, asumido ante el propio Gizzel) y el Engranajero (Forja de armaduras e Ingeniería, nombrado pero aún no jurable). Una advertencia importa aquí más que en ningún otro sitio: todos y cada uno de los peldaños de recetas de la Ingeniería quedan por encima del techo de nivel raro bajo el que trabajan los pasatiempos y los artesanos sin declarar, así que el número de habilidad solo se mueve para un artesano cuyas especializaciones principales incluyan la Ingeniería, lo que hoy significa el Bombardero. Cualquiera puede construir igualmente las herramientas de tierra; un artesano sin sintonizar simplemente no aprende nada al hacerlo, y las dos recetas de caña piden además la enseñanza de Gizzel.",
+          "identityBody": "El oficio se trabaja en el taller de herramientas en la esquina sureste de la Plaza de Eastbrook, hogar de Tinker Gizzel, Maestro del Taller de Herramientas. Los niveles 1 a 3 de cada línea de herramientas son existencias normales de vendedor; los niveles 4 y 5 solo existen a través de un ingeniero.\n\nEn la rueda se sitúa con los oficios de ensayo y error, junto a la Alquimia y la Forja de armaduras, dándole dos identidades de par: el Bombardero (Ingeniería y Alquimia, tomado ante el propio Gizzel) y el Engranajero (Forja de armaduras e Ingeniería, nombrado pero aún no puede jurarse). Una advertencia importa más aquí que en ningún otro lugar: ambos peldaños de recetas de la Ingeniería están por encima del techo de nivel raro bajo el que trabajan las aficiones y los artesanos no declarados, así que el número de habilidad solo avanza para un artesano cuyas especializaciones principales incluyan Ingeniería, que hoy en día significa el Bombardero. Cualquiera puede seguir fabricando las herramientas; un artesano no sintonizado simplemente no aprende nada al hacerlo.",
           "materialsHeading": "Reactivos y herramientas anteriores",
-          "materialsBody": "Cada receta de herramienta de tierra consume la herramienta del nivel inmediatamente inferior más un material FINO, y ese emparejamiento es toda la escalera de tierra: cuatro Minerales finos de hierro y un Pico de Minería de Plata Celeste se convierten en el Pico de Minería de Osmio, y luego dos Barras de Glyfiacero, dos Minerales finos de Osmio y ese pico de osmio se convierten en el Pico de Minería de Glyfiacero. Las líneas del hacha y de la hoz repiten la forma de fino más herramienta anterior con Troncos finos de Ceniza y de Pino Cumbre y con Hierbas finas de Hoja de Oro y de Pétalo de Sol, aunque sus peldaños de nivel 5 no piden ninguna Barra de Glyfiacero: el pico es la única línea que se encarece arriba del todo. Las dos recetas de caña rompen el patrón a propósito: la Caña de carrete de tormenta se lleva cuatro Koi Destello Solar y una Caña del arroyo plateado; la Caña forjada por la marea, dos Koi, ocho Carpas de aleta de pizarra crudas y esa Caña de carrete de tormenta, así que la cima de la escalera del pescador se paga en el agua y no en una veta.\n\nUn material fino no se vende en ninguna parte y no cae de una cosecha corriente: lo consigues trabajando una de las vetas de grado completo de una zona con una herramienta de rango superior al material en sí, lo que en la práctica significa la herramienta un peldaño por debajo de la que intentas construir (las vetas más fáciles que una zona guarda para los viajeros dan el material simple, golpees con lo que golpees). Eso es deliberado. En la ruta artesanal, una herramienta de nivel 5 sale de golpear de verdad con la de nivel 4, no de un viaje de compras; el mostrador de Marcas de Expedición es el único rodeo. La única excepción es la Barra de Glyfiacero, refinada y solo de vendedor, 1 de plata y 60 cobres la barra con la Intendente Bree en Highwatch o en el propio mostrador de Gizzel, así que solo el Pico de Minería de Glyfiacero lleva un suelo fijo de monedas incorporado a su coste.",
+          "materialsBody": "Cada receta de herramienta consume la herramienta del nivel anterior más un material premium: cuatro Minerales de Osmio y un Pico de Minería de Plata Celeste se convierten en el Pico de Minería de Osmio, luego dos Barras de Glyfiacero y ese pico de osmio se convierten en el Pico de Minería de Glyfiacero, y las líneas de hacha y hoz siguen la misma forma con Troncos de Ashwood y Pino Cumbre, Hierbas de Hoja Dorada y Pétalo de Sol.\n\nGizzel tiene los seis reactivos premium en el taller si quieres velocidad sobre margen, pero el mineral, los troncos y las hierbas son todos recolectables en el Pantano de Mirefen y las Alturas de Thornpeak, y las existencias recolectadas son donde vive el beneficio. La excepción es la Barra de Glyfiacero, que solo se consigue del vendedor, así que cada herramienta de nivel glyfiacero lleva un costo fijo en monedas incorporado en su precio.",
           "ladderHeading": "La escalera de herramientas",
-          "ladderBody": "La escalera son ocho recetas, todas vinculadas a la estación del taller de herramientas. Las seis recetas de herramientas de tierra se conocen automáticamente, sin ninguna tarifa de entrenador jamás: el pico, el hacha y la hoz de nivel 4 en habilidad 75, y las versiones de nivel 5 en habilidad 150. Ese segundo número no es una errata, y queda por encima del tope actual de 125 a propósito: aquí los requisitos de habilidad nunca cierran el paso a una elaboración, solo modelan la ganancia de habilidad, así que puedes construir una herramienta de nivel 5 el día que tengas sus reactivos y su predecesora de nivel 4. Las dos cañas elaboradas son la excepción enseñada: Gizzel enseña la Caña de carrete de tormenta en habilidad 75 por 4 de oro y la Caña forjada por la marea en habilidad 125 por 16 de oro, cada una en cuanto tu nivel en el oficio alcanza el suyo.\n\nToda herramienta terminada es de calidad rara o épica y sale firmada, así que tu nombre recorre las zonas en los cinturones de herramientas de otros jugadores. La Ingeniería también sostiene la mitad de una receta combinada: el Elixir del Oso, preparado por un Bombardero sintonizado con Ingeniería y Alquimia ambas en 25.",
+          "ladderBody": "Toda la escalera son seis recetas, todas vinculadas a la estación del taller de herramientas y todas conocidas automáticamente, sin tarifa de entrenador nunca: el pico, el hacha y la hoz de nivel 4 en habilidad 75, y las versiones de nivel 5 en habilidad 150. Ese segundo número no es un error de tipeo, y se sitúa por encima del tope actual de 125 a propósito: los requisitos de habilidad nunca bloquean una fabricación aquí, solo dan forma a la ganancia de habilidad, así que puedes fabricar una herramienta de nivel 5 el día que tengas sus reactivos y el nivel 4 anterior.\n\nCada herramienta terminada es de calidad rara o épica y sale firmada, por lo que tu nombre viaja por las zonas en los cinturones de herramientas de otros jugadores. La Ingeniería también sostiene la mitad de una receta combinada: el Elixir del Oso, elaborado por un Bombardero sintonizado con Ingeniería y Alquimia ambas en 25.",
           "routeHeading": "La ruta de un ingeniero hasta 125",
           "routeBody": "Las herramientas no tienen estadísticas de combate, así que nunca generan obras maestras; ese efecto corresponde al equipo con estadísticas. La especialización aún llega en habilidad 75: un 20 por ciento menos de materiales por fabricación, y un taller de herramientas de campo temporal que convierte cualquier viaje de recolección en un taller. La matemática de ganancia apenas se reduce aquí: las recetas de habilidad 75 pagan ganancia completa hasta 100 y la mitad después, y las recetas de habilidad 150 pagan ganancia completa hasta el tope de 125, así que la verdadera limitación son los reactivos y las monedas, nunca las recetas en gris.\n\nElige tu par primero, porque nada avanza sin él: toma la sintonización de Bombardero de Tinker Gizzel. Luego alimenta la escalera: sube Minería, Tala o Herboristería tú mismo o hazte amigo de recolectores, compra las herramientas de nivel 3 a los vendedores y trata el pedido de trabajo de Gizzel (ocho Troncos de Corteza de Hierro por 16 cobres, repetible cada 30 minutos) como dinero de bolsillo.\n\nLa Ingeniería es un oficio de prestigio de bajo volumen, aproximadamente un punto de habilidad por herramienta terminada, así que trata cada fabricación como existencias para vender. El argumento a tus clientes se escribe solo: cada nivel de herramienta por encima del propio del nodo reduce 0,4 segundos del tiempo de lanzamiento de recolección de 2,5 segundos (hasta un mínimo de 1,5 segundos), así que una herramienta de nivel 5 es una mejora de velocidad en cada nodo del mundo, y solo tú puedes fabricarla. El Libro de Gestas marca Engranajes y Resortes en habilidad 50 y la Ingeniería del Gran Maestro en 125."
         },
         "enchanting": {
           "identityHeading": "Equipo desmontado, poder devuelto",
-          "identityBody": "Todos los encantamientos se conocen desde el principio, cualquiera puede desencantar desde el primer día y ninguna de las dos cosas necesita estación jamás; la habilidad tope en 125, como todos los oficios. El único rincón enseñado del oficio es su pareja de recetas de talismán: Manitas Gizzel enseña el Alijo del Recolector y el Ojo del Artesano en el taller de herramientas, en la esquina suroeste de la plaza de Eastbrook, por la tarifa de nivel habitual en cuanto tu Encantamiento llega a 25, y los talismanes se trabajan en su estación.\n\nEn el anillo se sitúa entre la Inscripción y la Joyería, así que sus dos identidades de par son el Arcanista (Inscripción y Encantamiento) y el Gemoencantador (Encantamiento y Joyería). Ninguna puede jurarse todavía, ya que ambos vecinos esperan sus primeras recetas, así que hoy el Encantamiento sube como el oficio de todos: libre hasta el nivel raro antes de cualquier juramento, y una elección de pasatiempo natural para un Bombardero o un Boticario. Los encantadores también mantienen en marcha el mundo de la recolección: los dos efectos de herramienta que se pueden engarzar son obra de encantador, y el artesano original recarga sus propios efectos con descuento, aún mayor una vez especializado.",
+          "identityBody": "No hay estación, no hay entrenador y no hay lista de recetas que comprar: todos los encantamientos se conocen desde el principio, cualquiera puede desencantarlos desde el primer día y la habilidad llega a un tope de 125 como cualquier otro oficio.\n\nEn la rueda se sitúa entre la Inscripción y la Joyería, por lo que sus dos identidades de par son el Arcanista (Inscripción y Encantamiento) y el Gemoencantador (Encantamiento y Joyería). Ninguno puede jurarse todavía, ya que ambos vecinos esperan sus primeras recetas, así que hoy el Encantamiento sube como el oficio de todos: gratuito hasta el nivel raro antes de cualquier juramento, y una elección natural de afición para un Bombardero o un Boticario. Los encantadores también mantienen en marcha el mundo de la recolección: los tres efectos de herramienta para ranura son obra de los encantadores, y un artesano original recarga sus propios efectos con descuento, más aún una vez especializado.",
           "levelingHeading": "Cómo sube el encantamiento",
-          "levelingBody": "Tres acciones mueven la habilidad: desencantar una pieza, aplicar un encantamiento y elaborar los dos talismanes, que suben por la curva de artesanía habitual. Cada éxito vale hasta un punto, escalado según lo serio que sea el trabajo: la rareza de la pieza que rompes, o el nivel de reactivo del encantamiento que aplicas. Los desencantamientos comunes y los encantamientos que solo piden polvo puntúan como trabajo común; los desencantamientos poco comunes y los encantamientos de esencia, como poco común; los desencantamientos raros y todo encantamiento Rúnico o Mayor, como raro; los desencantamientos épicos y legendarios ocupan un lugar aún más alto en la tabla, aunque ninguna identidad de encantamiento llega hoy más allá del peldaño raro, así que en la práctica pagan lo mismo que el trabajo raro. Una honradez gobierna la mesa de romper: una pieza que salió de la mesa de un jugador (elaborada, firmada o de obra maestra) sigue moliéndose para dar materiales, pero no enseña nada, así que un bucle de elaborar y romper no sube a nadie, y las lecciones están en el equipo encontrado por el mundo.\n\nEl conocido desvanecimiento de maestría se aplica en niveles de 25 puntos, así que el trabajo de grado común se pone gris en habilidad 75, el poco común en 100 y el de nivel raro exactamente en el tope de 125. El Encantamiento tiene además una bondad propia: la entrada por encima del techo de tu arquetipo se redondea hacia abajo hasta ese techo en lugar de anularse, así que, antes de sintonizarte, un desencantamiento épico simplemente puntúa como raro en vez de no enseñar nada. Si el Encantamiento acaba inactivo detrás de otra identidad, romper y aplicar puntúan como trabajo común y el ascenso se atasca en 75, mientras que los dos talismanes, que van por la curva de artesanía por encima del techo común, no le enseñan absolutamente nada a un encantador inactivo; consérvalo como tu pasatiempo y el trabajo de nivel raro seguirá pagando, solo que más lento pasado 75.",
+          "levelingBody": "Dos acciones hacen avanzar la habilidad: desencantar una pieza y aplicar un encantamiento. Cada éxito vale hasta un punto, escalado según la seriedad del trabajo: la rareza de la pieza que destruyes, o el nivel del reactivo del encantamiento que aplicas. Los desencantos comunes y los encantamientos solo de polvo puntúan como trabajo común; los desencantos infrecuentes y los encantamientos de esencia como infrecuentes; los desencantos raros y todos los encantamientos Rúnicos o Mayores como raros; los desencantos épicos y legendarios aún más.\n\nLa habitual reducción de maestría se aplica en franjas de 25 puntos, así que el trabajo de calidad común se vuelve gris en habilidad 75, el trabajo infrecuente en 100 y el trabajo de nivel raro exactamente en el tope de 125. El Encantamiento también tiene una ventaja propia: la entrada por encima del techo de tu arquetipo se redondea a la baja hasta ese techo en lugar de anularse, así que antes de sintonizarte, un desencantamiento épico simplemente puntúa como raro en lugar de no enseñar nada. Si el Encantamiento acaba dormido detrás de otra identidad, todo puntúa como trabajo común y la subida se estanca en 75; mantenlo como afición y el trabajo de nivel raro aún paga, solo más lento pasado 75.",
           "marketHeading": "Copias encantadas, procedencia y el mercado",
-          "marketBody": "Aplicar un encantamiento gasta los reactivos y marca una copia concreta del objeto. Apúntalo a una copia guardada en la bolsa y recibes una copia encantada distinta; apúntalo a una pieza que ya llevas puesta y se encanta ahí mismo, donde está, sin el baile de quitar y volver a equipar. En ambos casos la bonificación acompaña a esa pieza para siempre, a través de desequipados, viajes al banco e intercambios. Un encantamiento por pieza: aplicar un encantamiento distinto a una copia encantada pide confirmación y luego sustituye por completo al encantamiento anterior, destruyéndolo sin devolver sus materiales. Vender, descartar y desencantar prefieren siempre primero las copias corrientes, para que tu pieza terminada no se la coma nadie por accidente.\n\nEl equipo de obra maestra y el encantamiento se llevan bien: una pieza de obra maestra sigue siendo del todo encantable, y el encantamiento se suma por encima de la bonificación de obra maestra sin alterarla ni tocar la firma del artesano. Sumando todas las fuentes, una obra maestra firmada que lleve un encantamiento Mayor es lo mejor que puede llegar a ser una pieza artesanal, y aun así queda por debajo del botín de banda por diseño.\n\nEn el mercado, una pieza encantada o firmada se publica como cualquier otra: sube como su propia publicación de copia única, la descripción emergente muestra el encantamiento y la marca del artesano, y el Correo del Cuervo la lleva con la misma fidelidad. Los materiales siguen siendo la mitad estable del oficio: el Polvo, la Esencia y los Fragmentos se publican sin trabas, publicar no cuesta nada, y el Mercader se queda solo con el 5 por ciento de una venta completada. Eso deja los dos ingresos clásicos del encantador en vender materiales y vender trabajo terminado: por el mercado, por cuervo o cara a cara en una ventana de intercambio."
+          "marketBody": "Aplicar un encantamiento consume los reactivos y marca una copia concreta del objeto. Si lo aplicas a una copia embolsada, recibes una copia encantada diferente; si lo aplicas a una pieza que ya llevas puesta, se encanta en el sitio, sin desequipar y volver a equipar. En cualquier caso la bonificación acompaña a la pieza para siempre, a través de desequipamientos, viajes al banco y comercios. Un encantamiento por pieza: aplicar un encantamiento distinto a una copia encantada pide confirmación primero y luego reemplaza el encantamiento antiguo directamente, destruyéndolo sin reembolsar sus materiales. Vender, descartar y desencantar prefieren las copias simples primero, para que tu pieza terminada no se consuma por accidente. Las copias encantadas idénticamente incluso se apilan en tus bolsas.\n\nEl equipo de obra maestra y el encantamiento son amigos: una pieza de obra maestra sigue siendo completamente encantable, y el encantamiento se suma a la bonificación de obra maestra sin alterarla ni la firma del fabricante. Sumando todas las fuentes, una obra maestra firmada con un encantamiento Mayor es lo mejor que puede lograr una pieza artesanal, y aún así sigue por debajo del botín de banda por diseño.\n\nEn el mercado, el Mercado Mundial solo comercia con existencias simples y sin modificar, por lo que las piezas encantadas y firmadas cambian de manos cara a cara a través de la ventana de comercio. Los materiales son la mitad comerciable del oficio: el Polvo, la Esencia y los Fragmentos se listan libremente, publicar no cuesta nada y el Mercader toma solo el 5 por ciento de una venta completada. Eso hace que los dos ingresos clásicos del encantador sean vender materiales en el mercado y tomar la pieza de un cliente en comercio, encantarla y devolvérsela."
         }
       },
       "howHeading": "Cómo funciona la artesanía",
-      "howBody": "Abre la ventana de elaboración (tecla T por defecto) y verás listadas todas las recetas que conoces con lo que necesitan y lo que tienes a mano. Las recetas vinculadas a estación te piden estar a menos de 20 metros de la estación correcta del pueblo, las recetas de campo se elaboran en cualquier lugar, y el desmontar y encantar del Encantamiento no necesitan estación alguna (solo sus dos recetas de amuleto son trabajo de estación, en el taller de herramientas). No hay tirada de fallo: una elaboración con los materiales en mano siempre tiene éxito.\n\nDos pequeñas fricciones mantienen honesta la economía. Cada elaboración exitosa paga una tarifa de 2 cobres por punto del presupuesto de estadísticas del objeto, y las acciones de tipo artesanal comparten un mismo ritmo: como máximo 10 elaboraciones, desencantamientos, encantamientos, desguaces o recargas de herramienta en cada ventana de 60 segundos. Ninguna de las dos molestará en una sesión normal; ambas impiden que un especialista al tope inunde el mercado.",
+      "howBody": "Abre la ventana de artesanía (tecla T por defecto) y cada receta que conoces aparece con lo que necesita y lo que tienes a mano. Las recetas de estación te piden estar a menos de 20 metros de la estación correcta en el pueblo, las recetas de campo se elaboran en cualquier lugar, y la Encantación nunca necesita estación. No hay dado de fallo: una elaboración con los materiales en mano siempre tiene éxito.\n\nDos pequeñas fricciones mantienen la economía honesta. Cada elaboración exitosa paga una tarifa de 2 cobres por punto del presupuesto de estadísticas del objeto, y las acciones de tipo artesanía comparten un ritmo: como máximo 10 elaboraciones, desencantamientos, encantamientos o salvamentos en cualquier periodo de 60 segundos. Ninguno de los dos molestará en una sesión normal; ambos evitan que un especialista al tope inunde el mercado.",
       "recipesHeading": "Recetas",
       "recipesNote": "Cada receta del oficio: su requisito exacto de habilidad y materiales, dónde se aprende y por qué tarifa, y los tres valores de habilidad donde su ganancia baja a la mitad, un cuarto y nada.",
       "masteryHeading": "Ganancia de habilidad",
       "masteryBody": "Cada receta de la ventana muestra su estado de ganancia en los colores clásicos: naranja significa ganancia completa, amarillo la mitad, verde un cuarto, gris nada. Los límites son exactos, cada {step} de habilidad es un nivel, y una receta pierde un color por cada nivel que queda por debajo del tuyo.\n\nComo las ganancias son deterministas (una elaboración de ganancia completa siempre te mueve exactamente un punto), puedes planear todo el ascenso desde la lista: trabaja un peldaño mientras esté naranja, aprende el siguiente cuando se ponga amarillo, y nunca gastes materiales en una elaboración gris esperando progreso. Al llegar al tope de {cap} el número se detiene, pero las recetas, la probabilidad de obra maestra y los beneficios siguen funcionando.",
       "masterworkHeading": "Obras maestras",
-      "masterworkBody": "Cada elaboración exitosa es exactamente lo que promete la receta, y a veces un poco más: una obra maestra termina esa misma pieza un nivel de calidad más fina, con las estadísticas extra incorporadas en el momento de elaborar. Solo suma, nunca rebaja, y se mantiene por debajo del suelo de la banda, así que el equipo artesanal puede ser excelente sin sustituir un botín de banda.\n\nLa probabilidad está publicada, no es mística: {base}% de base, más {perTier}% por cada nivel que tu habilidad esté por encima de la receta, más {signed}% cuando entra cualquier reactivo firmado, más {spec}% en cuanto te especializas, con los materiales de nivel superior añadiendo de un 1 a un 2% más, todo con un tope de {cap}%. Solo puede mejorar una pieza con estadísticas reales, así que los comunes sin estadísticas, las herramientas y los consumibles nunca la activan; un oficio inactivo nunca produce ninguna, y un oficio de afición no puede generar obra maestra más allá de su techo de calidad rara.\n\nEl buen trabajo lleva a su artesano. Los resultados raros o mejores salen firmados, cada copia (Elaborado por; los materiales recolectados llevan Recolectado por), y una obra maestra va siempre firmada sea cual sea su calidad. Una firma es procedencia, no un candado: los bienes firmados se intercambian, se envían por correo y se publican en el Mercado Mundial sin trabas.",
+      "masterworkBody": "Cada elaboración exitosa es exactamente lo que promete la receta, y a veces un poco más: una obra maestra termina la misma pieza un nivel de calidad por encima, con las estadísticas adicionales integradas en el momento de la elaboración. Es solo un añadido, nunca una degradación, y se mantiene por debajo del umbral de banda, así que el equipo elaborado puede ser excelente sin reemplazar un botín de banda.\n\nLa probabilidad está publicada, no es un misterio: {base}% base, más {perTier}% por cada nivel que tu habilidad supera a la receta, más {signed}% cuando entra cualquier reactivo firmado, más {spec}% una vez que estás especializado, y los materiales de nivel más alto añaden entre un 1 y un 2% más; todo con tope en {cap}%. Solo una pieza con estadísticas reales puede mejorar, así que los comunes sin estadísticas, las herramientas y los consumibles nunca la activan; una elaboración inactiva nunca produce una, y una elaboración de afición no puede superar su techo raro como obra maestra.\n\nEl buen trabajo lleva el nombre de su artesano. Los productos raros o mejores de una sola copia están firmados (Elaborado por; los materiales recolectados llevan Recolectado por), una obra maestra siempre está firmada sin importar su calidad, y piezas firmadas idénticamente siguen apilándose. Una firma es una procedencia, no un candado: los bienes firmados se comercian libremente.",
       "trainingHeading": "Entrenamiento",
-      "trainingBody": "Las recetas de entrenador vienen de los maestros residentes y se enseñan en sus estaciones. La regla cabe en una línea: un maestro enseña una receta en cuanto tu nivel en el oficio alcanza el nivel propio de la receta, y nada más la restringe, ni tu nivel de personaje ni tu arquetipo. Las escaleras de equipo y consumibles colocan sus peldaños en habilidad 0, 25 y 50; las dos lecciones de caña de la Ingeniería continúan la escalera en 75 y 125, y las dos recetas de amuleto del Encantamiento están en el peldaño de 25, así que se abre un peldaño nuevo a medida que suben tus niveles.\n\nLas tarifas son únicas y fijas por peldaño: el peldaño inicial es gratis, el peldaño de habilidad 25 cuesta {tier1} por receta, el de habilidad 50 {tier2}, y las lecciones de caña por encima de ellos llevan sus propias tarifas, indicadas junto a cada receta en la tabla. Debes estar en la estación real del maestro para entrenar, y una estación móvil nunca cuenta. Las recetas comunes de campo y las seis recetas de herramientas de tierra elaboradas no necesitan entrenamiento alguno; todos los personajes las conocen desde el principio.",
+      "trainingBody": "Las recetas del entrenador vienen de los maestros residentes, enseñadas en sus estaciones. La regla es una sola línea: un maestro enseña una receta cuando tu nivel en el oficio ha alcanzado el nivel propio de la receta, y nada más lo bloquea, ni tu nivel de personaje, ni tu arquetipo. Los peldaños de la escalera del entrenador están hoy en habilidad 0, 25 y 50, así que un nuevo peldaño se abre con cada nivel que subes.\n\nLas tarifas son únicas y fijas por peldaño: el peldaño inicial es gratis, el peldaño de habilidad 25 cuesta {tier1} por receta, y el de habilidad 50 cuesta {tier2}. Debes estar en la estación real del maestro para entrenar, y una estación móvil nunca cuenta. Las recetas de campo comunes y las recetas de herramientas no necesitan entrenamiento; cada personaje las conoce desde el principio.",
       "specializationHeading": "Especialización",
       "specializationBody": "En la habilidad {at} este oficio te especializa, sin necesidad de misión: las recetas cuestan un {pct}% menos de materiales a partir de entonces, y la especialización añade su propio impulso a la probabilidad de obra maestra.\n\nLos especializados también aprenden a llevar el taller consigo: un artesano especializado puede montar una estación móvil en el campo durante diez minutos seguidos, de modo que las recetas de estación se pueden trabajar en la boca de la mina en vez de volver al pueblo. Sus límites son deliberados: nunca cuenta para entrenar con un maestro ni para desvincular una pieza de encargo, y expira con su temporizador la hayas usado o no.",
       "ench": {
@@ -4573,7 +4775,7 @@ export const es: EnTranslations = {
         "meleeWeapons": "Armas de cuerpo a cuerpo",
         "timberWeapons": "Bastones, varitas, arcos y ballestas",
         "enchantsHeading": "Encantamientos",
-        "enchantsNote": "Los encantamientos vienen en tres niveles. El nivel base funciona con Polvo de Carillón (con un poco de Esencia en el extremo alto) y cubre la ranura de arma más todas las ranuras de armadura salvo la mano izquierda, con suficientes opciones de eje de estadística para que cada estilo de personaje encuentre algo para cada ranura. El nivel Mayor cuesta un Fragmento de Carillón más Esencia: bonificaciones más fuertes en las ranuras de mayor impacto. Los Fragmentos alimentan además otros dos sumideros, las dos recetas de amuleto a cinco cada una y el peldaño superior de las recargas de efecto de herramienta, así que guarda unos cuantos antes de gastar.\n\nEntre ambos se sitúan los cinco encantamientos Rúnicos, un consumidor por cada secundario tipificado, de modo que nada de lo que desencantes acaba en un callejón sin salida: Filo Rúnico (arma, Fuerza, consume Acero Resonante), Sello Rúnico (arma, Intelecto, Madera Resonante), Tejido Rúnico (pecho, Espíritu, Hilo Resonante), Piel Rúnica (piernas, Agilidad, Piel Resonante) y Eslabones Rúnicos (yelmo, Aguante, Eslabones Resonantes). Cada uno lleva además dos Esencias de Carillón; allí donde una ranura y una estadística tienen tanto un encantamiento base como uno Mayor, el bono Rúnico queda entre los dos, mientras que el Tejido Rúnico es sin discusión el mejor encantamiento de Espíritu para el pecho y la Piel Rúnica es el único encantamiento de Agilidad para las piernas. Las bonificaciones exactas están todas en la tabla de abajo.",
+        "enchantsNote": "Los encantamientos vienen en tres niveles. El nivel base funciona con Polvo de Carillón (con un poco de Esencia en el extremo superior) y cubre la ranura de arma más cada ranura de armadura, con suficientes opciones de estadísticas para que cada build encuentre algo para cada ranura. El nivel Mayor cuesta un Fragmento de Carillón más Esencia y es lo único para lo que sirven los Fragmentos: bonos más fuertes en las ranuras de mayor impacto.\n\nEntre ellos están los cinco encantamientos Rúnicos, uno por secundario tipificado, para que nada de lo que proceses sea un callejón sin salida: Filo Rúnico (arma, Fuerza, consume Acero Resonante), Foco Rúnico (arma, Intelecto, Madera Resonante), Tejido Rúnico (pecho, Espíritu, Hilo Resonante), Piel Rúnica (piernas, Agilidad, Piel Resonante) y Eslabones Rúnicos (casco, Aguante, Eslabones Resonantes). Cada uno también requiere dos Esencias de Carillón y queda entre sus hermanos base y Mayor en potencia; los bonos exactos están todos en la tabla siguiente.",
         "colEnchant": "Encantamiento",
         "colSlot": "Ranura",
         "colTier": "Nivel",
@@ -4588,62 +4790,62 @@ export const es: EnTranslations = {
         "bonusFmt": "+{value} {stat}"
       },
       "gatherIntro": {
-        "mining": "La Minería saca mineral directamente de la roca del mundo: cobre en el Valle de Eastbrook, hierro en la Ciénaga de Mirefen y osmio allá arriba en las Alturas de Thornpeak, con vetas iniciales repartidas por cada zona más joven más allá de ellas, alimentando los oficios de la fragua. Abierta a todos desde el nivel 1: un pico de minero de 20 cobres de un mostrador de Eastbrook, Fenbridge o Highwatch abre todas las vetas iniciales, y los peldaños más altos de la escalera de picos despiertan a medida que tu propio contador se los gana. Registrada en su propio contador hasta un tope de 100.",
-        "logging": "La Tala corta madera de arboledas repartidas por todo el mundo: corteza de hierro en el Valle de Eastbrook, madera de ceniza en la Ciénaga de Mirefen, pino cumbre en las Alturas de Thornpeak y arboledas iniciales en cada zona más joven, la materia prima para astiles, bastones y el banco del ingeniero. Abierta a todos desde el nivel 1 con un hacha de leñador en las bolsas (20 cobres en los mostradores de Eastbrook, Fenbridge y Highwatch), registrada en su propio contador hasta un tope de 100.",
-        "herbalism": "La Herboristería recoge lo que crece silvestre: hoja de brillo en el Valle de Eastbrook, hoja dorada en la Ciénaga de Mirefen, pétalo de sol en las Alturas de Thornpeak y matas iniciales en cada zona más joven, la hoja y el tallo que mantienen en marcha los oficios de botica. Abierta a todos desde el nivel 1 con una hoz de herborista en las bolsas (20 cobres en los mostradores de Eastbrook, Fenbridge y Highwatch), registrada en su propio contador hasta un tope de 100.",
-        "fishing": "La Pesca es la rara entre los oficios de recolección, y la más profunda: un minijuego de verdad de picada y cobranza, tablas de capturas propias en cada una de las tres zonas centrales (las aguas jóvenes más allá sirven de momento la tabla del Valle) y un tope de pericia de 200, el doble que las demás. Compra una caña, ponte de cara al agua abierta y lanza."
+        "mining": "La Minería extrae mineral directamente de la roca del mundo: cobre en el Valle de Eastbrook, hierro en el Pantano de Mirefen y osmio en las Alturas de Thornpeak, que alimenta los oficios de la forja. Disponible para todos desde el nivel 1: solo hace falta un pico de minero en la mochila, 20 de cobre en cualquier pueblo principal. Se registra en su propio contador hasta un tope de 100.",
+        "logging": "La Tala derriba madera de arboledas en las tres zonas: corteza de hierro en el Valle de Eastbrook, madera de ceniza en el Pantano de Mirefen y pino cumbre en las Alturas de Thornpeak, el material bruto para mangos, bastones y el banco del ingeniero. Disponible para todos desde el nivel 1 con un hacha de leñador en la mochila (20 de cobre en cualquier pueblo principal), con su propio contador hasta un tope de 100.",
+        "herbalism": "La Herboristería recoge lo que crece silvestre: hoja de brillo en el Valle de Eastbrook, hoja dorada en el Pantano de Mirefen y pétalo de sol en las Alturas de Thornpeak, la hoja y el tallo que mantienen activos los oficios del boticario. Disponible para todos desde el nivel 1 con una hoz de herborista en la mochila (20 de cobre en cualquier pueblo principal), con su propio contador hasta un tope de 100.",
+        "fishing": "La Pesca es la diferente entre los oficios de recolección, y la más profunda: un minijuego real de picar y cobrar, con sus propias tablas de captura en cada zona y un tope de pericia de 200, el doble que los demás. Compra una caña, mira hacia aguas abiertas y lanza."
       },
       "rhythmHeading": "El ritmo de recolección",
-      "rhythmBody": "Una cosecha es un lanzamiento corto y visible, no un agarre instantáneo: {base} segundos de base, nunca por debajo de un mínimo de {floor} segundos. Llevar una herramienta por encima del nivel del nodo, una que tu pericia te permita manejar, te acelera {tool} segundos por cada nivel por encima de él, y cada franja de pericia que cruzas recorta otros {band} segundos; igualar sin más el nivel del nodo te abre la puerta, son los niveles por encima los que te hacen rápido.\n\nUna bolsa llena rechaza cortésmente el lanzamiento antes de que empiece, así que no se desperdicia nada a medio golpe, y cada cosecha paga una pequeña porción de XP de personaje, escalada según el nivel del nodo frente al tuyo igual que escala la XP por muertes: un nodo gris trivial no le enseña nada a un personaje al tope.",
-      "gainBody": "La ganancia es determinista, nunca una tirada de subida de habilidad: un nodo en tu nivel de ganancia o por encima enseña un punto completo por cosecha, y cada {step} de pericia es un nivel puntuado frente al nodo. Los nodos de nivel 1 pagan completo por debajo de 25, la mitad hasta 49, un cuarto hasta 74 y nada a partir de 75; los nodos de nivel 2 pagan completo hasta 49; los dos nodos de nivel 3 de cada oficio pagan completo hasta 74 y la mitad justo hasta el tope de {cap}.\n\nLa ruta prevista es sencilla: aprende en los nodos iniciales del Valle, pasa a la ciénaga y termina el ascenso en el terreno elevado de las Alturas de Thornpeak. Al llegar al tope el aprendizaje se detiene, pero los rendimientos no: un recolector al tope sigue tirando para siempre las mejores probabilidades que ofrece el oficio.",
+      "rhythmBody": "Una cosecha es un lanzamiento corto y visible, no una toma instantánea: {base} segundos base, nunca por debajo de un piso de {floor} segundo. Tener una herramienta por encima del nivel del nodo te acelera {tool} segundos por cada nivel que la superas, y cada franja de pericia que cruzas recorta otros {band} segundos; simplemente igualar el nivel del nodo te da acceso, pero son los niveles por encima del mismo los que te hacen rápido.\n\nUna bolsa llena rechaza amablemente el lanzamiento antes de que empiece, así que no se desperdicia nada a medias, y cada cosecha paga una pequeña porción de EXP de personaje, escalada por el nivel del nodo contra el tuyo igual que escala el EXP de matar: un nodo gris trivial no le enseña nada a un personaje al tope.",
+      "gainBody": "La ganancia es determinista, nunca un dado de subida de habilidad: un nodo en tu nivel de ganancia o por encima enseña un punto completo por cosecha, y cada {step} de pericia es un nivel puntuado contra el nodo. Los nodos de nivel 1 pagan completo por debajo de 25, la mitad hasta 49, un cuarto hasta 74, y nada desde 75; los nodos de nivel 2 pagan completo hasta 49; el único nodo de nivel 3 paga completo hasta 74 y la mitad hasta el tope de {cap}.\n\nLa ruta prevista es clara: aprende en los nodos iniciales del Valle, pasa a la ciénaga y termina el ascenso en las tierras altas de las Alturas de Thornpeak. Al llegar al tope el aprendizaje se detiene, pero los rendimientos no: un recolector al tope sigue extrayendo materiales de máxima calidad para siempre.",
       "nodesHeading": "Nodos por zona",
       "nodesNote": "Dónde están los nodos, su nivel, la herramienta que necesitan y qué producen. Cada nodo reaparece para ti {respawn} segundos después de tu propia cosecha, y ese temporizador es solo tuyo: otro recolector trabajando el mismo nodo nunca retrasa el tuyo, así que no hay carreras por nodos ni campamentos. Cada zona que subes en la escalera trae un material mejor de un terreno más exigente.",
       "toolsHeading": "Herramientas",
-      "toolsNote": "Cada nodo necesita en tus bolsas la herramienta de su oficio, incluido el nivel 1: sin pico, no hay mineral, y sin caña, no hay pez. La escalera de vendedores cubre los niveles 1 a 3 en los tres centros de las tierras centrales: la herramienta de nivel 1 se vende en los tres, los peldaños superiores allí donde empieza el terreno que los usa (Fenbridge añade el nivel 2, Highwatch el nivel 3), y los asentamientos más jóvenes más allá de ellos no tienen herramienta alguna en existencias, así que equípate antes de viajar. Cada mostrador vende sin trabas todos los peldaños que tiene, y cualquier herramienta pasa por intercambio directo; cada peldaño se publica además en el Mercado y viaja por correo, salvo los tres iniciadores de tierra de 20 cobres: esos se compran en un mostrador o se pasan de mano en mano, y nunca se revenden, se envían por correo ni se publican. Lo que está restringido es el manejo. Una herramienta de tierra por encima del nivel 1 solo funciona cuando tu pericia en su propio oficio se la ha ganado, {tier2Prof} para el nivel 2, {tier3Prof} para el nivel 3, y 85 y 100 para los dos peldaños elaborados, y la fila del vendedor, la información emergente y la tabla de abajo nombran el requisito por adelantado. Hasta entonces, una herramienta comprada por adelantado simplemente espera en tus bolsas, sin abrir terreno, sin comprar velocidad y sin acuñar grados finos, y se maneja en el momento en que tu contador toca su número. Las cañas de pescar son la única excepción: ninguna caña lleva requisito de manejo, y el Comerciante Wilkes en Eastbrook tiene a propósito en existencias las cañas de nivel 2 y nivel 3 para los pescadores que compran por adelantado. Una herramienta nunca ocupa una ranura de equipo ni se desgasta nunca, así que cada una es una compra única, y para el requisito solo importa el nivel: una herramienta más rara del mismo nivel no abre nada extra. Eso sí, la rareza no es solo color. Hace que un efecto de herramienta ranurado dure más y, en una caña, ensancha la ventana de recogida.\n\nUna herramienta mejor compra tres cosas, no dos. Abre terreno de nivel superior, acorta el lanzamiento y mejora lo que sale: trabaja una veta con una herramienta clasificada POR ENCIMA del material propio de la zona y la cosecha da el grado fino de ese material en lugar del corriente. La veta tiene que ser una de las de grado completo de la zona, así que las vetas más fáciles que una zona reserva a los viajeros siguen dando el material ordinario. Los materiales finos son lo que consumen las recetas de herramientas elaboradas, y un grado fino cuenta como su versión ordinaria en cualquier sitio donde una receta o una orden de trabajo pida una, así que mejorar nunca te deja tirado: solo significa que tu mineral de cobre llega como Mineral de Cobre Fino.\n\nPor encima de la escalera de vendedores, cada oficio tiene dos herramientas elaboradas, de nivel 4 y nivel 5, hechas en el taller de herramientas (todos los personajes conocen las recetas de tierra; la habilidad que sube con el trabajo es la de Ingeniería), o compradas con Marcas de Expedición en el mostrador de La Letanía Ahogada una vez cumplidos sus requisitos de finalización: la tabla de abajo lleva el precio en Marcas y las finalizaciones que pide cada peldaño. Ningún mercader las vende jamás por monedas. La Pesca tiene su propia pareja, y se aprenden del fabricante de herramientas en lugar de conocerse desde el principio. Hoy ningún nodo y ninguna agua necesitan más del nivel 3, así que los dos peldaños superiores compran velocidad, grado y una ventana de recogida más amable en lugar de acceso, y serán la entrada cuando llegue terreno de nivel superior.",
+      "toolsNote": "Every node needs its trade's tool in your bags, tier 1 included: no pick, no ore, and no pole, no fish. The vendor ladder covers tiers 1 to 3 across the three heartland hubs: the tier-1 tool is sold at all three, the rungs above it where the ground that uses them begins (Fenbridge adds tier 2, Highwatch tier 3), and the younger settlements beyond them stock no tools at all, so kit up before you travel. Every counter sells every rung it stocks freely, and any tool passes by direct trade; every rung also lists on the Market and travels by mail except the three 20-copper land starters: those are bought at a counter or passed hand to hand, and never sold back, mailed, or listed. What is gated is the wielding. A land tool above tier 1 works only once your proficiency in its own trade has earned it, {tier2Prof} for tier 2, {tier3Prof} for tier 3, and 85 and 100 for the two crafted rungs, and the vendor row, the tooltip, and the table below all name the requirement up front. Until then a tool bought ahead simply waits in your bags, opening no ground, buying no speed, and minting no fine grades, then wields the moment your counter touches its number. Fishing rods are the one exception: no rod carries a wield requirement, and Trader Wilkes in Eastbrook deliberately stocks the tier 2 and tier 3 rods for anglers buying ahead. A tool never occupies an equip slot and never wears out, so each is a one-time purchase, and only the tier matters to the gate: a rarer tool of the same tier opens nothing extra. Rarity is not only colour, though. It makes a slotted tool effect last longer, and on a rod it widens the reel window.\n\nA better tool buys three things, not two. It opens higher-tier ground, it shortens the cast, and it improves what comes out: work a vein with a tool ranked ABOVE the zone's own material and the harvest yields the fine grade of it instead of the plain one. The vein has to be one of the zone's full-grade ones, so the easier veins a zone keeps for travellers still yield the ordinary material. Fine materials are what the crafted tool recipes consume, and a fine grade counts as its ordinary version anywhere a recipe or a work order asks for one, so upgrading never strands you: it just means your copper ore arrives as Fine Copper Ore.\n\nAbove the vendor ladder each trade has two crafted tools, tier 4 and tier 5, made at the toolworks (every character knows the land recipes; the skill that climbs for the work is Engineering's), or bought with Delve Marks at the Drowned Litany counter once its clears gates are met: the table below carries the Marks price and the clears each rung asks. No merchant ever sells them for coin. Fishing has its own pair, and they are learned from the toolmaker rather than known from the start. No node and no water today needs more than tier 3, so the top two rungs buy speed, grade and a kinder reel window rather than access, and they will be the entry ticket when higher-tier ground arrives.",
       "toolCrafted": "Elaborada ({craft})",
       "toolCraftedOrMarks": "Elaborada ({craft}) o {marks} Marcas de Expedición tras tres finalizaciones de La Letanía Ahogada",
       "toolCraftedOrMarksHeroic": "Elaborada ({craft}) o {marks} Marcas de Expedición tras una finalización Heroica de La Letanía Ahogada",
       "toolVendor": "{name} ({hub})",
       "toolUnavailable": "No se vende",
-      "priceNone": "No se vende por monedas",
+      "priceNone": "No se vende",
       "toolTierReq": "Herramienta de nivel {tier}",
       "colWield": "Uso desde",
       "wieldNone": "Cualquiera",
       "yieldsHeading": "Qué produce una cosecha",
       "yieldsBody": "Cada cosecha tira una calidad para lo que otorga, y tu pericia es toda la historia de esa tirada. Un recolector nuevo siempre saca material común; cada punto de habilidad desplaza peso de forma constante desde el común hacia los grados más altos y nunca hacia atrás, hasta que al llegar al tope de 100 el grado común desaparece por completo: 60 por ciento poco común, 30 por ciento raro, 8 por ciento épico y 2 por ciento legendario, siempre.\n\nLa calidad también significa cantidad: una tirada común da 1 unidad, poco común y raro dan 2, épico 3, y legendario 4. Cualquier resultado raro, épico o legendario llega como una copia firmada marcada como Recolectado por ti: al tope, eso es cuatro de cada diez cosechas con tu nombre, y las reglas de procedencia en la página de Economía de Artesanía explican por qué los artesanos pagan de más exactamente por esas pilas.",
       "bandsHeading": "Franjas de habilidad",
-      "bandsBody": "Las franjas de habilidad son la escalera compartida de 0/100/200 que corre sobre el contador de un oficio. En los oficios de tierra, la franja que se cruza en 100 recorta el tiempo de lanzamiento de recolección, y su tope hace de la franja 1 el techo. Las franjas de la Pesca no recortan nada: seleccionan las tablas de capturas (con una caña a juego), solo la Pesca llega a la franja 2, y la propia subida es lo que arrastra al pescador a aguas más profundas, donde viven tanto las mejores tablas como las lecciones siguientes.",
+      "bandsBody": "Las franjas de habilidad son la escala compartida de 0/100/200 sobre el contador de un oficio: cada franja que cruzas reduce el tiempo de lanzamiento de recolección, y en el caso de la pesca las franjas también seleccionan las tablas de captura (con la caña adecuada). Los oficios de tierra tienen un tope en 100, por lo que la franja 1 es su techo; solo la pesca alcanza la franja 2.",
       "bandFmt": "Franja {band}: desde {at} de habilidad",
       "rareHeading": "Hallazgos raros",
       "rareBody": "Cada cosecha, sin importar tu habilidad, tiene una probabilidad de 1 entre {oneIn} de un hallazgo raro: una vena prístina en el mineral, duramen antiguo en la madera, una flor iluminada por la luna entre las hierbas. El hallazgo multiplica el rendimiento de esa cosecha {mult} veces, cada unidad llega firmada con tu nombre sin importar la calidad obtenida, y toda la zona se entera por nombre. Cada variante también inscribe su propia gesta de cero Renombre en tu Libro de Gestas, una marca de coleccionista que existe solo para demostrar que te pasó a ti.",
-      "specimenBody": "Guarda algo de sitio libre en las bolsas cuando farmees: un golpe de suerte firmado necesita una ranura propia o una pila firmada idéntica donde caer, y si no encaja en ninguna parte el rendimiento llega igualmente, pero la firma se pierde. La cosecha de cadáveres tiene también su propio brazo de premio gordo: alrededor del {pct}% de cada componente cosechado sale raro o mejor. Una familia que tiene un ejemplar perfecto que dar (piel, seda, veneno, carne) mantiene liso su rendimiento ordinario y acuña el ejemplar firmado junto a él; cualquier otra familia firma el rendimiento en sí.",
+      "specimenBody": "Guarda algo de espacio en la bolsa cuando vayas a recolectar: un hallazgo inesperado necesita huecos libres para llegar firmado; si no cabe, el rendimiento llega igual pero la firma se pierde. La cosecha de cadáveres tiene también su propio brazo de suerte: alrededor de {pct}% de las cosechas de cadáveres dan raro o mejor, firmando el rendimiento y, en las familias de especímenes, otorgando un espécimen perfecto firmado.",
       "gatherDeedsHeading": "Gestas en el camino",
       "gatherDeeds": {
         "mining": "Tu primer nodo de cualquier oficio gana Frutos del Campo, y el tope de 100 en Minería inscribe Mineral en la Sangre. Llegar a 100 en cualquiera de los tres entre Minería, Tala, Herboristería y Pesca añade Maestro Recolector con 25 de Renombre, y romper una vena prístina registra su propia marca de coleccionista. Nada de esto otorga poder: las gestas son títulos y Renombre, un registro de los caminos que has recorrido.",
         "logging": "Tu primer nodo de cualquier oficio gana Frutos del Campo, y el tope de 100 en Tala inscribe Talador de Duramen. Llegar a 100 en cualquiera de los tres entre Minería, Tala, Herboristería y Pesca añade Maestro Recolector con 25 de Renombre, y un golpe de duramen antiguo registra su propia marca de coleccionista. Las gestas son títulos y Renombre únicamente, nunca poder.",
         "herbalism": "Tu primer nodo de cualquier oficio gana Frutos del Campo, y el tope de 100 en Herboristería inscribe Maestro del Prado. Llegar a 100 en cualquiera de los tres entre Minería, Tala, Herboristería y Pesca añade Maestro Recolector con 25 de Renombre, y una flor iluminada por la luna registra su propia marca de coleccionista. Las gestas son títulos y Renombre únicamente, nunca poder.",
-        "fishing": "El hito de 100 inscribe Viejo Sal y el de 200 inscribe Pescador Maestro con su título, la cima misma del arte del pescador; la Pesca también cuenta para Maestro Recolector, que se gana con 100 en tres cualesquiera de los oficios de recolección. Un primer pez de las aguas de cada una de seis zonas llena su propia página, las tres zonas centrales más El Pantano de los Sauces, La Cresta del Vendaval y La Costa Lejana al otro lado de ellas, y el Koi Destello Solar registra Destello de Esperanza, así que los viajeros con una caña en el macuto llenan su libro más rápido de lo que esperan."
+        "fishing": "El hito de 100 inscribe Viejo Sal y el de 200 inscribe Pescador Maestro con su título, la cumbre misma del arte del pescador; la Pesca también cuenta para Maestro Recolector, que se gana con 100 en cualquiera de los tres oficios de recolección. Un primer pez de las aguas de cada zona llena su propia página, y el Koi Destello Solar registra Destello de Esperanza, así que los viajeros con una caña en el morral llenan su libro más rápido de lo que esperan."
       },
       "fish": {
         "startHeading": "Primeros pasos",
-        "startBody": "Una Caña de pescar sencilla cuesta 20 cobres con el Pescador Brandt en Eastbrook (busca al Viejo lobo de agua en el borde este del pueblo, junto al camino al Lago Espejo); Manitas Gizzel, el Proveedor Hale en Fenbridge y la Intendente Bree en Highwatch también tienen cañas en existencias. Usa la caña mirando hacia agua lo bastante profunda como para tener peces, hasta unos 24 metros por delante de ti, y tu flotador sale volando.\n\nNo puedes lanzar en combate, nadando ni muerto: lanzar desde la orilla es la postura prevista. Eso sí, el agua se vuelve más exigente igual que la tierra: la ciénaga pide al menos la Caña de carrete de hierro de nivel 2 y las cumbres la Caña del arroyo plateado de nivel 3, y un sedal lanzado sin la caña que esa agua exige no llega a salir de tu mano. Por encima de esas hay dos cañas más, la Caña de carrete de tormenta y la Caña forjada por la marea: los ingenieros las fabrican en el taller de herramientas con lo que saca el sedal, y el mostrador de expedición de La Letanía Ahogada las vende por Marcas de Expedición tras cumplir sus requisitos de finalización, aunque nunca por monedas. Ningún agua las exige, así que compran una espera más corta y una ventana de recogida más ancha en lugar de acceso, lo que en el peldaño superior significa una picada en tres segundos justos.",
+        "startBody": "Una Caña de pescar sencilla cuesta 20 cobres de Pescador Brandt en Eastbrook (busca al Viejo Sal mirando el Lago Espejo con el ceño fruncido desde el borde este del pueblo); Tinker Gizzel, Abastecedor Hale en Fenbridge, y Intendente Bree en Highwatch también tienen cañas. Usa la caña mirando hacia agua lo bastante profunda para tener peces, hasta unos 24 metros por delante, y tu flotador sale disparado.\n\nNo puedes lanzar mientras estás en combate, nadando o muerto: lanzar desde la orilla es la postura prevista, y cualquier agua donde se pueda pescar funciona, en todas las zonas.",
         "biteHeading": "Picada y cobranza",
-        "biteBody": "Tras el lanzamiento, la picada llega en un momento oculto entre {min} y {max} segundos; el retardo se decide cuando el sedal toca el agua, así que no hay dos lanzamientos que se sientan iguales. Cuando el flotador pica tienes una ventana de {reel} segundos para volver a pulsar la caña y recoger: recoge dentro de ella y la captura entra, duda un instante de más y el pez se escapa sin dejarte nada. Una sesión entera tiene un tope de {cap} segundos, así que incluso un lanzamiento tranquilo se resuelve rápido.\n\nLas cañas mejores afilan los dos extremos del minijuego: cada nivel de caña por encima del primero recorta {rod} segundos de la espera máxima posible, nunca por debajo del suelo de tres segundos que la caña superior ya roza, y añade {reelRod} segundos a la ventana de recogida, de modo que la Caña de carrete de hierro baja la peor espera a 6,5 segundos con una ventana de 3,25 segundos, y la Caña del arroyo plateado a 5 con una ventana de más de 4, pues su rareza ensancha la recogida un poco más allá de lo que paga el nivel por sí solo. Las picadas más rápidas no cambian nunca, lleves lo que lleves, y a una caña le basta con estar en tus bolsas para contar.",
+        "biteBody": "Tras el lanzamiento, una picada llega en un momento oculto entre {min} y {max} segundos; el tiempo de espera se decide cuando el sedal cae, así que no hay dos lanzamientos que se sientan exactamente iguales. Cuando el flotador pica tienes una ventana de {reel} segundos para presionar la caña de nuevo y cobrar: hazlo dentro de ella y la captura cae en tu bolsa, vacila más allá y el pez se escapa sin dejar nada. Una sesión completa tiene un tope de {cap} segundos, así que incluso un lanzamiento tranquilo se resuelve rápido.\n\nLas mejores cañas afinan ambos extremos del minijuego: cada nivel de caña por encima del primero recorta {rod} segundos de la espera máxima posible y agrega {reelRod} segundos a la ventana de cobranza, así que el Carrete de Hierro reduce la peor espera a 6.5 segundos con una ventana de 3.75 segundos, y el Arroyo Plateado a 5 y 4.5. Las picadas más rápidas nunca cambian sin importar lo que tengas, y una caña solo necesita estar en tus bolsas para contar.",
         "earlyReelNote": "Una advertencia para los dedos impacientes: si vuelves a pulsar la caña antes de que algo pique, recoges la línea vacía y terminas el lanzamiento (aunque un breve margen justo después de lanzar perdona una doble pulsación accidental). La clave está en la paciencia: espera a que piquen y entonces actúa.",
         "scheduleHeading": "Ganancia de pericia",
-        "scheduleNote": "La ganancia de Pesca sigue un programa fijo sin dados: un punto completo por captura por debajo de 50 de pericia, medio punto por debajo de 100, una décima por debajo de 150 y un lento goteo de 0,02 de 150 a 200. Ese último tramo es a propósito un viaje de miles de capturas: 200 es una declaración, no una parada de camino a otra cosa.\n\nLa chatarra deja de enseñar por completo en {cutoff}: a partir de ahí, las algas y las botas son solo algas y botas. El agua misma también pone tope a la lección: las aguas de nivel 1 del Valle (y toda orilla joven más allá de las tierras centrales) no enseñan nada pasado 100, las de la ciénaga se detienen en 150, y solo las de Thornpeak instruyen a un pescador todo el camino hasta 200. Por lo demás, cada captura cobrada gana al ritmo previsto, así que cuando el contador se estanca, el programa te está diciendo que busques aguas más profundas.",
+        "scheduleNote": "La ganancia de pesca sigue un programa fijo sin dados: un punto completo por captura por debajo de 50 de pericia, medio punto por debajo de 100, un décimo por debajo de 150, y un lento avance de 0.02 desde 150 hasta 200. Ese último tramo es un viaje de miles de capturas a propósito: el 200 es una declaración, no una parada en el camino a otra cosa.\n\nLa basura deja de enseñar del todo en {cutoff}: a partir de ahí, las algas y las botas son solo algas y botas. Cada captura efectiva gana al ritmo programado, así que pesca donde irías de todas formas y deja que el contador suba.",
         "colProficiency": "Pericia",
         "colGain": "Ganancia por captura",
         "belowFmt": "Por debajo de {below}",
         "tablesHeading": "Tablas de capturas",
-        "tablesNote": "Tu pericia selecciona una de tres franjas de capturas: la franja 0 desde el principio, la franja 1 en 100 y la franja 2 en 200, cada una desplazando peso desde la chatarra y los anzuelos vacíos hacia peces de verdad, zona por zona. Cada franja por encima de la primera exige además una caña: la franja 1 pide la Caña de carrete de hierro de nivel 2, y la franja 2 la Caña del arroyo plateado de nivel 3. Tu franja efectiva es la menor entre la que tu habilidad ha ganado y la que tu caña admite, y el tope es silencioso: con una caña inferior sigues pescando, solo que de la tabla de la franja más baja, así que si tus capturas se sienten estancadas mientras tu habilidad sube, revisa primero tu caña.\n\nLas aguas de cada zona guardan su propia pareja de peces comestibles, que curan más cuanto más profunda es la zona, todos ellos ingredientes de cocina y perfectamente buena comida para sentarse a comer crudos recién sacados del sedal. El resto de la tabla es el impuesto del pescador: algas, alguna que otra bota y el anzuelo vacío, que nunca desaparece del todo. Cuánto pagas depende del agua en la que cae tu flotador, no de dónde estés parado: un lanzamiento alcanza hasta 24 metros, y la caña que el agua exige, la tabla de la que tira, la gesta que acredita y hasta dónde enseña responden todos a la zona a la que pertenece esa agua, decidido en el momento en que el sedal toca el agua. El agua de cada zona está escrita para una franja propia, el Valle para la franja 0, la ciénaga para la franja 1 y las cumbres para la franja 2, y pescar una franja por debajo convierte aproximadamente un tercio de tus lanzamientos en anzuelos vacíos, y dos franjas por debajo, más de la mitad. La caña te lleva al agua; la habilidad es lo que hace que rinda, y el ascenso es lo que arrastra al pescador hacia lo hondo, porque las franjas mejores no son solo mejor paga: pasado el Valle son las únicas aguas que siguen enseñando. El {rare} es la única fila que responde a tu franja de capturas y a nada más: las mismas probabilidades en todas las zonas, y seis veces más probable en la franja 2 que en la franja 0, así que lo más raro del muelle es precisamente aquello en lo que un Pescador Maestro de verdad es mejor.",
+        "tablesNote": "Tu pericia selecciona una de tres franjas de captura: franja 0 desde el principio, franja 1 en 100, franja 2 en 200; cada una desplaza peso fuera de basura y anzuelos vacíos hacia peces de verdad, zona por zona. Cada banda por encima de la primera también exige una caña: la franja 1 quiere la Carrete de hierro de nivel 2, la franja 2 la Arroyo plateado de nivel 3. Tu franja efectiva es la menor entre lo que tu habilidad ha ganado y lo que admite tu caña, y el tope es silencioso: con una caña inferior sigues pescando, solo con la tabla de la franja más baja, así que si tus capturas se sienten estancadas mientras tu habilidad sube, revisa la caña primero.\n\nLas aguas de cada zona guardan su propio par de peces de alimento, que curan más cuanto más profunda es la zona; todos son ingredientes de cocina y perfectamente buena comida para comer crudos recién sacados del sedal. El resto de la tabla es el impuesto del pescador: algas, la bota ocasional y el anzuelo vacío, que nunca desaparece del todo. El {rare} es la misma rareza en cada sedal, con probabilidades fijas que nunca cambian con la habilidad, así que el pescador más nuevo del muelle tiene las mismas chances que un Pescador Maestro.",
         "bandHeading": "Franja {band}: pericia {at} en adelante, nivel de caña {rod}",
         "colCatch": "Captura",
         "colOdds": "Probabilidad",
         "pctFmt": "{pct}%",
         "emptyHook": "Nada pica",
         "koiHeading": "El Koi Destello Solar",
-        "koiBody": "Cada masa de agua del juego esconde el mismo premio: el Koi Destello Solar, un brillo poco común en el sedal que vale 75 cobres para un vendedor y bastante más para tu orgullo. Sus probabilidades responden a tu franja de capturas y a nada más, iguales en todas las zonas: una fila del 1 por ciento de la tabla de capturas en la franja 0, 3 en la franja 1 y 6 en la franja 2, tirada en cada lanzamiento que recoges, así que el koi le llega al pescador que se ganó las tablas profundas. Sacar uno registra Destello de Esperanza en tu Libro de Gestas, una marca de coleccionista con cero Renombre. Cuando ocurra, el registro se asegura de que te enteres."
+        "koiBody": "Cada cuerpo de agua del juego esconde el mismo premio: el Koi Destello Solar, un destello poco común en el sedal que vale 75 cobres para un vendedor y bastante más para tu orgullo. Sus probabilidades son un fijo 3 por ciento por captura conseguida (4 por ciento en las aguas frías de Thornpeak) en cualquier franja, y atrapar uno registra Destello de Esperanza en tu Libro de Gestas, una marca de coleccionista con Renombre cero. Cuando sucede, el registro se asegura de que lo sepas."
       },
       "econ": {
         "title": "Economía de Artesanía",
@@ -4659,7 +4861,7 @@ export const es: EnTranslations = {
         "feeUnbind": "Tarifa de desvinculación",
         "feeUnbindValue": "{uncommon} poco común, {rare} raro, {epic} épico",
         "trainingHeading": "Tarifas de entrenamiento",
-        "trainingNote": "Una tarifa fija por peldaño de receta, cobrada una sola vez cuando un maestro la enseña; cada peldaño de la tabla de abajo está en uso hoy, desde las recetas iniciales gratuitas hasta las lecciones de caña del fabricante de herramientas en lo más alto.",
+        "trainingNote": "Una tarifa fija por peldaño de receta, cobrada una vez cuando un maestro la enseña; los niveles superiores de la tabla esperan contenido futuro.",
         "trainingTierFmt": "Nivel {tier}: {fee}",
         "free": "Gratis",
         "sellsHeading": "Qué se vende y por qué",
@@ -4675,7 +4877,7 @@ export const es: EnTranslations = {
         "commissionsHeading": "Encargos y el Vínculo del Artesano",
         "commissionsBody": "Un encargo es una creación hecha para alguien. Al crear un arma, una pieza de armadura u objeto de mano izquierda (una poción no puede llevar un vínculo), el artesano puede marcar la creación como encargo: la pieza terminada se comporta normalmente en manos del creador, pero en el momento en que cambia de manos en un intercambio queda vinculada a quien la recibió. Ese es el Vínculo del Artesano: el comprador obtiene su pieza, y la pieza no puede pasarse ni revenderse.\n\nLos vínculos no son para siempre, solo son costosos. Cualquier maestro de estación puede desvincular una pieza vinculada mientras estás en su estación (una estación móvil nunca ofrece el servicio), por una tarifa fijada por la calidad del objeto: 25 de plata para poco común, 1 de oro para raro, 4 de oro para épico, con un legendario pagando la tarifa épica y una pieza común de encargo la poco común.\n\nLa tarifa compra un estado limpio, no una cura: la pieza sigue siendo un encargo, así que se vuelve a vincular a quien la reciba en el siguiente intercambio, y todo lo demás sobre ella, firma, obra maestra y encantamientos, permanece intacto.",
         "provenanceHeading": "Trabajo firmado",
-        "provenanceBody": "Algunos objetos llevan un nombre. Pasa el cursor por encima y la descripción emergente dice Recolectado por fulano en un material en bruto, o Elaborado por fulano en una pieza terminada: la misma marca, redactada según cómo llegó a existir el objeto. Una firma es parte del objeto en sí, viaja con él por los intercambios, el banco, el correo, el Mercado Mundial e incluso una recompra al vendedor, y nunca se desvanece.\n\nLa recolección firma su mejor trabajo automáticamente: toda cosecha que saque raro o mejor llega firmada, y los hallazgos raros firman su ganancia quíntuple entera. La tirada afortunada de una cosecha de cadáver firma su rendimiento cuando la familia no tiene ejemplar que dar, y cuando sí lo tiene, deja el rendimiento simple y acuña a su lado el ejemplar prístino firmado. La artesanía firma en la misma línea: toda copia de un resultado raro o mejor se acuña firmada, y una obra maestra firma siempre, sea cual sea su calidad, así que la mejor versión de cualquier pieza nombra siempre a su creador. Lo único que puede costarte una firma es una bolsa llena: una unidad firmada necesita un hueco propio, o una pila firmada que le encaje, donde aterrizar.\n\nUna pila de objetos comparte una sola identidad, así que dos copias se fusionan solo cuando todas las marcas coinciden exactamente: mismo objeto, mismo firmante, mismas estadísticas de obra maestra, mismo encantamiento, mismo vínculo. Un tronco firmado nunca se une a un montón simple en ninguna de las dos direcciones (fusionarlos borraría el nombre de alguien), pero las cargas idénticas se fusionan sin problema, así que veinte minerales firmados por el mismo recolector ocupan una sola pila y un golpe de suerte no te destroza las bolsas.\n\nLas firmas les devuelven algo a los artesanos: tener en la mesa cualquier copia firmada de un reactivo necesario, la firme quien la firme, suma 2 puntos porcentuales de probabilidad de obra maestra, y tener un reactivo firmado por tu propia mano recorta en uno la cantidad exigida de ese reactivo (nunca por debajo de uno). Tu propio trabajo firmado de raro o mejor incluso te sigue enseñando, hoy solo a través del frasco: bebe una poción que hayas firmado y un pequeño goteo de habilidad vuelve al oficio que la preparó, siempre que ese oficio sea una de tus especializaciones principales activas.",
+        "provenanceBody": "Algunos objetos llevan un nombre. Pasa el cursor sobre uno y el tooltip dice Recolectado por fulano en un material en bruto, o Creado por fulano en una pieza terminada: la misma marca, redactada según cómo llegó a ser el objeto. Una firma es parte del objeto mismo, viaja con él a través de intercambios y el banco, y nunca desaparece.\n\nLa recolección firma su mejor trabajo automáticamente: cualquier cosecha que saque raro o mejor llega firmada, los hallazgos raros firman toda su bonificación quíntuple, y el golpe de suerte de una cosecha de cadáver firma su rendimiento, especímenes prístinos incluidos. La artesanía firma siguiendo la misma línea: una producción de una sola copia de calidad rara o mejor se acuña firmada, y una obra maestra siempre firma sin importar su calidad, por lo que la versión más fina de cualquier pieza siempre nombra a su creador. Lo único que puede costarte una firma es una bolsa llena: una unidad firmada necesita espacio propio, o una pila firmada coincidente, para aterrizar en ella.\n\nUna pila de objetos comparte una identidad, por lo que dos copias solo se fusionan cuando cada marca coincide exactamente: mismo objeto, mismo firmante, mismas estadísticas de obra maestra, mismo encantamiento, mismo vínculo. Un tronco firmado nunca se une a una pila sin firmar en ninguna dirección (fusionarlos borraría el nombre de alguien), pero las cargas idénticas se fusionan felizmente, así que veinte minerales firmados por el mismo recolector caben en una sola pila y una bonificación no destroza tus bolsas.\n\nLas firmas recompensan a los artesanos: consumir cualquier reactivo firmado, quien sea que lo haya firmado, agrega 2 puntos porcentuales de probabilidad de obra maestra, y tener un reactivo firmado por tu propia mano reduce la cantidad requerida de ese reactivo en uno (nunca por debajo de uno). Tu propio trabajo raro o mejor firmado incluso sigue enseñándote: cuando una pieza que firmaste se desempeña en tus propias manos, una poción bebida en el momento correcto, un golpe de muerte asestado, armadura usada en una muerte, un pequeño flujo de habilidad regresa al oficio que lo creó, siempre que ese oficio sea uno de tus oficios principales activos.",
         "collectorsHeading": "Coleccionistas, trofeos y el precio de una historia",
         "collectorsBody": "Los vendedores son ciegos a la procedencia: un objeto firmado se vende a un PNJ exactamente por su precio base. La prima de una firma existe solo entre jugadores, que es precisamente lo que la hace interesante: una pila de mineral inesperado firmada por un recolector famoso, un Corte Primo de una cosecha afortunada, una hoja de obra maestra que nombra a un artesano que ya se retiró; todo vale lo que la memoria de alguien diga que vale.\n\nEl Libro de Gestas se inclina hacia el mismo instinto: Veta Prístina, Duramen Antiguo, Flor Iluminada por la Luna, Espécimen Perfecto y Destello de Esperanza son marcas de coleccionista con Renombre cero que existen únicamente para demostrar que un momento te sucedió a ti. Conserva el objeto que ganó la gesta y tienes el recibo. Nada de esto da poder; la procedencia no compra estadísticas ni gana combates, es el rastro en papel del juego de los buenos días.",
         "castPaceHeading": "El tiempo de lanzamiento y el drenaje de oro",
@@ -4701,15 +4903,15 @@ export const es: EnTranslations = {
         "q3": "¿Cuál es la diferencia entre saquear y recolectar un cadáver?",
         "a3": "Una sola pulsación cubre ambas. Todo lo que un cadáver contiene, monedas y botín más cualquier componente recolectable, se abre en la misma ventana: el saqueo sigue las reglas normales de botín, y la recolección es el lado de los oficios, extrayendo materiales del cadáver mismo.\n\nLa recolección es de primero en llegar, de uso único: cada cadáver puede recolectarse exactamente una vez, por quien lo reclame primero, incluidos los que están en línea. Tu Enfoque del Pueblo determina lo que obtienes: mientras estés en un pueblo principal puedes distribuir 10 puntos de enfoque entre los tipos de componente que te interesan, y cada componente enfocado saca un nivel mejor (cada 5 puntos lo sube un escalón, como máximo dos escalones) y rinde más (10 por ciento por punto). Los componentes sin enfoque nunca empeoran.",
         "q4": "¿Por qué está firmado mi Tronco de Corteza de Hierro?",
-        "a4": "Te tocó un golpe de suerte. Aproximadamente 1 de cada 90 cosechas activa un evento de recolección raro (duramen antiguo en un árbol, una veta prístina en el mineral, una flor iluminada por la luna entre las hierbas): multiplica el rendimiento por cinco, firma cada unidad con tu nombre y anuncia el hallazgo a toda la zona. Una tirada de rareza rara o mejor en una cosecha corriente también firma el rendimiento.\n\nLos materiales firmados vale la pena guardarlos o venderlos caros: tener en el banco de trabajo cualquier copia firmada de un reactivo necesario añade 2 puntos porcentuales a la probabilidad de obra maestra. Solo recuerda que únicamente se apilan con copias firmadas de forma idéntica, así que ocupan su propia ranura de bolsa.",
+        "a4": "Tuviste un golpe de suerte. Aproximadamente 1 de cada 90 cosechas activa un evento de recolección raro (duramen antiguo en un árbol, una veta prístina en mineral, una flor iluminada por la luna en hierbas): multiplica el rendimiento cinco veces, firma cada unidad con tu nombre y anuncia el hallazgo a toda la zona. Un tiro de rareza rara o mejor en una cosecha ordinaria también firma el rendimiento.\n\nLos materiales firmados vale la pena conservarlos o venderlos caro: consumir cualquier reactivo firmado en una creación agrega un 2 por ciento a la probabilidad de obra maestra. Solo recuerda que se apilan únicamente con copias firmadas de manera idéntica, por lo que mantienen su propia ranura de bolsa.",
         "q5": "¿Cómo desvínculo una pieza de encargo y cuánto cuesta?",
         "a5": "Ve a cualquier estación de artesanía con la pieza en tus bolsas y paga al maestro. La tarifa sigue la calidad del objeto: 25 de plata para una pieza poco común, 1 de oro para una rara, 4 de oro para una épica; una legendaria paga la tarifa épica, y una pieza común de encargo paga la tarifa poco común. Debe ser una estación real: una estación móvil nunca ofrece el servicio.\n\nLa tarifa compra un estado limpio, no una cura: la pieza sigue siendo un encargo, así que se vuelve a vincular a quien la reciba en el siguiente intercambio. Si varias copias vinculadas comparten una pila, se separa una copia y se desvincula por pago.",
         "q6": "¿Dónde aprendo recetas y cuánto cuestan?",
-        "a6": "Las nueve recetas comunes de campo y las seis recetas de herramientas de tierra elaboradas las conoce todo el mundo desde el principio, igual que tres piedras angulares vinculadas a estación (el Manto de Escama de Horno, el Capuchón Tejidoguarda y las Vendas de Cuero Crepuscular), que no necesitan entrenador, solo su estación. Todo lo demás lo enseñan los maestros residentes en sus estaciones repartidas por los tres pueblos centrales: la mayoría están en Eastbrook, el curtidor lleva la curtiduría en Fenbridge y el alquimista lleva el boticario en Highwatch.\n\nLas recetas de entrenador van por peldaños: habilidad 0, 25 y 50 para los oficios de equipo y consumibles, con precios de gratis, 25 de plata y 1 de oro como tarifas únicas; las dos recetas de amuleto del Encantamiento están en el peldaño de 25, y el fabricante de herramientas enseña las dos cañas de pescar elaboradas en 75 y 125 por 4 y 16 de oro. Un maestro enseña una receta en cuanto tu categoría en ese oficio alcanza la categoría propia de la receta, y debes estar de pie en su estación para aprender: una estación móvil no cuenta.",
+        "a6": "Las nueve recetas de campo comunes y las recetas de herramientas las conocen todos desde el principio, y también tres capítulos finales vinculados a estación (el Manto de Escama de Horno, la Capucha Tejido Guardián y las Envolturas Crepúsculo), que no necesitan entrenador, solo su estación. Todo lo demás lo enseñan los maestros residentes en sus estaciones en los tres pueblos principales: la mayoría están en Eastbrook, el curtidor lleva la curtiduría en Fenbridge, y el alquimista lleva la botica en Highwatch.\n\nLas recetas de entrenadores vienen en peldaños en habilidad 0, 25 y 50, con precios de gratis, 25 de plata y 1 de oro como tarifa única. Un maestro enseña una receta una vez que tu categoría en ese oficio ha alcanzado la propia categoría de la receta, y debes estar en su estación para aprender: una estación móvil no cuenta.",
         "q7": "¿Por qué mi recolección se volvió más lenta de repente?",
-        "a7": "El lanzamiento de recolección empieza en 2,5 segundos y se recorta de dos maneras: 0,4 segundos por cada nivel de herramienta que lleves y puedas manejar por encima del nivel propio del nodo, y 0,15 segundos en cuanto el contador de tu oficio cruza su franja de 100, con un mínimo de 1,5 segundos. Pasa de nodos de nivel 1 a nodos de nivel 3 y tu excedente desaparece, así que el mismo pico vuelve a golpear más despacio. Llevar exactamente el nivel requerido no compra velocidad; solo abre el nodo.\n\nLa ganancia de habilidad se apaga igual que en la artesanía: un nodo se pone gris a medida que tu pericia sube por encima de su nivel (los nodos de nivel 1 no enseñan nada a partir de 75 de pericia), así que la respuesta a las ganancias lentas son nodos de nivel superior. Esos necesitan en tus bolsas una herramienta de al menos su nivel (ningún nodo se trabaja jamás con las manos desnudas, incluido el nivel 1), y una herramienta de tierra por encima del nivel 1 pide además su marca de manejo, 40/70/85/100 en su propio oficio para los niveles 2 a 5. La Pesca sigue su propio descenso: ganancia completa por debajo de 50 de pericia, la mitad por debajo de 100, un goteo de 0,1 por debajo de 150 y de 0,02 por debajo de 200, las capturas de chatarra no enseñan nada en absoluto a partir de 100, y el agua misma pone tope a la lección (las aguas de nivel 1 dejan de enseñar en 100, las de la ciénaga en 150), así que un contador estancado también puede significar que ya has superado esas aguas.",
+        "a7": "El lanzamiento de recolección comienza en 2.5 segundos y se reduce de dos maneras: 0.4 segundos por cada nivel de herramienta que tengas por encima del propio nivel del nodo, y 0.15 segundos por cada franja de pericia que hayas cruzado (en 100 y 200), con un mínimo de 1.5 segundos. Pasa de los nodos de nivel 1 a los de nivel 3 y tu superávit desaparece, por lo que el mismo pico vuelve a oscilar más lento. Tener exactamente el nivel requerido no compra velocidad; solo abre el nodo.\n\nLa ganancia de habilidad se desvanece de la misma manera que la artesanía: un nodo se vuelve gris conforme tu pericia supera su nivel (los nodos de nivel 1 no enseñan nada a partir de pericia 75), por lo que la respuesta a las ganancias lentas son nodos de nivel superior, que necesitan una herramienta de al menos su nivel (las manos vacías cuentan como nivel 1). La Pesca sigue su propia reducción gradual: ganancia completa por debajo de pericia 50, la mitad por debajo de 100, un goteo de 0.1 por debajo de 150 y 0.02 por debajo de 200, y las capturas de chatarra no enseñan nada a partir de 100.",
         "q8": "¿Puedo crear objetos lejos del pueblo?",
-        "a8": "En parte. Las nueve recetas comunes de campo (los básicos iniciales de arma, armadura, comida y poción) se elaboran en cualquier lugar y en cualquier momento, igual que las tres recetas combinadas de los pares jurados. Todo lo demás por encima de ellas está vinculado a un tipo de estación: fragua, cocinas, boticario, curtiduría, telar o taller de herramientas, y debes estar a menos de 20 metros de la estación para que la elaboración salga adelante.\n\nCon 75 de habilidad en un oficio te especializas y, junto con un 20 por ciento de descuento en materiales, ganas una estación móvil: colócala en el campo y aguanta 10 minutos, sirviendo las recetas de ese oficio como si estuvieras en la de verdad. La estación móvil es solo para elaborar: aprender recetas y desvincular encargos siempre requieren la estación auténtica del pueblo."
+        "a8": "En parte. Las nueve recetas de campo comunes (el arma, armadura, comida y pociones básicas de inicio) se crean en cualquier lugar, en cualquier momento. Todo lo que está por encima de ellas está vinculado a un tipo de estación: forja, cocinas, botica, curtiduría, telar o taller de herramientas, y debes estar a menos de 20 yardas de la estación para que la creación se complete.\n\nA habilidad 75 en un oficio te especializas, y junto con un descuento del 20 por ciento en materiales obtienes una estación móvil: colócala en el campo y permanece durante 10 minutos, sirviendo las recetas de ese oficio como si estuvieras en la real. La estación móvil es solo para crear: aprender recetas y desvincular encargos siempre requieren la verdadera estación en el pueblo."
       }
     },
     "economy": {
@@ -4718,16 +4920,16 @@ export const es: EnTranslations = {
       "coinBody": "El dinero viene en tres monedas. Cien de cobre hacen una de plata, y cien de plata hacen una de oro, así que tu bolsa se llena empezando por la moneda más pequeña. Lo ganas con las recompensas de las misiones, saqueando a los enemigos caídos y vendiendo lo que ya no necesitas.",
       "vendorsTitle": "Vendedores y lo que tienen",
       "vendorsBody": "Pueblos y puestos de avanzada están salpicados de mercaderes, cada uno con su propio oficio. Los abastecedores tienen comida y bebida, los herreros y armeros llevan equipo, y un intendente guarda enseres prácticos de viaje. Acércate a uno para ver lo que vende.",
-      "marksTitle": "Marcas: las monedas más allá del dinero",
-      "marksBody": "El dinero no es lo único que guardas. Las expediciones pagan Marcas de Expedición, que solo gastas con el guardián de expediciones en mejoras para tu compañera y equipo que no encontrarás en otro sitio. Las mazmorras heroicas dejan Marcas Heroicas en el jefe final, que gastas con el intendente heroico en Highwatch en joyería que ningún otro rincón del reino vende. Ninguna se mezcla jamás con tu dinero.",
+      "marksTitle": "Una segunda moneda: Marcas de Expedición",
+      "marksBody": "El dinero no es lo único que guardas. Las expediciones pagan Marcas de Expedición, una moneda aparte que solo gastas con el guardián de expediciones, en mejoras para tu compañera y equipo que no encontrarás en otro sitio. Nunca se mezclan con tu dinero.",
       "bankTitle": "El banco",
       "bankBody": "Cada pueblo principal mantiene una sucursal del Arca Dorada, la casa de banca del reino. Habla allí con el tesorero para abrir tu bóveda, una reserva privada de espacio más allá de tus bolsas que tu personaje conserva de por vida. Lo que dejes en sus manos espera a salvo, sea cual sea la sucursal que visites la próxima vez.",
       "bankHow": "Con la bóveda abierta, haz clic en un objeto de tus bolsas para depositarlo y haz clic en él dentro de la bóveda para recuperarlo. La bóveda solo guarda bienes, nunca monedas, y los objetos de misión se quedan contigo. Cuando tus bolsas se llenan a mitad de viaje, un solo botón mete de una vez todos tus materiales de artesanía.",
       "bankSlots": "Una bóveda recién abierta empieza pequeña y crece contigo. El tesorero vende espacios adicionales por monedas a precios cada vez más altos, y jugar en línea suma espacio extra por cosas como un correo verificado, cuentas vinculadas y amigos que traes al juego.",
       "buyingTitle": "Comprar y vender",
-      "buyingBody": "Habla con un mercader y elige ver sus mercancías, y su tienda se abre con tres pestañas: Explorar, Vender y Recompra. Explorar contiene cuanto tiene en stock, tuyo si te lo puedes permitir. Vender enumera lo que de tus bolsas te pagará, y vender una pieza que lleva su propia calidad tirada te pide confirmar antes, para que un ejemplar preciado nunca se te escape por error. Si te desprendes de algo de lo que te arrepientes, la pestaña de Recompra guarda tus ventas recientes para que puedas recomprarlas por las monedas que te pagaron.",
+      "buyingBody": "Acércate a un mercader para abrir su ventana. Puedes comprar cualquier cosa de las que tenga en stock si te la puedes permitir, y vender la mayor parte de lo que llevas en las bolsas a cambio de monedas. Si vendes algo por error, un vendedor te guardará tus ventas recientes para que puedas recomprarlas.",
       "junkTitle": "Despejar la chatarra",
-      "junkBody": "Los objetos que recoges y no te sirven se pueden vender igualmente a cualquier vendedor, así que vacía las bolsas cada vez que pases por el pueblo en lugar de dejar que se llenen. La pestaña Vender del vendedor incluso guarda un botón de un solo clic que vende de golpe cada baratija de calidad Pobre. Las baratijas verdaderamente inútiles también se pueden descartar sin más para hacer sitio.",
+      "junkBody": "Los objetos que recoges y no te sirven se pueden vender igualmente a cualquier vendedor, así que vacía las bolsas cada vez que pases por el pueblo en lugar de dejar que se llenen. Las baratijas verdaderamente inútiles también se pueden descartar sin más para hacer sitio.",
       "tradeTitle": "Comerciar con otros jugadores",
       "tradeBody": "Puedes comerciar cara a cara con cualquiera que esté cerca de ti. Ambos ponéis objetos y monedas en una ventana compartida y el intercambio solo se produce cuando los dos lo confirmáis, así que ninguna de las partes puede ser engañada. Es la manera sencilla de pasarle un objeto a un amigo o cerrar un trato.",
       "mailTitle": "El Correo del Cuervo",
@@ -4736,7 +4938,7 @@ export const es: EnTranslations = {
       "dailyTitle": "Recompensas diarias",
       "dailyBody": "Un botón con forma de cofre del tesoro en tu pantalla abre la ventana de recompensas diarias. Cada día plantea un puñado de tareas, completar misiones, luchar en el Coliseo Cinéreo, ganar un partido de la Copa del Valle, y ofrece un giro gratis de la ruleta de premios; todas estas cosas suman puntos para la clasificación de ese día, y quienes más puntos consiguen en la jornada se reparten un fondo de premios reservado a los poseedores del token comunitario opcional. Nada de ello otorga poder en el juego. La propia ventana detalla las reglas del día y quién puede participar, muestra la clasificación y conserva tu historial.",
       "marketTitle": "El Mercado Mundial",
-      "marketBody": "El Mercader regenta el Mercado Mundial, un intercambio gestionado por los jugadores donde puedes comprar y vender con gente que quizá nunca llegues a conocer. Habla con el Mercader en Eastbrook, o con el Subastador Voss allá en Highwatch, para abrirlo: ambos encargados atienden el mismo mercado compartido. El Mercader también mantiene allí un surtido permanente de sus propias mercancías, así que siempre hay algo que comprar aunque ningún otro jugador haya publicado nada.",
+      "marketBody": "El Mercader regenta el Mercado Mundial, un intercambio gestionado por los jugadores donde puedes comprar y vender con gente que quizá nunca llegues a conocer. Habla con el Mercader para abrirlo. El Mercader también mantiene allí un surtido permanente de sus propias mercancías, así que siempre hay algo que comprar aunque ningún otro jugador haya publicado nada.",
       "marketBrowse": "Explorar: recorre los anuncios o busca por nombre para encontrar lo que está en venta. Cada anuncio muestra la mercancía, el vendedor y el precio que pide por el lote completo.",
       "marketPost": "Publicar: elige un lote de tus bolsas, fija tu precio y ponlo a la venta. El Mercader retiene la mercancía hasta que alguien la compra. Los anuncios sin vender regresan a ti pasado un tiempo, y puedes recuperar uno antes si cambias de idea.",
       "marketCollect": "Cobrar: cuando se vende tu mercancía, tus ganancias te esperan en el Mercader. Vuelve a recoger las monedas, junto con cuanto regrese sin vender. El Mercader se queda una pequeña parte de cada venta completada.",
@@ -4761,7 +4963,7 @@ export const es: EnTranslations = {
       "chanLfg": "Buscando grupo.",
       "chanLfgBody": "Un canal opcional para el reino entero para encontrar gente con quien hacer una mazmorra. Abre su pestaña para unirte.",
       "chanGuild": "Hermandad y oficial.",
-      "chanGuildBody": "Canales para tu hermandad. El chat de hermandad llega a cada miembro; el canal de oficiales es para los oficiales y el líder de la hermandad.",
+      "chanGuildBody": "Canales para tu hermandad. El chat de hermandad llega a todos los miembros; el canal de oficiales es solo para los oficiales.",
       "partyHeading": "Formar un grupo",
       "partyBody": "Invita a otro jugador haciendo clic derecho en su nombre y eligiendo invitar. Un grupo admite hasta cinco jugadores, y uno de vosotros es el líder.",
       "partyCredit": "Los miembros del grupo cercanos comparten el crédito de muertes y misiones, así que hacer misiones juntos es más rápido, nunca más lento. Un grupo es también la forma de entrar en una mazmorra como equipo.",
@@ -4771,7 +4973,7 @@ export const es: EnTranslations = {
       "lootCoinTitle": "Monedas.",
       "lootCoinBody": "El dinero de una muerte puede ir a quien lo saquee, o repartirse a partes iguales entre el grupo.",
       "lootCommonTitle": "Objetos.",
-      "lootCommonBody": "Los objetos corrientes pueden ir por turnos entre el grupo o para quien saquee, mientras que los mejores se ponen a una tirada para que todos tengan una oportunidad justa.",
+      "lootCommonBody": "Los objetos corrientes pueden ir al saqueador, mientras que los mejores se ponen a un tirada para que todos tengan una oportunidad justa.",
       "lootRollTitle": "Necesidad, Codicia o Paso.",
       "lootRollBody": "Cuando un objeto pasa a tirada, cada miembro con derecho elige Necesidad si lo quiere, Codicia si solo lo cogería por si acaso, o Paso para retirarse. Gana la tirada más alta.",
       "lootMasterTitle": "Maestro del botín.",
@@ -4794,7 +4996,7 @@ export const es: EnTranslations = {
       "markersHeading": "Marcadores de objetivo",
       "markersBody": "En un grupo, selecciona a una criatura hostil y haz clic derecho en su retrato del marco de objetivo (pulsación larga en táctil) para coronarla con uno de los ocho símbolos de banda. Cualquier miembro puede marcar, cada símbolo reside en un objetivo a la vez, y volver a aplicar un símbolo a su propio objetivo lo retira. El orden de muertes, las asignaciones de control de masas o un simple «este primero» viajan más rápido como símbolo que como frase.",
       "etiquetteHeading": "Etiqueta de grupo",
-      "etiquetteBody": "Agruparse es una elección, no una obligación. Saluda al unirte, tira Necesidad solo por el equipo que vayas a usar de verdad y avisa al grupo antes de marcharte. Un poco de cortesía vale mucho, y a la mayoría de los jugadores les alegra la compañía. Los moderadores mantienen la paz, y a un jugador que no deje a los demás disfrutar del juego se le puede trasladar a una celda hasta que un moderador lo deje salir."
+      "etiquetteBody": "Agruparse es una elección, no una obligación. Saluda al unirte, tira Necesidad solo por el equipo que vayas a usar de verdad y avisa al grupo antes de marcharte. Un poco de cortesía vale mucho, y a la mayoría de los jugadores les alegra la compañía."
     },
     "stats": {
       "intro": "Tu personaje se describe con un puñado de atributos. Nunca tienes que memorizarlos para jugar bien, pero saber a grandes rasgos qué hace cada uno te ayuda a leer tu hoja de personaje y a elegir las mejoras adecuadas.",
@@ -4809,15 +5011,15 @@ export const es: EnTranslations = {
       "intTitle": "Intelecto",
       "intBody": "El Intelecto amplía la reserva de maná de un lanzador, aumenta su poder con hechizos para que sus hechizos golpeen más fuerte y mejora la probabilidad de que sus hechizos sean críticos. Importa a las clases que lanzan desde el maná; para una clase de Ira o Energía hace poco.",
       "spiTitle": "Espíritu",
-      "spiBody": "El Espíritu rige la rapidez con que regresa el maná de un lanzador cada vez que hace una pausa en su lanzamiento, que es la mayor parte del tiempo entre combates. Como el Intelecto, sirve a las clases de maná y significa poco para las demás.",
+      "spiBody": "El Espíritu rige la rapidez con que regresa el maná de un lanzador mientras está fuera de combate. Como el Intelecto, sirve a las clases de maná y significa poco para las demás.",
       "armorTitle": "Armadura",
       "armorBody": "La armadura reduce el daño físico que recibes. Proviene principalmente de lo que vistes, y las clases de armadura más pesada cargan con mucha más. Más armadura frente a un enemigo cercano a tu nivel hace que cada uno de sus golpes impacte con menos fuerza.",
       "apTitle": "Poder de ataque",
-      "apBody": "El poder de ataque mide la fuerza con la que golpea tu arma. Tus atributos principales lo alimentan, y el equipo que lleva esos atributos lo aumenta aún más, mientras que un arma más potente eleva tu daño directamente, por eso una mejora puede suponer un salto real de daño.",
+      "apBody": "El poder de ataque mide la fuerza con la que golpea tu arma. Tus atributos principales lo alimentan, y las armas y el equipo más potentes lo aumentan aún más, por eso una mejora puede suponer un salto real de daño.",
       "spTitle": "Poder de hechizos",
       "spBody": "El poder de hechizos es la contraparte de un lanzador de hechizos al poder de ataque: aumenta el daño que infligen tus hechizos. El intelecto lo alimenta, y el equipo de lanzador y los beneficios añaden todavía más, así que un lanzador de hechizos vigila el poder de hechizos igual que un combatiente cuerpo a cuerpo vigila el poder de ataque.",
       "critTitle": "Golpe crítico",
-      "critBody": "Tu probabilidad de golpe crítico es la frecuencia con que un ataque impacta con daño extra. Todos parten de una pequeña probabilidad base, y la Agilidad (más algunos talentos y equipo) la incrementa. Tu hoja de personaje muestra tanto la probabilidad en sí como el Índice de golpe crítico que tu equipo aporta a ella.",
+      "critBody": "Tu probabilidad de golpe crítico es la frecuencia con que un ataque impacta con daño extra. Todos parten de una pequeña probabilidad base, y la Agilidad (más algunos talentos y equipo) la incrementa.",
       "dodgeTitle": "Esquivar",
       "dodgeBody": "La esquiva es tu probabilidad de evitar por completo un ataque cuerpo a cuerpo entrante. Comienzas con una pequeña probabilidad base, y la Agilidad la aumenta, así que las clases ágiles eluden más golpes.",
       "hasteTitle": "Celeridad",
@@ -4832,16 +5034,16 @@ export const es: EnTranslations = {
     "progression": {
       "intro": "Cada combate, misión y paso hacia el norte hace más fuerte a tu héroe. Aquí tienes cómo funciona subir de nivel y qué te mantiene creciendo una vez que llegas a la cima.",
       "xpTitle": "Cómo ganas experiencia",
-      "xpBody": "Ganas experiencia completando misiones, derrotando enemigos y despejando expediciones. Las misiones dan con diferencia lo máximo, así que seguir el rastro de misiones es la vía más rápida para subir. Las muertes y las expediciones por el camino rellenan el resto.",
+      "xpBody": "Ganas experiencia completando misiones y derrotando enemigos. Las misiones dan con diferencia lo máximo, así que seguir el rastro de misiones es la vía más rápida para subir. Matar cosas por el camino rellena el resto.",
       "capBody": "Cada nivel te hace más resistente y trae nuevas habilidades, hasta el límite de nivel {cap}.",
       "journeyTitle": "El viaje hacia el norte",
       "journeyBody": "El mundo es una sola tierra continua, tres zonas dispuestas de sur a norte, cada una un escalón más alta de nivel. Empiezas en el verde valle, avanzas por la ciénaga y terminas en los fríos picos elevados. Sigue el rastro de misiones y la tierra te lleva de una a la siguiente.",
       "bandLabel": "Niveles {min} a {max}",
       "restedTitle": "Experiencia de descanso",
-      "restedBody": "Entra en una posada y mantente fuera de combate, y tu personaje acumula experiencia de descanso mientras esperas. Cada pueblo tiene una. La próxima vez que salgas a luchar, esa reserva da un impulso extra a tus muertes hasta que se agota. Una pausa en la posada nunca es tiempo perdido; acelera tu siguiente tramo de subida de nivel.",
+      "restedBody": "Descansa en un lugar seguro como una posada, fuera de combate, y tu personaje acumula experiencia de descanso mientras está ahí sentado. La próxima vez que salgas a luchar, esa reserva da un impulso extra a tus muertes hasta que se agota. Una pausa en la posada nunca es tiempo perdido; acelera tu siguiente tramo de subida de nivel.",
       "capTitle": "Alcanzar el nivel {cap}",
-      "capJourneyBody": "El nivel {cap} es el límite, el final de subir de nivel pero no de crecer. A partir de ahí haces las mazmorras y la banda en normal y heroico, te enfrentas al jefe del mundo cuando se alza, persigues mejor equipo y te pones a prueba en la arena.",
-      "prestigeBody": "La experiencia sigue contando incluso después del límite. Alimenta un nivel virtual cosmético, así que tu barra de experiencia sigue subiendo, y un rango de prestigio a largo plazo que puedes reclamar desde tu hoja de personaje una vez que llegas ahí. Superar grandes hitos de experiencia acumulada también consigue gestas en tu Libro de Gestas, con títulos cosméticos y bordes de placa de nombre que se muestran en tu hoja de personaje. Todas estas recompensas son puramente opcionales y nunca otorgan poder, solo una marca del camino que has recorrido.",
+      "capJourneyBody": "El nivel {cap} es el límite, el final de subir de nivel pero no de crecer. A partir de ahí haces mazmorras y la banda, persigues mejor equipo y te pones a prueba en la arena.",
+      "prestigeBody": "La experiencia sigue contando incluso después del límite. Alimenta un nivel virtual cosmético, así que tu barra de experiencia sigue subiendo, y un rango de prestigio a largo plazo que puedes ganarte por el reconocimiento. Superar grandes hitos de experiencia acumulada también desbloquea títulos cosméticos y bordes de placa de nombre que se muestran en tu hoja de personaje. Todas estas recompensas son puramente opcionales y nunca otorgan poder, solo una marca del camino que has recorrido.",
       "noRush": "No hay prisa. El mundo está ahí para disfrutarlo a tu propio ritmo, así que deambula, acepta las misiones que te llamen la atención y deja que tu héroe crezca por el camino."
     },
     "placeholder": {
@@ -4855,7 +5057,7 @@ export const es: EnTranslations = {
   },
   "editor": {
     "appTitle": "Editor de Mapas",
-    "docTitle": "Editor de Mapas - World of ClaudeCraft",
+    "docTitle": "Editor de Mapas - Cryptic Realm",
     "untitledMap": "Mapa sin título",
     "playtestPlayerName": "Cartógrafo",
     "topbar": {
@@ -5322,7 +5524,9 @@ export const es: EnTranslations = {
     "loginRegister": "Iniciar Sesión/Registrarse",
     "account": "Cuenta",
     "logout": "Cerrar sesión",
-    "donate": "Donar"
+    "donate": "Donar",
+    "contributions": "Contributions",
+    "whitepaper": "White Paper"
   },
   "stats": {
     "title": "Estado del Mundo",
@@ -5332,9 +5536,9 @@ export const es: EnTranslations = {
     "realmName": "Nombre del Mundo"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
+    "copyright": "2026 Cryptic Realm",
     "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "Proyecto de Código Abierto",
+    "githubLabel": "Contributions",
     "whitepaper": "Libro blanco",
     "terms": "Términos de Servicio",
     "privacy": "Política de Privacidad",
@@ -5363,7 +5567,17 @@ export const es: EnTranslations = {
     "prerelease": "Versión preliminar",
     "viewOnGithub": "Ver en GitHub",
     "new": "Nuevo",
-    "viewAll": "Ver todas las actualizaciones en GitHub"
+    "viewAll": "Ver todas las actualizaciones en GitHub",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "officialLog": "Official Work Log",
+    "openLink": "Open",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "prTitle": "Upstream Kindness Track",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links.",
+    "proofTitle": "$CR Proof",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap"
   },
   "download": {
     "title": "Descargar Lanzador de Escritorio",
@@ -5390,11 +5604,11 @@ export const es: EnTranslations = {
     "serverOnline": "En Línea",
     "serverOffline": "Desconectado",
     "play": "Jugar",
-    "playAria": "Jugar World of ClaudeCraft",
+    "playAria": "Jugar Cryptic Realm",
     "serverLabel": "Elige tu mundo",
     "serverAria": "Selecciona el mundo: En Línea o Desconectado",
     "serverOfflineSub": "Mundo local instantáneo",
-    "caLabel": "Dirección del contrato de $WOC",
+    "caLabel": "Dirección del contrato de $CR",
     "caCopyAria": "Copiar dirección del contrato",
     "caNote": "WOC es nuestro token comunitario. No es necesario para jugar. Únete a Discord para hablar sobre la utilidad y el círculo virtuoso de WOC."
   },
@@ -5635,10 +5849,17 @@ export const es: EnTranslations = {
       "logOut": "Cerrar sesión",
       "invalid": "Introduce una dirección de correo válida.",
       "failed": "No se pudo guardar tu correo. Inténtalo de nuevo."
-    }
+    },
+    "hardcoreChar": "Hardcore character",
+    "hardcoreHint": "Permadeath. If this character dies, it is permanently retired and can no longer be played. There is no resurrection.",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress).",
+    "ssoButton": "Continue with Google, Facebook, or Plex",
+    "ssoMoveweight": "Sign in with MoveWeight",
+    "ssoProviders": "Continue with Google, Facebook, Plex, or Discord"
   },
   "wallet": {
-    "label": "Cartera $WOC",
+    "label": "Cartera $CR",
     "connect": "Verificar cartera",
     "connectTitle": "Verifica tu cartera de Solana",
     "connectAria": "Verifica tu cartera de Solana",
@@ -5671,11 +5892,11 @@ export const es: EnTranslations = {
     "linkedDisconnectedAria": "La cartera sigue verificada para tu cuenta. Vuelve a conectar para gestionar la app de cartera.",
     "linkTitle": "Haz clic para firmar y vincular esta cartera a tu cuenta.",
     "connectedTitle": "Conectada. Inicia sesión para vincular esta cartera a tu cuenta.",
-    "balanceTitle": "Saldo de $WOC de la cartera de Solana verificada",
+    "balanceTitle": "Saldo de $CR de la cartera de Solana verificada",
     "balanceAria": "Saldo de la cartera de Solana verificada: {balance}",
-    "balancePreviewTitle": "Vista previa del saldo de $WOC de la cartera conectada",
+    "balancePreviewTitle": "Vista previa del saldo de $CR de la cartera conectada",
     "balancePreviewAria": "Vista previa del saldo de la cartera conectada: {balance}. Vincula la cartera para verificar el distintivo de titular.",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "bagConnect": "Vincular cartera",
     "bagLink": "Verificar cartera",
     "bagReconnect": "Volver a conectar cartera",
@@ -5695,12 +5916,12 @@ export const es: EnTranslations = {
     "extensionHelp": "Para ver una cartera aquí, mantén activa una extensión de cartera del navegador como Solflare Wallet.",
     "mobileAppHelp": "Elige Phantom o Solflare. Tu aplicación de cartera pedirá aprobación. Mantén este juego abierto y vuelve a él cuando termines.",
     "seekerAppHelp": "Continúa con la cartera Seed Vault. Revisa las solicitudes de conexión y verificación en Seed Vault y luego vuelve al juego.",
-    "standaloneAppHelp": "Las conexiones de cartera aún no están disponibles en la aplicación de la pantalla de inicio. Abre World of ClaudeCraft en Safari o Chrome para usar Phantom o Solflare.",
+    "standaloneAppHelp": "Las conexiones de cartera aún no están disponibles en la aplicación de la pantalla de inicio. Abre Cryptic Realm en Safari o Chrome para usar Phantom o Solflare.",
     "openAppTitle": "Continuar en {wallet}",
     "openAppHelp": "Abre {wallet} para revisar esta solicitud. Mantén esta pestaña del juego abierta mientras la aplicación de cartera esté activa.",
     "openAppButton": "Abrir {wallet}",
     "manualReturnBrowserHelp": "Tras la aprobación, vuelve a esta pestaña del juego. Si iOS abre otro navegador, ciérralo y regresa manualmente al navegador original.",
-    "manualReturnStandaloneHelp": "Tras la aprobación, vuelve a World of ClaudeCraft desde tu pantalla de inicio. Si iOS abre un navegador, ciérralo y vuelve a abrir la aplicación de la pantalla de inicio manualmente.",
+    "manualReturnStandaloneHelp": "Tras la aprobación, vuelve a Cryptic Realm desde tu pantalla de inicio. Si iOS abre un navegador, ciérralo y vuelve a abrir la aplicación de la pantalla de inicio manualmente.",
     "preparingAppButton": "Preparando {wallet}...",
     "walletAppUnavailable": "No se pudo preparar {wallet}. Cierra esta ventana e inténtalo de nuevo.",
     "flowConnect": "Elige una cartera. La verificación continúa automáticamente.",
@@ -5715,18 +5936,18 @@ export const es: EnTranslations = {
       "linkBody": "Elige una extensión de cartera en este navegador. Firmarás un mensaje de verificación y luego volverás a la aplicación de escritorio.",
       "paymentBody": "Elige la cartera vinculada a tu cuenta y aprueba la transacción en este navegador.",
       "extensionHelp": "No se encontró ninguna extensión de cartera compatible. Instala o desbloquea Phantom, Solflare u otra cartera de Solana para el navegador, luego vuelve a intentarlo.",
-      "safety": "World of ClaudeCraft nunca solicita tu frase de recuperación ni tu clave privada.",
+      "safety": "Cryptic Realm nunca solicita tu frase de recuperación ni tu clave privada.",
       "continueWith": "Continuar con {wallet}",
       "reviewTitle": "Revisar en tu cartera",
       "reviewBody": "Sigue el mensaje de {wallet}. Mantén esta página del navegador abierta.",
       "completeTitle": "Autorización de cartera completada",
-      "completeBody": "Puedes volver a la aplicación de escritorio de World of ClaudeCraft.",
+      "completeBody": "Puedes volver a la aplicación de escritorio de Cryptic Realm.",
       "returnButton": "Volver a la aplicación de escritorio",
       "failed": "La autorización de la cartera falló o caducó. Vuelve a la aplicación de escritorio e inténtalo de nuevo.",
       "retry": "Reintentar"
     },
-    "holder": "Titular de $WOC",
-    "holderTierTitle": "Titular de $WOC de nivel {tier}",
+    "holder": "Titular de $CR",
+    "holderTierTitle": "Titular de $CR de nivel {tier}",
     "holderTiers": {
       "ember": {
         "name": "Ascua",
@@ -5750,7 +5971,7 @@ export const es: EnTranslations = {
       },
       "vaultwarden": {
         "name": "Guardián de la bóveda",
-        "flavor": "Ahora custodias una bóveda real: el 0,01 % del suministro de $WOC."
+        "flavor": "Ahora custodias una bóveda real: el 0,01 % del suministro de $CR."
       },
       "whale": {
         "name": "Ballena",
@@ -5825,8 +6046,8 @@ export const es: EnTranslations = {
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Forja tu leyenda: {siteUrl}",
     "arenaStat": "Arena",
-    "shareTierBit": ", titular de $WOC de rango {tier}",
-    "shareText": "Estoy forjando mi leyenda en World of ClaudeCraft: nivel {level} {className}{tierBit}. Únete a mi mundo:",
+    "shareTierBit": ", titular de $CR de rango {tier}",
+    "shareText": "Estoy forjando mi leyenda en Cryptic Realm: nivel {level} {className}{tierBit}. Únete a mi mundo:",
     "nativeShareTitle": "Mundo de ClaudeCraft",
     "fileNameFallback": "jugador",
     "actionShareX": "Compartir en X",
@@ -6025,6 +6246,71 @@ export const es: EnTranslations = {
       "toolSlips": "Esa herramienta resbala sobre esta cerradura.",
       "lockJammed": "La cerradura está demasiado atascada para forzarla: vuelve a superar la expedición para otro intento.",
       "lastPickSnaps": "La última ganzúa se rompe. La cerradura se atasca: el cofre se pierde a menos que vuelvas a superar la expedición."
+    },
+    "venues": {
+      "derbyErrFull": "The grid is full for the next race.",
+      "derbyErrMarshal": "Sign up with the Race Marshal at the Thornwheel gate.",
+      "derbyErrRunning": "A race is already running. Wait for the next grid.",
+      "derbyFinish": "Checkered flag! You finish in {place} place.",
+      "derbyFinishPurse": "Checkered flag! You take {place} place and a {silver}s purse.",
+      "derbyGreen": "GREEN FLAG! Go go go!",
+      "derbyGrid": "Grid position {slot}. {laps} laps: follow the flags. Green in {seconds}...",
+      "derbyQueued": "You are signed up for the Thornwheel Derby ({count} on the grid).",
+      "derbyTimeUp": "Time! The Marshal waves you in.",
+      "homeDeed": "The deed to {name} is yours. Welcome home.",
+      "homeErrEntitlement": "A deed on Homestead Lane costs {price} $CR — settle the deed payment first.",
+      "homeErrHaveDeed": "You already hold a deed on Homestead Lane.",
+      "homeErrOwned": "That home already has an owner.",
+      "homeErrRealtor": "See Realtor Maribel on Homestead Lane to buy a home.",
+      "homeForSale": "That plot is still for sale.",
+      "homeShownDoor": "You are shown to the door.",
+      "hordeAlarm": "THE HORDE ALARM SOUNDS! The dead march on Eastbrook from the north road!",
+      "hordeBreach": "The dead break into the square! Wards left: {wards}.",
+      "hordeErrBoard": "Sound the alarm from the town defense board.",
+      "hordeErrBuildCost": "Raising a watch post costs 15s in timber and bowstrings.",
+      "hordeErrBuildMidWave": "Build between waves, not while the dead are inside the walls.",
+      "hordeErrCost": "Fortifying the town costs 20s in timber and nails.",
+      "hordeErrMaxWards": "The town is fortified to the rafters already.",
+      "hordeErrMidWave": "Fortify between waves, not while the dead are inside the walls.",
+      "hordeErrRunning": "The horde alarm is already sounding.",
+      "hordeFortified": "You fortify the town. Wards: {wards}. The line stands taller.",
+      "hordeLoss": "The last ward falls. The dead have Eastbrook tonight.",
+      "hordePostMax": "The watch posts are built out.",
+      "hordePostReinforced": "A watch post is reinforced to strength {level}.",
+      "hordePostUp": "A watch post rises on the line ({built} of {total}).",
+      "hordeWave": "WAVE {wave} of {waves}: {count} of the dead are on the road!",
+      "hordeWaveDown": "Wave {wave} is down. Fortify while you can — the next comes soon.",
+      "hordeWin": "The town stands! The bursar counts out your share: 80s.",
+      "pitBellMissed": "The bell rang without you. Your Boarpit card spot is forfeit.",
+      "pitDraw": "The Pit Master calls it a draw.",
+      "pitEnter": "Into the pit! {count} fighters. Fists in {seconds}...",
+      "pitErrFull": "The card is full for the next bout.",
+      "pitErrMaster": "Sign up with the Pit Master at the Boarpit gate.",
+      "pitErrRunning": "A bout is on. Wait for the next bell.",
+      "pitFight": "FIGHT!",
+      "pitForfeit": "You forfeit the bout.",
+      "pitKo": "Knocked out! You are hauled to the rail.",
+      "pitQueued": "You are on the card for the next Boarpit bout ({count} signed).",
+      "pitWin": "Last one standing! You take the pot: {silver}s.",
+      "skAxe": "Your builder shoulders the axe.",
+      "skBarracksUp": "Your barracks stands. Footmen may muster.",
+      "skBuilderDead": "Your camp builder has fallen.",
+      "skErrBusy": "You can't muster a warcamp right now.",
+      "skErrCost": "Not enough timber and stone for that.",
+      "skErrFull": "The muster roll is full.",
+      "skFootmanUp": "A footman answers the muster.",
+      "skHasBarracks": "Your camp already has a barracks.",
+      "skLoss": "The warband overruns the field. The skirmish is lost.",
+      "skNeedBarracks": "Footmen need a barracks.",
+      "skPick": "Your builder hefts the pick.",
+      "skQueued": "You are on the muster roll for a Warcamp Skirmish ({count} of 4).",
+      "skRally": "Your footmen march on the rally point.",
+      "skStart": "WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!",
+      "skTentDown": "Your Command Tent has fallen. Your camp is out.",
+      "skTowerUp": "A watchtower rises over your camp.",
+      "skTowersMax": "Your camp has all its watchtowers.",
+      "skWave": "Warband wave {wave} rides for the camps!",
+      "skWin": "The warband banner falls! The field is yours: 120s the commander."
     }
   },
   "lockpickUi": {
@@ -6170,7 +6456,8 @@ export const es: EnTranslations = {
       "riteChoose": "Acércate al Relicario Ahogado y pulsa F para comenzar el rito",
       "ritePlayback": "Observa los santuarios: memoriza el orden en que se iluminan",
       "riteInput": "Pulsa F en cada santuario en el orden en que se iluminaron ({current}/{total})",
-      "riteOpen": "El relicario está abierto: pulsa F sobre él para reclamar tu botín"
+      "riteOpen": "El relicario está abierto: pulsa F sobre él para reclamar tu botín",
+      "descend": "Descend the Hellmaw"
     },
     "objective": {
       "kill_boss": "Da muerte a {boss}",
@@ -6322,6 +6609,7 @@ export const es: EnTranslations = {
   "yumi": {
     "bracket3": "Yumi 3c3",
     "bracket5": "Yumi 5c5",
+    "enterQueue": "¡Únete a Protege a Yumi!",
     "queue": {
       "join": "Entras en la cola de Protege a Yumi. Protege a tu familiar…",
       "leave": "Sales de la cola de Protege a Yumi.",
@@ -6359,6 +6647,7 @@ export const es: EnTranslations = {
   },
   "fiesta": {
     "bracket": "Fiesta",
+    "enterQueue": "¡Únete a la Fiesta!",
     "banner": {
       "wave": "¡OLEADA {wave}/{total} — ELIGE UNA MEJORA!",
       "augmentGained": "¡Mejora obtenida: {name}!",
@@ -6523,14 +6812,14 @@ export const es: EnTranslations = {
     }
   },
   "seo": {
-    "title": "World of ClaudeCraft: MMO web de estilo clásico",
-    "description": "Emprende una aventura épica en World of ClaudeCraft, un micro-MMO de estilo clásico que se juega directamente en el navegador. Entra a un mundo compartido, sube de nivel y derrota enemigos.",
+    "title": "Cryptic Realm: MMO web de estilo clásico",
+    "description": "Emprende una aventura épica en Cryptic Realm, un micro-MMO de estilo clásico que se juega directamente en el navegador. Entra a un mundo compartido, sube de nivel y derrota enemigos.",
     "genre": "MMORPG",
     "playMode": "Multijugador",
     "applicationCategory": "Juego",
     "operatingSystem": "Navegador web",
-    "officialLabel": "Sitio web oficial de World of ClaudeCraft",
-    "officialBody": "worldofclaudecraft.com es el MMO de navegador gratuito oficial del mundo Claudemoon. Juega en línea con un personaje persistente, explora en solitario sin conexión, lee la wiki y sigue los enlaces comunitarios verificados desde este sitio."
+    "officialLabel": "Sitio web oficial de Cryptic Realm",
+    "officialBody": "crypticrealm.com es el MMO de navegador gratuito oficial del mundo Claudemoon. Juega en línea con un personaje persistente, explora en solitario sin conexión, lee la wiki y sigue los enlaces comunitarios verificados desde este sitio."
   },
   "a11y": {
     "goHome": "Ir a la página principal",
@@ -6538,9 +6827,9 @@ export const es: EnTranslations = {
     "mainNavigation": "Navegación principal",
     "languageSelection": "Selección de idioma",
     "characterActions": "Acciones de personaje",
-    "githubProject": "Abrir el proyecto de World of ClaudeCraft en GitHub",
-    "discordCommunity": "Unirse a la comunidad de World of ClaudeCraft en Discord",
-    "donateProject": "Donar para apoyar World of ClaudeCraft"
+    "githubProject": "Abrir el proyecto de Cryptic Realm en GitHub",
+    "discordCommunity": "Unirse a la comunidad de Cryptic Realm en Discord",
+    "donateProject": "Donar para apoyar Cryptic Realm"
   },
   "entryGuard": {
     "title": "Gráficos reducidos",
@@ -6573,7 +6862,8 @@ export const es: EnTranslations = {
       "professions": "Consejo: puedes aprender profesiones de recolección y artesanía junto con tu clase de combate.",
       "loadouts": "Consejo: guarda más de una configuración de talentos para cambiar de estilo sin gastar los puntos dos veces.",
       "pvp": "Consejo: desafía a otro jugador a un duelo amistoso o entra en la cola de la arena del Coliseo Cinéreo para poner a prueba tu configuración."
-    }
+    },
+    "reconnecting": "Conexión perdida. Reconectando..."
   },
   "errors": {
     "nothingInteract": "No hay nada con qué interactuar.",
@@ -6615,6 +6905,7 @@ export const es: EnTranslations = {
   },
   "desktop": {
     "update": {
+      "downloading": "Descargando actualización {version}...",
       "checkingTitle": "Buscando actualizaciones...",
       "checkingBody": "Las nuevas versiones se descargan mientras juegas.",
       "uptodateTitle": "Estás al día",
@@ -6627,11 +6918,11 @@ export const es: EnTranslations = {
       "dismiss": "Descartar"
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "body": "La vista del juego dejó de funcionar. ¿Recargarla?",
       "reload": "Recargar",
       "quit": "Salir",
-      "fatalBody": "World of ClaudeCraft tuvo un error inesperado y debe cerrarse."
+      "fatalBody": "Cryptic Realm tuvo un error inesperado y debe cerrarse."
     }
   },
   "gpuNotice": {
@@ -6666,7 +6957,9 @@ export const es: EnTranslations = {
     "characterCountOther": "{count} personajes",
     "selectedRealm": "Mundo: {name}",
     "statsOffline": "Desconectado",
-    "statsRealmOffline": "{realm} (desconectado)"
+    "statsRealmOffline": "{realm} (desconectado)",
+    "enter": "Enter Realm",
+    "exchangeNote": "The Exchange is the only realm where items move between realms."
   },
   "character": {
     "loading": "Cargando...",
@@ -6770,17 +7063,17 @@ export const es: EnTranslations = {
     "iosStandaloneDetail": "Estás en modo de pantalla completa desde la pantalla de inicio. Mantén el dispositivo en horizontal.",
     "iosInstallDetail": "Para pantalla completa real en iPhone o iPad, instala esta página en tu pantalla de inicio primero.",
     "iosShareStep": "En Safari, toca Compartir y luego Agregar a pantalla de inicio.",
-    "iosOpenStep": "Abre World of ClaudeCraft desde el nuevo icono de la pantalla de inicio.",
+    "iosOpenStep": "Abre Cryptic Realm desde el nuevo icono de la pantalla de inicio.",
     "androidStandaloneDetail": "Estás en modo de aplicación a pantalla completa. Mantén el dispositivo en horizontal.",
     "androidInstallDetail": "Para pantalla completa en Android, instala esta página o agrégala a la pantalla de inicio primero.",
     "androidInstallStep": "En Chrome, toca el menú y luego Instalar app o Agregar a pantalla de inicio.",
-    "androidOpenStep": "Abre World of ClaudeCraft desde el nuevo icono.",
+    "androidOpenStep": "Abre Cryptic Realm desde el nuevo icono.",
     "otherStandaloneDetail": "Mantén el dispositivo en pantalla completa horizontal.",
     "otherInstallDetail": "Instala o agrega esta página a la pantalla de inicio para la mejor experiencia móvil a pantalla completa."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft: Mundo no disponible",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm: Mundo no disponible",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "Mantenimiento del mundo",
     "heading": "El mundo no está disponible temporalmente.",
     "body": "Estamos reiniciando el servicio del juego y esperamos que Claudemoon vuelva pronto. Esta página seguirá comprobándolo automáticamente.",
@@ -6849,7 +7142,8 @@ export const es: EnTranslations = {
       "zoomIn": "Acercar",
       "zoomOut": "Alejar",
       "mapCanvasLabel": "Mapa",
-      "mapSummary": "Mapa de {zone}."
+      "mapSummary": "Mapa de {zone}.",
+      "mobileArena": "Arena"
     },
     "options": {
       "gameMenu": "Menú del juego",
@@ -6926,6 +7220,34 @@ export const es: EnTranslations = {
       "primary": "Principal",
       "alternate": "Alternativa",
       "unbound": "Sin asignar",
+      "arcforge": "ArcForge",
+      "controller": "Controller",
+      "controllerDisconnected": "Not connected",
+      "coop": "Join Co-Op",
+      "customization": "Customization",
+      "mods": "Mods",
+      "padA": "A",
+      "padAttackTarget": "Attack nearest · target",
+      "padB": "B",
+      "padBack": "Back / View",
+      "padCursorNote": "When a menu, quest dialog, or chat opens, the on-screen cursor arms automatically — move it with a stick and press A to click (accept quests, send chat, use menus).",
+      "padCursorToggle": "Toggle mouse cursor",
+      "padDpad": "D-Pad",
+      "padInteract": "Interact / talk to NPC",
+      "padJumpClick": "Jump · click in cursor mode",
+      "padLbRb": "LB / RB",
+      "padLeftStick": "Left Stick",
+      "padLookCursor": "Look / move cursor",
+      "padLtRt": "LT / RT (hold)",
+      "padMenu": "Open game menu",
+      "padMove": "Move",
+      "padRightStick": "Right Stick",
+      "padSkillChords": "Hold + A/B/X/Y for skills 9–16",
+      "padSkills12": "Skills 1 & 2",
+      "padSkills47": "Skills 5–8",
+      "padStart": "Start / Menu",
+      "padXY": "X / Y",
+      "reportBug": "Report Bug",
       "mouseCamera": "Cámara con ratón",
       "keybindHelpMouseCamera": "Cámara con ratón desactivada: A/D gira, arrastra para orbitar (clásico). Activada: WASD relativo a la cámara, A/D desplaza. Haz clic en una celda de tecla para reasignar; Esc cancela."
     },
@@ -6956,7 +7278,7 @@ export const es: EnTranslations = {
         "nameplates": "Alternar placas de nombre",
         "meters": "Medidores de daño",
         "social": "Amigos y hermandad",
-        "arena": "JcJ (Thornhollow Fields y Arenas)",
+        "arena": "Arena (Coliseo Cinéreo)",
         "chat": "Abrir chat",
         "attack": "Atacar",
         "actionBarSlot": "Barra de acción {slot}"
@@ -7273,7 +7595,7 @@ export const es: EnTranslations = {
       "defensiveDesc": "Ataca a enemigos que te dañen a ti o a tu mascota.",
       "aggressiveDesc": "Ataca a enemigos hostiles cercanos.",
       "rename": "Renombrar mascota",
-      "revive": "Remendar",
+      "revive": "Revivir mascota",
       "abandon": "Abandonar mascota",
       "cancel": "Cancelar",
       "renameLabel": "Elige un nuevo nombre para la mascota.",
@@ -7898,6 +8220,14 @@ export const es: EnTranslations = {
         "name": "Bramido de Hierro",
         "description": "Un grito que aumenta el poder de ataque de todos los miembros del grupo un {buff}% durante 30 min."
       },
+      "commanding_shout": {
+        "name": "Grito Alentador",
+        "description": "Aumenta tu Aguante en {buff} durante 2 min."
+      },
+      "rend": {
+        "name": "Tajo Profundo",
+        "description": "Hiere al objetivo y le hace sangrar por {damage} de daño durante {duration} s."
+      },
       "demoralizing_shout": {
         "name": "Aullido Pavoroso",
         "description": "Lanza un grito aterrador que reduce un {buff}% el daño infligido por todos los enemigos cercanos durante 20 s."
@@ -7976,7 +8306,7 @@ export const es: EnTranslations = {
       },
       "greater_invisibility": {
         "name": "Invisibilidad superior",
-        "description": "Desapareces durante 20 s y eliminas 2 efectos de daño periódico. Cuando termina la invisibilidad, recibes un 90% menos de daño durante 2 s. (Talento de mago)"
+        "description": "Desaparece durante 20 s: elimina 2 efectos de daño en el tiempo y recibes un 90% menos de daño mientras eres invisible y poco después. (Talento de mago)"
       },
       "hot_streak": {
         "name": "Buena racha",
@@ -8076,7 +8406,7 @@ export const es: EnTranslations = {
       },
       "frost_nova": {
         "name": "Atadura de Hielo",
-        "description": "Congela a todos los enemigos cercanos en el sitio durante hasta 8 s e inflige {damage} de daño de Escarcha. El enraizamiento se rompe tras recibir daño acumulado equivalente al 15 % de la salud máxima del objetivo, con un mínimo de 20 y un máximo de 60 de daño."
+        "description": "Congela a todos los enemigos cercanos en el sitio durante hasta 8 s e inflige {damage} de daño de Escarcha."
       },
       "arcane_explosion": {
         "name": "Estallido de Éter",
@@ -8131,7 +8461,7 @@ export const es: EnTranslations = {
         "description": "Embosca al objetivo por un 250% de daño de arma más {damage}. Debes estar en sigilo y detrás del objetivo. Requiere una daga. Otorga 1 punto de combo."
       },
       "stealth": {
-        "name": "Velo Crepuscular",
+        "name": "Duskveil",
         "description": "Te oculta en las sombras: los enemigos apenas te detectan, pero te mueves un 50% más lento. Atacar o recibir daño rompe Duskveil. Lánzalo de nuevo para salir."
       },
       "adrenaline_rush": {
@@ -8191,7 +8521,7 @@ export const es: EnTranslations = {
         "description": "Aumenta tu armadura en {buff} durante 30 min."
       },
       "judgement": {
-        "name": "Veredicto",
+        "name": "Verdict",
         "description": "Desata tu Sello activo sobre el enemigo, lo consume y causa su daño Sagrado acumulado."
       },
       "blessing_of_might": {
@@ -8363,7 +8693,7 @@ export const es: EnTranslations = {
         "description": "Imbuye tu arma con escarcha mordiente: cada golpe inflige {damage} de daño adicional durante 5 min."
       },
       "ghost_wolf": {
-        "name": "Lobo Sombrío",
+        "name": "Shadewolf",
         "description": "Te transforma en Shadewolf y aumenta tu velocidad de movimiento un 40% durante 10 min."
       },
       "stormstrike": {
@@ -8419,7 +8749,7 @@ export const es: EnTranslations = {
         "description": "Sana a un objetivo amistoso por {damage}."
       },
       "mark_of_the_wild": {
-        "name": "Resguardo Silvestre",
+        "name": "Wildward",
         "description": "Coloca la Wildward sobre un objetivo amistoso y aumenta su armadura en {buff} durante 30 min."
       },
       "moonfire": {
@@ -8440,7 +8770,7 @@ export const es: EnTranslations = {
       },
       "bear_form": {
         "name": "Forma de Bruin",
-        "description": "Cambias a forma de oso: armadura +130%, poder de ataque muy aumentado, tus ataques generan ira y un 30% más de amenaza. Lánzala de nuevo para volver a forma de taumaturgo."
+        "description": "Cambias a forma de oso: armadura +90%, poder de ataque muy aumentado, tus ataques generan ira y un 30% más de amenaza. Lánzala de nuevo para volver a forma de taumaturgo."
       },
       "maul": {
         "name": "Rompehuesos",
@@ -8520,7 +8850,7 @@ export const es: EnTranslations = {
       },
       "tigers_fury": {
         "name": "Sangre de Lobo",
-        "description": "Aumenta el poder de ataque en {buff} durante {duration} s. Solo en Forma de lobo."
+        "description": "Increases attack power by {buff} for {duration} sec. Wolf Form only."
       },
       "rip": {
         "name": "Desgarrar",
@@ -9059,8 +9389,8 @@ export const es: EnTranslations = {
         "description": "Una apertura sigilosa que desgarra al enemigo causando el daño del arma más {damage} y provoca daño por sangrado durante 9 s. Otorga 1 punto de combo. Solo en Forma de lobo."
       },
       "revive_pet": {
-        "name": "Remendar",
-        "description": "Remienda a tu mascota y restaura {overTime} de salud durante 12 s en pulsos cada 3 s mientras esté viva. Si está muerta, la revive con un 35% de salud."
+        "name": "Revivir mascota",
+        "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
       }
     },
     "items": {
@@ -9202,6 +9532,18 @@ export const es: EnTranslations = {
       "gravecaller_sigil": {
         "name": "Sigilo de Gravecaller"
       },
+      "binding_ward": {
+        "name": "Hellmaw Binding Ward"
+      },
+      "renders_hateforged_cleaver": {
+        "name": "The Render's Hateforged Cleaver"
+      },
+      "sigilbrand_of_the_durance": {
+        "name": "Brand of the Hellmaw"
+      },
+      "hollow_fang_of_hate": {
+        "name": "Hollow Fang of the Well"
+      },
       "blessed_wax": {
         "name": "Sebo bendito"
       },
@@ -9251,13 +9593,13 @@ export const es: EnTranslations = {
         "name": "Retal de lino"
       },
       "arcane_dust": {
-        "name": "Polvo de Carillón"
+        "name": "Polvo arcano"
       },
       "arcane_essence": {
-        "name": "Esencia de Carillón"
+        "name": "Esencia arcana"
       },
       "arcane_shard": {
-        "name": "Fragmento de Carillón"
+        "name": "Fragmento arcano"
       },
       "fen_muster_order": {
         "name": "Orden de alistamiento de Fenbridge"
@@ -9518,7 +9860,7 @@ export const es: EnTranslations = {
         "name": "Toga de lana de cumbre"
       },
       "stalkerhide_jerkin": {
-        "name": "Jubón de Piel de Merodeo"
+        "name": "Jubón de piel de acechador"
       },
       "cragwalker_boots": {
         "name": "Botas Caminarrocas"
@@ -9659,7 +10001,7 @@ export const es: EnTranslations = {
         "name": "Pico de Minería de Hierro"
       },
       "mithril_mining_pick": {
-        "name": "Pico de Minería de Plata Celeste"
+        "name": "Pico de Minería de Mithril"
       },
       "handaxe": {
         "name": "Hacha de Mano"
@@ -9677,19 +10019,19 @@ export const es: EnTranslations = {
         "name": "Hoz de Bronce"
       },
       "silverleaf_sickle": {
-        "name": "Hoz de Hoja de Brillo"
+        "name": "Hoz de Hoja de Plata"
       },
       "thorium_mining_pick": {
-        "name": "Pico de Minería de Osmio"
+        "name": "Pico de Minería de Torio"
       },
       "arcanite_mining_pick": {
-        "name": "Pico de Minería de Glyfiacero"
+        "name": "Pico de Minería de Arcanita"
       },
       "ashwood_axe": {
         "name": "Hacha de Fresno"
       },
       "elderwood_axe": {
-        "name": "Hacha de Pino Cumbre"
+        "name": "Hacha de Madera Añeja"
       },
       "goldleaf_sickle": {
         "name": "Hoz de Hoja Dorada"
@@ -9698,16 +10040,16 @@ export const es: EnTranslations = {
         "name": "Hoz de Pétalo Solar"
       },
       "thorium_ore": {
-        "name": "Mineral de Osmio"
+        "name": "Mineral de Torio"
       },
       "arcanite_bar": {
-        "name": "Barra de Glyfiacero"
+        "name": "Barra de Arcanita"
       },
       "ashwood_log": {
         "name": "Tronco de Ceniza"
       },
       "elderwood_log": {
-        "name": "Tronco de Pino Cumbre"
+        "name": "Tronco de Saúco"
       },
       "goldleaf_herb": {
         "name": "Hierba Hoja de Oro"
@@ -10720,6 +11062,15 @@ export const es: EnTranslations = {
       "simple_fishing_pole": {
         "name": "Caña de pescar sencilla"
       },
+      "mount_forest_stag": {
+        "name": "Brida de ciervo del bosque"
+      },
+      "mount_swamp_raptor": {
+        "name": "Silla de raptor lancero"
+      },
+      "mount_emerald_wyrm": {
+        "name": "Riendas del vermis esmeralda"
+      },
       "tangled_weed": {
         "name": "Hierba enredada"
       },
@@ -10748,7 +11099,7 @@ export const es: EnTranslations = {
         "name": "Botines Nightfang"
       },
       "glimmerfin_koi": {
-        "name": "Koi Destello Solar"
+        "name": "Koi de aletas brillantes"
       },
       "raw_bog_eel": {
         "name": "Anguila de ciénaga cruda"
@@ -11625,6 +11976,36 @@ export const es: EnTranslations = {
       "vale_cup_ball": {
         "name": "Balón de jabalí"
       },
+      "hellmaw_charred_husk": {
+        "name": "Charred Husk"
+      },
+      "hellmaw_cinder_acolyte": {
+        "name": "Cinder Acolyte"
+      },
+      "hellmaw_cursed_knight": {
+        "name": "Cursed Iron Knight"
+      },
+      "hellmaw_ember_behemoth": {
+        "name": "Ember Behemoth"
+      },
+      "hellmaw_inferno_dragon": {
+        "name": "Inferno Dragon"
+      },
+      "hellmaw_lava_fiend": {
+        "name": "Lava Fiend"
+      },
+      "hellmaw_primal_beast": {
+        "name": "Primal Emberbeast"
+      },
+      "hellmaw_sigilbound_warlock": {
+        "name": "Sigil-Bound Warlock"
+      },
+      "hellmaw_the_render": {
+        "name": "The Render"
+      },
+      "hellmaw_wailing_spectre": {
+        "name": "Wailing Spectre"
+      },
       "thunzharr_waking_peak": {
         "name": "Thunzharr, el Pico Despierto"
       },
@@ -12217,6 +12598,41 @@ export const es: EnTranslations = {
         "title": "Guardián del Relicario",
         "greeting": "El rastro llevaba al norte. Otro relicario, otro rito. Elige tu dificultad y yo sujetaré la cuerda hasta que vuelvas."
       },
+      "cainhurst_sage": {
+        "name": "Cainhurst the Sage",
+        "title": "Keeper of the Hellmaw",
+        "greeting": "You pulled me from the Hellmaw, friend - I do not forget it. The well is open to you now. Steel yourself: The Render waits at the bottom."
+      },
+      "stable_master_wren": {
+        "name": "Wren Saddleworth",
+        "title": "Maestra de establos",
+        "greeting": "Cada héroe necesita una montura, {className}. El ciervo es firme, el raptor es veloz y el vermis... el vermis vuela."
+      },
+      "mercenary_kael": {
+        "name": "Kael the Sellsword",
+        "title": "Wandering Mercenary",
+        "greeting": "Coin's coin, {className}. Lend a blade and the beast's yours to loot."
+      },
+      "huntress_verr": {
+        "name": "Huntress Verr",
+        "title": "Boar-Culler",
+        "greeting": "These tuskers won't thin themselves. Wade in - the kill counts for you."
+      },
+      "interior_merchant": {
+        "name": "Merchant",
+        "title": "Shopkeeper",
+        "greeting": "Wares for a wanderer? Take a look."
+      },
+      "interior_innkeeper": {
+        "name": "Innkeeper",
+        "title": "Host",
+        "greeting": "Rest your boots, traveller. The fire's warm."
+      },
+      "interior_villager": {
+        "name": "Villager",
+        "title": "Resident",
+        "greeting": "Oh - a visitor! Mind the mess."
+      },
       "spirit_healer": {
         "name": "El Guardián Pálido",
         "title": "Custodio de los Muertos",
@@ -12512,6 +12928,41 @@ export const es: EnTranslations = {
         "title": "Maestro del boticario",
         "greeting": "Mida dos veces y vierta una vez, {className}. El boticario no tiene paciencia con los reactivos derramados."
       },
+      "town_defense_board": {
+        "name": "Town Defense Board",
+        "title": "Keeper of the Eastbrook Watch",
+        "greeting": "The road needs a watch. Gather your party and hold Eastbrook against the dead."
+      },
+      "race_marshal_pip": {
+        "name": "Comisaria de carrera Pip",
+        "title": "Guardiana de la Rueda Espinosa",
+        "greeting": "¿Seis karts, tres vueltas y unos frenos que no merecen el nombre, {className}? Firma el registro y toma un puesto en la parrilla."
+      },
+      "pit_master_grott": {
+        "name": "Maestro del foso Grott",
+        "title": "Guardián del Foso del Jabalí",
+        "greeting": "Puños, pies y lo que el valle te haya dado, {className}. En mi foso no muere nadie: de eso se encargan las estacas. ¿Te apuntas al cartel?"
+      },
+      "realtor_maribel": {
+        "name": "Agente inmobiliaria Maribel",
+        "title": "Eastbrook Homes",
+        "greeting": "Cuatro parcelas estupendas, {className}, y el aire del valle es gratis; las escrituras no. Una casa en el Camino de los Hogares es para nuestros mecenas, pagada en moneda CR."
+      },
+      "skirmish_post": {
+        "name": "Estructura del campamento",
+        "title": "Escaramuza del campamento",
+        "greeting": "El campamento resiste."
+      },
+      "skirmish_builder": {
+        "name": "Constructor del campamento",
+        "title": "Escaramuza del campamento",
+        "greeting": "Hacha o pico, comandante: solo señala."
+      },
+      "skirmish_footman": {
+        "name": "Soldado del campamento",
+        "title": "Escaramuza del campamento",
+        "greeting": "Señálame a la banda de guerra."
+      },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
         "title": "Vigía de la Marea",
@@ -12521,11 +12972,11 @@ export const es: EnTranslations = {
     "quests": {
       "q_prof_intro": {
         "title": "Un oficio para cada mano",
-        "text": "Cada alma en Eastbrook trabaja un oficio además de la espada, {playerName}. Hay vetas de mineral en las rocas alrededor de la Excavación de Cobre, al sureste del pueblo. Ve a golpear con el pico y trabaja 5 de ellas tú mismo; lo sabré.",
+        "text": "Cada habitante de Eastbrook ejerce un oficio además de la espada, {playerName}. Hay vetas de mineral dispersas por el pueblo, así que toma un pico y tráeme 5 trozos. Extráelos tú mismo, ¿eh? Sabré si no lo haces.",
         "completion": "¿Lo ves? Mineral recogido y callos en las manos. Sigue con la minería, la tala y la herboristería mientras recorres los caminos, y cuando estés de vuelta en el pueblo, fíjate en el Tablón de Enfoque junto al mercado y el banco de artesanía cercano. Hay un trato justo en cada parte, si lo quieres.",
         "objectives": {
           "0": {
-            "label": "Veta de mineral extraída"
+            "label": "Trozo de mineral"
           }
         }
       },
@@ -12604,7 +13055,7 @@ export const es: EnTranslations = {
       },
       "q_supplies": {
         "title": "Suministros robados",
-        "text": "Los bandidos robaron mi último carro: herramientas, sal y lino de Eastbrook. Recupera 4 cajas de su campamento de las colinas del sudoeste.",
+        "text": "Los bandidos robaron mi último carro: herramientas, sal y lino de Eastbrook. Recupera 4 cajas de su campamento de las colinas del sudeste.",
         "completion": "¡Mis cajas! Apenas tienen un rasguño. Eres una maravilla.",
         "objectives": {
           "0": {
@@ -12833,11 +13284,11 @@ export const es: EnTranslations = {
       },
       "q_no_rest": {
         "title": "Sin descanso entre los juncos",
-        "text": "El rito grabado en esos incensarios obliga a los ahogados a levantarse, y ahora ha alzado a uno lo bastante fuerte para liderarlos. Los guardianes lo llaman el Señor de la Guerra Ahogado, y mientras controle la Capilla Ahogada, los muertos mantienen sus filas. Acaba con él, {playerName}, y el resto se dispersará de vuelta hacia la ciénaga.",
+        "text": "The rite on those censers binds the drowned to rise, and now it has raised one strong enough to lead them. The wardens call him the Drowned Warlord, and while he holds the Drowned Chapel the dead keep their ranks. Break him, {playerName}, and the rest will scatter back into the mire.",
         "completion": "Das más misericordia a los muertos que sus señores. Toma esto, lo mereces.",
         "objectives": {
           "0": {
-            "label": "El Señor de la Guerra Ahogado abatido"
+            "label": "Muerto ahogado devuelto al descanso"
           }
         }
       },
@@ -12955,7 +13406,7 @@ export const es: EnTranslations = {
         }
       },
       "q_stalker_pelts": {
-        "title": "Primera Escarcha en Highwatch",
+        "title": "El invierno llega a Highwatch",
         "text": "El invierno de esta montaña derriba puertas, {playerName}. Ocho pieles de acechador forrarán capas para la muralla.",
         "completion": "Gruesas como mi brazo. La guardia no se congelará este año.",
         "objectives": {
@@ -12986,7 +13437,7 @@ export const es: EnTranslations = {
       },
       "q_old_cragmaw": {
         "title": "El Viejo Cragmaw",
-        "text": "La gente de la montaña puso nombre a las huellas que encontró mi exploradora: el Viejo Cragmaw, un felino tirano de pelaje lleno de cicatrices que ha sobrevivido a tres generaciones de su propia manada. Es la razón de que los acechadores inunden mi camino, {playerName}. Su guarida está en la cresta oriental, sobre el camino del sur. Lleva a un amigo y acaba con el viejo demonio.",
+        "text": "La gente de la montaña puso nombre a las huellas que encontró mi exploradora: el Viejo Cragmaw, un felino tirano de pelaje lleno de cicatrices que ha sobrevivido a tres generaciones de su propia manada. Es la razón de que los acechadores inunden mi camino, {playerName}. Su guarida está en la cresta occidental, sobre el camino del sur. Lleva a un amigo y acaba con el viejo demonio.",
         "completion": "Abatido al fin. La gente de la montaña juraba que ese felino sobreviviría al propio muro. Ahora los acechadores se quedarán en sus nieves altas, {playerName}, y mis patrullas recorrerán el camino sin sangrar por ello. Toda la cresta está más tranquila gracias a tu trabajo.",
         "objectives": {
           "0": {
@@ -13219,11 +13670,21 @@ export const es: EnTranslations = {
       },
       "q_the_codfather": {
         "title": "El Bacaladrino",
-        "text": "El Bacaladrino no es solo un pez, {playerName}: es un asesino a sangre fría. Los viejos del lugar juran que desayuna Merodeadores del lodazal, y hasta las Viudas de Mirefen se niegan a tejer sus telas cerca de los Bajíos de Deepfen, del puro terror que le tienen. Él manda en esas aguas, y el agua del pantano exige nada menos que una Caña de carrete de hierro; en mi mostrador se venden. Consigue una, saca a ese viejo demonio de sus aguas y admitiré que te has unido a la familia.",
+        "text": "El Bacaladrino no es solo un pez, {playerName}, es un asesino de sangre fría. Los veteranos juran que desayuna merodeadores del lodazal, e incluso las viudas de Mirefen no tejen sus redes cerca de los Bajíos de Deepfen por puro terror. Gobierna esas aguas. Toma una caña de pescar, arranca a ese viejo demonio de sus aguas y admitiré que ya eres de la familia.",
         "completion": "Por los santos húmedos... El Bacaladrino en persona. Mira esos bigotes. Fenbridge vivirá un año entero contando historias de esta captura, {playerName}.",
         "objectives": {
           "0": {
             "label": "El Bacaladrino"
+          }
+        }
+      },
+      "q_save_cainhurst": {
+        "title": "Save Cainhurst the Sage",
+        "text": "Old Cainhurst - the sage who reads the deep maps - went down the well a week past and never came up. The thing below took him, and bound him with three cursed wards: one struck among the graves, one buried in the mine, one drowned at the docks. Break all three wards, {playerName}, and you'll break his chains. Bring them to me as proof.",
+        "completion": "The three wards, all snuffed cold. Cainhurst has crawled free - he waits at the well now, and swears the Hellmaw is open to you. He warns of something at the bottom he calls The Render.",
+        "objectives": {
+          "0": {
+            "label": "Hellmaw binding ward broken"
           }
         }
       },
@@ -13239,7 +13700,7 @@ export const es: EnTranslations = {
       },
       "q_nythraxis_graves": {
         "title": "Tumbas de los olvidados",
-        "text": "Ya he visto estas marcas antes, en tres tumbas viejas repartidas por el campo de batalla del norte. El capitán Aldren yace en la loma occidental, el sumo sacerdote Malric más al sur, siguiendo el linde oeste, y el asesino real Voss junto al acantilado oriental. Toca cada tumba y escucha, {playerName}. Puede que los muertos recuerden lo que los vivos olvidaron.",
+        "text": "He visto estas marcas antes, en tres viejas tumbas alrededor del campo de batalla del norte. El capitán Aldren yace en la elevación oriental, el sumo sacerdote Malric cerca del camino central roto, y el asesino real Voss junto al acantilado occidental. Toca cada tumba y escucha, {playerName}. Los muertos pueden recordar lo que los vivos olvidaron.",
         "completion": "Aldren siguió siendo leal, Malric se negó a aceptar la muerte y Voss vio el peligro antes que nadie. Los tres sirvieron al mismo rey olvidado.",
         "objectives": {
           "0": {
@@ -13255,7 +13716,7 @@ export const es: EnTranslations = {
       },
       "q_nythraxis_sealed_crypt": {
         "title": "La cripta abandonada",
-        "text": "Las visiones señalan la cripta abandonada en el acantilado oriental. Hay una vieja leyenda que dice que la cripta albergaba a un rey. Tal vez Thornpeak lo selló abajo después de que el ritual de Malric lo torciera en algo inmortal. Entra en la cripta y mira qué queda dentro.",
+        "text": "Las visiones señalan la cripta abandonada en el acantilado occidental. Hay una vieja leyenda que dice que la cripta albergaba a un rey. Tal vez Thornpeak lo selló abajo después de que el ritual de Malric lo torciera en algo inmortal. Entra en la cripta y mira qué queda dentro.",
         "completion": "Las mitades de la piedra clave encajan, y el diario de Voss nombra lo que sellaron: el anillo del rey Nythraxis. Si el diario dice la verdad, ese anillo es la llave de su tumba.",
         "objectives": {
           "0": {
@@ -13297,7 +13758,7 @@ export const es: EnTranslations = {
       },
       "q_mogger": {
         "title": "Mogger debe caer",
-        "text": "Mogger ha partido carretas, aplastado cercas y matado tanto ganado como para vaciar medio Valle. No lo enfrentes a solas. Lleva dos compañeros fuertes al prado occidental y acaba con la bestia para siempre.",
+        "text": "Mogger ha partido carretas, aplastado cercas y matado tanto ganado como para vaciar medio Valle. No lo enfrentes a solas. Lleva dos compañeros fuertes al prado oriental y acaba con la bestia para siempre.",
         "completion": "Mogger ha muerto por fin. Los campos de Eastbrook son más seguros, y sales del Valle con otra historia digna de contarse.",
         "objectives": {
           "0": {
@@ -13357,7 +13818,7 @@ export const es: EnTranslations = {
       },
       "q_prof_amends_outfitter": {
         "title": "Hilos reunidos",
-        "text": "De vuelta a mi telar después de todo. No guardo rencor, {playerName}, pero el hilo recuerda la mano que lo soltó, y el costo de volver a tomarlo se mide más largo cada vez. Elimina las arañas de Sableweb que se agolpan en los bosques del este, y la labor calmará tus manos antes de que toquen buena seda de nuevo.",
+        "text": "De vuelta a mi telar después de todo. No guardo rencor, {playerName}, pero el hilo recuerda la mano que lo soltó, y el costo de volver a tomarlo se mide más largo cada vez. Elimina las arañas de Sableweb que se agolpan en los bosques del oeste, y la labor calmará tus manos antes de que toquen buena seda de nuevo.",
         "completion": "Firme de nuevo. Peletería y Sastrería regresan a tus manos como especializaciones. Mide dos veces antes de volverte a ir.",
         "objectives": {
           "0": {
@@ -13367,7 +13828,7 @@ export const es: EnTranslations = {
       },
       "q_prof_amends_apothecary": {
         "title": "De vuelta al hornillo",
-        "text": "Mira quién vuelve a mi puchero. Sin rencores, {playerName}, una cocina siempre tiene sitio, aunque sabes que la cuenta crece cada vez que te vas. Ve a reducir los jabalíes salvajes de la pradera del oeste, porque el sudor honesto es el primer ingrediente, y le recordará a tus manos en qué consiste el trabajo.",
+        "text": "Mira quién vuelve a mi puchero. Sin rencores, {playerName}, una cocina siempre tiene sitio, aunque sabes que la cuenta crece cada vez que te vas. Ve a reducir los jabalíes salvajes de la pradera del este, porque el sudor honesto es el primer ingrediente, y le recordará a tus manos en qué consiste el trabajo.",
         "completion": "Ahí está el sabor de antes. Alquimia y Cocina vuelven a tu hornillo como especializaciones. Quédate esta vez.",
         "objectives": {
           "0": {
@@ -14551,6 +15012,26 @@ export const es: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Un oficio que puedes llamar tuyo",
+        "text": "Cada artesano de Eastbrook finalmente se decide por un oficio que puede considerar suyo. Ponte a prueba con una sola acción, {playerName}, y declara tu camino.",
+        "completion": "Tu camino está elegido; caminarlo bien.",
+        "objectives": {
+          "0": {
+            "label": "Lobo del bosque matado"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Hacer las paces",
+        "text": "Para dejar de lado un oficio para otro, un artesano primero debe enmendar el camino no recorrido, {playerName}.",
+        "completion": "Enmiendas hechas; un nuevo camino está abierto para ti.",
+        "objectives": {
+          "0": {
+            "label": "Lobo del bosque matado"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "El Coro Ahogado",
         "text": "Los vadeadores no actúan solos. Entre ellos caminan los Devotos Ahogados: la secta que se hundió con el templo, aún con sus vestiduras putrefactas, aún entonando la plegaria desde las rocas de la orilla. Silencia a ocho de ellos y tráeme seis de las ofrendas que portan. Quiero saber qué pretenden entregar a su diosa.",
@@ -14655,6 +15136,48 @@ export const es: EnTranslations = {
           },
           "11": {
             "label": "La Calzada del Farshore"
+          },
+          "12": {
+            "label": "Wolf Run"
+          },
+          "13": {
+            "label": "Boar Meadow"
+          },
+          "14": {
+            "label": "Mirror Lake"
+          },
+          "15": {
+            "label": "Sableweb"
+          },
+          "16": {
+            "label": "Copper Dig"
+          },
+          "17": {
+            "label": "Bandit Camp"
+          },
+          "18": {
+            "label": "Fallen Chapel"
+          },
+          "19": {
+            "label": "Reliquary Hill"
+          },
+          "20": {
+            "label": "Brightwood Glade"
+          },
+          "21": {
+            "label": "The Sowfield"
+          },
+          "22": {
+            "label": "Thornwheel Circuit"
+          },
+          "23": {
+            "label": "The Boarpit"
+          },
+          "24": {
+            "label": "Eastbrook Homes"
+          },
+          "25": {
+            "label": "The Farshore Causeway"
           }
         }
       },
@@ -15071,6 +15594,11 @@ export const es: EnTranslations = {
         "name": "La Letanía Ahogada",
         "enterText": "Desciendes al santuario ahogado al borde del pantano.",
         "leaveText": "Subes de vuelta hasta el Hermano Halven, al borde del pantano."
+      },
+      "hellmaw_well": {
+        "name": "The Hellmaw Well",
+        "enterText": "The well mouth yawns into red dark - and the Hellmaw swallows you down.",
+        "leaveText": "You haul yourself back up the well shaft, the Hellmaw seething below."
       }
     },
     "letters": {
@@ -15278,7 +15806,7 @@ export const es: EnTranslations = {
       },
       "necromancers": {
         "name": "Vestiduras de Mournweave",
-        "bonus2": "Aumenta el poder de los hechizos en 20. El daño recibido ya no retrasa tus hechizos (100% de resistencia al retraso de lanzamiento).",
+        "bonus2": "No puedes ser empujado hacia atrás (100% de resistencia al empuje).",
         "bonus3": "Aumenta el intelecto en 10 y el aguante en 10.",
         "bonus4": "Tus hechizos tienen un 10% de probabilidad de otorgar Mente Clara, haciendo que tu próximo hechizo sea gratuito."
       },
@@ -15290,13 +15818,13 @@ export const es: EnTranslations = {
       },
       "soulflame": {
         "name": "Vestiduras de Wraithfire",
-        "bonus2": "Aumenta el poder de los hechizos en 20. El daño recibido ya no retrasa tus hechizos (100% de resistencia al retraso de lanzamiento).",
+        "bonus2": "No puedes ser empujado hacia atrás (100% de resistencia al empuje).",
         "bonus3": "Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%.",
         "bonus4": "Tus hechizos tienen un 10% de probabilidad de otorgar Fulgor del Alma, aumentando el poder con hechizos en 40 durante 10 s."
       },
       "stormcallers": {
         "name": "Vestiduras de Galecall",
-        "bonus2": "Aumenta el poder de los hechizos en 20. El daño recibido ya no retrasa tus hechizos (100% de resistencia al retraso de lanzamiento).",
+        "bonus2": "No puedes ser empujado hacia atrás (100% de resistencia al empuje).",
         "bonus3": "Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%.",
         "bonus4": "Tus hechizos tienen un 10% de probabilidad de otorgar Fulgor del Alma, aumentando el poder con hechizos en 40 durante 10 s."
       },
@@ -15357,5 +15885,67 @@ export const es: EnTranslations = {
     "delveRiteShrineSkullInteract": "Santuario de la Calavera: pulsa F para tocarlo",
     "mailboxName": "Buzón",
     "noticeboardName": "Tablón de anuncios"
+  },
+  "contributions": {
+    "cAdminB": "Account review, chat moderation, report queues, role-gated dashboards, and better status panels.",
+    "cAdminT": "Admin & Moderator Tools",
+    "cAuthB": "OIDC wiring, optional TOTP login hardening, safer login throttles, clearer dashboard sessions.",
+    "cAuthT": "Auth & Account Safety",
+    "cOpsB": "Auto-update maintenance mode, static cache policy, API health checks, and safer server restarts.",
+    "cOpsT": "Updates & Operations",
+    "cTestB": "Security tests, OAuth tests, realm tests, launcher tests, and visual smoke scripts.",
+    "cTestT": "Test Coverage",
+    "cUiB": "Camera options, mobile layout fixes, clearer landing flows, and performance guidance.",
+    "cUiT": "Game UI Quality",
+    "cWikiB": "Public wiki hub fallback, release/news feed, launcher status page, and improved nav consistency.",
+    "cWikiT": "Wiki & Public Hubs",
+    "lead": "Cryptic Realm is its own game, but it can still send practical engine improvements back upstream. This separates shared ClaudeCraft-friendly work from private Cryptic Realm features.",
+    "privateBody": "These stay in the independent track because they define this game and are not handed over as generic upstream value.",
+    "privateTitle": "Cryptic Realm-Only Work",
+    "sharedBody": "Clean, generic improvements offered upstream because they help the base project without giving away Cryptic Realm-only economy, realm, or lore systems.",
+    "sharedTitle": "Shared Upstream Candidates",
+    "tagCustody": "Private custody runbooks",
+    "tagExchange": "Exchange realm",
+    "tagLore": "Cryptic Realm lore",
+    "tagMinigames": "Original mini-games",
+    "tagPlatinum": "Platinum economy",
+    "tagRealms": "Hellmaw / Classic / Dominion / Arcane realms",
+    "title": "Contributions"
+  },
+  "coop": {
+    "accountOther": "Different account",
+    "accountThis": "This account",
+    "createCharacter": "Create a character",
+    "createError": "Could not create the character. Try a different name.",
+    "createName": "Character name",
+    "createTitle": "Name your new hero and pick a class",
+    "hintJoin": "Press Start on another controller to add a player (up to 4).",
+    "hintLeave": "Hold Start on a controller to drop that player.",
+    "joinCancel": "Cancel",
+    "joinConfirm": "Join",
+    "joinNow": "Join now",
+    "joinTitle": "Player {slot}: press to join",
+    "keyboardJoin": "Press F2 to add a local player",
+    "loggingIn": "Signing in...",
+    "loginError": "Sign-in failed. Check the username and password.",
+    "loginPass": "Password",
+    "loginSubmit": "Sign in and join",
+    "loginTitle": "Sign in Player {slot}'s account",
+    "loginUser": "Username",
+    "noOtherCharacters": "This account has no other characters to bring in.",
+    "pickCharacter": "Choose a character",
+    "pickClass": "Choose a class",
+    "reconnecting": "Player {slot} reconnecting",
+    "reviving": "Reviving in {seconds}s",
+    "slotEmpty": "Open",
+    "slotLabel": "Player {slot}",
+    "stripTitle": "Local players"
+  },
+  "links": {
+    "loading": "Loading official channels…",
+    "title": "Official Links"
+  },
+  "whitepaper": {
+    "loading": "Loading the white paper…"
   }
 };

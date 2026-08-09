@@ -98,13 +98,7 @@ import {
 import { applyMobileKeyboardViewport } from './game/keyboard_viewport_applier';
 import { shouldUseStaticBackdrop } from './game/landing_backdrop';
 import { createLandingThemeAudio } from './game/landing_theme';
-import {
-  hideLoadingScreen,
-  LOADING_FADE_MS,
-  setLoadingProgress,
-  setLoadingStatus,
-  showLoadingScreen,
-} from './game/loading_screen';
+import { LOADING_FADE_MS, setLoadingProgress } from './game/loading_screen';
 // mobile_controls: landing-safe helpers only; the MobileControls class is runtime (GameRuntime).
 import { interfaceModeFromSetting, isPhoneTouchDevice, MobileControls, PHONE_TOUCH_QUERY, setInterfaceMode, useTouchInterface } from './game/mobile_controls';
 import { applyMobileHudLayout } from './game/mobile_hud_layout_applier';
@@ -289,11 +283,10 @@ import { findPlayerPath, resolvePlayerDestination } from './sim/pathfind';
 // statically imported, they come from loadGameRuntime() and init in startGame().
 import type { Sim } from './sim/sim';
 import { TAB_NEAR_RADIUS, TAB_QUERY_RADIUS, tabConeHalfAt } from './sim/tab_target';
-import { dist2d, DT, INTERACT_RANGE, MELEE_RANGE, RUN_SPEED, type PlayerClass, type WorldContent } from './sim/types';
+import { ALL_CLASSES, dist2d, DT, INTERACT_RANGE, MELEE_RANGE, RUN_SPEED, type PlayerClass, type WorldContent } from './sim/types';
 import { MARKET_HOUSE_STOCK } from './sim/market';
 import { bagOwnedMounts } from './sim/mounts';
 import { isSubmerged } from './sim/player_motion';
-import { TAB_NEAR_RADIUS, TAB_QUERY_RADIUS, tabConeHalfAt } from './sim/tab_target';
 import { zoneBiomeAt } from './sim/world';
 import { WORLD_SEED } from './sim/world_seed';
 import { startSitePresence } from './site_presence';
@@ -480,12 +473,7 @@ import { mountWalletPanel } from './ui/cryptic/wallet_panel';
 import { notePropPlaced, tryBuilderSelect } from './ui/cryptic/world_builder';
 import { getMe as getMeForEditor, getToken as getTokenForEditor } from './user/api';
 import { audio } from './game/audio';
-import { claudiumBalanceAddress } from './ui/claudium_view';
-import { devTierDisplayName } from './ui/dev_tier';
-import { ensureDeedLocalesLoaded } from './ui/deed_i18n';
-import { isDevGuiCommand } from './ui/dev_command_view';
 import { localPartyMemberIds } from './game/corpse_loot_availability';
-import { devTierByIndex } from './ui/dev_tier';
 import type { ReleaseEntry } from './net/online';
 
 // SECURITY: an SSO/realm handoff arrives as `/#auth_token=...&auth_user=...`.
@@ -507,7 +495,6 @@ const CAPTURED_SSO_HASH = (() => {
   return '';
 })();
 
-const WORLD_SEED = 20061; // fixed: Cryptic Realm is a persistent place
 
 const CLICK_MOVE_TURN_RATE = 4.2; // rad/sec; responsive turning while the camera stays decoupled from click spam
 const CLICK_MOVE_WAYPOINT_STOP = 0.8; // yards; intermediate A* corners should roll through, not stutter-stop
@@ -669,8 +656,6 @@ applyNativeDeviceLanguage({
 // residency profile; see src/device_memory_hint.ts). Fire-and-forget: this
 // boot's profile is already resolved, and a missing bridge no-ops.
 void primeNativeDeviceMemoryHint();
-
-const SITE_URL = 'https://crypticrealm.com/';
 
 const RESOURCE_KEYS = {
   mana: 'classDetails.resources.mana',
@@ -1560,8 +1545,6 @@ async function startGame(
       }),
   });
   uiEffectsApplier.applyNow();
-  const autoLoot = new AutoLoot();
-  const perf = createPerfMonitor(null);
   canvas.addEventListener('webglcontextlost', () => {
     entryDiagnostics.checkpoint('webgl-context-lost', {
       ...renderEntryDiagnostics(),

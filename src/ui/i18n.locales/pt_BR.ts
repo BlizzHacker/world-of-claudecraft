@@ -1230,9 +1230,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.collectorsHeading': 'Colecionadores, troféus e o preço de uma história',
   'guide.profPages.econ.collectorsBody':
     'Os vendedores são cegos à proveniência: um item assinado é vendido a um PNJ exatamente pelo seu preço comum. O prêmio de uma assinatura existe apenas entre jogadores, o que é precisamente o que o torna interessante: uma pilha de minério inesperado assinada por um coletor famoso, um Corte Principal de uma colheita sortuda, uma lâmina obra-prima com o nome de um artesão aposentado, todos custam o que a memória de alguém diz que valem.\n\nO Livro dos Feitos apoia o mesmo instinto: Veia Imaculada, Cerne Ancião, Flor ao Luar, Um Espécime Perfeito e Lampejo de Esperança são marcas de colecionador com zero de Renome que existem apenas para provar que um momento aconteceu com você. Guarde o item que conquistou o feito e você tem o recibo. Nada disso é poder; a proveniência não compra atributos nem vence batalhas, é o rastro de papel do jogo para dias felizes.',
-  'guide.profPages.econ.throttleHeading': 'O limitador de ações',
-  'guide.profPages.econ.throttleBody':
-    'A produção tem um teto: criação, desencantamento, encantamento e salvamento compartilham um orçamento de {actions} ações bem-sucedidas por {seconds} segundos contínuos. Uma tentativa negada não custa nada e não consome orçamento. Você nunca vai sentir isso no jogo normal; existe para que um especialista no limite máximo com um banco cheio não possa inundar o Mercado, independentemente de sua perícia ou estoque.',
   'guide.profPages.econ.doctrineHeading': 'Jogadores negociam com jogadores',
   'guide.profPages.econ.doctrineBody':
     'A economia de criação é construída sobre uma ideia: jogadores abastecem jogadores. Coletores alimentam artesãos, artesãos alimentam aventureiros e raideiros, e demolidores alimentam encantadores, com vendedores e mestres de posto nas bordas para absorver itens indesejados e moedas em vez de competir com você. Se quiser ganhar dinheiro com uma profissão, seu cliente é uma pessoa: aprenda o que outros jogadores consomem, precifique em relação ao Mercado Mundial e trate os sistemas de PNJ como um piso para seus preços, não como o mercado em si.\n\nO equipamento criado é ajustado para ficar abaixo do patamar de raide: mesmo uma obra-prima está apenas um nível de qualidade acima da receita, nunca além de lendário, e seu orçamento de atributos fica abaixo da faixa do saque de raide. A forja te prepara para o conteúdo mais difícil; ela não o substitui. Isso mantém artesãos, raideiros e o mercado em um triângulo estável: os drops de raide permanecem aspiracionais, e as peças criadas permanecem o melhor equipamento que o dinheiro pode de fato comprar.',
@@ -6067,14 +6064,12 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     'Esta letra veio do grimório de Morthen. A mesma mão guiou cada túmulo, {playerName}.',
   'entities.quests.q_cult_orders.objectives.0.label': 'Zelote do Culto do Wyrm abatido',
-  'entities.quests.q_cult_orders.objectives.1.label': 'Ordens do Culto do Wyrm',
   'entities.quests.q_necromancers.title': 'O anel de filactérios',
   'entities.quests.q_necromancers.text':
     'As ordens falam de um anel de filactérios, vasos de alma, {playerName}, ao redor do Santuário. Mate 8 necromantes e traga 3 intactos.',
   'entities.quests.q_necromancers.completion':
     'Que a Luz nos perdoe. Eles guardam os mortos do Vale e do pântano; nunca estavam erguendo um exército, {playerName}. Eram um dízimo.',
   'entities.quests.q_necromancers.objectives.0.label': 'Necromante do Culto do Wyrm abatido',
-  'entities.quests.q_necromancers.objectives.1.label': 'Filactério ritual',
   'entities.quests.q_revenants.title': 'Campos de revenantes',
   'entities.quests.q_revenants.text':
     'A leste da estrada há um velho campo de batalha. O culto ergueu seus ossos em placas enferrujadas. Ponha 12 de volta no chão, {playerName}.',
@@ -6489,9 +6484,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': 'Colosso',
   'fiesta.powerup.pow_moon_boots.name': 'Botas Lunares',
   'fiesta.powerup.pow_speed_demon.name': 'Demônio da Velocidade',
-  'fiesta.practice': '🎉 Treino contra Bots',
-  'fiesta.practiceNote':
-    'Treino offline: invoca 3 bots de IA e inscreve você em uma Fiesta 2v2. Clique de novo para parar.',
   'fiesta.queue.join': 'Você entra na fila da Fiesta 2v2. Prepare-se para a FESTA…',
   'fiesta.queue.leave': 'Você sai da fila da Fiesta 2v2.',
   'fiesta.queue.teamLeave': 'Sua equipe sai da fila da Fiesta 2v2.',
@@ -7347,8 +7339,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
     'Atinge tudo ao seu redor e reduz a velocidade dos ataques deles.',
   'guide.abilityHook.wrath':
     'Uma seta de natureza arremessada num alvo à distância, sua magia de ataque preferida.',
-  'guide.arenaPage.augmentsNote':
-    'Aprimoramentos e melhorias duram apenas a partida. Eles servem para builds divertidas e improvisadas, não para poder permanente, então ninguém compra a vitória.',
   'guide.arenaPage.coliseumBody':
     'O Coliseu é a arena do reino, onde você enfrenta outros jogadores em partidas ranqueadas, um contra um ou dois contra dois. Cada categoria mantém sua própria classificação, então uma vitória o eleva naquele placar para o reino inteiro ver.',
   'guide.arenaPage.coliseumHeading': 'O Coliseu das Cinzas',
@@ -7514,21 +7504,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
     'Três zonas, do sul ao norte, cada uma um degrau acima em nível. Siga a trilha das missões e a terra leva você do vale aos picos.',
   'guide.worldPage.places': 'Lugares notáveis',
   'guide.worldPage.residents': 'Quem você vai encontrar',
-  'guide.arenaPage.powerupsBody':
-    'Orbes brilhantes também caem na arena no meio da luta, livres para quem alcançá-los primeiro. Eles são deliberadamente exagerados e duram só um instante: Demônio da Velocidade para um lampejo de ritmo alucinante, Colosso para inchar até virar um gigante pesado, Botas Lunares para um salto saltitante de baixa gravidade, e Berserker para uma súbita explosão de fúria.',
-  'guide.arenaPage.powerupsTitle': 'Power-ups na arena',
-  'guide.arenaPage.waveGoldBody':
-    'A onda do meio: combos de dois gumes onde sua build começa a tomar forma e a brilhar.',
-  'guide.arenaPage.waveGoldTitle': 'Ouro',
-  'guide.arenaPage.wavePrismaticBody':
-    'A onda final: picos que definem a build e derretem a tela, feitos para parecer ridículos no melhor sentido.',
-  'guide.arenaPage.wavePrismaticTitle': 'Prismático',
-  'guide.arenaPage.waveSilverBody':
-    'A onda de abertura: reforços limpos de um único atributo que afiam o básico da sua classe.',
-  'guide.arenaPage.waveSilverTitle': 'Prata',
-  'guide.arenaPage.wavesBody':
-    'Cada rodada de uma Fiesta lhe dá uma nova escolha, e as escolhas ficam mais ousadas conforme a partida avança. Você constrói de uma onda para a próxima, escolhendo uma de poucas opções a cada vez e mantendo-a pelo resto da disputa.',
-  'guide.arenaPage.wavesTitle': 'Os aprimoramentos chegam em ondas',
   'guide.bestiary.flavor.gravecaller_cultist':
     'Servos encapuzados do culto da morte cuja obra profana as sepulturas do Vale aos cumes. Onde eles se reúnem, os mortos não descansam.',
   'guide.bestiary.flavor.grubjaw':
@@ -8619,8 +8594,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'desktop.update.downloading': 'Baixando atualização {version}...',
   'desktop.update.downloadingTitle': 'Baixando atualização {version}...',
   'desktop.update.later': 'Depois',
-  'desktop.update.ready':
-    'A atualização {version} está pronta. Ela será instalada ao sair, ou reinicie agora.',
   'desktop.update.readyTitle': 'A atualização {version} está pronta',
   'desktop.update.readyBody': 'Ela será instalada ao sair, ou reinicie agora.',
   'desktop.update.restart': 'Reiniciar agora',
@@ -8957,9 +8930,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
     'Retalha a armadura do alvo, reduzindo-a em {damage}% por aplicação. Acumula até 5 vezes. Gera uma grande quantidade de ameaça.',
   'entities.mobs.training_dummy.name': 'Boneco de Treino',
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'guide.arenaPage.yumiBody':
-    'Proteja a Yumi é um modo de objetivo em equipe disputado em um labirinto: cada lado protege a própria gata familiar enquanto caça a do inimigo. De tempos em tempos, as duas gatas saltam para novos cantos do labirinto, então a luta alterna entre defender, caçar e correr para reencontrá-las. Entre na fila em três contra três ou cinco contra cinco; cair em combate só o afasta por um instante.',
-  'guide.arenaPage.yumiHeading': 'Proteja a Yumi',
   'entities.mobs.water_elemental.name': 'Elemental da Água',
   'entities.mobs.ancient_guardian.name': 'Guardião Antigo',
   'entities.mobs.apprentice_wren.name': 'Aprendiz Wren',

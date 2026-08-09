@@ -3,6 +3,7 @@
 import type { ChatSenderFlair, StreamerLinks } from './account_flair';
 import type { MountKey } from './content/mounts';
 import type { CharacterState } from './sim';
+export type { CharacterState } from './sim';
 import type { GatheringProfessionId, ToolEffectId } from './content/professions';
 import type { LockSession, LootTier, PickAction, StepResult, VisibleCell } from './lockpick';
 import type { HarvestYield } from './professions/harvest_yields';
@@ -734,8 +735,8 @@ export type ItemUse =
   // single source of the effect-to-item mapping; a guard derives the craftable
   // set from these defs against the R9 slot policy so no item can exist for an
   // effect the policy refuses everywhere.
-  | { type: 'toolEffect'; effectId: ToolEffectId };
-  // D2 Town Portal: right-click consumes one scroll and opens a two-way portal —
+  | { type: 'toolEffect'; effectId: ToolEffectId }
+  // D2 Town Portal: right-click consumes one scroll and opens a two-way portal --
   // warp to the nearest town, click the return portal to come back. The tome IS the
   // stackable scroll item here (its stack count = scrolls left, max 20).
   | { type: 'townPortal' };
@@ -6061,10 +6062,6 @@ export function normAngle(a: number): number {
 // ---------------------------------------------------------------------------
 
 // XP required to go from level L to L+1 (classic-era curve values, levels 1..20)
-export const XP_TABLE = [
-  400, 900, 1400, 2100, 2800, 3600, 4500, 5400, 6500, 7600, 8800, 10100, 11400, 12900, 14400, 16000,
-  17700, 19400, 21300, 23200,
-];
 // Procedural Rift rank ladder (C lowest, S highest); tuning per rank lives in
 // rift/portals.ts (RIFT_TIER_INFO). Declared here so Entity can carry it.
 export type RiftTier = 'C' | 'B' | 'A' | 'S';

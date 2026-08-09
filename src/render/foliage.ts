@@ -5,13 +5,13 @@ import { DRAKELANDS_FLOWER_MEADOWS } from '../sim/content/drakelands';
 import { GALECREST_FLOWER_MEADOWS } from '../sim/content/galecrest';
 import { STABLE_PADDOCK } from '../sim/content/mounts';
 import { REALM_FLOWER_MEADOWS } from '../sim/content/realm';
+import { isInBoarpitShell } from '../sim/boarpit_layout';
+import { isInHomesShell } from '../sim/homes_layout';
+import { isInThornwheelShell } from '../sim/derby_layout';
 import {
   BUILTIN_WORLD,
   DUNGEON_X_THRESHOLD,
   getActiveWorldContent,
-import { isInBoarpitShell } from '../sim/boarpit_layout';
-import { isInHomesShell } from '../sim/homes_layout';
-import { isInThornwheelShell } from '../sim/derby_layout';
   WORLD_MAX_X,
   WORLD_MAX_Z,
   WORLD_MIN_Z,
@@ -1184,9 +1184,6 @@ interface Bucket {
   col: number;
   items: Decoration[];
 }
-      if (isInThornwheelShell(x, z)) continue; // and off the Derby circuit
-      if (isInBoarpitShell(x, z)) continue; // and out of the Boarpit
-      if (isInHomesShell(x, z)) continue; // and off Homestead Lane
 
 // scratch objects shared by every placement loop
 const m = new THREE.Matrix4();
@@ -1525,9 +1522,6 @@ function placeSpecies(
         im.castShadow = false;
         im.receiveShadow = true;
         parent.add(im);
-        if (isInThornwheelShell(x, z)) continue; // the circuit is packed cinder, not meadow
-        if (isInBoarpitShell(x, z)) continue; // the pit is stamped earth, not meadow
-        if (isInHomesShell(x, z)) continue; // the lane is kept yards, not meadow
         const cullBark =
           GFX.standardMaterials && !part.isLeaf && (spec.cullBarkFar || spec.farTrunkProxy);
         // Numeric caps that are NOT the detail swap: the near-fill density cull
@@ -2152,6 +2146,9 @@ function generateDressing(seed: number): DressingSpot[] {
       if (terrainHeight(x, z, seed) < WATER_LEVEL + 1.2) continue;
       if (tooSteep(x, z, seed)) continue;
       if (isInSowfieldShell(x, z)) continue; // keep bushes/plants off the football ground
+      if (isInThornwheelShell(x, z)) continue; // and off the Derby circuit
+      if (isInBoarpitShell(x, z)) continue; // and out of the Boarpit
+      if (isInHomesShell(x, z)) continue; // and off Homestead Lane
       // no scrub in the worked stable yard or up through the harbor decks
       if (biome === 'gale' && (inStableYard(x, z) || onHarborDeck(x, z, seed))) continue;
       // the fen's floor dressing grows in CLUMPED patches, not an even
@@ -2917,6 +2914,9 @@ function buildGrassRing(parent: THREE.Group, seed: number): GrassRing {
         if (roadDistance(x, z) < 3.2) continue;
         if (insideEastbrookGrassExclusion(townExclusions, x, z, GRASS_BUILDING_PADDING)) continue;
         if (isInSowfieldShell(x, z)) continue; // the Sowfield is a mown pitch, not meadow
+        if (isInThornwheelShell(x, z)) continue; // the circuit is packed cinder, not meadow
+        if (isInBoarpitShell(x, z)) continue; // the pit is stamped earth, not meadow
+        if (isInHomesShell(x, z)) continue; // the lane is kept yards, not meadow
         // the stable yard is worked dirt; deck planks grow nothing through
         if (tuftBiome === 'gale' && (inStableYard(x, z) || onHarborDeck(x, z, seed))) continue;
         // the Willowfen grows no grass blades: each would-be tuft stays an

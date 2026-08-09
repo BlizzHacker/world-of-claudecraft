@@ -4194,14 +4194,12 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     '이 필체는 모르덴의 마법서에서 본 것입니다. 모든 무덤을 같은 손이 이끌었습니다, {playerName}.',
   'entities.quests.q_cult_orders.objectives.0.label': '고룡교단 광신도 처치',
-  'entities.quests.q_cult_orders.objectives.1.label': '고룡교단 명령서',
   'entities.quests.q_necromancers.title': '성물함의 고리',
   'entities.quests.q_necromancers.text':
     '명령서는 성소 둘레의 성물함 고리를 말합니다. 영혼 그릇입니다, {playerName}이여. 강령술사 8명을 죽이고 3개를 온전하게 가져오십시오.',
   'entities.quests.q_necromancers.completion':
     '빛이여 용서하소서. 계곡과 습지의 죽은 자들이 담겨 있습니다. {playerName}이여, 그들은 군대를 만든 것이 아니라 십일조를 거두고 있었습니다.',
   'entities.quests.q_necromancers.objectives.0.label': '고룡교단 강령술사 처치',
-  'entities.quests.q_necromancers.objectives.1.label': '의식 성물함',
   'entities.quests.q_revenants.title': '망령 들판',
   'entities.quests.q_revenants.text':
     '성소 길 동쪽에는 오래된 전장이 있습니다. 교단이 녹슨 갑옷의 뼈들을 일으켰습니다. {playerName}이여, 12구를 흙으로 돌려보내십시오.',
@@ -5588,9 +5586,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': '거인',
   'fiesta.powerup.pow_moon_boots.name': '달빛 장화',
   'fiesta.powerup.pow_speed_demon.name': '질주의 악마',
-  'fiesta.practice': '🎉 봇 상대 연습',
-  'fiesta.practiceNote':
-    '오프라인 연습: AI 봇 3기를 소환하고 2대2 Fiesta 대기열에 등록합니다. 다시 클릭하면 중지합니다.',
   'fiesta.queue.join': '2대2 Fiesta 대기열에 들어갑니다. 축제를 준비하세요…',
   'fiesta.queue.leave': '2대2 Fiesta 대기열에서 나갑니다.',
   'fiesta.queue.teamLeave': '당신의 팀이 2대2 Fiesta 대기열에서 나갑니다.',
@@ -6598,8 +6593,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.thorns': '아군을 보호해, 근접 공격자가 칠 때마다 스스로 피해를 입게 합니다.',
   'guide.abilityHook.thunder_clap': '주위의 모든 적을 타격하고 그들의 공격 속도를 늦춥니다.',
   'guide.abilityHook.wrath': '원거리에서 대상에게 던지는 자연 화살로, 주력 공격기입니다.',
-  'guide.arenaPage.augmentsNote':
-    '증강과 강화 효과는 해당 경기 동안에만 유지됩니다. 지속적인 힘이 아니라 그 자리에서 재미있게 빌드를 짜는 것이 목적이므로, 돈으로 승리를 사는 일은 없습니다.',
   'guide.arenaPage.coliseumBody':
     '콜로세움은 서버의 투기장으로, 1대1 또는 2대2 등급전에서 다른 플레이어들과 맞붙는 곳입니다. 등급 구간마다 별도의 순위가 매겨지므로, 승리하면 그 사다리에서 순위가 올라 서버 전체가 그 결과를 보게 됩니다.',
   'guide.arenaPage.coliseumHeading': '잿빛 콜로세움',
@@ -6789,21 +6782,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '남쪽에서 북쪽으로 이어지는 세 지역은 각각 레벨이 한 단계씩 높아집니다. 퀘스트 길을 따라가면 땅이 당신을 골짜기에서 봉우리까지 이끌어 줍니다.',
   'guide.worldPage.places': '주요 명소',
   'guide.worldPage.residents': '만나게 될 이들',
-  'guide.arenaPage.powerupsBody':
-    '빛나는 구슬이 전투 도중 투기장 안으로 떨어지기도 하며, 먼저 닿는 사람이 임자입니다. 일부러 과장되게 만들어졌고 효과는 잠깐뿐입니다. 눈이 멀 듯한 속도를 주는 스피드 데몬, 굼뜬 거인으로 부풀어 오르는 콜로서스, 저중력으로 통통 튀어 오르게 하는 문 부츠, 그리고 분노가 한순간에 폭발하는 버서커가 있습니다.',
-  'guide.arenaPage.powerupsTitle': '원형 안의 강화 효과',
-  'guide.arenaPage.waveGoldBody':
-    '중반 웨이브: 양날의 조합으로, 이 무렵부터 당신의 빌드가 모습을 갖추고 노래하기 시작합니다.',
-  'guide.arenaPage.waveGoldTitle': '골드',
-  'guide.arenaPage.wavePrismaticBody':
-    '마지막 웨이브: 빌드를 결정짓고 화면을 녹여 버리는 폭발적인 한 방으로, 더없이 통쾌하게 터무니없는 느낌을 주려는 것입니다.',
-  'guide.arenaPage.wavePrismaticTitle': '프리즘',
-  'guide.arenaPage.waveSilverBody':
-    '첫 웨이브: 군더더기 없이 능력치 하나만 끌어올려 당신 직업의 기본기를 다듬어 줍니다.',
-  'guide.arenaPage.waveSilverTitle': '실버',
-  'guide.arenaPage.wavesBody':
-    'Fiesta의 매 라운드마다 새로운 선택지가 주어지며, 시합이 진행될수록 그 선택은 점점 대담해집니다. 한 웨이브에서 다음 웨이브로 빌드를 쌓아 가는데, 매번 몇 가지 중 하나를 골라 남은 시합 동안 계속 지니게 됩니다.',
-  'guide.arenaPage.wavesTitle': '증강은 웨이브로 찾아옵니다',
   'guide.bestiary.flavor.gravecaller_cultist':
     '골짜기에서 봉우리까지 무덤을 더럽히는 죽음교단의 로브 두른 종복들. 이들이 모이는 곳에서는 죽은 자가 쉬지 못합니다.',
   'guide.bestiary.flavor.grubjaw':
@@ -7901,8 +7879,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '이 설정은 나중에 Esc 메뉴의 키 설정에서 변경할 수 있습니다.',
   'hudChrome.cameraPrompt.confirm': '확인',
   'desktop.update.downloading': '업데이트 {version} 다운로드 중...',
-  'desktop.update.ready':
-    '업데이트 {version} 준비 완료. 게임을 종료하면 자동으로 설치되며, 지금 다시 시작할 수도 있습니다.',
   'desktop.update.checkingTitle': '업데이트 확인 중...',
   'desktop.update.checkingBody': '게임은 자동으로 최신 상태로 유지됩니다.',
   'desktop.update.uptodateTitle': '현재 최신 버전입니다.',
@@ -8920,9 +8896,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   // Protect Yumi locale fill (M16 wordy-key floor).
   'yumi.hud.collapse': 'Protect Yumi 게이지 접기',
   'yumi.hud.expand': 'Protect Yumi 게이지 펼치기',
-  'guide.arenaPage.yumiHeading': 'Yumi를 지켜라',
-  'guide.arenaPage.yumiBody':
-    'Protect Yumi는 미로에서 펼쳐지는 팀 목표 모드입니다. 각 팀은 아군 고양이 소환수를 지키면서 상대의 소환수를 사냥합니다. 두 고양이는 이따금 미로의 새 구석으로 순간이동하므로 전투는 수비, 추격, 수색 사이를 오갑니다. 3대3 또는 5대5로 참가할 수 있으며, 쓰러져도 잠시 벤치에 앉을 뿐입니다.',
   'yumi.queue.join': 'Protect Yumi 대기열에 참가했습니다. 소환수를 지키세요…',
   'yumi.queue.leave': 'Protect Yumi 대기열에서 나갑니다.',
   'yumi.queue.teamLeave': '팀이 Protect Yumi 대기열에서 나갑니다.',
@@ -11193,9 +11166,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.provenanceHeading': '서명된 작품',
   'guide.profPages.econ.provenanceBody':
     '희귀 이상의 제작품과 발견물에는 제작자의 서명이 남고, 서명이 완전히 같은 물건은 여전히 겹쳐 쌓인다.',
-  'guide.profPages.econ.throttleHeading': '행동 제한',
-  'guide.profPages.econ.throttleBody':
-    '제작, 마력 추출, 마법부여, 해체는 하나의 제한을 나눠 쓴다. {seconds}초당 최대 {actions}회다.',
   'guide.profPages.econ.doctrineHeading': '플레이어끼리의 거래',
   'guide.profPages.econ.doctrineBody':
     '제작 장비의 힘은 언제나 공격대 하한 아래에 머물고, 위의 비용들은 물건을 상점 순환이 아니라 플레이어 간 거래로 밀어낸다.',

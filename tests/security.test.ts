@@ -45,7 +45,6 @@ import {
 } from '../server/ratelimit';
 import { passesTurnstile } from '../server/turnstile';
 import { isWebClientRequest } from '../server/web_login_guard';
-import { buildWebSocketAuthMessage, buildWebSocketUrl } from '../src/net/online';
 import { BUILTIN_WORLD } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
 import type { WorldContent } from '../src/sim/types';

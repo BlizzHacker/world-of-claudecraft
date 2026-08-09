@@ -4044,14 +4044,12 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_cult_orders.completion':
     '這筆跡...我在東溪莫森的魔典裡見過。每座墳後都是同一隻手，{playerName}。',
   'entities.quests.q_cult_orders.objectives.0.label': '擊敗龍教狂熱者',
-  'entities.quests.q_cult_orders.objectives.1.label': '龍教命令',
   'entities.quests.q_necromancers.title': '護命匣之環',
   'entities.quests.q_necromancers.text':
     '命令提到一圈護命匣，{playerName}，靈魂容器圍著聖所供養它。殺8名死靈法師，帶回3個完整護命匣。',
   'entities.quests.q_necromancers.completion':
     '願聖光寬恕我們。裡面裝著谷地和濕地的死者，所有被收割的靈魂。他們從來不是在組建軍隊，{playerName}。他們是在收取貢稅。',
   'entities.quests.q_necromancers.objectives.0.label': '擊敗龍教死靈法師',
-  'entities.quests.q_necromancers.objectives.1.label': '儀式護命匣',
   'entities.quests.q_revenants.title': '亡魂戰場',
   'entities.quests.q_revenants.text':
     '聖所路東有片古戰場，上一支攻山軍的先鋒已埋兩百年。邪教叫醒了他們，穿著鏽甲。{playerName}，讓12個歸土。',
@@ -5407,8 +5405,6 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'fiesta.powerup.pow_colossus.name': '巨像',
   'fiesta.powerup.pow_moon_boots.name': '月靴',
   'fiesta.powerup.pow_speed_demon.name': '極速狂魔',
-  'fiesta.practice': '🎉 對戰機器人練習',
-  'fiesta.practiceNote': '離線練習：生成3個AI機器人並將你排入2v2 Fiesta佇列。再次點擊即可停止。',
   'fiesta.queue.join': '你加入了2v2 Fiesta佇列。準備好狂歡吧…',
   'fiesta.queue.leave': '你離開了2v2 Fiesta佇列。',
   'fiesta.queue.teamLeave': '你的隊伍離開了2v2 Fiesta佇列。',
@@ -6329,8 +6325,6 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.thorns': '守護友方，讓近戰攻擊者每次出手都會傷到自己。',
   'guide.abilityHook.thunder_clap': '打擊你周遭的一切並降低它們的攻擊速度。',
   'guide.abilityHook.wrath': '從遠處朝目標擲出一道自然箭矢，是你慣用的核彈。',
-  'guide.arenaPage.augmentsNote':
-    '強化與增益只在該場對戰中有效。它們著重於即興、好玩的搭配，而非長久的力量，所以沒有人能花錢買到勝利。',
   'guide.arenaPage.coliseumBody':
     'Coliseum 是這個王國的競技場，你會在排名對戰中面對其他玩家，進行一對一或二對二的較量。每個級別都各自保有自己的排名，因此一場勝利能讓你在那道天梯上往上爬，讓整個王國都看得見。',
   'guide.arenaPage.coliseumHeading': '灰燼鬥獸場',
@@ -6507,19 +6501,6 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '三個地區由南而北，等級層層遞增。跟著任務的軌跡走，這片土地會帶你從谷地一路前往群峰。',
   'guide.worldPage.places': '著名地點',
   'guide.worldPage.residents': '你將遇見的人物',
-  'guide.arenaPage.powerupsBody':
-    '戰鬥進行到一半，發光的能量球也會落入競技場，誰先搶到就歸誰。它們刻意設計得誇張過火，且只持續短短一陣子：速度惡魔讓你瞬間飆出令人目眩的步伐，巨像讓你脹大成笨重的巨人，月靴帶來低重力的彈跳躍動，狂戰士則是一股突如其來的暴怒之潮。',
-  'guide.arenaPage.powerupsTitle': '鬥技場中的能量道具',
-  'guide.arenaPage.waveGoldBody': '中段那波：雙刃般的搭配組合，你的配套在此開始成形，奏出旋律。',
-  'guide.arenaPage.waveGoldTitle': '黃金',
-  'guide.arenaPage.wavePrismaticBody':
-    '最後那波：足以定義整套配套、能融化整個畫面的爆發，刻意設計得荒謬到讓人拍案叫絕。',
-  'guide.arenaPage.wavePrismaticTitle': '彩虹',
-  'guide.arenaPage.waveSilverBody': '開場那波：乾淨俐落的單一屬性增益，磨利你職業的基本功。',
-  'guide.arenaPage.waveSilverTitle': '白銀',
-  'guide.arenaPage.wavesBody':
-    '嘉年華的每一回合都會發給你一份新的選項，而隨著對戰進行，選項也愈來愈大膽。你會一波接一波地堆疊配套，每次從幾個選項中挑一個，並保留到這場對戰結束。',
-  'guide.arenaPage.wavesTitle': '強化如波浪般湧來',
   'guide.bestiary.flavor.gravecaller_cultist':
     '死亡邪教的長袍僕從，他們的作為玷污了從谷地到群峰的座座墳塚。凡他們聚集之處，亡者便不得安息。',
   'guide.bestiary.flavor.grubjaw':
@@ -7578,7 +7559,6 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.cameraPrompt.changeLater': '稍後可在 Esc 選單的「按鍵綁定」中變更。',
   'hudChrome.cameraPrompt.confirm': '確認',
   'desktop.update.downloading': '正在下載更新 {version}...',
-  'desktop.update.ready': '更新 {version} 已就緒。離開遊戲時將自動安裝，也可立即重新啟動。',
   'desktop.update.checkingTitle': '正在檢查更新...',
   'desktop.update.checkingBody': '遊戲會自動保持最新版本。',
   'desktop.update.uptodateTitle': '目前已是最新版本。',
@@ -8523,9 +8503,6 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   // Protect Yumi locale fill (M16 wordy-key floor).
   'yumi.hud.collapse': '摺疊Protect Yumi血條',
   'yumi.hud.expand': '展開Protect Yumi血條',
-  'guide.arenaPage.yumiHeading': '守護Yumi',
-  'guide.arenaPage.yumiBody':
-    'Protect Yumi是一種在迷宮中進行的團隊目標模式：每隊守護自己的貓咪使魔，同時獵殺對方的。兩隻貓咪會不時閃現到迷宮的新角落，戰鬥在防守、追獵與尋回之間不斷搖擺。可選擇3對3或5對5排隊；陣亡只會讓你短暫離場。',
   'yumi.queue.join': '你加入了Protect Yumi佇列。守好你的使魔……',
   'yumi.queue.leave': '你離開了Protect Yumi佇列。',
   'yumi.queue.teamLeave': '你的隊伍離開了Protect Yumi佇列。',
@@ -10692,9 +10669,6 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'guide.profPages.econ.provenanceHeading': '署名作品',
   'guide.profPages.econ.provenanceBody':
     '精良及以上的成品與發現都帶有製作者的署名，而署名完全相同的物品仍可堆疊。',
-  'guide.profPages.econ.throttleHeading': '操作限頻',
-  'guide.profPages.econ.throttleBody':
-    '製作、分解、附魔與回收共用一個限頻：每{seconds}秒最多{actions}次操作。',
   'guide.profPages.econ.doctrineHeading': '玩家與玩家交易',
   'guide.profPages.econ.doctrineBody':
     '製作裝備的強度始終低於團隊副本的底線，而上述費用會把貨物推向玩家之間的交易，而非商店循環。',
