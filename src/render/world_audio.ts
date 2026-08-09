@@ -22,12 +22,13 @@ export function footstepSurfaceAt(
 ): Surface {
   if (x > DUNGEON_X_THRESHOLD) return 'stone';
   if (isOnDockDeck(x, z)) return 'wood';
-  const waterLevel = waterLevelAt(x, z);
+  const waterLevel = waterLevelAt(x, z, seed);
   if (groundHeight(x, z, seed) < waterLevel && y <= waterLevel + 0.3) return 'water';
-  const biome = zoneBiomeAt(z);
+  const biome = zoneBiomeAt(x, z);
   if (biome === 'vale') return 'grass';
-  if (biome === 'marsh') return 'dirt';
-  return weatherOn ? 'snow' : 'stone';
+  if (biome === 'marsh' || biome === 'ember') return 'dirt'; // ember: sandy waste
+  if (biome === 'amber' || biome === 'fen') return 'grass';
+  return weatherOn ? 'snow' : 'stone'; // peaks: snowy when weather is on
 }
 
 export function crowdAmbienceAt(

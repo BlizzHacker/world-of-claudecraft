@@ -161,10 +161,11 @@ describe('buildManifest', () => {
     expect(manifest).toContain('cast_lightning_bolt');
   });
 
-  it('keeps the release catalog and all 62 UI cues in one 210-key inventory', () => {
+  it('keeps the release catalog, all 9 mount cues, and all 63 UI cues in one 246-key inventory', () => {
     const keys = new Set(SFX.map((entry) => entry.key));
-    expect(keys.size).toBe(210);
-    expect([...keys].filter((key) => key.startsWith('ui_'))).toHaveLength(62);
+    expect(keys.size).toBe(246);
+    expect([...keys].filter((key) => key.startsWith('ui_'))).toHaveLength(63);
+    expect(keys.has('ui_craft_cast')).toBe(true);
     for (const key of [
       'cast_lightning_bolt',
       'mob_mudfin_attack',
@@ -182,6 +183,35 @@ describe('buildManifest', () => {
       'player_eat_food',
       'player_drink_water',
       'player_drink_potion',
+      'mount_run_terrorspark_groundshaker',
+      // the Drakemaw Raptor, the ninth mount cue (the brood rework's legendary)
+      'mount_run_drakemaw_raptor',
+      'fear_shout',
+      'fear',
+      'ice_block',
+      'frost_nova',
+      'hammer_of_justice',
+      'entangling_roots',
+      'blind',
+      'cloak_of_shadows',
+      'scorch',
+      'pyroblast',
+      'flamestrike',
+      'frozen_orb',
+      'glacial_spike',
+      'blizzard',
+      'blink',
+      'arcane_blast',
+      'shadowstep',
+      'vanish',
+      'cheap_shot',
+      'ambush',
+      'backstab',
+      'garrote',
+      'sap',
+      'sinister_strike',
+      'eviscerate',
+      'stealth',
     ]) {
       expect(keys.has(key), key).toBe(true);
     }
@@ -194,7 +224,7 @@ describe('buildManifest', () => {
     // purely filesystem-discovered.
     const mobFamilyKeys = [...keys].filter((key) => key.startsWith('mob_'));
     expect(mobFamilyKeys).toHaveLength(65); // 13 families x 5 actions
-    expect(SFX_FIXED_CATALOG_KEYS).toHaveLength(210);
+    expect(SFX_FIXED_CATALOG_KEYS).toHaveLength(246);
   });
 });
 

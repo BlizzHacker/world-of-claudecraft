@@ -5,6 +5,7 @@
 
 import { describe, expect, it } from 'vitest';
 import {
+  BUILTIN_WORLD,
   DELVES,
   DUNGEON_X_THRESHOLD,
   OVERWORLD_GRAVEYARDS,
@@ -17,16 +18,29 @@ import {
   RES_HEALER_HP_FRACTION,
   RES_HP_FRACTION,
   RESURRECTION_SICKNESS_ID,
+  resurrectOnInstanceReentry,
   SPIRIT_HEALER_RANGE,
 } from '../src/sim/spirit';
-import { dist2d, type Entity } from '../src/sim/types';
+import { dist2d, type Entity, type WorldContent } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
 
 type AnyEntity = Entity & Record<string, any>;
 type AnySim = Sim & Record<string, any>;
 
+// Spirit Healers are system-owned (spawnOverworldSpiritHealers places one per
+// OVERWORLD_GRAVEYARDS entry from the static template in the ctor pass), and
+// zones/graveyards, DELVES and dungeons are static data, so ambient camps,
+// world npcs and quest objects can all be stripped (subsystem-world pattern,
+// see tests/dot_final_tick.test.ts).
+const SPIRIT_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
+
 const makeSim = (cls: 'warrior' | 'rogue' | 'mage' = 'warrior', seed = 42): AnySim =>
-  new Sim({ seed, playerClass: cls, autoEquip: true }) as AnySim;
+  new Sim({ seed, playerClass: cls, autoEquip: true, world: SPIRIT_TEST_WORLD }) as AnySim;
 
 // A Spirit Healer NPC within reach of a position (2D).
 function healerInRange(
@@ -108,6 +122,22 @@ describe('spirit: release to ghost', () => {
 });
 
 describe('spirit: resurrect at corpse', () => {
+  it('does not let a ghost with an abandoned corpse bypass the Pale Keeper through an instance', () => {
+    const sim = makeSim();
+    const p = sim.player as AnyEntity;
+    const meta = sim.meta(p.id);
+    if (!meta) throw new Error('Expected player metadata');
+    p.dead = true;
+    p.ghost = true;
+    p.corpsePos = null;
+    p.corpseInstanceId = null;
+
+    resurrectOnInstanceReentry(sim.ctx, meta, p, sim.groundPos(10, 10));
+
+    expect(p.dead).toBe(true);
+    expect(p.ghost).toBe(true);
+  });
+
   it('resurrects penalty-free at the body when in range', () => {
     const sim = makeSim();
     sim.setPlayerLevel(10);
@@ -259,7 +289,12 @@ describe("spirit: The Keeper's Toll persistence", () => {
     expect(state.resSickness).toBe(remaining);
 
     // relog: a fresh Sim loads the saved character
-    const sim2 = new Sim({ seed: 99, playerClass: 'warrior', noPlayer: true }) as AnySim;
+    const sim2 = new Sim({
+      seed: 99,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: SPIRIT_TEST_WORLD,
+    }) as AnySim;
     const pid2 = sim2.addPlayer('warrior', 'Toller', { state });
     const e2 = sim2.entities.get(pid2) as AnyEntity;
     const toll2 = e2.auras.find((a: any) => a.id === RESURRECTION_SICKNESS_ID);
@@ -400,6 +435,80 @@ describe('spirit: delve respawn (unchanged bounded rules)', () => {
   });
 });
 
+describe('spirit: forced facing reset also resets prevFacing (camera-follow convention)', () => {
+  // Every other forced-facing site in the sim pairs `facing = 0` with
+  // `prevFacing = 0` (see mob/lifecycle.ts, sim.ts, arena.ts, etc). The
+  // respawn/release-spirit sites force facing to 0 too, but left prevFacing
+  // stale: the render-interpolated facing (prevFacing -> facing over the tick
+  // window) then jumps from the old heading, which the follow camera's rigid
+  // term reads as a huge instantaneous turn (it spins to a wrong yaw and
+  // sticks there if the player does not move right after).
+  it('releasing the spirit resets prevFacing along with facing', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(10);
+    const p = sim.player as AnyEntity;
+    p.facing = Math.PI / 2;
+    p.prevFacing = Math.PI / 2;
+    p.dead = true;
+    sim.releaseSpirit();
+    expect(p.facing).toBe(0);
+    expect(p.prevFacing).toBe(0);
+  });
+
+  it('resurrecting at the corpse resets prevFacing along with facing', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(10);
+    const p = sim.player as AnyEntity;
+    p.dead = true;
+    sim.releaseSpirit();
+    const corpse = { ...(p.corpsePos as { x: number; y: number; z: number }) };
+    p.pos = { x: corpse.x, y: corpse.y, z: corpse.z };
+    p.prevPos = { ...p.pos };
+    p.facing = Math.PI / 2;
+    p.prevFacing = Math.PI / 2;
+    sim.rebucket(p);
+    sim.resurrectAtCorpse();
+    expect(p.facing).toBe(0);
+    expect(p.prevFacing).toBe(0);
+  });
+
+  it('resurrecting at the Spirit Healer resets prevFacing along with facing', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(10);
+    const p = sim.player as AnyEntity;
+    p.dead = true;
+    sim.releaseSpirit();
+    p.facing = Math.PI / 2;
+    p.prevFacing = Math.PI / 2;
+    expect(sim.resurrectAtSpiritHealer()).toBe(true);
+    expect(p.facing).toBe(0);
+    expect(p.prevFacing).toBe(0);
+  });
+
+  it('a delve respawn resets prevFacing along with facing', () => {
+    const sim = makeSim('rogue', 99);
+    const reliquary = DELVES.collapsed_reliquary;
+    sim.setPlayerLevel(reliquary.minLevel);
+    const p = sim.player as AnyEntity;
+    p.pos = { x: reliquary.doorPos.x, y: 0, z: reliquary.doorPos.z };
+    p.prevPos = { ...p.pos };
+    sim.rebucket(p);
+    sim.enterDelve('collapsed_reliquary', 'normal');
+    const run = sim.delveRunForPlayer(sim.playerId) as any;
+    run.modules = ['reliquary_finale'];
+    run.moduleIndex = 0;
+    (sim as any).spawnDelveModule(run);
+
+    p.facing = Math.PI / 2;
+    p.prevFacing = Math.PI / 2;
+    p.dead = true;
+    sim.releaseSpirit();
+    expect(p.dead).toBe(false);
+    expect(p.facing).toBe(0);
+    expect(p.prevFacing).toBe(0);
+  });
+});
+
 describe('spirit: ghost movement (tick loop)', () => {
   it('a ghost runs on tick and stays a dead, unharmed spirit', () => {
     const sim = makeSim();
@@ -443,6 +552,8 @@ describe('spirit: stale movement intent does not survive death (#1651)', () => {
       strafeLeft: false,
       strafeRight: false,
       jump: false,
+      dive: false,
+      surface: false,
     });
     // ticking with the stale input gone, the ghost stays put
     const posAfterRelease = { ...p.pos };

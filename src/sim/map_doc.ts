@@ -18,6 +18,7 @@ import type {
   ZoneDef,
 } from './types';
 import { BIOME_BY_ID } from './world';
+import { WORLD_SEED } from './world_seed';
 
 export const MAP_DOC_VERSION = 2;
 
@@ -28,7 +29,10 @@ export const MAX_PLACEMENTS = 4000;
 export const MAX_CAMPS = 600;
 export const MAX_NPCS = 200;
 export const MAX_OBJECTS = 400;
-export const MAX_ZONES = 12;
+// The built-in grid world ships 14 zones (the original strip plus the east/west
+// realm columns), so the editor's zone cap sits above that with headroom for a
+// few custom zones. (It was 12 in the 3-zone-strip era.)
+export const MAX_ZONES = 24;
 export const MAX_ROADS = 64;
 export const MAX_ROAD_POINTS = 256;
 export const MAX_NAME_LENGTH = 60;
@@ -129,7 +133,8 @@ export function serializeMapDoc(doc: MapDoc): string {
   return JSON.stringify(doc, null, 2);
 }
 
-const DEFAULT_SEED = 20061; // the game's fixed world seed (src/main.ts WORLD_SEED)
+// A map document authored without an explicit seed builds the shipped world.
+const DEFAULT_SEED = WORLD_SEED;
 
 function num(v: unknown, fallback: number): number {
   return typeof v === 'number' && Number.isFinite(v) ? v : fallback;

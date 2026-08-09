@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { isBlocked } from '../src/sim/colliders';
-import { CAMPS } from '../src/sim/data';
+import { BUILTIN_WORLD, CAMPS } from '../src/sim/data';
 import { PLAYER_MAX_CLIMB_SLOPE } from '../src/sim/pathfind';
+import { rideSteepnessAt } from '../src/sim/ride_height';
 import { Sim } from '../src/sim/sim';
+import type { WorldContent } from '../src/sim/types';
 import { terrainDownhill, terrainHeight, terrainSteepness, WATER_LEVEL } from '../src/sim/world';
 
 // Movement gates for unwalkable slopes (the report: players climbing the
@@ -21,8 +23,26 @@ import { terrainDownhill, terrainHeight, terrainSteepness, WATER_LEVEL } from '.
 const SEED = 42;
 const CLIMB_LIMIT = 1.5;
 
+// These gates are about TERRAIN (the seed-procedural rim walls and slopes), not
+// entity content, and the walkers below tick a minute of world time each. Keep
+// every terrain-relevant field (zones, roads, terrainEdits, biomePaint,
+// waterLevel) identical to BUILTIN_WORLD and strip only the constructor-spawned
+// ambient mobs/NPCs/objects; the approach scan below still proves the steep
+// band and crest exist (it throws if they do not).
+const CLIMB_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
+
 function makeSim(): Sim {
-  const sim = new Sim({ seed: SEED, playerClass: 'warrior', autoEquip: true });
+  const sim = new Sim({
+    seed: SEED,
+    playerClass: 'warrior',
+    autoEquip: true,
+    world: CLIMB_TEST_WORLD,
+  });
   sim.setPlayerLevel(60); // rim mobs must not decide these tests
   return sim;
 }
@@ -116,9 +136,19 @@ describe('unwalkable slope movement gates', () => {
     }
   });
 
-  it('cannot climb the rim wall by spamming jump into it', { timeout: 60000 }, () => {
+  it('cannot climb the rim wall by spamming jump into it', { timeout: 30000 }, () => {
+    // What "cannot climb" means is a HEIGHT, not an x. This used to assert
+    // pos.x > xCrest, which only holds while the rim is an unbroken rise all
+    // the way to the map edge; since d5af0bfda ("every land border is walkable,
+    // not just the pass roads") the margin past the crest is coast, and the
+    // land west of it descends into open sea. A walker that correctly SLIDES
+    // off the steep face and rounds the headland at sea level then passes the
+    // crest's x about 19yd BELOW it, having climbed nothing: the old proxy read
+    // that as a breach. Measure the climb itself instead, both ways it could
+    // happen (walking up the face, or laddering it with a ledge grab).
     const sim = makeSim();
     const { z, xStart, xCrest } = findWestRimApproach(SEED);
+    const hCrest = terrainHeight(xCrest, z, SEED);
     teleport(sim, xStart, z);
     const meta = sim.players.get(sim.player.id);
     if (!meta) throw new Error('missing player meta');
@@ -127,7 +157,8 @@ describe('unwalkable slope movement gates', () => {
     sim.player.facing = WEST;
     for (let i = 0; i < 20 * 60; i++) {
       sim.tick();
-      expect(sim.player.pos.x, `tick ${i}: crossed the rim crest`).toBeGreaterThan(xCrest);
+      expect(sim.player.pos.y, `tick ${i}: climbed to the rim crest height`).toBeLessThan(hCrest);
+      expect(sim.player.climb, `tick ${i}: laddered the rim with a ledge climb`).toBeFalsy();
     }
   });
 
@@ -149,12 +180,32 @@ describe('unwalkable slope movement gates', () => {
     const meta = sim.players.get(sim.player.id);
     if (!meta) throw new Error('missing player meta');
     meta.moveInput.jump = true;
+    // The kernel decides the jump from the state at the START of a tick
+    // (player_motion.ts: STANDING there, with the RIDE-surface steepness
+    // memo over the climb limit AND an actual downhill at the exact
+    // position; rideSteepnessAt clamps submerged ground to the waterline so
+    // a lake-bed dip never strips control from a wader), and the body also
+    // moves within the tick. So the honest assertion is at the jump's
+    // launch moment, with the kernel's own predicate: whenever vy flips
+    // positive this tick, the PRE-tick state must not have been
+    // standing-on-kernel-steep. An airborne launch is the coyote window (a
+    // slide-off opens it by design, and the airborne contour gate still
+    // refuses any face you could not walk up). The natural-relief terrain
+    // is what makes the raw-steepness/post-tick shortcut misfire: a slide
+    // can end in a shoreline dip whose raw memo reads steep while the
+    // ridden surface is walkable.
+    let prevVy = 0;
     for (let i = 0; i < 20 * 5; i++) {
-      sim.tick();
       const p = sim.player;
-      if (terrainSteepness(p.pos.x, p.pos.z, SEED) > CLIMB_LIMIT) {
-        expect(p.vy, `tick ${i}: jumped off steep ground`).toBeLessThanOrEqual(0);
+      const preSteep =
+        p.onGround &&
+        rideSteepnessAt(p.pos.x, p.pos.z, SEED) > CLIMB_LIMIT &&
+        terrainDownhill(p.pos.x, p.pos.z, SEED) !== null;
+      sim.tick();
+      if (prevVy <= 0 && p.vy > 0) {
+        expect(preSteep, `tick ${i}: jumped off steep ground`).toBe(false);
       }
+      prevVy = p.vy;
     }
   });
 

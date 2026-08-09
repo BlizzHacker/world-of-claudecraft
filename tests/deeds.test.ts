@@ -10,6 +10,7 @@ import { ITEMS, MOBS, QUESTS, ZONES } from '../src/sim/data';
 import {
   bumpDeedStat,
   checkDeedTrigger,
+  DEEDS_RECENT_CAP,
   evaluateDeedsFor,
   grantDeed,
   markItemDiscovered,
@@ -29,6 +30,7 @@ import { turnInQuestCore } from '../src/sim/quests/quest_commands';
 import { type ArenaMatch, type CharacterState, Sim } from '../src/sim/sim';
 import * as duelMod from '../src/sim/social/duel';
 import { type Entity, MAX_LEVEL, MILESTONES, type SimEvent } from '../src/sim/types';
+import { runSalvage } from './helpers/enchant_family_cast';
 
 function makeSim(seed = 42): Sim {
   return new Sim({ seed, playerClass: 'warrior', autoEquip: false });
@@ -703,33 +705,50 @@ describe('retro on join', () => {
     expect(sim2.players.get(pid2)!.deedsEarned.has('exp_something_shiny')).toBe(false);
   });
 
-  it('Giantslayer heals exactly where no mob can sit five levels up', () => {
-    // The heroic pin (level 22) is the highest creditable spawn in the game,
-    // so level 18 is the first permanently stranded level and 17 the last
-    // one where the live kill site can still fire.
+  it('Giantslayer auto-heals for capped players now that S-rank is flat 23 (deed stranded)', () => {
+    // MAX_CREDITABLE_MOB_LEVEL was lowered from 25 to 23 when S-rank was
+    // re-tuned to a flat level 23 (no ramp to 25). A capped player (level 20)
+    // can never be hit by a mob five levels up (20+5=25>23), so the deed is
+    // permanently stranded and retroFallbackGrants auto-heals it at join time.
+    // Giantslayer is no longer earnable inside S-rank rifts (maintainer-accepted).
     const sim = makeSim();
     const capped = sim.addPlayer('warrior', 'Capped', {
       state: { ...veteranState(), level: 20 },
     });
+    // Auto-heal fires at join for the capped player (level 20+5=25 > 23).
     expect(sim.players.get(capped)!.deedsEarned.has('cmb_giantslayer')).toBe(true);
-    const edge = sim.addPlayer('warrior', 'Edge', { state: { ...veteranState(), level: 18 } });
-    expect(sim.players.get(edge)!.deedsEarned.has('cmb_giantslayer')).toBe(true);
-    const leveler = sim.addPlayer('warrior', 'Leveler', {
+    // A level-17 player (17+5=22 <= 23) is still below the threshold: not yet stranded.
+    const notStranded = sim.addPlayer('warrior', 'NotStranded', {
       state: { ...veteranState(), level: 17 },
     });
-    expect(sim.players.get(leveler)!.deedsEarned.has('cmb_giantslayer')).toBe(false);
-    // The heal is a retro grant: flagged on the event, delivered to the
-    // healed player only.
-    const evs = deedEvents(sim.tick());
-    const ev = evs.find((e) => e.deedId === 'cmb_giantslayer' && e.pid === capped);
-    expect(ev?.retro).toBe(true);
+    expect(sim.players.get(notStranded)!.deedsEarned.has('cmb_giantslayer')).toBe(false);
+    // A level-18 player (18+5=23, not strictly greater) is also not stranded yet.
+    const edge = sim.addPlayer('warrior', 'Edge', { state: { ...veteranState(), level: 18 } });
+    expect(sim.players.get(edge)!.deedsEarned.has('cmb_giantslayer')).toBe(false);
+    // The live kill site still grants on a killing blow five levels up (for sub-cap players).
+    const edgeEntity = sim.entities.get(edge)!;
+    const wolf = [...sim.entities.values()].find((e) => e.kind === 'mob' && !e.dead)!;
+    wolf.level = edgeEntity.level + 5;
+    (sim as unknown as { dealDamage: Function }).dealDamage(
+      edgeEntity,
+      wolf,
+      wolf.hp + 10,
+      false,
+      'physical',
+      'test',
+      'hit',
+      true,
+    );
+    expect(sim.players.get(edge)!.deedsEarned.has('cmb_giantslayer')).toBe(true);
   });
 
   it('the heals unlock feat_book_complete in the same join for an otherwise complete book', () => {
-    // The motivating payoff: when the three healed deeds were the last holes
-    // in a veteran's book, the meta pass that runs right after the fallback
-    // arms must complete the feat on the SAME login, not one login later.
-    const healed = ['exp_something_shiny', 'cmb_giantslayer', 'prog_well_rested'];
+    // The motivating payoff: when the healed deeds were the last holes in a
+    // veteran's book, the meta pass that runs right after the fallback arms
+    // must complete the feat on the SAME login, not one login later.
+    // (cmb_giantslayer left the healed set when the S-rank rift ceiling made
+    // it earnable at the cap, so this veteran already carries it.)
+    const healed = ['exp_something_shiny', 'prog_well_rested'];
     const bookIds = (DEEDS.feat_book_complete.trigger as { deedIds: string[] }).deedIds;
     const deeds: Record<string, string> = {};
     for (const id of bookIds) {
@@ -1063,7 +1082,7 @@ describe('persistence', () => {
     meta.deedStats.itemsDiscovered.delete('wolf_fang');
     const wilkes = [...sim.entities.values()].find((e) => e.templateId === 'trader_wilkes')!;
     sim.entities.get(pid)!.pos = { x: wilkes.pos.x + 2, y: wilkes.pos.y, z: wilkes.pos.z };
-    sim.buyBackItem('wolf_fang', pid);
+    sim.buyBackItem('wolf_fang', undefined, undefined, pid);
     expect(sim.countItem('wolf_fang', pid)).toBe(1);
     expect(meta.deedStats.itemsDiscovered.has('wolf_fang')).toBe(true);
   });
@@ -1220,7 +1239,10 @@ describe('meter triggers (negative then positive per resolver)', () => {
           meta.townFocus = {};
         },
         at: () => {
-          meta.townFocus = { forge: 1 };
+          // A real component family: since #2511 no reachable path can put a
+          // key like 'forge' in an allocation, so a fixture using one would
+          // pin a shape the game cannot produce.
+          meta.townFocus = { hide: 1 };
         },
       },
       {
@@ -1338,6 +1360,58 @@ describe('meter triggers (negative then positive per resolver)', () => {
       sim.ctx.markDeedsDirty(meta.entityId);
       sim.tick();
       expect(meta.deedsEarned.has('pvp_arena_first_match'), arm).toBe(true);
+    }
+  });
+
+  it('the battleground meters grant the first-win and first-capture deeds off PlayerMeta', () => {
+    // bgWins and bgCaptures are separate resolvers reading the persisted
+    // Thornhollow Fields standing: each arm gets a fresh Sim so a resolver that
+    // read the wrong field could not be masked by the other counter.
+    const winArm = makeSim();
+    const wm = primary(winArm).meta;
+    expect(wm.bgWins).toBe(0);
+    wm.bgWins = 1;
+    winArm.ctx.markDeedsDirty(wm.entityId);
+    winArm.tick();
+    expect(wm.deedsEarned.has('pvp_bg_first_win')).toBe(true);
+    // The capture deed must NOT ride along on a win.
+    expect(wm.deedsEarned.has('pvp_bg_first_capture')).toBe(false);
+
+    const capArm = makeSim();
+    const cm = primary(capArm).meta;
+    expect(cm.bgCaptures).toBe(0);
+    cm.bgCaptures = 1;
+    capArm.ctx.markDeedsDirty(cm.entityId);
+    capArm.tick();
+    expect(cm.deedsEarned.has('pvp_bg_first_capture')).toBe(true);
+    expect(cm.deedsEarned.has('pvp_bg_first_win')).toBe(false);
+  });
+
+  it('the battleground career deeds gate exactly at 25 wins and 100 captures', () => {
+    // Two-sided per threshold, fresh Sim per arm: the sticky grant means a
+    // single sim could never prove the below-threshold side after the fact.
+    const cases: { deedId: string; field: 'bgWins' | 'bgCaptures'; amount: number }[] = [
+      { deedId: 'pvp_bg_wins_25', field: 'bgWins', amount: 25 },
+      { deedId: 'pvp_bg_captures_100', field: 'bgCaptures', amount: 100 },
+    ];
+    for (const c of cases) {
+      // Pin the authored threshold so a content edit cannot silently drift the
+      // number this test claims to cover.
+      expect(DEEDS[c.deedId].trigger).toEqual({ kind: 'meter', meter: c.field, amount: c.amount });
+
+      const below = makeSim();
+      const bm = primary(below).meta;
+      bm[c.field] = c.amount - 1;
+      below.ctx.markDeedsDirty(bm.entityId);
+      below.tick();
+      expect(bm.deedsEarned.has(c.deedId), `${c.deedId} one short`).toBe(false);
+
+      const at = makeSim();
+      const am = primary(at).meta;
+      am[c.field] = c.amount;
+      at.ctx.markDeedsDirty(am.entityId);
+      at.tick();
+      expect(am.deedsEarned.has(c.deedId), `${c.deedId} at threshold`).toBe(true);
     }
   });
 });
@@ -1495,7 +1569,11 @@ describe('site wiring (real modules, not direct bumps)', () => {
     const clamped = victim.hp - 1;
     dealDamage(sim.ctx, attacker, victim, victim.hp + 500, true, 'physical', null, 'hit');
     expect(victim.hp).toBe(1);
-    expect(sim.ctx.duels.has(a)).toBe(false);
+    // The duel is over the instant the finisher lands, but the map entry
+    // itself lingers until updateDuels() purges it at tick-tail (see
+    // src/sim/social/duel.ts); duelFor() is the purge-order-independent way
+    // to observe "the duel has ended" from outside duel.ts.
+    expect(duelMod.duelFor(sim.ctx, a)).toBeNull();
     expect(metaA.deedStats.counters.damageDealt).toBe(10 + clamped);
     expect(metaA.deedStats.counters.crits).toBe(1);
   });
@@ -1635,6 +1713,40 @@ describe('site wiring (real modules, not direct bumps)', () => {
     sim.tick();
     for (const m of metas) expect(m.deedsEarned.has('soc_full_house')).toBe(true);
   });
+
+  it('a shared party kill through handleDeath credits kills to every eligible member, not just the tapper', () => {
+    const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+    const puller = sim.addPlayer('warrior', 'Puller');
+    const healer = sim.addPlayer('priest', 'Healer');
+    sim.tick();
+    sim.partyInvite(healer, puller);
+    sim.partyAccept(healer);
+
+    const pE = sim.entities.get(puller)!;
+    const hE = sim.entities.get(healer)!;
+    const template = MOBS.forest_wolf;
+    const mob = createMob(9999, template, template.maxLevel, { x: 0, y: 0, z: 0 });
+    sim.entities.set(mob.id, mob);
+    for (const e of [pE, hE, mob]) {
+      e.pos = { x: 0, y: 0, z: 0 };
+      e.prevPos = { x: 0, y: 0, z: 0 };
+    }
+
+    const pullerMeta = sim.players.get(puller)!;
+    const healerMeta = sim.players.get(healer)!;
+    expect(pullerMeta.deedStats.counters.kills).toBe(0);
+    expect(healerMeta.deedStats.counters.kills).toBe(0);
+
+    // Only the puller taps and lands the killing blow; the healer stands in
+    // range the whole fight (earning the same shared XP/quest/loot credit as
+    // the tapper) but never attacks. A healer who never taps must still
+    // advance the same lifetime kills counter for a shared kill.
+    dealDamage(sim.ctx, pE, mob, mob.hp + 500, false, 'physical', null, 'hit');
+
+    expect(mob.dead).toBe(true);
+    expect(pullerMeta.deedStats.counters.kills).toBe(1);
+    expect(healerMeta.deedStats.counters.kills).toBe(1);
+  });
 });
 
 describe('active title selection (setActiveTitle)', () => {
@@ -1762,6 +1874,48 @@ describe('deedsRarity (offline facet arm)', () => {
   it('always resolves null: a sandbox has no population to aggregate', async () => {
     const sim = makeSim();
     await expect(sim.deedsRarity()).resolves.toBeNull();
+  });
+});
+
+describe('deedsRecent (offline facet arm)', () => {
+  it('pins the cap literal and its strip relation', () => {
+    // A literal, never a self-comparison: the three enforcement points (the
+    // Sim slice, the server LIMIT, the client clamp) all import this
+    // constant, so only a literal pin can catch it silently shrinking below
+    // the Book's 5-slot recent strip.
+    expect(DEEDS_RECENT_CAP).toBe(8);
+    expect(DEEDS_RECENT_CAP).toBeGreaterThanOrEqual(5);
+  });
+
+  it('the offline save round-trip preserves the grant order deedsRecent serves', async () => {
+    const sim = makeSim();
+    const { meta } = primary(sim);
+    // A deliberate non-catalog order, so the assertion can tell grant order
+    // from DEED_ORDER after the reload.
+    const granted = ['dgn_korzul_flawless', 'prog_first_steps', 'cmb_first_blood'];
+    for (const id of granted) grantDeed(sim.ctx, meta, id);
+    const state = sim.serializeCharacter(sim.playerId);
+    const sim2 = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+    // JSON round-trip: exactly what the offline save does, and the step that
+    // would destroy the order if key order were not preserved.
+    sim2.addPlayer('warrior', 'Reload', { state: JSON.parse(JSON.stringify(state)) });
+    await expect(sim2.deedsRecent()).resolves.toEqual([...granted].reverse());
+  });
+
+  it('serves the live grant order newest first, capped at DEEDS_RECENT_CAP', async () => {
+    const sim = makeSim();
+    const { meta } = primary(sim);
+    // No unlocks yet: an empty list, never null (the Sim always has its own
+    // grant-order record; null is the fetch-failure arm online).
+    await expect(sim.deedsRecent()).resolves.toEqual([]);
+    // Grant two more than the cap in a KNOWN order that is not catalog order,
+    // so the assertion can tell grant order from DEED_ORDER.
+    const granted = [...DEED_ORDER.slice(0, DEEDS_RECENT_CAP + 1), 'dgn_korzul_flawless'];
+    for (const id of granted) grantDeed(sim.ctx, meta, id);
+    const recent = await sim.deedsRecent();
+    expect(recent).toEqual(granted.slice(-DEEDS_RECENT_CAP).reverse());
+    expect(recent).toHaveLength(DEEDS_RECENT_CAP);
+    expect(recent?.[0]).toBe('dgn_korzul_flawless');
   });
 });
 
@@ -2070,7 +2224,7 @@ describe('profession deed families (threshold-exact, live sites)', () => {
     const sim = makeSim();
     const { meta } = primary(sim);
     sim.addItem('eastbrook_arming_sword', 1, meta.entityId);
-    sim.salvageItem('eastbrook_arming_sword', meta.entityId);
+    runSalvage(sim, 'eastbrook_arming_sword', meta.entityId);
     expect(meta.deedStats.counters.salvagesPerformed).toBe(1);
     sim.tick();
     expect(meta.deedsEarned.has('soc_first_salvage')).toBe(true);

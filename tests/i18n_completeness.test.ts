@@ -163,6 +163,7 @@ describe('i18n whole-catalog completeness', () => {
     const BRAND_ALLOW = new Set([
       'footer.copyright', // "{year} Cryptic Realm" - brand
       'footer.githubLink', // repository URL
+      'hudChrome.epic.title', // "Epic" - brand
       'fiesta.bracket', // "Fiesta" event brand
       'serverUnavailable.logoAlt', // "Cryptic Realm" logo alt text - brand
       'guide.brand', // "Cryptic Realm" - brand (Guide)
@@ -210,6 +211,23 @@ describe('i18n whole-catalog completeness', () => {
       'wallet.holderTiers.worldforger.flavor',
       'desktop.crash.title', // "World of ClaudeCraft" - brand (desktop crash dialog title)
       'auth.emailPlaceholder', // "you@example.com" - RFC 2606 example address, kept verbatim
+      // Rift boss mechanic names: authored fantasy proper nouns that do not translate.
+      'abilityUi.cast.rift_frost_execution',
+      'abilityUi.cast.rift_frost_strike',
+      'abilityUi.cast.rift_ember_execution',
+      'abilityUi.cast.rift_ember_strike',
+      'abilityUi.cast.rift_venom_execution',
+      'abilityUi.cast.rift_venom_strike',
+      'abilityUi.cast.rift_necro_execution',
+      'abilityUi.cast.rift_necro_strike',
+      'abilityUi.cast.rift_brute_execution',
+      'abilityUi.cast.rift_brute_strike',
+      'abilityUi.cast.rift_arcane_execution',
+      'abilityUi.cast.rift_arcane_strike',
+      'abilityUi.cast.rift_storm_execution',
+      'abilityUi.cast.rift_storm_strike',
+      'abilityUi.cast.rift_tide_execution',
+      'abilityUi.cast.rift_tide_strike',
     ]);
     const BRAND_ALLOW_PREFIX = ['contributions.', 'whitepaper.', 'links.'];
     const allowed = (key: string) =>

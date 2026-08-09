@@ -11,6 +11,8 @@ export type AdminPage =
   | 'tick-perf'
   | 'accounts'
   | 'characters'
+  | 'online-players'
+  | 'guilds'
   | 'moderation'
   | 'moderation-history'
   | 'suspicious-players'
@@ -20,6 +22,7 @@ export type AdminPage =
   | 'chat-filter'
   | 'blocked-ips'
   | 'bug-reports'
+  | 'unstuck-reports'
   | 'staff';
 
 export interface AdminNavItem {
@@ -57,6 +60,10 @@ export const NAV_SECTIONS: readonly AdminNavSection[] = [
     items: [
       { id: 'accounts', labelKey: 'nav.accounts', permission: 'accounts.read' },
       { id: 'characters', labelKey: 'nav.characters', permission: 'accounts.read' },
+      // The live roster moved off the Overview dashboard onto its own page, so it
+      // keeps the already-localized title that panel used.
+      { id: 'online-players', labelKey: 'online.title', permission: 'accounts.read' },
+      { id: 'guilds', labelKey: 'nav.guilds', permission: 'accounts.read' },
     ],
   },
   {
@@ -93,7 +100,10 @@ export const NAV_SECTIONS: readonly AdminNavSection[] = [
     id: 'support',
     labelKey: 'nav.support',
     defaultPage: 'bug-reports',
-    items: [{ id: 'bug-reports', labelKey: 'nav.bugReports', permission: 'support.read' }],
+    items: [
+      { id: 'bug-reports', labelKey: 'nav.bugReports', permission: 'support.read' },
+      { id: 'unstuck-reports', labelKey: 'nav.unstuckReports', permission: 'support.read' },
+    ],
   },
   {
     id: 'administration',

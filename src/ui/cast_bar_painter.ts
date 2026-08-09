@@ -24,8 +24,14 @@
 // `.channel` CSS class, never a hex in TS; the percent precision and the consume
 // label keys are named constants; CONSUME_DURATION lives in the core, not here.
 
-import type { CastBarState, ConsumeBarState, ConsumeMode } from '../render/cast_bar';
+import type {
+  CastBarState,
+  ConsumeBarState,
+  ConsumeMode,
+  MountSummonBarState,
+} from '../render/cast_bar';
 import { formatNumber, type TranslationKey, t } from './i18n';
+import { mountDisplayName } from './mount_labels';
 import type { PainterHostWriters } from './painter_host';
 
 // The channel class drives the draining (vs filling) fill color via CSS; a channel,
@@ -69,6 +75,9 @@ export interface CastBarOptions {
   /** Clear the inner fill/label/timer + channel class when the bar is hidden (the
    *  player's inline block did; the target only set display:none). */
   clearOnHide?: boolean;
+  /** Display value when shown (default 'block'; the crafting window's cast
+   *  strip is a flex row). */
+  shownDisplay?: string;
 }
 
 /** The per-frame source the painter draws from. */
@@ -80,6 +89,10 @@ export interface CastBarPaintInput {
   /** The player's eat/drink overlay from consumeBarState; the target OMITS it, so
    *  the target instance can never render eat/drink. */
   consume?: ConsumeBarState;
+  /** The player's mount summon channel from mountSummonBarState; the target OMITS
+   *  it. Shown only when a summon is in progress (mountCastKey non-empty). Priority:
+   *  below cast but above eat/drink, since you cannot cast while mounting. */
+  mountSummon?: MountSummonBarState;
 }
 
 export class CastBarPainter {
@@ -96,6 +109,16 @@ export class CastBarPainter {
         input.cast.fill,
         this.opts.resolveCastLabel(input.cast),
         input.castRemaining,
+      );
+    } else if (input.mountSummon?.visible) {
+      // PLAYER-ONLY: mount summon channel uses the channel styling (draining bar).
+      // The label is the localized mount name (mountDisplayName), which resolves
+      // the mount key through the i18n name map; falls back to the raw key.
+      this.paintBar(
+        true,
+        input.mountSummon.fill,
+        mountDisplayName(input.mountSummon.mountKey),
+        input.mountSummon.remaining,
       );
     } else if (input.consume?.visible) {
       // PLAYER-ONLY: the consume overlay uses the channel styling and the localized
@@ -121,7 +144,7 @@ export class CastBarPainter {
   // blocks (display, channel, width, label, timer) so the elided-writer cache keys
   // line up byte-for-byte and the skip-rate accounting is unchanged.
   private paintBar(channel: boolean, fill: number, label: string, remaining: number): void {
-    this.writers.setDisplay(this.el.bar, SHOWN_DISPLAY);
+    this.writers.setDisplay(this.el.bar, this.opts.shownDisplay ?? SHOWN_DISPLAY);
     this.writers.toggleClass(this.el.bar, CHANNEL_CLASS, channel);
     this.writers.setWidth(this.el.fill, `${(fill * 100).toFixed(PERCENT_FRACTION_DIGITS)}%`);
     this.writers.setText(this.el.label, label);

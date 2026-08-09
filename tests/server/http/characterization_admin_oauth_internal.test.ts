@@ -33,19 +33,10 @@ import { goldenContentTypeMismatch } from './content_type_consistency';
 // connects, so every contract path captured here returns before touching it.
 process.env.DATABASE_URL ||= 'postgres://test:test@127.0.0.1:5433/wocc_phase3_aoi';
 
-// routeHttpRequest is synchronous fire-and-forget (void handleX(req, res)), so we
-// poll res.writableEnded before reading the captured response.
-const MAX_TICKS = 5000;
-
 async function loadDispatch(): Promise<Dispatch> {
   const main = await import('../../../server/main');
-  return async (req, res) => {
+  return (req, res) => {
     main.routeHttpRequest(req, res);
-    let ticks = 0;
-    while (!(res as unknown as { writableEnded: boolean }).writableEnded) {
-      if (ticks++ > MAX_TICKS) throw new Error('response never ended');
-      await new Promise((r) => setImmediate(r));
-    }
   };
 }
 
@@ -307,26 +298,21 @@ describe('characterization: internal handleInternalApi', () => {
     });
   });
 
-  // The ten /internal/discord/* routes and the method each is documented under.
-  // The DISCORD_BOT_SECRET gate in handleDiscordInternal runs BEFORE any route or
-  // method branch, so the 401 (and the 404 feature-off) contract is identical for
-  // all ten; we capture each route so the security gate is documented per route.
-  // (The two daily-rewards-winners routes postdate the original characterization
-  // capture; their goldens were backfilled under the same shared-gate rationale.)
+  // The seven live /internal/discord/* ladder routes and the method each is
+  // documented under. The DISCORD_BOT_SECRET gate in handleDiscordInternal runs
+  // BEFORE any route or method branch, so the 401 (and the 404 feature-off)
+  // contract is identical for all seven; we capture each route so the security
+  // gate is documented per route. (The mark route postdates the original
+  // characterization capture; its goldens were backfilled under the same
+  // shared-gate rationale. The retired relay/activity/winners GETs, #2791, are
+  // no longer captured: their paths answer the ladder's terminal 404.)
   const DISCORD_ROUTES = [
     { method: 'GET', path: '/internal/discord/flex', name: 'discord_flex' },
     { method: 'GET', path: '/internal/discord/roles', name: 'discord_roles' },
     { method: 'POST', path: '/internal/discord/presence', name: 'discord_presence' },
     { method: 'POST', path: '/internal/discord/grant', name: 'discord_grant' },
     { method: 'POST', path: '/internal/discord/member', name: 'discord_member' },
-    { method: 'GET', path: '/internal/discord/relay', name: 'discord_relay' },
-    { method: 'GET', path: '/internal/discord/activity', name: 'discord_activity' },
     { method: 'POST', path: '/internal/discord/members-meta', name: 'discord_members_meta' },
-    {
-      method: 'GET',
-      path: '/internal/discord/daily-rewards-winners',
-      name: 'discord_daily_rewards_winners',
-    },
     {
       method: 'POST',
       path: '/internal/discord/daily-rewards-winners/mark',
@@ -336,7 +322,7 @@ describe('characterization: internal handleInternalApi', () => {
 
   // Feature-off gate, captured PER ROUTE: with DISCORD_BOT_SECRET unset, the whole
   // /internal/discord/* surface answers 404 unknown endpoint at the shared gate.
-  // Looping all ten (mirroring the 401 loop below) freezes each route's feature-off
+  // Looping all seven (mirroring the 401 loop below) freezes each route's feature-off
   // baseline, so a later change that moves any one off the shared gate is caught.
   for (const route of DISCORD_ROUTES) {
     it(`${route.method} ${route.path} (bot secret unset) -> 404 unknown endpoint`, async () => {
@@ -350,7 +336,7 @@ describe('characterization: internal handleInternalApi', () => {
     });
   }
 
-  // 401 not-authenticated gate for each of the ten routes: DISCORD_BOT_SECRET
+  // 401 not-authenticated gate for each of the seven routes: DISCORD_BOT_SECRET
   // set, the x-woc-discord-secret request header absent. The gate precedes the db.
   for (const route of DISCORD_ROUTES) {
     it(`${route.method} ${route.path} (bot secret set, no header) -> 401 not authenticated`, async () => {

@@ -25,15 +25,20 @@ import {
 import { artisanRowPreloadInternalsForTest } from '../src/render/artisan_row_props';
 import { MEDIA_ASSETS } from '../src/render/assets/manifest.generated';
 import { bankerChestPreloadInternalsForTest } from '../src/render/banker_chest';
+import { battlegroundRuneModelPreloadInternalsForTest } from '../src/render/battleground_rune_model';
 import { marshDressingPreloadInternalsForTest } from '../src/render/delve_marsh_dressing';
 import { delvePropsPreloadInternalsForTest } from '../src/render/delve_props';
 import { doorPortalPreloadInternalsForTest } from '../src/render/door_portal';
 import { eastbrookGrandArmouryInternalsForTest } from '../src/render/eastbrook_grand_armoury';
 import { fishPreloadInternalsForTest } from '../src/render/fish';
+import { galeFeaturesPreloadInternalsForTest } from '../src/render/gale_features';
+import { gardenFeaturesPreloadInternalsForTest } from '../src/render/garden_features';
 import { gatherNodePreloadInternalsForTest } from '../src/render/gather_nodes';
 import { mailboxPreloadInternalsForTest } from '../src/render/mailbox';
+import { propPreloadInternalsForTest } from '../src/render/props';
 import { questObjectPreloadInternalsForTest } from '../src/render/quest_objects';
 import { stationsPreloadInternalsForTest } from '../src/render/stations';
+import { wildheartPropsPreloadInternalsForTest } from '../src/render/wildheart_props';
 import { yumiMazePreloadInternalsForTest } from '../src/render/yumi_maze';
 import { EASTBROOK_GRAND_ARMOURY } from '../src/sim/building_layout';
 import type { BuildingDef } from '../src/sim/types';
@@ -67,7 +72,7 @@ const armouryFinalPipelineEnabled =
     item.src?.endsWith('eastbrook_grand_armoury-final.glb'),
   ) ?? false;
 const ARMOURY_SHIPPING_BYTE_CEILING = 160 * 1024;
-const ARMOURY_SHIPPING_SHA256 = '822d6c9df6e8aa6e139e62e6c87ceb841431998f72b8b134de607c78c81fca32';
+const ARMOURY_SHIPPING_SHA256 = 'e0db9a1d97ed2365aa25ebf4dc47800bcc99fc3c5ec312272abaa78eb2bd2de9';
 const MANIFEST_HASH_LENGTH = 12;
 
 function expectAssetExistsAndManifested(url: string): void {
@@ -498,6 +503,17 @@ describe('GLB-replacement asset preload sets resolve to real, manifested files',
     expectAssetExistsAndManifested(mailboxPreloadInternalsForTest.mailboxAssetUrl);
   });
 
+  // Thornhollow Fields rune pads: all three defs are filled in now, so this
+  // sweeps the real set. Existence + manifest presence is all it claims; the
+  // per-file sha256 and parsed-shape contract for those three bodies lives in
+  // tests/battleground_rune_models.test.ts, which is what stands in for the
+  // deterministic exporter they do not have.
+  it('battleground rune pad assets', () => {
+    for (const url of battlegroundRuneModelPreloadInternalsForTest.urls()) {
+      expectAssetExistsAndManifested(url);
+    }
+  });
+
   it('banker chest asset', () => {
     const assetUrl = bankerChestPreloadInternalsForTest.bankerChestAssetUrl;
     expectAssetExistsAndManifested(assetUrl);
@@ -573,7 +589,7 @@ describe('GLB-replacement asset preload sets resolve to real, manifested files',
       'scripts/assets/specs/eastbrook_grand_armoury.json',
       'scripts/assets/eastbrook_grand_armoury/source_fingerprint.mjs',
       'scripts/assets/build_assets.mjs',
-      'package-lock.json',
+      'pnpm-lock.yaml',
     ]);
     expect(eastbrookGrandArmourySourceFingerprint(repoDir)).toMatch(/^[0-9a-f]{64}$/);
   });
@@ -589,7 +605,7 @@ describe('GLB-replacement asset preload sets resolve to real, manifested files',
 
       const knownFingerprint = eastbrookGrandArmourySourceFingerprint(fixtureRoot);
       expect(knownFingerprint).toBe(
-        'b4b18c6f18c4961912a8c556ce6823082b45bd247efeda9ceed69eb68339c726',
+        'd65cf120df170c401df25d801c1f55288451dbe82a44740e678af166d293b02e',
       );
 
       const mutatedPath = path.join(fixtureRoot, EASTBROOK_GRAND_ARMOURY_SOURCE_FILES[0]);
@@ -661,6 +677,7 @@ describe('GLB-replacement asset preload sets resolve to real, manifested files',
 
   it('dungeon door arch asset', () => {
     expectAssetExistsAndManifested(doorPortalPreloadInternalsForTest.doorArchAssetUrl);
+    expectAssetExistsAndManifested(doorPortalPreloadInternalsForTest.wildheartGateAssetUrl);
   });
 
   it('quest object assets', () => {
@@ -677,6 +694,42 @@ describe('GLB-replacement asset preload sets resolve to real, manifested files',
 
   it('crafting station prop assets (Professions 2.0)', () => {
     for (const url of Object.values(stationsPreloadInternalsForTest.assetUrl)) {
+      expectAssetExistsAndManifested(url);
+    }
+  });
+
+  it('Wildheart Basin jungle prop assets', () => {
+    for (const url of Object.values(wildheartPropsPreloadInternalsForTest.assetUrl)) {
+      expectAssetExistsAndManifested(url);
+      const file = path.join(publicDir, url.replace(/^\//, ''));
+      const size = statSync(file).size;
+      expect(size, `${url} should meet the static-prop size floor`).toBeGreaterThanOrEqual(40_000);
+      // KTX2 textures (tests/glb_texture_compression.test.ts) are larger on
+      // disk than the webp they replaced because they stay GPU-compressed in
+      // memory; the ceiling still catches an unoptimized re-export, which
+      // lands megabytes above this.
+      expect(size, `${url} should meet the static-prop size ceiling`).toBeLessThanOrEqual(256_000);
+      expect(
+        readGlbJson(path.join(publicDir, url.replace(/^\//, ''))).extensionsUsed,
+        `${url} should use Meshopt`,
+      ).toContain('EXT_meshopt_compression');
+    }
+  });
+
+  it('Great Maze hedge wall and arch assets', () => {
+    for (const url of Object.values(gardenFeaturesPreloadInternalsForTest.mazeAssetUrl)) {
+      expectAssetExistsAndManifested(url);
+    }
+  });
+
+  it('Old Beacon tower drum assets', () => {
+    for (const url of galeFeaturesPreloadInternalsForTest.towerAssetUrl) {
+      expectAssetExistsAndManifested(url);
+    }
+  });
+
+  it('every decor prop asset (the full PROP_ASSET_DEFS catalog)', () => {
+    for (const url of Object.values(propPreloadInternalsForTest.propAssetUrl)) {
       expectAssetExistsAndManifested(url);
     }
   });

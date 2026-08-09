@@ -499,8 +499,29 @@ const mergeStringsEn = {
     cast: {
       fishing: 'Fishing',
       gathering: 'Gathering',
+      crafting: 'Crafting',
+      disenchanting: 'Disenchanting',
+      enchanting_apply: 'Enchanting',
+      salvaging: 'Salvaging',
+      tool_recharge: 'Recharging',
       demonHeal: 'Demon Heal',
       thunzharrStormcall: 'Stormcall',
+      rift_frost_execution: 'Glacial Grave',
+      rift_frost_strike: 'Absolute Zero',
+      rift_ember_execution: 'Magma Well',
+      rift_ember_strike: 'Core Meltdown',
+      rift_venom_execution: 'Venom Pool',
+      rift_venom_strike: "Broodmother's Mark",
+      rift_necro_execution: 'Soul Grave',
+      rift_necro_strike: 'Death Sentence',
+      rift_brute_execution: 'Earthshatter',
+      rift_brute_strike: 'Final Judgment',
+      rift_arcane_execution: 'Void Rift',
+      rift_arcane_strike: 'Arcane Annihilation',
+      rift_storm_execution: 'Lightning Rod',
+      rift_storm_strike: "Stormcaller's Wrath",
+      rift_tide_execution: 'Abyssal Maw',
+      rift_tide_strike: 'Crushing Depth',
     },
     actionBar: {
       ...abilityStrings.en.abilityUi.actionBar,
@@ -517,6 +538,7 @@ const mergeStringsEn = {
       potion: 'Potion',
       elixir: 'Elixir',
       bag: 'Bag',
+      mount: 'Mount',
     },
     tooltip: {
       ...itemNames.en.itemUi.tooltip,
@@ -527,6 +549,9 @@ const mergeStringsEn = {
       clickUseInstant: 'Click to use instantly in combat',
       clickUse: 'Click to use',
       clickBuyback: 'Click to buy back',
+      // Rendered by the item tooltip (hud.ts), the bag sockets (bags_window.ts) AND the
+      // World Market's bag-capacity dropdown (market_window.ts), which reuses it so a new
+      // bag size needs no new key. Rewording this restyles that market control too.
       bagSlots: '{slots} Slot Bag',
     },
     vendor: {
@@ -627,6 +652,8 @@ const mergeStringsEn = {
       },
       statusWithZone: '{status} - {zone}',
       ranks: { leader: 'Guild Master', officer: 'Officer', member: 'Member' },
+      // Guild-roster tenure roles: joined under 7 days ago / 30 days or more.
+      tenure: { recruit: 'Recruit', veteran: 'Veteran' },
       guildHeadOne: 'you are {rank}, {count} member',
       guildHeadMany: 'you are {rank}, {count} members',
     },
@@ -700,6 +727,7 @@ export const mergeStrings = {
         potion: 'Poción',
         elixir: 'Elixir',
         bag: 'Bolsa',
+        mount: 'Montura',
       },
       tooltip: {
         ...itemNames.es.itemUi.tooltip,
@@ -868,6 +896,7 @@ export const mergeStrings = {
         potion: 'Potion',
         elixir: 'Élixir',
         bag: 'Sac',
+        mount: 'Monture',
       },
       tooltip: {
         ...itemNames.fr_FR.itemUi.tooltip,
@@ -1037,6 +1066,7 @@ export const mergeStrings = {
         potion: 'Pozione',
         elixir: 'Elisir',
         bag: 'Borsa',
+        mount: 'Cavalcatura',
       },
       tooltip: {
         ...itemNames.it_IT.itemUi.tooltip,
@@ -1199,6 +1229,7 @@ export const mergeStrings = {
         potion: 'Trank',
         elixir: 'Elixier',
         bag: 'Tasche',
+        mount: 'Reittier',
       },
       tooltip: {
         ...itemNames.de_DE.itemUi.tooltip,
@@ -1345,7 +1376,27 @@ export const mergeStrings = {
   zh_CN: {
     abilityUi: {
       ...abilityStrings.zh_CN.abilityUi,
-      cast: { fishing: '钓鱼', demonHeal: '恶魔治疗', thunzharrStormcall: '风暴召唤' },
+      cast: {
+        fishing: '钓鱼',
+        demonHeal: '恶魔治疗',
+        thunzharrStormcall: '风暴召唤',
+        rift_frost_execution: 'Glacial Grave',
+        rift_frost_strike: 'Absolute Zero',
+        rift_ember_execution: 'Magma Well',
+        rift_ember_strike: 'Core Meltdown',
+        rift_venom_execution: 'Venom Pool',
+        rift_venom_strike: "Broodmother's Mark",
+        rift_necro_execution: 'Soul Grave',
+        rift_necro_strike: 'Death Sentence',
+        rift_brute_execution: 'Earthshatter',
+        rift_brute_strike: 'Final Judgment',
+        rift_arcane_execution: 'Void Rift',
+        rift_arcane_strike: 'Arcane Annihilation',
+        rift_storm_execution: 'Lightning Rod',
+        rift_storm_strike: "Stormcaller's Wrath",
+        rift_tide_execution: 'Abyssal Maw',
+        rift_tide_strike: 'Crushing Depth',
+      },
       actionBar: {
         ...abilityStrings.zh_CN.abilityUi.actionBar,
         clearHint: 'Shift-右键或 Shift-Delete 清除',
@@ -1361,6 +1412,7 @@ export const mergeStrings = {
         potion: '药水',
         elixir: '药剂',
         bag: '背包',
+        mount: '坐骑',
       },
       tooltip: {
         ...itemNames.zh_CN.itemUi.tooltip,
@@ -1504,7 +1556,27 @@ export const mergeStrings = {
   zh_TW: {
     abilityUi: {
       ...abilityStrings.zh_TW.abilityUi,
-      cast: { fishing: '釣魚', demonHeal: '惡魔治療', thunzharrStormcall: '風暴召喚' },
+      cast: {
+        fishing: '釣魚',
+        demonHeal: '惡魔治療',
+        thunzharrStormcall: '風暴召喚',
+        rift_frost_execution: 'Glacial Grave',
+        rift_frost_strike: 'Absolute Zero',
+        rift_ember_execution: 'Magma Well',
+        rift_ember_strike: 'Core Meltdown',
+        rift_venom_execution: 'Venom Pool',
+        rift_venom_strike: "Broodmother's Mark",
+        rift_necro_execution: 'Soul Grave',
+        rift_necro_strike: 'Death Sentence',
+        rift_brute_execution: 'Earthshatter',
+        rift_brute_strike: 'Final Judgment',
+        rift_arcane_execution: 'Void Rift',
+        rift_arcane_strike: 'Arcane Annihilation',
+        rift_storm_execution: 'Lightning Rod',
+        rift_storm_strike: "Stormcaller's Wrath",
+        rift_tide_execution: 'Abyssal Maw',
+        rift_tide_strike: 'Crushing Depth',
+      },
       actionBar: {
         ...abilityStrings.zh_TW.abilityUi.actionBar,
         clearHint: 'Shift-右鍵或 Shift-Delete 清除',
@@ -1520,6 +1592,7 @@ export const mergeStrings = {
         potion: '藥水',
         elixir: '藥劑',
         bag: '背包',
+        mount: '坐騎',
       },
       tooltip: {
         ...itemNames.zh_TW.itemUi.tooltip,
@@ -1663,7 +1736,27 @@ export const mergeStrings = {
   ko_KR: {
     abilityUi: {
       ...abilityStrings.ko_KR.abilityUi,
-      cast: { fishing: '낚시', demonHeal: '악마 치유', thunzharrStormcall: '폭풍의 부름' },
+      cast: {
+        fishing: '낚시',
+        demonHeal: '악마 치유',
+        thunzharrStormcall: '폭풍의 부름',
+        rift_frost_execution: 'Glacial Grave',
+        rift_frost_strike: 'Absolute Zero',
+        rift_ember_execution: 'Magma Well',
+        rift_ember_strike: 'Core Meltdown',
+        rift_venom_execution: 'Venom Pool',
+        rift_venom_strike: "Broodmother's Mark",
+        rift_necro_execution: 'Soul Grave',
+        rift_necro_strike: 'Death Sentence',
+        rift_brute_execution: 'Earthshatter',
+        rift_brute_strike: 'Final Judgment',
+        rift_arcane_execution: 'Void Rift',
+        rift_arcane_strike: 'Arcane Annihilation',
+        rift_storm_execution: 'Lightning Rod',
+        rift_storm_strike: "Stormcaller's Wrath",
+        rift_tide_execution: 'Abyssal Maw',
+        rift_tide_strike: 'Crushing Depth',
+      },
       actionBar: {
         ...abilityStrings.ko_KR.abilityUi.actionBar,
         clearHint: 'Shift-우클릭 또는 Shift-Delete로 비우기',
@@ -1679,6 +1772,7 @@ export const mergeStrings = {
         potion: '물약',
         elixir: '비약',
         bag: '가방',
+        mount: '탈것',
       },
       tooltip: {
         ...itemNames.ko_KR.itemUi.tooltip,
@@ -1825,7 +1919,27 @@ export const mergeStrings = {
   ja_JP: {
     abilityUi: {
       ...abilityStrings.ja_JP.abilityUi,
-      cast: { fishing: '釣り', demonHeal: '悪魔の治癒', thunzharrStormcall: '嵐の呼び声' },
+      cast: {
+        fishing: '釣り',
+        demonHeal: '悪魔の治癒',
+        thunzharrStormcall: '嵐の呼び声',
+        rift_frost_execution: 'Glacial Grave',
+        rift_frost_strike: 'Absolute Zero',
+        rift_ember_execution: 'Magma Well',
+        rift_ember_strike: 'Core Meltdown',
+        rift_venom_execution: 'Venom Pool',
+        rift_venom_strike: "Broodmother's Mark",
+        rift_necro_execution: 'Soul Grave',
+        rift_necro_strike: 'Death Sentence',
+        rift_brute_execution: 'Earthshatter',
+        rift_brute_strike: 'Final Judgment',
+        rift_arcane_execution: 'Void Rift',
+        rift_arcane_strike: 'Arcane Annihilation',
+        rift_storm_execution: 'Lightning Rod',
+        rift_storm_strike: "Stormcaller's Wrath",
+        rift_tide_execution: 'Abyssal Maw',
+        rift_tide_strike: 'Crushing Depth',
+      },
       actionBar: {
         ...abilityStrings.ja_JP.abilityUi.actionBar,
         clearHint: 'Shift-右クリックまたはShift-Deleteで消去',
@@ -1841,6 +1955,7 @@ export const mergeStrings = {
         potion: 'ポーション',
         elixir: 'エリクサー',
         bag: 'バッグ',
+        mount: 'マウント',
       },
       tooltip: {
         ...itemNames.ja_JP.itemUi.tooltip,
@@ -2006,6 +2121,7 @@ export const mergeStrings = {
         potion: 'Poção',
         elixir: 'Elixir',
         bag: 'Bolsa',
+        mount: 'Montaria',
       },
       tooltip: {
         ...itemNames.pt_BR.itemUi.tooltip,
@@ -2157,6 +2273,22 @@ export const mergeStrings = {
         fishing: 'Рыбная ловля',
         demonHeal: 'Исцеление демона',
         thunzharrStormcall: 'Зов бури',
+        rift_frost_execution: 'Glacial Grave',
+        rift_frost_strike: 'Absolute Zero',
+        rift_ember_execution: 'Magma Well',
+        rift_ember_strike: 'Core Meltdown',
+        rift_venom_execution: 'Venom Pool',
+        rift_venom_strike: "Broodmother's Mark",
+        rift_necro_execution: 'Soul Grave',
+        rift_necro_strike: 'Death Sentence',
+        rift_brute_execution: 'Earthshatter',
+        rift_brute_strike: 'Final Judgment',
+        rift_arcane_execution: 'Void Rift',
+        rift_arcane_strike: 'Arcane Annihilation',
+        rift_storm_execution: 'Lightning Rod',
+        rift_storm_strike: "Stormcaller's Wrath",
+        rift_tide_execution: 'Abyssal Maw',
+        rift_tide_strike: 'Crushing Depth',
       },
       actionBar: {
         ...abilityStrings.ru_RU.abilityUi.actionBar,
@@ -2173,6 +2305,7 @@ export const mergeStrings = {
         potion: 'Зелье',
         elixir: 'Эликсир',
         bag: 'Сумка',
+        mount: 'Транспорт',
       },
       tooltip: {
         ...itemNames.ru_RU.itemUi.tooltip,
@@ -2449,7 +2582,7 @@ const mergeEntitiesEn = {
   quests: {
     q_mogger: {
       title: 'Mogger Must Fall',
-      text: 'Mogger has split carts, flattened fences, and killed enough livestock to empty half the Vale. Do not face him alone. Take two strong companions into the eastern meadow and put the brute down for good.',
+      text: 'Mogger has split carts, flattened fences, and killed enough livestock to empty half the Vale. Do not face him alone. Take two strong companions into the western meadow and put the brute down for good.',
       completion:
         "Mogger is dead at last. Eastbrook's fields are safer, and you leave the Vale with one more tale worth retelling.",
       objectives: { 0: { label: 'Mogger slain' } },

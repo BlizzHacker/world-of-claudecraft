@@ -4,6 +4,7 @@ import { buildingContainsPoint } from '../src/sim/building_layout';
 import {
   colliderInternalsForTest,
   isBlocked,
+  lineOfSightClear,
   pathCrossesFence,
   resolveMovement,
 } from '../src/sim/colliders';
@@ -86,7 +87,7 @@ function expectWalkableRoute(
     seed: SEED,
     bodyRadius,
     maxClimbSlope: PLAYER_MAX_CLIMB_SLOPE,
-    minGround: (x: number, z: number) => waterLevelAt(x, z) - PLAYER_SWIM_DEPTH,
+    minGround: (x: number, z: number) => waterLevelAt(x, z, SEED) - PLAYER_SWIM_DEPTH,
     maxSpan: 128,
   } as const;
   let route = findPath(from, to, options);
@@ -129,7 +130,7 @@ function expectWalkableRoute(
     const previousGround = groundHeight(current.x, current.z, SEED);
     const nextGround = groundHeight(resolved.x, resolved.z, SEED);
     expect(nextGround, `${label} enters deep water`).toBeGreaterThanOrEqual(
-      waterLevelAt(resolved.x, resolved.z) - PLAYER_SWIM_DEPTH,
+      waterLevelAt(resolved.x, resolved.z, SEED) - PLAYER_SWIM_DEPTH,
     );
     expect(
       (nextGround - previousGround) / Math.max(moved, Number.EPSILON),
@@ -330,8 +331,52 @@ describe('Eastbrook authored gameplay data integration', () => {
       'weaver_ottilie',
       'tinker_gizzel',
     ]);
+    // Everything except pos/facing, hashed: the placement rebuild must not have
+    // touched any other NpcDef field. Re-minted deliberately when the gathered
+    // materials came off the station masters' vendorItems rows (the ruling that
+    // no NPC stocks a gathered material), which is a content change to this
+    // payload, not placement drift. Any UNEXPLAINED move here is the bug it
+    // was written to catch.
+    //
+    // Re-minted a second time when Eastbrook stopped stocking the tier-2 and
+    // tier-3 land tools, the hub rule that a zone sells the tiers its own
+    // nodes use (Eastbrook is entirely tier-1 ground). Exactly three of the 16
+    // payloads moved and all three moves are vendorItems rows: trader_wilkes
+    // (six tools dropped, both rods kept), forgemistress_darva (two picks
+    // dropped) and tinker_gizzel (four axes and sickles dropped). Nothing else
+    // in any def, and no placement field, changed. The three row assertions
+    // that follow re-check that those are still the rows this case owns.
+    // The three moved rows, asserted BEFORE the digest below so they actually
+    // run: a failing expect throws, so stating them after the hash meant they
+    // never evaluated in the one case they exist to describe. Ordered this way
+    // a drift in some OTHER field of some other NPC moves the hash while these
+    // three stay green, which is the diagnostic the digest alone cannot give.
+    expect(ZONE1_NPCS.trader_wilkes.vendorItems).toEqual([
+      'baked_bread',
+      'spring_water',
+      'roasted_boar',
+      'tough_jerky',
+      'minor_healing_potion',
+      'minor_mana_potion',
+      'linen_pouch',
+      'travelers_knapsack',
+      'copper_mining_pick',
+      'handaxe',
+      'gathering_sickle',
+      'ironreel_fishing_rod',
+      'silverstream_fishing_rod',
+    ]);
+    expect(ZONE1_NPCS.forgemistress_darva.vendorItems).toEqual([
+      'copper_mining_pick',
+      'smithing_flux',
+    ]);
+    expect(ZONE1_NPCS.tinker_gizzel.vendorItems).toEqual([
+      'handaxe',
+      'simple_fishing_pole',
+      'arcanite_bar',
+    ]);
     expect(createHash('sha256').update(JSON.stringify(stableTownNpcPayload())).digest('hex')).toBe(
-      '92c37779f6a29982ec3541169d995fc4365c9696a9b7a0e2fd32713094073db1',
+      '253d5927ed17e438faa5d66b57e031cc1ab3af61370b773e0d714bc3426226e8',
     );
     expect(ZONE1_TOWN_NPC_IDS).toHaveLength(15);
     for (const id of ZONE1_TOWN_NPC_IDS) {
@@ -433,7 +478,7 @@ describe('Eastbrook authored gameplay data integration', () => {
         id: 'station_fenbridge_tannery',
         type: 'tannery',
         zoneId: 'mirefen_marsh',
-        pos: { x: -13, z: 314 },
+        pos: { x: 1.0670827486441765, z: 315.3263500973041 },
         masterNpcId: 'tanner_hesk',
       },
       {
@@ -455,6 +500,17 @@ describe('Eastbrook authored gameplay data integration', () => {
       },
       { x: 6, z: 294 },
       { x: 6, z: 654 },
+      { x: -33, z: 1025 },
+      { x: 397, z: 1905 },
+      { x: -23, z: 1555 },
+      { x: -353, z: 2067 },
+      { x: -354, z: 356 },
+      { x: -364, z: 1415 },
+      { x: 354, z: 1436 },
+      { x: -294, z: 815 },
+      { x: 314, z: 816 },
+      { x: 427, z: 355 },
+      { x: 299, z: 76 },
     ]);
     expect(PLAYER_START).toEqual({ x: 2, z: -2 });
     expect(EASTBROOK_LAYOUT.services.graveyard.position).toEqual({ x: -14, z: -14 });
@@ -499,7 +555,7 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
     }
   });
 
-  it('uses exact authored collider shapes, heights, and camera-occlusion policy', () => {
+  it('uses exact authored collider shapes and visual heights', () => {
     const colliders = colliderInternalsForTest.staticWorldColliders(SEED);
     const stall = EASTBROOK_LAYOUT.market.stalls[0];
     const stallCollider = colliders.find(
@@ -513,7 +569,6 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
       hw: stall.width / 2,
       hd: stall.depth / 2,
       rot: stall.rotation,
-      camGhost: false,
     });
     expect(
       colliders.find(
@@ -535,7 +590,7 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
         collider.x === well.position.x &&
         collider.z === well.position.z,
     );
-    expect(wellCollider).toMatchObject({ type: 'circle', r: well.radius, camGhost: false });
+    expect(wellCollider).toMatchObject({ type: 'circle', r: well.radius });
     expect(wellCollider?.cameraTopY).toBeCloseTo(
       groundHeight(well.position.x, well.position.z, SEED) + well.height,
     );
@@ -552,7 +607,6 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
       hw: wall.footprint.halfWidth,
       hd: wall.footprint.halfDepth,
       rot: wall.footprint.rotation,
-      camGhost: false,
     });
 
     const fence = EASTBROOK_LAYOUT.fences[0];
@@ -568,7 +622,6 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
       type: 'obb',
       hd: fence.width / 2,
       isFence: true,
-      camGhost: true,
     });
     expect(fenceCollider?.cameraTopY).toBeCloseTo(
       groundHeight(fenceCenter.x, fenceCenter.z, SEED) + fence.height,
@@ -586,7 +639,6 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
       hw: board.nativeDimensions.width / 2,
       hd: board.nativeDimensions.depth / 2,
       rot: board.rotation,
-      camGhost: true,
     });
     expect(boardCollider?.cameraTopY).toBeCloseTo(
       groundHeight(board.position.x, board.position.z, SEED) + board.nativeDimensions.height,
@@ -645,7 +697,7 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
       })),
       {
         id: EASTBROOK_LAYOUT.services.mailbox.id,
-        point: EASTBROOK_LAYOUT.services.mailbox.position,
+        point: EASTBROOK_LAYOUT.services.mailbox.frontStandingPoint,
       },
       {
         id: EASTBROOK_LAYOUT.services.noticeboard.id,
@@ -816,7 +868,7 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
     const buyerMeta = sim.meta(first);
     if (!buyerMeta) throw new Error('missing buyer metadata');
     buyerMeta.copper = 10_000;
-    sim.buyItem(trader.id, 'baked_bread', first);
+    sim.buyItem(trader.id, 'baked_bread', undefined, first);
     expect(sim.countItem('baked_bread', first)).toBeGreaterThan(0);
 
     const marshal = npcEntity(sim, 'marshal_redbrook');
@@ -842,7 +894,10 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
   });
 
   it('keeps the fixed-seed world projection stable through wandering and respawn', {
-    timeout: 60000,
+    // Two complete shipped-world simulations run through wandering and respawn.
+    // Loaded five-worker CI can exceed the old 90s budget while the bounded
+    // projection still completes deterministically.
+    timeout: 180000,
   }, () => {
     const stabilitySeed = 4_242;
     const legacyWorld = {
@@ -920,5 +975,71 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
     rebuilt.ctx.respawnMob(rebuiltWolf);
     expect(stableProjection(rebuilt)).toEqual(stableProjection(legacy));
     expect(rebuilt.rng.next()).toBe(legacy.rng.next());
+  });
+});
+
+describe('the first sixty seconds: starter pull lanes from spawn', () => {
+  // The town is furnished with solid props now, so pin explicitly what the
+  // fixtures that moved to open ground implied: a new character can walk out
+  // of the spawn square to each nearby starter camp, and at the camp's edge
+  // a ranged pull has a clear 25 yd sight lane to the camp's heart.
+  it('walks out to the starter camps and sights a ranged pull at each', () => {
+    // The level-1 quest targets: the first camps a fresh character is sent
+    // at. (The spider wood is a later, longer walk whose winding route the
+    // simple follower here cannot prove; its lane is covered by the
+    // route-existence check below.)
+    const starterMobs = new Set(['wild_boar', 'forest_wolf']);
+    const nearest = [...CAMPS]
+      .map((camp) => ({
+        camp,
+        d: Math.hypot(camp.center.x - PLAYER_START.x, camp.center.z - PLAYER_START.z),
+      }))
+      .filter(({ camp }) => starterMobs.has(camp.mobId))
+      .sort((a, b) => a.d - b.d)
+      .slice(0, 2);
+    expect(nearest.length).toBe(2);
+    for (const { camp } of nearest) {
+      // The pull spot as a player finds it: walk the pathfinder's own route
+      // out of town and stop at the first waypoint inside ranged pull
+      // distance of the camp's heart. That keeps the spot on walkable
+      // ground even where the beeline crosses a rim.
+      const route = findPath(PLAYER_START, camp.center, {
+        seed: SEED,
+        bodyRadius: 0.5,
+        maxClimbSlope: PLAYER_MAX_CLIMB_SLOPE,
+        minGround: (x: number, z: number) => waterLevelAt(x, z, SEED) - PLAYER_SWIM_DEPTH,
+        maxSpan: 160,
+      });
+      expect(route.length, `${camp.mobId} has a route from spawn`).toBeGreaterThan(0);
+      const pull =
+        route.find((p) => Math.hypot(p.x - camp.center.x, p.z - camp.center.z) <= 25) ??
+        route[route.length - 1];
+      expect(isBlocked(SEED, pull.x, pull.z, 0.5), `${camp.mobId} pull spot`).toBe(false);
+      expectWalkableRoute(`${camp.mobId} camp approach`, PLAYER_START, pull, 0.5);
+      expect(lineOfSightClear(SEED, pull, camp.center), `${camp.mobId} pull sight lane`).toBe(true);
+      expect(
+        Math.hypot(pull.x - camp.center.x, pull.z - camp.center.z),
+        `${camp.mobId} pull distance`,
+      ).toBeLessThanOrEqual(25);
+    }
+  });
+
+  it('every camp within 90 yd of spawn keeps a route and a pull sight lane', () => {
+    for (const camp of CAMPS) {
+      const d = Math.hypot(camp.center.x - PLAYER_START.x, camp.center.z - PLAYER_START.z);
+      if (d > 90) continue;
+      const route = findPath(PLAYER_START, camp.center, {
+        seed: SEED,
+        bodyRadius: 0.5,
+        maxClimbSlope: PLAYER_MAX_CLIMB_SLOPE,
+        minGround: (x: number, z: number) => waterLevelAt(x, z, SEED) - PLAYER_SWIM_DEPTH,
+        maxSpan: 160,
+      });
+      expect(route.length, `${camp.mobId} at ${camp.center.x},${camp.center.z}`).toBeGreaterThan(0);
+      const pull =
+        route.find((p) => Math.hypot(p.x - camp.center.x, p.z - camp.center.z) <= 25) ??
+        route[route.length - 1];
+      expect(lineOfSightClear(SEED, pull, camp.center), `${camp.mobId} pull sight lane`).toBe(true);
+    }
   });
 });

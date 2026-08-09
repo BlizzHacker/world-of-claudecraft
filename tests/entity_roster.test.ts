@@ -7,6 +7,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { MOBS } from '../src/sim/data';
 import { createDeedRuntime } from '../src/sim/deeds';
 import { createMob } from '../src/sim/entity';
+import type { DelayedEvent } from '../src/sim/entity_roster';
 import {
   addEntityToRoster,
   drainDelayedEvents,
@@ -18,6 +19,7 @@ import {
   tickGroundAoEs,
 } from '../src/sim/entity_roster';
 import { createMobScanCounters } from '../src/sim/mob/scan_counters';
+import type { PendingProjectile } from '../src/sim/projectile_travel';
 import { Rng } from '../src/sim/rng';
 import { createSimContext, type SimContextHost } from '../src/sim/sim_context';
 import { createPitState } from '../src/sim/social/boarpit';
@@ -29,7 +31,7 @@ import { createVcState } from '../src/sim/social/vale_cup';
 import { SpatialGrid } from '../src/sim/spatial';
 import type { Entity } from '../src/sim/types';
 
-type AnyEntity = Entity & Record<string, any>;
+type AnyEntity = Entity & Record<string, unknown>;
 
 // A SpatialGrid contains `e` iff a radius query around its position finds its id.
 function gridHas(grid: SpatialGrid, e: Entity): boolean {
@@ -54,19 +56,18 @@ function makeCtx() {
   const players = new Map();
   const cfg = { seed: 1 } as unknown as SimContextHost['cfg'];
   const clock = { time: 0, tick: 0 };
-  let delayedEvents: { at: number; event: any; guard?: () => boolean }[] = [];
-  let pendingProjectiles: any[] = [];
+  let delayedEvents: DelayedEvent[] = [];
+  let pendingProjectiles: PendingProjectile[] = [];
   const emit = vi.fn();
   const clearEntityMarker = vi.fn();
   const pulseGroundAoE = vi.fn();
   const host: SimContextHost = {
-    npcDuels: new Map(),
-    deedDirtyPids: new Set(),
-    deedDirtyKeys: new Map(),
-    worldBossEntityIds: [],
-    fiestaBotPids: [],
-    deedRuntime: {} as unknown as SimContextHost['deedRuntime'],
-    mobScanCounters: {} as unknown as SimContextHost['mobScanCounters'],
+    riftCollisionToken: 1,
+    naturalRiftPortals: [],
+    riftEvents: [],
+    nextRiftInstanceId: 1,
+    riftPortalNextAt: 120,
+    riftPortalSpawnCount: 0,
     get rng() {
       return rng;
     },
@@ -109,6 +110,8 @@ function makeCtx() {
       return dungeonDoorIds;
     },
     instances: [],
+    riftInstances: [],
+    riftPortalIds: null,
     dungeonResetLocks: new Map(),
     get arenaMatches() {
       return arenaMatches;
@@ -116,6 +119,7 @@ function makeCtx() {
     get players() {
       return players;
     },
+    masteryResetNoticeCounter: { pending: 0 },
     stationPlacements: [],
     get cfg() {
       return cfg;
@@ -129,12 +133,18 @@ function makeCtx() {
     arenaQueueYumi5: [],
     yumiBusySlots: new Set(),
     yumiCatMatches: new Map(),
+    escortRuns: new Map(),
     matchmakeYumi: vi.fn(),
     updateYumiActive: vi.fn(),
     yumiPlayerDown: vi.fn(),
     yumiCatDamaged: vi.fn(),
     cleanupYumiMatch: vi.fn(),
     nextArenaMatchId: 1,
+    bgQueue: [],
+    bgMatches: new Map(),
+    bgBusySlots: new Set(),
+    bgOutcomes: [],
+    nextBgMatchId: 1,
     delveRuns: [],
     delvePetStash: new Map(),
     utcDay: '',
@@ -219,6 +229,9 @@ function makeCtx() {
     instanceClaimIdAt: vi.fn(() => null),
     enterDungeon: vi.fn(),
     leaveDungeon: vi.fn(),
+    enterRift: vi.fn(),
+    leaveRift: vi.fn(),
+    riftOpenTreasure: vi.fn(),
     resetDungeonInstances: vi.fn(),
     inheritDungeonResetLocks: vi.fn(),
     dungeonDifficulty: vi.fn(() => 'normal' as const),
@@ -240,13 +253,23 @@ function makeCtx() {
     nextLootRollId: 1,
     devCommands: false,
     marketListings: [],
+    commissionOrderBoard: [],
+    nextCommissionOrderId: 1,
     bankerIds: [],
+    guildBanks: new Map(),
     vcup: createVcState(),
-    derby: createDerbyState(),
-    boarpit: createPitState(),
-    homes: createHomesState(),
-    horde: createHordeState(),
-    skirmish: createSkirmishState(),
+    deedDirtyPids: new Set<number>(),
+    deedDirtyKeys: new Map<number, Set<string>>(),
+    worldBossEntityIds: [],
+    deedRuntime: createDeedRuntime(),
+    fiestaBotPids: [],
+    mobScanCounters: createMobScanCounters(),
+    bumpDeedStat: vi.fn(),
+    bumpCommissionOrderBoardRev: vi.fn(),
+    markItemDiscovered: vi.fn(),
+    markVisited: vi.fn(),
+    markDeedsDirty: vi.fn(),
+    grantDeed: vi.fn(() => true),
     grantXp: vi.fn(),
     enterCombat: vi.fn(),
     hexOutputMult: vi.fn(() => 1),
@@ -277,6 +300,7 @@ function makeCtx() {
     swingIntervalMult: vi.fn(() => 1),
     mobCanSwim: vi.fn(() => false),
     resolveMovePoint: vi.fn(() => ({ x: 0, z: 0 })),
+    resolvePlayerMove: vi.fn(() => ({ x: 0, z: 0 })),
     resolveMove: vi.fn(() => ({ x: 0, z: 0 })),
     updatePet: vi.fn(),
     isDelveCompanionMob: vi.fn(() => false),
@@ -316,6 +340,9 @@ function makeCtx() {
     abandonLockpick: vi.fn(),
     tickLockpickTimeout: vi.fn(),
     startDelveRaiseDeadChannel: vi.fn(() => false),
+    tickMountTraining: vi.fn(),
+    tickMountRace: vi.fn(),
+    abandonMountTraining: vi.fn(),
     resolvedAbility: vi.fn(() => null),
     playerGcdFor: vi.fn(() => 1.5),
     isFriendlyTo: vi.fn(() => false),
@@ -327,10 +354,16 @@ function makeCtx() {
     tameError: vi.fn(() => null),
     standUp: vi.fn(),
     breakGhostWolf: vi.fn(),
+    forceDismount: vi.fn(),
     startAutoAttack: vi.fn(),
     revivePet: vi.fn(),
     completeFishing: vi.fn(),
     completeGatherCast: vi.fn(),
+    completeCraftCast: vi.fn(),
+    completeDisenchantCast: vi.fn(),
+    completeApplyEnchantCast: vi.fn(),
+    completeSalvageCast: vi.fn(),
+    completeRechargeCast: vi.fn(),
     applyDemonHealTick: vi.fn(),
     awardCombo: vi.fn(),
     meleeSwing: vi.fn(() => false),
@@ -367,13 +400,21 @@ function makeCtx() {
     queueQuestLetter: vi.fn(),
     mailHeroicMarks: vi.fn(),
     mailAuthoredLetter: vi.fn(),
+    mailboxHoldsItem: vi.fn(() => false),
     applySetProcs: vi.fn(),
+    // Vale Cup <-> Arena queue exclusion.
+    vcupSeatedOrQueued: vi.fn(() => false),
     // The Vale Cup sport-move arms.
     vcupBallKick: vi.fn(),
     vcupBallPass: vi.fn(),
     vcupShoot: vi.fn(),
     vcupSportDash: vi.fn(),
     vcupSportShove: vi.fn(),
+    // Thornhollow Fields battleground hooks.
+    bgOnPlayerDeath: vi.fn(),
+    bgOnPlayerDamaged: vi.fn(),
+    bgOnPlayerHealed: vi.fn(),
+    bgCancelFlagAura: vi.fn(() => false),
   };
   const ctx = createSimContext(host);
   return {
@@ -493,7 +534,7 @@ describe('entity_roster: despawn prologue (isolated ctx)', () => {
     const t = makeCtx();
     t.clock.time = 50;
     const m = mob(220, 1, 1);
-    m.overheadEmoteId = 'laugh' as any;
+    m.overheadEmoteId = 'laugh' as Entity['overheadEmoteId'];
     m.overheadEmoteUntil = 49; // already past
     addEntityToRoster(t.ctx, m);
     runDespawnDecay(t.ctx);
@@ -538,7 +579,8 @@ describe('entity_roster: ground-AoE drain (isolated ctx)', () => {
       interval: 1,
       tickTimer: 0,
       school: 'holy',
-      ability: 'consecration',
+      ability: 'Consecration',
+      abilityId: 'consecration',
       ...over,
     };
   }

@@ -9,7 +9,6 @@
 
 import { describe, expect, it, vi } from 'vitest';
 import { DUNGEON_X_THRESHOLD } from '../src/sim/data';
-import { Sim } from '../src/sim/sim';
 import { VC_BACKFILL_WAIT, VC_MATCH_DURATION } from '../src/sim/social/vale_cup';
 import type { SimEvent } from '../src/sim/types';
 import { addAt, makeWorld, readyAll, tickUntil } from './vale_cup_util';
@@ -27,7 +26,7 @@ describe('Vale Cup: bot showcase', () => {
   it('auto-stages a 3v3 bot exhibition after 60s idle when showcase is enabled', () => {
     // A human is online (so someone can watch), nobody queues: after the idle
     // stretch the Sowfield stages a full bot-vs-bot match with distinct nations.
-    const sim = new Sim({ seed: 42, playerClass: 'warrior', playerName: 'Watcher' });
+    const sim = makeWorld({ noPlayer: false, playerName: 'Watcher' });
     (sim as unknown as { cfg: { valeCupShowcase: boolean } }).cfg.valeCupShowcase = true;
     for (let i = 0; i < 20 * 60 + 2 && !sim.vcup.match; i++) sim.tick();
     const match = sim.vcup.match!;
@@ -44,13 +43,13 @@ describe('Vale Cup: bot showcase', () => {
   });
 
   it('does not stage a showcase when the flag is off (tests/goldens stay quiet)', () => {
-    const sim = new Sim({ seed: 42, playerClass: 'warrior', playerName: 'Watcher' });
+    const sim = makeWorld({ noPlayer: false, playerName: 'Watcher' });
     for (let i = 0; i < 20 * 65; i++) sim.tick();
     expect(sim.vcup.match).toBe(null);
   });
 
   it('preempts a live bot exhibition the moment two humans can form a rated match', () => {
-    const sim = new Sim({ seed: 42, playerClass: 'warrior', playerName: 'Watcher' });
+    const sim = makeWorld({ noPlayer: false, playerName: 'Watcher' });
     (sim as unknown as { cfg: { valeCupShowcase: boolean } }).cfg.valeCupShowcase = true;
     for (let i = 0; i < 20 * 60 + 2 && !sim.vcup.match; i++) sim.tick();
     const showcase = sim.vcup.match!;
@@ -67,6 +66,9 @@ describe('Vale Cup: bot showcase', () => {
     expect(real).toBeTruthy();
     expect(real.id).not.toBe(showcase.id);
     expect(real.rated).toBe(true);
+    // The all-human match's readout says rated (no unrated note shows).
+    expect(sim.cupInfoFor(a)!.match!.rated).toBe(true);
+    expect(sim.cupInfoFor(a)!.match!.practice).toBe(false);
     expect(real.teamA).toContain(a);
     expect(real.teamB).toContain(b);
     // The showcase bots are gone (only the two real humans remain seated).
@@ -76,7 +78,7 @@ describe('Vale Cup: bot showcase', () => {
   });
 
   it('does not preempt a bot-backfilled match (a human is playing in it)', () => {
-    const sim = new Sim({ seed: 42, playerClass: 'warrior', playerName: 'Solo' });
+    const sim = makeWorld({ noPlayer: false, playerName: 'Solo' });
     (sim as unknown as { cfg: { valeCupShowcase: boolean } }).cfg.valeCupShowcase = true;
     // A lone human queues and gets bot-backfilled after the wait: that match has
     // a human seated, so a second late queuer must NOT tear it down.
@@ -95,7 +97,7 @@ describe('Vale Cup: bot showcase', () => {
   });
 
   it('bots use the pass mechanic to build up in a showcase match', () => {
-    const sim = new Sim({ seed: 42, playerClass: 'warrior', playerName: 'Watcher' });
+    const sim = makeWorld({ noPlayer: false, playerName: 'Watcher' });
     (sim as unknown as { cfg: { valeCupShowcase: boolean } }).cfg.valeCupShowcase = true;
     for (let i = 0; i < 20 * 60 + 2 && !sim.vcup.match; i++) sim.tick();
     expect(sim.vcup.match).toBeTruthy();
@@ -126,6 +128,11 @@ describe('Vale Cup: bot backfill and practice', () => {
     const match = sim.vcup.match!;
     expect(match).toBeTruthy();
     expect(match.rated).toBe(false);
+    // The readout ships the flag, so the briefing overlay can tell the player
+    // the bout is unrated (no standings, no skill deeds; issue 2767). Backfill
+    // is queued play, not practice, so the copy branch reads false.
+    expect(sim.cupInfoFor(a)!.match!.rated).toBe(false);
+    expect(sim.cupInfoFor(a)!.match!.practice).toBe(false);
     expect(sim.vcup.botPids.length).toBe(3);
     expect(match.teamA[0]).toBe(a);
     // Bot names are lore-flavored and unique.
@@ -144,7 +151,7 @@ describe('Vale Cup: bot backfill and practice', () => {
   });
 
   it('practice seats you on a PRIVATE instanced pitch, not the physical slot', () => {
-    const sim = new Sim({ seed: 42, playerClass: 'warrior', playerName: 'Solo' });
+    const sim = makeWorld({ noPlayer: false, playerName: 'Solo' });
     sim.vcupPracticeStart(3);
     // The one physical Sowfield slot stays free; practice lives in its own list.
     expect(sim.vcup.match).toBe(null);
@@ -152,6 +159,10 @@ describe('Vale Cup: bot backfill and practice', () => {
     expect(match).toBeTruthy();
     expect(match.bracket).toBe(3);
     expect(match.rated).toBe(false);
+    // The private practice readout carries the unrated flag too, plus the
+    // practice flag that picks the blanket no-deeds briefing copy (issue 2767).
+    expect(sim.cupInfoFor(sim.primaryId)!.match!.rated).toBe(false);
+    expect(sim.cupInfoFor(sim.primaryId)!.match!.practice).toBe(true);
     expect(match.practice?.ownerPid).toBe(sim.primaryId);
     expect(sim.vcup.botPids.length).toBe(5);
     expect(match.teamA[0]).toBe(sim.primaryId);
@@ -162,7 +173,7 @@ describe('Vale Cup: bot backfill and practice', () => {
   });
 
   it('a full practice bout plays itself out and cleans up, returning me home', () => {
-    const sim = new Sim({ seed: 42, playerClass: 'hunter', playerName: 'Solo' });
+    const sim = makeWorld({ noPlayer: false, playerClass: 'hunter', playerName: 'Solo' });
     const home = { ...sim.entities.get(sim.primaryId)!.pos };
     sim.vcupPracticeStart(1);
     expect(sim.vcup.practices.length).toBe(1);

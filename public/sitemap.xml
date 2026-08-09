@@ -1,287 +1,292 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://crypticrealm.com/</loc>
+    <loc>https://worldofclaudecraft.com/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/links</loc>
+    <loc>https://worldofclaudecraft.com/links</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/merch</loc>
+    <loc>https://worldofclaudecraft.com/merch</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/press</loc>
+    <loc>https://worldofclaudecraft.com/press</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/play</loc>
+    <loc>https://worldofclaudecraft.com/play</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki</loc>
+    <loc>https://worldofclaudecraft.com/wiki</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/how-to-play</loc>
+    <loc>https://worldofclaudecraft.com/wiki/how-to-play</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/wish-i-knew</loc>
+    <loc>https://worldofclaudecraft.com/wiki/wish-i-knew</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/faq</loc>
+    <loc>https://worldofclaudecraft.com/wiki/faq</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/social</loc>
+    <loc>https://worldofclaudecraft.com/wiki/social</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/classes</loc>
+    <loc>https://worldofclaudecraft.com/wiki/classes</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/classes/warrior</loc>
+    <loc>https://worldofclaudecraft.com/wiki/classes/warrior</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/classes/paladin</loc>
+    <loc>https://worldofclaudecraft.com/wiki/classes/paladin</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/classes/hunter</loc>
+    <loc>https://worldofclaudecraft.com/wiki/classes/hunter</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/classes/rogue</loc>
+    <loc>https://worldofclaudecraft.com/wiki/classes/rogue</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/classes/priest</loc>
+    <loc>https://worldofclaudecraft.com/wiki/classes/priest</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/classes/shaman</loc>
+    <loc>https://worldofclaudecraft.com/wiki/classes/shaman</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/classes/mage</loc>
+    <loc>https://worldofclaudecraft.com/wiki/classes/mage</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/classes/warlock</loc>
+    <loc>https://worldofclaudecraft.com/wiki/classes/warlock</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/classes/druid</loc>
+    <loc>https://worldofclaudecraft.com/wiki/classes/druid</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/bestiary</loc>
+    <loc>https://worldofclaudecraft.com/wiki/bestiary</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/models</loc>
+    <loc>https://worldofclaudecraft.com/wiki/models</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/world</loc>
+    <loc>https://worldofclaudecraft.com/wiki/world</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/gear</loc>
+    <loc>https://worldofclaudecraft.com/wiki/gear</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/professions</loc>
+    <loc>https://worldofclaudecraft.com/wiki/professions</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/professions/engineering</loc>
+    <loc>https://worldofclaudecraft.com/wiki/professions/engineering</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/professions/alchemy</loc>
+    <loc>https://worldofclaudecraft.com/wiki/professions/alchemy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/professions/cooking</loc>
+    <loc>https://worldofclaudecraft.com/wiki/professions/cooking</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/professions/leatherworking</loc>
+    <loc>https://worldofclaudecraft.com/wiki/professions/leatherworking</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/professions/tailoring</loc>
+    <loc>https://worldofclaudecraft.com/wiki/professions/tailoring</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/professions/enchanting</loc>
+    <loc>https://worldofclaudecraft.com/wiki/professions/enchanting</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/professions/weaponcrafting</loc>
+    <loc>https://worldofclaudecraft.com/wiki/professions/weaponcrafting</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/professions/armorcrafting</loc>
+    <loc>https://worldofclaudecraft.com/wiki/professions/armorcrafting</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/professions/mining</loc>
+    <loc>https://worldofclaudecraft.com/wiki/professions/mining</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/professions/logging</loc>
+    <loc>https://worldofclaudecraft.com/wiki/professions/logging</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/professions/herbalism</loc>
+    <loc>https://worldofclaudecraft.com/wiki/professions/herbalism</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/professions/fishing</loc>
+    <loc>https://worldofclaudecraft.com/wiki/professions/fishing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/professions/economy</loc>
+    <loc>https://worldofclaudecraft.com/wiki/professions/economy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/professions/faq</loc>
+    <loc>https://worldofclaudecraft.com/wiki/professions/faq</loc>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/economy</loc>
+    <loc>https://worldofclaudecraft.com/wiki/economy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/quests</loc>
+    <loc>https://worldofclaudecraft.com/wiki/quests</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/dungeons</loc>
+    <loc>https://worldofclaudecraft.com/wiki/dungeons</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/delves</loc>
+    <loc>https://worldofclaudecraft.com/wiki/delves</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/arena</loc>
+    <loc>https://worldofclaudecraft.com/wiki/arena</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/vale-cup</loc>
+    <loc>https://worldofclaudecraft.com/wiki/vale-cup</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/deeds</loc>
+    <loc>https://worldofclaudecraft.com/wiki/thornhollow-fields</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/reference/controls</loc>
+    <loc>https://worldofclaudecraft.com/wiki/deeds</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/reference/settings</loc>
+    <loc>https://worldofclaudecraft.com/wiki/reference/controls</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/reference/combat</loc>
+    <loc>https://worldofclaudecraft.com/wiki/reference/settings</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/reference/stats</loc>
+    <loc>https://worldofclaudecraft.com/wiki/reference/combat</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/reference/progression</loc>
+    <loc>https://worldofclaudecraft.com/wiki/reference/stats</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/reference/talents</loc>
+    <loc>https://worldofclaudecraft.com/wiki/reference/progression</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/wiki/reference/glossary</loc>
+    <loc>https://worldofclaudecraft.com/wiki/reference/talents</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/privacy</loc>
+    <loc>https://worldofclaudecraft.com/wiki/reference/glossary</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://worldofclaudecraft.com/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/terms</loc>
+    <loc>https://worldofclaudecraft.com/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/data-deletion</loc>
+    <loc>https://worldofclaudecraft.com/data-deletion</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://crypticrealm.com/support</loc>
+    <loc>https://worldofclaudecraft.com/support</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

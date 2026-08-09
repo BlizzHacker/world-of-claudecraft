@@ -238,6 +238,9 @@ const BIND_ACTION_LABEL_KEYS: Partial<Record<string, TranslationKey>> = {
   strafeLeft: 'hud.keybinds.actions.strafeLeft',
   strafeRight: 'hud.keybinds.actions.strafeRight',
   jump: 'hud.keybinds.actions.jump',
+  // English-only chrome key, like every keybind row added since the `hud`
+  // domain was tsc-locked to inline per-locale blocks.
+  dive: 'hudChrome.keybinds.dive',
   autorun: 'hud.keybinds.actions.autorun',
   target: 'hud.keybinds.actions.target',
   attackMove: 'hud.keybinds.actions.attackMove',
@@ -249,6 +252,7 @@ const BIND_ACTION_LABEL_KEYS: Partial<Record<string, TranslationKey>> = {
   bags: 'hud.keybinds.actions.bags',
   nameplates: 'hud.keybinds.actions.nameplates',
   meters: 'hud.keybinds.actions.meters',
+  targetAuras: 'hudChrome.targetAuras.keybindLabel',
   social: 'hud.keybinds.actions.social',
   arena: 'hud.keybinds.actions.arena',
   chat: 'hud.keybinds.actions.chat',
@@ -262,6 +266,8 @@ const BIND_ACTION_LABEL_KEYS: Partial<Record<string, TranslationKey>> = {
   petTaunt: 'hudChrome.keybinds.petTaunt',
   petDefensive: 'hudChrome.keybinds.petDefensive',
   petAggressive: 'hudChrome.keybinds.petAggressive',
+  targetPet: 'hudChrome.keybinds.targetPet',
+
   // Reuse the existing window/feature names so these labels localize everywhere
   // without duplicating strings (these two ids were previously absent from the
   // map and fell back to the raw English BIND_ACTIONS labels).
@@ -699,6 +705,17 @@ export class OptionsWindow {
   }
 
   close(): void {
+    // Keep the submitted draft attached to its single-flight transaction. If
+    // the window closed and reopened mid-swap, a second draft could otherwise
+    // settle against the first transaction's result.
+    if (this.graphicsBusy) return;
+    this.graphicsApplyGeneration += 1;
+    this.graphicsDraft = null;
+    this.graphicsApplied = null;
+    this.graphicsBusy = false;
+    this.graphicsOutcome = null;
+    this.opened = false;
+    this.deps.root().removeAttribute('aria-busy');
     this.deps.root().style.display = 'none';
     this.unobserveInterfaceModeFlips();
     // Disarm any in-flight rebind capture so a stale callback can never fire after
@@ -706,6 +723,8 @@ export class OptionsWindow {
     this.cancelCapture();
     this.capturingKey = null;
     this.deps.options()?.perfOverlay.setPlacement(false);
+    this.auraSettings?.closePlacement();
+    this.deps.auraOverlays?.().setPlacement(false);
     this.deps.hideTooltip();
     music.resumeFromMenu();
     const target = this.returnFocus;
@@ -1570,7 +1589,7 @@ export class OptionsWindow {
           this.settingBoolToggle(parent, c, hooks);
           break;
         case 'choice':
-          this.settingChoice(parent, c, hooks, c.rerender ? rerender : undefined);
+          this.settingChoice(parent, c, hooks, c.rerender ? rerender : undefined, choiceBinding);
           break;
         case 'note':
           this.noteRow(parent, c.textKey);
@@ -1700,6 +1719,7 @@ export class OptionsWindow {
     c: ChoiceControl,
     hooks: OptionsHooks,
     onChange?: () => void,
+    binding?: NumericChoiceBinding,
   ): void {
     const key = c.key as NumericSettingKey;
     const label = t(c.labelKey);
@@ -1741,6 +1761,10 @@ export class OptionsWindow {
       btn.type = 'button';
       btn.setAttribute('role', 'radio');
       btn.dataset.value = String(option.value);
+      // Focus identity for rebuild-crossing restores (focus_restore.ts): a
+      // rerendering choice wipes the panel, and this key is how the rebuilt
+      // equivalent of the clicked button is found again.
+      btn.dataset.focusKey = `${key}:${option.value}`;
       btn.textContent = optionLabel;
       btn.setAttribute('aria-label', optionLabel);
       btn.addEventListener('click', () => {
@@ -2378,6 +2402,23 @@ export class OptionsWindow {
     ver.textContent = t('hudChrome.options.version', { version, build });
     about.appendChild(ver);
     detail.appendChild(about);
+  }
+
+  private renderAuras(): void {
+    const hooks = this.deps.auraOverlays?.();
+    if (!hooks) return;
+    this.deps.root().classList.add('aura-wide');
+    const body = this.settingsViewShell(t('hudChrome.auraOverlay.title'));
+    this.auraSettings ??= new AuraOverlaySettingsPanel({
+      auras: hooks,
+      click: () => audio.click(),
+      openFocusTrap: this.deps.openFocusTrap,
+    });
+    this.auraSettings.render(body);
+    this.deps
+      .root()
+      .querySelector('[data-close]')
+      ?.addEventListener('click', () => this.close());
   }
 
   private perfSettingsHost(hooks: OptionsHooks): PerfSettingsHost {

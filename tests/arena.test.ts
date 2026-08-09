@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { cameraOcclusion, lineOfSightClear, resolveMovement } from '../src/sim/colliders';
+import { lineOfSightClear, resolveMovement } from '../src/sim/colliders';
 import {
   ARENA_SLOT_COUNT,
   ARENA_X_MIN,
   arenaOrigin,
+  BUILTIN_WORLD,
   dungeonAt,
   instanceOrigin,
   isArenaPos,
@@ -19,11 +20,20 @@ import {
 } from '../src/sim/dungeon_layout';
 import { PLAYER_BODY_RADIUS } from '../src/sim/pathfind';
 import { eloDelta, Sim } from '../src/sim/sim';
-import type { PlayerClass } from '../src/sim/types';
+import type { PlayerClass, WorldContent } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
 
+// Arena assertions exercise players and the private arena band. Spawning every
+// ambient realm mob makes each countdown tick scan unrelated overworld AI.
+const ARENA_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
+
 function makeWorld() {
-  return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+  return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true, world: ARENA_TEST_WORLD });
 }
 
 function teleport(sim: Sim, pid: number, x: number, z: number) {
@@ -913,16 +923,6 @@ describe('arena: enclosing walls', () => {
         z: o.z,
       };
       expect(lineOfSightClear(sim.cfg.seed, inside, outside)).toBe(false);
-    }
-  });
-
-  it('reports camera occlusion at both side walls', () => {
-    const sim = makeWorld();
-    const o = arenaOrigin(0);
-    for (const side of [-1, 1]) {
-      const insideX = o.x + side * (DUNGEON_WALL_X - 1.5);
-      const outsideX = o.x + side * (DUNGEON_WALL_X + 4);
-      expect(cameraOcclusion(sim.cfg.seed, insideX, 2, o.z, outsideX, 2, o.z, 0.1)).toBeLessThan(1);
     }
   });
 

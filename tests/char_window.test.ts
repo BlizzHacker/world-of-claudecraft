@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -100,6 +100,9 @@ describe('char_window: profession art placements', () => {
       honor: 0,
       archetypeTitle: 'weaponcrafting+armorcrafting' as string | null,
       hobbyCraft: 'jewelcrafting',
+      selectedMount: () => null,
+      ownedMounts: () => [],
+      selectMount: () => {},
       professionsState: {
         skills: [
           { professionId: 'mining', skill: 11, maxSkill: 125 },
@@ -133,6 +136,8 @@ describe('char_window: profession art placements', () => {
       dragState: new ItemDragState(),
       renderBags: vi.fn(),
       showError: vi.fn(),
+      helmHidden: () => false,
+      toggleHelm: vi.fn(),
       itemIcon: () => '',
       moneyHtml: () => '',
       itemTooltip: () => '',
@@ -199,6 +204,9 @@ describe('char_window: profession art placements', () => {
       honor: 0,
       archetypeTitle: null,
       hobbyCraft: 'jewelcrafting',
+      selectedMount: () => null,
+      ownedMounts: () => [],
+      selectMount: () => {},
       professionsState: {
         skills: [
           { professionId: 'mining', skill: 99.75, maxSkill: 100 },
@@ -231,6 +239,8 @@ describe('char_window: profession art placements', () => {
       dragState: new ItemDragState(),
       renderBags: vi.fn(),
       showError: vi.fn(),
+      helmHidden: () => false,
+      toggleHelm: vi.fn(),
       itemIcon: () => '',
       moneyHtml: () => '',
       itemTooltip: () => '',
@@ -239,7 +249,26 @@ describe('char_window: profession art placements', () => {
 
     win.render();
     const values = [...root.querySelectorAll('.char-gather-row b')].map((b) => b.textContent);
-    expect(values).toEqual(['99', '12', '100', '99']);
+    // The row renders a BOUNDED "skill / max", never a bare integer. The floor
+    // still holds (99.75 and 99.5 read 99, never a fake crossed 100), and
+    // fishing's denominator is its own 200 cap, not the 100 the other three
+    // share.
+    expect(values).toEqual(['99 / 100', '12 / 100', '100 / 100', '99 / 200']);
+    // Decisive against a regression to the bare integer: no row may render a
+    // lone number with no denominator.
+    for (const value of values) expect(value).toMatch(/^\d+ \/ \d+$/);
+  });
+
+  it('renders the gathering denominator through the shared professions skillValue key', () => {
+    // The same key the professions window uses, so the two surfaces cannot
+    // drift apart and a locale owns the separator. Never a concatenated
+    // '/' literal in the painter.
+    // Strip whole-line comments first: gatheringHtml's own comment names this
+    // key in prose, so an uncommented read is one reword from self-satisfying.
+    const code = painter.replace(/^\s*\/\/.*$/gm, '');
+    expect(code).toContain("t('hudChrome.professions.skillValue'");
+    expect(code).toMatch(/skill:\s*formatNumber\(r\.displayValue/);
+    expect(code).toMatch(/max:\s*formatNumber\(r\.maxSkill/);
   });
 });
 

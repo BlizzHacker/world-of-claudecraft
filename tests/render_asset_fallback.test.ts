@@ -36,12 +36,31 @@ describe('render asset preload fallbacks', () => {
     vi.resetModules();
     mockEmptyAssetLoads();
 
-    const { buildSky, hasSkyHdriAssets } = await import('../src/render/sky');
+    const { buildSky, hasSkyHdriAssets, SKY_BACKGROUND_RENDER_ORDER } = await import(
+      '../src/render/sky'
+    );
     expect(hasSkyHdriAssets()).toBe(false);
 
     const sky = buildSky(false, new THREE.Vector3(90, 140, 50));
     expect(sky.envTexture('vale')).toBe(null);
     expect(sky.dome).toBeInstanceOf(THREE.Mesh);
+    expect(SKY_BACKGROUND_RENDER_ORDER).toBe(1000);
+    expect(sky.dome.renderOrder).toBe(SKY_BACKGROUND_RENDER_ORDER);
+    const material = sky.dome.material as THREE.MeshBasicMaterial;
+    expect(material.depthWrite).toBe(false);
+    const shader = {
+      vertexShader: 'before\n#include <logdepthbuf_vertex>\nafter',
+    } as Parameters<typeof material.onBeforeCompile>[0];
+    material.onBeforeCompile(shader, null as never);
+    expect(shader.vertexShader).toContain(
+      '#include <logdepthbuf_vertex>\ngl_Position.z = gl_Position.w;',
+    );
+    expect(() =>
+      material.onBeforeCompile(
+        { vertexShader: 'missing anchor' } as Parameters<typeof material.onBeforeCompile>[0],
+        null as never,
+      ),
+    ).toThrow('sky shader is missing the pinned log-depth vertex anchor');
   });
 
   it('keeps water construction non-fatal when shader normal maps were not preloaded', async () => {
@@ -60,12 +79,29 @@ describe('render asset preload fallbacks', () => {
     mockEmptyAssetLoads();
 
     const { buildTerrain, hasTerrainSplatAssets } = await import('../src/render/terrain');
+    const { zoneAt } = await import('../src/sim/data');
     expect(hasTerrainSplatAssets()).toBe(false);
 
     const terrain = buildTerrain(20061);
+    expect(terrain.group.children).toHaveLength(0);
+    const zone = zoneAt(0, 0);
+    const progress: number[] = [];
+    const first = terrain.ensureZone(zone, (done, total) => progress.push(done / total));
+    expect(terrain.ensureZone(zone)).toBe(first);
+    await first;
     expect(terrain.group.children.length).toBeGreaterThan(0);
-    // Real timers, never cancelled: without this the far-chunk stream keeps
-    // building on a setTimeout chain in the background for the rest of the suite.
+    expect(terrain.isZoneLoaded(zone.id)).toBe(true);
+    expect(progress[0]).toBeGreaterThan(0);
+    expect(progress.at(-1)).toBe(1);
+    expect(progress.every((value, index) => index === 0 || value >= progress[index - 1])).toBe(
+      true,
+    );
+    const childCount = terrain.group.children.length;
+    await terrain.ensureZone(zone);
+    expect(terrain.group.children).toHaveLength(childCount);
+    // Real timers, never cancelled: without this an abandoned zone build keeps
+    // running on a setTimeout chain in the background for the rest of the suite.
     terrain.cancelStreaming();
-  });
+    // One streamed zone still exercises the complete Lambert fallback mesh.
+  }, 90_000);
 });

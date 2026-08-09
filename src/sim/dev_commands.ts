@@ -1,16 +1,23 @@
 import { DEV_KIT_ROLES, devKitRole } from './content/dev_kit_roles';
+import { MOUNT_KEYS, TRAINING_MOUNT_KEY } from './content/mounts';
 import { GATHERING_PROFESSIONS } from './content/professions';
-import { DUNGEONS, ITEMS, MOBS } from './data';
+import { DUNGEONS, ITEMS, MOBS, NPCS } from './data';
 import { applyDevKit } from './dev_kit';
-import { createMob } from './entity';
+import { createGroundObject, createMob } from './entity';
 import { enterDungeon } from './instances/dungeons';
+import { mountItemId, mountOwned } from './mounts';
+import { MOUNT_TRAIN_MIN_LEVEL } from './mounts_training';
 import { isGatheringProfessionId, queueGatheringGrant } from './professions/gathering';
 import { placeMobileStationForPlayer } from './professions/mobile_station';
+import { cancelProfessionSessionOnDisplacement } from './professions/session_teardown';
 import { completeAllQuestsForDev } from './quests/dev_quest_commands';
+import { RIFT_RANK_BASE_LEVEL, riftRankForBaseLevel } from './rift/ranks';
+import { generateRiftPlan, isSetPieceSeed } from './rift/rift_gen';
 import type { SentChat } from './sim';
 import type { SimContext } from './sim_context';
+import { bgQueueJoin, bgQueueSize, devEndBg, devStartBg } from './social/battleground';
 import { revivePlayerAt } from './spirit';
-import { MAX_LEVEL } from './types';
+import { MAX_LEVEL, type RiftTier } from './types';
 
 const MAX_DEV_SPAWNS = 20;
 const DEV_SPAWN_RADIUS = 4;
@@ -136,6 +143,7 @@ export function handleDevChat(
   if (teleportMatch) {
     const entity = ctx.entities.get(pid);
     if (entity) {
+      cancelProfessionSessionOnDisplacement(ctx, entity);
       const pos = ctx.groundPos(Number(teleportMatch[1]), Number(teleportMatch[2]));
       entity.pos = pos;
       entity.prevPos = { ...pos };
@@ -190,6 +198,60 @@ export function handleDevChat(
     const count = clampInteger(Number(giveMatch[2] ?? 1), 1, 20);
     if (!ITEMS[itemId]) ctx.error(pid, `[dev] Unknown item '${itemId}'.`);
     else ctx.addItem(itemId, count, pid);
+    return null;
+  }
+
+  if (/^\/(?:dev\s+mounts?|devmounts?)\s*$/i.test(raw)) {
+    const meta = ctx.players.get(pid);
+    const entity = ctx.entities.get(pid);
+    if (meta && entity) {
+      // Mounts have no per-mount level gate any more; the only level that still
+      // matters anywhere in the mount flow is the stablemaster's level-20 buy gate.
+      const maxGate = 20;
+      const leveled = entity.level < maxGate;
+      if (leveled) ctx.setPlayerLevel(maxGate, pid);
+      meta.ridingTrained = true;
+      let granted = 0;
+      for (const key of MOUNT_KEYS) {
+        if (mountOwned(meta, key)) continue;
+        const itemId = mountItemId(key);
+        if (!itemId) continue;
+        ctx.addItem(itemId, 1, pid);
+        granted += 1;
+      }
+      const levelNote = leveled ? `, level raised to ${maxGate} for the riding gate` : '';
+      emitDevLog(
+        ctx,
+        pid,
+        `[dev] Granted ${granted} mount reins (${MOUNT_KEYS.length} owned)${levelNote}. Use a reins item from your bags to ride.`,
+      );
+    }
+    return null;
+  }
+
+  if (/^\/(?:dev\s+(?:mountquest|startmount)|devmountquest)\s*$/i.test(raw)) {
+    const meta = ctx.players.get(pid);
+    const entity = ctx.entities.get(pid);
+    const marla = NPCS.stablemaster_marla;
+    if (meta && entity && marla) {
+      const gate = MOUNT_TRAIN_MIN_LEVEL;
+      const leveled = entity.level < gate;
+      if (leveled) ctx.setPlayerLevel(gate, pid);
+      meta.copper += 100 * 10000;
+      // Every teleport, the dev ones included, runs the one session teardown
+      // (the same call /dev tp makes above).
+      cancelProfessionSessionOnDisplacement(ctx, entity);
+      const pos = ctx.groundPos(marla.pos.x + 2, marla.pos.z + 1);
+      entity.pos = pos;
+      entity.prevPos = { ...pos };
+      ctx.rebucket(entity);
+      const levelNote = leveled ? `level ${gate}, ` : '';
+      emitDevLog(
+        ctx,
+        pid,
+        `[dev] ${levelNote}100g added, teleported to the Highwatch Stables. Talk to Stablemaster Marla to begin the riding lesson.`,
+      );
+    }
     return null;
   }
 
@@ -270,6 +332,58 @@ export function handleDevChat(
     return null;
   }
 
+  if (/^\/(?:dev\s+bg|devbg)\s+end\s*$/i.test(raw)) {
+    // End the caller's live match early, resolving on the current score (ties
+    // draw) through the normal result screen + release flow.
+    if (devEndBg(ctx, pid))
+      emitDevLog(ctx, pid, '[dev] Thornhollow Fields resolved early on score.');
+    else ctx.error(pid, '[dev] You are not in an unresolved battleground.');
+    return null;
+  }
+
+  if (/^\/(?:dev\s+bg|devbg)\s*$/i.test(raw)) {
+    if (ctx.bgMatches.has(pid)) {
+      ctx.error(pid, '[dev] You are already in a battleground.');
+      return null;
+    }
+    bgQueueJoin(ctx, pid, { bypassLevel: true });
+    // The join can refuse (dead, inside an instance, oversize party); it
+    // already told the caller why, so bail before padding leaks a bot.
+    if (!ctx.bgQueue.some((g) => g.pids.includes(pid))) return null;
+    if (bgQueueSize(ctx) < 2) {
+      // Solo walk-around: pad the queue with one stationary dev bot (reusing an
+      // idle one if a previous /dev bg left it behind) so the force-start below
+      // has an opposing side. Partied bots stay untouched: queueing one would
+      // drag its whole party in.
+      let botPid = -1;
+      for (const meta of ctx.players.values()) {
+        const id = meta.entityId;
+        const e = ctx.entities.get(id);
+        if (meta.isDevBot && e && !e.dead && !ctx.bgMatches.has(id) && !ctx.partyOf(id)) {
+          botPid = id;
+          break;
+        }
+      }
+      // The suffix loop only exists to step past name collisions with
+      // player-spawned "/dev bot" dummies; nine tries is plenty.
+      for (let i = 1; i <= 9 && botPid < 0; i++)
+        botPid = ctx.spawnDevBot(i === 1 ? 'Riftbot' : `Riftbot${i}`);
+      if (botPid >= 0) bgQueueJoin(ctx, botPid, { bypassLevel: true });
+    }
+    devStartBg(ctx);
+    const match = ctx.bgMatches.get(pid);
+    if (match) {
+      const count = match.teams[0].length + match.teams[1].length;
+      emitDevLog(ctx, pid, `[dev] Thornhollow Fields force-started with ${count} champions.`);
+    } else {
+      ctx.error(
+        pid,
+        '[dev] Could not force-start Thornhollow Fields (needs 2 queued players and a free slot).',
+      );
+    }
+    return null;
+  }
+
   if (/^\/(?:dev\s+vendor|devvendor)\s*$/i.test(raw)) {
     const vendorId = ctx.spawnDevVendor(pid);
     if (vendorId < 0) ctx.error(pid, '[dev] Could not spawn the test vendor.');
@@ -310,10 +424,14 @@ export function handleDevChat(
     const craftId = mobileStationMatch[1].toLowerCase();
     const station = placeMobileStationForPlayer(ctx, craftId, pid);
     if (!station) {
-      ctx.error(
-        pid,
-        `[dev] Could not place a mobile ${craftId} station (specialization required).`,
-      );
+      // The module's dead gate already printed the real reason for a dead
+      // caller; the specialization line would state the wrong one on top.
+      if (!ctx.resolve(pid)?.e.dead) {
+        ctx.error(
+          pid,
+          `[dev] Could not place a mobile ${craftId} station (specialization required).`,
+        );
+      }
     } else {
       const minutes = Math.round((station.expiresAtTick - station.placedAtTick) / (20 * 60));
       emitDevLog(ctx, pid, `[dev] Mobile ${craftId} station placed here for ${minutes} minutes.`);
@@ -376,6 +494,92 @@ export function handleDevChat(
     return null;
   }
 
+  // [dev] Spawn a procedural rift portal in front of the player. Each invocation
+  // rolls a fresh seed (so every portal opens a different, infinite dungeon) unless
+  // one is supplied for reproducibility. An optional rank letter selects the
+  // DIFFICULTY: it maps to that rank's canonical baseLevel (RIFT_RANK_BASE_LEVEL),
+  // overriding an explicit level, so what spawns inside always matches the badge.
+  // Without a letter, the badge derives from the (explicit or player) level via
+  // the same inversion every difficulty consumer uses; the badge can never lie.
+  // A trailing kind token forces the DUNGEON TYPE:
+  // /dev portal [seed] [level] [C|B|A|S] [infernal|random].
+  //
+  // The kind is not a wire field: it SEARCHES for a seed of the requested kind
+  // (isSetPieceSeed is a pure function of the seed), so the descriptor stays
+  // {seed, baseLevel, floorIndex, origin} and every client regenerates the same
+  // dungeon from it. A supplied seed of the wrong kind is advanced, with a notice.
+  const portalMatch =
+    /^\/(?:dev\s+portal|devportal)(?:\s+(\d+))?(?:\s+(\d+))?(?:\s+([CBAScbas]))?(?:\s+(infernal|citadel|random|procedural))?\s*$/i.exec(
+      raw,
+    );
+  if (portalMatch) {
+    const e = ctx.entities.get(pid);
+    if (!e) return null;
+    let seed = (portalMatch[1] ? Number(portalMatch[1]) : ctx.rng.int(1, 1_000_000_000)) >>> 0;
+    const kind = portalMatch[4]?.toLowerCase();
+    if (kind) {
+      const wantSetPiece = kind === 'infernal' || kind === 'citadel';
+      const start = seed;
+      for (let i = 0; i < 10_000 && isSetPieceSeed(seed) !== wantSetPiece; i++) {
+        seed = (seed + 1) >>> 0;
+      }
+      if (isSetPieceSeed(seed) !== wantSetPiece) {
+        ctx.error(pid, '[dev] Found no seed of that kind. Try again.');
+        return null;
+      }
+      if (seed !== start) {
+        ctx.emit({
+          type: 'log',
+          text: `[dev] Seed ${start} is not ${wantSetPiece ? 'infernal' : 'procedural'}; using ${seed}.`,
+          color: '#b9f',
+          pid,
+        });
+      }
+    }
+    const forcedTier = portalMatch[3] ? (portalMatch[3].toUpperCase() as RiftTier) : null;
+    const baseLevel = forcedTier
+      ? RIFT_RANK_BASE_LEVEL[forcedTier]
+      : Math.max(1, Math.min(60, portalMatch[2] ? Number(portalMatch[2]) : e.level));
+    const tier: RiftTier = forcedTier ?? riftRankForBaseLevel(Math.round(baseLevel));
+    const d = 5;
+    const px = e.pos.x + Math.sin(e.facing) * d;
+    const pz = e.pos.z + Math.cos(e.facing) * d;
+    const plan = generateRiftPlan(seed, baseLevel);
+    const portal = createGroundObject(ctx.nextId++, '', plan.name, ctx.groundPos(px, pz));
+    portal.templateId = 'rift_portal';
+    portal.objectItemId = null;
+    portal.lootable = true;
+    portal.riftSeed = seed;
+    portal.riftBaseLevel = baseLevel;
+    portal.riftTier = tier;
+    portal.facing = e.facing + Math.PI; // face back toward the player
+    portal.prevFacing = portal.facing;
+    ctx.addEntity(portal);
+    ctx.emit({
+      type: 'log',
+      text: `[dev] Opened a ${tier}-rank portal to ${plan.name} (${plan.floorCount} floors, L${baseLevel}). Walk through it.`,
+      color: '#b9f',
+      pid,
+    });
+    return null;
+  }
+
+  // [dev] Toggle one-shot ("smite") mode: this player's every hit deletes any mob
+  // it lands on (see dealDamage). Handy for blasting through the giga-boss rifts.
+  if (/^\/(?:dev\s+(?:smite|oneshot|nuke)|devsmite)\s*$/i.test(raw)) {
+    const e = ctx.entities.get(pid);
+    if (e) {
+      e.oneShot = !e.oneShot;
+      ctx.emit({
+        type: 'log',
+        text: e.oneShot ? '[dev] Smite mode ON (one-shot everything).' : '[dev] Smite mode OFF.',
+        color: '#b9f',
+        pid,
+      });
+    }
+    return null;
+  }
+
   if (/^\/(?:dev\s+god|devgod)\s*$/i.test(raw)) {
     const entity = ctx.entities.get(pid);
     if (entity) {
@@ -432,7 +636,7 @@ export function handleDevChat(
   if (/^\/dev(?:\s|$)/i.test(raw)) {
     ctx.error(
       pid,
-      'Dev commands: /dev gui, /dev level, /dev tp, /dev spawn, /dev despawn, /dev killtarget, /dev give, /dev kit, /dev gold, /dev quest, /dev quests, /dev attune, /dev mobilestation, /dev gather, /dev bot, /dev vendor, /dev lfg, /dev cascade, /dev sandbox, /dev god, /dev heal, /dev resource, /dev cooldowns, /dev revive, /dev combatreset, /dev dungeon, /dev raid, /dev kill',
+      'Dev commands: /dev gui, /dev level, /dev tp, /dev spawn, /dev despawn, /dev killtarget, /dev give, /dev kit, /dev mounts, /dev mountquest, /dev gold, /dev quest, /dev quests, /dev attune, /dev mobilestation, /dev gather, /dev bot, /dev vendor, /dev bg, /dev lfg, /dev portal [seed] [level] [C|B|A|S] [infernal|random], /dev cascade, /dev sandbox, /dev smite, /dev god, /dev heal, /dev resource, /dev cooldowns, /dev revive, /dev combatreset, /dev dungeon, /dev raid, /dev kill',
     );
     return null;
   }

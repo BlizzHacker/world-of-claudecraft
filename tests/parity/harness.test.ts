@@ -135,6 +135,7 @@ describe('exclude lists are pinned and real (anti-loosening guard)', () => {
       'damageHistory',
       'equippedInstances',
       'equippedItems',
+      'firebottleCdRemaining', // derived display copy of PlayerMeta.firebottleReadyAt
       'guild',
       'holderBalance',
       'holderTier',
@@ -168,8 +169,10 @@ describe('exclude lists are pinned and real (anti-loosening guard)', () => {
       'away',
       'bankBonusSources',
       'characterId',
+      'craftThrottle',
       'fiestaMods',
       'fiestaSpecial',
+      'guildMembership',
       'joinedAt',
       'known',
       'lastActiveTick',

@@ -35,6 +35,7 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
   'news.proofBody': 'La pagina publica de prueba muestra mint, tesoreria y enlaces de Solscan.',
   'news.openLink': 'Abrir',
   'download.linuxHint': 'AppImage: hazlo ejecutable y ejecutalo. No requiere instalacion.',
+  'hud.errors.tradeAlreadyTrading': 'Ese jugador ya está tradeando.',
   // Stat tooltips inherit the es base: none of these keys needs a genuine Iberian
   // divergence (es already uses "hechizos" and neutral wording), so per the
   // divergence-only policy es_ES carries no hudChrome.statInfo.* overrides.
@@ -250,11 +251,13 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.summon_water_elemental.description':
     'Invoca a un elemental de agua que combate junto a ti, dispara Descargas de Agua contra tu objetivo y canaliza Chorro de Agua. (Escarcha)',
   'entities.items.conjured_water4.name': 'Agua de Manantial Invocada',
+  'entities.items.direfang_quiver.name': 'Carcaj de Direfang',
   'entities.items.conjured_bread4.name': 'Hogaza de Festín Invocada',
   'entities.delves.collapsed_reliquary.leaveText':
     'Trepas de vuelta hasta el Hermano Halven, en la ruina del relicario.',
   'entities.mobs.reliquary_bonewalker.name': 'Caminahuesos alzado',
   'entities.mobs.reliquary_gravecall_acolyte.name': 'Acólito invocasepulcros',
+  'entities.mobs.water_elemental.name': 'Elemental acuático',
   'entities.npcs.brother_halven.greeting': 'El relicario de abajo ha vuelto a moverse.',
   'sim.delve.alreadyInDelve': 'Ya estás en una Profundidad.',
   'sim.delve.bossChest':
@@ -399,6 +402,17 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
     'Tu probabilidad de rechazar por completo un ataque cuerpo a cuerpo frontal, sin recibir daño. Un golpe por la espalda no se puede rechazar.',
   'hud.combat.floatingParry': 'Rechazo',
   'hud.combat.parried': '{target} rechaza tu {ability}.',
+  'hud.combat.floatingEvade': 'Eludido',
+  'hud.combat.evaded': '{target} elude tu {ability}.',
   'hudChrome.options.mouseoverCast': 'Lanzar al pasar el ratón sobre los marcos de grupo',
   'hudChrome.options.showTargetOfTarget': 'Mostrar objetivo del objetivo',
+  'hud.errors.marketListBound': 'Este objeto está vinculado y no puede ponerse a la venta.',
+  'hudChrome.mailbox.result.noMailBound':
+    'Este objeto está vinculado y no puede enviarse por correo.',
+  // Guild rename moderation prompts (v0.34.0 release i18n fill)
+  'hud.prompts.guildInviteCancelled':
+    'Se ha anulado una invitación de hermandad pendiente porque la hermandad ha cambiado de nombre.',
+  'hud.prompts.guildRenamed':
+    'Tu hermandad ha sido renombrada a {name} por el equipo de moderación.',
+  'hudChrome.options.hideUnusedActionSlots': 'Ocultar casillas de acción sin usar',
 };

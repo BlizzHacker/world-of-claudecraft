@@ -3,10 +3,24 @@
 // polymorphed into a baby llama" griefing path can never regress.
 import { describe, expect, it } from 'vitest';
 import { runEffects } from '../src/sim/combat/effect_dispatch';
+import { BUILTIN_WORLD } from '../src/sim/data';
 import type { PlayerMeta, ResolvedAbility } from '../src/sim/sim';
 import { Sim } from '../src/sim/sim';
 import type { AbilityDef, Aura, Entity, Vec3 } from '../src/sim/types';
 import { dist2d } from '../src/sim/types';
+
+// Duel / diminishing-returns tests need two players and nothing else: the DR
+// timelines tick a minute-plus of world time, and spawning the whole continent
+// makes every one of those ticks pay for the full MMO. Keep every
+// terrain-relevant field identical to BUILTIN_WORLD while stripping only the
+// constructor-spawned ambient entities. The tests that DO need real world
+// content (a non-hostile NPC, a hostile camp mob) build their own full Sim.
+const DUEL_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
 
 function twoPlayers(clsA = 'mage', clsB = 'warrior') {
   const sim = new Sim({
@@ -14,6 +28,7 @@ function twoPlayers(clsA = 'mage', clsB = 'warrior') {
     playerClass: clsA as any,
     playerName: 'Caster',
     autoEquip: true,
+    world: DUEL_TEST_WORLD,
   });
   const aPid = sim.primaryId;
   const bPid = sim.addPlayer(clsB as any, 'Victim', { autoEquip: true });
@@ -284,7 +299,7 @@ describe('PvP control abilities in active duels', () => {
 
     expect(dist2d(start, b.pos)).toBeGreaterThan(2);
     expect(b.auras.some((aura) => aura.id === 'fear_incap')).toBe(true);
-  });
+  }, 90_000);
 
   it('diminishes repeated duel Fears to 8s, 4s, 2s, 1s and resets after 60s', () => {
     const { sim, aPid, b } = startDuel('warlock', 'warrior', 20);

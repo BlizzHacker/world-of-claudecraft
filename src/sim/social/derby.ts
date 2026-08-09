@@ -16,7 +16,7 @@
 // goldens are untouched.
 
 import type { DerbyInfo, DerbyRaceInfo, DerbyRacerInfo } from '../../world_api/derby';
-import { MOUNT_AURA_PREFIX, MOUNTS } from '../content/mounts';
+import { LEGACY_MOUNTS, MOUNT_AURA_PREFIX } from '../content/mounts';
 import { NPCS } from '../data';
 import {
   DERBY_CHECKPOINTS,
@@ -178,7 +178,7 @@ function seatKart(ctx: SimContext, e: Entity): void {
       e.auras.splice(i, 1);
     }
   }
-  const kart = MOUNTS[DERBY_KART_MOUNT_ID];
+  const kart = LEGACY_MOUNTS[DERBY_KART_MOUNT_ID];
   e.auras.push({
     id: DERBY_KART_AURA_ID,
     name: kart.name,

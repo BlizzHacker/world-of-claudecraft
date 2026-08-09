@@ -27,13 +27,15 @@
 // `src/sim`-pure: no DOM/Three, no Math.random/Date.now; all randomness is the shared
 // `ctx.rng` stream, drawn in the exact pre-move positions.
 
-import { ITEMS, isArenaPos, MOBS } from '../data';
+import { CLASSES, ITEMS, isArenaPos, MOBS } from '../data';
 import { weaponHand } from '../equipment_rules';
 import { TWOHAND_DPS_MULT } from '../item_budget';
+import { forceDismount } from '../mounts';
 import { scheduleProjectile } from '../projectile_travel';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
-import { addThreat } from '../threat';
+import { resolveTalentHitMult } from '../talent_hit_mult';
+import { addThreat, hasEscapeStealth } from '../threat';
 import {
   angleTo,
   armorReduction,
@@ -106,10 +108,15 @@ export function startAutoAttack(ctx: SimContext, pid?: number): void {
   // still-alive snapshot just as quietly. A genuinely invalid target (none, or a
   // friendly) still reports the error.
   if (t?.dead) return;
-  if (!t || !ctx.isHostileTo(p, t)) {
+  // Vanish (hasEscapeStealth) makes the target fully undetectable, same as a
+  // mob that lost line of sight on a stealthed player (mob/targeting.ts): a
+  // fresh engage against it is refused exactly like any other invalid target.
+  if (!t || !ctx.isHostileTo(p, t) || hasEscapeStealth(t)) {
     ctx.error(p.id, 'Invalid attack target.');
     return;
   }
+  // Auto-dismount when the player is mounted and starts auto-attack.
+  if (p.mountKey !== '') forceDismount(ctx, p);
   if (p.sitting) ctx.standUp(p);
   if (p.weaponStowed) drawWeapon(p);
   p.autoAttack = true;
@@ -156,7 +163,11 @@ export function updatePlayerAutoAttack(ctx: SimContext, p: Entity, meta: PlayerM
   }
   if (!p.autoAttack || p.castingAbility) return;
   const t = p.targetId !== null ? ctx.entities.get(p.targetId) : null;
-  if (!t || t.dead || !ctx.isHostileTo(p, t)) {
+  // A target that slips into Vanish's escape stealth mid-fight must drop the
+  // swing too (issue #2426): the client stops rendering it as targeted, but
+  // without this the swing kept connecting on a target the caster could no
+  // longer see, the same detection the mob AI already honors (mobCanSeeTarget).
+  if (!t || t.dead || !ctx.isHostileTo(p, t) || hasEscapeStealth(t)) {
     p.autoAttack = false;
     return;
   }
@@ -171,6 +182,10 @@ export function updatePlayerAutoAttack(ctx: SimContext, p: Entity, meta: PlayerM
   // casters (wand-style, no dead zone so they don't run into melee, #94).
   // Form-aware: a druid keeps the class wand only in caster or Moonwing Form;
   // bear/cat/travel resolve to undefined here and fall through to melee.
+  // A pre-armed auto-attack that fires while mounted (e.g. mounted player who
+  // somehow retained autoAttack=true) force-dismounts before the swing lands,
+  // mirroring the ghost_wolf break pattern below and the startAutoAttack guard.
+  if (p.mountKey !== '') forceDismount(ctx, p);
   const ranged = rangedAutoProfile(p, meta.cls);
   if (ranged && d <= ranged.maxRange && d >= (ranged.wand ? 0 : ranged.minRange)) {
     if (!ctx.hasLineOfSight(p, t)) return;
@@ -197,6 +212,12 @@ export function updatePlayerAutoAttack(ctx: SimContext, p: Entity, meta: PlayerM
     let abilityName: string | null = null;
     let threatFlat = 0;
     let threatMult = 1;
+    // The resolved talent/mastery damage multiplier for the queued on-swing
+    // ability (weaponMult, mirroring weaponStrike's own field): meleeSwing
+    // applies it to the WHOLE swing (weapon roll + AP), not just `bonus`, so a
+    // "+X%" mastery/talent reaches the weapon+AP portion of a Heroic Strike /
+    // Raptor Strike style on-next-swing hit too (issue #1803).
+    let weaponMult = 1;
     if (p.queuedOnSwing) {
       const queued = ctx.resolvedAbility(p.queuedOnSwing, p.id);
       if (queued) {
@@ -215,6 +236,7 @@ export function updatePlayerAutoAttack(ctx: SimContext, p: Entity, meta: PlayerM
           abilityName = queued.def.name;
           threatFlat = queued.threatFlat;
           threatMult = queued.threatMult;
+          weaponMult = resolveTalentHitMult(queued.def, ctx.playerMods(meta)).dmgMult;
         }
       }
       p.queuedOnSwing = null;
@@ -225,6 +247,7 @@ export function updatePlayerAutoAttack(ctx: SimContext, p: Entity, meta: PlayerM
       autoAttackHand: 'mainhand',
       threatFlat,
       threatMult,
+      weaponMult,
       whiteDualWieldPenalty: p.dualWielding && abilityName === null,
     });
     // Thuggery mastery (Sword Specialization shape): a landed mainhand auto has
@@ -410,6 +433,14 @@ export function meleeSwing(
     critBonus?: number;
     onDealt?: (amount: number) => void;
     whiteDualWieldPenalty?: boolean;
+    // The casting ability's stable content id, threaded onto the landed-hit
+    // damage event's abilityId field (the weaponStrike path only; a plain
+    // auto-attack swing has no ability and leaves this unset). abilityName
+    // above stays the display label, so a client-side impact-cue lookup
+    // keyed off it silently breaks on the next rename (review finding, PR
+    // #2861: this is what left Ambush/Backstab/Sinister Strike's dedicated
+    // impact cues unreachable).
+    abilityId?: string | null;
   },
 ): boolean {
   const missChance =
@@ -497,15 +528,32 @@ export function meleeSwing(
     opts.forceCrit === true;
   if (crit) dmg *= 2 + attacker.critDmgPhysBonus;
   dmg *= 1 - armorReduction(ctx.effectiveArmor(target), attacker.level);
-  if (blockChance > 0 && roll < missChance + dodgeChance + parryChance + blockChance) {
+  const blocked = blockChance > 0 && roll < missChance + dodgeChance + parryChance + blockChance;
+  if (blocked) {
     dmg = Math.max(1, dmg - target.blockValue);
   }
   const dealtAmount = Math.max(1, Math.round(dmg));
-  ctx.dealDamage(attacker, target, dealtAmount, crit, 'physical', abilityName, 'hit', false, {
-    flat: opts.threatFlat ?? 0,
-    mult: opts.threatMult ?? 1,
-  });
-  opts.onDealt?.(dealtAmount);
+  const resolvedAmount = ctx.dealDamage(
+    attacker,
+    target,
+    dealtAmount,
+    crit,
+    'physical',
+    abilityName,
+    blocked ? 'block' : 'hit',
+    false,
+    {
+      flat: opts.threatFlat ?? 0,
+      mult: opts.threatMult ?? 1,
+    },
+    true,
+    false,
+    false,
+    // Cue-presentation only on this path: onSpellCrit skips the physical
+    // school, so the id can never newly arm an ability-filtered proc here.
+    opts.abilityId ?? null,
+  );
+  opts.onDealt?.(resolvedAmount);
   // 4-piece set procs keyed to weapon crits (melee arm; covers auto-attack AND
   // the weaponStrike ability path, which resolves through this shell). Gated on
   // setProcs inside applySetProcs, so proc-less players draw no rng.

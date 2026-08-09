@@ -26,7 +26,6 @@ vi.mock('../server/db', () => ({
 }));
 
 import { GameServer } from '../server/game';
-import { ClientWorld } from '../src/net/online';
 import { type CharacterState, Sim } from '../src/sim/sim';
 import {
   canPrestige,
@@ -44,6 +43,7 @@ import {
 } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
 import { formatXp, xpBarView } from '../src/ui/xp_bar';
+import { bareClient } from './helpers/bare_client';
 
 // These tests validate the level-cap + virtual-level + prestige system against
 // MAX_LEVEL (20). The default realm is now crypticrealm (cap 99), so force a
@@ -498,36 +498,6 @@ describe('xp-bar label states', () => {
 // Online path: the values flow through the snapshot to the ClientWorld, and
 // the client derives virtual level for display (server stays authoritative).
 // -------------------------------------------------------------------------
-
-function bareClient(pid: number): ClientWorld {
-  const c: any = Object.create(ClientWorld.prototype);
-  c.cfg = { seed: 20061, playerClass: 'warrior' };
-  c.entities = new Map();
-  c.missingSince = new Map(); // despawn-grace bookkeeping (set by the real field initializer)
-  c.playerId = pid;
-  c.moveInput = {};
-  c.inventory = [];
-  c.equipment = {};
-  c.copper = 0;
-  c.xp = 0;
-  c.lifetimeXp = 0;
-  c.prestigeRank = 0;
-  c.unlockedMilestones = [];
-  c.known = [];
-  c.questLog = new Map();
-  c.questsDone = new Set();
-  c.pendingQuestCommands = new Map();
-  c.partyInfo = null;
-  c.tradeInfo = null;
-  c.duelInfo = null;
-  c.lastSnapAt = 0;
-  c.snapInterval = 50;
-  c.pendingFacingDelta = 0;
-  c.connected = true;
-  c.eventQueue = [];
-  c.mouselookFacing = null;
-  return c;
-}
 
 describe('online ClientWorld path', () => {
   let server: GameServer;

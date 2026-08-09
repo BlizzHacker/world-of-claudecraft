@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import './_setup';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { parseAdminRoute, routeHref, shouldHandleNavigation } from '../../src/admin/navigation';
@@ -15,11 +15,23 @@ describe('admin navigation', () => {
     expect(parseAdminRoute(new URL('https://admin.test/admin?page=accounts'))).toEqual({
       page: 'accounts',
     });
+    expect(parseAdminRoute(new URL('https://admin.test/admin?page=guilds&guildId=42'))).toEqual({
+      page: 'guilds',
+      guildId: 42,
+    });
+    expect(
+      parseAdminRoute(new URL('https://admin.test/admin?page=guilds&guildId=invalid')),
+    ).toEqual({
+      page: 'guilds',
+    });
     expect(parseAdminRoute(new URL('https://admin.test/admin?page=shared-ips'))).toEqual({
       page: 'shared-ips',
     });
     expect(parseAdminRoute(new URL('https://admin.test/admin?page=suspicious-players'))).toEqual({
       page: 'suspicious-players',
+    });
+    expect(parseAdminRoute(new URL('https://admin.test/admin?page=unstuck-reports'))).toEqual({
+      page: 'unstuck-reports',
     });
     expect(
       parseAdminRoute(new URL('https://admin.test/admin?page=ip&ip=2001%3Adb8%3A%3A1')),
@@ -31,9 +43,14 @@ describe('admin navigation', () => {
 
   it('keeps unrelated query parameters while serializing one route', () => {
     expect(routeHref({ page: 'blocked-ips' })).toBe('/admin?lang=en&page=blocked-ips');
+    expect(routeHref({ page: 'unstuck-reports' })).toBe('/admin?lang=en&page=unstuck-reports');
     expect(routeHref({ page: 'ip', ip: '203.0.113.7' })).toBe(
       '/admin?lang=en&page=ip&ip=203.0.113.7',
     );
+    expect(routeHref({ page: 'guilds', guildId: 42 })).toBe(
+      '/admin?lang=en&page=guilds&guildId=42',
+    );
+    expect(routeHref({ page: 'guilds' })).toBe('/admin?lang=en&page=guilds');
   });
 
   it('supports legacy IP links without an explicit page', () => {

@@ -104,12 +104,18 @@ export function countFit(
   itemId: string,
   count: number,
   instance?: ItemInstancePayload,
+  craftedRecipeId?: string,
 ): number {
   const def = ITEMS[itemId];
   const stack = stackSizeOf(def);
   let room = 0;
   for (const s of inventory) {
-    if (s.itemId === itemId && canStackInstancePayloads(s.instance, instance) && s.count < stack) {
+    if (
+      s.itemId === itemId &&
+      canStackInstancePayloads(s.instance, instance) &&
+      s.craftedRecipeId === craftedRecipeId &&
+      s.count < stack
+    ) {
       room += stack - s.count;
     }
   }
@@ -121,20 +127,45 @@ export function countFit(
   return Math.min(count, room);
 }
 
-/** True when ONE copy of an instanced grant fits: room in a byte-equal
- *  mergeable stack (identical-payload stacking) OR a free slot.
- *  The signed-grant guards (corpse focus-harvest, node harvest) consume this
- *  so a slot-full bag holding a same-payload stack with room keeps the
+/** True when ALL `count` copies of an instanced grant fit (one by default):
+ *  room in a byte-equal mergeable stack (identical-payload stacking) plus free
+ *  slots. The corpse focus-harvest signed guards consume this (harvestNode's
+ *  signed batch reads countFit directly for the same model) so a slot-full bag
+ *  holding a same-payload stack with room keeps the
  *  signature instead of downgrading to the plain fungible fallback (#2139:
  *  every capacity pre-check must model the merge identically, or a guard
- *  that disagrees with addStacked re-opens the overflow class). */
+ *  that disagrees with addStacked re-opens the overflow class). Counting the
+ *  WHOLE grant is what keeps that promise for a multi-unit signed yield
+ *  (#2473): a stack with room for one of three units must refuse, or the
+ *  remaining two push a fresh slot past capacity. The plain twin is
+ *  canAddItem, same all-or-nothing shape. A `count` of 0 answers true (nothing
+ *  is always grantable) and addItemInstance early-returns on it, so a caller
+ *  that can legitimately reach 0 owns that check itself; no shipped grant can
+ *  (a harvest quantity floors at 1). */
 export function canGrantItemInstance(
   inventory: readonly InvSlot[],
   capacity: number,
   itemId: string,
   instance: ItemInstancePayload,
+  count = 1,
 ): boolean {
-  return countFit(inventory, capacity, itemId, 1, instance) >= 1;
+  return countFit(inventory, capacity, itemId, count, instance) >= count;
+}
+
+/** How many of a `count`-unit instanced grant actually fit: the same
+ *  countFit room model canGrantItemInstance boolean-gates, surfaced as a
+ *  number. A signed-grant call site that owns a rolled quantity larger than
+ *  one (the corpse-harvest signed grant, mirroring the node-harvest signed
+ *  grant's own countFit call) uses this to size its addItemInstance call
+ *  instead of truncating an available multi-unit fit down to one. */
+export function fitForItemInstance(
+  inventory: readonly InvSlot[],
+  capacity: number,
+  itemId: string,
+  count: number,
+  instance: ItemInstancePayload,
+): number {
+  return countFit(inventory, capacity, itemId, count, instance);
 }
 
 /** True when all `count` copies fit. */
@@ -147,6 +178,27 @@ export function canAddItem(
   return countFit(inventory, capacity, itemId, count) >= count;
 }
 
+/** The ONE capacity check the exchange pipes share (market buy/cancel/collect,
+ *  mail claim, vendor buyback), payload-aware on both arms (#2139: the
+ *  pre-check must model the grant identically or the overflow class re-opens):
+ *  with `instance` absent this is canAddItem, with it canGrantItemInstance.
+ *  Also threads the plain-stack `craftedRecipeId` marker: a caller granting a
+ *  crafted plain stack must pre-check with the same marker `grantCopies`
+ *  grants with, or the fit check can see room in a marker-free stack that the
+ *  actual grant (keyed on the marker by addStacked) cannot merge into,
+ *  overfilling the recipient's bags past the modelled cap. Its grant twin is
+ *  item_instance_transfer.ts grantCopies. */
+export function canGrantCopies(
+  inventory: readonly InvSlot[],
+  capacity: number,
+  itemId: string,
+  count: number,
+  instance?: ItemInstancePayload,
+  craftedRecipeId?: string,
+): boolean {
+  return countFit(inventory, capacity, itemId, count, instance, craftedRecipeId) >= count;
+}
+
 /** True when EVERY add in the batch fits together (simulated cumulatively on a
  *  scratch copy, so three 1-slot items against one free slot correctly fail). */
 export function fitsAll(
@@ -156,8 +208,9 @@ export function fitsAll(
 ): boolean {
   const scratch = inventory.map((s) => ({ ...s }));
   for (const a of adds) {
-    if (countFit(scratch, capacity, a.itemId, a.count, a.instance) < a.count) return false;
-    addStacked(scratch, a.itemId, a.count, a.instance);
+    if (countFit(scratch, capacity, a.itemId, a.count, a.instance, a.craftedRecipeId) < a.count)
+      return false;
+    addStacked(scratch, a.itemId, a.count, a.instance, a.craftedRecipeId);
   }
   return true;
 }
@@ -176,13 +229,19 @@ export function addStacked(
   itemId: string,
   count: number,
   instance?: ItemInstancePayload,
+  craftedRecipeId?: string,
 ): void {
   const def = ITEMS[itemId];
   const stack = stackSizeOf(def);
   let remaining = count;
   for (const s of inventory) {
     if (remaining <= 0) return;
-    if (s.itemId !== itemId || !canStackInstancePayloads(s.instance, instance) || s.count >= stack)
+    if (
+      s.itemId !== itemId ||
+      !canStackInstancePayloads(s.instance, instance) ||
+      s.craftedRecipeId !== craftedRecipeId ||
+      s.count >= stack
+    )
       continue;
     const take = Math.min(stack - s.count, remaining);
     s.count += take;
@@ -193,19 +252,31 @@ export function addStacked(
     // A charge-bearing payload stays one-per-slot; every fresh instanced slot
     // carries its own deep clone so two slots never alias one mutable payload.
     const take = instance && !mergeable ? 1 : Math.min(stack, remaining);
-    inventory.push(
-      instance
-        ? { itemId, count: take, instance: cloneItemInstancePayload(instance) }
-        : { itemId, count: take },
-    );
+    const slot: InvSlot = instance
+      ? { itemId, count: take, instance: cloneItemInstancePayload(instance) }
+      : { itemId, count: take };
+    if (craftedRecipeId !== undefined) slot.craftedRecipeId = craftedRecipeId;
+    inventory.push(slot);
     remaining -= take;
   }
 }
 
+/** Units of `itemId` a scratch inventory holds, instanced slots included: the
+ *  read half of removeStacked below, for a capacity simulation that has to
+ *  decide HOW MUCH it can take from the scratch copy before taking it (the
+ *  grade-spanning craft consumption in professions/crafting.ts). Mirrors the
+ *  Sim hub's countItem, which sums the same slots. */
+export function countStacked(inventory: readonly InvSlot[], itemId: string): number {
+  let total = 0;
+  for (const s of inventory) if (s.itemId === itemId) total += s.count;
+  return total;
+}
+
 /** Stack-aware removal mirroring the Sim hub's removeItem walk (from the end,
  *  instanced slots included, exactly like removeItem), for capacity simulations
- *  on a scratch copy (e.g. "after handing in the collect items, does the quest
- *  reward fit?"). */
+ *  on a scratch copy whose live path removes with removeItem (the trade swap,
+ *  craft/enchant reagents). The quest turn-in gate instead models its
+ *  prefer-plain hand-in with consumeOneScratch below. */
 export function removeStacked(inventory: InvSlot[], itemId: string, count: number): void {
   let remaining = count;
   for (let i = inventory.length - 1; i >= 0 && remaining > 0; i--) {
@@ -226,7 +297,10 @@ export function removeStacked(inventory: InvSlot[], itemId: string, count: numbe
  *  removeEnchantableItem's second pass), and only then an excluded instanced
  *  slot (highest index: with no preferred copy left, the live paths fall back
  *  to the plain removeItem walk, where only excluded slots remain). With no
- *  `excludeInstance` it models items.ts removePreferFungible (salvage); with
+ *  `excludeInstance` it models items.ts removePreferFungible in its
+ *  predicate-less form, the only form its callers here use (salvage); the
+ *  trade path's `deprioritize` two-pass has its own dedicated mirror,
+ *  trade.ts fitsAfterSwap. With
  *  professions/enchanting.ts isEnchantedInstance it models the
  *  countEnchantableItem >= 1 ? removeEnchantableItem : removeItem split
  *  (disenchant) and removeEnchantableItem alone (apply-enchant, whose

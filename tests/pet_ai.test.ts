@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { BUILTIN_WORLD } from '../src/sim/data';
 import {
   petFollow,
   petPickTarget,
@@ -7,56 +8,70 @@ import {
   updatePet,
 } from '../src/sim/pet/pet_ai';
 import { Sim } from '../src/sim/sim';
-import { dist2d, type Entity } from '../src/sim/types';
+import { dist2d, type Entity, type SimEvent, type WorldContent } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
+import { expectDefined } from './helpers/defined';
 
 // Direct unit tests for the extracted pet-AI module (P1a). They drive the moved
 // functions through the real Sim.ctx seam (so the still-on-Sim helpers they reach
 // back for resolve), pinning the slice's behavior independent of the parity golden.
 
-type AnySim = Sim & Record<string, any>;
-type AnyEntity = Entity & Record<string, any>;
+// The pets and hostiles under test are adopted/flagged wild mobs (any mob will
+// do; the tests place and level them explicitly), so keep the real forest_wolf
+// camps as that mob supply and strip the rest of the ambient world
+// (subsystem-world pattern, see tests/dot_final_tick.test.ts).
+const PET_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: BUILTIN_WORLD.camps.filter((c) => c.mobId === 'forest_wolf'),
+  npcs: {},
+  groundObjects: [],
+};
 
-function world(): { sim: AnySim; pid: number; owner: AnyEntity } {
-  const sim = new Sim({ seed: 7, playerClass: 'hunter', noPlayer: true }) as AnySim;
+function world(): { sim: Sim; pid: number; owner: Entity } {
+  const sim = new Sim({
+    seed: 7,
+    playerClass: 'hunter',
+    noPlayer: true,
+    world: PET_TEST_WORLD,
+  });
   const pid = sim.addPlayer('hunter', 'Owner');
-  const owner = sim.entities.get(pid) as AnyEntity;
+  const owner = expectDefined(sim.entities.get(pid));
   return { sim, pid, owner };
 }
 
 // Adopt the first wild mob as the player's pet (mirrors a completed tame/summon).
-function adopt(sim: AnySim, pid: number, exclude: number[] = []): AnyEntity {
+function adopt(sim: Sim, pid: number, exclude: number[] = []): Entity {
   for (const e of sim.entities.values()) {
     if (e.kind === 'mob' && !e.dead && e.ownerId === null && !exclude.includes(e.id)) {
       e.ownerId = pid;
       e.hostile = false;
       e.hp = e.maxHp;
-      return e as AnyEntity;
+      return e;
     }
   }
   throw new Error('no wild mob to adopt');
 }
 
-function wildHostile(sim: AnySim, exclude: number[]): AnyEntity {
+function wildHostile(sim: Sim, exclude: number[]): Entity {
   for (const e of sim.entities.values()) {
     if (e.kind === 'mob' && !e.dead && e.ownerId === null && !exclude.includes(e.id)) {
       e.hostile = true;
-      return e as AnyEntity;
+      return e;
     }
   }
   throw new Error('no wild hostile');
 }
 
-function place(e: AnyEntity, x: number, z: number): void {
+function place(e: Entity, x: number, z: number): void {
   e.pos = { x, y: e.pos.y, z };
   e.prevPos = { ...e.pos };
 }
 
 // Banish every entity except the named ones far off the map so a target scan only
 // sees what the test set up (the ctor seeds wild mobs around the player).
-function isolate(sim: AnySim, keep: number[]): void {
+function isolate(sim: Sim, keep: number[]): void {
   for (const e of sim.entities.values()) {
-    if (!keep.includes(e.id)) place(e as AnyEntity, 5000, 5000);
+    if (!keep.includes(e.id)) place(e, 5000, 5000);
   }
 }
 
@@ -65,12 +80,12 @@ function isolate(sim: AnySim, keep: number[]): void {
 // the grid from the live positions before a pick, exactly as a real tick's end-of-tick
 // grid.refresh does (server/sim.ts). Banished entities land in a far cell and the query's
 // live-distance filter drops them; the placed entities land in their real cells.
-function syncGrid(sim: AnySim): void {
+function syncGrid(sim: Sim): void {
   sim.grid.refresh(sim.entities.values());
 }
 
 // A second wild hostile mob, distinct from the first (grows the exclude set).
-function wildHostile2(sim: AnySim, exclude: number[]): [AnyEntity, AnyEntity] {
+function wildHostile2(sim: Sim, exclude: number[]): [Entity, Entity] {
   const first = wildHostile(sim, exclude);
   const second = wildHostile(sim, [...exclude, first.id]);
   return [first, second];
@@ -80,12 +95,17 @@ function wildHostile2(sim: AnySim, exclude: number[]): [AnyEntity, AnyEntity] {
 // inherits its owner's PvP hostility toward the opponent player. Used to prove a hostile
 // PLAYER is a valid petPickTarget candidate (the grid holds every kind, and the admit
 // predicates carry no kind === 'mob' restriction on ownerOffense).
-function startedDuelHunter(): { sim: AnySim; a: number; b: number } {
-  const sim = new Sim({ seed: 7, playerClass: 'warrior', noPlayer: true }) as AnySim;
+function startedDuelHunter(): { sim: Sim; a: number; b: number } {
+  const sim = new Sim({
+    seed: 7,
+    playerClass: 'warrior',
+    noPlayer: true,
+    world: PET_TEST_WORLD,
+  });
   const a = sim.addPlayer('hunter', 'Aleph', { autoEquip: true });
   const b = sim.addPlayer('mage', 'Bet', { autoEquip: true });
   const move = (pid: number, x: number, z: number): void => {
-    const e = sim.entities.get(pid) as AnyEntity;
+    const e = expectDefined(sim.entities.get(pid));
     e.pos = { x, y: groundHeight(x, z, sim.cfg.seed), z };
     e.prevPos = { ...e.pos };
     sim.rebucket(e);
@@ -148,7 +168,7 @@ describe('pet_ai module (P1a) — direct unit tests', () => {
     target.aggroTargetId = null; // not engaging the owner or pet
     owner.targetId = null;
     owner.autoAttack = false;
-    const meta = sim.meta(pid)!;
+    const meta = expectDefined(sim.meta(pid));
     meta.lastActiveTick = sim.tickCount; // active: the aggressive auto-pull gate is open
     syncGrid(sim); // the grid, not the entity map, is now the scan source
     expect(petPickTarget(sim.ctx, pet, owner)?.id).toBe(target.id);
@@ -163,20 +183,23 @@ describe('pet_ai module (P1a) — direct unit tests', () => {
     target.maxHp = 50000;
     target.hp = 50000;
     petRangedAttack(sim.ctx, pet, target, { range: 25, school: 'fire' });
-    const ev = sim.drainEvents() as Array<Record<string, any>>;
+    const ev: SimEvent[] = sim.drainEvents();
     expect(
       ev.some((e) => e.type === 'spellfx' && e.fx === 'projectile' && e.school === 'fire'),
     ).toBe(true);
     // The bolt's damage lands when it reaches the target (projectile_travel), not the
-    // tick it is hurled: advance until it connects.
+    // tick it is hurled: advance until it connects. The bolt now rolls spell resist
+    // on impact (tests/pet_ranged_resist.test.ts pins that arm); pin the hit roll to
+    // succeed so this test stays about the landing damage, not the resist draw.
+    sim.rng.chance = () => true;
     let landed = false;
     for (let i = 0; i < 20 && !landed; i++) {
-      landed = (sim.tick() as Array<Record<string, any>>).some(
-        (e) => e.type === 'damage' && e.sourceId === pet.id && e.school === 'fire',
-      );
+      landed = sim
+        .tick()
+        .some((e) => e.type === 'damage' && e.sourceId === pet.id && e.school === 'fire');
     }
     expect(landed).toBe(true);
-    expect(target.hp).toBeLessThan(target.maxHp); // the bolt never misses (crit-only roll)
+    expect(target.hp).toBeLessThan(target.maxHp); // a landed bolt always damages
   });
 
   it('Water Jet is a real channel that slows, blocks bolts, and breaks out of range', () => {
@@ -375,7 +398,7 @@ describe('petPickTarget: grid scan preserves the selection contract', () => {
     mob.aggroTargetId = null; // not engaging owner or pet
     owner.targetId = null;
     owner.autoAttack = false;
-    const meta = sim.meta(pid)!;
+    const meta = expectDefined(sim.meta(pid));
     meta.lastActiveTick = sim.tickCount; // active: the aggressive gate is open
     syncGrid(sim);
     // the wider superset radius (50) surfaces this mob, but the `aggressive` predicate
@@ -390,8 +413,8 @@ describe('petPickTarget: grid scan preserves the selection contract', () => {
   it('selects a hostile PLAYER in PvP (the grid holds every kind; no mob-only restriction)', () => {
     const { sim, a, b } = startedDuelHunter();
     expect(sim.duels.get(a)?.state).toBe('active');
-    const owner = sim.entities.get(a) as AnyEntity;
-    const enemy = sim.entities.get(b) as AnyEntity;
+    const owner = expectDefined(sim.entities.get(a));
+    const enemy = expectDefined(sim.entities.get(b));
     const pet = adopt(sim, a); // the hunter's pet
     pet.petMode = 'defensive';
     expect(sim.isHostileTo(pet, enemy)).toBe(true); // pet inherits owner PvP hostility

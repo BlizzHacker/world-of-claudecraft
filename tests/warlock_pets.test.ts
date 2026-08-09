@@ -1,11 +1,23 @@
 import { describe, expect, it } from 'vitest';
+import { BUILTIN_WORLD } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
-import type { Entity } from '../src/sim/types';
+import type { Entity, WorldContent } from '../src/sim/types';
 import { dist2d } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
 
+// The imp's target is whatever wild mob is nearest (teleported next to the
+// player as a dummy), so keep the real forest_wolf camps as that mob supply
+// and strip the rest of the ambient world (subsystem-world pattern, see
+// tests/dot_final_tick.test.ts).
+const WARLOCK_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: BUILTIN_WORLD.camps.filter((c) => c.mobId === 'forest_wolf'),
+  npcs: {},
+  groundObjects: [],
+};
+
 function makeSim(seed = 42) {
-  return new Sim({ seed, playerClass: 'warlock', autoEquip: true });
+  return new Sim({ seed, playerClass: 'warlock', autoEquip: true, world: WARLOCK_TEST_WORLD });
 }
 
 function nearestMob(sim: Sim): Entity {
@@ -88,6 +100,58 @@ describe('warlock demon pets', () => {
     expect(pet.templateId).toBe('gloomshade');
     // the imp is gone from the world entirely (summoned demons unravel)
     expect(sim.entities.has(imp.id)).toBe(false);
+  });
+
+  it('gloomshade, the tank demon, auto-taunts by default on summon', () => {
+    // Bug #1356: createDemonPet unconditionally set petAutoTaunt=false for every
+    // demon, so Gloomshade (a "sturdy melee tank that taunts to hold threat", per
+    // this file's header comment) never held aggro unless the owner manually
+    // toggled auto-taunt every session. A melee_tank demon should come up with
+    // auto-taunt already on.
+    const sim = makeSim();
+    sim.setPlayerLevel(12);
+    castAndFinish(sim, 'summon_voidwalker');
+    const pet = sim.petOf(sim.playerId);
+    expect(pet).not.toBeNull();
+    expect(pet!.templateId).toBe('gloomshade');
+    expect(pet!.petAutoTaunt).toBe(true);
+  });
+
+  it('gloomshade does not auto-taunt by default for a grouped owner', () => {
+    // Auto-taunting off a 10s cycle with no target/tank check would rip every
+    // non-boss add off the real party/raid tank. Keep the free default scoped
+    // to solo play; a grouped warlock keeps the manual /pettaunt opt-in.
+    const sim = new Sim({
+      seed: 42,
+      playerClass: 'warlock',
+      noPlayer: true,
+      world: WARLOCK_TEST_WORLD,
+    });
+    const lockPid = sim.addPlayer('warlock', 'Lock');
+    const otherPid = sim.addPlayer('warrior', 'Tank');
+    sim.partyInvite(otherPid, lockPid);
+    sim.partyAccept(otherPid);
+    const lock = sim.entities.get(lockPid)!;
+    sim.setPlayerLevel(12, lockPid);
+    lock.resource = lock.maxResource;
+    sim.castAbility('summon_voidwalker', lockPid);
+    for (let i = 0; i < 20 * 12 && sim.entities.get(lockPid)!.castingAbility; i++) sim.tick();
+    const pet = sim.petOf(lockPid);
+    expect(pet).not.toBeNull();
+    expect(pet!.templateId).toBe('gloomshade');
+    expect(pet!.petAutoTaunt).toBe(false);
+  });
+
+  it('emberkin, the ranged damage demon, does not auto-taunt by default', () => {
+    // Non-tank demons keep the prior default: no free auto-taunt for a demon
+    // that was never described as a threat-holder.
+    const sim = makeSim();
+    sim.setPlayerLevel(10);
+    castAndFinish(sim, 'summon_imp');
+    const pet = sim.petOf(sim.playerId);
+    expect(pet).not.toBeNull();
+    expect(pet!.templateId).toBe('emberkin');
+    expect(pet!.petAutoTaunt).toBe(false);
   });
 
   it('a slain demon unravels instead of respawning into the wild', () => {

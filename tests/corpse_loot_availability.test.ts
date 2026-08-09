@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { corpseLootAvailability } from '../src/game/corpse_loot_availability';
+import { MOBS } from '../src/sim/data';
 import type { Entity } from '../src/sim/types';
 
 function corpse(overrides: Partial<Entity>): Entity {
@@ -49,6 +50,57 @@ describe('corpseLootAvailability', () => {
     expect(result.hasLoot).toBe(false);
     expect(result.harvestable).toBe(true);
     expect(result.canOpen).toBe(true);
+  });
+
+  it('closes a depleted corpse whose every component family is unmapped (#2513)', () => {
+    // fen_troll carried claw and tusk and HARVEST_COMPONENT_ITEMS mapped
+    // neither, so the sim refused a harvest there. Both are mapped now (this
+    // branch's own fix), so no shipped template is left in that shape: gills
+    // and horn are still waiting on theirs, so this drives the gate through a
+    // real, otherwise-untagged template (warlock_imp) retagged for the
+    // duration of the case, restored in a finally. This arm used to answer on
+    // the tag COUNT and reported the corpse harvestable, which kept the popup
+    // open on an empty body with an enabled Harvest button whose every submit
+    // the server refused. It now reads the sim's own isHarvestableCorpse.
+    const template = MOBS.warlock_imp;
+    const priorTags = template.componentTags;
+    template.componentTags = ['gills', 'horn'];
+    try {
+      const depleted = corpseLootAvailability(
+        corpse({ templateId: 'warlock_imp', loot: null, harvestClaimedBy: null }),
+        1,
+      );
+      expect(depleted.hasLoot).toBe(false);
+      expect(depleted.harvestable).toBe(false);
+      expect(depleted.canOpen).toBe(false);
+      // The corpse is NOT orphaned while it still holds loot: the popup still
+      // opens for the coin, only without the picker section. Suppressing the
+      // dead affordance must not cost the player the live one.
+      const withCoin = corpseLootAvailability(
+        corpse({
+          templateId: 'warlock_imp',
+          loot: { copper: 50, items: [] },
+          harvestClaimedBy: null,
+        }),
+        1,
+      );
+      expect(withCoin.harvestable).toBe(false);
+      expect(withCoin.hasLoot).toBe(true);
+      expect(withCoin.canOpen).toBe(true);
+      expect(withCoin.visibleCopper).toBe(50);
+    } finally {
+      template.componentTags = priorTags;
+    }
+    // The discriminator on real content: a template carrying an unmapped
+    // family beside a mapped one stays harvestable, so this is the yield
+    // table talking and not a special case of the corpse-level gate.
+    expect(MOBS.sethrael_palecoil.componentTags).toEqual(['hide', 'claw', 'horn']);
+    const palecoil = corpseLootAvailability(
+      corpse({ templateId: 'sethrael_palecoil', loot: null, harvestClaimedBy: null }),
+      1,
+    );
+    expect(palecoil.harvestable).toBe(true);
+    expect(palecoil.canOpen).toBe(true);
   });
 
   it('refuses a corpse the viewing player claimed themselves', () => {

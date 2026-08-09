@@ -1,6 +1,18 @@
-import { dist2d, type Entity, type GatherNodeDef, INTERACT_RANGE } from '../sim/types';
+import { buildingDoorNear } from '../sim/interiors';
+import {
+  dist2d,
+  type Entity,
+  type GatherNodeDef,
+  INTERACT_RANGE,
+  type QuestProgress,
+} from '../sim/types';
 import { corpseLootAvailability, localPartyMemberIds } from './corpse_loot_availability';
-import { type GatherNodeToolGate, handleGatherNodeInteract } from './gather_node_interact';
+import { decideEscortPress, handleEscortPress } from './escort_interact';
+import {
+  type GatherEffectConfirmGate,
+  type GatherNodeToolGate,
+  handleGatherNodeInteract,
+} from './gather_node_interact';
 import type { InteractionOutcome } from './interaction_autorun';
 import { objectInteractionRange } from './interactions';
 
@@ -11,6 +23,13 @@ export interface NearbyInteractionWorld {
   // this structurally); optional so party-less fixtures stay valid.
   partyInfo?: { members: readonly { pid: number }[] } | null;
   entities: ReadonlyMap<number, Entity>;
+  // The viewer's quest log, for the escort arm below (an escortee is only
+  // startable while its quest is active). Required, not optional: an escort
+  // quest has NO other client entry point, so a silently unwired arm would
+  // make the quest uncompletable again.
+  questLog: ReadonlyMap<string, QuestProgress>;
+  targetEntity(id: number | null): void;
+  interact(): void;
   lootCorpse(id: number): InteractionOutcome;
   // Fire-and-forget half of the unified corpse press; omitting the
   // components argument selects the caller's town-focus default server-side.
@@ -20,7 +39,7 @@ export interface NearbyInteractionWorld {
   leaveDungeon(): InteractionOutcome;
   pickUpObject(id: number): InteractionOutcome;
   nodeHarvestableByMe(nodeId: string): boolean;
-  harvestNode(nodeId: string): InteractionOutcome;
+  harvestNode(nodeId: string, confirmEffectUse?: boolean): InteractionOutcome;
 }
 
 export interface NearbyInteractionHud {
@@ -38,7 +57,8 @@ type NearbyGatherNode = Pick<GatherNodeDef, 'id' | 'pos' | 'type' | 'tier'>;
  *  gate + localized denial line for the node about to be harvested; it sits
  *  with the node list (not trailing) so the live call site (main.ts
  *  interactKey) still closes on the nothing-to-interact string, as pinned by
- *  tests/client_shell.test.ts. */
+ *  tests/client_shell.test.ts. `escortAwayText` sits before that same string
+ *  for the same reason. */
 export function tryNearbyInteraction(
   world: NearbyInteractionWorld,
   hud: NearbyInteractionHud,
@@ -46,8 +66,11 @@ export function tryNearbyInteraction(
   nodeToolGateFor: ((node: NearbyGatherNode) => GatherNodeToolGate) | null,
   tooFarText: string,
   notReadyText: string,
+  escortAwayText: string,
   nothingToInteractText: string,
   harvestStateReliable = true,
+  // The R40 per-use effect confirm gate, threaded to the node dispatch.
+  effectConfirm?: GatherEffectConfirmGate,
 ): InteractionOutcome {
   const player = world.player;
   const playerId = world.playerId ?? player.id;
@@ -137,6 +160,16 @@ export function tryNearbyInteraction(
     } else if (object.templateId === 'mailbox') {
       hud.openMailbox();
       return true;
+    } else if (
+      object.templateId === 'building_exit' ||
+      object.templateId === 'waypoint' ||
+      object.templateId === 'town_portal'
+    ) {
+      // Building interior exit door, waypoint pylon, town portal: server-authoritative
+      // object interactions. Route through world.interact() (the server sim.interact)
+      // rather than pickUpObject so the sim runs the right handler online + offline.
+      world.interact();
+      return true;
     } else {
       return world.pickUpObject(bestObject);
     }
@@ -156,6 +189,14 @@ export function tryNearbyInteraction(
     }
     return true;
   }
+  // STARTING an escort sits below the npc arm (an escortee is mob-kind, so the
+  // two can never compete) and above gather nodes: an escortee standing in
+  // front of you beats the node you happen to be over. Corpses still win, so
+  // looting the ambush wave is never swallowed.
+  const escort = player.dead
+    ? ({ kind: 'none' } as const)
+    : decideEscortPress(player.pos, world.entities, world.questLog);
+  if (escort.kind === 'start') return handleEscortPress(world, hud, escort, escortAwayText);
   if (bestNode !== null) {
     return handleGatherNodeInteract(
       world,
@@ -166,7 +207,21 @@ export function tryNearbyInteraction(
       tooFarText,
       notReadyText,
       nodeToolGateFor?.(bestNode),
+      effectConfirm,
     );
+  }
+  // The away line is a LAST resort that only replaces the generic
+  // nothing-to-interact message: an absent escortee must never eat a press that
+  // some other arm above could have used (a node underfoot at an empty post).
+  if (escort.kind === 'away') return handleEscortPress(world, hud, escort, escortAwayText);
+  // Building entry: buildings are SOLID and carry NO entity; the door is the
+  // building's own +z face (BUILDING_DOORS registry). No other arm claimed the
+  // press, so if the player stands in a door area, send interact() and let the
+  // sim (buildingDoorNear inside sim.interact, then enterInterior) do the entry
+  // authoritatively, online and offline alike.
+  if (buildingDoorNear(player.pos.x, player.pos.z)) {
+    world.interact();
+    return true;
   }
   hud.showError(nothingToInteractText);
   return false;

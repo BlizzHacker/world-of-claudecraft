@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import * as THREE from 'three';
 import { afterEach, describe, expect, it } from 'vitest';
 import { eastbrookGrandArmouryInternalsForTest } from '../src/render/eastbrook_grand_armoury';
-import { GFX } from '../src/render/gfx';
+import { gfxInternalsForTest } from '../src/render/gfx';
 import { stationPropPlacements } from '../src/render/stations_core';
 import {
   BUILDING_TERRAIN_SAMPLE_STEP,
@@ -22,6 +22,7 @@ import {
   isEastbrookGrandArmoury,
 } from '../src/sim/building_layout';
 import {
+  bankerChestSpots,
   colliderInternalsForTest,
   isBlocked,
   pathCrossesFence,
@@ -31,6 +32,11 @@ import { ZONE1_PROPS } from '../src/sim/content/zone1';
 import { BUILTIN_WORLD, NPCS, PROPS, STATIONS, setActiveWorldContent } from '../src/sim/data';
 import { EASTBROOK_BUILDINGS_BY_ID } from '../src/sim/eastbrook_layout';
 import {
+  FENBRIDGE_BUILDINGS_BY_ID,
+  FENBRIDGE_LAYOUT,
+  localToWorld,
+} from '../src/sim/fenbridge_layout';
+import {
   findPlayerPath,
   PLAYER_BODY_RADIUS,
   PLAYER_MAX_CLIMB_SLOPE,
@@ -39,8 +45,9 @@ import {
 import { isResting } from '../src/sim/progression/xp';
 import type { BuildingDef, Entity } from '../src/sim/types';
 import { groundHeight, terrainHeight, waterLevelAt } from '../src/sim/world';
+import { WORLD_SEED } from '../src/sim/world_seed';
 
-const SEED = 20061;
+const SEED = WORLD_SEED;
 const ALTERNATE_SEED = 4717;
 
 afterEach(() => setActiveWorldContent(null));
@@ -63,7 +70,7 @@ function expectWalkableRoute(from: { x: number; z: number }, to: { x: number; z:
   expect(
     groundHeight(current.x, current.z, SEED),
     'route start is in deep water',
-  ).toBeGreaterThanOrEqual(waterLevelAt(current.x, current.z) - PLAYER_SWIM_DEPTH);
+  ).toBeGreaterThanOrEqual(waterLevelAt(current.x, current.z, SEED) - PLAYER_SWIM_DEPTH);
   expect(isBlocked(SEED, to.x, to.z, PLAYER_BODY_RADIUS), 'route destination is blocked').toBe(
     false,
   );
@@ -110,7 +117,7 @@ function expectWalkableRoute(from: { x: number; z: number }, to: { x: number; z:
     expect(
       nextGround,
       `deep-water route sample at ${resolved.x},${resolved.z}`,
-    ).toBeGreaterThanOrEqual(waterLevelAt(resolved.x, resolved.z) - PLAYER_SWIM_DEPTH);
+    ).toBeGreaterThanOrEqual(waterLevelAt(resolved.x, resolved.z, SEED) - PLAYER_SWIM_DEPTH);
     expect(
       (nextGround - previousGround) / Math.max(moved, Number.EPSILON),
       `route sample exceeds climb slope at ${resolved.x},${resolved.z}`,
@@ -337,20 +344,56 @@ describe('Eastbrook Grand Armoury gameplay preservation', () => {
     expect(isResting(player)).toBe(false);
   });
 
-  it('preserves the legacy rest footprint of unrelated rotated inns', () => {
+  it('uses the collider-correct rest footprint for the rebuilt Fenbridge inn', () => {
+    const authoredInn = FENBRIDGE_BUILDINGS_BY_ID.fenbridge_crooked_reed_inn;
     const fenbridgeInn = PROPS.buildings.find(
-      (building) => building.x === 13 && building.z === 306,
+      (building) => building.id === FENBRIDGE_LAYOUT.services.rest.buildingId,
     );
     if (!fenbridgeInn) throw new Error('Fenbridge inn fixture is missing');
-    expect(buildingContainsRestPoint(fenbridgeInn, 6, 306.8, 2)).toBe(true);
-    expect(buildingContainsRestPoint(fenbridgeInn, 6, 304.6, 2)).toBe(false);
+    expect(fenbridgeInn).toMatchObject({
+      id: 'fenbridge_crooked_reed_inn',
+      assetId: '/models/props/fenbridge_crooked_reed_inn.glb',
+      x: -21.25,
+      z: 317,
+      w: 9,
+      d: 8,
+      rot: FENBRIDGE_BUILDINGS_BY_ID.fenbridge_crooked_reed_inn.rotation,
+    });
+
+    const restPadding = buildingRestPadding(fenbridgeInn);
+    const restPoint = authoredInn.frontStandingPoint;
+    const outsideRestPoint = localToWorld(
+      authoredInn.position,
+      authoredInn.rotation,
+      authoredInn.sockets.entrance.localPosition.x,
+      authoredInn.nativeDimensions.depth / 2 + restPadding + 0.25,
+    );
+    expect(restPadding).toBe(2);
+    expect(buildingContainsPoint(fenbridgeInn, restPoint.x, restPoint.z, restPadding)).toBe(true);
+    expect(buildingContainsRestPoint(fenbridgeInn, restPoint.x, restPoint.z, restPadding)).toBe(
+      true,
+    );
+    expect(
+      buildingContainsPoint(fenbridgeInn, outsideRestPoint.x, outsideRestPoint.z, restPadding),
+    ).toBe(false);
+    expect(
+      buildingContainsRestPoint(fenbridgeInn, outsideRestPoint.x, outsideRestPoint.z, restPadding),
+    ).toBe(false);
 
     const player = {
       inCombat: false,
-      pos: { x: 6, y: terrainHeight(6, 306.8, SEED), z: 306.8 },
+      pos: {
+        x: restPoint.x,
+        y: terrainHeight(restPoint.x, restPoint.z, SEED),
+        z: restPoint.z,
+      },
     } as Entity;
     expect(isResting(player)).toBe(true);
-    player.pos.z = 304.6;
+    player.pos = {
+      x: outsideRestPoint.x,
+      y: terrainHeight(outsideRestPoint.x, outsideRestPoint.z, SEED),
+      z: outsideRestPoint.z,
+    };
     expect(isResting(player)).toBe(false);
   });
 
@@ -369,9 +412,21 @@ describe('Eastbrook Grand Armoury gameplay preservation', () => {
       if (!npc) throw new Error(`missing pinned Eastbrook NPC ${id}`);
       expect(isBlocked(SEED, npc.pos.x, npc.pos.z, 0.6), `${id} overlaps collision`).toBe(false);
     }
-    expect(isBlocked(SEED, 13.65, 9.15, 0.7), 'banker chest approach overlaps collision').toBe(
-      false,
+    // The strongbox is a SOLID standable prop now (banker_chest_layout): the
+    // chest spot itself blocks, and the approach that must stay clear is the
+    // banker's own interaction point beside it, at route body radius.
+    const chest = bankerChestSpots(SEED).find(
+      (s) =>
+        Math.hypot(s.anchorX - NPCS.bursar_fernando.pos.x, s.anchorZ - NPCS.bursar_fernando.pos.z) <
+        0.75,
     );
+    expect(chest, 'fernando chest spot resolved').toBeDefined();
+    if (!chest) return;
+    expect(isBlocked(SEED, chest.x, chest.z, 0.5), 'chest spot is solid').toBe(true);
+    expect(
+      isBlocked(SEED, chest.anchorX, chest.anchorZ, 0.8),
+      'banker approach overlaps collision',
+    ).toBe(false);
   });
 
   it('keeps the square, card table, toolworks, and armoury approach mutually reachable', () => {
@@ -394,12 +449,15 @@ describe('Eastbrook Grand Armoury gameplay preservation', () => {
     const props = stationPropPlacements(STATIONS).filter(
       (placement) => placement.stationId === 'station_eastbrook_toolworks',
     );
+    // The anchor prop stands BESIDE the station point now (solid furniture
+    // may not wall off the interaction point routes end on), so the cluster
+    // hangs off the authored anchor by its authored offsets.
     expect(props).toEqual([
       {
         stationId: 'station_eastbrook_toolworks',
         kind: 'workbench',
-        x: station.pos.x,
-        z: station.pos.z,
+        x: station.pos.x + 1.5,
+        z: station.pos.z + 0.6,
         rot: -0.4,
       },
       {
@@ -426,7 +484,7 @@ describe('Eastbrook Grand Armoury gameplay preservation', () => {
     const points = [EASTBROOK_GRAND_ARMOURY.frontApproachWorld, NPCS.card_master.pos];
     for (const point of points) {
       expect(terrainHeight(point.x, point.z, SEED)).toBeGreaterThan(
-        waterLevelAt(point.x, point.z) - 0.8,
+        waterLevelAt(point.x, point.z, SEED) - 0.8,
       );
       expect(isBlocked(SEED, point.x, point.z, PLAYER_BODY_RADIUS)).toBe(false);
     }
@@ -465,9 +523,7 @@ describe('Eastbrook Grand Armoury render seam', () => {
   });
 
   it('clones an immutable source, preserves Standard material factors, and excludes emissives from shadows', () => {
-    const mutableGfx = GFX as unknown as { standardMaterials: boolean };
-    const originalStandardMaterials = mutableGfx.standardMaterials;
-    mutableGfx.standardMaterials = true;
+    const restoreGfx = gfxInternalsForTest.overrideSettings({ standardMaterials: true });
     const source = new THREE.Group();
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const colors = new Float32Array(geometry.getAttribute('position').count * 3).fill(0.5);
@@ -535,14 +591,12 @@ describe('Eastbrook Grand Armoury render seam', () => {
         crystal,
       ]);
     } finally {
-      mutableGfx.standardMaterials = originalStandardMaterials;
+      restoreGfx();
     }
   });
 
   it('uses the Lambert-compatible Low/native-iOS arm without losing vertex colors or emissive cues', () => {
-    const mutableGfx = GFX as unknown as { standardMaterials: boolean };
-    const originalStandardMaterials = mutableGfx.standardMaterials;
-    mutableGfx.standardMaterials = false;
+    const restoreGfx = gfxInternalsForTest.overrideSettings({ standardMaterials: false });
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     geometry.setAttribute(
       'color',
@@ -595,7 +649,7 @@ describe('Eastbrook Grand Armoury render seam', () => {
       );
       expect(meshes.map((mesh) => mesh.castShadow)).toEqual([true, false]);
     } finally {
-      mutableGfx.standardMaterials = originalStandardMaterials;
+      restoreGfx();
     }
   });
 
@@ -614,9 +668,14 @@ describe('Eastbrook Grand Armoury render seam', () => {
   it('dispatches the landmark before the old inn asset branch', () => {
     const source = readFileSync(new URL('../src/render/props.ts', import.meta.url), 'utf8');
     const armouryDispatch = source.indexOf('buildEastbrookGrandArmouryView(b, ground)');
-    const legacyInnDispatch = source.indexOf("b.kind === 'inn' ? 'inn'");
+    // The legacy per-kind asset resolution (now the shared buildingAssetPick
+    // helper, so the impostor collector resolves the SAME asset) must stay
+    // BELOW the landmark dispatch in the building loop, which `continue`s:
+    // an armoury building must never fall through to a generic house pick.
+    // The scan anchors on the loop's CALL SITE, not the helper's internals.
+    const legacyAssetDispatch = source.indexOf('const asset = buildingAssetPick(b);');
     expect(armouryDispatch).toBeGreaterThan(0);
-    expect(legacyInnDispatch).toBeGreaterThan(armouryDispatch);
+    expect(legacyAssetDispatch).toBeGreaterThan(armouryDispatch);
     expect(source).toMatch(
       /const armoury = buildEastbrookGrandArmouryView\(b, ground\);\s*if \(armoury\) \{\s*group\.add\(armoury\.group\);\s*registerHideable\(\s*armoury\.group,\s*obbFootprint\(b\.x, b\.z, b\.w \/ 2, b\.d \/ 2, b\.rot, armoury\.cameraTopY\),\s*\);\s*continue;\s*\}/,
     );

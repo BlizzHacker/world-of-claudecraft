@@ -30,8 +30,8 @@ import { HARVEST_COMPONENT_ITEMS, NODE_MATERIAL_TABLE } from '../src/sim/profess
 import { Sim } from '../src/sim/sim';
 import { ALL_CLASSES, MAX_LEVEL, XP_TABLE, type ZoneDef } from '../src/sim/types';
 import { terrainHeight, WATER_LEVEL } from '../src/sim/world';
+import { WORLD_SEED } from '../src/sim/world_seed';
 
-const WORLD_SEED = 20061; // production seed (main.ts / server/game.ts)
 const SCRIPTED_COLLECT_ITEMS = new Set(['the_codfather']);
 
 // The complete set of ways a collect-objective item can legitimately enter a
@@ -140,6 +140,43 @@ describe('content referential integrity', () => {
     expect(new Set(QUEST_ORDER).size).toBe(QUEST_ORDER.length);
   });
 
+  it('every camp-spawned mob has an unconditional loot entry (copper at minimum)', () => {
+    // The v0.32.0 realms shipped 34 camp-spawned mobs with empty loot arrays
+    // and another 20 whose only entries were quest-gated: rollLoot
+    // (src/sim/loot/loot_roll.ts) drives entirely off template.loot, so both
+    // shapes drop nothing outside their quest, not even copper. Require at
+    // least one entry with no questId gate. The sanctioned lootless camp
+    // spawns are the practice target and the ambient stable horse (both
+    // non-combat fixtures by design), plus the Gilded Stag: the farm-yield
+    // economy model (tests/economy_yield.test.ts) uses it as the quest-only,
+    // zero-coin exemplar on purpose. The quest-dedupe content pass added the
+    // Broodmother egg clutch (spider_egg): a destructible quest object, not a
+    // combatant (dmgBase 0, moveSpeed 0, aggroRadius 0, xpMult 0, damageable
+    // only on q_broodmother via requiresQuestId), so it is lootless by design
+    // like the other fixtures, not a v0.32.0-style empty-loot regression.
+    const LOOTLESS_FIXTURES = new Set([
+      'training_dummy',
+      'stable_horse',
+      'gilded_stag',
+      'spider_egg',
+    ]);
+    const problems: string[] = [];
+    const seen = new Set<string>();
+    for (const c of CAMPS) {
+      if (seen.has(c.mobId) || LOOTLESS_FIXTURES.has(c.mobId)) continue;
+      seen.add(c.mobId);
+      const t = MOBS[c.mobId];
+      // Puzzle-object mobs (xpMult 0: the 1 HP dragonkin egg, the spider
+      // egg-sac pattern) pay no XP and carry no loot BY DESIGN: the hatched
+      // fight is the reward, and a lootable shell would sparkle every corpse
+      // in a clutch. The xpMult-0 marker is the principled gate.
+      if (t?.xpMult === 0) continue;
+      if (t && !t.loot.some((l) => !l.questId))
+        problems.push(`${c.mobId} spawns from a camp with no unconditional loot`);
+    }
+    expect(problems).toEqual([]);
+  });
+
   it('all loot tables, vendor stock, camps and dungeon spawns resolve', () => {
     const problems: string[] = [];
     for (const m of Object.values(MOBS)) {
@@ -174,9 +211,63 @@ describe('content referential integrity', () => {
     expect(problems).toEqual([]);
   });
 
-  it('zones tile the world strip and content sits inside its zone band', () => {
-    for (let i = 0; i + 1 < ZONES.length; i++) {
-      expect(ZONES[i].zMax).toBe(ZONES[i + 1].zMin);
+  it('every kill-quest target mob actually spawns somewhere', () => {
+    // v0.34.0 shipped q_gc_scuttlers_in_the_pots (shoal_scuttler) and
+    // q_gc_wind_against_the_wick (gale_wisp) with kill targets that resolved
+    // fine in MOBS but had zero camp or dungeon spawn entry: unfinishable,
+    // and blocking the downstream Galecrest chain via requiresQuest. The
+    // "every quest reference resolves" test above only checks the mob id
+    // exists, never that anything spawns it, so this closes that gap.
+    // bound_guardian is a Nythraxis raid-encounter add spawned by the
+    // encounter script itself (src/sim/encounters/nythraxis.ts), not a
+    // world camp or a dungeon spawn list, so it is a documented exception.
+    const RAID_ENCOUNTER_SPAWNED = new Set(['bound_guardian']);
+    const spawning = new Set<string>();
+    for (const c of CAMPS) spawning.add(c.mobId);
+    for (const d of DUNGEON_LIST) for (const s of d.spawns) spawning.add(s.mobId);
+    const problems: string[] = [];
+    for (const q of Object.values(QUESTS)) {
+      for (const obj of q.objectives) {
+        if (
+          obj.type === 'kill' &&
+          obj.targetMobId &&
+          !spawning.has(obj.targetMobId) &&
+          !RAID_ENCOUNTER_SPAWNED.has(obj.targetMobId)
+        ) {
+          problems.push(`${q.id}: kill target ${obj.targetMobId} has no camp/dungeon spawn source`);
+        }
+      }
+    }
+    expect(problems).toEqual([]);
+  });
+
+  it('zones tile the grid and content sits inside its zone band', () => {
+    // the strip column tiles south to north exactly as it always did
+    const strip = ZONES.filter((zn) => (zn.xMin ?? -180) <= -180 && (zn.xMax ?? 180) >= 180);
+    for (let i = 0; i + 1 < strip.length; i++) {
+      expect(strip[i].zMax).toBe(strip[i + 1].zMin);
+    }
+    // the columns stack beside the strip: bands may straddle strip rows
+    // (the realms kept their sizes when the grid landed), so the invariants
+    // are: no two zone rects overlap, and every column shares some z with
+    // the strip (an unreachable island would be a bug)
+    const x0 = (zn: (typeof ZONES)[number]) => zn.xMin ?? -180;
+    const x1 = (zn: (typeof ZONES)[number]) => zn.xMax ?? 180;
+    for (const a of ZONES) {
+      for (const b of ZONES) {
+        if (a.id >= b.id) continue;
+        const overlap = x0(a) < x1(b) && x1(a) > x0(b) && a.zMin < b.zMax && a.zMax > b.zMin;
+        expect(overlap, `${a.id} and ${b.id} rects must not overlap`).toBe(false);
+      }
+    }
+    const stripMin = strip[0].zMin;
+    const stripMax = strip[strip.length - 1].zMax;
+    for (const zn of ZONES) {
+      if (x0(zn) <= -180 && x1(zn) >= 180) continue;
+      expect(
+        zn.zMin < stripMax && zn.zMax > stripMin,
+        `${zn.id} band overlaps the strip somewhere`,
+      ).toBe(true);
     }
     const problems: string[] = [];
     const inWorld = (x: number, z: number) =>

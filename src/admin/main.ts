@@ -4,6 +4,12 @@ import { adminLanguage, ensureAdminLocaleLoaded, t } from './i18n';
 import { startSitePresence } from './site_presence';
 import { mountAdminUpdatePanel } from './update_panel';
 import '../ui/cryptic/dashboard_chrome';
+// Side-effect import: constructs the theme singleton (state/theme.svelte.ts) so the
+// stored dark/light preference is applied and kept in sync from the first tick,
+// even before AdminShell (where the toggle itself lives) ever mounts. admin.html's
+// inline <head> script already avoids the first-paint flash; this is what keeps the
+// DOM attribute authoritative once the app is running.
+import './state/theme.svelte';
 import './admin.css';
 
 startSitePresence();

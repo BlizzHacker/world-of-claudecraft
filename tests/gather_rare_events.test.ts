@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { bagCapacity } from '../src/sim/bags';
 import { GATHER_NODES } from '../src/sim/content/gather_nodes';
-import { zoneAt } from '../src/sim/data';
+import { DUNGEON_X_THRESHOLD, zoneAt } from '../src/sim/data';
 import {
   announceGatherRareEvent,
+  emitToZonePlayers,
   GATHER_RARE_EVENT_CHANCE,
   GATHER_RARE_EVENT_YIELD_MULT,
   gatherRareEventFlavor,
@@ -16,6 +17,7 @@ import { Sim } from '../src/sim/sim';
 import type { SimContext } from '../src/sim/sim_context';
 import type { GatherNodeType, GatherRareEventFlavor, SimEvent } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
+import { placeAtHarvestSpot } from './helpers/harvest_spot';
 
 const FLAVOR_BY_TYPE: Record<GatherNodeType, GatherRareEventFlavor> = {
   ore: 'pristine_vein',
@@ -111,11 +113,18 @@ describe('gather rare events: cadence knob + flavor mapping', () => {
 describe('resolveHarvest two-draw order pin', () => {
   const node = mustNode('ore_eastbrook_1');
 
+  // The tier-1 pick is load-bearing, not decoration: resolveHarvest resolves
+  // the material GRADE off the bags (D8), so an inventory-less fixture no
+  // longer models a real harvester. A tier-1 tool at this tier-1 eastbrook
+  // vein is the plain-grade case, which is what these draw-order pins are
+  // about; the fine-grade arm has its own coverage in
+  // tests/material_grades.test.ts.
   function freshMeta(): PlayerMeta {
     return {
       gatheringProficiency: { mining: 0, logging: 0, herbalism: 0 },
       nodeHarvestReadyAt: {},
       pendingGatherGrants: [],
+      inventory: [{ itemId: 'copper_mining_pick', count: 1 }],
     } as unknown as PlayerMeta;
   }
 
@@ -202,8 +211,24 @@ describe('announceGatherRareEvent: soft zone fanout + dormant deed mark', () => 
   }
 
   it('sanity: the fanout z positions used below sit in the intended zones', () => {
-    expect(zoneAt(0).id).toBe('eastbrook_vale');
-    expect(zoneAt(340).id).toBe('mirefen_marsh');
+    expect(zoneAt(0, 0).id).toBe('eastbrook_vale');
+    expect(zoneAt(0, 340).id).toBe('mirefen_marsh');
+    expect(zoneAt(400, 340).id).toBe('galecrest');
+  });
+
+  it('routes same-row players by both atlas coordinates', () => {
+    const { ctx, emitted, addPlayer } = fakeCtx();
+    addPlayer(1, 'GalecrestOne', 340, 400);
+    addPlayer(2, 'GalecrestTwo', 340, 420);
+    addPlayer(3, 'Mirefen', 340, 0);
+
+    emitToZonePlayers(ctx, 'galecrest', (pid) => ({
+      type: 'log',
+      pid,
+      text: `recipient:${pid}`,
+    }));
+
+    expect(emitted.map((event) => event.pid)).toEqual([1, 2]);
   });
 
   it('emits one pid-scoped copy per in-zone player (finder included), none out of zone', () => {
@@ -213,7 +238,7 @@ describe('announceGatherRareEvent: soft zone fanout + dormant deed mark', () => 
     addPlayer(3, 'FarAway', 340); // mirefen_marsh: must not receive
     // Instance space: z overlaps the zone strip but x sits past
     // DUNGEON_X_THRESHOLD (600), so a dungeon/arena/delve runner is excluded.
-    addPlayer(4, 'Delver', 0, 900);
+    addPlayer(4, 'Delver', 0, DUNGEON_X_THRESHOLD + 100);
 
     announceGatherRareEvent(ctx, finder, node, 'pristine_vein', 'copper_ore');
 
@@ -254,10 +279,7 @@ describe('rare events through Sim.harvestNode (all three flavors)', () => {
     const node = mustNode(nodeId);
     const p = sim.entities.get(pid);
     if (!p) throw new Error('missing player entity');
-    p.pos.x = node.pos.x;
-    p.pos.z = node.pos.z;
-    p.pos.y = terrainHeight(node.pos.x, node.pos.z, sim.cfg.seed);
-    p.prevPos = { ...p.pos };
+    placeAtHarvestSpot(sim, pid, nodeId);
     const meta = sim.players.get(pid);
     if (!meta) throw new Error('missing player meta');
     for (let i = 0; i < 2000; i++) {
@@ -268,7 +290,7 @@ describe('rare events through Sim.harvestNode (all three flavors)', () => {
       meta.inventory.length = 0;
       meta.inventory.push({ itemId: TOOL_BY_TYPE[node.type], count: 1 });
       delete meta.nodeHarvestReadyAt[nodeId];
-      expect(sim.harvestNode(nodeId, pid)).toBe(true);
+      expect(sim.harvestNode(nodeId, undefined, pid)).toBe(true);
       completeCastNow(sim, pid);
       const events = sim.drainEvents();
       const rare = events.find((e) => e.type === 'gatherRareEvent');
@@ -308,10 +330,20 @@ describe('rare events through Sim.harvestNode (all three flavors)', () => {
 
     // The whole windfall is ONE batched loot line with the x5 suffix, never
     // one line and cue per unit (the recorded loot-burst polish).
-    const lootLines = events
-      .filter((e) => e.type === 'loot')
-      .map((e) => (e as { text: string }).text);
-    expect(lootLines).toEqual(['You receive: Copper Ore x5.']);
+    const lootEvents = events.filter((e) => e.type === 'loot') as Array<{
+      text: string;
+      silent?: boolean;
+      callerLogs?: boolean;
+    }>;
+    expect(lootEvents.map((e) => e.text)).toEqual(['You receive: Copper Ore x5.']);
+    // #2430: this is the SIGNED batched arm of the harvest grant, a different
+    // call site from the fungible one tests/professions_silent_loot.test.ts
+    // drives, and it is the arm every rare-event windfall takes. Both hub
+    // feedbacks stand down here too, so the gatherResult line above is the
+    // only line and the node cue the only cue. Without this the arm was
+    // pinned only by an opaque parity digest.
+    expect(lootEvents[0].silent).toBe(true);
+    expect(lootEvents[0].callerLogs).toBe(true);
 
     // The per-flavor deed mark (deeds.ts registers a deed per flavor).
     expect(meta.deedStats.visited.has('gather_event:pristine_vein')).toBe(true);
@@ -369,10 +401,7 @@ describe('rarity-floor signing through Sim.harvestNode', () => {
     const node = mustNode(nodeId);
     const p = sim.entities.get(pid);
     if (!p) throw new Error('missing player entity');
-    p.pos.x = node.pos.x;
-    p.pos.z = node.pos.z;
-    p.pos.y = terrainHeight(node.pos.x, node.pos.z, sim.cfg.seed);
-    p.prevPos = { ...p.pos };
+    placeAtHarvestSpot(sim, pid, nodeId);
     const meta = sim.players.get(pid);
     if (!meta) throw new Error('missing player meta');
     // Max proficiency: zero common weight, so rare-or-better shows up fast.
@@ -381,7 +410,7 @@ describe('rarity-floor signing through Sim.harvestNode', () => {
       meta.inventory.length = 0;
       meta.inventory.push({ itemId: TOOL_BY_TYPE.ore, count: 1 }); // the #2343 tool gate
       delete meta.nodeHarvestReadyAt[nodeId];
-      expect(sim.harvestNode(nodeId, pid)).toBe(true);
+      expect(sim.harvestNode(nodeId, undefined, pid)).toBe(true);
       completeCastNow(sim, pid);
       const gather = sim.drainEvents().find((e) => e.type === 'gatherResult');
       if (gather?.type !== 'gatherResult') throw new Error('expected gatherResult');
@@ -440,10 +469,7 @@ describe('grant truncation at the command boundary (full bags)', () => {
     const node = mustNode(nodeId);
     const p = sim.entities.get(pid);
     if (!p) throw new Error('missing player entity');
-    p.pos.x = node.pos.x;
-    p.pos.z = node.pos.z;
-    p.pos.y = terrainHeight(node.pos.x, node.pos.z, sim.cfg.seed);
-    p.prevPos = { ...p.pos };
+    placeAtHarvestSpot(sim, pid, nodeId);
     const meta = sim.players.get(pid);
     if (!meta) throw new Error('missing player meta');
     return { sim, pid, nodeId, meta };
@@ -461,7 +487,7 @@ describe('grant truncation at the command boundary (full bags)', () => {
       for (let f = 0; f < capacity - 2; f++)
         meta.inventory.push({ itemId: 'bone_fragments', count: 1 });
       delete meta.nodeHarvestReadyAt[nodeId];
-      expect(sim.harvestNode(nodeId, pid)).toBe(true);
+      expect(sim.harvestNode(nodeId, undefined, pid)).toBe(true);
       completeCastNow(sim, pid);
       const events = sim.drainEvents();
       const gather = events.find((e) => e.type === 'gatherResult');
@@ -505,7 +531,7 @@ describe('grant truncation at the command boundary (full bags)', () => {
         meta.inventory.push({ itemId: 'bone_fragments', count: 1 });
       meta.inventory.push({ itemId: 'copper_ore', count: 15 });
       delete meta.nodeHarvestReadyAt[nodeId];
-      if (!sim.harvestNode(nodeId, pid)) continue;
+      if (!sim.harvestNode(nodeId, undefined, pid)) continue;
       completeCastNow(sim, pid);
       const events = sim.drainEvents();
       const gather = events.find((e) => e.type === 'gatherResult');
@@ -555,7 +581,7 @@ describe('grant truncation at the command boundary (full bags)', () => {
       meta.inventory.push({ itemId: 'copper_ore', count: 15 });
       meta.inventory.push({ itemId: 'copper_ore', count: 5, instance: { signer: 'Packrat' } });
       delete meta.nodeHarvestReadyAt[nodeId];
-      if (!sim.harvestNode(nodeId, pid)) continue;
+      if (!sim.harvestNode(nodeId, undefined, pid)) continue;
       completeCastNow(sim, pid);
       const events = sim.drainEvents();
       const gather = events.find((e) => e.type === 'gatherResult');
@@ -594,7 +620,7 @@ describe('grant truncation at the command boundary (full bags)', () => {
         meta.inventory.push({ itemId: 'bone_fragments', count: 1 });
       meta.inventory.push({ itemId: 'copper_ore', count: 19 });
       delete meta.nodeHarvestReadyAt[nodeId];
-      if (!sim.harvestNode(nodeId, pid)) continue;
+      if (!sim.harvestNode(nodeId, undefined, pid)) continue;
       completeCastNow(sim, pid);
       const events = sim.drainEvents();
       const gather = events.find((e) => e.type === 'gatherResult');

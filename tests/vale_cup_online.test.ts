@@ -4,7 +4,7 @@
 // isUpdateDue carve-out for distant viewers, desertion persisting the loss
 // BEFORE the leave save, the Sowfield presence label, and the daily-reward /
 // activity-card arm on a decided rated match.
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../server/db', () => ({
   loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
@@ -36,10 +36,25 @@ import { dailyRewardService } from '../server/daily_rewards';
 import * as db from '../server/db';
 import { drainActivity } from '../server/discord_activity';
 import { type ClientSession, GameServer } from '../server/game';
+import { BUILTIN_WORLD, setActiveWorldContent } from '../src/sim/data';
 import { VC_OVER_DELAY } from '../src/sim/social/vale_cup';
 import type { PlayerClass } from '../src/sim/types';
 import { PITCH_CENTER } from '../src/sim/vale_cup_layout';
 import { groundHeight } from '../src/sim/world';
+
+// The Vale Cup is self-contained (vale_cup.ts spawns its own Bram NPC, ball
+// and Sowfield fixtures); ambient camps, world npcs and quest objects never
+// take part, and each test boots a full GameServer and ticks it hundreds of
+// times, so strip them via the active-world seam (GameServer takes no world
+// option; same subsystem-world pattern as tests/dot_final_tick.test.ts, seam
+// precedent in tests/mob_locomotion.test.ts).
+setActiveWorldContent({
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+});
+afterAll(() => setActiveWorldContent(null));
 
 interface FakeClient {
   sent: unknown[];
@@ -516,6 +531,10 @@ describe('vale cup: online integration (GameServer)', () => {
     const matchInfo = snapsWithSelfKey(fcB, 'vcup').pop()?.self.vcup;
     expect(matchInfo?.match?.ballId).toBe(ball.entityId);
     expect(matchInfo?.match?.phase).toBe('active');
+    // the rated and practice flags ride the wire so the client briefing can
+    // flag an unrated (practice / bot-backfilled) bout up front (issue 2767)
+    expect(matchInfo?.match?.rated).toBe(true);
+    expect(matchInfo?.match?.practice).toBe(false);
     const sharedInfo = snapsWithSelfKey(fcB, 'vcupb').pop()?.self.vcupb;
     expect(sharedInfo?.live?.bracket).toBe(1);
 

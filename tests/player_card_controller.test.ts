@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { FocusTrapHandle } from '../src/ui/focus_manager';
@@ -68,10 +68,10 @@ function deferred<T>() {
 
 function harness() {
   const ensurePreview = vi.fn();
-  const captureCloseup = vi.fn(() => 'data:image/png;base64,preview');
+  const captureCloseup = vi.fn(async () => document.createElement('canvas'));
   const focusFirst = vi.fn();
   const release = vi.fn();
-  const trap: FocusTrapHandle = { focusFirst, release };
+  const trap: FocusTrapHandle = { focusFirst, release, opener: vi.fn(() => null) };
   const options = {
     refreshBalance: vi.fn(),
     showWallet: vi.fn(() => true),

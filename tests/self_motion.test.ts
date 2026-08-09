@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
+  hasAuthoritativeSelfPositionDiscontinuity,
   SELF_MOTION_CAP_MAX_MS,
   SELF_MOTION_CAP_MIN_MS,
   SELF_MOTION_SNAP_DIST_SQ,
   type SelfMotionFrame,
   SelfMotionPredictor,
+  updateSelfRenderFallback,
 } from '../src/render/self_motion';
 import { Sim } from '../src/sim/sim';
 import { type Entity, type MoveInput, RUN_SPEED } from '../src/sim/types';
@@ -27,6 +29,8 @@ const mi = (over: Partial<MoveInput> = {}): MoveInput => ({
   strafeLeft: false,
   strafeRight: false,
   jump: false,
+  dive: false,
+  surface: false,
   ...over,
 });
 
@@ -158,6 +162,71 @@ class Lab {
 }
 
 describe('SelfMotionPredictor', () => {
+  it('recognizes only the local completed-unstuck event as an authoritative discontinuity', () => {
+    const completed = {
+      type: 'unstuck',
+      phase: 'completed',
+      pid: 7,
+      reason: 'moved_to_graveyard',
+      area: { kind: 'overworld', id: 'eastbrook_vale' },
+      origin: { x: 0, y: 0, z: 0, localX: 0, localZ: 0 },
+      destination: { x: 0, y: 0, z: 4, localX: 0, localZ: 4 },
+      duration: 10,
+      distance: 4,
+    } as const;
+    expect(hasAuthoritativeSelfPositionDiscontinuity([completed], 7)).toBe(true);
+    expect(hasAuthoritativeSelfPositionDiscontinuity([completed], 8)).toBe(false);
+    expect(
+      hasAuthoritativeSelfPositionDiscontinuity(
+        [{ type: 'unstuck', phase: 'countdown', seconds: 4 }],
+        7,
+      ),
+    ).toBe(false);
+  });
+
+  it('snaps both predictive and fallback poses on a sub-threshold authoritative recovery', () => {
+    const sim = new Sim({ seed: SEED, playerClass: 'warrior', autoEquip: true });
+    teleport(sim, 0, -40);
+    const self = {
+      ...sim.player,
+      pos: { ...sim.player.pos },
+      prevPos: { ...sim.player.prevPos },
+    };
+    const frame: SelfMotionFrame = {
+      enabled: true,
+      moveInput: mi({ forward: true }),
+      displayFacing: 0,
+      echoMs: 100,
+      jitterMs: 0,
+      alpha: 1,
+      frameDt: 0.05,
+    };
+    const predictive = new SelfMotionPredictor(SEED);
+    const ordinary = new SelfMotionPredictor(SEED);
+    for (let i = 0; i < 2; i++) {
+      predictive.step(self, frame);
+      ordinary.step(self, frame);
+    }
+
+    // Four yards is deliberately below the renderer's normal six-yard snap
+    // threshold. The explicit completed-unstuck discontinuity must still win.
+    self.pos = { ...self.pos, z: self.pos.z + 4 };
+    self.prevPos = { ...self.pos };
+    const ordinaryPose = ordinary.step(self, frame);
+    const snappedPose = predictive.step(self, frame, true);
+    expect(Math.abs((ordinaryPose?.z ?? self.pos.z) - self.pos.z)).toBeGreaterThan(0.1);
+    expect(snappedPose).toEqual(self.pos);
+    expect(predictive.leadMs).toBe(0);
+
+    const fallbackPose = { x: 0, y: 0, z: 0 };
+    updateSelfRenderFallback(fallbackPose, 0, 0, 4, true, 1 / 60, true, false);
+    expect(fallbackPose.z).toBeGreaterThan(0);
+    expect(fallbackPose.z).toBeLessThan(4);
+    fallbackPose.z = 0;
+    updateSelfRenderFallback(fallbackPose, 0, 0, 4, true, 1 / 60, true, true);
+    expect(fallbackPose).toEqual({ x: 0, y: 0, z: 4 });
+  });
+
   it('moves the pose the moment intent is pressed, long before the server does', () => {
     const lab = new Lab(120);
     lab.frame();
@@ -173,14 +242,15 @@ describe('SelfMotionPredictor', () => {
     expect(lab.srv.player.pos.z).toBeCloseTo(-80, 3);
   });
 
-  // Running into a blocker is the case the predictor must NOT "correct": the
+  // Running into a blocker (the Grand Armoury's flat south face at z = -12) is
+  // the case the predictor must NOT "correct": the
   // display stops at the wall a full echo before the server does, and that is
   // right. Stripping the lead against the lagging anchor teleports the avatar
   // backward by RUN_SPEED x echo on the contact frame. A normal forward step at
   // 60 fps is RUN_SPEED/60 = 0.117 yd, so any backward frame step of that order
   // reads as a snap; the leash + divergence servo alone keep it sub-centimeter.
   it.each([100, 200, 300])('does not snap the pose backward on contact at %ims echo', (lagMs) => {
-    const lab = new Lab(lagMs, FRAME_MS, { start: { x: 0, z: -6 }, facing: 0 });
+    const lab = new Lab(lagMs, FRAME_MS, { start: { x: 17.5, z: -16 }, facing: 0 });
     lab.frame();
     lab.frame();
     lab.setInput(mi({ forward: true }));
@@ -201,7 +271,7 @@ describe('SelfMotionPredictor', () => {
   });
 
   it('never renders the pose through a blocker it is running into', () => {
-    const lab = new Lab(200, FRAME_MS, { start: { x: 0, z: -6 }, facing: 0 });
+    const lab = new Lab(200, FRAME_MS, { start: { x: 17.5, z: -16 }, facing: 0 });
     lab.frame();
     lab.frame();
     lab.setInput(mi({ forward: true }));
@@ -220,7 +290,7 @@ describe('SelfMotionPredictor', () => {
   });
 
   it('holds a settled pose while forward is held against a wall', () => {
-    const lab = new Lab(120, FRAME_MS, { start: { x: 0, z: -2 }, facing: 0 });
+    const lab = new Lab(120, FRAME_MS, { start: { x: 17.5, z: -14.2 }, facing: 0 });
     lab.setInput(mi({ forward: true }));
     for (let i = 0; i < 60; i++) lab.frame(); // run in and settle
 

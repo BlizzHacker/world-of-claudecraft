@@ -12,6 +12,7 @@
 // north, so the pitch's long axis runs east-west and the goals face east/west.
 // Sim layer: no three.js imports.
 import type { Collider } from './colliders';
+import { VC_PRACTICE_X } from './data';
 
 // ---------------------------------------------------------------------------
 // Site footprint
@@ -203,17 +204,16 @@ export function isOnPitch(x: number, z: number): boolean {
 // pitch far from the one physical Sowfield, so many run at once without touching
 // the real match. Each copy is the SAME pitch geometry shifted by an ORIGIN
 // offset (the real Sowfield match uses {0,0}); match code adds match.origin to
-// every geometry read. Origins sit far past every instance band (x >= 4773 is a
-// delve, arena at 4200, dungeons from 900) and 400yd apart, so interest scoping
-// (~130yd) keeps each practice pitch fully private and clear of all other
-// entities. Practice players are clamped to their copy's pitch, so the region's
-// collider routing out there never matters.
+// every geometry read. Origins sit in the flat instance plane at VC_PRACTICE_X
+// (data.ts), a dedicated band between the delve and rift bands, 400yd apart, so
+// interest scoping (~130yd) keeps each practice pitch fully private and clear of
+// all other entities. Practice players are clamped to their copy's pitch, so the
+// region's collider routing out there never matters.
 export const VC_PRACTICE_SLOTS = 8; // max concurrent practice matches per realm
-const VC_PRACTICE_BASE_X = 30000;
 const VC_PRACTICE_SLOT_DZ = 400;
 
 export function vcPracticeOrigin(slot: number): { x: number; z: number } {
-  return { x: VC_PRACTICE_BASE_X, z: slot * VC_PRACTICE_SLOT_DZ };
+  return { x: VC_PRACTICE_X, z: slot * VC_PRACTICE_SLOT_DZ };
 }
 
 // ---------------------------------------------------------------------------
@@ -266,9 +266,8 @@ export function valeCupColliders(): Collider[] {
   const out: Collider[] = [];
   const midZ = (PITCH.zMin + PITCH.zMax) / 2;
   const midX = (PITCH.xMin + PITCH.xMax) / 2;
-  // The whole site sits on the flattened plateau, so the camera-occlusion tops
-  // are plain constants (no seed needed): low boards never pull the chase cam
-  // in (camGhost) but the renderer can still fade one crossing the eye line.
+  // The whole site sits on the flattened plateau, so the visual tops used by
+  // sight checks and renderer fades are plain constants (no seed needed).
   const boardTop = SOWFIELD_FLAT.height + BOARD_H;
   const postTop = SOWFIELD_FLAT.height + 2.4;
 
@@ -283,7 +282,6 @@ export function valeCupColliders(): Collider[] {
     hd: BOARD_T,
     rot: 0,
     cameraTopY: boardTop,
-    camGhost: true,
   });
   out.push({
     type: 'obb',
@@ -293,7 +291,6 @@ export function valeCupColliders(): Collider[] {
     hd: BOARD_T,
     rot: 0,
     cameraTopY: boardTop,
-    camGhost: true,
   });
   // south board, full length
   out.push({
@@ -304,7 +301,6 @@ export function valeCupColliders(): Collider[] {
     hd: BOARD_T,
     rot: 0,
     cameraTopY: boardTop,
-    camGhost: true,
   });
   // west + east boards flanking the goal mouths
   for (const [gx] of [[PITCH.xMin], [PITCH.xMax]] as const) {
@@ -318,7 +314,6 @@ export function valeCupColliders(): Collider[] {
       hd: southHd,
       rot: 0,
       cameraTopY: boardTop,
-      camGhost: true,
     });
     out.push({
       type: 'obb',
@@ -328,7 +323,6 @@ export function valeCupColliders(): Collider[] {
       hd: northHd,
       rot: 0,
       cameraTopY: boardTop,
-      camGhost: true,
     });
   }
   // goal posts (circles at the mouth corners) + net pockets (back/side walls)
@@ -341,7 +335,6 @@ export function valeCupColliders(): Collider[] {
       z: GOAL_Z_MIN,
       r: 0.35,
       cameraTopY: postTop,
-      camGhost: true,
     });
     out.push({
       type: 'circle',
@@ -349,7 +342,6 @@ export function valeCupColliders(): Collider[] {
       z: GOAL_Z_MAX,
       r: 0.35,
       cameraTopY: postTop,
-      camGhost: true,
     });
     // pocket back wall
     out.push({
@@ -360,7 +352,6 @@ export function valeCupColliders(): Collider[] {
       hd: GOAL_HALF_W + 0.6,
       rot: 0,
       cameraTopY: boardTop,
-      camGhost: true,
     });
     // pocket side rails
     for (const gz of [GOAL_Z_MIN, GOAL_Z_MAX]) {
@@ -372,7 +363,6 @@ export function valeCupColliders(): Collider[] {
         hd: BOARD_T * 0.6,
         rot: 0,
         cameraTopY: boardTop,
-        camGhost: true,
       });
     }
   }
@@ -395,7 +385,6 @@ export function valeCupColliders(): Collider[] {
       hd: 0.3,
       rot: 0,
       cameraTopY: backTop,
-      camGhost: true,
     });
   }
   // the Copper Pail plinth
@@ -405,7 +394,6 @@ export function valeCupColliders(): Collider[] {
     z: PLINTH_POS.z,
     r: 0.9,
     cameraTopY: SOWFIELD_FLAT.height + 1.8,
-    camGhost: true,
   });
   return out;
 }

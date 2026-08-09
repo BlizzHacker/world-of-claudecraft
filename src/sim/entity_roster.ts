@@ -34,8 +34,23 @@ import { CAST_COMPLETE_EPS, DT, emptyMoveInput } from './types';
 // Mobs that despawn after sitting out of combat too long (boss adds that should not
 // litter the world). The idle timer is reset to DAMAGE_IDLE_DESPAWN_SECONDS whenever
 // they take damage (that reset still lives on Sim in the damage path, C1).
+//
+// `dragonkin_whelp` is here because a hatchling is the one summoned add with no
+// summoner to clean it up. mob/locomotion.ts acts on `summonedAdd` only in the
+// DEAD branch (a slain add unravels with its corpse), and the brood hatch does
+// not register the whelp on the egg's `summonedIds`, so respawnMob's
+// despawnSummonedAdds cannot reach one either. A whelp nobody killed therefore
+// lived forever while its egg re-clutched on the trash cadence and hatched
+// another for the next passer-by: measured at 92 live whelps after one walk of
+// the Drakemaw belt, 184 after two, 267 after three, out of 75 authored eggs.
+// The idle timer only runs out of combat, so an engaged whelp is never yanked
+// out of a fight (pinned by tests/dragonkin_whelp_litter.test.ts).
 export const DAMAGE_IDLE_DESPAWN_SECONDS = 60;
-export const DAMAGE_IDLE_DESPAWN_MOB_IDS = new Set(['varkas_boneguard', 'bound_guardian']);
+export const DAMAGE_IDLE_DESPAWN_MOB_IDS = new Set([
+  'varkas_boneguard',
+  'bound_guardian',
+  'dragonkin_whelp',
+]);
 
 // A ticking ground hazard (e.g. Consecration). Scheduled by the damage/effect path
 // (C1/C4b, still on Sim) and drained here by tickGroundAoEs.
@@ -50,6 +65,10 @@ export type GroundAoE = {
   tickTimer: number;
   school: string;
   ability: string;
+  // The casting ability's stable id (`ability` above is the display NAME, kept
+  // for aura/damage attribution); the zone pulse events carry this so the
+  // renderer can identify which ground cast is pulsing.
+  abilityId: string;
   // Spell Power added per tick, snapshotted at cast time (caster ground AoEs).
   spBonus?: number;
   // Rune of Power (mage choice row): a FRIENDLY zone. When set, each pulse
@@ -123,6 +142,7 @@ export function addEntityToRoster(ctx: SimContext, e: Entity): void {
   ctx.grid.insert(e);
   if (e.kind === 'player') ctx.playerGrid.insert(e);
   if (e.templateId === 'dungeon_door' && ctx.dungeonDoorIds) ctx.dungeonDoorIds.push(e.id);
+  if (e.templateId === 'rift_portal' && ctx.riftPortalIds) ctx.riftPortalIds.push(e.id);
 }
 
 export function dropEntityFromRoster(ctx: SimContext, id: number): void {
@@ -141,6 +161,18 @@ export function dropEntityFromRoster(ctx: SimContext, id: number): void {
   }
   ctx.grid.remove(e);
   if (e.kind === 'player') ctx.playerGrid.remove(e);
+  // Mirror addEntityToRoster's trigger registries: natural rift portals expire
+  // and reopen for the world's whole lifetime, so an unspliced id would leak
+  // (and cost the walk-in scan) forever. Doors are never dropped today, but the
+  // registries must stay symmetric either way.
+  if (e.templateId === 'rift_portal' && ctx.riftPortalIds) {
+    const at = ctx.riftPortalIds.indexOf(id);
+    if (at >= 0) ctx.riftPortalIds.splice(at, 1);
+  }
+  if (e.templateId === 'dungeon_door' && ctx.dungeonDoorIds) {
+    const at = ctx.dungeonDoorIds.indexOf(id);
+    if (at >= 0) ctx.dungeonDoorIds.splice(at, 1);
+  }
   ctx.entities.delete(id);
 }
 
@@ -207,7 +239,8 @@ export function tickGroundAoEs(ctx: SimContext): void {
         persistentSource &&
         ((effect.temporalHourglass.sourceOrigin.x <= DUNGEON_X_THRESHOLD &&
           persistentSource.pos.x <= DUNGEON_X_THRESHOLD &&
-          effect.temporalHourglass.sourceZoneId !== zoneAt(persistentSource.pos.z).id) ||
+          effect.temporalHourglass.sourceZoneId !==
+            zoneAt(persistentSource.pos.x, persistentSource.pos.z).id) ||
           (persistentSource.pos.x - effect.temporalHourglass.sourceOrigin.x) ** 2 +
             (persistentSource.pos.z - effect.temporalHourglass.sourceOrigin.z) ** 2 >
             300 ** 2),
@@ -279,7 +312,11 @@ export function releaseSpiritInDelve(ctx: SimContext, pid: number): void {
   // puddles must not outlive the death, or the respawned player can be hit
   // (or insta-killed) by an effect that was already active before they died.
   clearDrownedLitanyBellsAndMarks(ctx, run);
+  // prevFacing pairs with the forced facing reset (same convention as the graveyard
+  // release/revive flow in spirit.ts), or the render-interpolated facing sweeps from
+  // the pre-death heading instead of landing on 0 immediately.
   p.facing = 0;
+  p.prevFacing = 0;
   // A held movement key at the moment of death must not carry over into the respawned
   // body, or it walks off on its own with no input held (same fix as the graveyard
   // release/revive flow in spirit.ts).
@@ -320,7 +357,7 @@ export function releaseSpiritInDelve(ctx: SimContext, pid: number): void {
 // guard does not see it as a literal emit.
 export function graveyardReadout(p: Entity): string {
   const dungeon = dungeonAt(p.pos.x);
-  const zone = zoneAt(dungeon ? dungeon.doorPos.z : p.pos.z);
+  const zone = zoneAt(dungeon ? dungeon.doorPos.x : p.pos.x, dungeon ? dungeon.doorPos.z : p.pos.z);
   const gy = zone.graveyard;
   return `If you fall here, your spirit returns to the ${zone.name} graveyard at (${Math.floor(gy.x)}, ${Math.floor(gy.z)}).`;
 }

@@ -8,6 +8,8 @@ export interface RankedPointLight {
   base: number | null;
   /** Moving VFX lights refresh their world position and intensity every frame. */
   dynamic: boolean;
+  /** Stable index in the renderer's fire-light registry, absent for view lights. */
+  fireIndex?: number;
 }
 
 export interface ReconciledViewPointLights {
@@ -64,7 +66,12 @@ export function applyPointLightBudget(
     const dz = entry.worldPos.z - pz;
     entry.d2 = dx * dx + dz * dz;
   }
-  if (ranked.length > visibleCount) ranked.sort((a, b) => a.d2 - b.d2);
+  // Sort whenever the live budget (which can sit below visibleCount under the
+  // frame-budget governor or on constrained-memory tiers) actually truncates
+  // the ranked list: comparing against visibleCount alone let array order,
+  // not distance, decide which lights shine whenever liveBudget < ranked.length
+  // <= visibleCount.
+  if (ranked.length > liveBudget) ranked.sort((a, b) => a.d2 - b.d2);
   for (let index = 0; index < ranked.length; index++) {
     const entry = ranked[index];
     const counted = index < visibleCount;
@@ -78,4 +85,35 @@ export function applyPointLightBudget(
       entry.light.intensity = 0;
     }
   }
+}
+
+/** Flicker only fire lights that the completed budget says can contribute. */
+export function flickerContributingFireLights(
+  ranked: readonly RankedPointLight[],
+  time: number,
+  visibleCount: number,
+  liveBudget: number,
+  rangeSq: number,
+): void {
+  const contributingCount = Math.min(ranked.length, visibleCount, liveBudget);
+  for (let index = 0; index < contributingCount; index++) {
+    const entry = ranked[index];
+    const fireIndex = entry.fireIndex;
+    if (fireIndex === undefined || entry.d2 >= rangeSq) continue;
+    const base = (entry.light.userData.baseIntensity as number | undefined) ?? 11;
+    entry.light.intensity = base + Math.sin(time * 11 + fireIndex * 1.7) * 2.5 * (base / 11);
+  }
+}
+
+/**
+ * How many renderer-owned pad lights must be visible so the TOTAL visible
+ * point-light count stays pinned at `visibleCount` even when fewer real lights
+ * than the budget exist (boot before props stream in, sparse custom maps,
+ * dungeon interiors). Three counts a light into numPointLights iff `visible`,
+ * and that count is part of every lit material's program cache key, so any
+ * drift recompiles every lit material in view: the open-world travel freeze.
+ * Pad lights carry intensity 0 / distance 0, so they shade nothing.
+ */
+export function pointLightPadCount(rankedCount: number, visibleCount: number): number {
+  return Math.max(0, visibleCount - Math.min(visibleCount, rankedCount));
 }

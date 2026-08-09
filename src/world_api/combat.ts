@@ -25,6 +25,8 @@ export interface IWorldCombat {
   /** Server-authored persistent traps currently visible to this world view. */
   activeFrostRings: ActiveFrostRing[];
   activeTemporalHourglasses: ActiveTemporalHourglass[];
+  /** Remaining server-authoritative lifetime of a reactive ability window. */
+  reactiveAbilityWindowRemaining(abilityId: string): number;
   castAbility(abilityId: string): void;
   castAbilityBySlot(slot: number): void;
   // Ground-targeted cast: the ability is aimed at a world point (x, z) the player
@@ -44,6 +46,10 @@ export interface IWorldCombat {
   cancelAura(auraId: string): void;
   startAutoAttack(): void;
   stopAutoAttack(): void;
+  // Begin the local, server-authoritative geometry recovery countdown. It may
+  // only relocate within the current reachable area and can be cancelled by
+  // movement or combat.
+  unstuck(): void;
   // Death loop: releaseSpirit leaves the body and rises as a ghost at the nearest
   // graveyard; resurrectAtCorpse revives at the body (no penalty, must be in range);
   // resurrectAtSpiritHealer revives at the angel with Resurrection Sickness.

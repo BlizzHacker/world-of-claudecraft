@@ -6,12 +6,13 @@ import {
   bankerChestPreloadInternalsForTest,
   isBankerNpcForRender,
 } from '../src/render/banker_chest';
-import { GFX } from '../src/render/gfx';
+import { GFX, gfxInternalsForTest } from '../src/render/gfx';
 import { BUILTIN_WORLD, setActiveWorldContent } from '../src/sim/data';
 import type { NpcDef } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
+import { WORLD_SEED } from '../src/sim/world_seed';
 
-const TEST_WORLD_SEED = 20061;
+const TEST_WORLD_SEED = WORLD_SEED;
 const banker = (templateId: string) => ({ kind: 'npc' as const, templateId });
 
 function placedBuiltInBanker(templateId: string) {
@@ -139,9 +140,7 @@ describe('banker chest model and placement', () => {
   });
 
   it('keeps vertex colors when the low tier converts the source to Lambert', () => {
-    const mutableGfx = GFX as unknown as { standardMaterials: boolean };
-    const previousStandardMaterials = mutableGfx.standardMaterials;
-    mutableGfx.standardMaterials = false;
+    const restoreGfx = gfxInternalsForTest.overrideSettings({ standardMaterials: false });
     try {
       const sourceMaterial = new THREE.MeshStandardMaterial({
         color: 0xffffff,
@@ -163,22 +162,29 @@ describe('banker chest model and placement', () => {
       expect(converted.emissiveIntensity).toBe(0.4);
       expect(converted.side).toBe(THREE.BackSide);
     } finally {
-      mutableGfx.standardMaterials = previousStandardMaterials;
+      restoreGfx();
     }
   });
 
   it('pins the candidate order and chooses an unobstructed built-in placement', () => {
+    // The chest is a SOLID standable collider now: every candidate keeps the
+    // banker's own interaction point clear (banker_chest_layout
+    // placementClearsBanker), so the old hugging offsets moved back and out.
     expect(bankerChestPreloadInternalsForTest.placements).toEqual([
-      { x: 1.15, y: 0, z: -0.7, rotationY: 0 },
-      { x: -1.15, y: 0, z: -0.7, rotationY: 0 },
-      { x: 1.15, y: 0, z: 0.7, rotationY: 0 },
-      { x: -1.15, y: 0, z: 0.7, rotationY: 0 },
+      { x: 1.15, y: 0, z: -1.6, rotationY: 0 },
+      { x: -1.15, y: 0, z: -1.6, rotationY: 0 },
+      { x: 2.0, y: 0, z: 0.9, rotationY: 0 },
+      { x: -2.0, y: 0, z: 0.9, rotationY: 0 },
     ]);
 
     const expectedOffsets: Record<string, readonly [number, number]> = {
-      bursar_fernando: [1.15, -0.7],
-      bursar_petra_vell: [-1.15, -0.7],
-      bursar_aldous_crane: [1.15, -0.7],
+      // The bank facade stands directly behind Fernando, so his behind-side
+      // candidates sample blocked and the chest takes the pushed-out front
+      // corner. Petra's rebuilt exterior teller likewise keeps the bank facade
+      // directly behind her, so its first fully clear spot is also in front.
+      bursar_fernando: [2.0, 0.9],
+      bursar_petra_vell: [2.0, 0.9],
+      bursar_aldous_crane: [2.0, 0.9],
     };
     for (const [templateId, expected] of Object.entries(expectedOffsets)) {
       const entity = placedBuiltInBanker(templateId);
@@ -217,12 +223,12 @@ describe('banker chest model and placement', () => {
     );
 
     expect([placement.x, placement.y, placement.z, placement.rotationY]).toEqual([
-      1.15, 3.25, -0.7, 0,
+      1.15, 3.25, -1.6, 0,
     ]);
-    expect(groundSamples).toEqual([[9.3, 18.85, 77]]);
+    expect(groundSamples).toEqual([[8.4, 18.85, 77]]);
   });
 
-  it('places a non-interactive sibling behind and lateral to the live banker transform', () => {
+  it('places a non-interactive sibling beside the live banker transform', () => {
     const viewGroup = new THREE.Group();
     const visualRoot = new THREE.Group();
     const clickProxy = new THREE.Object3D();
@@ -234,8 +240,11 @@ describe('banker chest model and placement', () => {
     const chest = attachBankerChestToNpcView(viewGroup, entity, TEST_WORLD_SEED);
     if (!chest) throw new Error('built-in banker chest was not attached');
     expect(chest.parent).toBe(viewGroup);
-    expect(chest.position.x).toBe(1.15);
-    expect(chest.position.z).toBeLessThan(0);
+    // Fernando's chest resolves to the pushed-out front corner (the bank
+    // facade blocks his behind-side candidates), matching the sim's solid
+    // collider spot exactly.
+    expect(chest.position.x).toBe(2.0);
+    expect(chest.position.z).toBeGreaterThan(0);
     expect(chest.rotation.y).toBe(0);
     expect(clickTargets).toEqual([clickProxy]);
     expect(clickProxy.getObjectByName('bankerChestDecoration')).toBeUndefined();
@@ -289,7 +298,7 @@ describe('banker chest renderer integration', () => {
     const preloadStart = moduleSource.indexOf("if (typeof window !== 'undefined')");
     const preloadEnd = moduleSource.indexOf('type BankerNpcRef', preloadStart);
     const preloadBlock = moduleSource.slice(preloadStart, preloadEnd);
-    expect(preloadBlock).toContain('registerPreload(');
+    expect(preloadBlock).toContain('registerDeferredPreload(');
     expect(preloadBlock).toContain('loadGltf(BANKER_CHEST_ASSET_URL)');
     expect(preloadBlock).not.toContain('GFX');
     expect(preloadBlock).not.toContain('getActiveWorldContent');

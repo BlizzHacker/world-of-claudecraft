@@ -34,10 +34,17 @@ export const EASTBROOK_GRAND_ARMOURY = {
  *  one startup-time landmark measurement into per-frame work. */
 export const BUILDING_TERRAIN_SAMPLE_STEP = 0.5;
 
+// Total by construction: a new BuildingDef kind must declare its height here
+// rather than silently inheriting a default. hollow* is the Veiled Hollow set.
 const BUILDING_CAMERA_HEIGHT: Readonly<Record<BuildingDef['kind'], number>> = {
   house: 8,
   inn: 7.8,
   chapel: 10.8,
+  hollowHouse: 8,
+  hollowInn: 8.5,
+  hollowChapel: 10.5,
+  hollowSmith: 6.2,
+  hollowMarket: 5.2,
 };
 
 /** Narrow the landmark-tagged inn record without changing its rested-XP kind. */
@@ -139,9 +146,9 @@ export function buildingContainsPoint(
 }
 
 /**
- * The rebuilt Eastbrook inn opts into the collider-correct transform. Keep the
- * historical transform for every unrelated inn so a town-layout change cannot
- * move established rest areas elsewhere in the world.
+ * Rebuilt inns opt into the collider-correct transform. Keep the historical
+ * transform for every unrelated inn so a town-layout change cannot move
+ * established rest areas elsewhere in the world.
  */
 export function buildingContainsRestPoint(
   building: BuildingDef,
@@ -149,7 +156,9 @@ export function buildingContainsRestPoint(
   z: number,
   padding = 0,
 ): boolean {
-  if (building.id === 'eastbrook_inn') return buildingContainsPoint(building, x, z, padding);
+  if (building.id === 'eastbrook_inn' || building.id === 'fenbridge_crooked_reed_inn') {
+    return buildingContainsPoint(building, x, z, padding);
+  }
 
   const dx = x - building.x;
   const dz = z - building.z;

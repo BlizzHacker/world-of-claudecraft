@@ -50,12 +50,22 @@ function horizontalTravel(sim: Sim, pid: number, ticks: number): number {
 }
 
 function findDeepWater(seed: number): { x: number; z: number } {
-  for (let z = -50; z <= 950; z += 5) {
-    for (let x = -170; x <= 170; x += 5) {
-      if (groundHeight(x, z, seed) < WATER_LEVEL - 1.25) return { x, z };
-    }
+  // A lake CENTRE, not an edge: the whole ~6yd neighbourhood sits well below the
+  // swim line, so a 20-tick forward swim stays submerged the whole way. An edge
+  // spot lets the mover swim out into the shallows mid-run, which skews the swim
+  // ratio (this matters now that the grid world reshaped where the lakes fall).
+  // Eastbrook's Mirror Lake centre: a large open deep pool, clear of town
+  // structures, so a 20-tick swim run stays submerged and collider-free the whole
+  // way (a general deepest-first scan can land in a cluttered or narrow spot that
+  // stalls the run against a wall). The fixture seed is fixed, so this is stable;
+  // the guard fires loudly if a future world change moves the lake.
+  const spot = { x: -100, z: 70 };
+  // (the no-stuck shore grading floats every carved bed ~0.9yd shallower, so
+  // the guard bites at 2yd: still far past the 0.8yd swim line for the run)
+  if (groundHeight(spot.x, spot.z, seed) >= WATER_LEVEL - 2) {
+    throw new Error('test fixture deep-water spot is no longer deep water; pick a new lake centre');
   }
-  throw new Error('test fixture needs a deep-water coordinate');
+  return spot;
 }
 
 // Push a shapeshift toggle aura directly (forms use the 3600s sentinel).
@@ -167,6 +177,8 @@ describe('druid spell pack — casting applies effects', () => {
     const distanceOver = (withForm: boolean): number => {
       const sim = makeWorld();
       const a = sim.addPlayer('druid', 'Strider');
+      // Measure the speed ratio on empty ground: the starting town is
+      // furnished now, so a run from spawn measures a collision, not a speed.
       placePlayerInOpenField(sim, a);
       const e = sim.entities.get(a)!;
       sim.setPlayerLevel(20, a);
@@ -184,6 +196,8 @@ describe('druid spell pack — casting applies effects', () => {
         strafeLeft: false,
         strafeRight: false,
         jump: false,
+        dive: false,
+        surface: false,
       };
       const start = { x: e.pos.x, z: e.pos.z };
       for (let i = 0; i < 60; i++) sim.tick();
@@ -200,6 +214,7 @@ describe('druid spell pack — casting applies effects', () => {
     const distanceOver = (withProwl: boolean): number => {
       const sim = makeWorld();
       const pid = sim.addPlayer('druid', withProwl ? 'Prowler' : 'Runner');
+      // Same reason as Travel Form above: measure on empty ground.
       placePlayerInOpenField(sim, pid);
       const e = sim.entities.get(pid)!;
       sim.setPlayerLevel(20, pid);
@@ -222,6 +237,8 @@ describe('druid spell pack — casting applies effects', () => {
         strafeLeft: false,
         strafeRight: false,
         jump: false,
+        dive: false,
+        surface: false,
       };
       const start = { x: e.pos.x, z: e.pos.z };
       for (let i = 0; i < 60; i++) sim.tick();
@@ -291,6 +308,7 @@ describe('druid spell pack — casting applies effects', () => {
     const normalFollower = normal.addPlayer('druid', 'Follower');
     placeOnGround(normal, normalLeader, 0, 90);
     placeOnGround(normal, normalFollower, 0, 40);
+    normal.setPlayerLevel(20, normalFollower);
     normal.chat('/follow Leader', normalFollower);
     normal.tick();
 

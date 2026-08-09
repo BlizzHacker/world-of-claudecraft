@@ -15,7 +15,7 @@
 // `src/sim`-pure: no DOM/Three, no Math.random/Date.now; all randomness is the
 // shared `ctx.rng` stream, drawn in the exact pre-move order.
 
-import { isDebuffAura, isDispellableAura } from '../aura_classify';
+import { isDebuffAura, isDispellableAura, isPlayerRemovableAura } from '../aura_classify';
 import { ABILITIES, isDelvePos, MOBS } from '../data';
 import { logCascadeCast, recordCascadeInitial } from '../dev/cascade_playtest';
 import { recalcPlayerStats } from '../entity';
@@ -33,7 +33,8 @@ import {
   hotTickBonus,
 } from '../spell_scaling';
 import { stunDrCategory } from '../stun_dr';
-import { addThreat } from '../threat';
+import { resolveTalentHitMult } from '../talent_hit_mult';
+import { addThreat, dropThreat } from '../threat';
 import type { AbilityDef, Entity } from '../types';
 import {
   angleTo,
@@ -71,7 +72,7 @@ import {
   selectCascadeTargets,
 } from './chronomancy';
 import { extendOwnedDot } from './dot_mutation';
-import { consumeAuraKind, consumeNextAttackCrit } from './empower_next';
+import { consumeNextAttackCrit } from './empower_next';
 import { runWeaponProcs } from './equip_procs';
 import { exclusiveAuraConflicts } from './exclusive_aura';
 import { fireGuaranteedCrit, personalBarrierIdForSpec } from './fire_mage';
@@ -84,6 +85,10 @@ import {
 } from './frost_mage';
 import { spawnFrozenOrb } from './frozen_orb';
 import { glacialFrontContains } from './glacial_front';
+import {
+  applyGreaterInvisibilityAftereffect,
+  GREATER_INVISIBILITY_DR_AURA_ID,
+} from './greater_invisibility';
 import { livingGroupRaidInRadius } from './group_targeting';
 import { applyGroupHaste } from './haste_burst';
 import { armHeroicLeap, relocateSwept } from './heroic_leap';
@@ -92,7 +97,7 @@ import { resurrectDeadGroupMembers } from './mass_resurrection';
 import { offerResurrection } from './resurrection_offer';
 import { applyRewind } from './rewind';
 import { spawnRingOfFrost } from './ring_of_frost';
-import { hasCastShield, noteSpellHit, spellDamageMultFromAuras } from './spell_combat';
+import { noteSpellHit, spellDamageMultFromAuras } from './spell_combat';
 import { consumeSureCritCharge, hasSureCritAura } from './sure_crit';
 import { applyTemporalHourglass } from './temporal_hourglass';
 
@@ -122,6 +127,49 @@ function preservesStealth(ability: AbilityDef): boolean {
     ability.id === 'sap' ||
     ability.id === 'shadowstep'
   );
+}
+
+function dropsCombatOnStealth(ability: AbilityDef): boolean {
+  return ability.id === 'vanish';
+}
+
+function dropSelfFromHostileFocus(ctx: SimContext, p: Entity): void {
+  p.combatTimer = 5;
+  p.inCombat = false;
+  p.autoAttack = false;
+  p.targetId = null;
+  p.queuedOnSwing = null;
+  delete p.queuedOnSwingFree;
+  delete p.queuedOnSwingCostMultiplier;
+
+  const pet = ctx.petOf(p.id);
+  const escapeIds = pet ? [p.id, pet.id] : [p.id];
+  if (pet) {
+    pet.combatTimer = 5;
+    pet.inCombat = false;
+    pet.aggroTargetId = null;
+    pet.targetId = null;
+  }
+
+  for (const entity of ctx.entities.values()) {
+    if (entity.kind !== 'mob' || entity.dead || !ctx.isHostileTo(p, entity)) continue;
+    let dropped = false;
+    for (const id of escapeIds) {
+      if (entity.threat.has(id) || entity.forcedTargetId === id) dropped = true;
+      dropThreat(entity, id);
+      if (entity.aggroTargetId === id) {
+        entity.aggroTargetId = null;
+        dropped = true;
+      }
+    }
+    if (!dropped) continue;
+    if (entity.ownerId !== null) {
+      if (entity.aggroTargetId === null) entity.inCombat = false;
+    } else if (entity.threat.size === 0 && entity.aggroTargetId === null) {
+      entity.aiState = 'evade';
+      entity.inCombat = false;
+    }
+  }
 }
 
 // Resolve the exclusiveGroup for an AURA id: either a plain ability id (a
@@ -196,6 +244,13 @@ export function runEffects(
   const ability = res.def;
   const isSpell = ability.school !== 'physical';
   const mods = ctx.playerMods(meta);
+  // The resolved mastery/talent damage and heal multiplier for this ability
+  // (talent_hit_mult.ts): the SAME number applyTalentMods already baked into
+  // its authored base magnitudes, reused here to scale the SP/AP rider a
+  // damage/heal/DoT/HoT/absorb site adds on top, so the advertised percentage
+  // reaches the whole hit, not just the base (issue: mastery/talent damage
+  // percent under-delivered at high SP/AP since the rider was never scaled).
+  const { dmgMult: talentDmgMult, healMult: talentHealMult } = resolveTalentHitMult(ability, mods);
   const spentCombo = ability.spendsCombo ? p.comboPoints : 0;
   let comboAwarded = false;
   const sureCrit = hasSureCritAura(p);
@@ -272,7 +327,12 @@ export function runEffects(
     }
   }
 
-  if (ability.requiresAuraKind) consumeAuraKind(ctx, p, ability.requiresAuraKind);
+  // requiresAuraKind (Glacial Spike's Icicles, Victory Rush's kill window) is now
+  // consumed atomically at cast commit in casting_lifecycle.ts's applyAbility,
+  // alongside spendAbilityCost/armAbilityCooldown, not here: a ranged ability's
+  // runEffects can run ticks after the cast committed (once its projectile
+  // lands), which used to leave the gating aura alive for a same-tick second
+  // cast attempt (issue #2632).
 
   for (const eff of res.effects) {
     switch (eff.type) {
@@ -311,6 +371,7 @@ export function runEffects(
           // Ability-scoped crit talents (ResolvedAbilityMod.critPct, e.g. the
           // Redhanded Craven Thrust mastery) ride the shared hit table.
           critBonus: mods.abilities[ability.id]?.critPct ?? 0,
+          abilityId: ability.id,
           onDealt:
             areaEcho || sweeping
               ? (amount) => {
@@ -367,8 +428,15 @@ export function runEffects(
         // The flat rider scales with the school's rating: Spell Power for spells,
         // Ranged AP for hunter shots, melee Attack Power for physical specials.
         // abilityScalingPower picks the rating; powerScale (inside directHitBonus)
-        // applies the AP scale-down. A non-scaling effect just contributes 0.
-        dmg += directHitBonus(abilityScalingPower(p, ability), ability, res.castTime);
+        // applies the AP scale-down. talentDmgMult reaches the rider too, so a
+        // "+X%" mastery/talent scales the whole hit, not just the base roll.
+        dmg += directHitBonus(
+          abilityScalingPower(p, ability),
+          ability,
+          res.castTime,
+          false,
+          talentDmgMult,
+        );
         if (eff.vsRootedMult !== undefined && rooted) dmg *= eff.vsRootedMult;
         // Ice Lance against a frozen-counting target (combat/frost_mage.ts):
         // the per-cast resolution carries its 3x; 1 for every other cast.
@@ -403,7 +471,7 @@ export function runEffects(
         if (ability.id === ARCANE_SURGE_ID) dmg *= aetherSurgeDamageMult(p);
         const finalDamage = Math.round(dmg);
         lastDirectDamage = finalDamage;
-        ctx.dealDamage(
+        const resolvedDamage = ctx.dealDamage(
           p,
           target,
           finalDamage,
@@ -420,10 +488,18 @@ export function runEffects(
         );
         if (areaEcho) {
           areaEchoDealt = true;
-          echoAreaDamage(ctx, p, target, finalDamage, ability.school, ability.name, threatOpts);
+          echoAreaDamage(ctx, p, target, resolvedDamage, ability.school, ability.name, threatOpts);
         }
         if (sweeping)
-          sweepStrikeDamage(ctx, p, target, finalDamage, ability.school, ability.name, threatOpts);
+          sweepStrikeDamage(
+            ctx,
+            p,
+            target,
+            resolvedDamage,
+            ability.school,
+            ability.name,
+            threatOpts,
+          );
         // Power Echo (mage choice row): the armed echo repeats the SAME
         // resolved amount at its fraction on the same target (already rolled,
         // post crit; no new rng draw), consumed BEFORE the repeat so a copy
@@ -446,8 +522,13 @@ export function runEffects(
                 targetId: target.id,
                 school: ability.school,
                 fx: 'projectile',
+                ability: ability.id,
               });
               scheduleProjectile(ctx, p, target, (src, tgt) => {
+                // The echoed copy deliberately carries no abilityId: the copy
+                // keeps the shared school impact (one dedicated recording per
+                // cast), and threading the id here would ALSO route the echo
+                // hit through ability-filtered spellCrit procs a second time.
                 ctx.dealDamage(
                   src,
                   tgt,
@@ -487,7 +568,9 @@ export function runEffects(
           eff.base +
           eff.perCombo * spentCombo +
           ctx.rng.range(0, eff.variance) +
-          ctx.effectiveAttackPower(p) / 14;
+          // The AP rider gets the same talent/mastery multiplier already baked
+          // into eff.base/eff.perCombo, so it scales with the whole hit too.
+          (ctx.effectiveAttackPower(p) / 14) * talentDmgMult;
         const crit =
           ctx.rng.chance(consumeNextAttackCrit(ctx, p) ? 1 : p.critChance) ||
           sureCrit ||
@@ -596,8 +679,13 @@ export function runEffects(
         const initialApplied: number[] = [];
         for (const ally of targets) {
           const before = devPlaytest ? ally.hp : 0;
+          // Like heal/chainHeal, the base roll (eff.heal.min/max) is talent scaled
+          // by the massTemporalEcho case in classes.ts, and talentHealMult reaches
+          // the SP rider here too, so Chronoweave's "all healing" bonus applies to
+          // Temporal Cascade's initial heal the same way it does every other heal.
           const healAmount =
-            ctx.rng.range(eff.heal.min, eff.heal.max) + directHealBonus(p.spellPower, res.castTime);
+            ctx.rng.range(eff.heal.min, eff.heal.max) +
+            directHealBonus(p.spellPower, res.castTime, false, talentHealMult);
           ctx.applyHeal(p, ally, healAmount, ability.name);
           if (devPlaytest) {
             const applied = ally.hp - before;
@@ -621,11 +709,12 @@ export function runEffects(
           targetId: ally.id,
           school: 'arcane',
           fx: 'temporalGlyph',
+          ability: ability.id,
         });
         break;
       }
       case 'massResurrectGroup': {
-        resurrectDeadGroupMembers(ctx, p, eff.hpFrac);
+        resurrectDeadGroupMembers(ctx, p, eff.hpFrac, ability.id);
         break;
       }
       case 'perfectMoment': {
@@ -658,7 +747,8 @@ export function runEffects(
         // Heals scale with Spell Power at the direct cast-time coefficient, the
         // healing mirror of the direct-nuke rider (applyHeal fires the crit).
         const healAmount =
-          ctx.rng.range(eff.min, eff.max) + directHealBonus(p.spellPower, res.castTime);
+          ctx.rng.range(eff.min, eff.max) +
+          directHealBonus(p.spellPower, res.castTime, false, talentHealMult);
         const healed = ctx.applyHeal(p, healTarget, healAmount, ability.name, ability.id);
         // Power Echo (mage choice row): the armed echo also repeats a direct HEAL
         // (Temporal Mend, Temporal Echo) at its fraction of the RESOLVED heal on
@@ -688,7 +778,8 @@ export function runEffects(
         // Selection and the per-hop spellfx arc adopted from Blaine1705's #1434.
         const first = target ?? p;
         const baseAmount =
-          ctx.rng.range(eff.min, eff.max) + directHealBonus(p.spellPower, res.castTime);
+          ctx.rng.range(eff.min, eff.max) +
+          directHealBonus(p.spellPower, res.castTime, false, talentHealMult);
         const chain: Entity[] = [first];
         while (chain.length <= eff.jumps) {
           const from = chain[chain.length - 1];
@@ -730,6 +821,7 @@ export function runEffects(
             targetId: chain[i].id,
             school: ability.school,
             fx: 'chainHeal',
+            ability: ability.id,
           });
           const hopAmount = Math.max(1, Math.round(baseAmount * eff.falloff ** i));
           ctx.applyHeal(p, chain[i], hopAmount, ability.name, ability.id);
@@ -762,7 +854,14 @@ export function runEffects(
         // rider too would double-dip. Only pure HoTs (Rejuvenation) take the rider.
         const hybridHeal = res.effects.some((e) => e.type === 'heal');
         const hotBase = Math.max(1, Math.round(eff.total / (eff.duration / eff.interval)));
-        const hotSp = hybridHeal ? 0 : hotTickBonus(p.spellPower, eff.duration, eff.interval);
+        const hotSp = hybridHeal
+          ? 0
+          : hotTickBonus(
+              p.spellPower,
+              eff.duration,
+              eff.interval,
+              talentHealMult * (1 + mods.global.hotHealPct),
+            );
         ctx.applyAura(hotTarget, {
           id: ability.id,
           name: ability.name,
@@ -788,7 +887,13 @@ export function runEffects(
           kind: 'absorb',
           remaining: eff.duration,
           duration: eff.duration,
-          value: eff.amount + absorbBonus(p.spellPower, eff.spellPowerCoeff ?? 0),
+          value:
+            eff.amount +
+            absorbBonus(
+              p.spellPower,
+              eff.spellPowerCoeff ?? 0,
+              talentHealMult * (1 + mods.global.absorbPct),
+            ),
           sourceId: p.id,
           school: ability.school,
         });
@@ -826,12 +931,14 @@ export function runEffects(
         const seal = p.auras[sealIdx];
         p.auras.splice(sealIdx, 1);
         ctx.emit({ type: 'aura', targetId: p.id, name: seal.name, gained: false });
-        // Judgement is an instant holy nuke; scale it with Spell Power too.
+        // Judgement is an instant holy nuke; scale it with Spell Power too. The
+        // resolved talent/mastery multiplier (eff.dmgMult, carried forward by
+        // scaleEffect rather than baked into the seal's own value) now wraps
+        // the SP rider too, so it scales the whole hit like every other type.
         const baseDmg = ctx.rng.range(seal.value2 ?? 10, seal.value3 ?? 15);
         let dmg =
-          baseDmg * (eff.dmgMult ?? 1) +
-          (eff.flat ?? 0) +
-          directHitBonus(p.spellPower, ability, res.castTime);
+          (baseDmg + directHitBonus(p.spellPower, ability, res.castTime)) * (eff.dmgMult ?? 1) +
+          (eff.flat ?? 0);
         const crit =
           ctx.rng.chance(consumeNextAttackCrit(ctx, p) ? 1 : ctx.spellCrit(p)) || sureCrit;
         if (sureCrit) sureCritRolled = true;
@@ -873,13 +980,16 @@ export function runEffects(
         const scriptedChannel = interruptedDef
           ? undefined
           : SCRIPTED_INTERRUPTIBLE_CHANNELS[target.castingAbility];
+        // `school` is undefined exactly when BOTH lookups came up empty (both
+        // carry a required school field), so this guard is the old
+        // `!interruptedDef && !scriptedChannel` immunity check.
+        const school = interruptedDef?.school ?? scriptedChannel?.school;
         if (
-          (!interruptedDef && !scriptedChannel) ||
+          school === undefined ||
           interruptedDef?.school === 'physical' ||
           interruptedDef?.uninterruptible
         )
           break;
-        const school = interruptedDef?.school ?? scriptedChannel!.school;
         const remaining = ctx.diminishedCrowdControlDuration(p, target, 'lockout', eff.lockout);
         ctx.cancelCast(target);
         if (eff.rageOnInterrupt && meta.cls === 'warrior' && p.resourceType === 'rage') {
@@ -913,6 +1023,10 @@ export function runEffects(
           ctx.applyNonPlayerStatAura(target, aura, -1);
           target.auras.splice(index, 1);
           ctx.emit({ type: 'aura', targetId: target.id, name: aura.name, gained: false });
+          if (aura.kind === 'stealth') {
+            target.stealthed = target.auras.some((entry) => entry.kind === 'stealth');
+          }
+          applyGreaterInvisibilityAftereffect(ctx, target, aura);
           if (eff.steal && offensive) {
             ctx.applyAura(p, { ...aura, sourceId: p.id });
           }
@@ -960,6 +1074,7 @@ export function runEffects(
           targetId: p.id,
           school: ability.school,
           fx: 'nova',
+          ability: ability.id,
         });
         const fearBreakPct = mods.global.fearBreakPct;
         let feared = 0;
@@ -984,6 +1099,17 @@ export function runEffects(
             breakThreshold:
               fearBreakPct > 0 ? Math.max(1, Math.round(hostile.maxHp * fearBreakPct)) : undefined,
           });
+          // The shout above (fx:'nova') is the cast moment, once, at the
+          // caster; this is the landed-fear moment, once per creature
+          // actually feared, at that creature.
+          ctx.emit({
+            type: 'spellfx',
+            sourceId: p.id,
+            targetId: hostile.id,
+            school: ability.school,
+            fx: 'fearImpact',
+            ability: ability.id,
+          });
           ctx.enterCombat(p, hostile);
           if (hostile.kind === 'mob' && hostile.hostile) {
             addThreat(hostile, p.id, 10 * ctx.threatMod(p, ability.school));
@@ -1007,10 +1133,12 @@ export function runEffects(
         // Ice Block strips every player-removable debuff off the caster (control,
         // DoTs, stat saps, ...), broader than breakRoots and breakControl.
         // Encounter-authored unbreakable control stays until its owning script
-        // releases it.
+        // releases it, and an undispellable penalty (the recovery sicknesses) stays
+        // until its own timer runs out: isPlayerRemovableAura is the shared rule this
+        // and the dispel executor both answer to.
         for (let i = p.auras.length - 1; i >= 0; i--) {
           const aura = p.auras[i];
-          if (isDebuffAura(aura.kind, aura.value) && !isUnbreakableControlAura(aura)) {
+          if (isDebuffAura(aura.kind, aura.value) && isPlayerRemovableAura(aura)) {
             p.auras.splice(i, 1);
             ctx.emit({ type: 'aura', targetId: p.id, name: aura.name, gained: false });
           }
@@ -1044,6 +1172,7 @@ export function runEffects(
           targetId: p.id,
           school: ability.school,
           fx: 'echoBurst',
+          ability: ability.id,
         });
         break;
       }
@@ -1130,14 +1259,26 @@ export function runEffects(
             e.type === 'aoeRoot',
         );
         if (eff.directPct !== undefined && lastDirectDamage <= 0) break;
+        // Combo-point finishers (rupture/rip, spendsCombo: true) add a perCombo
+        // term to the base total, mirroring finisherDamage/finisherHaste/
+        // finisherStun below: spentCombo is already 0 for any ability that
+        // doesn't spend combo, so this is a no-op for every other dot.
         const dotTotal =
-          eff.directPct === undefined ? eff.total : Math.round(lastDirectDamage * eff.directPct);
+          eff.directPct === undefined
+            ? eff.total + (eff.perCombo ?? 0) * spentCombo
+            : Math.round(lastDirectDamage * eff.directPct);
         const dotBase = Math.max(1, Math.round(dotTotal / (eff.duration / eff.interval)));
         // Physical bleeds (Rend, Rupture, Garrote, Rip) scale off melee Attack
         // Power here just like a spell DoT scales off Spell Power; `hybrid` still
         // suppresses the rider on a DoT that trails its own direct nuke.
         const dotSp = !hybrid
-          ? dotTickBonus(abilityScalingPower(p, ability), ability, eff.duration, eff.interval)
+          ? dotTickBonus(
+              abilityScalingPower(p, ability),
+              ability,
+              eff.duration,
+              eff.interval,
+              talentDmgMult * (1 + mods.global.dotDmgPct),
+            )
           : 0;
         const dotId = eff.auraId ?? ability.id;
         ctx.applyAura(target, {
@@ -1153,6 +1294,16 @@ export function runEffects(
           school: eff.school ?? ability.school,
           leechPct: eff.leechPct,
         });
+        if (dotId === 'rupture') {
+          ctx.emit({
+            type: 'spellfx',
+            sourceId: p.id,
+            targetId: target.id,
+            school: eff.school ?? ability.school,
+            fx: 'dotApply',
+            ability: dotId,
+          });
+        }
         ctx.enterCombat(p, target);
         break;
       }
@@ -1183,6 +1334,7 @@ export function runEffects(
           targetId: target.id,
           school: dot.school,
           fx: 'detonate',
+          ability: ability.id,
         });
         if (remainingDamage > 0) {
           ctx.dealDamage(
@@ -1224,6 +1376,19 @@ export function runEffects(
           eff.duration,
           ability.school,
         );
+        // Gripping Roots (entangling_roots) sounds at the target; every other
+        // root ability has no dedicated recording and stays silent here (see
+        // CC_IMPACT_ABILITY_CUES, src/ui/combat_sfx.ts).
+        if (ability.id === 'entangling_roots') {
+          ctx.emit({
+            type: 'spellfx',
+            sourceId: p.id,
+            targetId: target.id,
+            school: ability.school,
+            fx: 'ccImpact',
+            ability: ability.id,
+          });
+        }
         ctx.enterCombat(p, target);
         break;
       }
@@ -1246,6 +1411,19 @@ export function runEffects(
           sourceId: p.id,
           school: ability.school,
         });
+        // Sundering Gavel (hammer_of_justice) and Gut Punch (cheap_shot)
+        // sound at the target; every other stun has no dedicated recording
+        // and stays silent here.
+        if (ability.id === 'hammer_of_justice' || ability.id === 'cheap_shot') {
+          ctx.emit({
+            type: 'spellfx',
+            sourceId: p.id,
+            targetId: target.id,
+            school: ability.school,
+            fx: 'ccImpact',
+            ability: ability.id,
+          });
+        }
         ctx.enterCombat(p, target);
         break;
       }
@@ -1269,6 +1447,35 @@ export function runEffects(
           // break; plain incapacitates (Eye Jab, Wyvern Sting) insta-break.
           breakChanceScale: ability.fearDr ? FEAR_BREAK_CHANCE_SCALE : undefined,
         });
+        // Fear-flavored incapacitates (Harrow) sound at the target, distinct
+        // from plain stuns/incapacitates (Eye Jab, Wyvern Sting), which have
+        // no dedicated fear audio. Gated to ability.id, not the broader
+        // fearDr flag: death_coil (Morrowlash) also carries fearDr for its
+        // diminishing-returns/break-chance treatment but has no fear
+        // recording of its own and is absent from FEAR_IMPACT_ABILITIES, so
+        // a flag-only gate here made it double up its own shadow damage
+        // impact with Harrow's fear sound (review finding, PR #2861).
+        if (ability.id === 'fear') {
+          ctx.emit({
+            type: 'spellfx',
+            sourceId: p.id,
+            targetId: target.id,
+            school: ability.school,
+            fx: 'fearImpact',
+            ability: ability.id,
+          });
+        }
+        // Dirt Toss (blind) and Sap sound at the target too.
+        if (ability.id === 'blind' || ability.id === 'sap') {
+          ctx.emit({
+            type: 'spellfx',
+            sourceId: p.id,
+            targetId: target.id,
+            school: ability.school,
+            fx: 'ccImpact',
+            ability: ability.id,
+          });
+        }
         if (ability.awardsCombo && !comboAwarded) {
           ctx.awardCombo(p, target, ability.awardsCombo);
           comboAwarded = true;
@@ -1304,6 +1511,9 @@ export function runEffects(
         // an aimed blast, the entity-anchored nova otherwise).
         const aoeCenter = p.castAim ?? p.pos;
         if (p.castAim) {
+          // sourceId attributes the landing to its caster so the renderer can
+          // fly the ability's authored projectile volley from the caster's
+          // hands to the aimed point (Splitshot's fan of arrows).
           ctx.emit({
             type: 'spellfxAt',
             x: aoeCenter.x,
@@ -1311,6 +1521,8 @@ export function runEffects(
             school: ability.school,
             fx: 'nova',
             radius: eff.radius,
+            ability: ability.id,
+            sourceId: p.id,
           });
         } else {
           ctx.emit({
@@ -1319,6 +1531,7 @@ export function runEffects(
             targetId: p.id,
             school: ability.school,
             fx: 'nova',
+            ability: ability.id,
           });
         }
         const aoeSpBonus = directHitBonus(
@@ -1326,6 +1539,7 @@ export function runEffects(
           ability,
           res.castTime,
           true,
+          talentDmgMult,
         );
         // Collect the eligible targets FIRST (LoS + frontal gate) so a soft
         // target cap can know the count before any hit lands. The skips draw no
@@ -1364,7 +1578,7 @@ export function runEffects(
           if (aoeCrit)
             dmg *= (isSpell ? 1.5 : 2) + (isSpell ? p.critDmgSpellBonus : p.critDmgPhysBonus);
           // Armor only mitigates physical damage, mirroring the single-target
-          // path above — spell-school AoE (Arcane Explosion, Consecration) is
+          // path above - spell-school AoE (Arcane Explosion, Consecration) is
           // not reduced by the target's armor.
           if (!isSpell) dmg *= 1 - armorReduction(ctx.effectiveArmor(m), p.level);
           // Soft-cap scale (Revenge above 5 targets): applied after the roll and
@@ -1432,13 +1646,22 @@ export function runEffects(
         // hop selection is deterministic (nearest squared distance, then lowest id) and
         // the chain uses one shared damage roll without additional RNG draws.
         const origin = target ?? p;
+        // Like directDamage/aoeDamage, chainDamage's base (min/max) is talent
+        // scaled by its scaleEffect case in classes.ts, and talentDmgMult
+        // reaches the SP/AP rider here too, so the whole bounce (base roll
+        // plus rider), not just the primary hit, scales with global spell
+        // damage / mastery / talent multipliers.
         const chainSpBonus = directHitBonus(
           abilityScalingPower(p, ability),
           ability,
           res.castTime,
           true,
+          talentDmgMult,
         );
-        const baseAmount = ctx.rng.range(eff.min, eff.max) + chainSpBonus;
+        // Resolve the shared primary amount once before applying hop falloff.
+        // Fractional spell-power coefficients must not make later hops round
+        // from a hidden value that differs from the primary damage players saw.
+        const baseAmount = Math.round(ctx.rng.range(eff.min, eff.max) + chainSpBonus);
         const hitsPrimary = eff.hitsPrimary === true && target !== null;
         const hitList: Entity[] = hitsPrimary && target ? [target] : [];
         const excluded = new Set<number>([p.id]);
@@ -1474,6 +1697,7 @@ export function runEffects(
             targetId: m.id,
             school: ability.school,
             fx: 'projectile',
+            ability: ability.id,
           });
           let dmg = baseAmount * eff.falloff ** i;
           if (isSpell) dmg *= spellDamageMultFromAuras(p);
@@ -1503,9 +1727,10 @@ export function runEffects(
           targetId: p.id,
           school: ability.school,
           fx: 'nova',
+          ability: ability.id,
         });
         // AoE heals take the same per-target coefficient penalty as AoE damage.
-        const aoeHealBonus = directHealBonus(p.spellPower, res.castTime, true);
+        const aoeHealBonus = directHealBonus(p.spellPower, res.castTime, true, talentHealMult);
         for (const m of friendliesInRadius(ctx, p, eff.radius)) {
           if (!ctx.hasLineOfSight(p, m)) continue;
           const healAmount = ctx.rng.range(eff.min, eff.max) + aoeHealBonus;
@@ -1521,6 +1746,7 @@ export function runEffects(
           p,
           eff,
           ability.name,
+          ability.id,
           directHitBonus(abilityScalingPower(p, ability), ability, res.castTime, true),
         );
         break;
@@ -1540,9 +1766,17 @@ export function runEffects(
           tickTimer: eff.interval,
           school: ability.school,
           ability: ability.name,
+          abilityId: ability.id,
           // Each pulse is an AoE hit; scale per tick off the school's rating
           // (Spell Power, Ranged AP, or melee Attack Power for physical pulses).
-          spBonus: directHitBonus(abilityScalingPower(p, ability), ability, res.castTime, true),
+          // talentDmgMult reaches this snapshot too, same as every other rider.
+          spBonus: directHitBonus(
+            abilityScalingPower(p, ability),
+            ability,
+            res.castTime,
+            true,
+            talentDmgMult,
+          ),
           allyBuffPct: eff.allyBuffPct,
           igniteFrac: eff.igniteFrac,
           slowMult: eff.slowMult,
@@ -1564,6 +1798,7 @@ export function runEffects(
             fx: 'meteorFall',
             radius: eff.radius,
             duration: eff.interval,
+            ability: ability.id,
           });
         }
         if (eff.allyBuffPct) {
@@ -1575,6 +1810,7 @@ export function runEffects(
             fx: 'runeCircle',
             radius: eff.radius,
             duration: eff.duration,
+            ability: ability.id,
           });
         }
         // A snaring frost zone (Blizzard) snows over its area for its life.
@@ -1587,6 +1823,7 @@ export function runEffects(
             fx: 'snowZone',
             radius: eff.radius,
             duration: eff.duration,
+            ability: ability.id,
           });
         }
         if (p.castAim) {
@@ -1597,6 +1834,7 @@ export function runEffects(
             school: ability.school,
             fx: 'nova',
             radius: eff.radius,
+            ability: ability.id,
           });
         } else {
           ctx.emit({
@@ -1605,6 +1843,7 @@ export function runEffects(
             targetId: p.id,
             school: ability.school,
             fx: 'nova',
+            ability: ability.id,
           });
         }
         // A delayed zone (Meteor's fall) skips the on-cast pulse: its first
@@ -1676,6 +1915,7 @@ export function runEffects(
           targetId: p.id,
           school: ability.school,
           fx: 'nova',
+          ability: ability.id,
         });
         for (const m of ctx.hostilesInRadius(p, p.pos, eff.radius)) {
           if (m.dead) continue;
@@ -1709,6 +1949,7 @@ export function runEffects(
           targetId: p.id,
           school: ability.school,
           fx,
+          ability: ability.id,
           range: stage.range,
           angle,
           level,
@@ -1905,11 +2146,17 @@ export function runEffects(
         break;
       }
       case 'greaterInvisibility': {
-        // One dispatch applies the whole package so the two self-auras carry
-        // distinct ids (the selfBuff case keys auras by the ability id alone):
-        // strip up to N DoTs (newest first), vanish via the stealth machinery
-        // (applyAura sets stealthed), and a buff_dr cut that outlives the
-        // vanish by `linger` so it survives an early break. Draws no rng.
+        // Strip up to N DoTs (newest first), then vanish through the shared
+        // stealth machinery. value2/value3 carry the configured defensive
+        // aftereffect so whichever normal path ends the vanish applies it once.
+        // A reset-assisted recast may have just ended the previous vanish, so
+        // clear that aftereffect before entering invisibility again.
+        const existingDr = p.auras.findIndex((a) => a.id === GREATER_INVISIBILITY_DR_AURA_ID);
+        if (existingDr >= 0) {
+          const gone = p.auras[existingDr];
+          p.auras.splice(existingDr, 1);
+          ctx.emit({ type: 'aura', targetId: p.id, name: gone.name, gained: false });
+        }
         let removed = 0;
         for (let i = p.auras.length - 1; i >= 0 && removed < eff.removeDotCount; i--) {
           if (p.auras[i].kind !== 'dot') continue;
@@ -1928,16 +2175,8 @@ export function runEffects(
           remaining: eff.duration,
           duration: eff.duration,
           value: 1,
-          sourceId: p.id,
-          school: ability.school,
-        });
-        ctx.applyAura(p, {
-          id: `${ability.id}_dr`,
-          name: ability.name,
-          kind: 'buff_dr',
-          remaining: eff.duration + eff.linger,
-          duration: eff.duration + eff.linger,
-          value: eff.drValue,
+          value2: eff.drValue,
+          value3: eff.afterDuration,
           sourceId: p.id,
           school: ability.school,
         });
@@ -1981,6 +2220,7 @@ export function runEffects(
           targetId: p.id,
           school: ability.school,
           fx: 'nova',
+          ability: ability.id,
         });
         // Materialize before movement so displacement cannot perturb iteration.
         for (const hostile of [...ctx.hostilesInRadius(p, p.pos, eff.radius)]) {
@@ -2024,6 +2264,7 @@ export function runEffects(
             school: ability.school,
             fx: 'nova',
             radius: eff.radius,
+            ability: ability.id,
           });
         } else {
           ctx.emit({
@@ -2032,6 +2273,7 @@ export function runEffects(
             targetId: p.id,
             school: ability.school,
             fx: 'nova',
+            ability: ability.id,
           });
         }
         // Control-only roots (for example Frost Trap) must not turn spell power
@@ -2039,7 +2281,13 @@ export function runEffects(
         // damaging roots such as Frost Nova retain their normal scaling path.
         const dealsDamage = eff.min !== 0 || eff.max !== 0;
         const aoeRootSp = dealsDamage
-          ? directHitBonus(abilityScalingPower(p, ability), ability, res.castTime, true)
+          ? directHitBonus(
+              abilityScalingPower(p, ability),
+              ability,
+              res.castTime,
+              true,
+              talentDmgMult,
+            )
           : 0;
         for (const m of ctx.hostilesInRadius(p, center, eff.radius)) {
           if (!ctx.hasLineOfSight(p, m)) continue;
@@ -2112,7 +2360,13 @@ export function runEffects(
         if (eff.deal) {
           let dmg =
             ctx.rng.range(eff.deal.min, eff.deal.max) +
-            directHitBonus(abilityScalingPower(p, ability), ability, res.castTime);
+            directHitBonus(
+              abilityScalingPower(p, ability),
+              ability,
+              res.castTime,
+              false,
+              talentDmgMult,
+            );
           if (isSpell) dmg *= spellDamageMultFromAuras(p);
           const crit =
             ctx.rng.chance(consumeNextAttackCrit(ctx, p) ? 1 : ctx.spellCrit(p)) || sureCrit;
@@ -2139,13 +2393,17 @@ export function runEffects(
         }
         if (eff.heal) {
           const healAmount =
-            ctx.rng.range(eff.heal.min, eff.heal.max) + directHealBonus(p.spellPower, res.castTime);
+            ctx.rng.range(eff.heal.min, eff.heal.max) +
+            directHealBonus(p.spellPower, res.castTime, false, talentHealMult);
           ctx.applyHeal(p, target, healAmount, ability.name, ability.id);
         }
         break;
       }
       case 'breakRoots': {
-        removeRootAuras(ctx, p);
+        // Self-cast only: a personal barrier laid on a friendly TARGET (the
+        // Chronomancy Temporal Barrier can shield an ally) must not cleanse
+        // the caster's own root just because they cast the spell.
+        if (!target || target === p) removeRootAuras(ctx, p);
         break;
       }
       case 'breakControl': {
@@ -2208,6 +2466,7 @@ export function runEffects(
           targetId: p.id,
           school: ability.school,
           fx: 'blinkStep',
+          ability: ability.id,
         });
         break;
       }
@@ -2294,6 +2553,9 @@ export function runEffects(
           charges: eff.charges,
           icdMax: eff.internalCooldown,
         });
+        if (eff.kind === 'stealth' && dropsCombatOnStealth(ability)) {
+          dropSelfFromHostileFocus(ctx, p);
+        }
         recalcPlayerStats(
           p,
           meta.cls,
@@ -2518,7 +2780,22 @@ export function runEffects(
             : Math.min(eff.maxStacks, (existing.stacks ?? 1) + 1);
           existing.value = eff.armor;
           existing.remaining = existing.duration;
-          ctx.emit({ type: 'aura', targetId: target.id, name: ability.name, gained: true });
+          // A stack bump is a refresh of the existing aura: carry the count
+          // and attribution so parses can track Sunder/Expose stacks past the
+          // first application (parse fidelity 7.2). Attribution names the
+          // CURRENT caster and cast, agreeing with `name`: warrior Sunder and
+          // rogue Expose share kind 'sunder', so crediting the pre-existing
+          // aura would attribute a warrior's bump to the rogue's cast.
+          ctx.emit({
+            type: 'aura',
+            targetId: target.id,
+            name: ability.name,
+            gained: true,
+            sourceId: p.id,
+            abilityId: ability.id,
+            stacks: existing.stacks,
+            refresh: true,
+          });
         } else {
           ctx.applyAura(target, {
             id: ability.id,
@@ -2596,7 +2873,12 @@ export function runEffects(
   // plants Winter's Chill on its surviving target. Inert for everyone else.
   frostMageAfterCast(ctx, p, meta, ability, target);
 
-  if (ability.spendsCombo && spentCombo > 0) {
+  // A finisher cast fully free via next_cast_free/next_execute_free (Borrowed
+  // Tempo's Cutthroat Tempo proc) still uses the banked combo points to scale
+  // its effect (spentCombo above), but does not spend them: "free" means the
+  // whole cast, not just the resource bill (issue #2426). A next_cast_cheap/
+  // next_cast_instant discount never sets freeCast, so those still spend as normal.
+  if (ability.spendsCombo && spentCombo > 0 && !res.freeCast) {
     p.comboPoints = 0;
     ctx.emit({ type: 'comboPoint', points: 0, pid: p.id });
   }

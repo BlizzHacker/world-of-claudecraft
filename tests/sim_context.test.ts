@@ -133,6 +133,7 @@ const CALLBACK_KEYS = [
   'swingIntervalMult',
   'mobCanSwim',
   'resolveMovePoint',
+  'resolvePlayerMove',
   'resolveMove',
   'updatePet',
   'isDelveCompanionMob',
@@ -183,6 +184,9 @@ const CALLBACK_KEYS = [
   'abandonLockpick',
   'tickLockpickTimeout',
   'startDelveRaiseDeadChannel',
+  'tickMountTraining',
+  'abandonMountTraining',
+  'tickMountRace',
   // C4a casting-lifecycle surface.
   'resolvedAbility',
   'playerGcdFor',
@@ -193,10 +197,16 @@ const CALLBACK_KEYS = [
   'tameError',
   'standUp',
   'breakGhostWolf',
+  'forceDismount',
   'startAutoAttack',
   'revivePet',
   'completeFishing',
   'completeGatherCast',
+  'completeCraftCast',
+  'completeDisenchantCast',
+  'completeApplyEnchantCast',
+  'completeSalvageCast',
+  'completeRechargeCast',
   'applyDemonHealTick',
   'awardCombo',
   'meleeSwing',
@@ -232,14 +242,24 @@ const CALLBACK_KEYS = [
   'queueQuestLetter',
   'mailHeroicMarks',
   'mailAuthoredLetter',
+  'mailboxHoldsItem',
+  // Commission order board change signal (professions/commission_order.ts
+  // writes it at every board mutation; the server's corder gate reads it).
+  'bumpCommissionOrderBoardRev',
   // Set proc firing.
   'applySetProcs',
+  // Book of Deeds lifetime-counter bump (deeds.ts owns the body).
+  'bumpDeedStat',
+  // Vale Cup <-> Arena queue exclusion (social/vale_cup.ts).
+  'vcupSeatedOrQueued',
   // The Vale Cup sport-move arms (social/vale_cup.ts).
   'vcupBallKick',
   'vcupBallPass',
   'vcupShoot',
   'vcupSportDash',
   'vcupSportShove',
+  // Thornhollow Fields battleground hooks (social/battleground.ts).
+  'bgOnPlayerDeath',
 ] as const;
 
 // A fully-spied fake host. `clock` is mutable so a test can prove the context reads
@@ -249,6 +269,12 @@ function makeFakeHost() {
   const entities = new Map<number, Entity>();
   const clock = { time: 0, tick: 0 };
   const host: SimContextHost = {
+    riftCollisionToken: 1,
+    naturalRiftPortals: [],
+    riftEvents: [],
+    nextRiftInstanceId: 1,
+    riftPortalNextAt: 120,
+    riftPortalSpawnCount: 0,
     get rng() {
       return rng;
     },
@@ -262,6 +288,7 @@ function makeFakeHost() {
       return entities;
     },
     players: new Map(),
+    masteryResetNoticeCounter: { pending: 0 },
     stationPlacements: [],
     primaryId: -1,
     tradeInvites: new Map(),
@@ -275,6 +302,8 @@ function makeFakeHost() {
     frozenOrbs: [],
     dungeonDoorIds: null,
     instances: [],
+    riftInstances: [],
+    riftPortalIds: null,
     dungeonResetLocks: new Map(),
     arenaMatches: new Map(),
     duels: new Map(),
@@ -290,12 +319,18 @@ function makeFakeHost() {
     arenaQueueYumi5: [],
     yumiBusySlots: new Set(),
     yumiCatMatches: new Map(),
+    escortRuns: new Map(),
     matchmakeYumi: vi.fn(),
     updateYumiActive: vi.fn(),
     yumiPlayerDown: vi.fn(),
     yumiCatDamaged: vi.fn(),
     cleanupYumiMatch: vi.fn(),
     nextArenaMatchId: 1,
+    bgQueue: [],
+    bgMatches: new Map(),
+    bgBusySlots: new Set(),
+    bgOutcomes: [],
+    nextBgMatchId: 1,
     delveRuns: [],
     delvePetStash: new Map(),
     utcDay: '',
@@ -309,13 +344,28 @@ function makeFakeHost() {
     nextLootRollId: 1,
     devCommands: false,
     marketListings: [],
+    commissionOrderBoard: [],
+    nextCommissionOrderId: 1,
     bankerIds: [],
+    guildBanks: new Map(),
     vcup: createVcState(),
     derby: createDerbyState(),
     boarpit: createPitState(),
     homes: createHomesState(),
     horde: createHordeState(),
     skirmish: createSkirmishState(),
+    deedDirtyPids: new Set<number>(),
+    deedDirtyKeys: new Map<number, Set<string>>(),
+    worldBossEntityIds: [],
+    deedRuntime: createDeedRuntime(),
+    fiestaBotPids: [],
+    mobScanCounters: createMobScanCounters(),
+    bumpDeedStat: vi.fn(),
+    bumpCommissionOrderBoardRev: vi.fn(),
+    markItemDiscovered: vi.fn(),
+    markVisited: vi.fn(),
+    markDeedsDirty: vi.fn(),
+    grantDeed: vi.fn(() => true),
     emit: vi.fn(),
     error: vi.fn(),
     dealDamage: vi.fn(),
@@ -390,6 +440,9 @@ function makeFakeHost() {
     instanceClaimIdAt: vi.fn(() => null),
     enterDungeon: vi.fn(),
     leaveDungeon: vi.fn(),
+    enterRift: vi.fn(),
+    leaveRift: vi.fn(),
+    riftOpenTreasure: vi.fn(),
     resetDungeonInstances: vi.fn(),
     inheritDungeonResetLocks: vi.fn(),
     dungeonDifficulty: vi.fn(() => 'normal' as const),
@@ -435,6 +488,7 @@ function makeFakeHost() {
     swingIntervalMult: vi.fn(() => 1),
     mobCanSwim: vi.fn(() => false),
     resolveMovePoint: vi.fn(() => ({ x: 0, z: 0 })),
+    resolvePlayerMove: vi.fn(() => ({ x: 0, z: 0 })),
     resolveMove: vi.fn(() => ({ x: 0, z: 0 })),
     updatePet: vi.fn(),
     isDelveCompanionMob: vi.fn(() => false),
@@ -474,6 +528,9 @@ function makeFakeHost() {
     abandonLockpick: vi.fn(),
     tickLockpickTimeout: vi.fn(),
     startDelveRaiseDeadChannel: vi.fn(() => false),
+    tickMountTraining: vi.fn(),
+    tickMountRace: vi.fn(),
+    abandonMountTraining: vi.fn(),
     resolvedAbility: vi.fn(() => null),
     playerGcdFor: vi.fn(() => 1.5),
     isFriendlyTo: vi.fn(() => false),
@@ -485,10 +542,16 @@ function makeFakeHost() {
     tameError: vi.fn(() => null),
     standUp: vi.fn(),
     breakGhostWolf: vi.fn(),
+    forceDismount: vi.fn(),
     startAutoAttack: vi.fn(),
     revivePet: vi.fn(),
     completeFishing: vi.fn(),
     completeGatherCast: vi.fn(),
+    completeCraftCast: vi.fn(),
+    completeDisenchantCast: vi.fn(),
+    completeApplyEnchantCast: vi.fn(),
+    completeSalvageCast: vi.fn(),
+    completeRechargeCast: vi.fn(),
     applyDemonHealTick: vi.fn(),
     awardCombo: vi.fn(),
     meleeSwing: vi.fn(() => false),
@@ -525,13 +588,21 @@ function makeFakeHost() {
     queueQuestLetter: vi.fn(),
     mailHeroicMarks: vi.fn(),
     mailAuthoredLetter: vi.fn(),
+    mailboxHoldsItem: vi.fn(() => false),
     applySetProcs: vi.fn(),
+    // Vale Cup <-> Arena queue exclusion.
+    vcupSeatedOrQueued: vi.fn(() => false),
     // The Vale Cup sport-move arms.
     vcupBallKick: vi.fn(),
     vcupBallPass: vi.fn(),
     vcupShoot: vi.fn(),
     vcupSportDash: vi.fn(),
     vcupSportShove: vi.fn(),
+    // Thornhollow Fields battleground hooks.
+    bgOnPlayerDeath: vi.fn(),
+    bgOnPlayerDamaged: vi.fn(),
+    bgOnPlayerHealed: vi.fn(),
+    bgCancelFlagAura: vi.fn(() => false),
   };
   return { host, rng, entities, clock };
 }
@@ -561,6 +632,14 @@ describe('createSimContext (isolated, fake host)', () => {
     expect(ctx.bankerIds).toBe(host.bankerIds);
     host.bankerIds.push(4242); // the Sim ctor pushes ids after the ctx is built
     expect(ctx.bankerIds).toEqual([4242]);
+  });
+
+  it('exposes guildBanks as a live shared view (the bankerIds idiom)', () => {
+    const { host } = makeFakeHost();
+    const ctx = createSimContext(host);
+    expect(ctx.guildBanks).toBe(host.guildBanks);
+    host.guildBanks.set(3, { treasury: 0, inventory: [], purchasedSlots: 0 });
+    expect(ctx.guildBanks.get(3)).toEqual({ treasury: 0, inventory: [], purchasedSlots: 0 });
   });
 
   it('passes every callback through to the host by identity (no rewrapping)', () => {

@@ -207,6 +207,57 @@ describe('item-instance payload (#1165)', () => {
       sim.meta(seller)?.inventory.some((s) => s.itemId === 'apprentice_staff' && s.instance),
     ).toBe(true);
   });
+
+  it('trade preserves an instanced copy instead of flattening its payload', () => {
+    const sim = makeWorld();
+    const seller = sim.addPlayer('warrior', 'Seller');
+    const buyer = sim.addPlayer('mage', 'Buyer');
+    // A signed (but unbound) copy: boundTo is the Maker's Bond trade LOCK
+    // (social/trade.ts isTradeLocked), so a payload carrying it can never be
+    // offered; the flatten guard rides an ordinary signed payload instead.
+    sim.addItemInstance('apprentice_staff', { signer: 'Aldric' }, seller);
+
+    sim.tradeRequest(buyer, seller);
+    sim.tradeAccept(buyer);
+    sim.tradeSetOffer([{ itemId: 'apprentice_staff', count: 1 }], 0, seller);
+    sim.tradeConfirm(seller);
+    sim.tradeConfirm(buyer);
+
+    expect(sim.countItem('apprentice_staff', buyer)).toBe(1);
+    expect(
+      sim
+        .meta(buyer)
+        ?.inventory.some(
+          (slot) => slot.itemId === 'apprentice_staff' && slot.instance?.signer === 'Aldric',
+        ),
+    ).toBe(true);
+    expect(sim.meta(seller)?.inventory.some((slot) => slot.itemId === 'apprentice_staff')).toBe(
+      false,
+    );
+  });
+
+  it('trade moves a plain copy without touching a same-id instanced copy', () => {
+    const sim = makeWorld();
+    const seller = sim.addPlayer('warrior', 'Seller');
+    const buyer = sim.addPlayer('mage', 'Buyer');
+    sim.addItem('apprentice_staff', 1, seller);
+    sim.addItemInstance('apprentice_staff', { signer: 'Aldric', boundTo: seller }, seller);
+
+    sim.tradeRequest(buyer, seller);
+    sim.tradeAccept(buyer);
+    sim.tradeSetOffer([{ itemId: 'apprentice_staff', count: 1 }], 0, seller);
+    sim.tradeConfirm(seller);
+    sim.tradeConfirm(buyer);
+
+    expect(sim.countItem('apprentice_staff', buyer)).toBe(1);
+    expect(
+      sim
+        .meta(seller)
+        ?.inventory.some(
+          (slot) => slot.itemId === 'apprentice_staff' && slot.instance?.signer === 'Aldric',
+        ),
+    ).toBe(true);
+  });
 });
 
 describe('masterwork and legacy instance payloads (Professions 2.0 back-compat)', () => {
@@ -477,11 +528,14 @@ describe('identical-payload stacking (Professions 2.0)', () => {
     sim.addItemInstance('wolf_fang', { ...payload, rolled: { ...payload.rolled } }, sim.playerId);
     sim.addItemInstance('wolf_fang', { ...payload, rolled: { ...payload.rolled } }, sim.playerId);
     const [consumed] = sim.removeEnchantableItem('wolf_fang', 1, sim.playerId);
-    expect(consumed).toEqual({ signer: 'Ana', rolled: { masterwork: true, stats: { str: 1 } } });
+    expect(consumed).toEqual({
+      instance: { signer: 'Ana', rolled: { masterwork: true, stats: { str: 1 } } },
+      craftedRecipeId: undefined,
+    });
     // The enchant path mutates the payload it gets back; the surviving stack's
     // shared payload must stay untouched.
-    consumed.enchant = 'enchant_weapon_might';
-    consumed.rolled!.stats!.str = 99;
+    consumed.instance!.enchant = 'enchant_weapon_might';
+    consumed.instance!.rolled!.stats!.str = 99;
     const survivor = sim.meta(sim.playerId)!.inventory.find((s) => s.itemId === 'wolf_fang')!;
     expect(survivor.count).toBe(1);
     expect(survivor.instance).toEqual({
