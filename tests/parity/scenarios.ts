@@ -365,6 +365,10 @@ function affixMob(): Scenario {
       sim.setPlayerLevel(13);
       const p = sim.player as AnyEntity;
       beef(p, 90000);
+      // Stage on open vale ground: the fork's Hellmaw Well delve arch stands
+      // beside the town well and blocks line of sight across the old spawn-side
+      // staging spot.
+      teleport(sim, p, 40, -40);
       const greyjaw = spawnMob(sim, 'old_greyjaw', 4, p.pos.x + 2, p.pos.y, p.pos.z);
       const stalker = spawnMob(sim, 'ridge_stalker', 13, p.pos.x - 2, p.pos.y, p.pos.z);
       beef(greyjaw, 60000);
@@ -1666,6 +1670,20 @@ function masterLoot(): Scenario {
       }),
     drive(rec: Recorder) {
       const sim = rec.sim;
+      // No wild-mob interference: the fork's grinding town NPCs pick fights with
+      // wild mobs, and the mob's hit-table swings draw from the shared combat
+      // stream mid-window. Silence the world's mobs up front (deterministic,
+      // recorded state, the test-suite despawnMobs idiom); the scenario spawns
+      // its own actors below.
+      for (const e of (sim.entities as Map<number, AnyEntity>).values()) {
+        if (e.kind !== 'mob') continue;
+        e.dead = true;
+        e.hp = 0;
+        e.aiState = 'dead';
+        e.respawnTimer = 9999;
+        e.corpseTimer = 9999;
+        e.inCombat = false;
+      }
       const a = sim.addPlayer('warrior', 'Aaa');
       const b = sim.addPlayer('mage', 'Bbb');
       const c = sim.addPlayer('rogue', 'Ccc');
@@ -3339,6 +3357,9 @@ function c3AuraRunner(): Scenario {
       sim.setPlayerLevel(20); // consecration learnLevel 18
       const p = sim.player as AnyEntity;
       beef(p);
+      // Stage on open vale ground, clear of the Hellmaw Well delve arch beside
+      // the town well (it blocks the consecration line of sight at old spawn).
+      teleport(sim, p, 40, -40);
 
       // ----- Phase A: a DoT kills the victim mid-updateAuras (the e.dead guard) -----
       // The buff at index 0 + the lethal dot at index 1: the backward walk ticks the dot

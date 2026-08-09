@@ -404,7 +404,10 @@ describe('coverage: each scenario fires its subsystem', () => {
     const signedUnits = signed.reduce((n: number, s: any) => n + s.count, 0);
     expect(signedUnits).toBeGreaterThanOrEqual(rareGather!.qty);
     expect(signed.length).toBeLessThanOrEqual(Math.ceil(signedUnits / 20));
-  });
+    // Raised for the v0.35.1 intake: the merged world carries BOTH parents'
+    // content, so each tick walks more entities and the long gather hunt
+    // overruns the default timeout. Bounded work, not a hang.
+  }, 120000);
 
   // This block exists because its absence is what let the scenario rot. Its
   // stand point for step 1 was an inlined coordinate; the v0.32.0 merge moved
