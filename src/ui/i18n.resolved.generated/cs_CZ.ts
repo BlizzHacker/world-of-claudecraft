@@ -3589,7 +3589,7 @@ export const cs_CZ: EnTranslations = {
   },
   "guide": {
     "brand": "Cryptic Realm",
-    "brandShort": "ClaudeCraft",
+    "brandShort": "Cryptic",
     "tagline": "MMO v klasickém stylu, které hraješ zdarma v prohlížeči.",
     "skipToContent": "Přejít na hlavní obsah",
     "loading": "Načítá se...",

@@ -4009,7 +4009,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'stats.playersOnline': 'Joueurs en ligne',
   'stats.realmName': 'Nom du monde',
   'footer.copyright': '2026 Cryptic Realm',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
+  'footer.githubLink': '/contributions.html',
   'footer.githubLabel': 'Contributions',
   'footer.whitepaper': 'Livre blanc',
   'footer.terms': "Conditions d'utilisation",
@@ -4193,8 +4193,8 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'playerCard.levelClass': 'Niveau {level} - {className}',
   'playerCard.topPercent': 'TOP {percent} %',
   'playerCard.realmSubtitle': 'Monde {realm}',
-  'playerCard.defaultRealm': 'Monde de ClaudeCraft',
-  'playerCard.brandWordmark': 'WORLD OF CLAUDECRAFT',
+  'playerCard.defaultRealm': 'Cryptic Realm',
+  'playerCard.brandWordmark': 'CRYPTIC REALM',
   'playerCard.recruited': '{count} recrutés',
   'playerCard.footerHandle': '@{handle}',
   'playerCard.footerHandleWithRecruits': '@{handle} - {recruited}',
@@ -4203,7 +4203,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'playerCard.shareTierBit': ', détenteur $CR de rang {tier}',
   'playerCard.shareText':
     'Je forge ma légende dans Cryptic Realm : niveau {level} {className}{tierBit}. Rejoignez mon monde :',
-  'playerCard.nativeShareTitle': 'Monde de ClaudeCraft',
+  'playerCard.nativeShareTitle': 'Cryptic Realm',
   'playerCard.fileNameFallback': 'joueur',
   'playerCard.actionShareX': 'Partager sur X',
   'playerCard.actionCopyReferral': "Copier le lien d'invitation",
@@ -7537,7 +7537,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.levelsSame': 'Niveau {min}',
   'guide.bestiary.rare': 'Rare',
   'guide.brand': 'Cryptic Realm',
-  'guide.brandShort': 'ClaudeCraft',
+  'guide.brandShort': 'Cryptic',
   'guide.classHook.druid':
     'Un métamorphe qui encaisse en ours, taille les ennemis en fauve ou soigne au cœur de la mêlée.',
   'guide.classHook.hunter':

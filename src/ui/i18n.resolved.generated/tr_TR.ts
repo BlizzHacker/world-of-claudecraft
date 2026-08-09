@@ -3589,7 +3589,7 @@ export const tr_TR: EnTranslations = {
   },
   "guide": {
     "brand": "Cryptic Realm",
-    "brandShort": "ClaudeCraft",
+    "brandShort": "Cryptic",
     "tagline": "Tarayıcınızda ücretsiz oynayabileceğiniz klasik tarzda bir MMO.",
     "skipToContent": "Ana içeriğe geç",
     "loading": "Yükleniyor...",
@@ -5544,7 +5544,7 @@ export const tr_TR: EnTranslations = {
   },
   "footer": {
     "copyright": "2026 Cryptic Realm",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
+    "githubLink": "/contributions.html",
     "githubLabel": "Contributions",
     "whitepaper": "Teknik Doküman",
     "terms": "Hizmet Koşulları",
@@ -6047,7 +6047,7 @@ export const tr_TR: EnTranslations = {
     "topPercent": "İLK %{percent}",
     "realmSubtitle": "{realm} Dünyası",
     "defaultRealm": "Cryptic Realm",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "brandWordmark": "CRYPTIC REALM",
     "recruited": "{count} davet edildi",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",

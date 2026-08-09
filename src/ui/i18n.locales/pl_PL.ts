@@ -5754,7 +5754,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.notedLabel': 'Warte uwagi',
   'guide.bestiary.rare': 'Rzadki',
   'guide.brand': 'Cryptic Realm',
-  'guide.brandShort': 'ClaudeCraft',
+  'guide.brandShort': 'Cryptic',
   'guide.breadcrumb.home': 'Przewodnik',
   'guide.breadcrumb.label': 'Ścieżka nawigacji',
   'guide.chooser.clear': 'Wyczyść',

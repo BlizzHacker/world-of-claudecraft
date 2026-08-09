@@ -3522,7 +3522,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'stats.playersOnline': 'Jogadores online',
   'stats.realmName': 'Nome do mundo',
   'footer.copyright': '2026 Cryptic Realm',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
+  'footer.githubLink': '/contributions.html',
   'footer.githubLabel': 'Contributions',
   'footer.whitepaper': 'Whitepaper',
   'footer.terms': 'Termos de serviço',
@@ -3703,8 +3703,8 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'playerCard.levelClass': 'Nível {level} - {className}',
   'playerCard.topPercent': 'TOP {percent}%',
   'playerCard.realmSubtitle': 'Mundo {realm}',
-  'playerCard.defaultRealm': 'Mundo de ClaudeCraft',
-  'playerCard.brandWordmark': 'WORLD OF CLAUDECRAFT',
+  'playerCard.defaultRealm': 'Cryptic Realm',
+  'playerCard.brandWordmark': 'CRYPTIC REALM',
   'playerCard.recruited': '{count} recrutados',
   'playerCard.footerHandle': '@{handle}',
   'playerCard.footerHandleWithRecruits': '@{handle} - {recruited}',
@@ -3713,7 +3713,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'playerCard.shareTierBit': ', titular de $CR de nível {tier}',
   'playerCard.shareText':
     'Estou forjando minha lenda em Cryptic Realm: nível {level} {className}{tierBit}. Entre no meu mundo:',
-  'playerCard.nativeShareTitle': 'Mundo de ClaudeCraft',
+  'playerCard.nativeShareTitle': 'Cryptic Realm',
   'playerCard.fileNameFallback': 'jogador',
   'playerCard.actionShareX': 'Compartilhar no X',
   'playerCard.actionCopyReferral': 'Copiar link de indicação',
@@ -6827,7 +6827,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.levelsSame': 'Nível {min}',
   'guide.bestiary.rare': 'Raro',
   'guide.brand': 'Cryptic Realm',
-  'guide.brandShort': 'ClaudeCraft',
+  'guide.brandShort': 'Cryptic',
   'guide.classHook.druid':
     'Um metamorfo que protege como um urso, dilacera inimigos como um felino ou cura no auge da refrega.',
   'guide.classHook.hunter':

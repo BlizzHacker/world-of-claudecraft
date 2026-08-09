@@ -3589,7 +3589,7 @@ export const sv_SE: EnTranslations = {
   },
   "guide": {
     "brand": "Cryptic Realm",
-    "brandShort": "ClaudeCraft",
+    "brandShort": "Cryptic",
     "tagline": "En klassisk MMO du spelar gratis i din webbläsare.",
     "skipToContent": "Hoppa till huvudinnehållet",
     "loading": "Laddar...",
@@ -5544,7 +5544,7 @@ export const sv_SE: EnTranslations = {
   },
   "footer": {
     "copyright": "2026 Cryptic Realm",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
+    "githubLink": "/contributions.html",
     "githubLabel": "Contributions",
     "whitepaper": "Whitepaper",
     "terms": "Användarvillkor",
@@ -6047,7 +6047,7 @@ export const sv_SE: EnTranslations = {
     "topPercent": "TOPP {percent}%",
     "realmSubtitle": "Världen {realm}",
     "defaultRealm": "Cryptic Realm",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "brandWordmark": "CRYPTIC REALM",
     "recruited": "{count} värvade",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",

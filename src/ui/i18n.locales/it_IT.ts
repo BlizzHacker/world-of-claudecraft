@@ -3567,7 +3567,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'stats.playersOnline': 'Giocatori online',
   'stats.realmName': 'Nome del mondo',
   'footer.copyright': '2026 Cryptic Realm',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
+  'footer.githubLink': '/contributions.html',
   'footer.githubLabel': 'Contributions',
   'footer.whitepaper': 'Libro bianco',
   'footer.terms': 'Termini di servizio',
@@ -3748,8 +3748,8 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'playerCard.levelClass': 'Livello {level} - {className}',
   'playerCard.topPercent': 'TOP {percent}%',
   'playerCard.realmSubtitle': 'Mondo {realm}',
-  'playerCard.defaultRealm': 'Mondo di ClaudeCraft',
-  'playerCard.brandWordmark': 'WORLD OF CLAUDECRAFT',
+  'playerCard.defaultRealm': 'Cryptic Realm',
+  'playerCard.brandWordmark': 'CRYPTIC REALM',
   'playerCard.recruited': '{count} reclutati',
   'playerCard.footerHandle': '@{handle}',
   'playerCard.footerHandleWithRecruits': '@{handle} - {recruited}',
@@ -3758,7 +3758,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'playerCard.shareTierBit': ', titolare $CR di rango {tier}',
   'playerCard.shareText':
     'Sto forgiando la mia leggenda in Cryptic Realm: livello {level} {className}{tierBit}. Unisciti al mio mondo:',
-  'playerCard.nativeShareTitle': 'Mondo di ClaudeCraft',
+  'playerCard.nativeShareTitle': 'Cryptic Realm',
   'playerCard.fileNameFallback': 'giocatore',
   'playerCard.actionShareX': 'Condividi su X',
   'playerCard.actionCopyReferral': 'Copia link di invito',
@@ -6953,7 +6953,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.levelsSame': 'Livello {min}',
   'guide.bestiary.rare': 'Raro',
   'guide.brand': 'Cryptic Realm',
-  'guide.brandShort': 'ClaudeCraft',
+  'guide.brandShort': 'Cryptic',
   'guide.classHook.druid':
     'Un mutaforma che fa da tank come orso, dilania i nemici come felino o cura nel pieno della mischia.',
   'guide.classHook.hunter':

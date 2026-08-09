@@ -45,7 +45,9 @@ export function classifyAuthCode(raw: string): { code: string; recoveryCode: str
 export function formatRecoveryCodesFile(
   codes: string[],
   username: string,
-  brand = 'World of ClaudeCraft',
+  // The only caller (main.ts) omits this, so the DEFAULT is what every player
+  // actually downloads with their recovery codes - it was still the upstream brand.
+  brand = 'Cryptic Realm',
 ): string {
   return [
     t('hudChrome.account.recoveryCodesFileHeader', { brand }),

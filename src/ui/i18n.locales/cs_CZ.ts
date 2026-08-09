@@ -7658,7 +7658,7 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
     'Když vítr vane z jižních štítů, {playerName}, nese zpěv. Kult draka se už neskrývá, vztyčil stany pod svatyní a zpívá tomu, co pod ní spí. Umlč dvanáct fanatiků. Každý utišený hlas kupuje hoře další noc spánku.',
   'entities.quests.q_zealots.title': 'Zpěvy ve větru',
   'guide.brand': 'Cryptic Realm',
-  'guide.brandShort': 'ClaudeCraft',
+  'guide.brandShort': 'Cryptic',
   'guide.tagline': 'MMO v klasickém stylu, které hraješ zdarma v prohlížeči.',
   'guide.skipToContent': 'Přejít na hlavní obsah',
   'guide.loading': 'Načítá se...',

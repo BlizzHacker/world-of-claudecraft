@@ -3597,7 +3597,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'stats.playersOnline': 'Spieler online',
   'stats.realmName': 'Weltname',
   'footer.copyright': '2026 Cryptic Realm',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
+  'footer.githubLink': '/contributions.html',
   'footer.githubLabel': 'Contributions',
   'footer.whitepaper': 'Whitepaper',
   'footer.terms': 'Nutzungsbedingungen',
@@ -3776,8 +3776,8 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'playerCard.levelClass': 'Stufe {level} - {className}',
   'playerCard.topPercent': 'TOP {percent} %',
   'playerCard.realmSubtitle': 'Welt {realm}',
-  'playerCard.defaultRealm': 'Welt von ClaudeCraft',
-  'playerCard.brandWordmark': 'WORLD OF CLAUDECRAFT',
+  'playerCard.defaultRealm': 'Cryptic Realm',
+  'playerCard.brandWordmark': 'CRYPTIC REALM',
   'playerCard.recruited': '{count} rekrutiert',
   'playerCard.footerHandle': '@{handle}',
   'playerCard.footerHandleWithRecruits': '@{handle} - {recruited}',
@@ -3786,7 +3786,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'playerCard.shareTierBit': ', $CR-Inhaber mit Rang {tier}',
   'playerCard.shareText':
     'Ich schmiede meine Legende in Cryptic Realm: Stufe {level} {className}{tierBit}. Tritt meiner Welt bei:',
-  'playerCard.nativeShareTitle': 'Welt von ClaudeCraft',
+  'playerCard.nativeShareTitle': 'Cryptic Realm',
   'playerCard.fileNameFallback': 'spieler',
   'playerCard.actionShareX': 'Auf X teilen',
   'playerCard.actionCopyReferral': 'Empfehlungslink kopieren',
@@ -6891,7 +6891,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.levelsSame': 'Stufe {min}',
   'guide.bestiary.rare': 'Selten',
   'guide.brand': 'Cryptic Realm',
-  'guide.brandShort': 'ClaudeCraft',
+  'guide.brandShort': 'Cryptic',
   'guide.classHook.druid':
     'Ein Gestaltwandler, der als BÃ¤r tankt, Gegner als Katze zerfleischt oder mitten im GetÃ¼mmel heilt.',
   'guide.classHook.hunter':

@@ -3589,7 +3589,7 @@ export const id_ID: EnTranslations = {
   },
   "guide": {
     "brand": "Cryptic Realm",
-    "brandShort": "ClaudeCraft",
+    "brandShort": "Cryptic",
     "tagline": "MMO bergaya klasik yang bisa kamu mainkan gratis di peramban.",
     "skipToContent": "Lewati ke konten utama",
     "loading": "Memuat...",
@@ -5544,7 +5544,7 @@ export const id_ID: EnTranslations = {
   },
   "footer": {
     "copyright": "2026 Cryptic Realm",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
+    "githubLink": "/contributions.html",
     "githubLabel": "Contributions",
     "whitepaper": "Whitepaper",
     "terms": "Ketentuan Layanan",
@@ -6047,7 +6047,7 @@ export const id_ID: EnTranslations = {
     "topPercent": "TERATAS {percent}%",
     "realmSubtitle": "Dunia {realm}",
     "defaultRealm": "Cryptic Realm",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "brandWordmark": "CRYPTIC REALM",
     "recruited": "{count} direkrut",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",

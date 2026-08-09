@@ -3589,7 +3589,7 @@ export const vi_VN: EnTranslations = {
   },
   "guide": {
     "brand": "Cryptic Realm",
-    "brandShort": "ClaudeCraft",
+    "brandShort": "Cryptic",
     "tagline": "Một MMO phong cách cổ điển bạn chơi miễn phí ngay trên trình duyệt.",
     "skipToContent": "Chuyển đến nội dung chính",
     "loading": "Đang tải...",
@@ -5544,7 +5544,7 @@ export const vi_VN: EnTranslations = {
   },
   "footer": {
     "copyright": "2026 Cryptic Realm",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
+    "githubLink": "/contributions.html",
     "githubLabel": "Contributions",
     "whitepaper": "Sách trắng",
     "terms": "Điều Khoản Dịch Vụ",
@@ -6047,7 +6047,7 @@ export const vi_VN: EnTranslations = {
     "topPercent": "TOP {percent}%",
     "realmSubtitle": "Thế Giới {realm}",
     "defaultRealm": "Cryptic Realm",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "brandWordmark": "CRYPTIC REALM",
     "recruited": "{count} người được chiêu mộ",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",

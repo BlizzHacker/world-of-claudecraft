@@ -3436,7 +3436,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'stats.playersOnline': 'Jugadores en Línea',
   'stats.realmName': 'Nombre del Mundo',
   'footer.copyright': '2026 Cryptic Realm',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
+  'footer.githubLink': '/contributions.html',
   'footer.githubLabel': 'Contributions',
   'footer.whitepaper': 'Libro blanco',
   'footer.terms': 'Términos de Servicio',
@@ -3618,8 +3618,8 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'playerCard.levelClass': 'Nivel {level} - {className}',
   'playerCard.topPercent': 'TOP {percent}%',
   'playerCard.realmSubtitle': 'Mundo {realm}',
-  'playerCard.defaultRealm': 'Mundo de ClaudeCraft',
-  'playerCard.brandWordmark': 'WORLD OF CLAUDECRAFT',
+  'playerCard.defaultRealm': 'Cryptic Realm',
+  'playerCard.brandWordmark': 'CRYPTIC REALM',
   'playerCard.recruited': '{count} reclutados',
   'playerCard.footerHandle': '@{handle}',
   'playerCard.footerHandleWithRecruits': '@{handle} - {recruited}',
@@ -3628,7 +3628,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'playerCard.shareTierBit': ', titular de $CR de rango {tier}',
   'playerCard.shareText':
     'Estoy forjando mi leyenda en Cryptic Realm: nivel {level} {className}{tierBit}. Únete a mi mundo:',
-  'playerCard.nativeShareTitle': 'Mundo de ClaudeCraft',
+  'playerCard.nativeShareTitle': 'Cryptic Realm',
   'playerCard.fileNameFallback': 'jugador',
   'playerCard.actionShareX': 'Compartir en X',
   'playerCard.actionCopyReferral': 'Copiar enlace de invitación',
@@ -6827,7 +6827,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.levelsSame': 'Nivel {min}',
   'guide.bestiary.rare': 'Raro',
   'guide.brand': 'Cryptic Realm',
-  'guide.brandShort': 'ClaudeCraft',
+  'guide.brandShort': 'Cryptic',
   'guide.classHook.druid':
     'Un cambiaformas que protege como oso, despedaza a sus enemigos como felino o sana en plena refriega.',
   'guide.classHook.hunter':
