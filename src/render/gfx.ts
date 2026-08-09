@@ -1379,6 +1379,11 @@ function runtimeDeviceHints(): RuntimeDeviceHints {
     nativeApp: NATIVE_APP,
     tightMemory: tightMemoryDeviceHint(),
     platform: mobilePlatformFromNavigator(nav),
+    xboxConsole: typeof navigator !== 'undefined' && /\bXbox\b/i.test(navigator.userAgent),
+    consoleModel:
+      typeof document !== 'undefined'
+        ? (document.documentElement.dataset.console ?? undefined)
+        : undefined,
   };
 }
 

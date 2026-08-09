@@ -90,8 +90,9 @@ export function runParityShard(shard: number): void {
           const b = plain(recordTrace(scenario));
           expect(a).toEqual(b);
           // two full recordings of the heaviest scenarios (the raid pull,
-          // the fiesta) on the 13-zone world: headroom under suite load
-        }, 90_000);
+          // the fiesta, professions_gather since the wilds bestiary camps) on
+          // the 13-zone world: headroom under suite load
+        }, 180_000);
 
         it(UPDATE ? 'mints the golden' : 'matches the committed golden', () => {
           const trace = plain(recordTrace(scenario));

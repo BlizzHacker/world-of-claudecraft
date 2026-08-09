@@ -191,8 +191,8 @@ describe('coverage: each scenario fires its subsystem', () => {
     const held = (pid: number) => sim.countItem('greyjaw_hide_boots', pid) as number;
     expect(held(a)).toBe(0); // the master looter assigned all three away
     expect(held(b)).toBe(1); // direct grant only
-    expect(held(c)).toBe(1); // direct grant only
-    expect(held(d)).toBe(1); // rolled at the tie, then won the tie-break below
+    expect(held(c)).toBe(2); // direct grant, then won the tie-break below
+    expect(held(d)).toBe(0); // rolled at the tie and lost the tie-break
     // The deduped assignment never reopened as a roll.
     expect(evs.some((e) => e.type === 'lootRoll' && e.rollId === rollIds[1])).toBe(false);
 
@@ -214,7 +214,8 @@ describe('coverage: each scenario fires its subsystem', () => {
     // camp fix: the tie SHAPE is preserved (two rollers level at the top), only
     // which rollers tie, the third roll, and the tie-break's winner move, because
     // these branches shift the shared rng and never master-loot logic itself.
-    expect(needRolls).toEqual([46, 60, 60]); // c and d tie at the top, b below
+    // Re-seeded again 38 -> 69 by the overworld wilds bestiary camps merge.
+    expect(needRolls).toEqual([12, 78, 78]); // c and d tie at the top, b below
     // The tie-break picked d, and that outcome is the one observable effect of the
     // master-loot-only draw, so it is pinned by name and by winning roll. WHICH of
     // the tied rollers wins is the rng's call and may move with the seed; that a
@@ -222,7 +223,7 @@ describe('coverage: each scenario fires its subsystem', () => {
     expect(
       evs.filter(
         (e) =>
-          e.type === 'loot' && text(e) === `Ddd wins [[i:greyjaw_hide_boots]] (${needRolls[1]})`,
+          e.type === 'loot' && text(e) === `Ccc wins [[i:greyjaw_hide_boots]] (${needRolls[1]})`,
       ).length,
     ).toBe(4); // announced once to each party member
 

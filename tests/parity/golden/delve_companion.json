@@ -10,13 +10,13 @@
     "combat_start/low_hp barks via maybeCompanionBark (stays on Sim)"
   ],
   "draws": 23,
-  "drawDigest": "89c8b60b",
+  "drawDigest": "165cb083",
   "frames": [
     {
       "tick": 0,
       "time": 0,
-      "nextId": 1000,
-      "state": "e414fc84",
+      "nextId": 1070,
+      "state": "4bb7afd5",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -54,7 +54,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 995,
+          "entityId": 1065,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword",
@@ -90,7 +90,7 @@
               "name": "Battle Stance",
               "remaining": 3600,
               "school": "physical",
-              "sourceId": 995
+              "sourceId": 1065
             }
           ],
           "blockChance": 0.05,
@@ -103,7 +103,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 100,
-          "id": 995,
+          "id": 1065,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -147,100 +147,100 @@
     {
       "tick": 5,
       "time": 0.25,
-      "nextId": 1009,
-      "state": "a1f21697",
-      "events": "69b87b96",
+      "nextId": 1079,
+      "state": "de3ad503",
+      "events": "e5ff8c48",
       "rng": {
-        "draws": 5,
-        "digest": "59be7c21"
+        "draws": 7,
+        "digest": "77df1a10"
       }
     },
     {
       "tick": 10,
       "time": 0.5,
-      "nextId": 1009,
-      "state": "0d50c69c",
-      "events": "603f30ce",
+      "nextId": 1079,
+      "state": "564c0d2b",
+      "events": "c340d9d1",
       "rng": {
         "draws": 8,
-        "digest": "6d2e6d5a"
+        "digest": "a9911053"
       }
     },
     {
       "tick": 15,
       "time": 0.75,
-      "nextId": 1009,
-      "state": "eb920926",
-      "events": "b784a1e4",
+      "nextId": 1079,
+      "state": "3d9990ec",
+      "events": "e6fcdb5a",
       "rng": {
         "draws": 12,
-        "digest": "3f24e479"
+        "digest": "d82157a2"
       }
     },
     {
       "tick": 20,
       "time": 1,
-      "nextId": 1009,
-      "state": "7f31c8e9",
-      "events": "12f4d1bf",
+      "nextId": 1079,
+      "state": "03f1e6d3",
+      "events": "1412ea27",
       "rng": {
         "draws": 15,
-        "digest": "3e776bef"
+        "digest": "c6382f93"
       }
     },
     {
       "tick": 25,
       "time": 1.25,
-      "nextId": 1009,
-      "state": "6e440e57",
+      "nextId": 1079,
+      "state": "8f3a11f3",
       "events": "741638a5",
       "rng": {
         "draws": 15,
-        "digest": "3e776bef"
+        "digest": "c6382f93"
       }
     },
     {
       "tick": 30,
       "time": 1.5,
-      "nextId": 1009,
-      "state": "c0f777a0",
+      "nextId": 1079,
+      "state": "47212969",
       "events": "741638a5",
       "rng": {
         "draws": 15,
-        "digest": "3e776bef"
+        "digest": "c6382f93"
       }
     },
     {
       "tick": 35,
       "time": 1.75,
-      "nextId": 1009,
-      "state": "90d8ef68",
+      "nextId": 1079,
+      "state": "f70170c6",
       "events": "741638a5",
       "rng": {
         "draws": 15,
-        "digest": "3e776bef"
+        "digest": "c6382f93"
       }
     },
     {
       "tick": 40,
       "time": 2,
-      "nextId": 1009,
-      "state": "0fe97ede",
+      "nextId": 1079,
+      "state": "297e557a",
       "events": "741638a5",
       "rng": {
         "draws": 15,
-        "digest": "3e776bef"
+        "digest": "c6382f93"
       }
     },
     {
       "tick": 40,
       "time": 2,
-      "nextId": 1009,
-      "state": "0fe97ede",
+      "nextId": 1079,
+      "state": "297e557a",
       "events": "741638a5",
       "rng": {
         "draws": 15,
-        "digest": "3e776bef"
+        "digest": "c6382f93"
       },
       "label": "combat",
       "players": [
@@ -286,7 +286,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 995,
+          "entityId": 1065,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword",
@@ -324,7 +324,7 @@
               "name": "Battle Stance",
               "remaining": 3598,
               "school": "physical",
-              "sourceId": 995
+              "sourceId": 1065
             }
           ],
           "blockChance": 0.05,
@@ -336,7 +336,7 @@
           "dodgeChance": 0.063,
           "fiveSecondRule": 101,
           "hp": 50000,
-          "id": 995,
+          "id": 1065,
           "inCombat": true,
           "kind": "player",
           "level": 7,
@@ -368,7 +368,7 @@
             "sta": 35,
             "str": 35
           },
-          "targetId": 1005,
+          "targetId": 1075,
           "templateId": "warrior",
           "weapon": {
             "max": 5,
@@ -385,8 +385,8 @@
           "dodgeChance": 0.05,
           "facing": -1.570796,
           "fiveSecondRule": 99,
-          "hp": 119,
-          "id": 1004,
+          "hp": 81,
+          "id": 1074,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -395,7 +395,7 @@
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
-          "ownerId": 995,
+          "ownerId": 1065,
           "petMode": "defensive",
           "pos": {
             "x": 104206.85,
@@ -419,9 +419,9 @@
           }
         },
         {
-          "aggroTargetId": 1004,
+          "aggroTargetId": 1074,
           "aiState": "attack",
-          "combatTimer": 2,
+          "combatTimer": 1.95,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -429,8 +429,8 @@
           "facing": 1.570796,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 39991,
-          "id": 1005,
+          "hp": 39994,
+          "id": 1075,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -458,12 +458,12 @@
           },
           "stompTimer": 10.2,
           "swingTimer": 0.25,
-          "tappedById": 995,
+          "tappedById": 1065,
           "templateId": "deacon_varric",
           "threat": [
             [
-              1004,
-              10
+              1074,
+              7
             ]
           ],
           "weapon": {
@@ -477,12 +477,12 @@
     {
       "tick": 41,
       "time": 2.05,
-      "nextId": 1009,
-      "state": "b974f535",
-      "events": "76e4085d",
+      "nextId": 1079,
+      "state": "87b692a9",
+      "events": "dab30a0a",
       "rng": {
         "draws": 23,
-        "digest": "89c8b60b"
+        "digest": "165cb083"
       },
       "label": "heal",
       "players": [
@@ -528,7 +528,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 995,
+          "entityId": 1065,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword",
@@ -566,7 +566,7 @@
               "name": "Battle Stance",
               "remaining": 3597.95,
               "school": "physical",
-              "sourceId": 995
+              "sourceId": 1065
             }
           ],
           "blockChance": 0.05,
@@ -579,7 +579,7 @@
           "fallStartY": 29.884403,
           "fiveSecondRule": 101.05,
           "hp": 29000,
-          "id": 995,
+          "id": 1065,
           "inCombat": true,
           "kind": "player",
           "level": 7,
@@ -611,7 +611,7 @@
             "sta": 35,
             "str": 35
           },
-          "targetId": 1005,
+          "targetId": 1075,
           "templateId": "warrior",
           "weapon": {
             "max": 5,
@@ -628,8 +628,8 @@
           "dodgeChance": 0.05,
           "facing": -1.570796,
           "fiveSecondRule": 99,
-          "hp": 119,
-          "id": 1004,
+          "hp": 81,
+          "id": 1074,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -638,7 +638,7 @@
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
-          "ownerId": 995,
+          "ownerId": 1065,
           "petMode": "defensive",
           "pos": {
             "x": 104206.85,
@@ -662,9 +662,9 @@
           }
         },
         {
-          "aggroTargetId": 1004,
+          "aggroTargetId": 1074,
           "aiState": "attack",
-          "combatTimer": 2.05,
+          "combatTimer": 2,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -672,8 +672,8 @@
           "facing": 1.570796,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 39991,
-          "id": 1005,
+          "hp": 39994,
+          "id": 1075,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -701,12 +701,12 @@
           },
           "stompTimer": 10.15,
           "swingTimer": 0.2,
-          "tappedById": 995,
+          "tappedById": 1065,
           "templateId": "deacon_varric",
           "threat": [
             [
-              1004,
-              10
+              1074,
+              7
             ]
           ],
           "weapon": {
@@ -720,23 +720,23 @@
     {
       "tick": 45,
       "time": 2.25,
-      "nextId": 1009,
-      "state": "30609d81",
+      "nextId": 1079,
+      "state": "60d98210",
       "events": "741638a5",
       "rng": {
         "draws": 23,
-        "digest": "89c8b60b"
+        "digest": "165cb083"
       }
     },
     {
       "tick": 49,
       "time": 2.45,
-      "nextId": 1009,
-      "state": "a722fea7",
+      "nextId": 1079,
+      "state": "89b22ad6",
       "events": "741638a5",
       "rng": {
         "draws": 23,
-        "digest": "89c8b60b"
+        "digest": "165cb083"
       },
       "label": "heel-walk",
       "players": [
@@ -782,7 +782,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 995,
+          "entityId": 1065,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword",
@@ -820,7 +820,7 @@
               "name": "Battle Stance",
               "remaining": 3597.55,
               "school": "physical",
-              "sourceId": 995
+              "sourceId": 1065
             }
           ],
           "blockChance": 0.05,
@@ -833,7 +833,7 @@
           "fallStartY": 30.257382,
           "fiveSecondRule": 101.45,
           "hp": 29000,
-          "id": 995,
+          "id": 1065,
           "kind": "player",
           "level": 7,
           "lootFfaTimer": "Infinity",
@@ -880,8 +880,8 @@
           "dodgeChance": 0.05,
           "facing": 1.570796,
           "fiveSecondRule": 99,
-          "hp": 119,
-          "id": 1004,
+          "hp": 81,
+          "id": 1074,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -889,7 +889,7 @@
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
-          "ownerId": 995,
+          "ownerId": 1065,
           "petMode": "defensive",
           "pos": {
             "x": 104209.65,
@@ -916,23 +916,23 @@
     {
       "tick": 50,
       "time": 2.5,
-      "nextId": 1009,
-      "state": "5fff6750",
+      "nextId": 1079,
+      "state": "2e6c0081",
       "events": "741638a5",
       "rng": {
         "draws": 23,
-        "digest": "89c8b60b"
+        "digest": "165cb083"
       }
     },
     {
       "tick": 51,
       "time": 2.55,
-      "nextId": 1009,
-      "state": "1f6ba73d",
+      "nextId": 1079,
+      "state": "ace1be66",
       "events": "741638a5",
       "rng": {
         "draws": 23,
-        "digest": "89c8b60b"
+        "digest": "165cb083"
       },
       "label": "heel-teleport",
       "players": [
@@ -978,7 +978,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 995,
+          "entityId": 1065,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword",
@@ -1016,7 +1016,7 @@
               "name": "Battle Stance",
               "remaining": 3597.45,
               "school": "physical",
-              "sourceId": 995
+              "sourceId": 1065
             }
           ],
           "blockChance": 0.05,
@@ -1029,7 +1029,7 @@
           "fallStartY": 42.029112,
           "fiveSecondRule": 101.55,
           "hp": 29000,
-          "id": 995,
+          "id": 1065,
           "kind": "player",
           "level": 7,
           "lootFfaTimer": "Infinity",
@@ -1076,8 +1076,8 @@
           "dodgeChance": 0.05,
           "facing": 1.570796,
           "fiveSecondRule": 99,
-          "hp": 119,
-          "id": 1004,
+          "hp": 81,
+          "id": 1074,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -1085,7 +1085,7 @@
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
-          "ownerId": 995,
+          "ownerId": 1065,
           "petMode": "defensive",
           "pos": {
             "x": 104289.65,
@@ -1113,12 +1113,12 @@
     {
       "tick": 51,
       "time": 2.55,
-      "nextId": 1009,
-      "state": "1f6ba73d",
+      "nextId": 1079,
+      "state": "ace1be66",
       "events": "741638a5",
       "rng": {
         "draws": 23,
-        "digest": "89c8b60b"
+        "digest": "165cb083"
       },
       "label": "final",
       "players": [
@@ -1164,7 +1164,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 995,
+          "entityId": 1065,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword",
@@ -1202,7 +1202,7 @@
               "name": "Battle Stance",
               "remaining": 3597.45,
               "school": "physical",
-              "sourceId": 995
+              "sourceId": 1065
             }
           ],
           "blockChance": 0.05,
@@ -1215,7 +1215,7 @@
           "fallStartY": 42.029112,
           "fiveSecondRule": 101.55,
           "hp": 29000,
-          "id": 995,
+          "id": 1065,
           "kind": "player",
           "level": 7,
           "lootFfaTimer": "Infinity",
@@ -1262,8 +1262,8 @@
           "dodgeChance": 0.05,
           "facing": 1.570796,
           "fiveSecondRule": 99,
-          "hp": 119,
-          "id": 1004,
+          "hp": 81,
+          "id": 1074,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -1271,7 +1271,7 @@
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
-          "ownerId": 995,
+          "ownerId": 1065,
           "petMode": "defensive",
           "pos": {
             "x": 104289.65,

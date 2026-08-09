@@ -1661,10 +1661,11 @@ function masterLoot(): Scenario {
     // at the old seed the need rolls stopped TYING. The tie is the whole point
     // of the scenario's last coverage line (resolveLootRoll's tie-break
     // rng.int), so the seed is re-hunted to keep two rollers level rather than
-    // re-recorded to whatever the new draw happens to be.
+    // re-recorded to whatever the new draw happens to be. Re-hunted 38 -> 69
+    // by the overworld wilds bestiary camps merge, same rule.
     build: () =>
       new Sim({
-        seed: 38,
+        seed: 69,
         playerClass: 'warrior',
         noPlayer: true,
       }),
@@ -3991,8 +3992,10 @@ function hitRatingHeroic(withHitGear: boolean): Scenario {
     // shifted world stream made the geared arm's fight unfold onto a
     // gear-conditional draw at 1021 (765 vs 761 draws), breaking the pair
     // invariant the scenario exists to pin. Re-hunted so both arms draw
-    // identically again rather than relaxing the assert.
-    build: () => new Sim({ seed: 1022, playerClass: 'mage' }),
+    // identically again rather than relaxing the assert. Re-hunted again
+    // 1022 -> 1023 by the overworld wilds bestiary camps (794 vs 802 draws
+    // at 1022), same rule: hunt the seed, never relax the pair assert.
+    build: () => new Sim({ seed: 1023, playerClass: 'mage' }),
     drive(rec: Recorder) {
       const sim = rec.sim;
       sim.setPlayerLevel(20);
@@ -4642,7 +4645,10 @@ function cardDuel(): Scenario {
 // clutch camps, the new elites) moved the shared stream once more, again
 // (5 -> 2) after the Galecrest unspawnable-quest camp fix, and back to 5
 // when those late quest camps moved onto their private scatter stream.
-function professionsCraft(seed = 5): Scenario {
+// Seed re-hunted 5 -> 25 by the overworld wilds bestiary camps merge: the
+// shifted shared stream stopped the vestments proc draw landing under the
+// capped 0.15 chance, and the proc firing is the scenario's whole point.
+function professionsCraft(seed = 25): Scenario {
   return {
     name: 'professions_craft',
     coverage: [

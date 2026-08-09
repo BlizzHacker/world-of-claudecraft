@@ -9,14 +9,14 @@
     "Fingers of Frost proc draw from frostbolt",
     "Brain Freeze proc draw from frostbolt"
   ],
-  "draws": 101,
-  "drawDigest": "4f934b13",
+  "draws": 106,
+  "drawDigest": "6ed9ed55",
   "frames": [
     {
       "tick": 0,
       "time": 0,
-      "nextId": 1000,
-      "state": "17233347",
+      "nextId": 1070,
+      "state": "b68c2b57",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -54,7 +54,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 995,
+          "entityId": 1065,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -93,7 +93,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 54,
-          "id": 995,
+          "id": 1065,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -137,34 +137,34 @@
     {
       "tick": 20,
       "time": 1,
-      "nextId": 1001,
-      "state": "9e0086f6",
-      "events": "e3d75c7a",
+      "nextId": 1071,
+      "state": "4ba08b70",
+      "events": "a440fdee",
       "rng": {
-        "draws": 9,
-        "digest": "4839e0ac"
+        "draws": 11,
+        "digest": "adb08b83"
       }
     },
     {
       "tick": 40,
       "time": 2,
-      "nextId": 1001,
-      "state": "586cbe47",
-      "events": "738f6bbd",
+      "nextId": 1071,
+      "state": "784c7630",
+      "events": "dbd97760",
       "rng": {
-        "draws": 13,
-        "digest": "75f9a1d7"
+        "draws": 12,
+        "digest": "af0e6626"
       }
     },
     {
       "tick": 49,
       "time": 2.45,
-      "nextId": 1001,
-      "state": "4f1794c0",
-      "events": "f04e847a",
+      "nextId": 1071,
+      "state": "7f92dd48",
+      "events": "c8346173",
       "rng": {
-        "draws": 101,
-        "digest": "4f934b13"
+        "draws": 106,
+        "digest": "6ed9ed55"
       },
       "label": "frost-procs",
       "players": [
@@ -185,12 +185,12 @@
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {
-            "damageDealt": 170
+            "damageDealt": 166
           },
           "craftSkills": {},
           "deedStats": {
             "counters": {
-              "dummyDamage": 170
+              "dummyDamage": 166
             },
             "dungeonClears": {},
             "itemsDiscovered": [
@@ -235,7 +235,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 995,
+          "entityId": 1065,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -277,8 +277,18 @@
               "name": "Icicles",
               "remaining": 29.95,
               "school": "frost",
-              "sourceId": 995,
+              "sourceId": 1065,
               "stacks": 3
+            },
+            {
+              "duration": 15,
+              "id": "fingers_of_frost",
+              "kind": "fingers_of_frost",
+              "name": "Fingers of Frost",
+              "remaining": 14.95,
+              "school": "frost",
+              "sourceId": 1065,
+              "stacks": 1
             }
           ],
           "castTotal": 0.75,
@@ -296,7 +306,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 0.25,
           "hp": 418,
-          "id": 995,
+          "id": 1065,
           "inCombat": true,
           "kind": "player",
           "level": 20,
@@ -329,7 +339,7 @@
             "sta": 33,
             "str": 10
           },
-          "targetId": 1000,
+          "targetId": 1070,
           "templateId": "mage",
           "weapon": {
             "max": 6,
@@ -347,7 +357,7 @@
               "name": "Frozen Orb",
               "remaining": 2,
               "school": "frost",
-              "sourceId": 995,
+              "sourceId": 1065,
               "value": 0.7
             },
             {
@@ -357,7 +367,7 @@
               "name": "Rimelance",
               "remaining": 8.95,
               "school": "frost",
-              "sourceId": 995,
+              "sourceId": 1065,
               "value": 0.6
             }
           ],
@@ -369,8 +379,8 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 499830,
-          "id": 1000,
+          "hp": 499834,
+          "id": 1070,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -396,12 +406,12 @@
             "z": 2
           },
           "stats": {},
-          "tappedById": 995,
+          "tappedById": 1065,
           "templateId": "training_dummy",
           "threat": [
             [
-              995,
-              170
+              1065,
+              166
             ]
           ],
           "weapon": {
@@ -413,12 +423,12 @@
     {
       "tick": 49,
       "time": 2.45,
-      "nextId": 1001,
-      "state": "4f1794c0",
+      "nextId": 1071,
+      "state": "7f92dd48",
       "events": "741638a5",
       "rng": {
-        "draws": 101,
-        "digest": "4f934b13"
+        "draws": 106,
+        "digest": "6ed9ed55"
       },
       "label": "final",
       "players": [
@@ -439,12 +449,12 @@
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {
-            "damageDealt": 170
+            "damageDealt": 166
           },
           "craftSkills": {},
           "deedStats": {
             "counters": {
-              "dummyDamage": 170
+              "dummyDamage": 166
             },
             "dungeonClears": {},
             "itemsDiscovered": [
@@ -489,7 +499,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 995,
+          "entityId": 1065,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -531,8 +541,18 @@
               "name": "Icicles",
               "remaining": 29.95,
               "school": "frost",
-              "sourceId": 995,
+              "sourceId": 1065,
               "stacks": 3
+            },
+            {
+              "duration": 15,
+              "id": "fingers_of_frost",
+              "kind": "fingers_of_frost",
+              "name": "Fingers of Frost",
+              "remaining": 14.95,
+              "school": "frost",
+              "sourceId": 1065,
+              "stacks": 1
             }
           ],
           "castTotal": 0.75,
@@ -550,7 +570,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 0.25,
           "hp": 418,
-          "id": 995,
+          "id": 1065,
           "inCombat": true,
           "kind": "player",
           "level": 20,
@@ -583,7 +603,7 @@
             "sta": 33,
             "str": 10
           },
-          "targetId": 1000,
+          "targetId": 1070,
           "templateId": "mage",
           "weapon": {
             "max": 6,
@@ -601,7 +621,7 @@
               "name": "Frozen Orb",
               "remaining": 2,
               "school": "frost",
-              "sourceId": 995,
+              "sourceId": 1065,
               "value": 0.7
             },
             {
@@ -611,7 +631,7 @@
               "name": "Rimelance",
               "remaining": 8.95,
               "school": "frost",
-              "sourceId": 995,
+              "sourceId": 1065,
               "value": 0.6
             }
           ],
@@ -623,8 +643,8 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 499830,
-          "id": 1000,
+          "hp": 499834,
+          "id": 1070,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -650,12 +670,12 @@
             "z": 2
           },
           "stats": {},
-          "tappedById": 995,
+          "tappedById": 1065,
           "templateId": "training_dummy",
           "threat": [
             [
-              995,
-              170
+              1065,
+              166
             ]
           ],
           "weapon": {

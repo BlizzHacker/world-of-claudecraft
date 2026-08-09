@@ -12,13 +12,13 @@
     "gatherResult itemId carries the resolved grade"
   ],
   "draws": 6,
-  "drawDigest": "1272a77a",
+  "drawDigest": "0bed3335",
   "frames": [
     {
       "tick": 0,
       "time": 0,
-      "nextId": 1000,
-      "state": "e414fc84",
+      "nextId": 1070,
+      "state": "4bb7afd5",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -56,7 +56,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 995,
+          "entityId": 1065,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword",
@@ -92,7 +92,7 @@
               "name": "Battle Stance",
               "remaining": 3600,
               "school": "physical",
-              "sourceId": 995
+              "sourceId": 1065
             }
           ],
           "blockChance": 0.05,
@@ -105,7 +105,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 100,
-          "id": 995,
+          "id": 1065,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -149,12 +149,12 @@
     {
       "tick": 51,
       "time": 2.55,
-      "nextId": 1000,
-      "state": "1f7f134d",
-      "events": "dd0e2b76",
+      "nextId": 1070,
+      "state": "ebeaa385",
+      "events": "f7da54e5",
       "rng": {
         "draws": 2,
-        "digest": "00a2a78c"
+        "digest": "a391ef5d"
       },
       "label": "fine-grade-at-full-tier-vein",
       "players": [
@@ -210,7 +210,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 995,
+          "entityId": 1065,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword",
@@ -236,7 +236,7 @@
               "itemId": "bronze_sickle"
             },
             {
-              "count": 2,
+              "count": 1,
               "itemId": "fine_iron_ore"
             }
           ],
@@ -266,7 +266,7 @@
               "name": "Battle Stance",
               "remaining": 3597.45,
               "school": "physical",
-              "sourceId": 995
+              "sourceId": 1065
             }
           ],
           "blockChance": 0.05,
@@ -280,7 +280,7 @@
           "fallStartY": -2.134597,
           "fiveSecondRule": 101.55,
           "hp": 100,
-          "id": 995,
+          "id": 1065,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -324,12 +324,12 @@
     {
       "tick": 104,
       "time": 5.2,
-      "nextId": 1000,
-      "state": "11d58f08",
-      "events": "afb52378",
+      "nextId": 1070,
+      "state": "ca43ad56",
+      "events": "d1dc03e3",
       "rng": {
         "draws": 4,
-        "digest": "49d036fe"
+        "digest": "1a4d496a"
       },
       "label": "plain-grade-at-lower-tier-vein",
       "players": [
@@ -386,7 +386,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 995,
+          "entityId": 1065,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword",
@@ -412,7 +412,7 @@
               "itemId": "bronze_sickle"
             },
             {
-              "count": 2,
+              "count": 1,
               "itemId": "fine_iron_ore"
             },
             {
@@ -450,7 +450,7 @@
               "name": "Battle Stance",
               "remaining": 3594.8,
               "school": "physical",
-              "sourceId": 995
+              "sourceId": 1065
             }
           ],
           "blockChance": 0.05,
@@ -464,7 +464,7 @@
           "fallStartY": -2.314273,
           "fiveSecondRule": 104.2,
           "hp": 100,
-          "id": 995,
+          "id": 1065,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -508,12 +508,12 @@
     {
       "tick": 157,
       "time": 7.85,
-      "nextId": 1000,
-      "state": "e4be4447",
-      "events": "13cbfcf8",
+      "nextId": 1070,
+      "state": "2dba447b",
+      "events": "5b327d05",
       "rng": {
         "draws": 6,
-        "digest": "1272a77a"
+        "digest": "0bed3335"
       },
       "label": "wrong-profession-tool-does-not-upgrade",
       "players": [
@@ -572,7 +572,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 995,
+          "entityId": 1065,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword",
@@ -598,7 +598,7 @@
               "itemId": "bronze_sickle"
             },
             {
-              "count": 2,
+              "count": 1,
               "itemId": "fine_iron_ore"
             },
             {
@@ -609,10 +609,7 @@
               "itemId": "iron_ore"
             },
             {
-              "count": 2,
-              "instance": {
-                "signer": "Adventurer"
-              },
+              "count": 1,
               "itemId": "goldleaf_herb"
             }
           ],
@@ -644,7 +641,7 @@
               "name": "Battle Stance",
               "remaining": 3592.15,
               "school": "physical",
-              "sourceId": 995
+              "sourceId": 1065
             }
           ],
           "blockChance": 0.05,
@@ -655,10 +652,10 @@
           "critChance": 0.06,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.06,
-          "fallStartY": -2.247485,
+          "fallStartY": -2.01698,
           "fiveSecondRule": 106.85,
           "hp": 100,
-          "id": 995,
+          "id": 1065,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -671,7 +668,7 @@
           "petMode": "defensive",
           "pos": {
             "x": 23,
-            "y": -2.247485,
+            "y": -2.01698,
             "z": 416
           },
           "potionCooldownUntil": -1,
@@ -702,12 +699,12 @@
     {
       "tick": 159,
       "time": 7.95,
-      "nextId": 1000,
-      "state": "bcbff6d0",
+      "nextId": 1070,
+      "state": "2b82c316",
       "events": "741638a5",
       "rng": {
         "draws": 6,
-        "digest": "1272a77a"
+        "digest": "0bed3335"
       },
       "label": "final",
       "players": [
@@ -766,7 +763,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 995,
+          "entityId": 1065,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword",
@@ -792,7 +789,7 @@
               "itemId": "bronze_sickle"
             },
             {
-              "count": 2,
+              "count": 1,
               "itemId": "fine_iron_ore"
             },
             {
@@ -803,10 +800,7 @@
               "itemId": "iron_ore"
             },
             {
-              "count": 2,
-              "instance": {
-                "signer": "Adventurer"
-              },
+              "count": 1,
               "itemId": "goldleaf_herb"
             }
           ],
@@ -838,7 +832,7 @@
               "name": "Battle Stance",
               "remaining": 3592.05,
               "school": "physical",
-              "sourceId": 995
+              "sourceId": 1065
             }
           ],
           "blockChance": 0.05,
@@ -849,10 +843,10 @@
           "critChance": 0.06,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.06,
-          "fallStartY": -2.247485,
+          "fallStartY": -2.01698,
           "fiveSecondRule": 106.95,
           "hp": 100,
-          "id": 995,
+          "id": 1065,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -865,7 +859,7 @@
           "petMode": "defensive",
           "pos": {
             "x": 23,
-            "y": -2.247485,
+            "y": -2.01698,
             "z": 416
           },
           "potionCooldownUntil": -1,
