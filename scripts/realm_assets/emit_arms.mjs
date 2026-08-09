@@ -65,6 +65,62 @@ const INDEX = arg('index', resolve(__dirname, 'arms_index.generated.json'));
 // variantGripTransform) that lays the model's longest axis along the hand's
 // pointing direction. `plus`/`minus` names the end of that axis that ends up IN
 // the fist; the other end is what the character points at the world.
+// MELEE REST TILT
+// ---------------------------------------------------------------------------
+// ROT alone lays the weapon along the hand bone's local Y, and in the idle pose
+// that axis points STRAIGHT OUT of a hanging fist - so a 2-unit staff, a scythe
+// and even a claw glove all run horizontally THROUGH the wielder. Rendered
+// front+side on a socketed body, every weapon class showed it, and every one of
+// them reads correctly with a further -90 degrees about hand-local X: blades and
+// hafts hang down the leg, shields sit vertically on the arm.
+//
+// The tilt applies in HAND space, after the axis map (v = base * T * E * v_model),
+// so the emitted euler is T composed with E - NOT E with -90 added to its X
+// field. For this particular table the two happen to coincide, because every ROT
+// entry rotates about X or Z with Y = 0; the composition is done properly anyway
+// so a future ROT entry with a non-zero Y cannot silently produce a wrong grip.
+//
+// Guns are excluded: their muzzle direction was verified by rendering and points
+// where it should already.
+const REST_TILT_X = -90;
+function restTilt([rx, ry, rz]) {
+  const q = quatMul(quatFromEulerDeg(REST_TILT_X, 0, 0), quatFromEulerDeg(rx, ry, rz));
+  return eulerFromQuatDeg(q).map((v) => round(v));
+}
+const D2R = Math.PI / 180;
+function quatFromEulerDeg(xd, yd, zd) {
+  const x = xd * D2R, y = yd * D2R, z = zd * D2R;
+  const c1 = Math.cos(x / 2), c2 = Math.cos(y / 2), c3 = Math.cos(z / 2);
+  const s1 = Math.sin(x / 2), s2 = Math.sin(y / 2), s3 = Math.sin(z / 2);
+  return [
+    s1 * c2 * c3 + c1 * s2 * s3,
+    c1 * s2 * c3 - s1 * c2 * s3,
+    c1 * c2 * s3 + s1 * s2 * c3,
+    c1 * c2 * c3 - s1 * s2 * s3,
+  ];
+}
+function quatMul([ax, ay, az, aw], [bx, by, bz, bw]) {
+  return [
+    ax * bw + aw * bx + ay * bz - az * by,
+    ay * bw + aw * by + az * bx - ax * bz,
+    az * bw + aw * bz + ax * by - ay * bx,
+    aw * bw - ax * bx - ay * by - az * bz,
+  ];
+}
+function eulerFromQuatDeg([x, y, z, w]) {
+  const m13 = Math.max(-1, Math.min(1, 2 * (x * z + y * w)));
+  const ey = Math.asin(m13);
+  let ex, ez;
+  if (Math.abs(m13) < 0.9999) {
+    ex = Math.atan2(-2 * (y * z - x * w), 1 - 2 * (x * x + y * y));
+    ez = Math.atan2(-2 * (x * y - z * w), 1 - 2 * (y * y + z * z));
+  } else {
+    ex = Math.atan2(2 * (y * z + x * w), 1 - 2 * (x * x + z * z));
+    ez = 0;
+  }
+  return [ex / D2R, ey / D2R, ez / D2R];
+}
+
 const ROT = {
   'x:plus': [0, 0, -90],
   'y:plus': [180, 0, 0],
@@ -222,8 +278,9 @@ function gripFor(bucket, base, geo) {
     handEnd = geo.thinEnd === 'min' ? 'minus' : 'plus';
   }
 
-  const rot = ROT[`${geo.axis}:${handEnd}`];
+  let rot = ROT[`${geo.axis}:${handEnd}`];
   if (!rot) return null;
+  if (!isGun) rot = restTilt(rot);
   const slide = (isGun ? GUN_SLIDE : MELEE_SLIDE) * target;
   return {
     scale: round(target / localLongest),
