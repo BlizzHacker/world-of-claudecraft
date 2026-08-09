@@ -2868,10 +2868,10 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 11,
         "rare": false,
         "templateId": "drowned_dead",
-        "model": "skel_mage",
+        "model": "skel_rogue",
         "tint": "#7fb3d5",
         "tintStrength": 0.25,
-        "still": "/guide-stills/skel_mage__7fb3d5__s25.webp"
+        "still": "/guide-stills/skel_rogue__7fb3d5__s25.webp"
       },
       {
         "name": "Drowned Votary",
@@ -2879,10 +2879,10 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 16,
         "rare": false,
         "templateId": "drowned_votary",
-        "model": "skel_rogue",
+        "model": "skel_warrior",
         "tint": "#6c8f8a",
         "tintStrength": 0.25,
-        "still": "/guide-stills/skel_rogue__6c8f8a__s25.webp"
+        "still": "/guide-stills/skel_warrior__6c8f8a__s25.webp"
       },
       {
         "name": "Ashbone Raider",
@@ -2890,10 +2890,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 18,
         "rare": false,
         "templateId": "ashbone_raider",
-        "model": "skel_mage",
-        "tint": "#e8dcc8",
-        "tintStrength": 0.25,
-        "still": "/guide-stills/skel_mage__e8dcc8__s25.webp"
+        "model": null
       },
       {
         "name": "Ashbone Warcaller",
@@ -2901,10 +2898,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 19,
         "rare": false,
         "templateId": "ashbone_warcaller",
-        "model": "skel_mage",
-        "tint": "#d8c8a8",
-        "tintStrength": 0.25,
-        "still": "/guide-stills/skel_mage__d8c8a8__s25.webp"
+        "model": null
       },
       {
         "name": "Boneclad Revenant",
@@ -10615,16 +10609,10 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "idle": "Idle",
     "height": 1.8
   },
-  "skel_mage": {
-    "url": "models/chars/enemies/skeleton_mage.glb",
+  "skel_rogue": {
+    "url": "models/chars/enemies/skeleton_rogue.glb",
     "idle": "Idle_Combat",
     "height": 2.5,
-    "attach": [
-      {
-        "url": "models/weapons/skeleton_staff.glb",
-        "bone": "handslot.r"
-      }
-    ],
     "tintStrength": 0.25
   },
   "mob_troll": {
@@ -10654,12 +10642,6 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
   },
   "skel_warrior": {
     "url": "models/chars/enemies/skeleton_warrior.glb",
-    "idle": "Idle_Combat",
-    "height": 2.5,
-    "tintStrength": 0.25
-  },
-  "skel_rogue": {
-    "url": "models/chars/enemies/skeleton_rogue.glb",
     "idle": "Idle_Combat",
     "height": 2.5,
     "tintStrength": 0.25
