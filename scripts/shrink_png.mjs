@@ -12,8 +12,9 @@ import { NodeIO } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
 import { MeshoptDecoder, MeshoptEncoder } from 'meshoptimizer';
 import sharp from 'sharp';
-import { statSync, readdirSync, existsSync, mkdirSync, copyFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { statSync, readdirSync, existsSync, mkdirSync, copyFileSync, renameSync, unlinkSync,
+         readFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
 
 const BACKUP = '/mnt/usb4/moveweight-assets/cr-realms-backup/png-shrink';
 mkdirSync(BACKUP, { recursive: true });
@@ -45,6 +46,10 @@ for (const path of files) {
   const big = doc.getRoot().listTextures().filter((t) =>
     t.getMimeType() === 'image/png' && (t.getImage()?.byteLength ?? 0) / 1024 > MIN_KB);
   if (!big.length) continue;
+  const meshCount = doc.getRoot().listMeshes().length;
+  const animCount = doc.getRoot().listAnimations().length;
+  const skinCount = doc.getRoot().listSkins().length;
+  const texCount = doc.getRoot().listTextures().length;
 
   const before = statSync(path).size;
   let ok = true;
@@ -90,7 +95,40 @@ for (const path of files) {
   }
 
   if (APPLY) {
-    await io.write(path, doc);
+    // These files are SERVED. Write beside the original and rename, so a player
+    // fetching mid-write gets the old bytes or the new bytes, never a truncated
+    // GLB. Then read it back and confirm it still parses and still has the same
+    // mesh and animation counts before the original backup is trusted.
+    // The temp file MUST keep a .glb extension. gltf-transform picks its
+    // container from the extension, so writing `foo.glb.tmp` silently emits
+    // JSON glTF plus external .bin and .webp siblings — which, renamed back to
+    // .glb, is a file the engine cannot parse. That corrupted 64 live bodies
+    // before this line was fixed; the only reason it was caught is that a
+    // reported texture was LARGER than the file containing it.
+    const tmp = `${path}.rewrite.glb`;
+    await io.write(tmp, doc);
+
+    // Gate on the container, not just on counts.
+    // readFileSync has no length option - it returns the WHOLE file, so the
+    // old comparison could never match and refused all 64. Slice the header.
+    const magic = readFileSync(tmp).subarray(0, 4).toString('latin1');
+    const stray = existsSync(`${tmp}.bin`) || existsSync(join(dirname(tmp), 'baseColor.webp'));
+    const check = await io.read(tmp);
+    const cr = check.getRoot();
+    const embedded = cr.listTextures().every((t) => (t.getImage()?.byteLength ?? 0) > 0);
+    const ok2 =
+      magic === 'glTF' && !stray && embedded &&
+      cr.listMeshes().length === meshCount &&
+      cr.listAnimations().length === animCount &&
+      cr.listSkins().length === skinCount &&
+      cr.listTextures().length === texCount &&
+      statSync(tmp).size < statSync(path).size;
+    if (!ok2) {
+      console.log(`  REFUSED ${path}: magic=${magic} stray=${stray} embedded=${embedded}`);
+      try { unlinkSync(tmp); } catch {}
+      continue;
+    }
+    renameSync(tmp, path);
     const after = statSync(path).size;
     console.log(`  ${path.split('/').pop()}: ${Math.round(before / 1024)}kb -> ${Math.round(after / 1024)}kb`);
     beforeTotal += before; afterTotal += after;
