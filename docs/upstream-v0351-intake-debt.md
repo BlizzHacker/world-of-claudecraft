@@ -39,6 +39,9 @@ Grinding these is pin-updates and fork-feature retuning against upstream's
 reshaped world (shorelines, vendor stock, mobile CSS), file by file. The
 authoritative lists live beside the runs that produced them; regenerate with
 two `vitest run --reporter=dot` passes (this branch vs the parent) and comm.
+fenbridge_town_assets pins package.json whole into the shipped-GLB source
+fingerprint (upstream's own noted follow-up is narrowing it to dependency
+fields; a local re-export is NOT the fix, its bytes are machine-dependent).
 Top families: deploy_watchdog (fork ops tooling vs upstream script shapes),
 professions_trend, character_clipmaps, icon_asset_audit, battleground_band,
 warfare_vendor_npc, fishing_waters shoreline tuning, chronomancy balance pins.
