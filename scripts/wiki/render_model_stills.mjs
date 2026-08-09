@@ -60,6 +60,7 @@ const bundled = await esbuild.build({
     // (the assert below only catches a literal `import.meta` surviving the bundle, not
     // an unmatched member access on the now-empty stand-in object). esbuild matches the
     // FULL member path, so every VITE_* member those modules read needs its own entry.
+    'import.meta.env.TEST': 'false',
     'import.meta.env.BASE_URL': '"/"',
     'import.meta.env.VITE_API_ORIGIN': '""',
     'import.meta.env.VITE_DESKTOP_API_ORIGIN': '""',

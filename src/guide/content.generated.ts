@@ -1709,6 +1709,20 @@ export const GUIDE_ZONES: GuideZoneInfo[] = [
       "Reliquary Hill",
       "Brightwood Glade",
       "The Sowfield",
+      "Eastbrook",
+      "Wolf Run",
+      "Boar Meadow",
+      "Mirror Lake",
+      "Sableweb",
+      "Copper Dig",
+      "Bandit Camp",
+      "Fallen Chapel",
+      "Reliquary Hill",
+      "Brightwood Glade",
+      "The Sowfield",
+      "Thornwheel Circuit",
+      "The Boarpit",
+      "Eastbrook Homes",
       "The Farshore Causeway"
     ],
     "welcome": "Find Marshal Redbrook in town - he has work for you.",
@@ -2088,58 +2102,37 @@ export const GUIDE_WARLOCK_PETS: GuideWarlockPet[] = [
   {
     "id": "emberkin",
     "name": "Emberkin",
-    "model": "mob_demon",
-    "tint": "#ff7a2a",
-    "tintStrength": 0.5,
-    "still": "/guide-stills/mob_demon__ff7a2a__s50.webp"
+    "model": null
   },
   {
     "id": "gloomshade",
     "name": "Gloomshade",
-    "model": "mob_demon",
-    "tint": "#3a3a6e",
-    "tintStrength": 0.5,
-    "still": "/guide-stills/mob_demon__3a3a6e__s50.webp"
+    "model": null
   },
   {
     "id": "duskborn",
     "name": "Duskborn",
-    "model": "mob_demon",
-    "tint": "#c6469b",
-    "tintStrength": 0.5,
-    "still": "/guide-stills/mob_demon__c6469b__s50.webp"
+    "model": null
   },
   {
     "id": "spellhound",
     "name": "Spellhound",
-    "model": "mob_demonalt",
-    "tint": "#4a7d4a",
-    "tintStrength": 0.35,
-    "still": "/guide-stills/mob_demonalt__4a7d4a__s35.webp"
+    "model": null
   },
   {
     "id": "warfiend",
     "name": "Warfiend",
-    "model": "mob_demonalt",
-    "tint": "#6e5a2a",
-    "tintStrength": 0.35,
-    "still": "/guide-stills/mob_demonalt__6e5a2a__s35.webp"
+    "model": null
   },
   {
     "id": "pyre_colossus",
     "name": "Pyre Colossus",
-    "model": "mob_demonalt",
-    "tint": "#d24a2a",
-    "tintStrength": 0.35,
-    "still": "/guide-stills/mob_demonalt__d24a2a__s35.webp"
+    "model": null
   },
   {
     "id": "wraithborn",
     "name": "Wraithborn",
-    "model": "mob_demonalt",
-    "tint": "#7a3a8e",
-    "tintStrength": 0.35,
-    "still": "/guide-stills/mob_demonalt__7a3a8e__s35.webp"
+    "model": null
   }
 ];
 
@@ -2647,10 +2640,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 5,
         "rare": false,
         "templateId": "vale_bandit",
-        "model": "mob_bandit",
-        "tint": "#6b3a32",
-        "tintStrength": 0.3,
-        "still": "/guide-stills/mob_bandit__6b3a32__s30.webp"
+        "model": null
       },
       {
         "name": "Gravecaller Cultist",
@@ -2658,10 +2648,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 12,
         "rare": false,
         "templateId": "gravecaller_cultist",
-        "model": "mob_dark_caster",
-        "tint": "#6c3483",
-        "tintStrength": 0.5,
-        "still": "/guide-stills/mob_dark_caster__6c3483__s50.webp"
+        "model": null
       },
       {
         "name": "Gravecaller Mender",
@@ -2669,10 +2656,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 12,
         "rare": false,
         "templateId": "gravecaller_mender",
-        "model": "mob_bandit",
-        "tint": "#6b3a32",
-        "tintStrength": 0.3,
-        "still": "/guide-stills/mob_bandit__6b3a32__s30.webp"
+        "model": null
       },
       {
         "name": "Gravecaller Summoner",
@@ -2680,10 +2664,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 12,
         "rare": false,
         "templateId": "gravecaller_summoner",
-        "model": "mob_dark_caster",
-        "tint": "#884ea0",
-        "tintStrength": 0.5,
-        "still": "/guide-stills/mob_dark_caster__884ea0__s50.webp"
+        "model": null
       },
       {
         "name": "Wyrmcult Zealot",
@@ -2691,10 +2672,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 19,
         "rare": false,
         "templateId": "wyrmcult_zealot",
-        "model": "mob_bandit",
-        "tint": "#6b3a32",
-        "tintStrength": 0.3,
-        "still": "/guide-stills/mob_bandit__6b3a32__s30.webp"
+        "model": null
       },
       {
         "name": "Wyrmcult Necromancer",
@@ -2702,10 +2680,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 19,
         "rare": false,
         "templateId": "wyrmcult_necromancer",
-        "model": "mob_dark_caster",
-        "tint": "#533566",
-        "tintStrength": 0.5,
-        "still": "/guide-stills/mob_dark_caster__533566__s50.webp"
+        "model": null
       },
       {
         "name": "Dawnhold Knight",
@@ -2713,8 +2688,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 20,
         "rare": false,
         "templateId": "hedge_knight",
-        "model": "npc_knight",
-        "still": "/guide-stills/npc_knight.webp"
+        "model": null
       }
     ]
   },
@@ -2792,10 +2766,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 7,
         "rare": false,
         "templateId": "restless_bones",
-        "model": "skel_minion",
-        "tint": "#d5dbdb",
-        "tintStrength": 0.25,
-        "still": "/guide-stills/skel_minion__d5dbdb__s25.webp"
+        "model": null
       },
       {
         "name": "Drowned Dead",
@@ -2803,10 +2774,10 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 11,
         "rare": false,
         "templateId": "drowned_dead",
-        "model": "skel_minion",
+        "model": "skel_mage",
         "tint": "#7fb3d5",
         "tintStrength": 0.25,
-        "still": "/guide-stills/skel_minion__7fb3d5__s25.webp"
+        "still": "/guide-stills/skel_mage__7fb3d5__s25.webp"
       },
       {
         "name": "Drowned Votary",
@@ -2814,10 +2785,10 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 16,
         "rare": false,
         "templateId": "drowned_votary",
-        "model": "skel_minion",
+        "model": "skel_rogue",
         "tint": "#6c8f8a",
         "tintStrength": 0.25,
-        "still": "/guide-stills/skel_minion__6c8f8a__s25.webp"
+        "still": "/guide-stills/skel_rogue__6c8f8a__s25.webp"
       },
       {
         "name": "Ashbone Raider",
@@ -2825,10 +2796,10 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 18,
         "rare": false,
         "templateId": "ashbone_raider",
-        "model": "skel_minion",
+        "model": "skel_mage",
         "tint": "#e8dcc8",
         "tintStrength": 0.25,
-        "still": "/guide-stills/skel_minion__e8dcc8__s25.webp"
+        "still": "/guide-stills/skel_mage__e8dcc8__s25.webp"
       },
       {
         "name": "Ashbone Warcaller",
@@ -2836,10 +2807,10 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 19,
         "rare": false,
         "templateId": "ashbone_warcaller",
-        "model": "skel_minion",
+        "model": "skel_mage",
         "tint": "#d8c8a8",
         "tintStrength": 0.25,
-        "still": "/guide-stills/skel_minion__d8c8a8__s25.webp"
+        "still": "/guide-stills/skel_mage__d8c8a8__s25.webp"
       },
       {
         "name": "Boneclad Revenant",
@@ -2858,10 +2829,10 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 20,
         "rare": false,
         "templateId": "barrow_wight",
-        "model": "skel_minion",
+        "model": "skel_rogue",
         "tint": "#9fb0c4",
         "tintStrength": 0.25,
-        "still": "/guide-stills/skel_minion__9fb0c4__s25.webp"
+        "still": "/guide-stills/skel_rogue__9fb0c4__s25.webp"
       },
       {
         "name": "Drowned Deckhand",
@@ -2869,10 +2840,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 20,
         "rare": false,
         "templateId": "drowned_deckhand",
-        "model": "skel_minion",
-        "tint": "#86988e",
-        "tintStrength": 0.25,
-        "still": "/guide-stills/skel_minion__86988e__s25.webp"
+        "model": null
       }
     ]
   },
@@ -3034,10 +3002,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 4,
         "rare": false,
         "templateId": "riftspawn",
-        "model": "mob_demonalt",
-        "tint": "#7a3fb0",
-        "tintStrength": 0.35,
-        "still": "/guide-stills/mob_demonalt__7a3fb0__s35.webp"
+        "model": null
       }
     ]
   },
@@ -3050,10 +3015,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 20,
         "rare": false,
         "templateId": "gloam_strider",
-        "model": "mob_raptor",
-        "tint": "#4c4a72",
-        "tintStrength": 0.35,
-        "still": "/guide-stills/mob_raptor__4c4a72__s35.webp"
+        "model": null
       }
     ]
   }
@@ -3109,6 +3071,29 @@ export const GUIDE_DELVES: GuideDelve[] = [
       "High Water",
       "Lively Choir",
       "Belligerent Dead"
+    ]
+  },
+  {
+    "id": "hellmaw_well",
+    "name": "The Hellmaw Well",
+    "theme": "crypt",
+    "minLevel": 10,
+    "suggestedPlayers": 2,
+    "keeper": {
+      "name": "Cainhurst the Sage",
+      "title": "Keeper of the Hellmaw"
+    },
+    "tiers": [
+      "Normal",
+      "Infernal"
+    ],
+    "affixes": [
+      "Restless Graves",
+      "Bad Air",
+      "Candleblind",
+      "Grave Tax",
+      "Unstable Roof",
+      "Cult Remnants"
     ]
   }
 ];
@@ -10496,18 +10481,6 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "idle": "Idle",
     "height": 2.3
   },
-  "mob_demon": {
-    "url": "models/creatures/demonalt.glb",
-    "idle": "Idle",
-    "height": 1.8,
-    "tintStrength": 0.5
-  },
-  "mob_demonalt": {
-    "url": "models/creatures/demonalt.glb",
-    "idle": "Idle",
-    "height": 2.1,
-    "tintStrength": 0.35
-  },
   "mob_wolf": {
     "url": "models/creatures/wolf_basic.glb",
     "idle": "Idle",
@@ -10543,32 +10516,22 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "height": 2.1,
     "tintStrength": 0.2
   },
-  "mob_bandit": {
-    "url": "models/chars/players/rogue_hooded.glb",
-    "idle": "Idle",
-    "height": 2.6,
-    "attach": [
-      {
-        "url": "models/weapons/dagger.glb",
-        "bone": "handslot.r"
-      },
-      {
-        "url": "models/weapons/dagger.glb",
-        "bone": "handslot.l"
-      }
-    ],
-    "tintStrength": 0.3
-  },
-  "skel_minion": {
-    "url": "models/chars/enemies/skeleton_minion.glb",
-    "idle": "Idle_Combat",
-    "height": 2.5,
-    "tintStrength": 0.25
-  },
   "mob_spider_egg_sac": {
     "url": "models/creatures/spider_egg_sac.glb",
     "idle": "Idle",
     "height": 1.8
+  },
+  "skel_mage": {
+    "url": "models/chars/enemies/skeleton_mage.glb",
+    "idle": "Idle_Combat",
+    "height": 2.5,
+    "attach": [
+      {
+        "url": "models/weapons/skeleton_staff.glb",
+        "bone": "handslot.r"
+      }
+    ],
+    "tintStrength": 0.25
   },
   "mob_troll": {
     "url": "models/creatures/orc.glb",
@@ -10581,21 +10544,6 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "idle": "Idle",
     "height": 2.9,
     "tintStrength": 0.04
-  },
-  "mob_dark_caster": {
-    "url": "models/chars/players/mage.glb",
-    "idle": "Idle",
-    "height": 2.6,
-    "show": [
-      "Mage_Hat"
-    ],
-    "attach": [
-      {
-        "url": "models/weapons/staff.glb",
-        "bone": "handslot.r"
-      }
-    ],
-    "tintStrength": 0.5
   },
   "mob_ogre": {
     "url": "models/creatures/giant.glb",
@@ -10612,6 +10560,12 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
   },
   "skel_warrior": {
     "url": "models/chars/enemies/skeleton_warrior.glb",
+    "idle": "Idle_Combat",
+    "height": 2.5,
+    "tintStrength": 0.25
+  },
+  "skel_rogue": {
+    "url": "models/chars/enemies/skeleton_rogue.glb",
     "idle": "Idle_Combat",
     "height": 2.5,
     "tintStrength": 0.25
@@ -10698,12 +10652,6 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "height": 1.7,
     "tintStrength": 0.3
   },
-  "mob_raptor": {
-    "url": "models/creatures/velociraptor.glb",
-    "idle": "Velociraptor_Idle",
-    "height": 1.6,
-    "tintStrength": 0.35
-  },
   "mob_nightkin": {
     "url": "models/creatures/tribal.glb",
     "idle": "Flying_Idle",
@@ -10722,20 +10670,5 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "idle": "Idle",
     "height": 1.7,
     "tintStrength": 0.35
-  },
-  "npc_knight": {
-    "url": "models/chars/players/knight.glb",
-    "idle": "Idle",
-    "height": 2.6,
-    "show": [
-      "Knight_Helmet",
-      "Knight_Cape"
-    ],
-    "attach": [
-      {
-        "url": "models/weapons/sword_1handed.glb",
-        "bone": "handslot.r"
-      }
-    ]
   }
 };

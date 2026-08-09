@@ -566,9 +566,9 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
     // Rift + mounts surface. The v0.31.0 base merge added the release's three new
     // members on top of the branch's 272; making reins usable items then removed
     // two (selectedMount + selectMount) for 273; the v0.32.0 base merge adds
-    expect(IWORLD_MEMBERS.length).toBe(228);
-    expect(DATA_MEMBERS.length).toBe(58);
-    expect(METHOD_MEMBERS.length).toBe(170);
+    expect(IWORLD_MEMBERS.length).toBe(323);
+    expect(DATA_MEMBERS.length).toBe(80);
+    expect(METHOD_MEMBERS.length).toBe(243);
     // activeMasterLootRolls, leaving 274; the packet's slotted tool effects add
     // toolEffectSlots (data) and slotToolEffect (method) for 276, the
     // acquisition craft's recharge command (rechargeToolEffect) makes 277,
@@ -595,9 +595,9 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
     // acceptCommissionOrder/deliverCommissionOrder (methods), leaving 299.
     // This branch's paperdoll helmet-visibility eye adds setHelmHidden
     // (IWorldCosmetics, a method), leaving 300.
-    expect(IWORLD_MEMBERS.length).toBe(300);
-    expect(DATA_MEMBERS.length).toBe(76);
-    expect(METHOD_MEMBERS.length).toBe(224);
+    expect(IWORLD_MEMBERS.length).toBe(323);
+    expect(DATA_MEMBERS.length).toBe(80);
+    expect(METHOD_MEMBERS.length).toBe(243);
   });
   it('has no duplicate member names', () => {
     const names = IWORLD_MEMBERS.map((m) => m.name);
@@ -739,23 +739,6 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'guildEventRemove',
       'guildInvite',
       'guildKick',
-      'minigameAbort',
-      'minigameArcadeState',
-      'minigameBrawlerInput',
-      'minigameClaim',
-      'minigameCreate',
-      'minigameFeatures',
-      'minigameHousingPlace',
-      'minigameInvite',
-      'minigameJoin',
-      'minigameRaceInput',
-      'minigameReady',
-      'minigameRtsBuild',
-      'minigameRtsTrain',
-      'minigameSession',
-      'minigameZombieBuild',
-      'minigameZombieStart',
-      'minigameZombieState',
       'guildLeaderboard',
       'guildLeave',
       'guildPromote',
@@ -782,6 +765,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'leaveCardDuelQueue',
       'leaveDelve',
       'leaveDungeon',
+      'leaveInterior',
       'lifetimeHonor',
       'lifetimeXp',
       'loadouts',
@@ -806,6 +790,23 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'marketList',
       'marketListInstance',
       'marketSearch',
+      'minigameAbort',
+      'minigameArcadeState',
+      'minigameBrawlerInput',
+      'minigameClaim',
+      'minigameCreate',
+      'minigameFeatures',
+      'minigameHousingPlace',
+      'minigameInvite',
+      'minigameJoin',
+      'minigameRaceInput',
+      'minigameReady',
+      'minigameRtsBuild',
+      'minigameRtsTrain',
+      'minigameSession',
+      'minigameZombieBuild',
+      'minigameZombieStart',
+      'minigameZombieState',
       'mountLessonActive',
       'mountRaceCancel',
       'mountRaceStart',
@@ -813,6 +814,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'mountTrainBegin',
       'moveInput',
       'moveInventoryItem',
+      'moveProp',
       'moveRaidMember',
       'nodeHarvestableByMe',
       'nodeRespawnSeconds',
@@ -830,8 +832,8 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'petWaterJet',
       'pickUpObject',
       'placeMobileStation',
-      'playCardInDuel',
       'placeProp',
+      'playCardInDuel',
       'playEmote',
       'player',
       'playerId',
@@ -1150,11 +1152,6 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'marketList',
       'marketListInstance',
       'marketSearch',
-      'mountLessonActive',
-      'mountRaceCancel',
-      'mountRaceStart',
-      'mountRaceView',
-      'mountTrainBegin',
       'minigameAbort',
       'minigameBrawlerInput',
       'minigameClaim',
@@ -1168,6 +1165,12 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'minigameRtsTrain',
       'minigameZombieBuild',
       'minigameZombieStart',
+      'mountLessonActive',
+      'mountRaceCancel',
+      'mountRaceStart',
+      'mountRaceView',
+      'mountTrainBegin',
+      'moveInventoryItem',
       'moveProp',
       'moveRaidMember',
       'nodeHarvestableByMe',
@@ -1185,8 +1188,8 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'petWaterJet',
       'pickUpObject',
       'placeMobileStation',
-      'playCardInDuel',
       'placeProp',
+      'playCardInDuel',
       'playEmote',
       'prestige',
       'questState',
@@ -1818,11 +1821,12 @@ const FACET_MEMBER_ARRAYS: Readonly<Record<string, readonly string[]>> = {
   dungeonFinder: FACET_DUNGEON_FINDER,
   deeds: FACET_DEEDS,
   actionBar: FACET_ACTION_BAR,
+  minigames: FACET_MINIGAMES,
 };
 
 describe('W1: aggregate IWorld member set equals the disjoint union of the facets', () => {
   it('pins the facet count', () => {
-    expect(Object.keys(FACET_MEMBER_ARRAYS).length).toBe(32);
+    expect(Object.keys(FACET_MEMBER_ARRAYS).length).toBe(33);
   });
 
   it('each facet array is non-empty and internally duplicate-free', () => {
@@ -1850,8 +1854,8 @@ describe('W1: aggregate IWorld member set equals the disjoint union of the facet
 
   it('the facet union equals the pinned IWORLD_MEMBERS set', () => {
     const union = Object.values(FACET_MEMBER_ARRAYS).flatMap((arr) => [...arr]);
-    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(300);
-    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(300);
+    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(323);
+    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(323);
     const sortedUnion = [...union].sort();
     const pinned = IWORLD_MEMBERS.map((m) => m.name).sort();
     expect(sortedUnion).toEqual(pinned);

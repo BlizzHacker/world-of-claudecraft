@@ -2072,7 +2072,7 @@ describe('Guide professions pages and routes', () => {
   });
 
   it('lists every professions detail page in the sitemap', () => {
-    const origin = 'https://worldofclaudecraft.com';
+    const origin = 'https://crypticrealm.com';
     for (const id of GUIDE_PROF_PAGES) {
       const loc = `${origin}${hrefFor(`professions/${id}`)}`;
       expect(sitemapXml, `sitemap missing professions page "${id}"`).toContain(`<loc>${loc}</loc>`);

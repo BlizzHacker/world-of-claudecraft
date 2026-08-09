@@ -197,6 +197,10 @@ const MODELS = {};
 function modelKeyFor(visualKey) {
   const def = VISUALS[visualKey];
   if (!def) return null;
+  // Realm bodies under /cr-realms/ are the out-of-band store (gitignored,
+  // shipped into the deployment separately): the wiki cannot pin an on-disk
+  // GLB for them, so their figures fall back to still-less text entries.
+  if (typeof def.url === 'string' && def.url.startsWith('/cr-realms/')) return null;
   if (!MODELS[visualKey]) {
     const spec = { url: def.url, idle: def.clips?.idle ?? null, height: def.height };
     if (def.yaw) spec.yaw = def.yaw;

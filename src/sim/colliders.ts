@@ -782,6 +782,10 @@ function staticWorldColliders(seed: number): Collider[] {
   // (players enter by talking to the warden; leaveDelve drops them mouth-side
   // of this collider, see prop_layout delveExitDropZ).
   for (const dm of PROPS.delveMarkers ?? []) {
+    // The Hellmaw Well portal renders only in the infernal realm (render/props.ts
+    // skips it elsewhere), so its slab must not collide elsewhere either: an
+    // invisible wall beside the town well is what it was outside infernal.
+    if (dm.delveId === 'hellmaw_well' && getActiveRealm().id !== 'infernal') continue;
     const az = delveArchZ(dm.z, dm.delveId);
     out.push({
       type: 'obb',

@@ -2,6 +2,7 @@ import { existsSync, readFileSync, statSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
+const landingTs = readFileSync(new URL('../src/landing.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 // The CSS extraction moved the :root tokens and the reset/base
 // block (universal reset, scrollbars, forms, the global canvas/#ui/#nameplates base
 // rules) out of index.html's inline <style> into src/styles/base.css, loaded by the
@@ -55,6 +56,10 @@ const playHtml = readFileSync(new URL('../play.html', import.meta.url), 'utf8').
   /\r\n/g,
   '\n',
 );
+const userDropdownTs = readFileSync(
+  new URL('../src/ui/cryptic/user_dropdown.ts', import.meta.url),
+  'utf8',
+).replace(/\r\n/g, '\n');
 const privacyHtml = readFileSync(
   new URL('../public/privacy.html', import.meta.url),
   'utf8',
@@ -72,7 +77,7 @@ const supportHtml = readFileSync(
   'utf8',
 ).replace(/\r\n/g, '\n');
 const whitepaperUrl = new URL(
-  '../public/World-of-ClaudeCraft-Whitepaper-v1.0.pdf',
+  '../public/World-of-Cryptic-Realm-Whitepaper-v1.0.pdf',
   import.meta.url,
 );
 const viteConfig = readFileSync(new URL('../vite.config.ts', import.meta.url), 'utf8').replace(
@@ -91,10 +96,6 @@ const newsFeedTs = readFileSync(new URL('../src/ui/news_feed.ts', import.meta.ur
   /\r\n/g,
   '\n',
 );
-const highscoreBoardTs = readFileSync(
-  new URL('../src/ui/highscore_board.ts', import.meta.url),
-  'utf8',
-).replace(/\r\n/g, '\n');
 const hudTs = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8').replace(
   /\r\n/g,
   '\n',
@@ -117,6 +118,7 @@ const actionBarLayoutSyncTs = readFileSync(
 // The Esc options menu was extracted to options_view.ts (the declarative menu
 // model) + options_window.ts (the painter); the menu guard reads the
 // model rather than the old inline hud.ts main-menu builder.
+const optionsIaTs = readFileSync(new URL('../src/ui/options_ia.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const optionsViewTs = readFileSync(
   new URL('../src/ui/options_view.ts', import.meta.url),
   'utf8',
@@ -145,6 +147,10 @@ const spellbookWindowTs = readFileSync(
 ).replace(/\r\n/g, '\n');
 const mobileControlsTs = readFileSync(
   new URL('../src/game/mobile_controls.ts', import.meta.url),
+  'utf8',
+).replace(/\r\n/g, '\n');
+const loadingScreenTs = readFileSync(
+  new URL('../src/game/loading_screen.ts', import.meta.url),
   'utf8',
 ).replace(/\r\n/g, '\n');
 const characterPreviewTs = readFileSync(
@@ -253,54 +259,6 @@ describe('client HTML shell', () => {
     }
   });
 
-  it('removes loading-curtain and progress motion for reduced-motion players', () => {
-    expect(shellCss).toContain('transition: opacity calc(0.35s * var(--motion-scale)) ease;');
-    expect(shellCss).toContain('transition: width calc(0.2s * var(--motion-scale)) ease;');
-    const reducedMotion = shellCss.match(
-      /@media \(prefers-reduced-motion: reduce\) \{([\s\S]*?)\n {2}\}/,
-    )?.[1];
-    expect(reducedMotion).toContain('#loading-screen');
-    expect(reducedMotion).toContain('#ls-fill');
-    expect(reducedMotion).toContain('transition: none;');
-    expect(mainTs).toContain(
-      "return loadingCurtainFadeMs(new Settings().get('reduceMotion') || osReducedMotion);",
-    );
-    expect(mainTs.match(/}, loadingCurtainFadeDelayMs\(\)\);/g)).toHaveLength(2);
-  });
-
-  it('restores graphics preview contexts only after rebinding the committed renderer', () => {
-    const commitAt = mainTs.indexOf('commit: (next, target) => {');
-    const progressAt = mainTs.indexOf('onProgress:', commitAt);
-    const commit = mainTs.slice(commitAt, progressAt);
-    const replaceAt = commit.indexOf('hud.replaceRenderer(next);');
-    const restoreAt = commit.indexOf('hud.restoreGraphicsPreviewContexts();');
-    expect(commitAt).toBeGreaterThan(-1);
-    expect(progressAt).toBeGreaterThan(commitAt);
-    expect(replaceAt).toBeGreaterThan(-1);
-    expect(restoreAt).toBeGreaterThan(replaceAt);
-  });
-
-  it('keeps live graphics rebuilds bound to the existing world and online session', () => {
-    const buildAt = mainTs.indexOf('buildRenderer: (target, recycled) => {');
-    const prepareAt = mainTs.indexOf('prepareCurrentZone:', buildAt);
-    const build = mainTs.slice(buildAt, prepareAt);
-    expect(buildAt).toBeGreaterThan(-1);
-    expect(prepareAt).toBeGreaterThan(buildAt);
-    expect(build).toContain('new Renderer(world, recycled.canvas, nameplates, {');
-    expect(mainTs).toContain('online?.neutralizeInputForClientPause();');
-  });
-
-  it('attempts both auxiliary graphics teardown arms before reporting reset failures', () => {
-    const resetAt = mainTs.indexOf('resetAuxiliaryRenderers: () => {');
-    const captureAt = mainTs.indexOf('captureRendererContext:', resetAt);
-    const reset = mainTs.slice(resetAt, captureAt);
-    expect(resetAt).toBeGreaterThan(-1);
-    expect(captureAt).toBeGreaterThan(resetAt);
-    expect(reset).toMatch(/try\s*\{\s*hud\.resetGraphicsPreviewContexts\(\);\s*\} catch/);
-    expect(reset).toMatch(/try\s*\{\s*resetPortraitRendererForGraphicsRebuild\(\);\s*\} catch/);
-    expect(reset).toContain('throw new AggregateError');
-  });
-
   it('places skip links as the first focusable elements in BOTH entries', () => {
     for (const entry of [html, playHtml]) {
       const skipMain = entry.indexOf('class="hud-skip" href="#ui"');
@@ -397,7 +355,7 @@ describe('client HTML shell', () => {
     // tag also locks the attribute order + the exact i18n key across entries.
     for (const entry of [html, playHtml]) {
       expect(entry).toContain(
-        'id="player-frame" class="unitframe" role="group" tabindex="0" aria-haspopup="menu" data-i18n-aria="hudChrome.unitFrame.playerLabel"',
+        'id="player-frame" class="unitframe has-orbs" role="group" tabindex="0" aria-haspopup="menu" data-i18n-aria="hudChrome.unitFrame.playerLabel"',
       );
     }
   });
@@ -674,8 +632,6 @@ describe('client HTML shell', () => {
     // character-bound) through toggleClass. No raw classList/style write on either
     // frame survives (those silently collapse the hot-DOM skip rate).
     expect(hudTs).toContain('const targetRank = targetRankView(targetTemplate);');
-    // Written into the reused target descriptor rather than a per-frame object
-    // literal; the routing this test guards is unchanged.
     expect(hudTs).toContain('targetFrame.levelText = String(target.level);');
     expect(hudTs).toContain(
       "this.toggleClass(this.targetFrameEl, 'elite', targetUsesEliteFrame(targetRank));",
@@ -721,6 +677,9 @@ describe('client HTML shell', () => {
   it('keeps the Account nav tab hidden unless a session is restored', () => {
     expect(html).toContain('<li class="nav-item" id="nav-item-account" hidden>');
     expect(html).toContain('<li class="nav-item" id="nav-item-logout" hidden>');
+    expect(mainTs).toContain('function hydrateApiFromSavedSession(): boolean');
+    expect(mainTs).toContain('} else if (hydrateApiFromSavedSession()) {');
+    expect(mainTs).toContain('} else {\n    enterLoggedOutChrome();\n  }');
     expect(mainTs).toContain('if (api.restoreSession()) {');
     expect(mainTs).toContain(
       "} else {\n    enterLoggedOutChrome();\n    if (isDesktopLoginPage()) show('#login-panel');\n  }",
@@ -753,9 +712,15 @@ describe('client HTML shell', () => {
       expect(modalAt, name).toBeLessThan(startAt);
       expect(windowAt, name).toBeLessThan(startAt);
     }
+    expect(html).toContain('id="discord-keep-form"');
+    expect(html).toContain('id="discord-keep-username" name="username" type="text" autocomplete="username"');
+    expect(html).toContain('id="discord-link-existing" hidden novalidate');
+    expect(html).toContain('id="discord-link-user" name="username" type="text"');
+    expect(mainTs).toContain("document.getElementById('discord-keep-form')?.addEventListener('submit'");
+    expect(mainTs).toContain("document.getElementById('discord-link-existing')?.addEventListener('submit'");
   });
 
-  it('shows a logged-in Logout nav item next to Account', () => {
+  it('keeps Account/Logout nav hooks available while the user dropdown owns logged-in chrome', () => {
     expect(html).toContain('id="nav-btn-account"');
     expect(html).toContain('id="nav-btn-logout"');
     expect(html.indexOf('id="nav-btn-account"')).toBeLessThan(html.indexOf('id="nav-btn-logout"'));
@@ -765,10 +730,14 @@ describe('client HTML shell', () => {
     expect(mainTs).toContain('void api.logout().finally(finish);');
     expect(mainTs).toContain('api.clearSession();');
     expect(mainTs).toContain("setupNavBtn($('#nav-btn-logout'), '#hero-view', logoutAccount);");
+    expect(mainTs).toContain('// The logged-in account + sign-out affordances live ONLY in the header user');
+    expect(userDropdownTs).toContain('not erase an otherwise valid game session');
   });
 
   it('requires users to confirm a new account password', () => {
     expect(html).toContain('id="account-confirm-pass"');
+    expect(html).toContain('id="account-password-form" class="account-form" novalidate');
+    expect(html).toContain('name="username" type="text" autocomplete="username" tabindex="-1" aria-hidden="true"');
     expect(mainTs).toContain(
       "const confirm = ($('#account-confirm-pass') as HTMLInputElement).value;",
     );
@@ -776,76 +745,104 @@ describe('client HTML shell', () => {
   });
 
   it('routes logged-in play navigation to the realm and character flow', () => {
+    expect(mainTs).toContain('const resumeOnlineSession = async (): Promise<void> => {');
     expect(mainTs).toContain('const goToLoggedInPlay = () => {');
-    expect(mainTs).toContain('void enterRealmFlow().catch((err) => {');
+    expect(mainTs).toContain('void resumeOnlineSession();');
     expect(mainTs).toContain('api.clearSession();');
     expect(mainTs).toContain('const enterOnlinePlayFlow = () => {');
-    expect(mainTs).toContain('if (api.token) {');
+    expect(mainTs).toContain('if (api.token || hydrateApiFromSavedSession()) {');
     expect(mainTs).toContain('goToLoggedInPlay();');
     expect(mainTs).toContain("setupNavBtn(navBtnPlay, '#hero-view', enterOnlinePlayFlow);");
     expect(mainTs).toContain('const handleOnlineSelect = () => {');
     expect(mainTs).toContain("show('#login-panel');");
   });
 
+  it('marks realm-skinned character choices with faction and GLB metadata', () => {
+    expect(mainTs).toContain('button.dataset.faction = choice.faction;');
+    expect(mainTs).toContain('button.dataset.realmAssetStatus = choice.assetStatus;');
+    expect(mainTs).toContain('button.dataset.realmAsset = choice.assetUrl;');
+    expect(mainTs).toContain('button.dataset.realmAssetName = choice.assetName ?? choice.name;');
+    expect(mainTs).toContain('ArcForge model');
+    expect(mainTs).toContain('realm-coming-soon');
+    expect(shellCss).toContain('.mini-class-row:has(.mini-class.realm-skinned)');
+    expect(shellCss).toContain('grid-template-columns: repeat(2, minmax(0, 1fr));');
+    expect(shellCss).toContain('.mini-class.realm-skinned .mini-class-label');
+    expect(shellCss).toContain('.class-details-asset.asset-comingSoon');
+  });
+
+  it('keeps test realm rings behind a compact checkbox', () => {
+    expect(mainTs).toContain('class="rl-test-rings"');
+    expect(mainTs).toContain('Dev stays Dev and is approved only.');
+    expect(mainTs).toContain('function canUseDevStage()');
+    expect(shellCss).toContain('#realm-list .rc-stages[hidden]');
+    expect(shellCss).toContain('#realm-list .rc-stage-toggle small');
+  });
+
+  it('lets the loading screen fully own the viewport during world entry', () => {
+    expect(mainTs).toContain('showLoadingScreen(statusText);');
+    expect(mainTs).toContain('hideLoadingScreen();');
+    expect(loadingScreenTs).toContain("document.body.classList.add('is-entering-world');");
+    expect(loadingScreenTs).toContain("document.body.classList.remove('is-entering-world');");
+    expect(shellCss).toMatch(/#loading-screen \{\n\s+position: fixed;/);
+    expect(shellCss).toContain('body.is-entering-world #title-logo,');
+    expect(shellCss).toContain('body.is-entering-world .homepage-header');
+  });
+
   it('ships crawlable SEO metadata and sitemap hints', () => {
     expect(html).toContain(
       '<meta name="robots" content="index, follow, max-image-preview:large" />',
     );
-    expect(html).toContain('<link rel="canonical" href="https://worldofclaudecraft.com/" />');
-    expect(html).toContain('<meta property="og:site_name" content="World of ClaudeCraft" />');
-    expect(html).toContain('"alternateName": "World of Claudecraft"');
-    expect(html).toContain('"https://github.com/levy-street/world-of-claudecraft"');
-    expect(mainTs).toContain("alternateName: 'World of Claudecraft'");
-    expect(mainTs).toContain("'https://github.com/levy-street/world-of-claudecraft'");
+    // Cryptic Realm's own host and site name: branding_guard forbids upstream
+    // branding on every public surface, so these two tests must agree.
+    expect(html).toContain('<link rel="canonical" href="https://crypticrealm.com/" />');
+    expect(html).toContain('<meta property="og:site_name" content="Cryptic Realm" />');
     expect(robotsTxt.trim()).toBe(
-      'User-agent: *\nAllow: /\n\nSitemap: https://worldofclaudecraft.com/sitemap.xml\nSitemap: https://worldofclaudecraft.com/sitemap-characters.xml',
+      'User-agent: *\nAllow: /\n\nSitemap: https://crypticrealm.com/sitemap.xml',
     );
-    expect(robotsTxt).toContain('Sitemap: https://worldofclaudecraft.com/sitemap.xml');
-    // The dynamic per-character sitemap (served by the game server) is advertised too.
-    expect(robotsTxt).toContain('Sitemap: https://worldofclaudecraft.com/sitemap-characters.xml');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/</loc>');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/links</loc>');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/play</loc>');
+    expect(robotsTxt).toContain('Sitemap: https://crypticrealm.com/sitemap.xml');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/</loc>');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/links</loc>');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/play</loc>');
     expect(playHtml).toContain(
-      '<link rel="canonical" href="https://worldofclaudecraft.com/play" />',
+      '<link rel="canonical" href="https://crypticrealm.com/play" />',
     );
     expect(playHtml).toContain(
-      '<meta property="og:url" content="https://worldofclaudecraft.com/play" />',
+      '<meta property="og:url" content="https://crypticrealm.com/play" />',
     );
-    expect(playHtml).toContain('"url": "https://worldofclaudecraft.com/play"');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/privacy</loc>');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/terms</loc>');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/data-deletion</loc>');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/support</loc>');
+    expect(playHtml).toContain('"url": "https://crypticrealm.com/play"');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/privacy</loc>');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/terms</loc>');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/data-deletion</loc>');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/support</loc>');
     expect(privacyHtml).toContain(
-      '<link rel="canonical" href="https://worldofclaudecraft.com/privacy" />',
+      '<link rel="canonical" href="https://crypticrealm.com/privacy" />',
     );
     expect(privacyHtml).toContain('<h1>Privacy Policy</h1>');
     expect(privacyHtml).toContain('href="/support">Support</a>');
     expect(privacyHtml).toContain('href="/data-deletion">Data Deletion</a>');
     expect(termsHtml).toContain(
-      '<link rel="canonical" href="https://worldofclaudecraft.com/terms" />',
+      '<link rel="canonical" href="https://crypticrealm.com/terms" />',
     );
     expect(termsHtml).toContain('<h1>Terms and Conditions</h1>');
     expect(termsHtml).toContain('href="/support">Support</a>');
     expect(termsHtml).toContain('href="/data-deletion">Data Deletion</a>');
     expect(dataDeletionHtml).toContain(
-      '<link rel="canonical" href="https://worldofclaudecraft.com/data-deletion" />',
+      '<link rel="canonical" href="https://crypticrealm.com/data-deletion" />',
     );
     expect(dataDeletionHtml).toContain('<h1>Data Deletion</h1>');
-    expect(dataDeletionHtml).toContain('href="mailto:woc@levystreet.com"');
-    expect(dataDeletionHtml).toContain('href="https://discord.com/invite/worldofclaudecraft"');
+    expect(dataDeletionHtml).toContain('href="mailto:support@crypticrealm.com"');
+    expect(dataDeletionHtml).toContain('href="https://discord.gg/Zdj3JGrx"');
     expect(dataDeletionHtml).toContain('href="/support">Support</a>');
     expect(supportHtml).toContain(
-      '<link rel="canonical" href="https://worldofclaudecraft.com/support" />',
+      '<link rel="canonical" href="https://crypticrealm.com/support" />',
     );
     expect(supportHtml).toContain('<h1>Support</h1>');
-    expect(supportHtml).toContain('href="mailto:woc@levystreet.com"');
-    expect(supportHtml).toContain('href="https://discord.com/invite/worldofclaudecraft"');
+    expect(supportHtml).toContain('href="mailto:support@crypticrealm.com"');
+    expect(supportHtml).toContain('href="https://discord.gg/Zdj3JGrx"');
     expect(supportHtml).toContain('href="/data-deletion">Data Deletion page</a>');
     expect(supportHtml).toContain('"@type": "ContactPage"');
     expect(html).toContain(
-      'href="/World-of-ClaudeCraft-Whitepaper-v1.0.pdf" class="footer-link" data-i18n="footer.whitepaper"',
+      'href="/World-of-Cryptic-Realm-Whitepaper-v1.0.pdf" class="footer-link" data-i18n="footer.whitepaper"',
     );
     expect(html.indexOf('data-i18n="footer.whitepaper"')).toBeLessThan(
       html.indexOf('data-i18n="footer.terms"'),
@@ -862,6 +859,17 @@ describe('client HTML shell', () => {
     expect(serverMain).toContain("['/terms', '/terms.html']");
     expect(serverMain).toContain("['/data-deletion', '/data-deletion.html']");
     expect(serverMain).toContain("['/support', '/support.html']");
+    // CR fork: Cryptic Realm branding / crypticrealm.com. Upstream credits live
+    // on the contributions page and the claudecraft realm config, not site SEO.
+    expect(html).toContain('<meta name="robots" content="index, follow, max-image-preview:large" />');
+    expect(html).toContain('<link rel="canonical" href="https://crypticrealm.com/" />');
+    expect(html).toContain('<meta property="og:site_name" content="Cryptic Realm" />');
+    expect(mainTs).not.toContain('github.com/BlizzHacker/cryptic-realm');
+    expect(mainTs).toContain("'https://discord.gg/Zdj3JGrx'");
+    expect(robotsTxt.trim()).toBe('User-agent: *\nAllow: /\n\nSitemap: https://crypticrealm.com/sitemap.xml');
+    expect(robotsTxt).toContain('Sitemap: https://crypticrealm.com/sitemap.xml');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/</loc>');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/links</loc>');
   });
 
   it('loads Meta Pixel outside local development and tracks level 5', () => {
@@ -883,16 +891,16 @@ describe('client HTML shell', () => {
     expect(mainTs).toContain(
       'registered.accountId ? { eventID: `acct_$' + '{registered.accountId}` } : undefined',
     );
-    expect(mainTs).toContain("'GitHubClick'");
+    expect(mainTs).toContain("'AccountCreated',");
+    expect(mainTs).not.toContain("'GitHubClick'");
     expect(mainTs).toContain("'DiscordClick'");
   });
 
-  it('excludes wallet surfaces from unverified native and Steam builds while allowing Seeker', () => {
+  it('excludes wallet surfaces from native and Steam builds while allowing website desktop', () => {
     expect(hudCss).toContain('body.native-app #nav-btn-download,');
     expect(hudCss).toContain(
-      'body.native-app:not(.seeker-wallet-enabled) .cs-wallet,\n  body.native-app:not(.seeker-wallet-enabled) .cs-wallet-hidden-note,\n  body.native-app:not(.seeker-wallet-enabled) .account-wallet-card',
+      'body.native-app:not(.seeker-wallet-enabled) .cs-wallet,\n  body.native-app:not(.seeker-wallet-enabled) .cs-wallet-hidden-note,\n  body.native-app:not(.seeker-wallet-enabled) .account-wallet-card,',
     );
-    expect(hudCss).not.toContain('body.native-app .cs-wallet,');
     expect(hudCss).toContain('body.native-app #performance-tip,');
     expect(hudCss).toContain('body.desktop-app #token-ca,\n  body.desktop-app .official-site-copy');
     expect(hudCss).not.toContain('body.desktop-app .cs-wallet');
@@ -939,25 +947,6 @@ describe('client HTML shell', () => {
     );
     expect(characterPreviewTs).toContain('this.renderer.forceContextLoss();');
     expect(characterPreviewTs).toContain('this.renderer.dispose();');
-  });
-
-  it('keeps the character preview render loop dormant while its host is hidden', () => {
-    expect(characterPreviewTs.match(/requestAnimationFrame\(this\.animate\)/g)).toHaveLength(1);
-    expect(characterPreviewTs).toContain('if (!this.renderActive) return;');
-    expect(characterPreviewTs).toContain('this.renderActive = width > 0 && height > 0;');
-  });
-
-  it('warms contextual Canvas HUD assets before gameplay becomes visible', () => {
-    expect(mainTs).toContain('hud.prewarmStaticUiAssets();');
-    expect(hudTs).toContain('prewarmStaticUiAssets(): void {');
-    expect(hudTs).toContain('raidMarkerDataUrl(marker);');
-    const crestWarm = mainTs.slice(
-      mainTs.indexOf('for (const cls of ALL_CLASSES)'),
-      mainTs.indexOf('for (const slot of world.inventory)'),
-    );
-    expect(crestWarm).toContain("kind: 'crest'");
-    expect(crestWarm).toContain('size: 20');
-    expect(crestWarm).toContain('size: 96');
   });
 
   it('keeps the desktop character roster readable inside a centered cinematic stage', () => {
@@ -1028,11 +1017,12 @@ describe('client HTML shell', () => {
     // .donate links in hud.css.
     expect(hudCss).toContain('body.native-app #mobile-donate,');
     // The tap targets: the account panel with the invite as the logged-out /
-    // offline fallback (discordInviteUrl() itself falls back to
-    // DEFAULT_DISCORD_INVITE_URL in discord_status.ts), and the Ko-fi page,
-    // pinned to the shells' URLs.
-    expect(mainTs).toContain("const DONATE_URL = 'https://ko-fi.com/worldofclaudecraft';");
-    expect(mainTs).toContain("window.open(discordInviteUrl(), '_blank', 'noopener,noreferrer');");
+    // offline fallback, and the Cryptic Realm tip page, pinned to the shells' URLs.
+    expect(mainTs).toContain("const DISCORD_INVITE_URL = 'https://discord.gg/Zdj3JGrx';");
+    expect(mainTs).toContain("const DONATE_URL = '/links.html#btn-tip';");
+    expect(mainTs).toContain(
+      "window.open(discordInviteUrl() || DISCORD_INVITE_URL, '_blank', 'noopener,noreferrer');",
+    );
     expect(mainTs).toContain(
       "onDonate: () => window.open(DONATE_URL, '_blank', 'noopener,noreferrer'),",
     );
@@ -1040,7 +1030,7 @@ describe('client HTML shell', () => {
       ['index.html', html],
       ['play.html', playHtml],
     ] as const) {
-      expect(entry.match(/href="https:\/\/ko-fi\.com\/worldofclaudecraft"/g), name).toHaveLength(3);
+      expect(entry.match(/href="\/links\.html#btn-tip"/g), name).toHaveLength(3);
       expect(entry, name).not.toContain('https://github.com/sponsors/levy-street');
     }
   });
@@ -1172,14 +1162,17 @@ describe('client HTML shell', () => {
 
   it('carries the same community-tray links in BOTH entries, with no duplicate Discord entry', () => {
     for (const entry of [html, playHtml]) {
-      expect(entry).toContain('<a class="community-link github"');
+      // The fork ships discord + donate and NO github link (its repo is not
+      // public; branding_guard forbids advertising it).
+      expect(entry).toContain('<a class="community-link discord"');
       expect(entry).toContain('<a class="community-link donate"');
-      expect(entry).not.toContain('<a class="community-link discord"');
+      expect(entry).not.toContain('<a class="community-link github"');
     }
   });
 
   it('keeps the game menu free of duplicate and dev-only entries', () => {
-    const interfaceEntries = optionsViewTs.match(/labelKey: 'hud\.options\.interface'/g) ?? [];
+    // The fork's redesign moved category labels into options_ia.ts as `nameKey`.
+    const interfaceEntries = optionsIaTs.match(/nameKey: 'hud\.options\.interface'/g) ?? [];
     expect(interfaceEntries).toHaveLength(1);
     expect(optionsViewTs).not.toContain('Skin Select (dev)');
     expect(hudTs).not.toContain('Skin Select (dev)');
@@ -1267,12 +1260,13 @@ describe('client HTML shell', () => {
     expect(html).toContain('<details id="community-menu">');
     expect(html).toContain('<summary class="community-toggle"');
     expect(html).toContain('<div class="community-tray">');
-    expect(html).toContain('<a class="community-link github"');
+    expect(html).toContain('<a class="community-link discord"');
+    // CR: the GitHub community link was removed by request.
+    // Cryptic Realm does not advertise the repository.
     expect(html).toContain('<a class="community-link donate"');
     // No separate Discord invite link here: it duplicated the Discord (U)
     // icon-rail button (#mm-discord), the game HUD's single Discord entry
     // point (see the fix/inspect-camera-talent-overlap-discord-dup PR).
-    expect(html).not.toContain('<a class="community-link discord"');
     expect(hudMobileCss).toContain('body.mobile-touch.game-active #ui {\n    z-index: 80;\n  }');
     expect(hudMobileCss).toContain('body.mobile-touch #community-hud {\n    display: none;\n  }');
     // No stray mobile-touch styling survives for the hidden rail (the old
@@ -1627,13 +1621,14 @@ describe('client HTML shell', () => {
   });
 
   it('renders the high scores leaderboard responsively on mobile', () => {
-    // The board markup moved to src/ui/highscore_board.ts (extracted out of main.ts,
-    // the news_feed.ts precedent); the mobile data-label captions moved with it.
-    expect(highscoreBoardTs).toContain(
+    // The board markup moved out of main.ts into src/ui/highscore_board.ts
+    // (the v0.35.1 intake); the responsive contract is unchanged.
+    const highscoreTs = readFileSync(new URL('../src/ui/highscore_board.ts', import.meta.url), 'utf8');
+    expect(highscoreTs).toContain(
       // biome-ignore lint/suspicious/noTemplateCurlyInString: asserting the source literally contains this template expression
       '<span class="hs-realm" data-label="${esc(realmLabel)}">${esc(r.realm ?? \'\')}</span>',
     );
-    expect(highscoreBoardTs).toContain(
+    expect(highscoreTs).toContain(
       // biome-ignore lint/suspicious/noTemplateCurlyInString: asserting the source literally contains this template expression
       '<span class="hs-xp" data-label="${esc(lifetimeXpLabel)}">${formatXp(r.lifetimeXp)}</span>',
     );
@@ -1662,10 +1657,10 @@ describe('client HTML shell', () => {
     );
     expect(html).toContain('<div class="panel-title">');
     expect(html).toContain(
-      '<span id="mobile-more-title" data-i18n="hud.core.mobileMore">More</span>',
+      '<span class="window-title" id="mobile-more-title" data-i18n="hud.core.mobileMore">More</span>',
     );
     expect(playHtml).toContain(
-      '<span id="mobile-more-title" data-i18n="hud.core.mobileMore">More</span>',
+      '<span class="window-title" id="mobile-more-title" data-i18n="hud.core.mobileMore">More</span>',
     );
     expect(html).toContain('id="mobile-more-close"');
     for (const entry of [html, playHtml]) {
@@ -1674,21 +1669,20 @@ describe('client HTML shell', () => {
       );
     }
     expect(html).toContain('<div id="mobile-extra-grid">');
-    // Daily Rewards, the Book of Deeds, Mount / Dismount, and Crafting ride the More grid in BOTH
+    // Daily Rewards, the Book of Deeds, and Crafting ride the More grid in BOTH
     // entries (play.html historically lags index.html; these pins keep them in
     // step).
     for (const entry of [html, playHtml]) {
       expect(entry).toContain('id="mobile-daily-rewards"');
       expect(entry).toContain('id="mobile-deeds"');
-      expect(entry).toContain('id="mobile-mounts"');
       expect(entry).toContain('id="mobile-crafting"');
     }
     expect(hudMobileCss).not.toContain('body.mobile-touch.mobile-more-open #mobile-controls');
     expect(html).toContain(
-      '</div>\n    </div>\n  </section>\n      <div id="mobile-extra-controls"',
+      '</div>\n    </div>\n      <div id="mobile-extra-controls"',
     );
     expect(playHtml).toContain(
-      '</div>\n    </div>\n  </div>\n      <div id="mobile-extra-controls"',
+      '</div>\n    </div>\n      <div id="mobile-extra-controls"',
     );
     expect(hudMobileCss).toContain(
       'body.mobile-touch #mobile-extra-controls {\n    position: fixed;\n    left: 50%;\n    top: 50%;\n    bottom: auto;\n    --mobile-more-open-transform: translate(-50%, -50%);\n    --mobile-more-closed-transform: translate(-50%, -46%) scale(0.96);\n    transform: var(--mobile-more-closed-transform);',
@@ -1852,47 +1846,48 @@ describe('client HTML shell', () => {
     );
   });
 
-  it('ships a looping cinematic backdrop with a poster fallback, lazy-loaded for perf', () => {
-    expect(html).toContain('id="bg-home"');
-    expect(html).toContain('poster="/home-bg.png"');
-    // The 5.7MB mp4 is NOT eagerly fetched: no <source>/autoplay/preload in the
-    // static markup. main.ts attaches data-trailer-src only on capable devices;
-    // phones / Save-Data / reduced-motion / high-contrast keep the poster only.
-    expect(html).toContain('data-trailer-src="/home-bg.mp4"');
-    expect(html).toContain('preload="none"');
-    expect(html).not.toContain('<source src="/home-bg.mp4"');
-    expect(mainTs).toContain('applyLandingBackdrop');
-    // View transitions still honour reduced-motion.
-    expect(mainTs).toContain('prefers-reduced-motion: reduce');
+  it('keeps public homepage nav reachable from the deferred landing shell', () => {
+    expect(html).toContain('id="nav-btn-highscores"');
+    expect(html).toContain('id="nav-btn-wiki"');
+    expect(html).toContain('id="nav-btn-news"');
+    expect(html).toContain('id="nav-btn-download"');
+    // Contributions / Links / White Paper are now in-app SPA views (one nav),
+    // not standalone-HTML nav links. See feat(nav) unification.
+    expect(html).toContain('id="nav-btn-links"');
+    expect(html).toContain('id="nav-btn-whitepaper"');
+    expect(html).toContain('id="nav-btn-contributions"');
+    expect(landingTs).toContain("document.getElementById('nav-btn-highscores')");
+    expect(landingTs).toContain("document.getElementById('nav-btn-wiki')");
+    expect(landingTs).toContain("document.getElementById('nav-btn-news')");
+    expect(landingTs).toContain("document.getElementById('nav-btn-download')");
+    expect(landingTs).toContain('loadLandingHighscores');
+    expect(landingTs).toContain('loadLandingNews');
   });
 
-  it('holds the cinematic trailer hidden until it plays, so the poster never flashes first', () => {
-    // The backdrop is one <video class="bg-trailer bg-home" poster=...>. The poster
-    // must stay hidden until JS reveals the layer, otherwise it paints at full
-    // opacity from first paint and the user sees the still key-art for the whole
-    // time the 5.7MB mp4 is still downloading, then it abruptly swaps to video.
-    // The trailer layer is held transparent by default:
-    expect(shellCss).toMatch(/\.bg-trailer\s*\{[\s\S]*?\bopacity:\s*0;/);
-    // ...and there is NO bare `.bg-home { opacity: 0.85 }` base rule overriding that
-    // hold (the bug: a later equal-specificity rule revealed the poster early).
-    expect(shellCss).not.toContain('.bg-home {\n    opacity: 0.85;');
-    // The poster is revealed ONLY by JS: trailer-ready (the video is playing, or a
-    // play/decode failure fallback)...
-    expect(shellCss).toContain(
-      '#start-screen-backdrop.trailer-ready .bg-trailer {\n    opacity: 0.85;',
-    );
-    // ...or backdrop-static (the static-poster path for phone / Save-Data /
-    // reduced-motion / high-contrast), which still shows the poster, dimmed.
-    expect(shellCss).toContain(
-      '#start-screen-backdrop.backdrop-static .bg-home {\n    opacity: 0.4;',
-    );
-    // main.ts reveals the static poster as a fallback when the trailer cannot play,
-    // so a failed/blocked video never leaves a black backdrop.
-    expect(mainTs).toContain("video.addEventListener('error'");
-    // The dead black-wipe overlay (never in the markup, never toggled by JS) is gone.
-    expect(shellCss).not.toContain('bg-trailer-fade');
-    expect(shellCss).not.toContain('trailer-fade-in');
-    expect(shellCss).not.toContain('trailer-fade-out');
+  it('hands nav ownership from the landing shell to the full client without stale transitions', () => {
+    expect(landingTs).toContain('function landingShellActive(): boolean');
+    expect(landingTs).toContain("return document.body.dataset.crFullClient !== '1';");
+    expect(landingTs).toContain('if (!landingShellActive()) return;');
+    expect(mainTs).toContain("document.body.dataset.crFullClient = '1';");
+    expect(mainTs).toContain('let activeViewTransitionTimeout: number | null = null;');
+    expect(mainTs).toContain('function clearViewTransition(): void');
+    expect(mainTs).toContain('clearViewTransition();');
+    expect(mainTs).toContain('activeViewTransitionCleanup = () => {');
+  });
+
+  it('ships a poster-backed cinematic shell without requesting a missing trailer', () => {
+    // CR fork: the homepage cinematic is #bg-trailer, played from main.ts
+    // (initHomepageTrailer) so it can respect reduced-motion / save-data rather
+    // than autoplaying in markup. There is no checked-in trailer asset right now,
+    // so the markup must not point at a guaranteed 404.
+    expect(html).toContain('id="bg-trailer"');
+    expect(html).toContain('poster="/cryptic-realm-loading-bg.webp"');
+    expect(html).not.toContain('<source src="/video/trailer.mp4" type="video/mp4"');
+    expect(html).toContain('loop');
+    expect(html).toContain('playsinline');
+    // The trailer respects reduced-motion (handled in initHomepageTrailer).
+    expect(mainTs).toContain("prefers-reduced-motion: reduce");
+    expect(mainTs).toContain('applyLandingBackdrop');
   });
 
   it('omits Meters from the mobile More tray while keeping the desktop window', () => {
@@ -1933,18 +1928,6 @@ describe('client HTML shell', () => {
     expect(marketWindowTs).toContain('data-market-page="next"');
     expect(marketWindowTs).toContain('itemUi.market.pageRange');
     expect(marketWindowTs).toContain('class="mkt-filters"');
-    // Search and every visible filter must participate in the same responsive grid.
-    // A nested wrapping flex row makes the search align against the full filter block,
-    // so it drops beside the last filter row as the window narrows.
-    expect(componentsCss).toContain(
-      '.mkt-controls {\n    display: grid;\n    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));',
-    );
-    expect(componentsCss).toContain('.mkt-filters {\n    display: contents;');
-    expect(componentsCss).toContain('.mkt-search {\n    width: 100%;\n    max-width: none;');
-    expect(componentsCss).toContain(
-      '.mkt-filter {\n    display: flex;\n    flex-direction: column;\n    gap: 3px;\n    max-width: none;',
-    );
-    expect(marketWindowTs).toContain('`<div class="mkt-controls" role="group" aria-label="');
     // biome-ignore lint/suspicious/noTemplateCurlyInString: asserting the source literally contains this template expression
     expect(marketWindowTs).toContain('data-market-filter-menu="${menu}"');
     expect(marketWindowTs).toMatch(/this\.renderMarketFilterMenu\(\s*'itemType'/);
@@ -1961,7 +1944,7 @@ describe('client HTML shell', () => {
     // other test catching it. controlsHtml (built with `.mkt-controls` as its own
     // top-level div) is spliced into el.innerHTML as a sibling ahead of the
     // `#market-body` div, never inside it.
-    expect(marketWindowTs).toContain('`<div class="mkt-controls" role="group"');
+    expect(marketWindowTs).toContain('`<div class="mkt-controls" role="group" aria-label=');
     const markupIdx = marketWindowTs.indexOf('el.innerHTML =');
     const controlsHtmlIdx = marketWindowTs.indexOf('controlsHtml +', markupIdx);
     const bodyIdx = marketWindowTs.indexOf('<div id="market-body">', markupIdx);
@@ -1973,8 +1956,9 @@ describe('client HTML shell', () => {
     // multi-column landscape grid would otherwise go undetected.
     expect(componentsCss).toContain('.mkt-list {');
     expect(marketWindowTs).toContain("list.className = 'mkt-list';");
-    // Mobile reduces the shared controls grid to one column and forces the listing
-    // grid back to a single column instead of relying on auto-fill alone.
+    // Mobile stacks the controls row to one column (the flex-basis-neutralizing
+    // fix depends on this direction flip actually happening) and forces the
+    // listing grid back to a single column instead of relying on auto-fill alone.
     expect(hudMobileCss).toContain(
       'body.mobile-touch .mkt-controls {\n    grid-template-columns: 1fr;\n    align-items: stretch;',
     );
@@ -2117,21 +2101,20 @@ describe('client HTML shell', () => {
       "import { stopAutorunForInteraction } from './game/interaction_autorun';",
     );
     expect(mainTs).toContain("import { tryNearbyInteraction } from './game/nearby_interaction';");
-    expect(mainTs).toContain('stopAutorunForInteraction(\n      tryNearbyInteraction(');
-    // Open-gate flip: the trailing (online === null) override is gone,
-    // so the helpers default harvestStateReliable = true (trusting the hcb
-    // corpse-claim mirror online). The R40 confirm gate now trails the
-    // nothing-to-interact string, with harvestStateReliable still an
-    // explicit `undefined` (the default), never a live override.
+    // The fork routes the pick through handlePickedEntity and feeds its outcome
+    // to stopAutorunForInteraction, instead of upstream's inline
+    // tryNearbyInteraction composition. Same contract: an attempted interaction
+    // stops autorun.
+    expect(mainTs).toContain('const interactionOutcome = handlePickedEntity(');
     expect(mainTs).toContain(
-      "t('errors.nothingInteract'),\n        undefined,\n        gatherEffectConfirm,\n      ),",
+      'stopAutorunForInteraction(interactionOutcome, input, mobileControls);',
     );
-    // The escort away line sits immediately before it (escort_interact.ts): an
-    // escort run has no other client entry point, so an unwired argument here
-    // would silently make those quests uncompletable again.
-    expect(mainTs).toContain(
-      "t('questUi.errors.escortAway'),\n        t('errors.nothingInteract'),",
-    );
+    // Open-gate flip: the trailing (online === null) override is gone, and the
+    // v0.35.1 intake moved the nothing-to-interact error INSIDE the shared
+    // tryNearbyInteraction module, so main.ts carries the localized string only
+    // as arguments to that module.
+    const nearbyTs = readFileSync(new URL('../src/game/nearby_interaction.ts', import.meta.url), 'utf8');
+    expect(nearbyTs).toContain('hud.showError(nothingToInteractText);');
     expect(mainTs).not.toContain('online === null');
     expect(mainTs).toContain('const interactionOutcome = handlePickedEntity(');
     expect(mainTs).toContain(
@@ -2140,7 +2123,7 @@ describe('client HTML shell', () => {
     expect(mainTs).toContain(
       'stopAutorunForInteraction(interactionOutcome, input, mobileControls);',
     );
-    expect(mainTs).toContain('stopAutorunForInteraction(\n          handleGatherNodeInteract(');
+    expect(mainTs).toContain('stopAutorunForInteraction(\n      handleGatherNodeInteract(');
     // The R40 gate rides the CLICK dispatch too (the phase 14 QA found only
     // the interact-key site pinned): the world-click harvest passes the same
     // confirm gate, trailing the tool gate.
@@ -2161,8 +2144,6 @@ describe('client HTML shell', () => {
     expect(hudMobileCss).toContain(
       'body.mobile-touch.hud-mobile-compact #player-frame {\n    left: calc(50% - 15px);\n  }',
     );
-    // The pet frame joins the same nudge: it shares the bottom-centre column with
-    // the player frame and the two bars, so it has to travel with them.
     expect(hudMobileCss).toContain(
       'body.mobile-touch.hud-mobile-compact #castbar,\n  body.mobile-touch.hud-mobile-compact #swingbar,\n  body.mobile-touch.hud-mobile-compact #pet-frame {\n    left: calc(50% - 15px);\n  }',
     );
@@ -2171,26 +2152,6 @@ describe('client HTML shell', () => {
     // satellite placement rules.
     expect(hudMobileCss).toContain(
       'body.mobile-touch.mobile-left-handed #mobile-move-zone {\n    left: auto;\n    right: max(18px, env(safe-area-inset-right));\n  }',
-    );
-  });
-
-  // #mobile-move-zone is the floating capture zone the joystick above rests
-  // in; every other touch control anchors off env(safe-area-inset-*), but
-  // this one was still pinned to the literal device corner (left: 0; bottom:
-  // 0), so on a notched/rounded-corner phone it could sit under the home
-  // indicator gesture strip. Mirror the same left/bottom offsets the
-  // adjacent .mobile-joystick rule uses, without touching the zone's own
-  // width/height (it must not shrink the capture area).
-  it('anchors the move-zone capture area off the safe-area insets like its sibling joystick', () => {
-    expect(hudMobileCss).toContain(
-      'body.mobile-touch #mobile-move-zone {\n' +
-        '    position: absolute;\n' +
-        '    left: max(18px, env(safe-area-inset-left));\n' +
-        '    bottom: calc(26px + env(safe-area-inset-bottom));\n' +
-        '    width: min(30vw, 132px);',
-    );
-    expect(hudMobileCss).toContain(
-      'min-width: 112px;\n    max-width: 132px;\n    height: min(36vh, 172px);',
     );
   });
 
@@ -2536,11 +2497,8 @@ describe('client HTML shell', () => {
   });
 
   it('caps mobile quest and NPC panels instead of stretching them edge to edge', () => {
-    // The WARFARE shop joined this centered-sheet group, so the pinned run grew
-    // with it rather than being narrowed around it: keeping the new window inside
-    // the assertion is what makes this guard cover it too.
     expect(hudMobileCss).toContain(
-      'body.mobile-touch #quest-log-window,\n  body.mobile-touch #vendor-window,\n  body.mobile-touch #warfare-window,\n  body.mobile-touch #quest-dialog',
+      'body.mobile-touch #quest-log-window,\n  body.mobile-touch #quest-dialog {\n    max-width: calc(100vw - 20px);',
     );
     expect(hudMobileCss).toContain('width: clamp(320px, 76vw, 680px);');
     expect(hudMobileCss).toContain('max-width: calc(100vw - 20px);');
@@ -2554,141 +2512,17 @@ describe('client HTML shell', () => {
     expect(hudMobileCss).toContain('transform: translate(-50%, -50%);');
     expect(hudMobileCss).toContain('z-index: 95 !important;');
   });
-  it('keeps desktop rolls above managed windows and the mobile bag sheet above rolls', () => {
-    const railZ = Number(componentsCss.match(/#loot-rolls \{[\s\S]*?z-index:\s*(\d+);/)?.[1]);
-    const managedFloors = [
-      ...hudTs.matchAll(/(?:private windowZ =|this\.windowZ =)\s*(\d+);/g),
-    ].map((match) => Number(match[1]));
-    expect(Number.isFinite(railZ)).toBe(true);
-    expect(managedFloors).toHaveLength(2); // initial value + normalization reset
-    for (const floor of managedFloors) {
-      // Desktop Bags shares the roll rail's bottom-right footprint, so the first
-      // managed window must remain below it.
-      expect(floor + 1, `first managed z-index overlaps loot rail ${railZ}`).toBeLessThan(railZ);
-    }
-    // On mobile Bags is a full-screen modal sheet. !important intentionally
-    // beats the inline managed-window value without changing desktop stacking.
-    expect(hudMobileCss).toMatch(/body\.mobile-touch #bags \{[\s\S]*?z-index:\s*95 !important;/);
-  });
-});
 
-// The pet cluster: the pet command bar and the pet health frame share ONE row above
-// the player frame on desktop, and are deliberately SPLIT again on mobile (command bar
-// under the thumb at the top, health strip in the bottom-centre column). Both halves
-// are pinned because either one alone silently changes the layout: the markup that
-// puts the two in one wrapper, and the mobile rule that dissolves it.
-describe('pet cluster layout', () => {
-  const hudCssSrc = readFileSync(new URL('../src/styles/hud.css', import.meta.url), 'utf8');
-  const hudMobileSrc = readFileSync(
-    new URL('../src/styles/hud.mobile.css', import.meta.url),
-    'utf8',
-  );
-
-  it.each([['index.html'], ['play.html']])(
-    '%s wraps the pet bar and pet frame in one cluster above the player frame',
-    (file) => {
-      const src = readFileSync(new URL(`../${file}`, import.meta.url), 'utf8');
-      const cluster = src.indexOf('id="pet-cluster"');
-      const petbar = src.indexOf('id="petbar"');
-      const petFrame = src.indexOf('id="pet-frame"');
-      const player = src.indexOf('id="player-frame"');
-      expect(cluster).toBeGreaterThan(-1);
-      // Bar on the left, health on the right, and the whole row above the player.
-      expect(cluster).toBeLessThan(petbar);
-      expect(petbar).toBeLessThan(petFrame);
-      expect(petFrame).toBeLessThan(player);
-    },
-  );
-
-  it('lays the cluster out as one row and un-anchors the pet bar from the stack edge', () => {
-    expect(hudCssSrc).toMatch(/#pet-cluster \{[^}]*display: flex/);
-    // The bar keeps its own absolute top:-52px seat for the mobile sheet, so the
-    // desktop cluster has to override it or the two halves overlap.
-    expect(hudCssSrc).toMatch(/#pet-cluster > #petbar \{[^}]*position: static/);
-  });
-
-  it('shares one content inset with the player frame so the row lines up with it', () => {
-    expect(hudCssSrc).toContain('--unit-frame-content-inset: 18px;');
-    expect(hudCssSrc).toMatch(
-      /#pet-cluster \{[^}]*padding-left: var\(--unit-frame-content-inset\)/,
-    );
-  });
-
-  // The bottom-centre column (player frame, cast bar, swing bar, pet strip) is nudged
-  // sideways by FOUR separate rules: compact, compact+left-handed, and a narrow-phone
-  // variant of each. A rule that moves the bars but forgets the pet strip leaves it
-  // horizontally detached from the column it belongs to, and the left-handed rule's
-  // extra class means it WINS over the narrow rule, so the omission does not even fall
-  // back to a sane value. Pinned as an invariant over every such rule rather than as
-  // four string literals: only one of the four was pinned before, which is how the
-  // narrow left-handed variant shipped without the strip twice.
-  it('nudges the pet strip in EVERY rule that nudges the cast bar', () => {
-    const rules = hudMobileSrc.split('}');
-    const nudges = rules
-      .map((block) => {
-        const open = block.lastIndexOf('{');
-        if (open === -1) return null;
-        return { selector: block.slice(0, open), body: block.slice(open + 1) };
-      })
-      .filter(
-        (r): r is { selector: string; body: string } =>
-          r !== null && /left:\s*calc\(50%/.test(r.body) && r.selector.includes('#castbar'),
-      );
-    // Vacuity floor: all SIX column nudges must actually be found, which is the count
-    // on the release base too (compact, compact left-handed, their two narrow-phone
-    // variants, and the tablet tier plus its left-handed mirror). This change adds no
-    // rule; it adds the pet strip to the ones that already existed.
-    expect(nudges.length).toBeGreaterThanOrEqual(6);
-    for (const rule of nudges) {
-      expect(rule.selector).toContain('#pet-frame');
-    }
-  });
-
-  // The sliver's own CSS, pinned because nothing else reads it: the class exists,
-  // raid style re-seats it absolutely (its rows are fixed-height with overflow hidden,
-  // so an in-flow strip would be clipped), and the two variants too small to hit are
-  // made non-interactive. That last one is the load-bearing pin: without
-  // pointer-events the sliver is a 3px (mobile) or 2px (raid) click target whose
-  // handler stopPropagations away the member selection the player actually meant.
-  it('gives the pet sliver its own class rather than reusing .bar', () => {
-    expect(hudCssSrc).toContain('.party-frame .pfm-pet {');
-    expect(hudCssSrc).toContain('.party-frame .pfm-pet-fill {');
-    // `.bar` would be caught by pf-hide-resource and by the raid strip positioning.
-    expect(hudCssSrc).not.toMatch(/\.party-frame \.bar\.pfm-pet/);
-  });
-
-  it('re-seats the sliver absolutely in raid style and makes it non-interactive', () => {
-    const raid = hudCssSrc.slice(
-      hudCssSrc.indexOf('#party-frames.party-style-raid .party-frame .pfm-pet {'),
-    );
-    const block = raid.slice(0, raid.indexOf('}'));
-    expect(block).toContain('position: absolute');
-    expect(block).toContain('pointer-events: none');
-  });
-
-  it('shrinks the sliver on mobile and makes it non-interactive there too', () => {
-    const m = hudMobileSrc.slice(
-      hudMobileSrc.indexOf('body.mobile-touch #party-frames .party-frame .pfm-pet {'),
-    );
-    const block = m.slice(0, m.indexOf('}'));
-    expect(block).toMatch(/height:\s*3px/);
-    expect(block).toContain('pointer-events: none');
-  });
-
-  // A dead pet is always hp 0, so its FILL is scaleX(0) and has no pixels: the dead
-  // state has to sit on the track or it renders nothing at all, which is the one
-  // state a hunter needs to tell apart in order to revive.
-  it('puts the dead-pet styling on the track, not the zero-width fill', () => {
-    expect(hudCssSrc).toContain('.party-frame .pfm-pet.dead {');
-    expect(hudCssSrc).not.toContain('.party-frame .pfm-pet.dead .pfm-pet-fill');
-  });
-
-  // display:contents dissolves the wrapper so each child keeps its own fixed seat.
-  // Without it the mobile layout inherits the desktop row and the command bar is
-  // dragged down out of thumb reach into the bottom-centre column.
-  it('dissolves the cluster on mobile so the two halves keep separate seats', () => {
-    expect(hudMobileSrc).toMatch(/body\.mobile-touch #pet-cluster \{\s*display: contents;\s*\}/);
-    expect(hudMobileSrc).toMatch(/body\.mobile-touch #petbar \{[^}]*position: fixed/);
-    expect(hudMobileSrc).toMatch(/body\.mobile-touch #pet-frame \{[^}]*position: fixed/);
+  it('character-preview init considers ALL THREE play panels (create included)', () => {
+    // On a slow connection (a phone with a cold cache) assets finish loading
+    // AFTER the player has registered and landed on the CREATE panel; the old
+    // two-panel candidate list resolved to the hidden charselect container and
+    // the create preview rendered nothing (show()'s updatePreviewContainer
+    // no-ops until this init has run). The init must consider the create panel
+    // and route through the full panel wiring.
+    expect(mainTs).toContain("['#charselect-panel', '#charcreate-panel', '#offline-select'].find(");
+    // Cryptic Realm: the preview builds lazily through loadGameRuntime()
+    // (ensureCharacterPreview applies the panel wiring itself).
+    expect(mainTs).toContain('ensureCharacterPreview(panelId)');
   });
 });

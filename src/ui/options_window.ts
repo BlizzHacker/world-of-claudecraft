@@ -269,6 +269,15 @@ const BIND_ACTION_LABEL_KEYS: Partial<Record<string, TranslationKey>> = {
   leaderboard: 'game.leaderboard.title',
   calendar: 'hudChrome.calendar.keybindLabel',
   crafting: 'hudChrome.crafting.title',
+  bgFlag: 'hudChrome.keybinds.bgFlag',
+  deeds: 'hudChrome.deeds.title',
+  dive: 'hudChrome.keybinds.dive',
+  dungeonFinder: 'hudChrome.finder.title',
+  mount: 'hudChrome.keybinds.mount',
+  professions: 'hudChrome.professions.title',
+  sheathe: 'hudChrome.keybinds.sheathe',
+  targetAuras: 'hudChrome.targetAuras.keybindLabel',
+  targetPet: 'hudChrome.keybinds.targetPet',
 };
 
 function el<K extends keyof HTMLElementTagNameMap>(
