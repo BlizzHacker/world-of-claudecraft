@@ -387,6 +387,11 @@ const UI_PURE_CORES = [
   'src/ui/trade_view.ts',
   'src/ui/hud/rift/rift_floor_tracker_view.ts',
   'src/ui/safe_local_storage.ts',
+  'src/ui/corpse_harvest_view.ts',
+  'src/ui/cryptic/wallet_panel_core.ts',
+  'src/ui/exchange_view.ts',
+  'src/ui/options_mobile_shell_view.ts',
+  'src/ui/window_frame_view.ts',
 ].map((rel) => join(repoRoot, rel));
 
 // The one pure core allowed to trip DOM_GLOBAL_VALUE_RE: the shared safeLocalStorage()
@@ -1186,9 +1191,11 @@ describe('curated bare-named pure cores (cross-check)', () => {
     // but forgotten here would escape both onDiskCores() (bare name) and the loop above
     // (not listed), reopening the gap; this equality makes that omission fail.
     const derivedBare = deriveBareNamedCores(UI_PURE_CORES, RENDER_PURE_CORES);
-    const bareNamedRel = [...new Set(BARE_NAMED.map((f) => relative(repoRoot, f)))].sort();
+    const bareNamedRel = [...new Set(
+      BARE_NAMED.map((f) => relative(repoRoot, f).split('\\').join('/')),
+    )].sort();
     expect(
-      derivedBare,
+      derivedBare.map((f) => f.split(String.fromCharCode(92)).join('/')),
       'BARE_NAMED must equal the registered cores whose name is bare (not _view/_core)',
     ).toEqual(bareNamedRel);
 
@@ -1595,6 +1602,44 @@ const UI_DOM_MODULES = [
   'src/ui/vale_cup_hud.ts',
   'src/ui/window_drag.ts',
   'src/ui/window_resize.ts',
+  'src/ui/arcade_minigame_window.ts',
+  'src/ui/coop_overlay.ts',
+  'src/ui/corpse_harvest_window.ts',
+  'src/ui/cryptic/arcforge_editor.ts',
+  'src/ui/cryptic/auto_fps.ts',
+  'src/ui/cryptic/bestiary.ts',
+  'src/ui/cryptic/branding.ts',
+  'src/ui/cryptic/bug_report.ts',
+  'src/ui/cryptic/char_builder.ts',
+  'src/ui/cryptic/chat_frame.ts',
+  'src/ui/cryptic/dashboard_chrome.ts',
+  'src/ui/cryptic/doc_fragment.ts',
+  'src/ui/cryptic/download_launchers.ts',
+  'src/ui/cryptic/fps_mode.ts',
+  'src/ui/cryptic/globes.ts',
+  'src/ui/cryptic/hud_layout.ts',
+  'src/ui/cryptic/ingame_options.ts',
+  'src/ui/cryptic/links_rebrand.ts',
+  'src/ui/cryptic/loot_vault.ts',
+  'src/ui/cryptic/move_hud_button.ts',
+  'src/ui/cryptic/music_widget.ts',
+  'src/ui/cryptic/native_sso.ts',
+  'src/ui/cryptic/news_realm_filter.ts',
+  'src/ui/cryptic/pickit_panel.ts',
+  'src/ui/cryptic/pwa_install.ts',
+  'src/ui/cryptic/realm_env.ts',
+  'src/ui/cryptic/realm_visual_editor.ts',
+  'src/ui/cryptic/session.ts',
+  'src/ui/cryptic/skilltree.ts',
+  'src/ui/cryptic/theme_select.ts',
+  'src/ui/cryptic/user_dropdown.ts',
+  'src/ui/cryptic/wallet_panel.ts',
+  'src/ui/cryptic/world_builder.ts',
+  'src/ui/derby_hud.ts',
+  'src/ui/exchange_window.ts',
+  'src/ui/horde_hud.ts',
+  'src/ui/options_mobile_shell.ts',
+  'src/ui/zombie_defense_window.ts',
 ].map((rel) => join(repoRoot, rel));
 
 // The sweep's domain: every src/ui module the other two sweeps do NOT already
