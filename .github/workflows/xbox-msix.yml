@@ -34,7 +34,7 @@ jobs:
           $dest = 'shell\CrypticRealm.Shell\web'
           if (Test-Path $dest) { Remove-Item $dest -Recurse -Force }
           New-Item -ItemType Directory -Path $dest | Out-Null
-          gh release download client-dist-v0.24.0 -R ${{ github.repository }} `
+          gh release download client-dist-v0.32.0 -R ${{ github.repository }} `
             -p 'cr-client-dist.tgz' -O client.tgz
           if ($LASTEXITCODE -ne 0) { Write-Error 'client asset download failed'; exit 1 }
           tar -xzf client.tgz -C $dest
