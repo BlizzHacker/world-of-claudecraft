@@ -254,13 +254,41 @@ export const INFERNAL_UNDEAD_VISUAL_KEYS = [
   'hellmaw_spectre_body',
 ] as const;
 
-function stableIndex(value: string, size: number): number {
+function fnv1a(value: string): number {
   let hash = 2166136261;
   for (let i = 0; i < value.length; i++) {
     hash ^= value.charCodeAt(i);
     hash = Math.imul(hash, 16777619);
   }
-  return (hash >>> 0) % size;
+  return hash >>> 0;
+}
+
+/**
+ * Pick one key for `value` from `keys`, stably ACROSS EDITS to `keys`.
+ *
+ * The old `hash % keys.length` re-rolled the entire town whenever the bank
+ * changed size: add one body and every NPC becomes someone else, because the
+ * modulus moved. That made growing the rotation - the whole point of repairing
+ * the bank - a townwide visual reshuffle, and it is why this is still four.
+ *
+ * Rendezvous (highest-random-weight) hashing instead scores each candidate for
+ * this id and takes the winner. Adding a key only steals the ids whose score for
+ * the NEW key beats their current best - about 1/n of them - and every other
+ * NPC keeps the body it already had. Removing a key only re-rolls the ids that
+ * were using it. Ties break on the key name so the result never depends on
+ * array order.
+ */
+function stablePick<T extends string>(value: string, keys: readonly T[]): T {
+  let best = keys[0];
+  let bestScore = -1;
+  for (const key of keys) {
+    const score = fnv1a(`${value}\u0000${key}`);
+    if (score > bestScore || (score === bestScore && key < best)) {
+      best = key;
+      bestScore = score;
+    }
+  }
+  return best;
 }
 
 export function infernalNpcVisualKey(templateId: string): InfernalHumanVisualKey {
@@ -268,7 +296,7 @@ export function infernalNpcVisualKey(templateId: string): InfernalHumanVisualKey
   if (templateId.startsWith('brother_aldric')) return 'realm_infernal_human_hooded_wanderer';
   return (
     NPC_ROLE_VISUALS[templateId] ??
-    INFERNAL_HUMAN_VISUAL_KEYS[stableIndex(templateId, INFERNAL_HUMAN_VISUAL_KEYS.length)]
+    stablePick(templateId, INFERNAL_HUMAN_VISUAL_KEYS)
   );
 }
 
@@ -278,7 +306,7 @@ export function infernalOpponentVisualKey(
   if (/(?:captain|commander|foreman|warlord|mogger|gorrak|drogmar|brutok)/.test(templateId)) {
     return 'realm_infernal_dark_paladin';
   }
-  return OPPONENT_KEYS[stableIndex(templateId, OPPONENT_KEYS.length)];
+  return stablePick(templateId, OPPONENT_KEYS);
 }
 
 /** Infernal and Cryptic undead rotate through the approved skeleton, spectre,
@@ -289,7 +317,7 @@ export function infernalUndeadVisualKey(
   if (/(?:restless_bones|bone_herald|bonewalker|gravecaller|necromancer)/.test(templateId)) {
     return 'realm_cryptic_bone_herald';
   }
-  return INFERNAL_UNDEAD_VISUAL_KEYS[stableIndex(templateId, INFERNAL_UNDEAD_VISUAL_KEYS.length)];
+  return stablePick(templateId, INFERNAL_UNDEAD_VISUAL_KEYS);
 }
 
 /** Full-size living/corrupted humanoids only. Shared by crossroads realms that
@@ -297,7 +325,7 @@ export function infernalUndeadVisualKey(
 export function hostileHumanoidVisualKey(
   templateId: string,
 ): (typeof HOSTILE_HUMANOID_KEYS)[number] {
-  return HOSTILE_HUMANOID_KEYS[stableIndex(templateId, HOSTILE_HUMANOID_KEYS.length)];
+  return stablePick(templateId, HOSTILE_HUMANOID_KEYS);
 }
 
 // ---------------------------------------------------------------------------
