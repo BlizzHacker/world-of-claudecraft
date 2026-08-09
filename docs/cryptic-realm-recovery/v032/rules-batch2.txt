@@ -1,0 +1,7 @@
+# counts + mechanics that must be RE-DERIVED by running the test after the
+# source settles. Upstream is the base; see rederive-list.txt
+theirs          tests/ground_pickup_i18n.test.ts
+theirs          tests/command_schema.test.ts
+theirs          tests/combat_casting_lifecycle.test.ts
+theirs          tests/entity_roster.test.ts
+theirs          tests/snapshots.test.ts

@@ -1,0 +1,11 @@
+# both sides add a needed import / record entry / mock field
+union           src/sim/social/chat_readouts.ts
+union           src/render/motes.ts
+union           src/render/quest_objects.ts
+union           tests/server/characters.test.ts
+# fork branding in a golden fixture
+ours            tests/server/fixtures/main/discord_callback_error_bounce.json
+# upstream refactors we are adopting wholesale
+theirs          tests/antibot_config_api.test.ts
+theirs          tests/server/admin.test.ts
+theirs          tests/loot_master_sim.test.ts

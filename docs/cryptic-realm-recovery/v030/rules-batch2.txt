@@ -1,0 +1,11 @@
+# fork branding / fork links win
+ours            .env.example
+ours            public/support.html
+ours            src/guide/chrome.ts
+# additive collisions
+union           server/http/registry.ts
+union           tests/server/http/completeness.test.ts
+union           tests/visual_manifest.test.ts
+union           src/ui/sim_i18n.ts
+# same-module import collision: take theirs, then fold our symbol in below
+theirs          src/render/dungeon.ts

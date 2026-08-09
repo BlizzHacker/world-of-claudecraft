@@ -1,0 +1,6 @@
+# upstream superset: adds SFX cache handling and extends isImmutable
+theirs          server/static_cache.ts
+# independent methods: fork "Move HUD" master control + upstream UI-Scale repaint
+union           src/ui/movable_frame.ts
+# array entries: fork venue NPCs + upstream chroniclers/crafting masters
+union           src/ui/world_entity_i18n.ts
