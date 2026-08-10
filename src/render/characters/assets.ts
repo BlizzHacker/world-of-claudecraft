@@ -934,7 +934,14 @@ function resolvedGltf(url: string): GLTF {
     // attempt re-kicks the fetch (the mount lazy-load pattern; loadGltf
     // evicts rejected promises so the re-call really re-fetches). A
     // non-streamed miss stays a loud preload-set bug: no masking fetch.
-    if (streamedUrlSet.has(url)) ensureCharacterUrl(url);
+    // Re-arm the fetch for EVERY miss, not only streamed urls (2026-08-10):
+    // hand-authored realm overrides (infernal_class_*, the male/female
+    // variants) are in no preload sweep and not in streamedUrlSet, so the old
+    // gate threw forever and every class rendered as its KayKit fallback -
+    // permanently, because nothing ever started a load. The retry gate +
+    // evicted-promise re-fetch machinery is identical for these; the thrown
+    // error still keeps the miss loud in the console.
+    ensureCharacterUrl(url);
     throw new Error(`character asset not preloaded: ${resolvedUrl}`);
   }
   return g;
