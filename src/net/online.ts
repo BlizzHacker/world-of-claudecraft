@@ -413,9 +413,14 @@ export class Api {
   // token (when logged in) also returns per-realm character counts.
   async realms(): Promise<RealmDirectory> {
     try {
-      const res = await fetch(apiUrl('/api/realms'), {
+      let res = await fetch(apiUrl('/api/realms'), {
         headers: this.token ? { Authorization: `Bearer ${this.token}` } : {},
       });
+      // The directory itself is public. A sick token (or a DB-starved auth
+      // check, 2026-08-10) must not blank the WORLD LIST - refetch without
+      // credentials and show the realms; only the per-realm character counts
+      // are lost. Previously ANY failure rendered as "No worlds available".
+      if (!res.ok && this.token) res = await fetch(apiUrl('/api/realms'));
       if (!res.ok) return { current: '', realms: [], characters: {} };
       const d = await res.json();
       return { current: d.current ?? '', realms: d.realms ?? [], characters: d.characters ?? {} };
