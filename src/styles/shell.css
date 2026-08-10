@@ -9526,3 +9526,18 @@ body:not(.mobile-touch) #charselect-panel.cs-wow #charselect-news[hidden] {
    content hash, which yields a URL the edge has never cached. */
 
 :root { --cr-asset-epoch: 20260728; }
+
+/* --- appearance customizer: never over the name field (Wade, 2026-08-10) ---
+   The cs-wow desktop layout flattens .char-create with display: contents, so
+   the customizer becomes a bare grid item and AUTO-PLACES into the first open
+   cell - which at wide viewports is on top of the CHARACTER NAME field. Pin it
+   as a full-width row ordered after every explicitly placed item instead. The
+   mobile layout (its own ordered flex flow, see the media block near 5786) is
+   untouched. */
+#offline-select.cs-wow #offline-appearance,
+body:not(.mobile-touch) #charcreate-panel.cs-wow #charcreate-appearance {
+  grid-column: 1 / -1;
+  order: 99;
+  justify-self: start;
+  margin-top: 10px;
+}
