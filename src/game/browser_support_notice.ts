@@ -22,9 +22,14 @@ const DISMISS_KEY = 'woc_unsupported_browser_dismissed';
  */
 export function isSupportedBrowser(userAgent: string, hasBraveApi: boolean): boolean {
   const ua = userAgent || '';
-  if (hasBraveApi) return false;
-  if (/\bEdg(?:A|iOS)?\/\d/.test(ua)) return false;
-  if (/\bOPR\/\d/.test(ua)) return false;
+  // FORK BEHAVIOUR: upstream (#2266) classified Brave, Edge and Opera as
+  // unsupported - and since everything else falls through to `return true`,
+  // those three were the ONLY browsers that ever saw the nag. They are all
+  // current Chromium; the performance claim in the notice is not true of them,
+  // and Cryptic Realm's own operator plays in Brave. All Chromium forks are
+  // supported here, which leaves the notice with no trigger - kept wired (and
+  // table-tested) so a genuinely unsupported engine can be added if one shows.
+  void hasBraveApi;
   // The three positive branches below are documentation of intent, not load-bearing
   // decisions: the trailing `return true` already covers everything that reaches
   // this point, per the "default to supported on ambiguity" rule above. Keep them
@@ -159,9 +164,12 @@ let liveRelocalize: (() => void) | null = null;
  * language switch is covered by `woc:languagechange`, the same reactivity
  * `src/ui/gpu_notice_toast.ts` uses.
  */
-export function initBrowserSupportNotice(doc: Document = document): void {
+export function initBrowserSupportNotice(doc: Document = document, force = false): void {
   const show = shouldShowBrowserSupportNotice({
-    isSupportedBrowser: isSupportedBrowser(navigator.userAgent || '', readHasBraveApi()),
+    // `force` is a test seam: with every real browser now classified supported,
+    // the DOM suites (#2721) can no longer summon the notice through a UA, but
+    // its localization and teardown machinery still needs coverage.
+    isSupportedBrowser: !force && isSupportedBrowser(navigator.userAgent || '', readHasBraveApi()),
     isDesktopApp: isDesktopAppRuntime(),
     isNativeShell: isNativeAppShell(),
     dismissed: readBrowserSupportNoticeDismissed(),

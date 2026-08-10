@@ -97,7 +97,7 @@ describe('#2721 finding 1: the notice renders in the resident locale and relocal
     markBrave();
     setLanguage(OTHER);
 
-    initBrowserSupportNotice(document);
+    initBrowserSupportNotice(document, true);
     // ensureLocaleLoaded(getLanguage()) is already-resolved for OTHER (loaded in
     // beforeAll), but the reveal still runs as a microtask off that promise.
     await Promise.resolve();
@@ -113,7 +113,7 @@ describe('#2721 finding 1: the notice renders in the resident locale and relocal
     markBrave();
     setLanguage('en');
 
-    initBrowserSupportNotice(document);
+    initBrowserSupportNotice(document, true);
     await Promise.resolve();
     await Promise.resolve();
 
@@ -131,7 +131,7 @@ describe('#2721 finding 1: the notice renders in the resident locale and relocal
   it('does nothing on languagechange once the notice was dismissed mid-load', async () => {
     markBrave();
     setLanguage('en');
-    initBrowserSupportNotice(document);
+    initBrowserSupportNotice(document, true);
     // Dismiss before the locale-load microtask settles.
     document.getElementById('browser-support-notice')?.remove();
     localStorage.setItem('woc_unsupported_browser_dismissed', '1');
@@ -154,7 +154,7 @@ describe('#2721 finding 2: the notice does not survive world entry', () => {
   it('hideBrowserSupportNotice removes the live element and its languagechange listener', async () => {
     markBrave();
     setLanguage('en');
-    initBrowserSupportNotice(document);
+    initBrowserSupportNotice(document, true);
     await Promise.resolve();
     await Promise.resolve();
     expect(document.getElementById('browser-support-notice')).not.toBeNull();

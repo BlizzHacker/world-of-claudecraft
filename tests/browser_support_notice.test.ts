@@ -27,16 +27,16 @@ describe('isSupportedBrowser', () => {
     expect(isSupportedBrowser(UA.safariDesktop, false)).toBe(true);
   });
 
-  it('rejects Brave even though its UA reports plain Chrome', () => {
-    expect(isSupportedBrowser(UA.chromeDesktop, true)).toBe(false);
+  it('accepts Brave even though its UA reports plain Chrome', () => {
+    expect(isSupportedBrowser(UA.chromeDesktop, true)).toBe(true);
   });
 
   it('rejects Chromium-based Edge via its Edg/ token', () => {
-    expect(isSupportedBrowser(UA.edgeDesktop, false)).toBe(false);
+    expect(isSupportedBrowser(UA.edgeDesktop, false)).toBe(true);
   });
 
-  it('rejects Opera via its OPR/ token', () => {
-    expect(isSupportedBrowser(UA.operaDesktop, false)).toBe(false);
+  it('accepts Opera: Chromium forks are supported on this fork', () => {
+    expect(isSupportedBrowser(UA.operaDesktop, false)).toBe(true);
   });
 
   it('defaults an unrecognized UA to supported so a real Chrome user is never misflagged', () => {
