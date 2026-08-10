@@ -8588,7 +8588,7 @@ function updateSeoMetadata(lang: SupportedLanguage): void {
   const jsonLd = document.getElementById('structured-data') as HTMLScriptElement | null;
   if (jsonLd) {
     const sameAs = [
-      'https://discord.gg/Zdj3JGrx',
+      'https://discord.gg/WnxcamHJdh',
       'https://www.youtube.com/@CrypticMMO',
       'https://x.com/CrypticMMO',
     ];
@@ -9728,7 +9728,7 @@ const DONATE_URL = '/links.html#btn-tip';
 // Mirrors the hardcoded invite on the shells' community links and is the
 // fallback when the server-fed discordInviteUrl() is not known yet (logged
 // out, offline).
-const DISCORD_INVITE_URL = 'https://discord.gg/Zdj3JGrx';
+const DISCORD_INVITE_URL = 'https://discord.gg/WnxcamHJdh';
 const DISCORD_ONBOARD_KEY = 'woc_discord_onboard';
 let discordPopup: Window | null = null;
 

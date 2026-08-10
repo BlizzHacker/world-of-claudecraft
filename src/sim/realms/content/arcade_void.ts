@@ -29,7 +29,7 @@ export const ARCADE_VOID_REALM: RealmContent = {
     logoSrc: '/cryptic-realm-logo-512.webp',
     brandText: 'Cryptic Realm - Arcane Void',
     loadingScreenSrc: '/cr-realms/arcadevoid/cr-loggedin.png',
-    discordUrl: 'https://discord.gg/Zdj3JGrx',
+    discordUrl: 'https://discord.gg/WnxcamHJdh',
     showDonate: false,
     showAuthentikSso: true,
   },

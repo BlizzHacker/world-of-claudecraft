@@ -28,7 +28,7 @@ import { type GuideRoute, hrefFor } from './routes';
 const ORIGIN = 'https://crypticrealm.com';
 const LOGO = `${ORIGIN}/cryptic-realm-logo.png`;
 const CONTRIBUTIONS_URL = `${ORIGIN}/contributions.html`;
-const DISCORD_URL = 'https://discord.gg/Zdj3JGrx';
+const DISCORD_URL = 'https://discord.gg/WnxcamHJdh';
 
 // The newcomer FAQ on /guide/faq, kept in lockstep with pages/faq.ts so the FAQPage
 // JSON-LD answers the same questions the visible page does. cap rows splice the level

@@ -5156,7 +5156,11 @@ export class MusicDirector {
       !this._menuPaused &&
       this._vol > 0 &&
       !this.bossActive &&
-      this.sowfieldTrack === null
+      this.sowfieldTrack === null &&
+      // The CR soundtrack owns the mix outright. masterTarget() already zeroes
+      // the SYNTH when it is on, but the streamed remasters bypass the master
+      // duck - without this check they stack on top of the CR tracks.
+      !crypticMusicEnabled()
     );
   }
 

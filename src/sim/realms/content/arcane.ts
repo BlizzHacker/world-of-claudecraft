@@ -24,7 +24,7 @@ export const ARCANE_REALM: RealmContent = {
     logoSrc: '/cryptic-realm-logo-512.webp',
     brandText: 'Cryptic Realm - Arcane Nexus',
     loadingScreenSrc: '/cryptic-realm-loading.png',
-    discordUrl: 'https://discord.gg/Zdj3JGrx',
+    discordUrl: 'https://discord.gg/WnxcamHJdh',
     showDonate: false,
     showAuthentikSso: true,
   },

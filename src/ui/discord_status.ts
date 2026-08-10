@@ -78,7 +78,7 @@ const NO_PRESENCE: DiscordPresenceState = {
 // This build is Cryptic Realm, so the fail-open default is the fork's invite
 // (the same one CR_SOCIALS carries in sim/realms/social_links.ts). Upstream
 // shipped its own server here.
-export const DEFAULT_DISCORD_INVITE_URL = 'https://discord.gg/Zdj3JGrx';
+export const DEFAULT_DISCORD_INVITE_URL = 'https://discord.gg/WnxcamHJdh';
 
 let enabled = false;
 let status: DiscordAccountStatus = UNLINKED;

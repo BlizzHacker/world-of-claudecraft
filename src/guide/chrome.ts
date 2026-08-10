@@ -136,7 +136,7 @@ export function buildChrome(
         <nav class="guide-footer-links" aria-label="${esc(t('guide.footer.linksLabel'))}">
           <a class="guide-cta guide-cta-sm" href="/play">${esc(t('guide.footer.playNow'))}</a>
           <a href="/contributions.html">${esc(t('guide.footer.github'))}</a>
-          <a href="https://discord.gg/Zdj3JGrx" target="_blank" rel="noopener">${esc(t('guide.footer.discord'))}</a>
+          <a href="https://discord.gg/WnxcamHJdh" target="_blank" rel="noopener">${esc(t('guide.footer.discord'))}</a>
         </nav>
         <p class="guide-footer-rights">&copy; ${esc(t('guide.footer.rights'))}</p>
       </div>

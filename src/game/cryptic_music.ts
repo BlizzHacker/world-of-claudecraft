@@ -24,6 +24,28 @@ const ZONE_TRACK: Partial<Record<MusicZone, string>> = {
   dungeon_hollow_crypt: 'just-another-crypt-cryptic-realm.mp3',
   dungeon_sunken_bastion: 'catacomb-calls-cryptic-realm.mp3',
   dungeon_gravewyrm_sanctum: 'dungeon-time-cryptic-realm.mp3',
+  // Stand-ins so every zone scores from the CR set (same precedent as the
+  // stand-ins in music_tracks.ts): moody overworlds take the temple/forest
+  // cues, rifts take the dungeon cues. Replace as dedicated tracks land.
+  dusk: 'corrupted-temple-cryptic-realm.mp3',
+  ember: 'act-5-sanctum-cryptic-realm.mp3',
+  frost: 'the-journey-begins-cryptic-realm.mp3',
+  amber: 'the-forest-calls-cryptic-realm.mp3',
+  fen: 'town-hall-cryptic-realm.mp3',
+  night: 'corrupted-temple-cryptic-realm.mp3',
+  haunt: 'just-another-crypt-cryptic-realm.mp3',
+  jungle: 'the-forest-calls-cryptic-realm.mp3',
+  garden: 'welcome-home-cryptic-realm.mp3',
+  gale: 'the-journey-begins-cryptic-realm.mp3',
+  farshore: 'act-2-welcome-cryptic-realm.mp3',
+  rift_frost: 'catacomb-calls-cryptic-realm.mp3',
+  rift_ember: 'dungeon-time-cryptic-realm.mp3',
+  rift_venom: 'corrupted-temple-cryptic-realm.mp3',
+  rift_bone: 'just-another-crypt-cryptic-realm.mp3',
+  rift_brute: 'dungeon-time-cryptic-realm.mp3',
+  rift_void: 'catacomb-calls-cryptic-realm.mp3',
+  rift_storm: 'act-5-sanctum-cryptic-realm.mp3',
+  rift_tide: 'act-2-welcome-cryptic-realm.mp3',
 };
 const COMBAT_TRACK = 'throne-of-ashes-boss-fight-activated-cryptic-realm.mp3';
 

@@ -28,7 +28,7 @@ export const FPS_REALM: RealmContent = {
     logoSrc: '/cryptic-realm-logo-512.webp',
     brandText: 'Cryptic Realm - FPS',
     loadingScreenSrc: '/cryptic-realm-loading-bg.webp',
-    discordUrl: 'https://discord.gg/Zdj3JGrx',
+    discordUrl: 'https://discord.gg/WnxcamHJdh',
     showDonate: false,
     showAuthentikSso: true,
   },

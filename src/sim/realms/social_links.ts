@@ -29,7 +29,7 @@ const CR_SOCIALS: SocialLinks = {
   tiktok: 'https://www.tiktok.com/@crypticmmo',
   youtube: 'https://www.youtube.com/@CrypticMMO',
   reddit: 'https://www.reddit.com/r/CrypticMMO',
-  discord: 'https://discord.gg/Zdj3JGrx',
+  discord: 'https://discord.gg/WnxcamHJdh',
   wiki: 'https://crypticrealm.com/wiki/',
   tipWalletSolana: 'GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi',
   tokenMintSolana: '3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv',
