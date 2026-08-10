@@ -9541,3 +9541,17 @@ body:not(.mobile-touch) #charcreate-panel.cs-wow #charcreate-appearance {
   justify-self: start;
   margin-top: 10px;
 }
+
+/* The REAL overlap fix, verified in a live 1920px DOM (the cs-wow rule above
+   was a wrong first attempt - the overlap reproduces with cs-wow OFF): the
+   customizer mounts ONTO the host node and something styles the host
+   position:absolute; top:126px; left:22px, floating it over CHARACTER NAME.
+   No author stylesheet rule matches it (checked rule-by-rule live), so win by
+   specificity+importance and put it back in flow below the form. */
+#offline-appearance.appearance-customizer,
+#charcreate-appearance.appearance-customizer {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  margin: 12px 0 0 !important;
+}
