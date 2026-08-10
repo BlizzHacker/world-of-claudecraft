@@ -14,7 +14,15 @@ export function safeStartupGraphicsPreset(
   preset: number,
   ultraPreset: number,
   highPreset: number,
+  softwareGl = false,
+  lowPreset = 1,
 ): number {
+  // A software rasterizer (SwiftShader/WARP - hardware acceleration off or
+  // blocklisted) cannot survive an Ultra entry either: the context is lost
+  // mid-scene-build and the player gets a black world with a live HUD, with a
+  // PERSISTED ultra re-springing the trap every entry. Same shape as the iOS
+  // case below, but capped to LOW - software GL cannot drive HIGH either.
+  if (softwareGl && preset > lowPreset) return lowPreset;
   const isIosWebkit = engine === 'webkit' && mobile;
   if ((isNative || isIosWebkit) && preset >= ultraPreset) return highPreset;
   return preset;

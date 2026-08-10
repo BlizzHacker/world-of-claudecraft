@@ -131,6 +131,8 @@ import {
   spawnCinematicPose,
 } from './game/spawn_cinematic';
 import { safeStartupGraphicsPreset } from './game/startup_graphics_safety';
+import { probeMajorPerformanceCaveat } from './render/software_renderer';
+import { gfxSoftwareRendering } from './render/gfx';
 import { shouldClearTargetOnGroundClick } from './game/target_click';
 import { loadingCurtainFadeMs, resolveUiEffectsProfile } from './game/ui_effects_profile';
 import { currentUtcDay } from './game/utc_day';
@@ -1374,6 +1376,11 @@ async function startGame(
     settings.get('graphicsPreset'),
     GRAPHICS_PRESET_ULTRA,
     GRAPHICS_PRESET_HIGH,
+    // Live-context probe: true when WebGL resolved to SwiftShader/WARP. A
+    // persisted Ultra from a hardware-accelerated session must not be honoured
+    // by a software one - it black-screens with a Context Lost every entry.
+    gfxSoftwareRendering() || probeMajorPerformanceCaveat() === true,
+    1, // GRAPHICS_PRESET_LOW - gfx.ts PRESET_LOW is module-private
   );
   if (safePreset !== settings.get('graphicsPreset')) {
     settings.set('graphicsPreset', safePreset);

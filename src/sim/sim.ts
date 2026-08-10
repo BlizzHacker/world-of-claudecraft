@@ -6294,8 +6294,24 @@ export class Sim {
       if (pe && !pe.dead) this.activePlayerPos.push({ x: pe.pos.x, z: pe.pos.z });
     }
 
+    // Empty-world fast path (measured on an idle live ring, PERF_TICK_LOG=1,
+    // online=0, ents=1086): mob.update was 61-64ms per second - roughly the
+    // whole idle tick cost - all of it beasts steering around eastbrook_vale
+    // for nobody. The per-mob dormancy below only covers aiState==='idle' with
+    // no auras, so chasing/fleeing/aura-carrying mobs tick forever on an empty
+    // ring. With zero connected players no unowned mob needs AI at all: skip
+    // updateMob outright and let auras keep ticking (a departed player's DoT
+    // still resolves). Gated on the same cfg switch as the dormancy radius, so
+    // the offline world and the parity harness (which never set it) are
+    // byte-identical; state resumes exactly where it froze on first login.
+    const emptyWorld = this.cfg.idleMobTickRadius > 0 && this.players.size === 0;
     for (const e of this.entities.values()) {
       if (e.kind === 'mob') {
+        if (emptyWorld && !e.dead && e.ownerId === null) {
+          updateAuras(this.ctx, e);
+          lap?.('mob.auras');
+          continue;
+        }
         if (this.shouldSkipIdleMobTick(e)) continue;
         this.updateMob(e);
         // Tag the mob.update lap with the mob so the host can attribute this slice
