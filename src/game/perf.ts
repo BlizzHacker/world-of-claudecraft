@@ -917,7 +917,7 @@ export class PerfMonitor {
     this.lastCensus = report;
     this.lastCensusLines = censusTableLines(report);
     this.skipNextFrameSample = true;
-    console.info('World of Claudecraft scene census:', JSON.stringify(report, null, 2));
+    console.info('Cryptic Realm scene census:', JSON.stringify(report, null, 2));
     if (this.enabled) this.renderOverlay(this.lastSnapshot ?? this.snapshot());
     return report;
   }

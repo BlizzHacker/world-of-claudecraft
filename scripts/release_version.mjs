@@ -8,17 +8,17 @@ const VERSION_RE = /^\d+\.\d+\.\d+$/;
 // A release integration branch (release/vX.Y.Z-<slug>) carries the base
 // version's surfaces, so a trailing -<slug> is tolerated when inferring.
 const RELEASE_REF_RE = /(?:^|refs\/heads\/)release\/v?(\d+\.\d+\.\d+)(?:-[a-z0-9][a-z0-9-]*)?$/;
-const MAC_DMG_RE = /world-of-claudecraft-\d+\.\d+\.\d+-mac-universal\.dmg/g;
-const LINUX_APPIMAGE_RE = /world-of-claudecraft-\d+\.\d+\.\d+-linux-x86_64\.AppImage/g;
+const MAC_DMG_RE = /cryptic-realm-\d+\.\d+\.\d+-mac-universal\.dmg/g;
+const LINUX_APPIMAGE_RE = /cryptic-realm-\d+\.\d+\.\d+-linux-x86_64\.AppImage/g;
 // The website download page links the x64 NSIS installer (build.nsis.
 // buildUniversalInstaller is false, issue 2013): a per-arch installer, not
 // the old combined "-win.exe" that folded both arches into one download.
-const WINDOWS_INSTALLER_RE = /world-of-claudecraft-\d+\.\d+\.\d+-win-x64\.exe/g;
+const WINDOWS_INSTALLER_RE = /cryptic-realm-\d+\.\d+\.\d+-win-x64\.exe/g;
 // A page migrated before the per-arch cutover (or hand-edited afterward) can
 // still carry the legacy combined-installer filename. Both prepare and check
 // must recognize it so it gets rewritten/flagged instead of silently surviving
 // a version bump (issue: legacy Windows links bypass the release guard).
-const LEGACY_WINDOWS_INSTALLER_RE = /world-of-claudecraft-\d+\.\d+\.\d+-win\.exe/g;
+const LEGACY_WINDOWS_INSTALLER_RE = /cryptic-realm-\d+\.\d+\.\d+-win\.exe/g;
 const DESKTOP_VERSION_RE = /export const DESKTOP_VERSION = '(\d+\.\d+\.\d+)';/;
 const GAME_VERSION_RE = /(<div\b[^>]*\bid=["']game-version["'][^>]*>)v[^<]*(<\/div>)/;
 const README_VERSION_BADGE_SOURCE = String.raw`img\.shields\.io/badge/version-(\d+\.\d+\.\d+)-blue`;
@@ -96,10 +96,10 @@ export function setDesktopDownloadVersion(html, version, path) {
   // Optional platform links are rewritten wherever present. The macOS link is
   // the only download URL every entry page is required to carry.
   return html
-    .replace(MAC_DMG_RE, `world-of-claudecraft-${normalized}-mac-universal.dmg`)
-    .replace(LINUX_APPIMAGE_RE, `world-of-claudecraft-${normalized}-linux-x86_64.AppImage`)
-    .replace(WINDOWS_INSTALLER_RE, `world-of-claudecraft-${normalized}-win-x64.exe`)
-    .replace(LEGACY_WINDOWS_INSTALLER_RE, `world-of-claudecraft-${normalized}-win-x64.exe`);
+    .replace(MAC_DMG_RE, `cryptic-realm-${normalized}-mac-universal.dmg`)
+    .replace(LINUX_APPIMAGE_RE, `cryptic-realm-${normalized}-linux-x86_64.AppImage`)
+    .replace(WINDOWS_INSTALLER_RE, `cryptic-realm-${normalized}-win-x64.exe`)
+    .replace(LEGACY_WINDOWS_INSTALLER_RE, `cryptic-realm-${normalized}-win-x64.exe`);
 }
 
 export function setDesktopModuleVersion(source, version, path) {
@@ -230,9 +230,9 @@ export function collectReleaseVersionFailures({
     );
   }
 
-  const expectedArtifact = `world-of-claudecraft-${expected}-mac-universal.dmg`;
-  const expectedLinuxArtifact = `world-of-claudecraft-${expected}-linux-x86_64.AppImage`;
-  const expectedWindowsArtifact = `world-of-claudecraft-${expected}-win-x64.exe`;
+  const expectedArtifact = `cryptic-realm-${expected}-mac-universal.dmg`;
+  const expectedLinuxArtifact = `cryptic-realm-${expected}-linux-x86_64.AppImage`;
+  const expectedWindowsArtifact = `cryptic-realm-${expected}-win-x64.exe`;
   for (const [path, html] of Object.entries(htmlFiles)) {
     const gameVersion = readGameVersion(html);
     if (gameVersion !== expected) {

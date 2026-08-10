@@ -7,11 +7,11 @@
 export type DesktopPlatform = 'mac' | 'win' | 'linux' | 'other';
 
 // The published desktop build on the update host. Bump in lockstep with the
-// artifacts uploaded to updates.worldofclaudecraft.com/desktop/ at release
+// artifacts uploaded to updates.crypticrealm.com/desktop/ at release
 // (see docs/desktop-release.md). The static hrefs in index.html carry the same
 // version as a no-JS fallback.
 export const DESKTOP_VERSION = '0.35.1';
-const DESKTOP_HOST = 'https://updates.worldofclaudecraft.com/desktop';
+const DESKTOP_HOST = 'https://updates.crypticrealm.com/desktop';
 
 // electron-builder website-channel artifact names (docs/desktop-release.md):
 // mac ships one universal dmg; the x64 Linux AppImage is named x86_64 (that is
@@ -21,9 +21,9 @@ const DESKTOP_HOST = 'https://updates.worldofclaudecraft.com/desktop';
 // channel's precedent of running Windows-on-ARM visitors under x64 emulation
 // rather than shipping a second download button.
 const ARTIFACT: Partial<Record<DesktopPlatform, string>> = {
-  mac: `world-of-claudecraft-${DESKTOP_VERSION}-mac-universal.dmg`,
-  win: `world-of-claudecraft-${DESKTOP_VERSION}-win-x64.exe`,
-  linux: `world-of-claudecraft-${DESKTOP_VERSION}-linux-x86_64.AppImage`,
+  mac: `cryptic-realm-${DESKTOP_VERSION}-mac-universal.dmg`,
+  win: `cryptic-realm-${DESKTOP_VERSION}-win-x64.exe`,
+  linux: `cryptic-realm-${DESKTOP_VERSION}-linux-x86_64.AppImage`,
 };
 
 // Full download URL for a platform, or null when no artifact is published for it.

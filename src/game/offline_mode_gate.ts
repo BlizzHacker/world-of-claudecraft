@@ -23,5 +23,13 @@ export function isPackagedConsoleApp(hostname: string): boolean {
 }
 
 export function isOfflineModeAvailable(isDev: boolean, packagedConsoleApp = false): boolean {
-  return isDev || packagedConsoleApp;
+  // Cryptic Realm ships offline play as a FEATURE, not a dev convenience: the
+  // landing page advertises "explore solo offline" and the mode picker offers
+  // it. Upstream returns `isDev || packagedConsoleApp`, which hides the option
+  // in every production web build - so players saw an Online-only dropdown
+  // while the site promised solo play. The arguments are kept so the console
+  // and dev paths stay expressible, and so upstream's tests still compile.
+  void isDev;
+  void packagedConsoleApp;
+  return true;
 }

@@ -10,8 +10,13 @@ describe('isOfflineModeAvailable', () => {
     expect(isOfflineModeAvailable(true)).toBe(true);
   });
 
-  it('is disabled in production web builds', () => {
-    expect(isOfflineModeAvailable(false)).toBe(false);
+  // FORK BEHAVIOUR, deliberately different from upstream. Upstream treats
+  // offline as a dev convenience and closes it in production web. Cryptic Realm
+  // SELLS it: the landing page says "explore solo offline" and the mode picker
+  // offers an Offline entry, so closing it left players an Online-only dropdown
+  // and a site making a promise the build would not keep.
+  it('is available in production web builds on this fork', () => {
+    expect(isOfflineModeAvailable(false)).toBe(true);
   });
 
   // The console package ships the whole client and is expected to run with no
@@ -20,9 +25,9 @@ describe('isOfflineModeAvailable', () => {
     expect(isOfflineModeAvailable(false, true)).toBe(true);
   });
 
-  // The exception must stay scoped: a production web build is still closed.
-  it('stays closed for production web even though the console exception exists', () => {
-    expect(isOfflineModeAvailable(false, false)).toBe(false);
+  it('is available regardless of how the two flags combine', () => {
+    expect(isOfflineModeAvailable(false, false)).toBe(true);
+    expect(isOfflineModeAvailable(true, true)).toBe(true);
   });
 });
 

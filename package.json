@@ -24,7 +24,7 @@
     "wiki:content": "node scripts/wiki/build_content.mjs",
     "wiki:stills": "node scripts/wiki/render_model_stills.mjs",
     "sitemap:build": "node scripts/build_sitemap.mjs",
-    "build:native": "VITE_NATIVE_APP=1 VITE_API_ORIGIN=${VITE_API_ORIGIN:-https://worldofclaudecraft.com} npm run build && node scripts/build_media_manifest.mjs prune",
+    "build:native": "VITE_NATIVE_APP=1 VITE_API_ORIGIN=${VITE_API_ORIGIN:-https://crypticrealm.com} npm run build && node scripts/build_media_manifest.mjs prune",
     "native:sync": "npm run build:native && npx cap sync",
     "ota:publish": "node scripts/ota/publish_bundle.mjs",
     "native:open:ios": "npm run native:sync && npx cap open ios",
@@ -191,7 +191,7 @@
     "steamworks.js": "^0.4.0"
   },
   "build": {
-    "appId": "com.worldofclaudecraft.desktop",
+    "appId": "com.crypticrealm.desktop",
     "productName": "World of ClaudeCraft",
     "icon": "build/icon.png",
     "files": [
@@ -230,7 +230,7 @@
       {
         "name": "World of ClaudeCraft Login",
         "schemes": [
-          "worldofclaudecraft"
+          "crypticrealm"
         ]
       }
     ],
@@ -302,7 +302,7 @@
     "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
     "publish": {
       "provider": "generic",
-      "url": "https://updates.worldofclaudecraft.com/desktop"
+      "url": "https://updates.crypticrealm.com/desktop"
     }
   },
   "allowScripts": {
