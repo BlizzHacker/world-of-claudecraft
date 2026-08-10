@@ -98,7 +98,7 @@ export const fr_CA: Partial<Record<TranslationKey, string>> = {
   'mobilePreflight.androidInstallStep':
     "Dans Chrome, touchez le menu, puis Installer l'application ou Ajouter Ã  l'Ã©cran d'accueil.",
   'serverUnavailable.body':
-    'Nous redÃ©marrons le service de jeu et Claudemoon devrait revenir sous peu. Cette page continuera de vÃ©rifier automatiquement.',
+    'Nous redÃ©marrons le service de jeu et Cryptic Realm devrait revenir sous peu. Cette page continuera de vÃ©rifier automatiquement.',
   'serverUnavailable.status': 'De retour bientÃ´t',
   'delveUi.affix.candleblind': 'Aveuglement de chandelle',
   'delveUi.blessing.chapel_candle':

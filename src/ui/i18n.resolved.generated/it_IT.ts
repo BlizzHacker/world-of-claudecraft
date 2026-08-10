@@ -2381,7 +2381,7 @@ export const it_IT: EnTranslations = {
         "titleDiscordian": "Titolo: Discordiano",
         "titleSquire": "Titolo: Scudiero del Reame",
         "chromaBlurple": "Cromatura Mech Blurple",
-        "titleChampion": "Titolo: Campione di Claudemoon",
+        "titleChampion": "Titolo: Campione di Cryptic Realm",
         "swagStickers": "Pacchetto adesivi (spedito)",
         "swagTee": "Maglietta (spedita)"
       },
@@ -6826,7 +6826,7 @@ export const it_IT: EnTranslations = {
     "applicationCategory": "Gioco",
     "operatingSystem": "Browser web",
     "officialLabel": "Sito ufficiale di Cryptic Realm",
-    "officialBody": "crypticrealm.com Ã¨ l'MMO gratuito ufficiale da browser del mondo Claudemoon. Gioca online con un personaggio persistente, esplora offline in solitaria, leggi il wiki e segui i link della community verificati da questo sito."
+    "officialBody": "crypticrealm.com Ã¨ l'MMO gratuito ufficiale da browser del mondo Cryptic Realm. Gioca online con un personaggio persistente, esplora offline in solitaria, leggi il wiki e segui i link della community verificati da questo sito."
   },
   "a11y": {
     "goHome": "Vai alla pagina iniziale",
@@ -7083,7 +7083,7 @@ export const it_IT: EnTranslations = {
     "logoAlt": "Cryptic Realm",
     "eyebrow": "Manutenzione del mondo",
     "heading": "Il mondo Ã¨ temporaneamente non disponibile.",
-    "body": "Stiamo riavviando il servizio di gioco e prevediamo che Claudemoon torni a breve. Questa pagina continuerÃ  a controllare automaticamente.",
+    "body": "Stiamo riavviando il servizio di gioco e prevediamo che Cryptic Realm torni a breve. Questa pagina continuerÃ  a controllare automaticamente.",
     "status": "Torna presto"
   },
   "hud": {

@@ -2328,7 +2328,7 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
     'Vydej se na epické dobrodružství ve Cryptic Realm, klasicky laděném micro-MMO hratelném přímo v prohlížeči. Připoj se k trvalému sdílenému světu, zvyšuj úrovně tříd a porážej nepřátele!',
   'seo.genre': 'MMORPG',
   'seo.officialBody':
-    'crypticrealm.com je oficiální bezplatné prohlížečové MMO pro svět Claudemoon. Hraj online s trvalou postavou, prozkoumávej sólo offline, čti wiki a používej ověřené komunitní odkazy z tohoto webu.',
+    'crypticrealm.com je oficiální bezplatné prohlížečové MMO pro svět Cryptic Realm. Hraj online s trvalou postavou, prozkoumávej sólo offline, čti wiki a používej ověřené komunitní odkazy z tohoto webu.',
   'seo.officialLabel': 'Oficiální web Cryptic Realm',
   'seo.operatingSystem': 'Webový prohlížeč',
   'seo.playMode': 'Multiplayer',
@@ -2350,7 +2350,7 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'download.title': 'Stáhnout desktopový launcher',
   'download.windowsPending': 'Sestavení pro Windows se připravuje.',
   'serverUnavailable.body':
-    'Restartujeme herní službu a očekáváme, že se Claudemoon brzy vrátí. Tato stránka bude stav automaticky kontrolovat.',
+    'Restartujeme herní službu a očekáváme, že se Cryptic Realm brzy vrátí. Tato stránka bude stav automaticky kontrolovat.',
   'serverUnavailable.eyebrow': 'Údržba světa',
   'serverUnavailable.heading': 'Svět je dočasně nedostupný.',
   'serverUnavailable.logoAlt': 'Cryptic Realm',
@@ -4613,7 +4613,7 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.swag.swagStickers': 'Balíček samolepek (odesílá se)',
   'hudChrome.discord.swag.swagTee': 'Tričko (odesílá se)',
   'hudChrome.discord.swag.title': 'Merch',
-  'hudChrome.discord.swag.titleChampion': 'Titul: Šampion Claudemoonu',
+  'hudChrome.discord.swag.titleChampion': 'Titul: Šampion Cryptic Realmu',
   'hudChrome.discord.swag.titleDiscordian': 'Titul: Discordián',
   'hudChrome.discord.swag.titleSquire': 'Titul: Panoš světa',
   'hudChrome.discord.tierCurrent': 'Aktuální',

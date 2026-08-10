@@ -3237,7 +3237,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.unitFrame.targetLabel': 'Euer Ziel',
   'seo.officialLabel': 'Offizielle Website von Cryptic Realm',
   'seo.officialBody':
-    'crypticrealm.com ist das offizielle kostenlose Browser-MMO fÃ¼r die Welt Claudemoon. Spiele online mit einem dauerhaften Charakter, erkunde solo offline, lies das Wiki und folge den verifizierten Community-Links auf dieser Website.',
+    'crypticrealm.com ist das offizielle kostenlose Browser-MMO fÃ¼r die Welt Cryptic Realm. Spiele online mit einem dauerhaften Charakter, erkunde solo offline, lies das Wiki und folge den verifizierten Community-Links auf dieser Website.',
   'hudChrome.questShare.notShareable': 'Diese Quest kann nicht geteilt werden.',
   'hudChrome.questShare.notInSharerParty':
     'Ihr mÃ¼sst in der Gruppe von {name} sein, um diese Quest anzunehmen.',
@@ -4016,7 +4016,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'serverUnavailable.eyebrow': 'Weltwartung',
   'serverUnavailable.heading': 'Die Welt ist vorÃ¼bergehend nicht verfÃ¼gbar.',
   'serverUnavailable.body':
-    'Wir starten den Spieldienst neu und erwarten, dass Claudemoon bald zurÃ¼ckkehrt. Diese Seite prÃ¼ft automatisch weiter.',
+    'Wir starten den Spieldienst neu und erwarten, dass Cryptic Realm bald zurÃ¼ckkehrt. Diese Seite prÃ¼ft automatisch weiter.',
   'serverUnavailable.status': 'Bald zurÃ¼ck',
   'hud.core.elite': 'ELITE',
   'hud.core.boss': 'BOSS',
@@ -8462,7 +8462,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.swag.titleDiscordian': 'Titel: Discordianer',
   'hudChrome.discord.swag.titleSquire': 'Titel: Knappe des Reichs',
   'hudChrome.discord.swag.chromaBlurple': 'Blurple-Mech-Chroma',
-  'hudChrome.discord.swag.titleChampion': 'Titel: Champion von Claudemoon',
+  'hudChrome.discord.swag.titleChampion': 'Titel: Champion von Cryptic Realm',
   'hudChrome.discord.swag.swagStickers': 'Stickerpaket (Versand)',
   'hudChrome.discord.swag.swagTee': 'T-Shirt (Versand)',
   'hudChrome.discord.relay.tooFast':

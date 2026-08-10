@@ -2381,7 +2381,7 @@ export const ru_RU: EnTranslations = {
         "titleDiscordian": "Титул: Discordian",
         "titleSquire": "Титул: Оруженосец Королевства",
         "chromaBlurple": "Расцветка меха Blurple",
-        "titleChampion": "Титул: Чемпион Claudemoon",
+        "titleChampion": "Титул: Чемпион Cryptic Realm",
         "swagStickers": "Набор стикеров (с доставкой)",
         "swagTee": "Футболка (с доставкой)"
       },
@@ -6826,7 +6826,7 @@ export const ru_RU: EnTranslations = {
     "applicationCategory": "Игра",
     "operatingSystem": "Веб-браузер",
     "officialLabel": "Официальный сайт Cryptic Realm",
-    "officialBody": "crypticrealm.com - официальная бесплатная браузерная MMO для мира Claudemoon. Играйте онлайн с постоянным персонажем, исследуйте мир в одиночку офлайн, читайте wiki и переходите по проверенным ссылкам сообщества с этого сайта."
+    "officialBody": "crypticrealm.com - официальная бесплатная браузерная MMO для мира Cryptic Realm. Играйте онлайн с постоянным персонажем, исследуйте мир в одиночку офлайн, читайте wiki и переходите по проверенным ссылкам сообщества с этого сайта."
   },
   "a11y": {
     "goHome": "Перейти на главную",
@@ -7083,7 +7083,7 @@ export const ru_RU: EnTranslations = {
     "logoAlt": "Cryptic Realm",
     "eyebrow": "Технические работы",
     "heading": "Мир временно недоступен.",
-    "body": "Мы перезапускаем игровой сервис и ожидаем, что Claudemoon скоро вернется. Эта страница продолжит проверку автоматически.",
+    "body": "Мы перезапускаем игровой сервис и ожидаем, что Cryptic Realm скоро вернется. Эта страница продолжит проверку автоматически.",
     "status": "Скоро вернется"
   },
   "hud": {

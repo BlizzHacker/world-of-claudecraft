@@ -2381,7 +2381,7 @@ export const ja_JP: EnTranslations = {
         "titleDiscordian": "称号：Discordian",
         "titleSquire": "称号：レルムの従者",
         "chromaBlurple": "Blurpleメックカラー",
-        "titleChampion": "称号：Claudemoonのチャンピオン",
+        "titleChampion": "称号：Cryptic Realmのチャンピオン",
         "swagStickers": "ステッカーパック（発送）",
         "swagTee": "Tシャツ（発送）"
       },
@@ -6826,7 +6826,7 @@ export const ja_JP: EnTranslations = {
     "applicationCategory": "ゲーム",
     "operatingSystem": "Webブラウザ",
     "officialLabel": "Cryptic Realm 公式サイト",
-    "officialBody": "crypticrealm.com は Claudemoon ワールドの公式無料ブラウザMMOです。永続キャラクターでオンラインプレイし、オフラインでソロ探索し、wikiを読み、このサイトから確認済みのコミュニティリンクをたどれます。"
+    "officialBody": "crypticrealm.com は Cryptic Realm ワールドの公式無料ブラウザMMOです。永続キャラクターでオンラインプレイし、オフラインでソロ探索し、wikiを読み、このサイトから確認済みのコミュニティリンクをたどれます。"
   },
   "a11y": {
     "goHome": "ホームへ移動",
@@ -7083,7 +7083,7 @@ export const ja_JP: EnTranslations = {
     "logoAlt": "Cryptic Realm",
     "eyebrow": "ワールドメンテナンス",
     "heading": "ワールドは一時的に利用できません。",
-    "body": "ゲームサービスを再起動しています。Claudemoonはまもなく戻る予定です。このページは自動的に確認を続けます。",
+    "body": "ゲームサービスを再起動しています。Cryptic Realmはまもなく戻る予定です。このページは自動的に確認を続けます。",
     "status": "まもなく復帰"
   },
   "hud": {

@@ -2381,7 +2381,7 @@ export const zh_TW: EnTranslations = {
         "titleDiscordian": "稱號：Discordian",
         "titleSquire": "稱號：王國侍從",
         "chromaBlurple": "Blurple 機甲塗裝",
-        "titleChampion": "稱號：Claudemoon 勇士",
+        "titleChampion": "稱號：Cryptic Realm 勇士",
         "swagStickers": "貼紙包（實體寄送）",
         "swagTee": "T恤（實體寄送）"
       },
@@ -6826,7 +6826,7 @@ export const zh_TW: EnTranslations = {
     "applicationCategory": "遊戲",
     "operatingSystem": "網頁瀏覽器",
     "officialLabel": "Cryptic Realm 官方網站",
-    "officialBody": "crypticrealm.com 是 Claudemoon 世界的官方免費瀏覽器 MMO。你可以用持久角色線上遊玩，也可以離線單人探索、閱讀 wiki，並從本站前往已驗證的社群連結。"
+    "officialBody": "crypticrealm.com 是 Cryptic Realm 世界的官方免費瀏覽器 MMO。你可以用持久角色線上遊玩，也可以離線單人探索、閱讀 wiki，並從本站前往已驗證的社群連結。"
   },
   "a11y": {
     "goHome": "前往首頁",
@@ -7083,7 +7083,7 @@ export const zh_TW: EnTranslations = {
     "logoAlt": "Cryptic Realm",
     "eyebrow": "世界維護",
     "heading": "這個世界暫時無法使用。",
-    "body": "我們正在重新啟動遊戲服務，Claudemoon 應會很快恢復。此頁面會自動持續檢查。",
+    "body": "我們正在重新啟動遊戲服務，Cryptic Realm 應會很快恢復。此頁面會自動持續檢查。",
     "status": "即將恢復"
   },
   "hud": {

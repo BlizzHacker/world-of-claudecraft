@@ -2381,7 +2381,7 @@ export const id_ID: EnTranslations = {
         "titleDiscordian": "Gelar: Discordian",
         "titleSquire": "Gelar: Pengiring Kerajaan",
         "chromaBlurple": "Kroma Mech Blurple",
-        "titleChampion": "Gelar: Jawara Claudemoon",
+        "titleChampion": "Gelar: Jawara Cryptic Realm",
         "swagStickers": "Paket Stiker (dikirim)",
         "swagTee": "Kaus (dikirim)"
       },
@@ -6826,7 +6826,7 @@ export const id_ID: EnTranslations = {
     "applicationCategory": "Permainan",
     "operatingSystem": "Peramban web",
     "officialLabel": "Situs resmi Cryptic Realm",
-    "officialBody": "crypticrealm.com adalah MMO peramban gratis resmi untuk dunia Claudemoon. Bermain daring dengan karakter yang persisten, jelajahi solo secara luring, baca wiki, dan ikuti tautan komunitas terverifikasi dari situs ini."
+    "officialBody": "crypticrealm.com adalah MMO peramban gratis resmi untuk dunia Cryptic Realm. Bermain daring dengan karakter yang persisten, jelajahi solo secara luring, baca wiki, dan ikuti tautan komunitas terverifikasi dari situs ini."
   },
   "a11y": {
     "goHome": "Ke halaman utama",
@@ -7083,7 +7083,7 @@ export const id_ID: EnTranslations = {
     "logoAlt": "Cryptic Realm",
     "eyebrow": "Pemeliharaan dunia",
     "heading": "Dunia sementara tidak tersedia.",
-    "body": "Kami sedang memulai ulang layanan game dan memperkirakan Claudemoon akan kembali sebentar lagi. Halaman ini akan terus memeriksa secara otomatis.",
+    "body": "Kami sedang memulai ulang layanan game dan memperkirakan Cryptic Realm akan kembali sebentar lagi. Halaman ini akan terus memeriksa secara otomatis.",
     "status": "Segera kembali"
   },
   "hud": {

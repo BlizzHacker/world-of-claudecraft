@@ -2763,7 +2763,7 @@ export const hudChromeStrings = {
       titleDiscordian: 'Title: Discordian',
       titleSquire: 'Title: Squire of the Realm',
       chromaBlurple: 'Blurple Mech Chroma',
-      titleChampion: 'Title: Champion of Claudemoon',
+      titleChampion: 'Title: Champion of Cryptic Realm',
       swagStickers: 'Sticker Pack (shipped)',
       swagTee: 'T-Shirt (shipped)',
     },

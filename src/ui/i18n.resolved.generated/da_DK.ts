@@ -2381,7 +2381,7 @@ export const da_DK: EnTranslations = {
         "titleDiscordian": "Titel: Discordianer",
         "titleSquire": "Titel: Væbner af Riget",
         "chromaBlurple": "Blurple Mech-kromfarve",
-        "titleChampion": "Titel: Champion af Claudemoon",
+        "titleChampion": "Titel: Champion af Cryptic Realm",
         "swagStickers": "Klistermærkepakke (sendes)",
         "swagTee": "T-shirt (sendes)"
       },
@@ -6826,7 +6826,7 @@ export const da_DK: EnTranslations = {
     "applicationCategory": "Spil",
     "operatingSystem": "Webbrowser",
     "officialLabel": "Officiel Cryptic Realm-hjemmeside",
-    "officialBody": "crypticrealm.com er den officielle gratis browser-MMO for Claudemoon-verdenen. Spil online med en vedvarende karakter, udforsk solo offline, læs wikien, og følg verificerede fællesskabslinks fra denne side."
+    "officialBody": "crypticrealm.com er den officielle gratis browser-MMO for Cryptic Realm-verdenen. Spil online med en vedvarende karakter, udforsk solo offline, læs wikien, og følg verificerede fællesskabslinks fra denne side."
   },
   "a11y": {
     "goHome": "Gå til forsiden",
@@ -7083,7 +7083,7 @@ export const da_DK: EnTranslations = {
     "logoAlt": "Cryptic Realm",
     "eyebrow": "Verdens-vedligeholdelse",
     "heading": "Verdenen er midlertidigt utilgængelig.",
-    "body": "Vi genstarter spiltjenesten og forventer, at Claudemoon vender tilbage om kort tid. Denne side bliver ved med at tjekke automatisk.",
+    "body": "Vi genstarter spiltjenesten og forventer, at Cryptic Realm vender tilbage om kort tid. Denne side bliver ved med at tjekke automatisk.",
     "status": "Tilbage snart"
   },
   "hud": {

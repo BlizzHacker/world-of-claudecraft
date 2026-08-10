@@ -2381,7 +2381,7 @@ export const fr_CA: EnTranslations = {
         "titleDiscordian": "Titre: Discordien",
         "titleSquire": "Titre: Écuyer du Royaume",
         "chromaBlurple": "Chroma Mech Blurple",
-        "titleChampion": "Titre: Champion de Claudemoon",
+        "titleChampion": "Titre: Champion de Cryptic Realm",
         "swagStickers": "Pack d'autocollants (expédié)",
         "swagTee": "T-shirt (expédié)"
       },
@@ -6826,7 +6826,7 @@ export const fr_CA: EnTranslations = {
     "applicationCategory": "Jeu",
     "operatingSystem": "Navigateur Web",
     "officialLabel": "Site officiel de Cryptic Realm",
-    "officialBody": "crypticrealm.com est le MMO gratuit officiel sur navigateur du monde Claudemoon. Jouez en ligne avec un personnage persistant, explorez en solo hors ligne, lisez le wiki et suivez les liens communautaires vérifiés depuis ce site."
+    "officialBody": "crypticrealm.com est le MMO gratuit officiel sur navigateur du monde Cryptic Realm. Jouez en ligne avec un personnage persistant, explorez en solo hors ligne, lisez le wiki et suivez les liens communautaires vérifiés depuis ce site."
   },
   "a11y": {
     "goHome": "Aller à l'accueil",
@@ -7083,7 +7083,7 @@ export const fr_CA: EnTranslations = {
     "logoAlt": "Cryptic Realm",
     "eyebrow": "Maintenance du monde",
     "heading": "Le monde est temporairement indisponible.",
-    "body": "Nous redÃ©marrons le service de jeu et Claudemoon devrait revenir sous peu. Cette page continuera de vÃ©rifier automatiquement.",
+    "body": "Nous redÃ©marrons le service de jeu et Cryptic Realm devrait revenir sous peu. Cette page continuera de vÃ©rifier automatiquement.",
     "status": "De retour bientÃ´t"
   },
   "hud": {

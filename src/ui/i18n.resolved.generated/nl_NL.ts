@@ -2381,7 +2381,7 @@ export const nl_NL: EnTranslations = {
         "titleDiscordian": "Titel: Discordiaan",
         "titleSquire": "Titel: Schildknaap van het Rijk",
         "chromaBlurple": "Blurple Mech Chroma",
-        "titleChampion": "Titel: Kampioen van Claudemoon",
+        "titleChampion": "Titel: Kampioen van Cryptic Realm",
         "swagStickers": "Stickerpakket (verzonden)",
         "swagTee": "T-shirt (verzonden)"
       },
@@ -6826,7 +6826,7 @@ export const nl_NL: EnTranslations = {
     "applicationCategory": "Spel",
     "operatingSystem": "Webbrowser",
     "officialLabel": "Officiële website van Cryptic Realm",
-    "officialBody": "crypticrealm.com is de officiële gratis browser-MMO voor de Claudemoon-wereld. Speel online met een blijvend personage, verken solo offline, lees de wiki en volg geverifieerde communitylinks vanaf deze site."
+    "officialBody": "crypticrealm.com is de officiële gratis browser-MMO voor de Cryptic Realm-wereld. Speel online met een blijvend personage, verken solo offline, lees de wiki en volg geverifieerde communitylinks vanaf deze site."
   },
   "a11y": {
     "goHome": "Ga naar de startpagina",
@@ -7083,7 +7083,7 @@ export const nl_NL: EnTranslations = {
     "logoAlt": "Cryptic Realm",
     "eyebrow": "Wereldonderhoud",
     "heading": "De wereld is tijdelijk niet beschikbaar.",
-    "body": "We herstarten de gameservice en verwachten dat Claudemoon binnenkort weer terug is. Deze pagina blijft automatisch controleren.",
+    "body": "We herstarten de gameservice en verwachten dat Cryptic Realm binnenkort weer terug is. Deze pagina blijft automatisch controleren.",
     "status": "Snel terug"
   },
   "hud": {

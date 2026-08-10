@@ -2381,7 +2381,7 @@ export const en_CA: EnTranslations = {
         "titleDiscordian": "Title: Discordian",
         "titleSquire": "Title: Squire of the Realm",
         "chromaBlurple": "Blurple Mech Chroma",
-        "titleChampion": "Title: Champion of Claudemoon",
+        "titleChampion": "Title: Champion of Cryptic Realm",
         "swagStickers": "Sticker Pack (shipped)",
         "swagTee": "T-Shirt (shipped)"
       },
@@ -7083,7 +7083,7 @@ export const en_CA: EnTranslations = {
     "logoAlt": "Cryptic Realm",
     "eyebrow": "World maintenance",
     "heading": "The world is temporarily unavailable.",
-    "body": "We are restarting the game service and expect Claudemoon to return shortly. This page will keep checking automatically.",
+    "body": "We are restarting the game service and expect Cryptic Realm to return shortly. This page will keep checking automatically.",
     "status": "Back soon"
   },
   "hud": {

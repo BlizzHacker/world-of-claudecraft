@@ -725,7 +725,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.unitFrame.targetLabel': '你的目標',
   'seo.officialLabel': 'Cryptic Realm 官方網站',
   'seo.officialBody':
-    'crypticrealm.com 是 Claudemoon 世界的官方免費瀏覽器 MMO。你可以用持久角色線上遊玩，也可以離線單人探索、閱讀 wiki，並從本站前往已驗證的社群連結。',
+    'crypticrealm.com 是 Cryptic Realm 世界的官方免費瀏覽器 MMO。你可以用持久角色線上遊玩，也可以離線單人探索、閱讀 wiki，並從本站前往已驗證的社群連結。',
   'hudChrome.questShare.notShareable': '該任務無法分享。',
   'hudChrome.questShare.notInSharerParty': '你必須在 {name} 的隊伍中才能接受該任務。',
   'hudChrome.questShare.accepted': '{name} 接受了你分享的任務。',
@@ -1861,7 +1861,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'serverUnavailable.eyebrow': '世界維護',
   'serverUnavailable.heading': '這個世界暫時無法使用。',
   'serverUnavailable.body':
-    '我們正在重新啟動遊戲服務，Claudemoon 應會很快恢復。此頁面會自動持續檢查。',
+    '我們正在重新啟動遊戲服務，Cryptic Realm 應會很快恢復。此頁面會自動持續檢查。',
   'serverUnavailable.status': '即將恢復',
   'hud.core.elite': '精英',
   'hud.core.boss': '首領',
@@ -7438,7 +7438,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.swag.titleDiscordian': '稱號：Discordian',
   'hudChrome.discord.swag.titleSquire': '稱號：王國侍從',
   'hudChrome.discord.swag.chromaBlurple': 'Blurple 機甲塗裝',
-  'hudChrome.discord.swag.titleChampion': '稱號：Claudemoon 勇士',
+  'hudChrome.discord.swag.titleChampion': '稱號：Cryptic Realm 勇士',
   'hudChrome.discord.swag.swagStickers': '貼紙包（實體寄送）',
   'hudChrome.discord.swag.swagTee': 'T恤（實體寄送）',
   'hudChrome.discord.relay.tooFast': '你發送得太快了。請稍候再試。',

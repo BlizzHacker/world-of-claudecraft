@@ -2381,7 +2381,7 @@ export const tr_TR: EnTranslations = {
         "titleDiscordian": "Unvan: Discordlu",
         "titleSquire": "Unvan: Diyarın Silahtarı",
         "chromaBlurple": "Blurple Mech Renk Kaplaması",
-        "titleChampion": "Unvan: Claudemoon Şampiyonu",
+        "titleChampion": "Unvan: Cryptic Realm Şampiyonu",
         "swagStickers": "Çıkartma Paketi (kargoyla)",
         "swagTee": "Tişört (kargoyla)"
       },
@@ -6826,7 +6826,7 @@ export const tr_TR: EnTranslations = {
     "applicationCategory": "Oyun",
     "operatingSystem": "Web tarayıcısı",
     "officialLabel": "Resmi Cryptic Realm web sitesi",
-    "officialBody": "crypticrealm.com, Claudemoon dünyasının resmi ücretsiz tarayıcı MMO'sudur. Kalıcı bir karakterle çevrimiçi oyna, çevrimdışı tek başına keşfet, wiki'yi oku ve bu siteden doğrulanmış topluluk bağlantılarını takip et."
+    "officialBody": "crypticrealm.com, Cryptic Realm dünyasının resmi ücretsiz tarayıcı MMO'sudur. Kalıcı bir karakterle çevrimiçi oyna, çevrimdışı tek başına keşfet, wiki'yi oku ve bu siteden doğrulanmış topluluk bağlantılarını takip et."
   },
   "a11y": {
     "goHome": "Ana sayfaya git",
@@ -7083,7 +7083,7 @@ export const tr_TR: EnTranslations = {
     "logoAlt": "Cryptic Realm",
     "eyebrow": "Dünya bakımı",
     "heading": "Dünya geçici olarak kullanılamıyor.",
-    "body": "Oyun hizmetini yeniden başlatıyoruz ve Claudemoon'un kısa süre içinde geri döneceğini umuyoruz. Bu sayfa otomatik olarak denetlemeye devam edecek.",
+    "body": "Oyun hizmetini yeniden başlatıyoruz ve Cryptic Realm'un kısa süre içinde geri döneceğini umuyoruz. Bu sayfa otomatik olarak denetlemeye devam edecek.",
     "status": "Birazdan döneriz"
   },
   "hud": {
