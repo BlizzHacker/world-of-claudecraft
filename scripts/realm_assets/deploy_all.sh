@@ -18,6 +18,14 @@ for r in infernal classic dominion arcane fps arcadevoid crypticrealm claudecraf
   for s in live dev alpha beta; do
     d="/opt/cr-stages/$r/$s"
     [ -e "$d/.git" ] || continue
+    # PARKED rings (stopped + disabled for capacity: an empty v0.35 ring idles
+    # at ~43% of a core) are never touched: `systemctl restart` STARTS a
+    # stopped unit, so deploying through it would silently un-park all 27 and
+    # re-saturate the box. Deploy running rings only; deploy_live_rings.sh is
+    # the scoped default. Un-parking is a deliberate `systemctl enable --now`.
+    if ! systemctl is-active --quiet "cryptic-realm-stage@$r-$s"; then
+      echo "PARKED $r/$s (left alone)"; continue
+    fi
     if [ "$(git -C "$d" rev-parse --short HEAD 2>/dev/null)" = "$SHA" ] \
        && [ -f "$d/dist-server/server.cjs" ] \
        && systemctl is-active --quiet "cryptic-realm-stage@$r-$s"; then
