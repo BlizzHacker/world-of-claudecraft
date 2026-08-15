@@ -1,0 +1,78 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;background:#20242c;overflow:hidden}canvas{display:block}
+</style></head><body>
+<script type="importmap">
+{"imports":{"three":"/node_modules/three/build/three.module.js",
+"three/addons/":"/node_modules/three/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+
+const W = 420, H = 560;
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1);
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x20242c);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x30343c, 2.2));
+const key = new THREE.DirectionalLight(0xffffff, 2.0); key.position.set(2, 4, 3); scene.add(key);
+const rim = new THREE.DirectionalLight(0x88aaff, 1.0); rim.position.set(-3, 2, -2); scene.add(rim);
+const camera = new THREE.PerspectiveCamera(32, W / H, 0.01, 200);
+const loader = new GLTFLoader();
+// The realm bodies ship meshopt-compressed (and some draco); without these the
+// loader throws before any geometry exists.
+await MeshoptDecoder.ready;
+loader.setMeshoptDecoder(MeshoptDecoder);
+const draco = new DRACOLoader();
+draco.setDecoderPath('/node_modules/three/examples/jsm/libs/draco/');
+loader.setDRACOLoader(draco);
+const cache = new Map();
+
+async function load(url) {
+  if (cache.has(url)) return cache.get(url);
+  const gltf = await loader.loadAsync(url);
+  cache.set(url, gltf);
+  return gltf;
+}
+
+window.renderBody = async ({ url, clip, phase, yaw = 0.6 }) => {
+  const gltf = await load(url);
+  const root = gltf.scene.clone(true);
+  // Clone must share the skeleton binding: SkeletonUtils is overkill here since
+  // we render one pose at a time, so use the original scene instead.
+  const target = gltf.scene;
+  scene.add(target);
+
+  const mixer = new THREE.AnimationMixer(target);
+  const found = gltf.animations.find(a => a.name.toLowerCase() === clip.toLowerCase())
+    || gltf.animations.find(a => a.name.toLowerCase().includes(clip.toLowerCase()));
+  let dur = 1;
+  if (found) {
+    const act = mixer.clipAction(found);
+    act.reset(); act.play();
+    dur = found.duration || 1;
+    mixer.setTime(phase * dur);
+  }
+  target.updateMatrixWorld(true);
+
+  // Frame on the POSED bounds so a body that shears out of frame is visible.
+  const box = new THREE.Box3().setFromObject(target);
+  const size = box.getSize(new THREE.Vector3());
+  const ctr = box.getCenter(new THREE.Vector3());
+  const radius = Math.max(size.x, size.y, size.z) * 0.5 || 1;
+  const dist = radius / Math.tan((camera.fov * Math.PI / 180) / 2) * 1.5;
+  camera.position.set(ctr.x + Math.sin(yaw) * dist, ctr.y + size.y * 0.08, ctr.z + Math.cos(yaw) * dist);
+  camera.lookAt(ctr);
+  camera.updateProjectionMatrix();
+
+  renderer.render(scene, camera);
+  const png = renderer.domElement.toDataURL('image/png');
+  scene.remove(target);
+  mixer.stopAllAction();
+  return { png, clips: gltf.animations.map(a => a.name), height: size.y, width: size.x, dur };
+};
+window.__ready = true;
+</script></body></html>

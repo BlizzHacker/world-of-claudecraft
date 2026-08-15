@@ -26,11 +26,27 @@
 // barred is a FIGHTER'S GUARD, not a T-pose: the arms rest away from the body
 // but they are driven, and Attack, Taunt and Wave all move them. It is the exact
 // case the queue note warned "must not be judged on numbers".
+// 2026-08-15: assassin joins the rotation, making it five. It was repaired with
+// the rule K recipe at the bottom of this file and then RENDERED before/after at
+// four phases each of Idle, Walk and Attack via scripts/rig_contact_sheet.mjs
+// (new — an offline harness, so this no longer needs a live client and an auth
+// token). The sheets are at /opt/cr-rig-repair/shots/.
+//
+// What the render shows, which is why this one un-bars and the other five in the
+// same batch did not: the sleeves that used to end in flat dark blades resolve
+// into readable forearms and hands, the arms articulate across all four phases of
+// Idle and Walk instead of holding bind, and Attack no longer collapses the coat
+// into planes. The boots were already real geometry with toes, so this body never
+// had the plank-feet fault that keeps forge_worker and hermit barred.
+//
+// The pre-repair GLB is kept at /opt/cr-backups/rig-preweight/ and the repaired
+// bytes are what /opt/cr-realms-store/infernal/ now serves.
 export const INFERNAL_HUMAN_VISUAL_KEYS = [
   'realm_infernal_human_iron_warden',
   'realm_infernal_human_weathered_elder',
   'realm_infernal_human_hooded_wanderer',
   'realm_infernal_human_monk',
+  'realm_infernal_human_assassin',
 ] as const;
 
 /**
@@ -118,7 +134,8 @@ export const INFERNAL_DEFECTIVE_BODY_KEYS = [
   'realm_infernal_human_tempest',
   'realm_infernal_human_tainted_hood',
   'realm_infernal_human_blood_knight',
-  'realm_infernal_human_assassin',
+  // assassin was here until 2026-08-15; repaired and rendered, see the note on
+  // INFERNAL_HUMAN_VISUAL_KEYS above.
 ] as const;
 
 /**
@@ -360,4 +377,39 @@ export function hostileHumanoidVisualKey(
 // Candidates are staged, NOT shipped. Nothing above was un-barred on these
 // numbers - the owner has rejected this work twice for bodies judged on numbers
 // or on a static pose, so they need the Idle/Walk/Attack render first.
+//
+// 2026-08-15 BATCH — six bodies repaired and RENDERED. One shipped.
+//
+// First: the bank is TWO populations, and the earlier note conflated them. The
+// bodies judged unrepairable (forge_worker 295 welded verts, hermit 285,
+// white_sage 276, road_mercenary 207, vanguard 305, tempest/wizard 687) are
+// ~300-vertex meshes. There is no hand or foot geometry to recover at that
+// density and no weight surgery will invent it — that verdict stands. But the
+// rest are 155k-304k verts, a completely different case, and those are what this
+// batch repaired.
+//
+// Rendered before/after at four phases each of Idle, Walk and Attack with
+// scripts/rig_contact_sheet.mjs; sheets at /opt/cr-rig-repair/shots/.
+//
+//   human_assassin   PASS and SHIPPED. Blade sleeves -> real forearms and hands,
+//                    arms articulate through Idle and Walk, Attack holds. Now in
+//                    INFERNAL_HUMAN_VISUAL_KEYS.
+//   class_sorcerer   IMPROVED, still barred. The held horizontal T through Idle
+//                    is gone — arms rest at the sides and swing in Walk, exactly
+//                    what rule K is for. But Attack still collapses the gown into
+//                    flat planes, so it fails the same gate as before.
+//   class_warlock    FAIL. Arm mass moved (core weight on arm surface 1386 verts
+//                    /945 mass -> 8/3.3) and it changed nothing you can see: the
+//                    dress hem still lies on the ground as a slab through every
+//                    Idle frame and Attack still shears the whole body into
+//                    planes. Geometry fault, not a weighting fault.
+//   class_assassin   NO GAIN. The repaired arm juts forward through Idle rather
+//                    than resting — arguably worse than the original tuck.
+//   class_spiritborn / human_spiritborn  same GLB (296594 verts both); numbers
+//                    improved most of the batch (core mass 29622 -> 7157) but the
+//                    render is not a clear pass, so both stay barred.
+//
+// The lesson worth keeping: arm weight is necessary and nowhere near sufficient.
+// Five of six moved decisively on every metric the tool reports and only one of
+// them survived being looked at.
 // ---------------------------------------------------------------------------
