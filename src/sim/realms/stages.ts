@@ -19,7 +19,12 @@ import { REALM_LIST, realmHostEnv } from './registry';
 
 export type RealmStage = 'live' | 'beta' | 'alpha' | 'dev';
 
-export const STAGE_ORDER: readonly RealmStage[] = ['live', 'beta', 'alpha', 'dev'];
+// 2026-08-15: one ring per realm. Only 'live' is generated, deployed, or
+// offered in the stage picker — see the note in scripts/admin/stages.config.mjs
+// (the two files are kept in sync by hand). The RealmStage union and STAGE_META
+// below are deliberately left whole so a stored 'cr_realm_stage_*' value from
+// the old four-ring world still parses and resolves, rather than throwing.
+export const STAGE_ORDER: readonly RealmStage[] = ['live'];
 
 export interface StageMeta {
   id: RealmStage;
@@ -32,8 +37,8 @@ export interface StageMeta {
 }
 
 export const STAGE_META: Record<RealmStage, StageMeta> = {
-  live: { id: 'live', label: 'Live', platinumMultiplier: 1, restricted: false,
-    note: 'Stable public ring.' },
+  live: { id: 'live', label: 'In Development', platinumMultiplier: 1, restricted: false,
+    note: 'The realm’s only ring — in active development.' },
   beta: { id: 'beta', label: 'Beta', platinumMultiplier: 1.5, restricted: false,
     note: 'Monthly promotion candidate — testers earn 1.5x Platinum.' },
   alpha: { id: 'alpha', label: 'Alpha', platinumMultiplier: 2, restricted: true,
@@ -103,7 +108,11 @@ const STAGE_STORE_KEY = (realmId: RealmId) => `cr_realm_stage_${realmId}`;
 export function resolveRealmStage(realmId: RealmId): RealmStage {
   try {
     const ls = realmHostEnv()?.storageGet(STAGE_STORE_KEY(realmId));
-    if (ls === 'beta' || ls === 'alpha' || ls === 'dev' || ls === 'live') return ls;
+    // Clamp to the rings that still exist. A browser that picked 'dev' or
+    // 'alpha' before the 2026-08-15 cutdown still has that value in
+    // localStorage, and honouring it would route the player to
+    // dev-<realm>.crypticrealm.com — a host with no server behind it any more.
+    if (isRealmStage(ls) && STAGE_ORDER.includes(ls)) return ls;
   } catch { /* storage unavailable */ }
   return 'live';
 }

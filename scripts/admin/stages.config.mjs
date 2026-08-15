@@ -2,7 +2,16 @@
 // env generator, the per-stage deploy script, and the promotion script.
 // Mirrors src/sim/realms/stages.ts (kept in sync by hand — both are tiny).
 
-export const STAGES = ['live', 'beta', 'alpha', 'dev'];
+// 2026-08-15: collapsed to a single ring per realm. The beta/alpha/dev rings
+// each carried their own 8.3 GB worktree under /opt/cr-stages (27 idle copies,
+// 222 GB) and their own env file, systemd instance, port and directory entry,
+// none of which were ever promoted off the stale 15d54b7617 build. One ring per
+// realm now, advertised as "(In Development)" — see stageName below.
+//
+// The rest of the stage vocabulary (offsets, git refs, multipliers) is kept so
+// re-adding a ring is a one-line change to this array, but nothing generates or
+// deploys a non-live ring while STAGES holds only 'live'.
+export const STAGES = ['live'];
 
 export const STAGE_PORT_OFFSET = { live: 0, beta: 1, alpha: 2, dev: 3 };
 
@@ -55,9 +64,16 @@ export function stageHost(realmId, stage) {
 }
 
 // Display label for the realm directory / UI (brackets OK here — client only).
+// The single remaining ring advertises itself as in development so the realm
+// list reads honestly; this is display text only and never reaches
+// stageRealmName (the DB partition key), so existing characters are untouched.
+export const IN_DEVELOPMENT_SUFFIX = '(In Development)';
+
 export function stageName(realmId, stage) {
   const base = REALMS[realmId]?.name ?? realmId;
-  return stage === 'live' ? base : `${base} [${stage.toUpperCase()}]`;
+  return stage === 'live'
+    ? `${base} ${IN_DEVELOPMENT_SUFFIX}`
+    : `${base} [${stage.toUpperCase()}]`;
 }
 
 // Server REALM_NAME = DB partition key. Each stage is its OWN world (separate

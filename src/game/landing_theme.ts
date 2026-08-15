@@ -17,6 +17,8 @@
 // unavailable or wiring throws, prepare() resolves anyway and the caller's
 // plain element playback proceeds exactly as before.
 
+import { audioUnlocked } from './audio_unlock';
+
 interface MediaSourceLike {
   connect(node: unknown): unknown;
 }
@@ -25,6 +27,10 @@ export interface ThemeAudioContextLike {
   readonly destination: unknown;
   resume(): Promise<void>;
   createMediaElementSource(el: HTMLAudioElement): MediaSourceLike;
+  /** Optional so existing test stubs stay valid. A context that opened already
+   *  'running' (media-engagement autoplay) skips the pre-gesture guard in
+   *  prepare() and resumes normally. */
+  readonly state?: AudioContextState | 'interrupted';
 }
 
 export interface LandingThemeAudio {
@@ -42,6 +48,7 @@ function defaultContextFactory(): ThemeAudioContextLike {
 
 export function createLandingThemeAudio(
   makeContext: () => ThemeAudioContextLike = defaultContextFactory,
+  isUnlocked: () => boolean = audioUnlocked,
 ): LandingThemeAudio {
   let ctx: ThemeAudioContextLike | null = null;
   let unavailable = false;
@@ -66,6 +73,15 @@ export function createLandingThemeAudio(
           // the element on plain playback. The context, if it opened, opened
           // BEFORE the element plays, which is the clean ordering anyway.
         }
+      }
+      // Before the first user gesture, resume() can only be refused, and
+      // Chrome logs "The AudioContext was not allowed to start" for every
+      // refused call whether or not the rejection is handled — three lines of
+      // console noise on a cold landing load. Reporting the failure without
+      // making the doomed call is identical from the caller's side (it still
+      // rejects, so its gesture retry stays armed) and silent.
+      if (ctx.state !== 'running' && !isUnlocked()) {
+        return Promise.reject(new Error('audio locked: awaiting user gesture'));
       }
       // Routed (or plain with a live context): wait for running so routed
       // playback is never swallowed by a suspended graph. A rejection keeps

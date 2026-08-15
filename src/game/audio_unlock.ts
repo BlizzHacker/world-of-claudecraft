@@ -80,3 +80,11 @@ const sharedLatch = createAudioUnlockLatch(typeof window === 'undefined' ? null 
 export function resumeWhenAllowed(ctx: ResumableContext): void {
   sharedLatch.resumeWhenAllowed(ctx);
 }
+
+/** True once the page has seen a user gesture, i.e. once an AudioContext
+ *  resume() can actually succeed. Callers that must REPORT failure rather than
+ *  queue (the landing theme, whose caller drives its own gesture retry) check
+ *  this instead of calling resume() into a refusal Chrome logs. */
+export function audioUnlocked(): boolean {
+  return sharedLatch.unlocked;
+}

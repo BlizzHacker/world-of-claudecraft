@@ -85,6 +85,11 @@ export interface RealmHostEnv {
   storageGet(key: string): string | null;
   storageSet(key: string, value: string): void;
   notifyStageChange?(realmId: string, stage: string): void;
+  /** The realm this ORIGIN serves, derived from the hostname. Every realm is a
+   *  separate host backed by its own server process, so when this is set it is
+   *  authoritative over the last-picked value in storage — see
+   *  resolveActiveRealmId. Undefined on hosts with no DOM. */
+  hostRealmId?(): string | null;
 }
 let hostEnv: RealmHostEnv | null = null;
 export function setRealmHostEnv(env: RealmHostEnv | null): void {
@@ -99,6 +104,16 @@ export function resolveActiveRealmId(): RealmId {
     if (hostEnv) {
       const q = hostEnv.queryParam('realm');
       if (isRealmId(q)) return q;
+      // The ORIGIN outranks the last-picked value. Each realm is its own host
+      // in front of its own server process (infernal.crypticrealm.com -> the
+      // REALM_NAME=Infernal process), so a stored 'crypticrealm' from an
+      // earlier visit to the apex must not make this client render Cryptic
+      // Realm's class tables, rosters and decor against an Infernal world.
+      // That mismatch is what put every Infernal player on the wrong bodies:
+      // the realm never resolved to 'infernal' at all unless ?realm= was typed
+      // by hand, so REALM_CLASS_VISUALS.infernal was effectively dead code.
+      const host = hostEnv.hostRealmId?.();
+      if (isRealmId(host)) return host;
       const ls = hostEnv.storageGet(STORE_KEY);
       if (isRealmId(ls)) return ls;
     }

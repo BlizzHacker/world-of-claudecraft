@@ -751,24 +751,39 @@ export function applySurfaceDetail(
           const in vec3 w,
           const in vec3 axis
         ) {
+          // SINGLE EXIT, and the accumulator is initialized at declaration.
+          // This was a chain of eight early returns, which is identical GLSL
+          // but made ANGLE's HLSL backend emit, on every program using this
+          // material, "warning X4000: use of potentially uninitialized
+          // variable (f_wornTriR)". The translator inlines the function into a
+          // scalar and cannot prove across flattened branches that every path
+          // writes it. An else-if chain over one pre-initialized local is the
+          // same arithmetic in the same order and the warning goes away.
+          float r = 0.0;
           // Dominant-plane fast path: the weight collapse below makes any
           // surface within ~33deg of a projection axis exactly one-hot, so a
           // flat wall pays one tap instead of three. The branch is coherent
           // per surface (weights are constant across a facet).
-          if ( w.x >= 0.999 ) return texture2D( tex, p.zy ).r;
-          if ( w.y >= 0.999 ) return texture2D( tex, p.xz ).r;
-          if ( w.z >= 0.999 ) return texture2D( tex, p.xy ).r;
+          if ( w.x >= 0.999 ) {
+            r = texture2D( tex, p.zy ).r;
+          } else if ( w.y >= 0.999 ) {
+            r = texture2D( tex, p.xz ).r;
+          } else if ( w.z >= 0.999 ) {
+            r = texture2D( tex, p.xy ).r;
           // Exact geometric-axis zeroes are coherent across the flat facets
           // used by town kits. Preserve the two active terms in their
           // original order and omit only the fetch multiplied by exact zero.
-          if ( axis.x <= 0.0 )
-            return texture2D( tex, p.xz ).r * w.y + texture2D( tex, p.xy ).r * w.z;
-          if ( axis.y <= 0.0 )
-            return texture2D( tex, p.zy ).r * w.x + texture2D( tex, p.xy ).r * w.z;
-          if ( axis.z <= 0.0 )
-            return texture2D( tex, p.zy ).r * w.x + texture2D( tex, p.xz ).r * w.y;
-          return texture2D( tex, p.zy ).r * w.x + texture2D( tex, p.xz ).r * w.y
-            + texture2D( tex, p.xy ).r * w.z;
+          } else if ( axis.x <= 0.0 ) {
+            r = texture2D( tex, p.xz ).r * w.y + texture2D( tex, p.xy ).r * w.z;
+          } else if ( axis.y <= 0.0 ) {
+            r = texture2D( tex, p.zy ).r * w.x + texture2D( tex, p.xy ).r * w.z;
+          } else if ( axis.z <= 0.0 ) {
+            r = texture2D( tex, p.zy ).r * w.x + texture2D( tex, p.xz ).r * w.y;
+          } else {
+            r = texture2D( tex, p.zy ).r * w.x + texture2D( tex, p.xz ).r * w.y
+              + texture2D( tex, p.xy ).r * w.z;
+          }
+          return r;
         }`,
       )
       .replace(

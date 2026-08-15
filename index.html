@@ -978,6 +978,29 @@
         <form id="reset-panel" class="panel auth-panel auth-panel-premium" hidden novalidate>
           <h2 class="auth-title" data-i18n="hudChrome.auth.resetTitle">Choose a new password</h2>
 
+          <!-- Chrome logs "Password forms should have (optionally hidden) username
+               fields for accessibility" for any form carrying a password input with
+               no companion username. This reset flow is token-based (the account is
+               identified by ?reset=<token> and never typed here), and no endpoint
+               resolves a token back to an account, so there is nothing to prefill
+               from in the general case — the link is normally opened in a fresh
+               session. The field is still what the platform wants present: it gives
+               assistive tech and password managers the username slot to anchor the
+               new credential on. main.ts fills it opportunistically when the same
+               session just used #forgot-user; otherwise it stays empty, which is
+               the documented "optionally hidden" shape. Not focusable, not
+               announced. -->
+          <input
+            id="reset-user"
+            name="username"
+            type="text"
+            autocomplete="username"
+            tabindex="-1"
+            aria-hidden="true"
+            readonly
+            hidden
+          />
+
           <div class="auth-field">
             <label for="reset-pass" class="auth-label" data-i18n="hudChrome.auth.resetNewPassword">New password</label>
             <div class="password-wrapper">

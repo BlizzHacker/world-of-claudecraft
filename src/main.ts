@@ -11645,6 +11645,13 @@ function wireStartScreens(): void {
             return;
           }
         }
+        // Carry the typed account into the reset form's hidden username field
+        // (see the note on #reset-user in index.html). Only helps when the
+        // emailed link is opened in this same session — the usual flow opens it
+        // fresh, where the field stays empty — but it costs nothing and lets a
+        // password manager file the new credential under the right account.
+        const resetUserInput = document.getElementById('reset-user') as HTMLInputElement | null;
+        if (resetUserInput && username) resetUserInput.value = username;
         if (forgotStatus) forgotStatus.textContent = t('hudChrome.auth.forgotSent');
       })();
     });
