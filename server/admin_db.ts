@@ -228,6 +228,32 @@ export async function recordSitePresence(input: SitePresenceInput): Promise<void
   );
 }
 
+/** The coalesced form of recordSitePresence (site_presence.ts buffers beacons and
+ *  flushes them here as ONE statement every few seconds, keeping the public
+ *  heartbeat endpoint off the pool's critical path). PRECONDITION: one entry per
+ *  visitorId — the conflict target — or Postgres rejects the statement with
+ *  "ON CONFLICT DO UPDATE command cannot affect row a second time"; the caller's
+ *  visitor-keyed Map guarantees it. */
+export async function recordSitePresenceBatch(inputs: readonly SitePresenceInput[]): Promise<void> {
+  if (inputs.length === 0) return;
+  const params: string[] = [];
+  const rows = inputs.map((input, i) => {
+    params.push(input.visitorId, input.page, input.ipHash, input.userAgentHash);
+    const b = i * 4;
+    return `($${b + 1}, $${b + 2}, $${b + 3}, $${b + 4})`;
+  });
+  await pool.query(
+    `INSERT INTO site_presence_sessions (visitor_id, page, ip_hash, user_agent_hash)
+     VALUES ${rows.join(', ')}
+     ON CONFLICT (visitor_id) DO UPDATE SET
+       page = EXCLUDED.page,
+       last_seen_at = now(),
+       ip_hash = EXCLUDED.ip_hash,
+       user_agent_hash = EXCLUDED.user_agent_hash`,
+    params,
+  );
+}
+
 export async function currentSitePresenceUsers(): Promise<number> {
   const res = await pool.query(
     `SELECT count(*)::int AS count

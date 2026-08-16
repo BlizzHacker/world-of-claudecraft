@@ -459,6 +459,10 @@ describe('linkdead grace lifecycle', () => {
     const server = new GameServer();
     const ws = fakeWs();
     const session = expectJoined(server.join(ws, 11, 101, 'Blackhole', 'warrior', null));
+    // This test pins the STEADY-STATE black-hole contract; a fresh join sits
+    // inside the entry grace window (tests/keepalive_entry_grace.test.ts owns
+    // that window's behavior), so expire it.
+    session.keepaliveGraceUntil = 0;
 
     // first sweep: ping goes out, pong now outstanding
     server.pingLiveSessions();

@@ -295,7 +295,7 @@ import { gameMetricsCounters, type WsDropCause } from './http/game_signals';
 import { buildSharedInterestCandidates } from './interest_candidates';
 import { IpBlockList } from './ip_block';
 import { loadActiveBlockedIps } from './ip_block_db';
-import { keepaliveSweepDelayed } from './keepalive_sweep';
+import { inEntryGrace, keepaliveSweepDelayed, WS_ENTRY_GRACE_MS } from './keepalive_sweep';
 import { LINKDEAD_GRACE_MS, planJoin } from './linkdead';
 import {
   consumeListReadToken,
@@ -363,7 +363,7 @@ import { TickProfiler } from './tick_profiler';
 import { hrtimeToMs, TickRateMeter } from './tick_rate_meter';
 import { recordUnstuckEvent } from './unstuck_records';
 import { holderInfoForPubkey } from './woc_balance';
-import { isBackpressureExceeded } from './ws_backpressure';
+import { isBackpressureExceeded, WS_ENTRY_BACKPRESSURE_LIMIT_BYTES } from './ws_backpressure';
 import { RaceInput } from '../src/sim/racing';
 import { resolveRealmCharacterVisual } from '../src/sim/realms/class_visuals';
 import { setRealmHostEnv } from '../src/sim/realms/registry';
@@ -1050,6 +1050,14 @@ export interface ClientSession {
   // next to the close/error handlers in ws_auth.ts) clears it. Still set at
   // the next sweep means the socket is black-holed: terminate into the grace.
   awaitingPong: boolean;
+  // Epoch-ms end of the post-join/post-resume entry window (WS_ENTRY_GRACE_MS,
+  // stamped at join and re-stamped on resume). While inside it, pong silence and
+  // outbound backlog are read as "client main thread busy loading" rather than
+  // "socket dead": the keepalive sweep re-arms instead of terminating, and
+  // sendRaw tolerates the raised entry backpressure limit. See
+  // keepalive_sweep.ts for the full mechanism (blocked renderer -> full receive
+  // pipe -> pings undeliverable -> automatic browser pong never sent).
+  keepaliveGraceUntil: number;
   chatTokens: number;
   chatLastRefill: number;
   chatLastRateError: number;
@@ -3068,7 +3076,12 @@ export class GameServer {
     const delayed = keepaliveSweepDelayed(now, this.lastKeepaliveSweepAt, WS_KEEPALIVE_PING_MS);
     for (const session of this.clients.values()) {
       if (session.linkdead || session.ws.readyState !== 1) continue;
-      if (session.awaitingPong && !delayed) {
+      // Entry grace: pong silence from a session still inside its post-join/
+      // post-resume window is read as "main thread busy loading the world"
+      // (renderer prewarm blocks the pipe the ping must arrive through), not as
+      // a black-holed socket. Re-arm and keep pinging — the pings still keep
+      // NAT/proxy idle timers warm — and let the first post-grace sweep judge.
+      if (session.awaitingPong && !delayed && !inEntryGrace(now, session.keepaliveGraceUntil)) {
         const ws = session.ws;
         try {
           ws.terminate();
@@ -3797,6 +3810,7 @@ export class GameServer {
       linkdead: false,
       graceUntil: 0,
       awaitingPong: false,
+      keepaliveGraceUntil: Date.now() + WS_ENTRY_GRACE_MS,
       chatTokens: CHAT_RATE_BURST,
       chatLastRefill: Date.now() / 1000,
       chatLastRateError: 0,
@@ -4003,6 +4017,10 @@ export class GameServer {
     session.linkdead = false;
     session.graceUntil = 0;
     session.awaitingPong = false;
+    // A resume is a fresh socket and often a fresh page load, so the client may
+    // re-run the same heavy entry phase a first join does: re-arm the entry
+    // grace window for the sweep/backpressure reads.
+    session.keepaliveGraceUntil = Date.now() + WS_ENTRY_GRACE_MS;
     this.setMinigamePlayerConnection(session.pid, true);
     const sessionIp = meta.ip ?? '';
     if (sessionIp !== session.ip) {
@@ -10961,7 +10979,16 @@ export class GameServer {
     // the process and starves everyone. Terminate the offender instead. close()
     // would try to flush the already-huge buffer, so destroy the socket: the
     // 'close' handler funnels into the idempotent leave() for normal cleanup.
-    if (isBackpressureExceeded(session.ws.bufferedAmount)) {
+    // A session inside its entry grace window gets the raised limit: a client
+    // whose main thread is blocked by world-entry prewarm stops draining its
+    // socket for tens of seconds while 20 Hz snapshots pile up, and tearing it
+    // down reads as "Connection lost" mid-load. Date.now() is only consulted on
+    // the rare over-standard-limit path, so the per-snapshot cost is unchanged.
+    if (
+      isBackpressureExceeded(session.ws.bufferedAmount) &&
+      (!inEntryGrace(Date.now(), session.keepaliveGraceUntil) ||
+        isBackpressureExceeded(session.ws.bufferedAmount, WS_ENTRY_BACKPRESSURE_LIMIT_BYTES))
+    ) {
       if (!session.left) {
         const ws = session.ws;
         try {

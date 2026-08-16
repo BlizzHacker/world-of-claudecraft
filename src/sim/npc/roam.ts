@@ -16,10 +16,11 @@
 // to it (INTERACT_HOLD_R) or has it targeted, so quest turn-ins and vendor windows
 // never chase a moving target. It never leaves a small leash of its spawn point.
 
+import { PLAYER_BODY_RADIUS } from '../pathfind';
 import { hash2 } from '../rng';
 import type { SimContext } from '../sim_context';
 import { npcDuelOpponentOf } from '../social/npc_duel';
-import { angleTo, DT, dist2d, type Entity, MELEE_RANGE } from '../types';
+import { angleTo, DT, dist2d, type Entity, MELEE_RANGE, type Vec3 } from '../types';
 
 const ROAM_SEED = 0x726f616d; // 'roam'
 const ROAM_LEASH_R = 6; // never stray more than this from spawnPos (tight: quest givers stay near)
@@ -32,6 +33,55 @@ const ROAM_PAUSE_MAX = 8;
 // NPC freezes so the interaction target doesn't walk away. Comfortably larger than
 // the leash so a player standing at the NPC's home spot always pins it.
 const INTERACT_HOLD_R = 8;
+
+// ── Stuck give-up ────────────────────────────────────────────────────────────
+// Hub-anchored building spread (data.ts themeWorldForRealm) rings every themed
+// town's hub with scaled buildings, so a pure-hash wander target can land INSIDE
+// a building (or behind a wall the slide fan cannot round). moveToward then never
+// reports arrival and the NPC re-runs the full 7-heading fan — terrain sampling
+// and collider depenetration included — 20 times a second, forever. Enough pinned
+// town NPCs starve the server event loop: pg connect handshakes blow their
+// timeout, HTTP requests 500, and every DB-backed periodic job fails (the
+// 2026-08-16 infernal/classic incident). Three guards, all DETERMINISTIC (pure
+// functions of positions plus the per-NPC counter — no rng, so every host still
+// agrees frame-for-frame):
+//   1. hop targets are resolved out of colliders at pick time, so a hop into a
+//      building becomes a hop to the reachable point at its wall;
+//   2. a walk that makes no real progress for STUCK_GIVE_UP_TICKS abandons the
+//      hop into the normal hashed dwell instead of grinding on the wall;
+//   3. the chase/homing arms (grinder, duel, return-home) hold still while
+//      pinned, re-probing once every STUCK_RETRY_EVERY ticks instead of every
+//      tick, so a later un-pinning still recovers the NPC.
+// The counter is shared across arms; any tick of real movement resets it, and a
+// stale carry-over between arms costs at most one retry interval.
+const STUCK_GIVE_UP_TICKS = 20; // ~1s of pinned walking at 20 Hz means "unreachable"
+const STUCK_RETRY_EVERY = 40; // pinned chase/homing arms re-probe every ~2s
+
+/**
+ * One movement tick toward `dest` with pinned detection: the price of a full
+ * moveToward (slide fan + terrain samples + depenetration) is only paid while it
+ * is actually buying movement. Returns moveToward's arrival verdict; a held tick
+ * returns false. Progress under a quarter of this tick's step counts as pinned.
+ */
+function moveWithStuckHold(ctx: SimContext, npc: Entity, dest: Vec3, speed: number): boolean {
+  const stuck = npc.roamStuckTicks ?? 0;
+  if (stuck >= STUCK_GIVE_UP_TICKS && stuck % STUCK_RETRY_EVERY !== 0) {
+    npc.roamStuckTicks = stuck + 1;
+    return false;
+  }
+  const x0 = npc.pos.x;
+  const z0 = npc.pos.z;
+  const arrived = ctx.moveToward(npc, dest, speed);
+  if (arrived) {
+    npc.roamStuckTicks = 0;
+    return true;
+  }
+  const eps = speed * DT * 0.25;
+  const dx = npc.pos.x - x0;
+  const dz = npc.pos.z - z0;
+  npc.roamStuckTicks = dx * dx + dz * dz < eps * eps ? stuck + 1 : 0;
+  return false;
+}
 
 /** True if any live player is close enough (or targeting) that the NPC holds still. */
 function playerEngaging(ctx: SimContext, npc: Entity): boolean {
@@ -73,7 +123,8 @@ function fightTarget(ctx: SimContext, npc: Entity, target: Entity): void {
   const d = dist2d(npc.pos, target.pos);
   const reach = MELEE_RANGE * 0.8;
   if (d > reach) {
-    if (!ctx.isRooted(npc)) ctx.moveToward(npc, target.pos, npc.moveSpeed * ctx.moveSpeedMult(npc));
+    if (!ctx.isRooted(npc))
+      moveWithStuckHold(ctx, npc, target.pos, npc.moveSpeed * ctx.moveSpeedMult(npc));
   } else {
     npc.facing = angleTo(npc.pos, target.pos);
     if (npc.swingTimer <= 0) {
@@ -96,7 +147,7 @@ function updateGrinder(ctx: SimContext, npc: Entity): boolean {
     npc.aggroTargetId = null;
     const home = ctx.groundPos(npc.spawnPos.x, npc.spawnPos.z);
     const atHome = dist2d(npc.pos, home) <= 1.5;
-    if (!atHome) ctx.moveToward(npc, home, npc.moveSpeed * ctx.moveSpeedMult(npc));
+    if (!atHome) moveWithStuckHold(ctx, npc, home, npc.moveSpeed * ctx.moveSpeedMult(npc));
     else npc.hp = Math.min(npc.maxHp, npc.hp + GRIND_REGEN * DT);
     return true;
   }
@@ -119,7 +170,8 @@ function updateGrinder(ctx: SimContext, npc: Entity): boolean {
   const d = dist2d(npc.pos, target.pos);
   const reach = MELEE_RANGE * 0.8;
   if (d > reach) {
-    if (!ctx.isRooted(npc)) ctx.moveToward(npc, target.pos, npc.moveSpeed * ctx.moveSpeedMult(npc));
+    if (!ctx.isRooted(npc))
+      moveWithStuckHold(ctx, npc, target.pos, npc.moveSpeed * ctx.moveSpeedMult(npc));
   } else {
     npc.facing = angleTo(npc.pos, target.pos);
     if (npc.swingTimer <= 0) {
@@ -154,7 +206,7 @@ export function updateRoamingNpc(ctx: SimContext, npc: Entity): void {
     npc.wanderTarget = null;
     if (npc.wanderTimer < ROAM_PAUSE_MIN) npc.wanderTimer = ROAM_PAUSE_MIN;
     if (dist2d(npc.pos, npc.spawnPos) > 0.4) {
-      ctx.moveToward(npc, npc.spawnPos, ROAM_SPEED * 1.6);
+      moveWithStuckHold(ctx, npc, npc.spawnPos, ROAM_SPEED * 1.6);
     }
     return;
   }
@@ -182,16 +234,27 @@ export function updateRoamingNpc(ctx: SimContext, npc: Entity): void {
       tx = npc.spawnPos.x + (dx / d) * ROAM_LEASH_R;
       tz = npc.spawnPos.z + (dz / d) * ROAM_LEASH_R;
     }
-    npc.wanderTarget = ctx.groundPos(tx, tz);
+    // Resolve the hop out of colliders NOW (one call per hop, every few
+    // seconds): a target inside one of the themed-town buildings is otherwise
+    // unreachable, and the walk toward it grinds the slide fan on the wall
+    // until the give-up below fires. Resolved with the NPC's own body radius,
+    // it becomes the reachable point at the wall face instead.
+    const resolved = ctx.resolveMovePoint(tx, tz, PLAYER_BODY_RADIUS, npc);
+    npc.wanderTarget = ctx.groundPos(resolved.x, resolved.z);
     npc.roamHop = hopIdx + 1;
+    npc.roamStuckTicks = 0;
     void hop;
     return;
   }
 
-  // Walk toward the current spot; on arrival, dwell for a hashed beat.
-  const arrived = ctx.moveToward(npc, npc.wanderTarget, ROAM_SPEED);
-  if (arrived) {
+  // Walk toward the current spot; on arrival, dwell for a hashed beat. A walk
+  // pinned for STUCK_GIVE_UP_TICKS (target behind a wall the fan cannot round)
+  // abandons the hop into the SAME hashed dwell — the wall costs at most ~1s of
+  // fan probes per hop instead of pinning the NPC's full movement cost forever.
+  const arrived = moveWithStuckHold(ctx, npc, npc.wanderTarget, ROAM_SPEED);
+  if (arrived || (npc.roamStuckTicks ?? 0) >= STUCK_GIVE_UP_TICKS) {
     npc.wanderTarget = null;
+    npc.roamStuckTicks = 0;
     const hd = hash2(npc.id, (npc.roamHop ?? 0) * 2 + 7, ROAM_SEED);
     npc.wanderTimer = ROAM_PAUSE_MIN + hd * (ROAM_PAUSE_MAX - ROAM_PAUSE_MIN);
   }

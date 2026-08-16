@@ -14,6 +14,19 @@
 // several MiB of backlog can only mean a client that is not reading.
 export const WS_BACKPRESSURE_LIMIT_BYTES = 8 * 1024 * 1024;
 
+// The raised allowance while a session is inside its entry grace window
+// (keepalive_sweep.ts WS_ENTRY_GRACE_MS). During world entry the client's main
+// thread can be blocked for tens of seconds by renderer prewarm; it stops
+// draining its socket THROUGH NO FAULT of the connection, while the server keeps
+// pushing 20 Hz snapshots at it. At entry-snapshot rates that backlog can cross
+// the 8 MiB limit before the client wakes, and the terminate reads to the player
+// as "Connection lost" in the middle of loading. Four times the standard limit
+// covers the observed ~89s stall with margin; the exposure is bounded — only
+// freshly joined/resumed sessions qualify, their count is bounded by the realm
+// slot cap, and a socket still stuck past the grace is torn down by the standard
+// limit on the next send.
+export const WS_ENTRY_BACKPRESSURE_LIMIT_BYTES = 32 * 1024 * 1024;
+
 // True when a socket's unflushed outbound buffer has grown past the limit, i.e.
 // the peer is not draining and the session should be torn down.
 export function isBackpressureExceeded(

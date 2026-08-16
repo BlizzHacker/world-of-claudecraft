@@ -25,3 +25,22 @@ export function keepaliveSweepDelayed(
   const elapsed = nowMs - lastSweepAtMs;
   return elapsed > KEEPALIVE_STALL_FACTOR * intervalMs;
 }
+
+// The CLIENT-side stall mirror of the sweep-delay rule above. World entry is the
+// heaviest client phase: renderer prewarm can block the browser main thread for
+// tens of seconds (~89s observed on low-end hardware). A blocked renderer stops
+// draining its WebSocket receive pipe; once that pipe and the TCP window fill,
+// the server's ping frames sit undelivered behind queued snapshot bytes, so the
+// browser's automatic pong never happens — pong silence that reflects a BUSY
+// client, not a dead socket. For a session inside this window after join/resume,
+// the sweep re-arms instead of terminating (pings still flow, keeping NAT/proxy
+// idle timers warm), and the send path tolerates a deeper outbound backlog
+// (ws_backpressure.ts entry limit). A genuinely black-holed socket during entry
+// is still reaped at most one sweep after the grace expires — well inside the
+// 5-minute linkdead grace its character would be held for anyway.
+export const WS_ENTRY_GRACE_MS = 180_000;
+
+// True while a session is inside its post-join/post-resume entry grace window.
+export function inEntryGrace(nowMs: number, graceUntilMs: number): boolean {
+  return nowMs < graceUntilMs;
+}

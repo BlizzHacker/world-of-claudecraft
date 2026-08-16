@@ -136,7 +136,47 @@ if (rawDbPoolMaxClients !== '' && Number(rawDbPoolMaxClients) !== DB_POOL_MAX_CL
 // which checks a client out first) may block waiting for a free client or a new
 // TCP connect before it rejects. A slow database must fail a request fast rather
 // than queue the whole handshake path behind an exhausted pool forever.
-export const DB_POOL_CONNECT_TIMEOUT_MS = 5000;
+//
+// 12s, not the historical 5s, and env-tunable: the binding failure mode on the
+// shipped deployment turned out to be the PROCESS, not the database. A pg
+// connect handshake needs several event-loop turns, and a tick-starved realm
+// process (2026-08-16: back-to-back 0.5-3.4s loop stalls while Postgres sat at
+// 21/400 connections answering an out-of-process connect in 39ms) blows a 5s
+// budget on loop latency alone — every new connect "times out" against a
+// perfectly healthy database, and the error unhelpfully points at Postgres.
+// 12s rides out a burst of multi-second stalls while keeping the timeout
+// ladder intact (heavy 60s > ordinary statement 15s > this connect wait), so a
+// checkout still fails faster than the statements bounding the clients ahead
+// of it in the queue, and a genuinely down database still fails long before
+// the heavy ceiling.
+const DB_POOL_CONNECT_TIMEOUT_MS_DEFAULT = 12_000;
+const DB_POOL_CONNECT_TIMEOUT_MS_MIN = 1000;
+// Strictly under DB_STATEMENT_TIMEOUT_MS (15s, declared below): the timeout
+// ladder demands the connect/checkout wait fail FASTER than the statements
+// bounding the clients ahead of it in the queue, so an env value at or past the
+// statement ceiling (the deployed .env carried 30000 while the knob was still
+// hardcoded and ignored) falls back to the default with a boot error naming the
+// accepted range instead of silently inverting the ladder.
+const DB_POOL_CONNECT_TIMEOUT_MS_MAX = 14_000;
+export function parseDbPoolConnectTimeoutMs(raw: string | undefined): number {
+  const trimmed = (raw ?? '').trim();
+  if (!/^\d+$/.test(trimmed)) return DB_POOL_CONNECT_TIMEOUT_MS_DEFAULT;
+  const n = Number(trimmed);
+  return n >= DB_POOL_CONNECT_TIMEOUT_MS_MIN && n <= DB_POOL_CONNECT_TIMEOUT_MS_MAX
+    ? n
+    : DB_POOL_CONNECT_TIMEOUT_MS_DEFAULT;
+}
+export const DB_POOL_CONNECT_TIMEOUT_MS = parseDbPoolConnectTimeoutMs(
+  process.env.DB_POOL_CONNECT_TIMEOUT_MS,
+);
+// Same rejected-value visibility contract as DB_POOL_MAX_CLIENTS above: a typo
+// must not silently run the default while the operator believes their value took.
+const rawDbPoolConnectTimeout = (process.env.DB_POOL_CONNECT_TIMEOUT_MS ?? '').trim();
+if (rawDbPoolConnectTimeout !== '' && Number(rawDbPoolConnectTimeout) !== DB_POOL_CONNECT_TIMEOUT_MS) {
+  console.error(
+    `DB_POOL_CONNECT_TIMEOUT_MS="${rawDbPoolConnectTimeout}" is not an accepted value (a whole number of milliseconds from ${DB_POOL_CONNECT_TIMEOUT_MS_MIN} to ${DB_POOL_CONNECT_TIMEOUT_MS_MAX}); falling back to the default of ${DB_POOL_CONNECT_TIMEOUT_MS_DEFAULT} ms.`,
+  );
+}
 
 // One boot line naming the effective pool sizing. Nothing else logs it, so an
 // operator reading a "too many clients" or checkout-timeout incident had no way

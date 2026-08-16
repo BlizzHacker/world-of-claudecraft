@@ -13,15 +13,20 @@
 //
 // server/db.ts builds a pg Pool at module load and throws if DATABASE_URL is unset;
 // reports.ts (via perf_report.ts) imports it, so set a dummy URL. The pool never
-// connects: insertClientPerfReport / recordSitePresence are vi.fn fakes, and the
-// happy-path requests carry no bearer so perf-report's scoped lookup / getCharacter
-// reads are never reached.
+// connects: insertClientPerfReport / recordSitePresenceBatch are vi.fn fakes, and
+// the happy-path requests carry no bearer so perf-report's scoped lookup /
+// getCharacter reads are never reached.
 process.env.DATABASE_URL ||= 'postgres://test:test@127.0.0.1:5433/wocc_phase15_telemetry';
 
 import type * as http from 'node:http';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { recordSitePresence } from '../../server/admin_db';
+import { recordSitePresenceBatch } from '../../server/admin_db';
 import { insertClientPerfReport } from '../../server/db';
+import {
+  flushSitePresence,
+  queueSitePresence,
+  resetSitePresenceForTests,
+} from '../../server/site_presence';
 import { compose } from '../../server/http/compose';
 import { withErrors } from '../../server/http/middleware/with_errors';
 import { apiRegistry } from '../../server/http/registry';
@@ -41,13 +46,15 @@ vi.mock('../../server/db', async (importActual) => {
   };
 });
 
-// site-presence self-reads its body and writes via recordSitePresence; replace it
-// with a fake so the happy path stays db-free.
+// site-presence self-reads its body, buffers the heartbeat, and the flush timer
+// writes via recordSitePresenceBatch; replace the batch write with a fake so the
+// whole path stays db-free (tests drive the flush explicitly via
+// flushSitePresence rather than waiting out the timer).
 vi.mock('../../server/admin_db', async (importActual) => {
   const actual = await importActual<typeof import('../../server/admin_db')>();
   return {
     ...actual,
-    recordSitePresence: vi.fn(async () => {}),
+    recordSitePresenceBatch: vi.fn(async () => {}),
   };
 });
 
@@ -111,6 +118,9 @@ async function runRoute(
 afterEach(() => {
   vi.clearAllMocks();
   vi.restoreAllMocks();
+  // Drop buffered heartbeats + the armed flush timer so one test's beacons
+  // never surface in another test's flush.
+  resetSitePresenceForTests();
 });
 
 // ---------------------------------------------------------------------------
@@ -118,7 +128,7 @@ afterEach(() => {
 // ---------------------------------------------------------------------------
 
 describe('POST /api/site-presence (public site-presence beacon)', () => {
-  it('200 { ok: true } for a valid visitor id, recording presence once', async () => {
+  it('200 { ok: true } for a valid visitor id; the write is COALESCED (no db call in the request, one batch row on flush)', async () => {
     const r = await runRoute('POST', '/api/site-presence', {
       body: { visitorId: 'a'.repeat(16), page: 'home' },
     });
@@ -126,10 +136,72 @@ describe('POST /api/site-presence (public site-presence beacon)', () => {
     expect(r.status).toBe(200);
     expect(r.body).toEqual({ ok: true });
     expect(r.contentType).toBe('application/json');
-    expect(vi.mocked(recordSitePresence)).toHaveBeenCalledTimes(1);
+    // The handler never touches the pool: the 2026-08-16 500 bursts were pg
+    // connect timeouts surfacing THROUGH this handler's awaited write.
+    expect(vi.mocked(recordSitePresenceBatch)).not.toHaveBeenCalled();
+    await flushSitePresence();
+    expect(vi.mocked(recordSitePresenceBatch)).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(recordSitePresenceBatch).mock.calls[0][0]).toMatchObject([
+      { visitorId: 'a'.repeat(16), page: 'home' },
+    ]);
   });
 
-  it('400 { ok: false, error: "invalid visitor id" } for a bad visitor id, no write', async () => {
+  it('two beacons from ONE visitor coalesce to one batch row (latest page wins); distinct visitors keep their rows', async () => {
+    await runRoute('POST', '/api/site-presence', {
+      body: { visitorId: 'a'.repeat(16), page: 'home' },
+    });
+    await runRoute('POST', '/api/site-presence', {
+      body: { visitorId: 'a'.repeat(16), page: 'play' },
+    });
+    await runRoute('POST', '/api/site-presence', {
+      body: { visitorId: 'b'.repeat(16), page: 'guide' },
+    });
+    await flushSitePresence();
+    expect(vi.mocked(recordSitePresenceBatch)).toHaveBeenCalledTimes(1);
+    const batch = vi.mocked(recordSitePresenceBatch).mock.calls[0][0];
+    // One row per visitor id — the multi-row upsert's ON CONFLICT target — with
+    // the visitor's LATEST page.
+    expect(batch).toHaveLength(2);
+    expect(batch).toMatchObject([
+      { visitorId: 'a'.repeat(16), page: 'play' },
+      { visitorId: 'b'.repeat(16), page: 'guide' },
+    ]);
+  });
+
+  it('a db failure on flush is shed (logged), never a 500 to a later beacon', async () => {
+    vi.mocked(recordSitePresenceBatch).mockRejectedValueOnce(new Error('connect timeout'));
+    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    await runRoute('POST', '/api/site-presence', {
+      body: { visitorId: 'c'.repeat(16), page: 'home' },
+    });
+    await expect(flushSitePresence()).resolves.toBeUndefined();
+    expect(errSpy).toHaveBeenCalled();
+    // The endpoint keeps answering 200 regardless of DB health.
+    const r = await runRoute('POST', '/api/site-presence', {
+      body: { visitorId: 'c'.repeat(16), page: 'home' },
+    });
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual({ ok: true });
+  });
+
+  it('the buffer sheds NEW visitors past its cap but keeps updating buffered ones (bounded memory)', async () => {
+    const mk = (n: number) => ({
+      visitorId: `v${String(n).padStart(15, '0')}`,
+      page: 'home',
+      ipHash: 'ip',
+      userAgentHash: 'ua',
+    });
+    for (let i = 0; i < 4096; i++) queueSitePresence(mk(i));
+    queueSitePresence(mk(9_999_999)); // over cap: shed
+    queueSitePresence({ ...mk(0), page: 'play' }); // already buffered: still updates
+    await flushSitePresence();
+    const batch = vi.mocked(recordSitePresenceBatch).mock.calls[0][0];
+    expect(batch).toHaveLength(4096);
+    expect(batch.some((r) => r.visitorId === mk(9_999_999).visitorId)).toBe(false);
+    expect(batch.find((r) => r.visitorId === mk(0).visitorId)?.page).toBe('play');
+  });
+
+  it('400 { ok: false, error: "invalid visitor id" } for a bad visitor id, no write buffered', async () => {
     const r = await runRoute('POST', '/api/site-presence', {
       body: { visitorId: 'short' },
     });
@@ -137,7 +209,8 @@ describe('POST /api/site-presence (public site-presence beacon)', () => {
     expect(r.status).toBe(400);
     expect(r.body).toEqual({ ok: false, error: 'invalid visitor id' });
     expect(r.contentType).toBe('application/json');
-    expect(vi.mocked(recordSitePresence)).not.toHaveBeenCalled();
+    await flushSitePresence();
+    expect(vi.mocked(recordSitePresenceBatch)).not.toHaveBeenCalled();
   });
 
   it('GET resolves methodNotAllowed (the route is registered POST-only)', () => {

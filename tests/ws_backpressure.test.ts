@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { isBackpressureExceeded, WS_BACKPRESSURE_LIMIT_BYTES } from '../server/ws_backpressure';
+import {
+  isBackpressureExceeded,
+  WS_BACKPRESSURE_LIMIT_BYTES,
+  WS_ENTRY_BACKPRESSURE_LIMIT_BYTES,
+} from '../server/ws_backpressure';
 
 describe('isBackpressureExceeded', () => {
   it('passes a healthy, draining socket', () => {
@@ -19,5 +23,14 @@ describe('isBackpressureExceeded', () => {
 
   it('treats a default limit far above one legitimate inbound frame (16 KiB maxPayload)', () => {
     expect(WS_BACKPRESSURE_LIMIT_BYTES).toBeGreaterThan(16 * 1024 * 16);
+  });
+
+  it('the entry limit sits strictly above the standard limit and still trips past it', () => {
+    // World-entry sessions (keepalive_sweep.ts WS_ENTRY_GRACE_MS) tolerate a
+    // deeper backlog while the client main thread is blocked by prewarm; the
+    // raised limit must remain a real bound, not an off switch.
+    expect(WS_ENTRY_BACKPRESSURE_LIMIT_BYTES).toBeGreaterThan(WS_BACKPRESSURE_LIMIT_BYTES);
+    expect(isBackpressureExceeded(WS_ENTRY_BACKPRESSURE_LIMIT_BYTES, WS_ENTRY_BACKPRESSURE_LIMIT_BYTES)).toBe(false);
+    expect(isBackpressureExceeded(WS_ENTRY_BACKPRESSURE_LIMIT_BYTES + 1, WS_ENTRY_BACKPRESSURE_LIMIT_BYTES)).toBe(true);
   });
 });

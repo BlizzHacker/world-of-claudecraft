@@ -2332,6 +2332,33 @@ export class Sim {
       if (npcDef.market) this.market.merchantIds.push(npc.id); // every auctioneer anchors the shared World Market
       if (npcDef.banker) this.bankerIds.push(npc.id); // every bursar is a place to use the bank
     }
+    // One-shot roam census, server only (gated on the same server-only dormancy
+    // switch the tick loop uses, so browsers and the parity harness log nothing).
+    // findSafePos above is supposed to leave every NPC clear of colliders; a
+    // non-zero count here is the first signal that a world-content change (e.g.
+    // the wave-13 hub-anchored building spread) moved colliders onto NPC squares
+    // faster than its 80-probe spiral can escape — the population that would
+    // otherwise grind the movement fan every tick (see npc/roam.ts stuck give-up).
+    if ((cfg.idleMobTickRadius ?? 0) > 0) {
+      let roamers = 0;
+      let embedded = 0;
+      for (const e of this.entities.values()) {
+        if (e.kind !== 'npc' || !(e.roams || e.grinds)) continue;
+        roamers++;
+        const res = resolvePosition(
+          this.cfg.seed,
+          e.pos.x,
+          e.pos.z,
+          0.6,
+          false,
+          undefined,
+          undefined,
+          this.riftCollisionToken,
+        );
+        if (Math.abs(res.x - e.pos.x) >= 1e-4 || Math.abs(res.z - e.pos.z) >= 1e-4) embedded++;
+      }
+      console.log(`[roam census] ${embedded}/${roamers} roaming NPCs spawned overlapping a collider`);
+    }
     this.market.seed();
 
     // Mobs from camps
@@ -6323,7 +6350,14 @@ export class Sim {
       } else if (e.kind === 'npc') {
         cleanseFriendlyNpcAuras(this.ctx, e);
         tickNpcDuelRespawn(this.ctx, e); // F4c: restore a duel-defeated NPC
-        updateRoamingNpc(this.ctx, e);
+        // Roaming is pure ambience: on an empty server ring (same gate as the
+        // whole-world mob dormancy above) nobody can see the stroll, yet a themed
+        // town's worth of roamers runs the movement fan — terrain samples and
+        // collider depenetration — every tick. Skip it; wander state freezes
+        // where it stood and resumes exactly there on first login, like the
+        // dormant mobs. The offline world and the parity harness never set
+        // idleMobTickRadius, so they still tick roaming unconditionally.
+        if (!emptyWorld) updateRoamingNpc(this.ctx, e);
       } else if (e.kind === 'object') {
         if (!e.lootable) {
           e.respawnTimer -= DT;

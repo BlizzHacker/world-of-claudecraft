@@ -25,6 +25,11 @@ import { describe, expect, it, vi } from 'vitest';
 // capture recipe passes the knob on the command line for exactly that
 // reason.
 delete process.env.DB_POOL_MAX_CLIENTS;
+// Same shield for the connect-timeout knob (also env-tunable since the 2026-08-16
+// event-loop-starvation incident): tests/server/db_pool_timeout.test.ts exports
+// it into process.env for its timing bracket, and a shared worker would
+// otherwise leak that 5000 into this file's literal pin.
+delete process.env.DB_POOL_CONNECT_TIMEOUT_MS;
 
 import { DESKTOP_LOGIN_TTL_MS } from '../../server/desktop_login';
 import {
@@ -453,8 +458,12 @@ describe('db pool timeouts hold their literal values and the query_timeout layer
       getPoolClientErrorCount,
       pool,
     } = await import('../../server/db');
-    // (b) values: each named timeout holds its literal.
-    expect(DB_POOL_CONNECT_TIMEOUT_MS).toBe(5_000);
+    // (b) values: each named timeout holds its literal. The connect wait's
+    // literal is the env-knob DEFAULT (12s since the 2026-08-16 incident: a
+    // tick-starved process burns multi-second event-loop turns per handshake,
+    // and 5s timed out against a healthy database); the env delete at the top
+    // of this file keeps this a default pin, not an environment echo.
+    expect(DB_POOL_CONNECT_TIMEOUT_MS).toBe(12_000);
     expect(DB_STATEMENT_TIMEOUT_MS).toBe(15_000);
     expect(DB_HEAVY_STATEMENT_TIMEOUT_MS).toBe(60_000);
     expect(DB_QUERY_TIMEOUT_MS).toBe(65_000);

@@ -50,6 +50,9 @@ describe('keepalive sweep under an event-loop stall', () => {
     const server = new GameServer();
     const ws = fakeWs();
     const session = expectJoined(server.join(ws, 11, 101, 'Stalled', 'warrior', null));
+    // This test pins the STEADY-STATE stall contract; a fresh join is inside the
+    // entry grace window (which also suppresses termination), so expire it.
+    session.keepaliveGraceUntil = 0;
 
     // First on-time sweep: a ping goes out and a pong is now outstanding.
     server.pingLiveSessions();

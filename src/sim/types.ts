@@ -3902,6 +3902,7 @@ export interface Entity extends ClientMirroredEntityFields {
   wanderTimer: number;
   roams?: boolean; // F4: town NPC strolls its home square (see npc/roam.ts)
   roamHop?: number; // F4: per-NPC hop counter seeding roam's pure-hash draws (off the shared rng)
+  roamStuckTicks?: number; // consecutive no-progress movement ticks (npc/roam.ts stuck give-up); never serialized
   grinds?: boolean; // F4: NPC hunts nearby wild mobs (aid-for-XP); see npc/roam.ts
   npcResting?: boolean; // F4: grinder is retreating home to heal (rest-HP hysteresis)
   npcDuelMortal?: boolean; // F4c: set while a grinder NPC is in a to-the-death duel (bypass HP floor)
