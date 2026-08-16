@@ -57,6 +57,7 @@ import {
   GRAVE_RADIUS,
   graveHeight,
   graveOffset,
+  isAbandonedCryptMine,
   MAILBOX_HD,
   MAILBOX_HW,
   MINE_CART,
@@ -85,6 +86,7 @@ import {
   reachPalmSpots,
   roadDistance,
   terrainHeight,
+  WATER_LEVEL,
   waterLevelAt,
 } from './world';
 import { yumiMazeColliders } from './yumi_maze_layout';
@@ -445,7 +447,13 @@ function staticWorldColliders(seed: number): Collider[] {
     });
   // the collider runs wider than the data radius: the modeled trunks flare
   // at the base, and the r that sizes the tree understates the bark line
-  for (const t of PROPS.greatTrees ?? [])
+  for (const t of PROPS.greatTrees ?? []) {
+    // Every great-tree renderer (realm_flora, haunt/garden/jungle features)
+    // refuses a spot whose terrain sits below the waterline ("a hull on a
+    // lake bed reads as a bug"), so the trunk collider must not register
+    // there either: three submerged wraithwood records were invisible
+    // mid-lake blockers on every tier (movement audit 2).
+    if (terrainHeight(t.x, t.z, seed) < WATER_LEVEL) continue;
     out.push({
       type: 'circle',
       x: t.x,
@@ -453,6 +461,7 @@ function staticWorldColliders(seed: number): Collider[] {
       r: t.r * 1.45,
       cameraTopY: topY(seed, t.x, t.z, 7),
     });
+  }
   // The Duskfall Passage's cave mouths: each portal side wears a modeled
   // cave (render/hollow_gates.ts); two flank circles and a back circle
   // shape the walk-in so the only way through the rock is the mouth itself.
@@ -1111,6 +1120,11 @@ function staticWorldColliders(seed: number): Collider[] {
     }
   }
   for (const m of PROPS.mines) {
+    // The Abandoned Crypt's mine draws a rubble mound and NO ore cart
+    // (render/props.ts, same predicate), so the cart's standable circle must
+    // not register there: it was a phantom crate-sized blocker beside the
+    // crypt mouth (movement audit 2, docs/movement-audit-2.md).
+    if (isAbandonedCryptMine(m)) continue;
     const off = rotY(MINE_CART.x, MINE_CART.z, m.rot);
     const x = m.x + off.x;
     const z = m.z + off.z;

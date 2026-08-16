@@ -157,6 +157,20 @@ export const MINE_CART: SubProp = {
   scale: 1.9,
 };
 
+/**
+ * The Abandoned Crypt's mine (the Nythraxis door): its timber portal is
+ * swallowed by a taller rubble mound and the renderer draws NO ore cart
+ * there. ONE predicate read by BOTH halves — render/props.ts to pick the
+ * crypt dressing and sim/colliders.ts to skip the cart's collider — so the
+ * drawn scene and the collision map cannot drift (the STALL_DRESSING rule).
+ * Before it was shared, the collider side registered the cart circle at
+ * every mine including this one: a phantom crate-sized blocker beside the
+ * crypt mouth (movement audit 2).
+ */
+export function isAbandonedCryptMine(m: { x: number; z: number }): boolean {
+  return m.x < -140 && m.z > 590 && m.z < 630;
+}
+
 // ---------------------------------------------------------------------------
 // Graveyards (parent: PROPS.graveyards, unrotated grid of six stones)
 // ---------------------------------------------------------------------------
