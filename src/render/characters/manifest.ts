@@ -2777,7 +2777,22 @@ const HAND_VISUALS: Record<string, VisualDef> = {
 // 2. Every other generated body is a kaykit body carrying the same 22 baked
 //    clips as the shipped player GLBs, but the emitted map has no `emote` entry,
 //    so playEmote() returned immediately on all of them.
-const MESHY_RIGGED_GENERATED = /^realm_infernal_(hero_|meshy_necro_warlord)/;
+// 3. The 2026-08-16 wave (realm_infernal_class_*_f, hero_heaven_*,
+//    male_sorcerer) is also meshy24, but those GLBs ship ONLY the rig's free
+//    Walk/Run takes - no authored Idle/Attack/Hit/Death at all. A literal map
+//    below would leave Idle (and the far-LOD idle bake) resolving to NOTHING,
+//    and the last airborne clip (Jump_Idle, mounted as `jump`) kept playing
+//    through fadeTo's null early-return: the "hero idles like a skydiver" bug.
+//    `autoClip` re-resolves every name against the clips actually loaded
+//    (clip_resolution.ts). The wave's GLBs were given a real standing Idle
+//    out-of-band (hero_amazon's authored Idle, ROTATION channels only - the
+//    clip bank has no base Idle at all; its Idle_Alt_* takes are lookaround
+//    gestures that render hunched, and cross-rig translation/scale tracks are
+//    the body-shrink trap), so Idle resolves exactly; the remaining gaps fill
+//    from the bank (Death -> Death_A, Hit -> Hit_A, attack -> bank swings).
+//    Fully-clipped bodies resolve every name exactly and are untouched.
+const MESHY_RIGGED_GENERATED =
+  /^realm_infernal_(hero_|meshy_necro_warlord|class_\w+_f$|male_sorcerer$)/;
 
 function generatedVisualCorrections(): Record<string, VisualDef> {
   const out: Record<string, VisualDef> = {};
@@ -2786,6 +2801,10 @@ function generatedVisualCorrections(): Record<string, VisualDef> {
       out[key] = {
         ...def,
         animUrls: [...(def.animUrls ?? []), MESHY_CLIP_BANK_URL],
+        // Resolve the names below against the body's REAL clip inventory at
+        // load (see note 3 above): exact for bodies that carry them, bank
+        // fills for the Walk/Run-only wave.
+        autoClip: true,
         clips: withMeshyBank({
           idle: 'Idle',
           walk: 'Walk',

@@ -3,7 +3,16 @@ import type { ClipMap } from './manifest';
 type ClipRole = 'idle' | 'walk' | 'run' | 'attack' | 'hit' | 'cast' | 'death';
 
 const ROLE_PATTERNS: Record<ClipRole, readonly RegExp[]> = {
-  idle: [/idle/i, /stand/i, /breath/i, /walk/i],
+  // Idle tries names that BEGIN with "idle" before the loose substring match.
+  // The shared Meshy clip bank carries no clip literally named "Idle" - its
+  // standing idles are Idle_Alt_A / Idle_Alt_B at the very END of the bank -
+  // while Jump_Idle, Lie_Idle and Sit_Floor_Idle all contain the substring and
+  // sit EARLIER in the merged inventory. The loose /idle/ therefore resolved
+  // Idle for the Walk/Run-only Meshy bodies (2026-08-16 wave) to Jump_Idle:
+  // the airborne jump loop, a character "standing" in a skydiver lean. The
+  // loose match stays as a late fallback so nothing that used to resolve
+  // stops resolving.
+  idle: [/^idle/i, /stand/i, /breath/i, /idle/i, /walk/i],
   walk: [/walk/i, /stroll/i, /move/i],
   run: [/run/i, /gallop/i, /sprint/i, /fast/i, /walk/i],
   attack: [/attack/i, /slash/i, /strike/i, /swing/i, /chop/i, /punch/i, /skill/i, /cast/i],
