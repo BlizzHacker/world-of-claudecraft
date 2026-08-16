@@ -1082,8 +1082,13 @@ export function buildRealmFlora(seed: number): RealmFloraView {
   // trunk radius come from REALM_PROPS.greatTrees: the same record the sim's
   // collision grid consumes, so the visual and the collider never drift.
   const treeSpot = REALM_PROPS.greatTrees?.[0];
-  if (greatTreeScene && treeSpot) {
-    const tree = greatTreeScene.clone(true);
+  // Place from the loaded scene NOW, or as soon as the load lands: the old
+  // build-time `if (greatTreeScene)` gate left the town square with the
+  // Eldergleam's 8yd trunk collider and NO tree whenever this view was built
+  // before the deferred preload resolved (movement audit 2).
+  const placeGreatTree = (root: THREE.Group): void => {
+    if (!treeSpot) return;
+    const tree = root.clone(true);
     const tx = treeSpot.x,
       tz = treeSpot.z;
     tree.position.set(tx, terrainHeight(tx, tz, seed) - 0.2, tz);
@@ -1118,6 +1123,14 @@ export function buildRealmFlora(seed: number): RealmFloraView {
     canopyLight.userData.baseIntensity = 9;
     glowLights.push(canopyLight);
     group.add(canopyLight);
+  };
+  if (greatTreeScene) {
+    placeGreatTree(greatTreeScene);
+  } else if (treeSpot) {
+    void loadGltf(GREAT_TREE_URL).then((gltf) => {
+      greatTreeScene = gltf.scene;
+      placeGreatTree(gltf.scene);
+    });
   }
 
   // Glow lights at the largest features (deterministic pick: the biggest

@@ -23,6 +23,7 @@ import {
   DOCK_DRESSING,
   delveArchMouthSign,
   delveArchZ,
+  isAbandonedCryptMine,
   propPlacementRoll,
 } from '../sim/prop_layout';
 import { hash2 } from '../sim/rng';
@@ -369,10 +370,11 @@ const ALL_PROP_KEYS = Object.keys(PROP_ASSET_DEFS) as PropKey[];
 const ACTIVE_PROP_KEYS = new Set<PropKey>(ALL_PROP_KEYS);
 
 // The props the renderer actually RENDERS at the low graphics tier: a subset, since
-// low gfx drops the decorative/secondary props (anvils, extra rocks, statues, ...).
-// Medium and higher render every entry in PROP_ASSET_DEFS. All four headstone
-// shapes stay on every tier: their colliders carry per-shape standable heights,
-// and a tier may never desync what is drawn from what blocks. This list scopes
+// low gfx drops decorative-ONLY props (hanging lanterns, mound rock variety,
+// toadstool clusters). Medium and higher render every entry in PROP_ASSET_DEFS.
+// Everything that CARRIES A COLLIDER stays on every tier — the headstones, and
+// since movement audit 2 the stall/forge dressing and the ruin relics too: a
+// tier may never desync what is drawn from what blocks. This list scopes
 // ONLY the per-tier work (material prewarm); it is deliberately NOT the preload
 // set (see preloadPropKeys below).
 const LOW_TIER_PROP_KEYS: readonly PropKey[] = [
@@ -407,6 +409,14 @@ const LOW_TIER_PROP_KEYS: readonly PropKey[] = [
   'marshReeds',
   'crateWooden',
   'barrel',
+  // Solid dressing renders on EVERY tier (the headstone rule: a tier may never
+  // desync what is drawn from what blocks — movement audit 2): the forge/market
+  // stall dressing and the ruin relics all carry standable colliders.
+  'anvil',
+  'weaponStand',
+  'farmCrate',
+  'statueHead',
+  'statueBlock',
   'delveEntrance2', // delve entrance portal, a landmark, so keep it on low gfx too
   // The race fixtures are GAMEPLAY landmarks (players ride a timed course
   // against them), so every tier renders them: hiding one on low gfx would
@@ -1495,11 +1505,15 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
       scale: [3.1 / stand.size.x, 2.6 / stand.size.y, 2.5 / stand.size.z],
       rot: (keyRand(key, 1) - 0.5) * 0.1,
     });
-    if (!lowProps && s.smithy) {
+    // The dressing is SOLID (sim/colliders.ts registers SMITHY_DRESSING /
+    // STALL_DRESSING circles on every tier), so it renders on every tier too.
+    // The old !lowProps skip predates the colliders and left low-tier clients
+    // walking into invisible anvils and barrels (movement audit 2).
+    if (s.smithy) {
       // Smith Haldren (z1) / Armorer Hode (z3): forge-front dressing
       addParts(g, 'anvil', { x: 1.35, z: 1.15, rot: 0.9, scale: 1.35 });
       addParts(g, 'weaponStand', { x: -1.45, z: 0.6, rot: 0.5 + Math.PI, scale: 1.25 });
-    } else if (!lowProps) {
+    } else {
       addParts(g, 'farmCrate', { x: 1.3, z: 1.05, rot: keyRand(key, 2) * Math.PI, scale: 1.5 });
       addParts(g, 'barrel', { x: -1.35, z: 0.85, rot: keyRand(key, 3) * Math.PI, scale: 1.15 });
     }
@@ -1799,8 +1813,11 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
       const colTop = intact ? sy - 0.1 : 0.65 * sy - 0.1;
       registerHideable(g, circleFootprint(x, z, 0.6, y + colTop, 2.2));
     }
-    if (lowProps) continue;
-    // toppled relics at the ring's heart: half-buried head + fallen column
+    // Toppled relics at the ring's heart: half-buried head + fallen column.
+    // They are SOLID, STANDABLE colliders (sim/colliders.ts ruinRings relics)
+    // on every tier, so no tier may skip drawing them: the old lowProps skip
+    // made every ruin ring's heart three invisible obstacles on low-tier
+    // clients (movement audit 2).
     const fy = ground(r.x - 2, r.z - 3);
     const g = new THREE.Group();
     addParts(g, 'statueHead', {
@@ -1836,7 +1853,7 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
   // ---- mine entrances: timber portal, rock mound, ore cart, lantern --------
   for (const m of getActiveWorldContent().props.mines) {
     const g = new THREE.Group();
-    const abandonedCrypt = m.x < -140 && m.z > 590 && m.z < 630;
+    const abandonedCrypt = isAbandonedCryptMine(m);
     for (const sx of [-1.45, 1.45]) {
       addParts(g, 'timberPillar', { x: sx, scale: [3.4, 3.5, 3.4] });
     }
@@ -1967,11 +1984,13 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
         ],
       });
     }
-    if (!lowProps) {
+    {
       // Loose dressing from the shared DOCK_DRESSING layout (all collidable
       // now, so they sit OFF the pinned-crossable plank walkway, on the
       // shore around the pier entry and the hut). Each seats on its own
-      // ground sample: the shore undulates around the anchor.
+      // ground sample: the shore undulates around the anchor. Drawn on EVERY
+      // tier: the colliders register tier-independently, and the old
+      // !lowProps skip left invisible barrels on the shore (movement audit 2).
       DOCK_DRESSING.forEach((dd, i) => {
         const off = {
           x: dd.x * Math.cos(d.rot) + dd.z * Math.sin(d.rot),
@@ -2030,8 +2049,22 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
   // players enter by talking to Halven; leaveDelve drops them at doorPos.z - 4,
   // on the mouth side for both delves.
   const delvePortals: THREE.Mesh[] = [];
+  // Extract the arch model ONCE, before the marker loop. propAsset() CONSUMES
+  // loadedProps (the parsed scene is released after extraction), so a
+  // per-marker `loadedProps.has()` guard rendered marker #1 and then silently
+  // skipped every later marker — while sim/colliders.ts kept the full arch
+  // slab solid at each of them: the drowned shrine's slab was an invisible
+  // wall in the marsh (movement audit 2). The extract cache is the authority;
+  // it is empty only when the preload itself failed, which the boot already
+  // surfaces loudly (the v0.16.0 farmCrate precedent).
+  let delveArchAsset: PropAsset | null = null;
+  try {
+    delveArchAsset = propAsset('delveEntrance2');
+  } catch {
+    delveArchAsset = null;
+  }
   for (const dm of getActiveWorldContent().props.delveMarkers ?? []) {
-    if (!loadedProps.has('delveEntrance2')) continue;
+    if (!delveArchAsset) continue;
     // The Hellmaw Well is an infernal-realm exclusive: its portal only renders on
     // the infernal realm (entry is server-gated there too). On every other realm
     // the town well stays a plain well with no infernal portal beside it.
@@ -2048,7 +2081,7 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
     const faceSign = delveArchMouthSign(dm.delveId);
 
     // Portal-door model with its own backing slab, no separate vault sphere needed.
-    const arch = propAsset('delveEntrance2');
+    const arch = delveArchAsset;
     const SX = DELVE_ARCH_SCALE,
       SY = DELVE_ARCH_SCALE,
       SZ = DELVE_ARCH_SCALE;

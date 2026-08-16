@@ -109,11 +109,17 @@ export function buildHauntFeatures(seed: number): HauntFeaturesView {
       }
       return m;
     };
-    if (greatTreeScene) {
+    // Place from the loaded scene NOW, or as soon as the load lands. The old
+    // build-time `if (greatTreeScene)` silently produced a treeless wood when
+    // this view was built before the deferred preload resolved — and never
+    // recovered, leaving the sim's trunk colliders standing with no trees to
+    // see for the whole session (movement audit 2). loadGltf dedupes against
+    // the preload, so the late path costs no extra download.
+    const placeGreatTrees = (root: THREE.Group): void => {
       for (const t of WRAITHWOOD_PROPS.greatTrees ?? []) {
         const y = terrainHeight(t.x, t.z, seed);
         if (y < WATER_LEVEL) continue;
-        const tree = greatTreeScene.clone(true);
+        const tree = root.clone(true);
         tree.position.set(t.x, y - 0.2, t.z);
         tree.scale.setScalar(t.r * (2.4 + hash2(t.x, t.z, seed + 4101) * 0.5));
         tree.rotation.y = hash2(t.z, t.x, seed + 4111) * Math.PI * 2;
@@ -129,6 +135,14 @@ export function buildHauntFeatures(seed: number): HauntFeaturesView {
         });
         group.add(tree);
       }
+    };
+    if (greatTreeScene) {
+      placeGreatTrees(greatTreeScene);
+    } else {
+      void loadGltf(GREAT_TREE_URL).then((gltf) => {
+        greatTreeScene = gltf.scene;
+        placeGreatTrees(gltf.scene);
+      });
     }
   }
 

@@ -273,11 +273,14 @@ export function buildGardenFeatures(seed: number): GardenFeaturesView {
       return m2;
     };
     const trees = EVERGARDEN_PROPS.greatTrees ?? [];
-    if (greatTreeScene) {
+    // Place now or as soon as the GLB lands: the build-time-only gate left a
+    // specimen-less garden (trunk colliders with nothing to see) whenever this
+    // view was built before the deferred preload resolved (movement audit 2).
+    const placeGreatTrees = (root: THREE.Group): void => {
       for (const t of trees) {
         const y = terrainHeight(t.x, t.z, seed);
         if (y < WATER_LEVEL) continue;
-        const tree = greatTreeScene.clone(true);
+        const tree = root.clone(true);
         const scale = t.r * (2.4 + hash2(t.x, t.z, seed + 6301) * 0.5);
         tree.position.set(t.x, y - 0.2, t.z);
         tree.scale.setScalar(scale);
@@ -294,6 +297,14 @@ export function buildGardenFeatures(seed: number): GardenFeaturesView {
         });
         group.add(tree);
       }
+    };
+    if (greatTreeScene) {
+      placeGreatTrees(greatTreeScene);
+    } else {
+      void loadGltf(GREAT_TREE_URL).then((gltf) => {
+        greatTreeScene = gltf.scene;
+        placeGreatTrees(gltf.scene);
+      });
     }
   }
 

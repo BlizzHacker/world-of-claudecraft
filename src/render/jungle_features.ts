@@ -358,15 +358,18 @@ export function buildJungleFeatures(seed: number): JungleFeaturesView {
     const vineGeo = new THREE.CylinderGeometry(0.05, 0.028, 1, 3);
     vineGeo.translate(0, -0.5, 0); // hangs from its anchor
     const vineMats = [mat(0x4a8c46, 0.9), mat(0x6aa858, 0.9)]; // two-tone curtain
-    const vineSpots: { x: number; z: number; y: number; s: number; rot: number }[][] = [[], []];
-    const rootParts: THREE.BufferGeometry[] = [];
     const barkMat = mat(0x6a5a48, 0.92);
     const trees = PALMREACH_PROPS.greatTrees ?? [];
-    if (greatTreeScene) {
+    // Place now or as soon as the GLB lands: the build-time-only gate left a
+    // banyan-less strand (trunk colliders with nothing to see) whenever this
+    // view was built before the deferred preload resolved (movement audit 2).
+    const placeGreatTrees = (root: THREE.Group): void => {
+      const vineSpots: { x: number; z: number; y: number; s: number; rot: number }[][] = [[], []];
+      const rootParts: THREE.BufferGeometry[] = [];
       for (const t of trees) {
         const y = terrainHeight(t.x, t.z, seed);
         if (y < WATER_LEVEL) continue;
-        const tree = greatTreeScene.clone(true);
+        const tree = root.clone(true);
         const scale = t.r * (2.5 + hash2(t.x, t.z, seed + 5201) * 0.5);
         tree.position.set(t.x, y - 0.2, t.z);
         tree.scale.setScalar(scale);
@@ -415,26 +418,34 @@ export function buildJungleFeatures(seed: number): JungleFeaturesView {
           });
         }
       }
-    }
-    if (rootParts.length > 0) group.add(mergeBoxes(rootParts, barkMat));
-    // vines scale on Y only: compose with a per-instance non-uniform scale
-    vineSpots.forEach((list, tone) => {
-      if (list.length === 0) return;
-      const mesh = new THREE.InstancedMesh(vineGeo, vineMats[tone], list.length);
-      const m = new THREE.Matrix4();
-      const q = new THREE.Quaternion();
-      const v = new THREE.Vector3();
-      const sc = new THREE.Vector3();
-      list.forEach((sp, i) => {
-        v.set(sp.x, sp.y, sp.z);
-        sc.set(1, sp.s, 1);
-        mesh.setMatrixAt(i, m.compose(v, q, sc));
+      if (rootParts.length > 0) group.add(mergeBoxes(rootParts, barkMat));
+      // vines scale on Y only: compose with a per-instance non-uniform scale
+      vineSpots.forEach((list, tone) => {
+        if (list.length === 0) return;
+        const mesh = new THREE.InstancedMesh(vineGeo, vineMats[tone], list.length);
+        const m = new THREE.Matrix4();
+        const q = new THREE.Quaternion();
+        const v = new THREE.Vector3();
+        const sc = new THREE.Vector3();
+        list.forEach((sp, i) => {
+          v.set(sp.x, sp.y, sp.z);
+          sc.set(1, sp.s, 1);
+          mesh.setMatrixAt(i, m.compose(v, q, sc));
+        });
+        mesh.instanceMatrix.needsUpdate = true;
+        mesh.receiveShadow = true;
+        mesh.computeBoundingSphere();
+        group.add(mesh);
       });
-      mesh.instanceMatrix.needsUpdate = true;
-      mesh.receiveShadow = true;
-      mesh.computeBoundingSphere();
-      group.add(mesh);
-    });
+    };
+    if (greatTreeScene) {
+      placeGreatTrees(greatTreeScene);
+    } else {
+      void loadGltf(GREAT_TREE_URL).then((gltf) => {
+        greatTreeScene = gltf.scene;
+        placeGreatTrees(gltf.scene);
+      });
+    }
   }
 
   return {
