@@ -163,6 +163,74 @@ export interface RealmSeason {
   body: string;
 }
 
+/** Per-realm DISPLAY-TEXT override for one zone. Keys of the parent record are
+ *  canonical zone ids; nothing id-shaped is ever renamed. */
+export interface RealmZoneText {
+  name?: string;
+  welcome?: string;
+  /** POI label overrides keyed by the zone's poi array index. */
+  pois?: Record<string, string>;
+}
+
+export interface RealmNpcText {
+  name?: string;
+  title?: string;
+  greeting?: string;
+}
+
+export interface RealmQuestText {
+  title?: string;
+  text?: string;
+  completion?: string;
+  /** Objective label overrides keyed by objective array index. */
+  objectives?: Record<string, string>;
+}
+
+/** Name-only display override (mobs, items). */
+export interface RealmNamedText {
+  name?: string;
+}
+
+/** Dungeon / delve display override. */
+export interface RealmInstanceText {
+  name?: string;
+  enterText?: string;
+  leaveText?: string;
+}
+
+export interface RealmLetterText {
+  sender?: string;
+  subject?: string;
+  body?: string;
+}
+
+/** A realm's sparse LORE OVERLAY: display strings the realm re-skins on top of
+ *  the shared world content. Keyed by canonical entity ids and resolved inside
+ *  tEntity() (src/ui/entity_i18n.ts) BEFORE the locale table; t() consults the
+ *  `catalog` sub-map the same way for dotted chrome keys. Canonical English sim
+ *  text and the 21 locale overlays are untouched, so a realm that omits this
+ *  field (claudecraft) is byte-identical in behavior and the untranslated-key
+ *  guard stays green. DISPLAY ONLY: ids, i18n keys, save data, music-zone keys,
+ *  dungeon-finder wire tokens and API routes never move here.
+ *  Known limitation: overlay strings are English-only until a per-realm
+ *  per-locale overlay exists; on an overlaid key a non-English player reads the
+ *  realm's English name over otherwise-localized text. */
+export interface RealmEntityText {
+  zones?: Record<string, RealmZoneText>;
+  npcs?: Record<string, RealmNpcText>;
+  quests?: Record<string, RealmQuestText>;
+  mobs?: Record<string, RealmNamedText>;
+  items?: Record<string, RealmNamedText>;
+  dungeons?: Record<string, RealmInstanceText>;
+  delves?: Record<string, RealmInstanceText>;
+  letters?: Record<string, RealmLetterText>;
+  /** Dotted t() catalog keys (chrome copy) this realm overrides. */
+  catalog?: Record<string, string>;
+  /** Rift rank display words keyed by the wire rank letter (C/B/A/S). The UI
+   *  keeps the letter for sorting and prepends the word. */
+  riftRanks?: Record<string, string>;
+}
+
 export interface RealmContent {
   id: RealmId;
   /** Visible name in the picker. */
@@ -232,6 +300,16 @@ export interface RealmContent {
    *  challenge ratio holds (mirrors D2 Hell scaling monster life while heroes stack
    *  Vitality). Deterministic — a pure multiplier off level, draws no rng. */
   combatScaling?: RealmCombatScaling;
+  /** Per-realm LORE OVERLAY (see RealmEntityText): sparse display-string
+   *  re-skin of the shared world, resolved at the tEntity()/t() display sinks.
+   *  Omit (claudecraft) for byte-identical vanilla behavior. */
+  entityText?: RealmEntityText;
+  /** Display word for the shared 'Claudium' soft currency, substituted into
+   *  translated copy by applyRealmBrand exactly like tokenSymbol/shortBrand
+   *  (the word is baked untranslated into every locale). Omit to keep
+   *  'Claudium'. The /api/claudium/* routes, env names, Stripe webhook and
+   *  economy-service wire fields are identifiers and never rename. */
+  currencyName?: string;
 }
 
 /** Per-realm D2 stat ramp. Nothing scales at/below `fromLevel` (mult = 1). Above it,

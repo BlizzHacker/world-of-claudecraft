@@ -2,6 +2,7 @@
 // "infernal-realm". Default Cryptic Realm theme.
 
 import type { RealmContent } from '../types';
+import { INFERNAL_ENTITY_TEXT } from './infernal_lore';
 
 export const INFERNAL_REALM: RealmContent = {
   id: 'infernal',
@@ -114,4 +115,12 @@ export const INFERNAL_REALM: RealmContent = {
   // so a level-99 hero hits for hundreds→thousands. Mobs ramp with them so the
   // descent stays lethal (D2 Hell-style). Nothing changes at/below level 20.
   combatScaling: { fromLevel: 20, hpPerLevel: 1.05, dmgPerLevel: 1.055 },
+  // The Cinderveil lore rebrand: per-realm DISPLAY strings for the shared world
+  // (zones, town cast, hostiles, quests, letters, the Cup, rift-rank words),
+  // resolved in tEntity()/t() before the locale tables. Ids, keys, save data
+  // and routes untouched; realms without entityText behave byte-identically.
+  entityText: INFERNAL_ENTITY_TEXT,
+  // 'Claudium' display word on this realm (applyRealmBrand swap): Cinders,
+  // small coin struck from Abyssal Foundries slag. $CR is untouched.
+  currencyName: 'Cinders',
 };

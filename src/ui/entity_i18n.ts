@@ -19,6 +19,7 @@ import {
   QUESTS,
   ZONES,
 } from '../sim/data';
+import { getActiveRealm, REALMS } from '../sim/realms/registry';
 import type { ItemDef, PlayerClass } from '../sim/types';
 import {
   en,
@@ -398,7 +399,129 @@ function recordFallback(request: EntityTranslationRequest, value: string): void 
   fallbackLog.set(`${language}:${manifestEntry.key}`, { ...manifestEntry, language, value });
 }
 
+// --- Realm lore overlay (RealmContent.entityText) ---------------------------
+//
+// A realm pack may re-skin shared-world DISPLAY strings (the Cinderveil rebrand
+// on infernal) without touching canonical sim text or the 21 locale overlays:
+// tEntity resolves the active realm's sparse overlay FIRST, then falls through
+// to the locale table and the canonical text for every id the realm does not
+// override. Keys are canonical ids; nothing id-shaped changes, so the sim wire,
+// the name->id reverse maps (sim_i18n.ts), music-zone keys and save data are
+// untouched, and a realm without entityText behaves byte-identically.
+//
+// The gate set below is the applyRealmBrand cost discipline: realm packs are
+// static, so the union of overlaid ids is computable once at module init, and a
+// lookup no realm overlays never calls getActiveRealm() (which re-reads the URL
+// query per call in the browser host env).
+const REALM_ENTITY_TEXT_IDS: ReadonlySet<string> = (() => {
+  const ids = new Set<string>();
+  for (const realm of Object.values(REALMS)) {
+    const overlay = realm.entityText;
+    if (!overlay) continue;
+    for (const id of Object.keys(overlay.zones ?? {})) {
+      ids.add(`zone:${id}`);
+      ids.add(`zonePoi:${id}`);
+    }
+    for (const id of Object.keys(overlay.npcs ?? {})) ids.add(`npc:${id}`);
+    for (const id of Object.keys(overlay.quests ?? {})) {
+      ids.add(`quest:${id}`);
+      ids.add(`questObjective:${id}`);
+    }
+    for (const id of Object.keys(overlay.mobs ?? {})) ids.add(`mob:${id}`);
+    for (const id of Object.keys(overlay.items ?? {})) ids.add(`item:${id}`);
+    for (const id of Object.keys(overlay.dungeons ?? {})) ids.add(`dungeon:${id}`);
+    for (const id of Object.keys(overlay.delves ?? {})) ids.add(`delve:${id}`);
+    for (const id of Object.keys(overlay.letters ?? {})) ids.add(`letter:${id}`);
+  }
+  return ids;
+})();
+
+/** True when any realm ships rift-rank display words (riftFloorLabel gate). */
+const REALM_RIFT_RANK_WORDS: boolean = Object.values(REALMS).some(
+  (realm) => realm.entityText?.riftRanks !== undefined,
+);
+
+function requestGateKey(request: EntityTranslationRequest): string {
+  switch (request.kind) {
+    case 'questObjective':
+      return `questObjective:${request.questId}`;
+    case 'zonePoi':
+      return `zonePoi:${request.zoneId}`;
+    default:
+      return `${request.kind}:${request.id}`;
+  }
+}
+
+/** The active realm's display override for this request, or null to fall
+ *  through to the normal locale-table -> canonical-text chain. Own-property
+ *  reads throughout (the R34 prototype-key discipline): these ids arrive from
+ *  the same wire-supplied surfaces the canonical arms guard. */
+function realmEntityText(request: EntityTranslationRequest): string | null {
+  if (!REALM_ENTITY_TEXT_IDS.has(requestGateKey(request))) return null;
+  const overlay = getActiveRealm().entityText;
+  if (!overlay) return null;
+  switch (request.kind) {
+    case 'zone': {
+      const zone = overlay.zones ? ownEntry(overlay.zones, request.id) : undefined;
+      if (!zone) return null;
+      return (request.field === 'welcome' ? zone.welcome : zone.name) ?? null;
+    }
+    case 'zonePoi': {
+      const zone = overlay.zones ? ownEntry(overlay.zones, request.zoneId) : undefined;
+      return zone?.pois?.[request.poiIndex] ?? null;
+    }
+    case 'npc': {
+      const npc = overlay.npcs ? ownEntry(overlay.npcs, request.id) : undefined;
+      if (!npc) return null;
+      if (request.field === 'title') return npc.title ?? null;
+      if (request.field === 'greeting') return npc.greeting ?? null;
+      return npc.name ?? null;
+    }
+    case 'quest': {
+      const quest = overlay.quests ? ownEntry(overlay.quests, request.id) : undefined;
+      if (!quest) return null;
+      if (request.field === 'text') return quest.text ?? null;
+      if (request.field === 'completion') return quest.completion ?? null;
+      return quest.title ?? null;
+    }
+    case 'questObjective': {
+      const quest = overlay.quests ? ownEntry(overlay.quests, request.questId) : undefined;
+      return quest?.objectives?.[request.objectiveIndex] ?? null;
+    }
+    case 'mob': {
+      const mob = overlay.mobs ? ownEntry(overlay.mobs, request.id) : undefined;
+      return mob?.name ?? null;
+    }
+    case 'item': {
+      const item = overlay.items ? ownEntry(overlay.items, request.id) : undefined;
+      return item?.name ?? null;
+    }
+    case 'dungeon':
+    case 'delve': {
+      const table = request.kind === 'dungeon' ? overlay.dungeons : overlay.delves;
+      const instance = table ? ownEntry(table, request.id) : undefined;
+      if (!instance) return null;
+      if (request.field === 'enterText') return instance.enterText ?? null;
+      if (request.field === 'leaveText') return instance.leaveText ?? null;
+      return instance.name ?? null;
+    }
+    case 'letter': {
+      const letter = overlay.letters ? ownEntry(overlay.letters, request.id) : undefined;
+      if (!letter) return null;
+      if (request.field === 'sender') return letter.sender ?? null;
+      if (request.field === 'body') return letter.body ?? null;
+      return letter.subject ?? null;
+    }
+    default:
+      return null;
+  }
+}
+
 export function tEntity(request: EntityTranslationRequest): string {
+  // Realm lore overlay wins over the locale table (see realmEntityText above);
+  // an id the active realm does not override falls through unchanged.
+  const realmText = realmEntityText(request);
+  if (realmText !== null) return interpolateSource(realmText, request.values);
   const key = entityTranslationKey(request);
   const translated = tOptional(key, request.values);
   if (translated !== null) return translated;
@@ -447,7 +570,19 @@ export function dungeonDisplayName(dungeonId: string): string {
  *  map-window summary format it identically instead of each re-declaring the
  *  same rank ? label ternary. */
 export function riftFloorLabel(name: string, rank: string | null): string {
-  return rank ? t('hud.core.riftLabelRanked', { name, rank }) : t('hud.core.riftLabel', { name });
+  if (rank) {
+    // Realm tear-language (RealmContent.entityText.riftRanks): the letter stays
+    // (sorting, muscle memory), the realm's word for how wide the veil is torn
+    // rides with it -- "Rend (A)". Realms without rank words keep the bare letter.
+    let rankDisplay = rank;
+    if (REALM_RIFT_RANK_WORDS) {
+      const words = getActiveRealm().entityText?.riftRanks;
+      const word = words ? ownEntry(words, rank) : undefined;
+      if (word) rankDisplay = `${word} (${rank})`;
+    }
+    return t('hud.core.riftLabelRanked', { name, rank: rankDisplay });
+  }
+  return t('hud.core.riftLabel', { name });
 }
 
 export function resetEntityTranslationFallbackLog(): void {

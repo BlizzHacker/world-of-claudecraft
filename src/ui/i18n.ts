@@ -11,7 +11,7 @@
 // so the only reference to the barrel below is the dead re-export line - which Rollup
 // tree-shakes out of the app chunk.
 
-import { getActiveRealm } from '../sim/realms/registry';
+import { getActiveRealm, REALMS } from '../sim/realms/registry';
 import type {
   DeepPartial,
   EnTranslations,
@@ -358,6 +358,19 @@ function tableFor(lang: SupportedLanguage): EnTranslations {
 // 'WOC'/'WoC' and is a pure no-op.
 const TICKER_RE = /\bWOC\b/g;
 const BRAND_RE = /\bWoC\b/g;
+// `Claudium` is the shared soft-currency word, baked untranslated into every
+// locale exactly like the ticker; a realm that declares currencyName (infernal:
+// 'Cinders') swaps it under the same contract. Routes, env names and wire
+// fields spell claudium in lowercase identifiers and are never display text.
+const CURRENCY_RE = /\bClaudium\b/g;
+
+// Realm CATALOG overlay (RealmContent.entityText.catalog): dotted chrome keys a
+// realm re-brands (the infernal Cup strings, the rift-rank line format). Realm
+// packs are static, so the union of overridden keys is computable once; a key
+// no realm overrides costs one Set lookup and never resolves the active realm.
+const REALM_CATALOG_KEYS: ReadonlySet<string> = new Set(
+  Object.values(REALMS).flatMap((realm) => Object.keys(realm.entityText?.catalog ?? {})),
+);
 
 function applyRealmBrand(text: string): string {
   let out = text;
@@ -369,10 +382,21 @@ function applyRealmBrand(text: string): string {
     const brand = getActiveRealm().shortBrand ?? 'Cryptic Realm';
     if (brand !== 'WoC') out = out.replace(BRAND_RE, brand);
   }
+  if (out.includes('Claudium')) {
+    const currency = getActiveRealm().currencyName ?? 'Claudium';
+    if (currency !== 'Claudium') out = out.replace(CURRENCY_RE, currency);
+  }
   return out;
 }
 
 export function t(key: TranslationKey, values?: InterpolationValues): string {
+  // Realm catalog overlay resolves before the locale table (same precedence as
+  // the tEntity realm overlay); keys no realm overrides skip in one Set lookup.
+  if (REALM_CATALOG_KEYS.has(key)) {
+    const catalog = getActiveRealm().entityText?.catalog;
+    const override = catalog && Object.hasOwn(catalog, key) ? catalog[key] : undefined;
+    if (override !== undefined) return applyRealmBrand(interpolate(override, values));
+  }
   const parts = key.split('.');
   let current: unknown = tableFor(currentLanguage);
   for (const part of parts) {
