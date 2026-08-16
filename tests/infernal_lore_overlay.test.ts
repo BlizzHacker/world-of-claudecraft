@@ -103,9 +103,14 @@ describe('infernal lore overlay (the Cinderveil)', () => {
     useRealm('infernal');
     expect(t('loading.world')).toBe('Entering the Cinderveil...');
     expect(t('hudChrome.wocStore.skins.fletcher_s_guild_bow.lore')).toContain('Sorrowfen');
+    // The Cup banner nations and the battleground blurb are chrome keys too.
+    expect(t('hudChrome.vcup.nation.vale')).toBe('Candlebrook Vale');
+    expect(t('hudChrome.bg.blurb')).toContain('Martyrspike');
     useRealm('claudecraft');
     expect(t('loading.world')).toBe('Loading world...');
     expect(t('hudChrome.wocStore.skins.fletcher_s_guild_bow.lore')).toContain('Mirefen');
+    expect(t('hudChrome.vcup.nation.vale')).toBe('Eastbrook Vale');
+    expect(t('hudChrome.bg.blurb')).toContain('Thornpeak');
   });
 
   it('music-zone label overrides keep identifier keys and only re-skin values', () => {

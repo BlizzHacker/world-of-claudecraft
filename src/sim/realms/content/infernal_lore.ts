@@ -579,6 +579,7 @@ export const INFERNAL_ENTITY_TEXT: RealmEntityText = {
   },
   "catalog": {
     "hud.core.riftLabelRanked": "{rank}: {name}",
+    "hudChrome.bg.blurb": "Two ruined keeps face each other across a walled hollow in the shadow of Martyrspike: Crimson to the south, Azure to the north, and the older Ruin Courtyard between them that neither has ever held. Five a side, one banner each, and the first to carry three of theirs home takes the field.",
     "hudChrome.keybinds.valecup": "Tallow Cup",
     "hudChrome.vcup.bannerDraw": "A draw at Harrowfield.",
     "hudChrome.vcup.bannerFound": "The Tallow Cup calls: {nationA} vs {nationB}!",
@@ -600,6 +601,9 @@ export const INFERNAL_ENTITY_TEXT: RealmEntityText = {
     "hudChrome.vcup.logQueued": "You join the Tallow Cup queue for {bracket} (position {position}).",
     "hudChrome.vcup.logUnqueued": "You leave the Tallow Cup queue.",
     "hudChrome.vcup.logWin": "You win the bout at Harrowfield.",
+    "hudChrome.vcup.nation.mirefen": "The Sorrowfen",
+    "hudChrome.vcup.nation.thornpeak": "Martyrspike",
+    "hudChrome.vcup.nation.vale": "Candlebrook Vale",
     "hudChrome.vcup.offlineNote": "The fixture book is closed. The Tallow Cup is not available right now.",
     "hudChrome.vcup.queueNote": "Queue from anywhere; the whistle calls you to Harrowfield.",
     "hudChrome.vcup.title": "The Tallow Cup",
