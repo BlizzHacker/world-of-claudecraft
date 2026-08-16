@@ -1629,6 +1629,7 @@ const UI_DOM_MODULES = [
   'src/ui/cryptic/pwa_install.ts',
   'src/ui/cryptic/realm_env.ts',
   'src/ui/cryptic/realm_visual_editor.ts',
+  'src/ui/cryptic/realm_visual_overrides.ts',
   'src/ui/cryptic/session.ts',
   'src/ui/cryptic/skilltree.ts',
   'src/ui/cryptic/theme_select.ts',
