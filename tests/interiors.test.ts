@@ -11,6 +11,7 @@ import {
 import {
   buildingAtPoint,
   buildingDoorAt,
+  buildingDoorForPoint,
   buildingDoorNear,
   buildingEnterableNear,
   computeBuildingDoors,
@@ -138,6 +139,32 @@ describe('building interiors (enterable town buildings)', () => {
     p.pos.z = b.z + 6;
     sim.interact();
     expect(isInteriorPos(p.pos.x)).toBe(true);
+  });
+
+  it('buildingDoorForPoint maps every enterable footprint to its OWN door (the click-to-enter walk target)', () => {
+    // The Enter menu walks the player to this point before pressing the
+    // interact: from the click spot a bare interact loses the sim's distance
+    // arbitration to a doorstep NPC (the mill's tinker at 2.6yd beat the door
+    // at 2.9yd), so the accepted menu entered nothing. Each footprint must
+    // resolve to the door computeBuildingDoors placed on that same building.
+    forceRealm('infernal');
+    const buildings = getActiveWorldContent().props.buildings;
+    const doors = computeBuildingDoors(buildings);
+    for (const b of buildings) {
+      if (!buildingAtPoint(b.x, b.z)) continue; // not enterable
+      const door = buildingDoorForPoint(b.x, b.z);
+      expect(door, `building kind ${b.kind} @${b.x},${b.z} has no door mapping`).not.toBeNull();
+      const nearest = doors.reduce((a, c) =>
+        Math.hypot(a.x - b.x, a.z - b.z) <= Math.hypot(c.x - b.x, c.z - b.z) ? a : c,
+      );
+      // Its OWN door: the nearest computed door to the building centre (door
+      // rings are disjoint by the density clamp, so nearest = own).
+      expect(door!.x).toBeCloseTo(nearest.x, 5);
+      expect(door!.z).toBeCloseTo(nearest.z, 5);
+      expect(door!.interiorType).toBe(nearest.interiorType);
+    }
+    // And a miss stays a miss: open ground maps to no door.
+    expect(buildingDoorForPoint(0, 60)).toBeNull();
   });
 
   it('buildingAtPoint / buildingEnterableNear are null on vanilla realms', () => {

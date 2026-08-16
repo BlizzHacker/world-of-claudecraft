@@ -285,7 +285,7 @@ import {
   ZONES,
 } from './sim/data';
 import { canEquipItem } from './sim/equipment_rules';
-import { buildingAtPoint, buildingDoorNear } from './sim/interiors';
+import { buildingAtPoint, buildingDoorForPoint, buildingDoorNear } from './sim/interiors';
 import { findPlayerPath, resolvePlayerDestination } from './sim/pathfind';
 // CR overlay: heavy game runtime (Renderer, Sim, Hud, audio, music, voice, sfx,
 // MobileControls, perf, Input, Keybinds, camera-follow yaw helpers, CharacterPreview,
@@ -530,6 +530,13 @@ const ATTACK_MOVE_ACQUIRE_RANGE = 12; // yards; an attack-move toward open groun
 // How close (to a building's centre) a click-to-enter prompt appears. Generous so
 // "click a building near me" reliably offers Enter; the server re-validates entry.
 const BUILDING_CLICK_ENTER_RANGE = 26;
+// Click-to-enter's Enter walks to the DOOR POINT before pressing the interact;
+// inside this radius of it the door wins the sim's distance arbitration against
+// anything short of a corpse underfoot (a doorstep NPC in particular).
+const DOOR_ENTER_PRESS_RANGE = 1.4;
+// Give up on a blocked/abandoned walk-to-door quietly; a later manual interact
+// behaves normally.
+const DOOR_ENTER_WALK_TIMEOUT_MS = 25000;
 // Aura kinds that stop the player from moving (mirrors the sim's isRooted/isStunned):
 // while one of these is up, click-to-move can't make progress, so the destination
 // marker shows a "held" state instead of looking like a stuck game.
@@ -3638,7 +3645,34 @@ async function startGame(
           const pp = world.player.pos;
           const near = Math.hypot(pp.x - hit.cx, pp.z - hit.cz) <= BUILDING_CLICK_ENTER_RANGE;
           if (near) {
-            hud.openBuildingEnterPrompt(hit.interiorType, () => world.interact());
+            // Enter = WALK TO THE DOOR, then interact. A bare interact from the
+            // click spot loses the sim's distance arbitration to any NPC nearer
+            // than the door point (the artisan on every workshop porch: the
+            // tinker at 2.6yd beat the mill door at 2.9yd), so the menu read as
+            // accepted while the sim talked to the NPC instead. At the door
+            // point the door wins everywhere — online and offline, no protocol
+            // change. Headless player-path probe: doorprobe v13/v14.
+            const door = buildingDoorForPoint(g!.x, g!.z);
+            hud.openBuildingEnterPrompt(hit.interiorType, () => {
+              const dp = door ? { x: door.x, z: door.z } : null;
+              const from = world.player.pos;
+              if (!dp || Math.hypot(from.x - dp.x, from.z - dp.z) <= DOOR_ENTER_PRESS_RANGE) {
+                world.interact();
+                return;
+              }
+              const target = resolvedClickMoveTarget(dp);
+              input.setClickMoveTarget(target, 0.5, null, clickMovePathTo(target));
+              const startedAt = performance.now();
+              const timer = window.setInterval(() => {
+                const p = world.player.pos;
+                if (Math.hypot(p.x - dp.x, p.z - dp.z) <= DOOR_ENTER_PRESS_RANGE) {
+                  window.clearInterval(timer);
+                  world.interact();
+                } else if (performance.now() - startedAt > DOOR_ENTER_WALK_TIMEOUT_MS) {
+                  window.clearInterval(timer);
+                }
+              }, 200);
+            });
           } else {
             // Too far — walk toward the building's near edge, then they can click again.
             if (wantClickFeedback) renderer.spawnClickMarker(g!.x, g!.z, false);

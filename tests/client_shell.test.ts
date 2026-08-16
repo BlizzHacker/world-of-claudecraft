@@ -2108,14 +2108,21 @@ describe('client HTML shell', () => {
     // sim-level door tests stayed green. Pin the full wiring: footprint
     // hit-test, range gate, prompt, authoritative enter.
     expect(mainTs).toContain(
-      "import { buildingAtPoint, buildingDoorNear } from './sim/interiors';",
+      "import { buildingAtPoint, buildingDoorForPoint, buildingDoorNear } from './sim/interiors';",
     );
     expect(mainTs).toContain('const hit = g ? buildingAtPoint(g.x, g.z) : null;');
     expect(mainTs).toContain(
       'Math.hypot(pp.x - hit.cx, pp.z - hit.cz) <= BUILDING_CLICK_ENTER_RANGE',
     );
+    // Enter WALKS to the door point before pressing the interact: a bare
+    // interact from the click spot loses the sim's distance arbitration to any
+    // doorstep NPC (the mill's tinker), so the menu accepted and nothing
+    // happened. The walk ends inside DOOR_ENTER_PRESS_RANGE, where the door
+    // wins everywhere.
+    expect(mainTs).toContain('hud.openBuildingEnterPrompt(hit.interiorType, () => {');
+    expect(mainTs).toContain('const door = buildingDoorForPoint(g!.x, g!.z);');
     expect(mainTs).toContain(
-      'hud.openBuildingEnterPrompt(hit.interiorType, () => world.interact());',
+      'input.setClickMoveTarget(target, 0.5, null, clickMovePathTo(target));',
     );
     // The interact-key half (the door arbitrating by distance against a
     // doorstep NPC) is pinned behaviorally in tests/nearby_interaction.test.ts.
