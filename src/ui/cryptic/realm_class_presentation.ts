@@ -937,6 +937,20 @@ export function infernalHeroChoicesForRealm(realm: RealmContent): InfernalHeroPr
   );
 }
 
+/**
+ * Whether a class card offers the compact Female/Male body toggle: true when
+ * the active realm publishes a sex-suffixed body override for the card's base
+ * class (`class:<cls>:f` / `class:<cls>:m`, see server/realm_visuals.ts
+ * OVERRIDE_KEY_RE). One published sex is enough - the un-suffixed body keeps
+ * serving the other sex, mirroring overrideEntryForCharacter's fallback, so
+ * the toggle is offered as soon as either body exists.
+ */
+export function classSexToggleAvailable(realmId: string, baseClass: PlayerClass): boolean {
+  return (
+    firstRealmVisualOverride(realmId, [`class:${baseClass}:f`, `class:${baseClass}:m`]) !== null
+  );
+}
+
 export function presentationFactionsForRealm(realm: RealmContent): string[] {
   if (realm.id === 'infernal') {
     return [...new Set(infernalHeroChoicesForRealm(realm).map((choice) => choice.faction))];

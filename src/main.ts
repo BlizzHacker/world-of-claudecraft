@@ -221,6 +221,7 @@ import {
 import {
   setBodyOverrides,
   skinCount,
+  VISUALS,
   visualKeyForBodyAsset,
   visualKeyForCharacter,
   weaponSkinModelUrl,
@@ -230,7 +231,9 @@ import {
   type ArmorLoadout,
   type ArmorSetId,
   classArmorSet,
+  defaultLashes,
   fullSet,
+  type Gender,
   type ModularAppearance,
   type ModularLook,
   normalizeAppearance,
@@ -472,6 +475,7 @@ import { mountPwaInstall } from './ui/cryptic/pwa_install';
 import {
   classChoicesForRealm,
   classPresentationForRealm,
+  classSexToggleAvailable,
   infernalHeroChoicesForRealm,
   presentationFactionsForRealm,
   realmHasClassOverlay,
@@ -480,6 +484,7 @@ import { openRealmVisualEditor } from './ui/cryptic/realm_visual_editor';
 import {
   fetchRealmVisualOverrides,
   getRealmVisualOverrides,
+  realmVisualOverride,
 } from './ui/cryptic/realm_visual_overrides';
 import { clearCrypticSession, readCrypticSession, writeCrypticSession } from './ui/cryptic/session';
 import { mountSkillTree } from './ui/cryptic/skilltree';
@@ -5676,8 +5681,13 @@ function syncAppearanceUi(panelId: string, cls: PlayerClass): void {
     mountAppearanceCustomizer(host, {
       value: modularAppearance,
       onChange: (next) => {
+        const genderChanged = next.gender !== modularAppearance.gender;
         modularAppearance = next;
         storeAppearance(next);
+        // The Body tab's Male/Female control and the class cards' compact
+        // sex chips are two views of the SAME appearance.gender: keep the
+        // grid's chips in step when the pick came from the customizer.
+        if (genderChanged) syncCreateSexChips(next.gender);
         const c = panelClass();
         characterPreview?.setModular(next, creationLoadout(c), c);
       },
@@ -5841,7 +5851,52 @@ function realmClassPresentation(cls: PlayerClass) {
   return classPresentationForRealm(realm, cls);
 }
 
+/**
+ * The explicitly picked body sex for the pending create, and ONLY when the
+ * active realm publishes a body for that sex of this class (class:<cls>:f/:m).
+ * The sex WITHOUT a published suffixed body returns null so the card keeps its
+ * canonical resolution (the un-suffixed/hero body serves it). Scoped to the
+ * create grid's selected card - the same DOM the hero special case reads - so
+ * the offline picker and the char-select fallback preview are untouched.
+ */
+function charCreateSexPick(cls: PlayerClass): Gender | null {
+  const card = document.querySelector<HTMLElement>(
+    '#charcreate-panel .mini-class.sel[data-sex-toggle="1"]',
+  );
+  if (!card || card.dataset.class !== cls) return null;
+  const gender: Gender = modularAppearance.gender === 'female' ? 'female' : 'male';
+  const realm = realmContentForCharacterUi();
+  return realmVisualOverride(realm.id, `class:${cls}:${gender === 'female' ? 'f' : 'm'}`)
+    ? gender
+    : null;
+}
+
 function showClassPreview(cls: PlayerClass): void {
+  // The card's compact Female/Male toggle: an explicit sex pick resolves
+  // hero-neutrally (realmHeroId: null) through THE character resolver
+  // (visualKeyForCharacter, gender arg), so the preview mounts the same
+  // sex-suffixed realm body (class:<cls>:f/:m) the created character's
+  // appearance.gender selects on the roster and in the world. Hero-neutral on
+  // purpose: a published hero: override wins over the suffixed class key in
+  // overrideEntryForCharacter, which would leave the toggle inert on every
+  // card that carries a hero body - i.e. all of them on the infernal grid.
+  const sexPick = charCreateSexPick(cls);
+  if (sexPick) {
+    const key = visualKeyForCharacter({
+      realm: realmContentForCharacterUi().id,
+      realmHeroId: null,
+      cls,
+      gender: sexPick,
+    });
+    const url = VISUALS[key]?.url;
+    if (url) {
+      // Same never-blank pattern as the realm-asset path below: class rig up
+      // first, the suffixed body replaces it on arrival.
+      characterPreview?.setClass(cls);
+      characterPreview?.setExternalModel(url);
+      return;
+    }
+  }
   const realmClass = realmClassPresentation(cls);
   if (realmClass?.assetUrl) {
     // setExternalModel keeps whatever body is mounted until the GLB lands, which
@@ -6095,11 +6150,103 @@ function variantToggleGlyph(label: string): string {
   return label;
 }
 
+// ---------------------------------------------------------------------------
+// Class-card body-sex toggle (charcreate grid).
+//
+// The sorcerer card's Female/Male toggle is a HERO-variant mechanism: each side
+// is its own hidden selection (variantOf) submitting its own realmHeroId. The
+// chips below are the class-level counterpart for every OTHER card: they render
+// whenever the active realm publishes a sex-suffixed body override for the
+// card's base class (class:<cls>:f / class:<cls>:m), and the pick is written
+// into the SAME stored modular appearance the customizer's Body tab edits
+// (appearance.gender). That one value is what the creator already persists with
+// the character, what the roster threads into visualKeyForCharacter, and what
+// the world's sex-suffixed body resolution reads - so the choice survives with
+// zero server changes.
+// ---------------------------------------------------------------------------
+
+/** The compact Female/Male chip row for a class card whose realm publishes a
+ *  sex-suffixed body - the same markup the hero-variant toggle renders, driven
+ *  by appearance.gender (data-gender) instead of a hidden hero id. */
+function sexToggleChipsHtml(name: string): string {
+  const active: Gender = modularAppearance.gender === 'female' ? 'female' : 'male';
+  return `<span class="mini-class-variants" role="group" aria-label="${escapeHtml(`${name} body`)}">${(
+    ['female', 'male'] as const
+  )
+    .map((gender) => {
+      const label = gender === 'female' ? 'Female' : 'Male';
+      const sel = gender === active;
+      return `<span class="mini-class-variant${sel ? ' sel' : ''}" role="button" tabindex="0" data-gender="${gender}" aria-pressed="${sel ? 'true' : 'false'}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}">${escapeHtml(variantToggleGlyph(label))}</span>`;
+    })
+    .join('')}</span>`;
+}
+
+/** One pending character, one body sex: repaint every card's sex chips so the
+ *  grid never shows two different picks at once. */
+function syncCreateSexChips(gender: Gender): void {
+  document
+    .querySelectorAll<HTMLElement>('#charcreate-panel .mini-class-variant[data-gender]')
+    .forEach((chip) => {
+      const sel = chip.dataset.gender === gender;
+      chip.classList.toggle('sel', sel);
+      chip.setAttribute('aria-pressed', sel ? 'true' : 'false');
+    });
+}
+
+/** Write the card toggle's pick into the stored modular appearance. Routed
+ *  through the mounted customizer when it is up, so its own Male/Female control
+ *  repaints and its onChange (store + chip sync) runs exactly as if the pick
+ *  had been made there; otherwise the store is written directly. Lashes follow
+ *  the body for the same reason the customizer's own control sets them. */
+function setCharCreateGender(gender: Gender): void {
+  if (modularAppearance.gender === gender) return;
+  const ui = appearanceUis.get('charcreate-class-details');
+  if (ui) {
+    ui.set({ gender, lashes: defaultLashes(gender) });
+    return;
+  }
+  modularAppearance = normalizeAppearance({
+    ...modularAppearance,
+    gender,
+    lashes: defaultLashes(gender),
+  });
+  storeAppearance(modularAppearance);
+}
+
+/** Bind a card's sex chips: picking one persists the gender, repaints every
+ *  card's chips, and reruns the caller's select flow so the details panel and
+ *  the 3D preview resolve with the new sex. */
+function wireSexToggleChips(card: HTMLElement, select: () => void): void {
+  card.querySelectorAll<HTMLElement>('.mini-class-variant[data-gender]').forEach((chip) => {
+    const pick = () => {
+      const gender: Gender = chip.dataset.gender === 'female' ? 'female' : 'male';
+      setCharCreateGender(gender);
+      syncCreateSexChips(gender);
+      // The redundant-render guard elides same-class re-renders; a sex flip on
+      // the already-selected card must still remount the preview.
+      currentlyRenderedClass['charcreate-class-details'] = null;
+      select();
+    };
+    chip.addEventListener('click', (event) => {
+      event.stopPropagation();
+      pick();
+    });
+    chip.addEventListener('keydown', (event) => {
+      const key = (event as KeyboardEvent).key;
+      if (key !== 'Enter' && key !== ' ') return;
+      event.preventDefault();
+      event.stopPropagation();
+      pick();
+    });
+  });
+}
+
 function paintInfernalHeroRoster(
   row: HTMLElement,
   choices: ReturnType<typeof infernalHeroChoicesForRealm>,
   activeFaction: string | null,
 ): void {
+  const realmId = realmContentForCharacterUi().id;
   row.classList.add('infernal-hero-roster');
   row.innerHTML = choices
     // Hidden variant entries never render a card of their own; they are only
@@ -6128,7 +6275,14 @@ function paintInfernalHeroRoster(
             )
             .join('')}</span>`
         : '';
-      return `<button type="button" class="mini-class realm-skinned realm-playable${choice.assetUrl ? ' has-portrait' : ''}" data-class="${choice.baseClass}" data-hero-id="${defaultHeroId}" data-faction="${choice.faction}" data-realm-faction="${choice.faction}" data-realm-asset="${choice.assetUrl}" data-realm-asset-name="${choice.assetName}" data-realm-asset-status="ready" aria-label="${escapeHtml(`${choice.name}, ${choice.faction}`)}" aria-pressed="false" title="${escapeHtml(choice.assetName ?? choice.name)}">${portraitHtml}<span class="mini-class-text"><span class="mini-class-label">${escapeHtml(choice.name)}</span><span class="mini-class-faction">${escapeHtml(choice.faction)}</span></span>${variantsHtml}</button>`;
+      // Class-level body-sex toggle for cards WITHOUT a hero-variant toggle:
+      // the hero mechanism is the more specific one, so a card never renders
+      // both. Availability is data-driven off the published override map.
+      const sexHtml =
+        !variantsHtml && classSexToggleAvailable(realmId, choice.baseClass)
+          ? sexToggleChipsHtml(choice.name)
+          : '';
+      return `<button type="button" class="mini-class realm-skinned realm-playable${choice.assetUrl ? ' has-portrait' : ''}" data-class="${choice.baseClass}" data-hero-id="${defaultHeroId}"${sexHtml ? ' data-sex-toggle="1"' : ''} data-faction="${choice.faction}" data-realm-faction="${choice.faction}" data-realm-asset="${choice.assetUrl}" data-realm-asset-name="${choice.assetName}" data-realm-asset-status="ready" aria-label="${escapeHtml(`${choice.name}, ${choice.faction}`)}" aria-pressed="false" title="${escapeHtml(choice.assetName ?? choice.name)}">${portraitHtml}<span class="mini-class-text"><span class="mini-class-label">${escapeHtml(choice.name)}</span><span class="mini-class-faction">${escapeHtml(choice.faction)}</span></span>${variantsHtml}${sexHtml}</button>`;
     })
     .join('');
   hydrateHeroCardPortraits(row);
@@ -6177,6 +6331,9 @@ function paintInfernalHeroRoster(
         pick();
       });
     });
+    // Class-level body-sex toggle (cards without hero variants): persists
+    // appearance.gender and reruns the same select flow the variant chips use.
+    wireSexToggleChips(card, select);
   });
   const first = row.querySelector<HTMLElement>('.mini-class');
   if (first) first.click();
@@ -6309,6 +6466,8 @@ function paintRealmClassChoices(): void {
       button.setAttribute('aria-label', classDisplayName(cls));
       button.removeAttribute('title');
       button.querySelector('.mini-class-faction')?.remove();
+      delete button.dataset.sexToggle;
+      button.querySelector('.mini-class-variants')?.remove();
       button.style.removeProperty('--class-color');
       return;
     }
@@ -6344,6 +6503,19 @@ function paintRealmClassChoices(): void {
     const badge = factionBadgeForMiniClass(button);
     badge.textContent =
       choice.assetStatus === 'ready' ? choice.faction : `${choice.faction} - ${statusLabel}`;
+    // Class-level body-sex toggle on the generic (non-roster) grid: rendered
+    // whenever the realm publishes class:<cls>:f/:m. The buttons are static
+    // markup, so the chip row is rebuilt each paint and freshly bound; picking
+    // a chip re-clicks the card so the init-time select flow (selection state,
+    // details, preview) runs with the new sex.
+    button.querySelector('.mini-class-variants')?.remove();
+    if (classSexToggleAvailable(realm.id, cls)) {
+      button.dataset.sexToggle = '1';
+      button.insertAdjacentHTML('beforeend', sexToggleChipsHtml(choice.name));
+      wireSexToggleChips(button, () => button.click());
+    } else {
+      delete button.dataset.sexToggle;
+    }
   });
 }
 

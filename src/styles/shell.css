@@ -8074,6 +8074,15 @@
     margin-left: auto;
     gap: 3px;
   }
+  /* The same chip row on a GENERIC class card (a realm publishing a
+     class:<cls>:f/:m body without the hero roster): centred under the card's
+     label, clear of the emblem geometry above it. */
+  #charcreate-panel .mini-class-row:not(.infernal-hero-roster) .mini-class .mini-class-variants {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+    margin-top: 4px;
+  }
   .mini-class-variants .mini-class-variant {
     display: inline-flex;
     align-items: center;
