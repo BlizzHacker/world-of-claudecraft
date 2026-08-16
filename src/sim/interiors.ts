@@ -35,12 +35,28 @@ const TYPE_ENTER_TEXT: Record<number, string> = {
 /** Map a building to its interior type. Inns → inn; the FIRST house in a town → the
  *  shop (so the merchant/shop room is reachable), remaining houses → house; chapels
  *  are landmarks, not enterable. `houseSeen` counts houses already assigned so exactly
- *  one becomes the shop per town. */
+ *  one becomes the shop per town.
+ *
+ *  The upstream v0.35 Veiled Hollow set (BuildingDef kinds `hollow*`) maps onto the
+ *  same four rooms: its inn/house/chapel are those rooms in a different dress, and
+ *  its smith and market ARE shops, so the town keeps a reachable merchant without
+ *  leaning on the first-house rule. Leaving a kind out of this map silently makes
+ *  every building of that kind solid scenery (the v0.35.1 intake regression: all 8
+ *  Veiled Hollow buildings lost their doors because none of these kinds mapped). */
 function interiorTypeForBuilding(kind: string, houseSeen: number): number | null {
-  if (kind === 'inn') return INTERIOR_TYPE_INN;
-  if (kind === 'house') return houseSeen === 0 ? INTERIOR_TYPE_SHOP : INTERIOR_TYPE_HOUSE;
-  if (kind === 'chapel') return INTERIOR_TYPE_CHAPEL;
+  if (kind === 'inn' || kind === 'hollowInn') return INTERIOR_TYPE_INN;
+  if (isHouseKind(kind)) return houseSeen === 0 ? INTERIOR_TYPE_SHOP : INTERIOR_TYPE_HOUSE;
+  if (kind === 'chapel' || kind === 'hollowChapel') return INTERIOR_TYPE_CHAPEL;
+  if (kind === 'hollowSmith' || kind === 'hollowMarket') return INTERIOR_TYPE_SHOP;
   return null; // unknown kind — not enterable
+}
+
+/** Kinds that participate in the first-house-becomes-the-shop count. Every caller
+ *  iterating buildings MUST advance `houseSeen` through this predicate (not a raw
+ *  `kind === 'house'` check) or the door walk and the click walk disagree on which
+ *  building is the shop. */
+function isHouseKind(kind: string): boolean {
+  return kind === 'house' || kind === 'hollowHouse';
 }
 
 // Room-local furniture layout per interior type. Coords are room-instance-local
@@ -182,7 +198,7 @@ export function computeBuildingDoors(
   let houseSeen = 0;
   for (const b of buildings) {
     const interiorType = interiorTypeForBuilding(b.kind, houseSeen);
-    if (b.kind === 'house') houseSeen++;
+    if (isHouseKind(b.kind)) houseSeen++;
     if (interiorType == null) continue;
     const frontLocalZ = b.d / 2;
     const s = Math.sin(b.rot);
@@ -263,7 +279,7 @@ export function buildingAtPoint(
   let houseSeen = 0;
   for (const b of getActiveWorldContent().props.buildings) {
     const interiorType = interiorTypeForBuilding(b.kind, houseSeen);
-    if (b.kind === 'house') houseSeen++;
+    if (isHouseKind(b.kind)) houseSeen++;
     if (interiorType == null) continue;
     // Transform the point into the building's local (un-rotated) frame and test the box.
     const s = Math.sin(-b.rot);
@@ -289,7 +305,7 @@ export function buildingEnterableNear(x: number, z: number, range: number): numb
   let houseSeen = 0;
   for (const b of getActiveWorldContent().props.buildings) {
     const interiorType = interiorTypeForBuilding(b.kind, houseSeen);
-    if (b.kind === 'house') houseSeen++;
+    if (isHouseKind(b.kind)) houseSeen++;
     if (interiorType == null) continue;
     const d2 = (x - b.x) ** 2 + (z - b.z) ** 2;
     if (d2 <= r2 && d2 < bestD2) {

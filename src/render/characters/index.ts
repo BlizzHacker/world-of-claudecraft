@@ -2,6 +2,7 @@
 // rigs. Asset fetches start at module import (see assets.ts) and register
 // with the preload gate, so createCharacterVisual is synchronous by the time
 // the Renderer constructs views.
+import { resolveActiveRealmId } from '../../sim/realms/registry';
 import { type Entity, isMechWearer, type PlayerClass } from '../../sim/types';
 import { logAssetMissOnce } from './asset_miss_log';
 import { mechHeldWeaponOverride, modularVisualKey, overrideVisualKeyForEntity, VISUALS, visualKeyFor } from './manifest';

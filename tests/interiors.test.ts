@@ -1,6 +1,13 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
-import { getActiveWorldContent, isInteriorPos } from '../src/sim/data';
+import {
+  BUILTIN_WORLD,
+  getActiveWorldContent,
+  isBuiltinWorldContent,
+  isInteriorPos,
+  setActiveWorldContent,
+  zoneAt,
+} from '../src/sim/data';
 import {
   buildingAtPoint,
   buildingDoorAt,
@@ -150,6 +157,68 @@ describe('building interiors (enterable town buildings)', () => {
     }
     // Sanity: the realm actually has a chapel to prove the fix matters.
     expect(kinds.has('chapel')).toBe(true);
+    // And the v0.35 Veiled Hollow set is actually placed (the kinds whose missing
+    // mapping made all 8 of its buildings solid scenery after the intake).
+    expect(kinds.has('hollowInn')).toBe(true);
     void sim;
+  });
+
+  it('theme spread keeps every building in its own zone, ringed around its hub (v0.35.1 regression)', () => {
+    // Origin-anchored spread (x * 2.6) hurled 64 of 78 buildings 500-3400yd out of
+    // their towns once upstream v0.35 shipped hub towns far from the origin: doors,
+    // colliders and meshes all moved together, leaving building-less NPC squares and
+    // misplaced obstacles in other zones. Spread must displace a building around its
+    // OWN zone hub, so towns keep their buildings and doors stay walkable from town.
+    forceRealm('infernal');
+    const themed = getActiveWorldContent().props.buildings;
+    const base = BUILTIN_WORLD.props.buildings;
+    expect(themed.length).toBe(base.length);
+    for (let i = 0; i < base.length; i++) {
+      const b = base[i];
+      const t = themed[i];
+      // Same zone before and after theming — a displaced building never leaves town.
+      expect(zoneAt(t.x, t.z).id, `${t.kind} @${b.x},${b.z} left its zone`).toBe(
+        zoneAt(b.x, b.z).id,
+      );
+      // And it stays within its hub's orbit: |themed - hub| = spread * |base - hub|,
+      // which for the authored towns keeps every building under ~150yd of its hub.
+      const hub = zoneAt(b.x, b.z).hub;
+      const baseR = Math.hypot(b.x - hub.x, b.z - hub.z);
+      const themedR = Math.hypot(t.x - hub.x, t.z - hub.z);
+      expect(themedR, `${t.kind} @${b.x},${b.z} flew out of its hub orbit`).toBeLessThanOrEqual(
+        baseR * 2.6 + 0.01,
+      );
+    }
+    // Every door ring sits on a building's own front face: within the building's
+    // half-diagonal + its enter radius of the building centre (starter-town pin for
+    // the door-trigger/building overlap the v0.35.1 intake broke).
+    const buildingsNow = getActiveWorldContent().props.buildings;
+    for (const d of doors()) {
+      const owner = buildingsNow.some(
+        (b) => Math.hypot(d.x - b.x, d.z - b.z) <= Math.hypot(b.w, b.d) / 2 + d.r + 0.01,
+      );
+      expect(owner, `door at ${d.x},${d.z} overlaps no building`).toBe(true);
+    }
+  });
+
+  it('the themed world copy still counts as builtin content (invisible-wall regression)', () => {
+    // The authored town views (Eastbrook/Fenbridge) and the muster-board colliders
+    // gate on "is this the shipped world". Gating on OBJECT IDENTITY made every
+    // themed realm fail the check: the town kits (walls included) stopped rendering
+    // while their PROPS.walls colliders stayed registered — 102 invisible colliders
+    // on the infernal realm. The themed copy must classify as builtin content.
+    forceRealm('infernal');
+    const themed = getActiveWorldContent();
+    expect(themed).not.toBe(BUILTIN_WORLD); // it IS a distinct themed copy...
+    expect(isBuiltinWorldContent(themed)).toBe(true); // ...but builtin content
+    expect(isBuiltinWorldContent(BUILTIN_WORLD)).toBe(true);
+    // An editor/custom bundle stays non-builtin (it sheds the authored kits).
+    const custom = { ...BUILTIN_WORLD, props: { ...BUILTIN_WORLD.props, walls: [] } };
+    setActiveWorldContent(custom);
+    try {
+      expect(isBuiltinWorldContent(getActiveWorldContent())).toBe(false);
+    } finally {
+      setActiveWorldContent(null);
+    }
   });
 });

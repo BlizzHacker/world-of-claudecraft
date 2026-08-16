@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { BUILDING_TERRAIN_SAMPLE_STEP } from '../sim/building_layout';
-import { BUILTIN_WORLD, getActiveWorldContent } from '../sim/data';
+import { getActiveWorldContent, isBuiltinWorldContent } from '../sim/data';
 import { EASTBROOK_LAYOUT, localToWorld, wallSegmentMirrored } from '../sim/eastbrook_layout';
 import type { BuildingDef, ZonePropsDef } from '../sim/types';
 import { terrainHeight } from '../sim/world';
@@ -966,7 +966,12 @@ export function buildEastbrookTownView(seed: number): EastbrookTownView {
   // root stays isolated, while loader-owned decoded sources can be released and
   // a later same-page switch to the built-in world remains synchronous.
   if (loadedSources.size > 0) prepareTemplates(loadedSources, preparedTemplates, true);
-  if (getActiveWorldContent() !== BUILTIN_WORLD) {
+  // Builtin-CONTENT check, not object identity: a themed realm's world copy
+  // (infernal) still places the authored Eastbrook lots, walls and stalls at
+  // their fixed coordinates, and their colliders register regardless — gating
+  // this build on identity left those colliders meshless there (invisible
+  // walls around the starter town). Only editor/custom bundles skip the kit.
+  if (!isBuiltinWorldContent(getActiveWorldContent())) {
     return buildFromTemplates(preparedTemplates, () => 0, false, undefined);
   }
   prepareTemplates(loadedSources, preparedTemplates, true);

@@ -7,7 +7,7 @@ import {
 import { buildingCameraHeight } from '../sim/building_layout';
 import { mineMoundFootprint, STALL_HALF_D, STALL_HALF_W } from '../sim/colliders';
 import { MOUNT_RACE_JUMP_FIXTURES } from '../sim/content/mounts';
-import { BUILTIN_WORLD, getActiveWorldContent, WORLD_MIN_Z } from '../sim/data';
+import { getActiveWorldContent, isBuiltinWorldContent, WORLD_MIN_Z } from '../sim/data';
 import { getActiveRealm } from '../sim/realms/registry';
 import {
   DOCK_SECTION_LOCAL_Z,
@@ -1177,7 +1177,10 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
   const windmillFans: THREE.Object3D[] = [];
   const fireLights: THREE.PointLight[] = [];
   const activeContent = getActiveWorldContent();
-  const builtInWorld = activeContent === BUILTIN_WORLD;
+  // Builtin CONTENT, not object identity: the themed realm copy still places
+  // the authored Eastbrook/Fenbridge kits, whose views render on it too, so
+  // the procedural fallback must keep skipping their records there.
+  const builtInWorld = isBuiltinWorldContent(activeContent);
 
   const ground = (x: number, z: number) => terrainHeight(x, z, seed);
 
@@ -2879,7 +2882,10 @@ export function collectBuildingImpostors(seed: number): {
   instances: BuildingImpostorInstance[];
 } {
   const activeContent = getActiveWorldContent();
-  const builtInWorld = activeContent === BUILTIN_WORLD;
+  // Builtin CONTENT, not object identity: the themed realm copy still places
+  // the authored Eastbrook/Fenbridge kits, whose views render on it too, so
+  // the procedural fallback must keep skipping their records there.
+  const builtInWorld = isBuiltinWorldContent(activeContent);
   const used = new Map<string, PropAsset>();
   const instances: BuildingImpostorInstance[] = [];
   const use = (key: PropKey): PropAsset => {

@@ -15,7 +15,7 @@ import {
 } from './building_layout';
 import { MOUNT_RACE_JUMP_FIXTURES, raceGateSegment } from './content/mounts';
 import { getActiveRealm } from './realms/registry';
-import { arenaOriginAt, battlegroundOrigin, dungeonAt, BG_SLOT_COUNT, BUILTIN_WORLD, defaultDelveModules, delveAt, delveModuleLocal, DUNGEON_FLOOR_Y, DUNGEON_LIST, DUNGEON_X_THRESHOLD, DUNGEONS, GATHER_NODES, getActiveWorldContent, INSTANCE_SLOT_COUNT, instanceOrigin, interiorOriginAt, isArenaPos, isBgPos, isDelvePos, isInteriorPos, isRiftPos, isYumiMazePos, PORTALS, RIFT_REGION_HALF_X, RIFT_REGION_HALF_Z, STRIP_MAX_X, STRIP_MIN_X, yumiMazeOriginAt } from './data';
+import { arenaOriginAt, battlegroundOrigin, dungeonAt, BG_SLOT_COUNT, defaultDelveModules, delveAt, delveModuleLocal, DUNGEON_FLOOR_Y, DUNGEON_LIST, DUNGEON_X_THRESHOLD, DUNGEONS, GATHER_NODES, getActiveWorldContent, INSTANCE_SLOT_COUNT, isBuiltinWorldContent, instanceOrigin, interiorOriginAt, isArenaPos, isBgPos, isDelvePos, isInteriorPos, isRiftPos, isYumiMazePos, PORTALS, RIFT_REGION_HALF_X, RIFT_REGION_HALF_Z, STRIP_MAX_X, STRIP_MIN_X, yumiMazeOriginAt } from './data';
 import {
   ROCK_COLLIDER_MIN_SCALE,
   ROCK_RADIUS_PER_SCALE,
@@ -690,7 +690,10 @@ function staticWorldColliders(seed: number): Collider[] {
   // The dedicated Fenbridge renderer is built-in-only. Keep this specialized
   // service collision under the same authority so a programmatic custom world
   // cannot create an invisible solid board by supplying musterBoards data.
-  if (content === BUILTIN_WORLD) {
+  // Builtin CONTENT, not identity: the themed realm copy renders the muster
+  // boards too (fenbridge_town.ts uses the same predicate), so they must
+  // stay solid there; only editor/custom bundles shed this collision.
+  if (isBuiltinWorldContent(content)) {
     for (const board of content.services?.musterBoards ?? []) {
       out.push({
         type: 'obb',

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { BUILDING_TERRAIN_SAMPLE_STEP } from '../sim/building_layout';
-import { BUILTIN_WORLD, getActiveWorldContent } from '../sim/data';
+import { getActiveWorldContent, isBuiltinWorldContent } from '../sim/data';
 import {
   FENBRIDGE_BUILDINGS_BY_ID,
   FENBRIDGE_LAYOUT,
@@ -1321,7 +1321,10 @@ export function buildFenbridgeTownView(seed: number): FenbridgeTownView {
   // Extract once even if a custom world is currently active so loader-owned
   // prop GLTFs can be released and a later same-page switch remains sync.
   if (loadedSources.size > 0) prepareTemplates(loadedSources, preparedTemplates, true);
-  if (getActiveWorldContent() !== BUILTIN_WORLD) {
+  // Builtin-CONTENT check, not object identity (see buildEastbrookTownView):
+  // themed realms still collide the palisade + gate jambs from PROPS.walls, so
+  // the kit must render there too. Only editor/custom bundles skip it.
+  if (!isBuiltinWorldContent(getActiveWorldContent())) {
     return buildFromTemplates(preparedTemplates, () => 0, false, {
       atlas: undefined,
       normal: undefined,

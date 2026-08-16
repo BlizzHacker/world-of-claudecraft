@@ -9,9 +9,9 @@ import { isInBoarpitShell } from '../sim/boarpit_layout';
 import { isInHomesShell } from '../sim/homes_layout';
 import { isInThornwheelShell } from '../sim/derby_layout';
 import {
-  BUILTIN_WORLD,
   DUNGEON_X_THRESHOLD,
   getActiveWorldContent,
+  isBuiltinWorldContent,
   WORLD_MAX_X,
   WORLD_MAX_Z,
   WORLD_MIN_Z,
@@ -2592,7 +2592,7 @@ function buildGrassRing(parent: THREE.Group, seed: number): GrassRing {
   const activeContent = getActiveWorldContent();
   const townExclusions = eastbrookGrassExclusions(
     activeContent.props.buildings,
-    activeContent === BUILTIN_WORLD,
+    isBuiltinWorldContent(activeContent),
     activeContent.services?.noticeboards ?? [],
   );
 

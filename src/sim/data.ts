@@ -752,6 +752,26 @@ let contentGeneration = 0;
 let themedWorld: WorldContent | null = null;
 let themedWorldKey = '';
 
+// Zone hub for a base-world position, resolved against the BASE bundle's zones
+// (the same rect walk as zoneAt below). Deliberately NOT zoneAt: that reads the
+// ACTIVE content, and this runs while the themed copy is being BUILT inside
+// getActiveWorldContent, which would recurse straight back here.
+function baseZoneHub(
+  base: WorldContent,
+  x: number,
+  z: number,
+): { x: number; z: number; radius: number } {
+  let fallback: ZoneDef | null = null;
+  for (const zone of base.zones) {
+    if (z >= zone.zMax) continue;
+    if (fallback === null || zone.zMax < fallback.zMax) fallback = zone;
+    const x0 = zone.xMin ?? STRIP_MIN_X;
+    const x1 = zone.xMax ?? STRIP_MAX_X;
+    if (z >= zone.zMin && x >= x0 && x < x1) return zone.hub;
+  }
+  return (fallback ?? base.zones.reduce((a, b) => (b.zMax > a.zMax ? b : a))).hub;
+}
+
 // Apply a realm's worldTheme to the base world: scale/space the town buildings for
 // a grander settlement. Both render (props.ts) and collision (colliders.ts) read
 // through getActiveWorldContent, so the themed buildings stay consistent between
@@ -761,7 +781,7 @@ function themeWorldForRealm(base: WorldContent, theme: RealmWorldTheme | undefin
   const scale = theme?.buildingScale ?? 1;
   const spread = theme?.buildingSpread ?? 1;
   if (scale === 1 && spread === 1) return base;
-  const buildings = base.props.buildings.map((b) =>
+  const buildings = base.props.buildings.map((b) => {
     // Authored placements (an assetId names a specific GLB) are drawn by their own
     // layout module at fixed coordinates — src/render/eastbrook_town.ts reads
     // EASTBROOK_LAYOUT directly and never sees this theme. Scaling only the
@@ -769,16 +789,29 @@ function themeWorldForRealm(base: WorldContent, theme: RealmWorldTheme | undefin
     // actually see, which is what made the whole of Eastbrook Vale un-enterable.
     // Procedural buildings ARE rendered through getActiveWorldContent, so they keep
     // moving with the theme and stay consistent.
-    b.assetId
-      ? b
-      : {
-          ...b,
-          x: b.x * spread,
-          z: b.z * spread,
-          w: b.w * scale,
-          d: b.d * scale,
-        },
-  );
+    if (b.assetId) return b;
+    // Spread is anchored on the building's ZONE HUB, never the world origin.
+    // Origin-anchored `x * spread` was tuned when the only themed town sat at
+    // the origin; once upstream v0.35 shipped a dozen zones with hub towns up
+    // to ~1300yd out, origin-anchoring hurled 64 of 78 buildings 500-3400yd out
+    // of their towns (doors, colliders and meshes all went with them, leaving
+    // townless NPC squares and building-shaped obstacles in the wilderness).
+    // Hub-anchoring keeps every town's buildings ringed around its own hub —
+    // for a hub at the origin it degenerates to the original arithmetic.
+    // Only SETTLEMENT buildings spread: a building outside its hub circle (a
+    // farmstead or outpost, e.g. Galecrest's inn 150yd out) has no town square
+    // to breathe around, and spreading its big hub offset would push it across
+    // a zone border. It still takes the grander scale, in place.
+    const hub = baseZoneHub(base, b.x, b.z);
+    const inSettlement = Math.hypot(b.x - hub.x, b.z - hub.z) <= hub.radius;
+    return {
+      ...b,
+      x: inSettlement ? hub.x + (b.x - hub.x) * spread : b.x,
+      z: inSettlement ? hub.z + (b.z - hub.z) * spread : b.z,
+      w: b.w * scale,
+      d: b.d * scale,
+    };
+  });
   return { ...base, props: { ...base.props, buildings } };
 }
 
@@ -795,6 +828,20 @@ export function getActiveWorldContent(): WorldContent {
   themedWorld = themeWorldForRealm(BUILTIN_WORLD, realm.worldTheme);
   themedWorldKey = key;
   return themedWorld;
+}
+
+/** True when `content` IS the shipped built-in world: the literal BUILTIN_WORLD
+ *  or the per-realm themed copy derived from it in getActiveWorldContent. The
+ *  themed copy shares every array except props.buildings with BUILTIN_WORLD by
+ *  reference, so builtin-only consumers (the authored town views, the muster
+ *  board colliders, the Eastbrook grass exclusions) must treat it as builtin.
+ *  Gating those on `=== BUILTIN_WORLD` object identity is what un-rendered the
+ *  town kits on every themed realm while their colliders stayed registered:
+ *  Eastbrook's parapet and Fenbridge's palisade became invisible walls (102
+ *  colliders with no mesh on the infernal realm). Editor/custom bundles remain
+ *  non-builtin: they went through setActiveWorldContent, which nulls themedWorld. */
+export function isBuiltinWorldContent(content: WorldContent): boolean {
+  return content === BUILTIN_WORLD || (themedWorld !== null && content === themedWorld);
 }
 
 export function getContentGeneration(): number {
