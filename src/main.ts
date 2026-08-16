@@ -106,7 +106,7 @@ import { watchMobileMoreState } from './game/mobile_more_diagnostics';
 import { mouselookReleaseFacing } from './game/mouselook_release';
 import { diagonalMovementVisualFacing } from './game/movement_visual';
 import { music } from './game/music';
-import { tryNearbyInteraction } from './game/nearby_interaction';
+import { buildingDoorWinsPress, tryNearbyInteraction } from './game/nearby_interaction';
 import { isOfflineModeAvailable, isPackagedConsoleApp } from './game/offline_mode_gate';
 import { loadOfflineSave, mountOfflineAutosave } from './game/offline_save';
 import { padReelItemId } from './game/pad_reel';
@@ -530,12 +530,8 @@ const ATTACK_MOVE_ACQUIRE_RANGE = 12; // yards; an attack-move toward open groun
 // How close (to a building's centre) a click-to-enter prompt appears. Generous so
 // "click a building near me" reliably offers Enter; the server re-validates entry.
 const BUILDING_CLICK_ENTER_RANGE = 26;
-// Click-to-enter's Enter walks to the DOOR POINT before pressing the interact;
-// inside this radius of it the door wins the sim's distance arbitration against
-// anything short of a corpse underfoot (a doorstep NPC in particular).
-const DOOR_ENTER_PRESS_RANGE = 1.4;
-// Give up on a blocked/abandoned walk-to-door quietly; a later manual interact
-// behaves normally.
+// Give up on a blocked/abandoned click-to-enter walk quietly; a later manual
+// interact behaves normally.
 const DOOR_ENTER_WALK_TIMEOUT_MS = 25000;
 // Aura kinds that stop the player from moving (mirrors the sim's isRooted/isStunned):
 // while one of these is up, click-to-move can't make progress, so the destination
@@ -3654,18 +3650,21 @@ async function startGame(
             // change. Headless player-path probe: doorprobe v13/v14.
             const door = buildingDoorForPoint(g!.x, g!.z);
             hud.openBuildingEnterPrompt(hit.interiorType, () => {
-              const dp = door ? { x: door.x, z: door.z } : null;
-              const from = world.player.pos;
-              if (!dp || Math.hypot(from.x - dp.x, from.z - dp.z) <= DOOR_ENTER_PRESS_RANGE) {
+              // Fire the interact the moment the DOOR WINS the press (the same
+              // arbitration the dispatcher and the sim apply) - never at a
+              // fixed radius: the building's collider stops the body ~2yd from
+              // the door point while the porch NPC stands ~2.2yd out, so any
+              // distance threshold either never fires or fires into the NPC.
+              if (!door || buildingDoorWinsPress(world)) {
                 world.interact();
                 return;
               }
+              const dp = { x: door.x, z: door.z };
               const target = resolvedClickMoveTarget(dp);
               input.setClickMoveTarget(target, 0.5, null, clickMovePathTo(target));
               const startedAt = performance.now();
               const timer = window.setInterval(() => {
-                const p = world.player.pos;
-                if (Math.hypot(p.x - dp.x, p.z - dp.z) <= DOOR_ENTER_PRESS_RANGE) {
+                if (buildingDoorWinsPress(world)) {
                   window.clearInterval(timer);
                   world.interact();
                 } else if (performance.now() - startedAt > DOOR_ENTER_WALK_TIMEOUT_MS) {

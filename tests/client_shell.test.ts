@@ -2100,7 +2100,9 @@ describe('client HTML shell', () => {
     expect(mainTs).toContain(
       "import { stopAutorunForInteraction } from './game/interaction_autorun';",
     );
-    expect(mainTs).toContain("import { tryNearbyInteraction } from './game/nearby_interaction';");
+    expect(mainTs).toContain(
+      "import { buildingDoorWinsPress, tryNearbyInteraction } from './game/nearby_interaction';",
+    );
     // Click-to-enter buildings: the PLAYER's doorway (with the interact key as
     // the other half). The v0.35.1 intake merge dropped this handlePick hunk
     // while keeping its import and range const, leaving openBuildingEnterPrompt

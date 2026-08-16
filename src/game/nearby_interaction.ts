@@ -52,6 +52,37 @@ export interface NearbyInteractionHud {
 
 type NearbyGatherNode = Pick<GatherNodeDef, 'id' | 'pos' | 'type' | 'tier'>;
 
+/** True when a building door is underfoot AND no other press candidate (NPC,
+ *  corpse, lootable object, delve) is closer than the door point — i.e. the
+ *  interact press would ENTER right now under the sim's distance arbitration.
+ *  The click-to-enter walk polls this to fire its deferred interact: a fixed
+ *  arrival radius cannot work, because the building's own collider stops the
+ *  body ~2yd short of the door point while the porch NPC stands ~2.2yd out —
+ *  the press must fire at the moment the door wins, not at a distance. */
+export function buildingDoorWinsPress(
+  world: Pick<NearbyInteractionWorld, 'player' | 'playerId' | 'entities'>,
+): boolean {
+  const player = world.player;
+  if (player.dead) return false;
+  const door = buildingDoorNear(player.pos.x, player.pos.z);
+  if (!door) return false;
+  const doorDistance = Math.sqrt(door.d2);
+  const playerId = world.playerId ?? player.id;
+  for (const entity of world.entities.values()) {
+    if (entity.id === playerId) continue;
+    const distance = dist2d(player.pos, entity.pos);
+    if (distance > doorDistance) continue;
+    if (entity.kind === 'npc') return false;
+    if (entity.kind === 'mob' && entity.dead && entity.lootable) return false;
+    if (
+      entity.kind === 'object' &&
+      (entity.lootable || entity.templateId?.startsWith('delve_'))
+    )
+      return false;
+  }
+  return true;
+}
+
 /** Find and dispatch one eligible nearby interaction in stable priority order.
  *  `nodeToolGateFor` (Professions 2.0) resolves the tool-tier access
  *  gate + localized denial line for the node about to be harvested; it sits
