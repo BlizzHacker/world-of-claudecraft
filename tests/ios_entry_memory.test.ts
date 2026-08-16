@@ -247,12 +247,21 @@ describe('post-entry mob-body streaming (packaged iOS)', () => {
     );
   });
 
-  it('re-arms a failed streamed body fetch from the visual-build miss path', () => {
-    // A streamed body whose one-shot stream fetch failed must not stay
-    // invisible for the session: resolvedGltf kicks the fetch again before its
-    // fail-soft throw, and the view-create retry gate re-attempts the build.
-    // Gated to streamed urls so a non-streamed miss stays a loud preload bug.
-    expect(assetsSource).toContain('if (streamedUrlSet.has(url)) ensureCharacterUrl(url);');
+  it('re-arms a failed body fetch from the visual-build miss path', () => {
+    // A body whose fetch failed must not stay invisible for the session:
+    // resolvedGltf kicks the fetch again before its fail-soft throw, and the
+    // view-create retry gate re-attempts the build. Since 2026-08-10 the
+    // re-arm covers EVERY miss, not only streamed urls: hand-authored realm
+    // overrides (infernal_class_*, the male/female variants) are in no
+    // preload sweep and not in streamedUrlSet, so the old streamed-only gate
+    // threw forever and every class rendered as its KayKit fallback. The
+    // thrown error still keeps the miss loud in the console.
+    const missPathAt = assetsSource.indexOf('function resolvedGltf(');
+    expect(missPathAt).toBeGreaterThan(-1);
+    const missPath = assetsSource.slice(missPathAt, assetsSource.indexOf('return g;', missPathAt));
+    expect(missPath).toContain('ensureCharacterUrl(url);');
+    expect(missPath).not.toContain('if (streamedUrlSet.has(url)) ensureCharacterUrl(url);');
+    expect(missPath).toContain('character asset not preloaded');
   });
 
   it('starts the stream after prewarm, not inside the entry gate', () => {

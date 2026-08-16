@@ -187,8 +187,16 @@ export function prewarmBuildDeadline(
 
 /**
  * Resolve every prewarm knob from the device profile. The constrained arms are the
- * watchdog + memory fix; the unconstrained arm reproduces the historical desktop
- * behavior exactly (full manifest, generous budgets, no reordering).
+ * watchdog + memory fix; the unconstrained arm keeps the full manifest, the
+ * generous budgets, and its no-yield entry loop (measured: yielding between
+ * entries on a busy main thread let the queued icon-prewarm burst steal ~9s of
+ * the 12s budget, collapsing views.nearby from 46 built views to 2), but now
+ * (world-entry loading-spike fix) treats a renderer without
+ * KHR_parallel_shader_compile (software GL: SwiftShader/WARP) the way the
+ * constrained arm always did - the monolithic compile there is one
+ * un-preemptible synchronous block measured in tens of seconds, so those
+ * renderers link group-by-group per entry instead and leave the remainder to
+ * the bounded first-sight view gates.
  */
 export function resolvePrewarmPolicy(input: PrewarmPolicyInput): PrewarmPolicy {
   const { constrainedMemory, asyncCompileSupported, lowGfx } = input;
@@ -199,9 +207,9 @@ export function resolvePrewarmPolicy(input: PrewarmPolicyInput): PrewarmPolicy {
       compileMaxMs: input.defaultCompileMaxMs,
       maxViews: baseMaxViews,
       yieldBetweenEntries: false,
-      linkPassPerEntry: false,
+      linkPassPerEntry: !asyncCompileSupported,
       compileBeforeFirstFrame: false,
-      skipMonolithCompile: false,
+      skipMonolithCompile: !asyncCompileSupported,
       minimalManifest: false,
       textureBatchSize: 0,
       textureMaxMs: 0,

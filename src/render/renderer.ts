@@ -594,6 +594,15 @@ const VIEW_PREWARM_MAX_VIEWS_HIGH = 72;
 // submit. The retained iPhone probe measured that burst at 1.17s. Remaining views
 // stream in through the post-entry one-per-frame budget instead.
 const VIEW_PREWARM_MAX_VIEWS_CONSTRAINED = 2;
+// Desktop scene-texture uploads run in bounded event-loop-yielding batches
+// (the constrained profile always did; the old desktop arm was one synchronous
+// whole-scene sweep). The batch is larger than the constrained 4 because a
+// desktop GPU upload path is far cheaper per texture; the floor guarantees the
+// entry uploads at least a beat of textures even when earlier manifest entries
+// consumed the whole soft deadline, with the remainder amortized by the
+// background resume lane.
+const PREWARM_TEXTURE_BATCH_SIZE = 8;
+const PREWARM_TEXTURE_MIN_BUDGET_MS = 750;
 const VIEW_CREATED_TYPE_SAMPLE_LIMIT = 24;
 const PERSISTENT_PORTAL_VIEW_PREWARM_LIMIT = 16;
 // rigs further than this stop casting articulated shadows (~7 draws each) and
@@ -3561,7 +3570,7 @@ export class Renderer {
       const zone = zoneAt(x, z);
       const deadline = performance.now() + 5000;
       const t0 = performance.now();
-      const mobPrewarm = this.buildEntityPrewarmGroup(zone);
+      const mobPrewarm = this.buildEntityPrewarmGroup(zone, deadline);
       const npcPrewarm = this.buildNpcPrewarmGroup(zone, deadline);
       const mobGroup = mobPrewarm.group;
       const npcGroup = npcPrewarm.group;
@@ -5005,7 +5014,10 @@ export class Renderer {
     return [...ids].sort();
   }
 
-  private buildEntityPrewarmGroup(zone: ZoneDef): {
+  private buildEntityPrewarmGroup(
+    zone: ZoneDef,
+    deadline: number = Number.MAX_SAFE_INTEGER,
+  ): {
     group: THREE.Group;
     pooled: { key: string; visual: CharacterVisual }[];
   } {
@@ -5046,6 +5058,10 @@ export class Renderer {
     // Warm only templates that can appear in this zone. The per-template set
     // persists across transitions, so shared families are paid once per session.
     for (const templateId of this.templateIdsInZone(zone, 'mob')) {
+      // Same budget rule as the player/NPC builders: a template skipped by the
+      // deadline is NOT marked prewarmed, so a later zone preparation (or the
+      // in-world first-sight path) still warms it.
+      if (performance.now() >= deadline) break;
       if (this.prewarmedMobTemplates.has(templateId)) continue;
       const copies = PREWARM_MOB_COMMON_IDS.has(templateId) ? PREWARM_MOB_POOL_COPIES : 1;
       build(templateId, copies);
@@ -5464,17 +5480,23 @@ export class Renderer {
   private async prewarmInitialSceneTexturesBatched(
     batchSize: number,
     maxMs: number,
-  ): Promise<number> {
+  ): Promise<{ uploaded: number; leftover: THREE.Texture[] }> {
     const before = this.webgl.info.memory.textures;
     const deadline = performance.now() + Math.max(0, maxMs);
     const textures = this.collectInitialSceneTextures();
     const batch = Math.max(1, Math.floor(batchSize));
-    for (let i = 0; i < textures.length && performance.now() < deadline; i += batch) {
-      const end = Math.min(textures.length, i + batch);
-      for (let j = i; j < end; j++) this.prewarmTexture(textures[j]);
-      if (end < textures.length && performance.now() < deadline) await sleep(0);
+    let next = 0;
+    while (next < textures.length && performance.now() < deadline) {
+      const end = Math.min(textures.length, next + batch);
+      for (; next < end; next++) this.prewarmTexture(textures[next]);
+      if (next < textures.length && performance.now() < deadline) await sleep(0);
     }
-    return Math.max(0, this.webgl.info.memory.textures - before);
+    return {
+      uploaded: Math.max(0, this.webgl.info.memory.textures - before),
+      // Budget exhausted mid-sweep: the caller hands these to the background
+      // resume lane so they upload in idle slots instead of never.
+      leftover: textures.slice(next),
+    };
   }
 
   // Drop an out-of-band render burst (prewarm pass, screenshot, scene census)
@@ -5603,7 +5625,14 @@ export class Renderer {
       constrainedMemory: GFX.constrainedMemory,
       asyncCompileSupported: this.asyncCompileSupported,
       lowGfx: this.lowGfx,
-      finishFullManifestBeforeReveal: GFX.tier === 'insane' && !GFX.constrainedMemory,
+      // Desktop Insane used to hold the reveal until the FULL manifest
+      // finished (finishFullManifestBeforeReveal). On a production entry that
+      // held manifest was measured at ~89s against the 12s budget - the
+      // world-entry loading spike. Insane now takes the same soft deadline as
+      // every other desktop tier: late entries hand their bounded units to the
+      // background resume lane instead of gating the curtain, and everything
+      // else warms lazily through the in-world first-sight gates.
+      finishFullManifestBeforeReveal: false,
       defaultMaxMs: VIEW_PREWARM_MAX_MS,
       constrainedMaxMs: VIEW_PREWARM_MAX_MS_CONSTRAINED,
       defaultCompileMaxMs: PREWARM_COMPILE_MAX_MS,
@@ -5990,7 +6019,7 @@ export class Renderer {
         priority: 35,
         required: true,
         run: () => {
-          const built = this.buildEntityPrewarmGroup(activeZone);
+          const built = this.buildEntityPrewarmGroup(activeZone, buildDeadline);
           entityPrewarmGroup = built.group;
           entityPrewarmPool = built.pooled;
           this.scene.add(entityPrewarmGroup);
@@ -6132,12 +6161,27 @@ export class Renderer {
         required: true,
         resumeUnits: () => textureResumeUnits('scene', this.collectInitialSceneTextures()),
         run: async () => {
-          textureUploads = constrainedPrewarm
-            ? await this.prewarmInitialSceneTexturesBatched(
-                policy.textureBatchSize,
-                policy.textureMaxMs,
-              )
-            : this.prewarmObjectTextures(this.scene);
+          // Every profile pays for texture uploads in bounded, event-loop-
+          // yielding batches now. The old desktop arm was one synchronous
+          // whole-scene sweep (hundreds of decode+upload blits in a single
+          // task), which is exactly the kind of open-ended entry that blew the
+          // world-entry budget. Whatever the budget cannot fit is handed to
+          // the background resume lane below instead of uploading on the
+          // first live frame that binds it.
+          const budgetMs = constrainedPrewarm
+            ? policy.textureMaxMs
+            : Math.max(PREWARM_TEXTURE_MIN_BUDGET_MS, deadline - performance.now());
+          const batched = await this.prewarmInitialSceneTexturesBatched(
+            constrainedPrewarm ? policy.textureBatchSize : PREWARM_TEXTURE_BATCH_SIZE,
+            budgetMs,
+          );
+          textureUploads = batched.uploaded;
+          if (batched.leftover.length > 0) {
+            droppedEntries.push({
+              id: 'textures.scene',
+              units: textureResumeUnits('scene', batched.leftover),
+            });
+          }
         },
         detail: () => `uploaded=${textureUploads}`,
       },
@@ -6306,30 +6350,51 @@ export class Renderer {
           // exactly what prevents the in-world freeze, so a near-empty leftover budget
           // must not cut it short (the old bug, the async compile timed out and the
           // programs linked synchronously on first sight instead).
-          // Constrained (phone WebKit) without KHR_parallel_shader_compile: BOTH arms
-          // below are one multi-second synchronous main-thread block (compileAsync
-          // without the extension takes the same up-front compile), which is exactly
-          // the unresponsiveness that gets the WebContent process killed. The
-          // per-entry link passes already linked every visible program, so leave the
-          // remainder to the bounded first-sight view gates and skip the monolith.
+          // Without KHR_parallel_shader_compile BOTH arms below are one
+          // multi-second synchronous main-thread block (compileAsync without
+          // the extension takes the same up-front compile) that no budget can
+          // preempt - measured as the dominant share of a world entry on
+          // software-GL desktops, on top of being the phone-WebKit process
+          // kill. The per-entry link passes already linked every visible
+          // program on any no-parallel-compile profile, so leave the remainder
+          // to the bounded first-sight view gates and skip the monolith.
           if (policy.skipMonolithCompile) {
             compileMs = 0;
             return;
           }
           compileMode = 'async';
+          const compileBudgetLeft = (): number =>
+            compileStart + policy.compileMaxMs - performance.now();
           for (const group of [playerPrewarmGroup, entityPrewarmGroup, npcPrewarmGroup]) {
-            if (group) {
-              await this.compileSkinnedShadowPrograms(group);
-              compiledSkinnedShadowGroups++;
+            if (!group) continue;
+            // Check BETWEEN groups only: compileSkinnedShadowPrograms swaps
+            // depth materials onto the live rigs for the duration of its
+            // await, so abandoning one mid-flight would leave the swap in
+            // place for the color compile below.
+            if (compileBudgetLeft() <= 0) {
+              compileTimedOut = true;
+              break;
             }
+            await this.compileSkinnedShadowPrograms(group);
+            compiledSkinnedShadowGroups++;
           }
-          await this.compilePrewarmColorPrograms(this.scene, false).catch((err: unknown) => {
-            console.warn('Renderer async prewarm compile failed', err);
-          });
+          // The parallel linker cannot be cancelled, but it also does not need
+          // the curtain: hold the reveal only for the compile budget's
+          // remainder and let a slower driver finish linking off-thread under
+          // the live world. Programs that are still linking at first bind take
+          // the pre-existing lazy sync-link path, bounded by whatever the
+          // budget could not fit rather than by the whole scene.
+          const colorCompile = this.compilePrewarmColorPrograms(this.scene, false).catch(
+            (err: unknown) => {
+              console.warn('Renderer async prewarm compile failed', err);
+            },
+          );
+          const settled = await Promise.race([
+            colorCompile.then(() => true),
+            sleep(Math.max(0, compileBudgetLeft())).then(() => false),
+          ]);
+          if (!settled) compileTimedOut = true;
           compileMs = roundMs(performance.now() - compileStart);
-          // Keep the historical diagnostic field as a budget-overrun signal,
-          // but never abandon a still-running compile behind the loading gate.
-          compileTimedOut = compileMs > policy.compileMaxMs;
         },
         detail: () =>
           `mode=${compileMode};timedOut=${compileTimedOut};skinnedShadowGroups=${compiledSkinnedShadowGroups}`,

@@ -57,13 +57,17 @@ const MANIFEST_IDS = [
   'diagnostics.baseline',
 ];
 
-describe('resolvePrewarmPolicy: unconstrained (desktop) reproduces historical behavior', () => {
+describe('resolvePrewarmPolicy: unconstrained (desktop)', () => {
   it('runs the full manifest with generous budgets and no reordering', () => {
     const p = resolvePrewarmPolicy(BASE);
     expect(p.minimalManifest).toBe(false);
     expect(p.maxMs).toBe(12000);
     expect(p.compileMaxMs).toBe(10000);
     expect(p.maxViews).toBe(72);
+    // Desktop keeps the no-yield entry loop: yielding between entries on a
+    // busy main thread let the queued icon-prewarm burst steal ~9s of the 12s
+    // budget (views.nearby collapsed from 46 built views to 2 in the world-
+    // entry timing harness). The soft deadline now bounds the curtain instead.
     expect(p.yieldBetweenEntries).toBe(false);
     expect(p.linkPassPerEntry).toBe(false);
     expect(p.compileBeforeFirstFrame).toBe(false);
@@ -71,12 +75,25 @@ describe('resolvePrewarmPolicy: unconstrained (desktop) reproduces historical be
     expect(p.finishFullManifestBeforeReveal).toBe(false);
   });
 
-  it('keeps the complete desktop Insane manifest behind the entry cover', () => {
-    const p = resolvePrewarmPolicy({ ...BASE, finishFullManifestBeforeReveal: true });
-    expect(p.finishFullManifestBeforeReveal).toBe(true);
+  it('treats a no-parallel-compile desktop renderer like the constrained arm always was', () => {
+    // Without KHR_parallel_shader_compile the monolithic scene compile is one
+    // un-preemptible synchronous block (software GL: SwiftShader/WARP), the
+    // dominant share of the measured ~89s world entry. Link group-by-group per
+    // entry instead and skip the monolith.
+    const p = resolvePrewarmPolicy({ ...BASE, asyncCompileSupported: false });
+    expect(p.skipMonolithCompile).toBe(true);
+    expect(p.linkPassPerEntry).toBe(true);
+    expect(p.minimalManifest).toBe(false);
+  });
 
+  it('no longer holds the reveal for the full Insane manifest', () => {
+    // finishFullManifestBeforeReveal made desktop Insane ignore the 12s soft
+    // deadline entirely; a production entry measured that held manifest at
+    // ~89s. The renderer callsite now pins the flag false so every desktop
+    // tier takes the same soft deadline + background resume lane.
     const renderer = readFileSync(new URL('../src/render/renderer.ts', import.meta.url), 'utf8');
-    expect(renderer).toContain(
+    expect(renderer).toContain('finishFullManifestBeforeReveal: false,');
+    expect(renderer).not.toContain(
       "finishFullManifestBeforeReveal: GFX.tier === 'insane' && !GFX.constrainedMemory",
     );
     expect(renderer).toContain(
@@ -93,7 +110,9 @@ describe('resolvePrewarmPolicy: unconstrained (desktop) reproduces historical be
     );
   });
 
-  it('never defers full-manifest entries and does not trim their archetype build', () => {
+  it('retains the hold-reveal semantics for a caller that explicitly requests them', () => {
+    const p = resolvePrewarmPolicy({ ...BASE, finishFullManifestBeforeReveal: true });
+    expect(p.finishFullManifestBeforeReveal).toBe(true);
     expect(prewarmEntryShouldDefer(12_000, 12_000, false, true)).toBe(false);
     expect(prewarmEntryShouldDefer(20_000, 12_000, false, true)).toBe(false);
     expect(prewarmBuildDeadline(12_000, 3_000, true)).toBe(Number.MAX_SAFE_INTEGER);
@@ -475,14 +494,37 @@ describe('constrained entry view creation ramp', () => {
     expect(elapsedIncrementAt).toBeGreaterThan(createAt);
   });
 
-  it('uses the bounded texture path for constrained prewarm', () => {
+  it('uses the bounded texture path on every profile, with leftovers resumed', () => {
+    // The old desktop arm was one synchronous whole-scene sweep
+    // (prewarmObjectTextures(this.scene)); it is gone. Every profile now runs
+    // the batched, deadline-aware pass; whatever the budget cannot fit is
+    // handed to the background resume lane instead of uploading on the first
+    // live frame that binds it.
     const renderer = readFileSync(new URL('../src/render/renderer.ts', import.meta.url), 'utf8');
     expect(renderer).toContain(
-      `await this.prewarmInitialSceneTexturesBatched(
-                policy.textureBatchSize,
-                policy.textureMaxMs,
-              )`,
+      `const batched = await this.prewarmInitialSceneTexturesBatched(
+            constrainedPrewarm ? policy.textureBatchSize : PREWARM_TEXTURE_BATCH_SIZE,
+            budgetMs,
+          );`,
     );
+    expect(renderer).toContain(
+      `const budgetMs = constrainedPrewarm
+            ? policy.textureMaxMs
+            : Math.max(PREWARM_TEXTURE_MIN_BUDGET_MS, deadline - performance.now());`,
+    );
+    expect(renderer).toContain(
+      `if (batched.leftover.length > 0) {
+            droppedEntries.push({
+              id: 'textures.scene',
+              units: textureResumeUnits('scene', batched.leftover),
+            });
+          }`,
+    );
+    const texturesEntryAt = renderer.indexOf("id: 'textures.scene'");
+    const texturesEntryEnd = renderer.indexOf("id: 'vfx.atlas'", texturesEntryAt);
+    const texturesEntry = renderer.slice(texturesEntryAt, texturesEntryEnd);
+    expect(texturesEntry).not.toContain('this.prewarmObjectTextures(this.scene)');
+
     const collectionStart = renderer.indexOf('private collectInitialSceneTextures(');
     const collectionEnd = renderer.indexOf(
       '\n  private async prewarmInitialSceneTexturesBatched(',
@@ -496,22 +538,22 @@ describe('constrained entry view creation ramp', () => {
     const methodStart = renderer.indexOf('private async prewarmInitialSceneTexturesBatched(');
     const methodEnd = renderer.indexOf('\n  private renderPrewarmPass(', methodStart);
     const method = renderer.slice(methodStart, methodEnd);
-    const batchLoopAt = method.indexOf('for (let i = 0;');
     const deadlineAt = method.indexOf('const deadline = performance.now() + Math.max(0, maxMs)');
+    const batchLoopAt = method.indexOf('while (next < textures.length');
     const deadlineGuardAt = method.indexOf('performance.now() < deadline', batchLoopAt);
-    const batchStepAt = method.indexOf('i += batch', batchLoopAt);
-    const batchEndAt = method.indexOf('Math.min(textures.length, i + batch)', batchLoopAt);
-    const uploadAt = method.indexOf('this.prewarmTexture(textures[j])');
+    const batchEndAt = method.indexOf('Math.min(textures.length, next + batch)', batchLoopAt);
+    const uploadAt = method.indexOf('this.prewarmTexture(textures[next])');
     const yieldAt = method.indexOf('await sleep(0)');
+    const leftoverAt = method.indexOf('leftover: textures.slice(next)');
     expect(methodStart).toBeGreaterThan(-1);
     expect(methodEnd).toBeGreaterThan(methodStart);
     expect(deadlineAt).toBeGreaterThan(-1);
     expect(batchLoopAt).toBeGreaterThan(-1);
     expect(deadlineGuardAt).toBeGreaterThan(batchLoopAt);
-    expect(batchStepAt).toBeGreaterThan(deadlineGuardAt);
     expect(batchEndAt).toBeGreaterThan(batchLoopAt);
     expect(uploadAt).toBeGreaterThan(batchLoopAt);
     expect(yieldAt).toBeGreaterThan(uploadAt);
+    expect(leftoverAt).toBeGreaterThan(yieldAt);
     expect(method.slice(yieldAt - 100, yieldAt)).toContain('performance.now() < deadline');
   });
 });

@@ -63,32 +63,89 @@ export function registerPreload(task: Promise<unknown>): void {
  */
 export function registerDeferredPreload(start: () => Promise<unknown>): void {
   if (deferredBegun) {
-    registerPreload(start());
+    // A late registration (module imported lazily mid-session) starts
+    // IMMEDIATELY, exactly as before: the bounded window below exists to pace
+    // the ~424-thunk burst of opening the lane, and a mid-session module that
+    // needs its asset now must not queue behind that burst.
+    try {
+      registerPreload(start());
+    } catch (err) {
+      registerPreload(Promise.reject(err));
+    }
     return;
   }
   deferredStarters.push(start);
 }
 
 /**
+ * How many deferred thunks may be IN FLIGHT at once when the lane opens.
+ * Opening the lane used to start every stored thunk in one synchronous loop:
+ * ~424 fetch+decode chains all entering flight in a single task, so the decode
+ * work (GLB de-interleaving, image blits) arrived as one main-thread burst that
+ * starved the loading bar and spiked peak memory. The window keeps the network
+ * and decoder pipelines full while capping how much of that burst can land at
+ * once; each settled task admits the next, so total wall time stays within a
+ * pipeline latency of the old free-for-all. URL-level dedup is unaffected:
+ * loadGltf/loadTexture memoize by url, so a duplicate registration inside the
+ * window resolves from the same in-flight promise it always did.
+ */
+export const DEFERRED_START_CONCURRENCY = 16;
+
+let activeDeferredStarts = 0;
+const pendingDeferredStarts: (() => void)[] = [];
+
+function pumpDeferredStarts(): void {
+  while (activeDeferredStarts < DEFERRED_START_CONCURRENCY && pendingDeferredStarts.length > 0) {
+    const launch = pendingDeferredStarts.shift();
+    launch?.();
+  }
+}
+
+/**
+ * Register the wrapper promise NOW - assetsReady() snapshots the task list the
+ * moment it is called, so every deferred task must be awaitable before
+ * beginDeferredPreloads returns - while the underlying fetch starts only when
+ * the concurrency window has room. A thunk that throws synchronously must
+ * surface through assetsReady's aggregate rather than escaping into the
+ * pump's stack.
+ */
+function enqueueDeferredStart(start: () => Promise<unknown>): void {
+  registerPreload(
+    new Promise<void>((resolve, reject) => {
+      pendingDeferredStarts.push(() => {
+        activeDeferredStarts++;
+        const settle = (finish: () => void): void => {
+          activeDeferredStarts--;
+          finish();
+          pumpDeferredStarts();
+        };
+        try {
+          start().then(
+            () => settle(resolve),
+            (err: unknown) => settle(() => reject(err)),
+          );
+        } catch (err) {
+          settle(() => reject(err));
+        }
+      });
+      pumpDeferredStarts();
+    }),
+  );
+}
+
+/**
  * Open the deferred lane: world entry has begun. Idempotent, and returns how many
  * fetches it started so the caller can log it. MUST run before the assetsReady()
  * that gates the Renderer, because assetsReady captures the task list when called.
+ * Every stored thunk is registered as an awaitable task synchronously here; the
+ * fetches themselves start through the bounded concurrency window above.
  */
 export function beginDeferredPreloads(): number {
   if (deferredBegun) return 0;
   deferredBegun = true;
-  const started = deferredStarters.length;
-  for (const start of deferredStarters) {
-    // A thunk that throws synchronously must surface through assetsReady's
-    // aggregate rather than escaping into the caller's stack.
-    try {
-      registerPreload(start());
-    } catch (err) {
-      registerPreload(Promise.reject(err));
-    }
-  }
-  deferredStarters.length = 0;
-  return started;
+  const starters = deferredStarters.splice(0, deferredStarters.length);
+  for (const start of starters) enqueueDeferredStart(start);
+  return starters.length;
 }
 
 /** Test-only view of the registry, so a guard can prove no task retains its
@@ -98,9 +155,13 @@ export const preloadInternalsForTest = {
   tasks: (): readonly Promise<unknown>[] => tasks,
   pendingDeferred: (): number => deferredStarters.length,
   begun: (): boolean => deferredBegun,
+  pendingWindow: (): number => pendingDeferredStarts.length,
+  activeWindow: (): number => activeDeferredStarts,
   reset: (): void => {
     tasks.length = 0;
     deferredStarters.length = 0;
+    pendingDeferredStarts.length = 0;
+    activeDeferredStarts = 0;
     deferredBegun = false;
   },
 };

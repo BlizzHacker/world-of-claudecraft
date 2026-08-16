@@ -335,7 +335,7 @@ describe('runBackgroundPrewarm', () => {
     expect(passMethod).toContain('this.discardOutOfBandDraws()');
   });
 
-  it('awaits shader compiles instead of letting timed-out work overlap later lanes', () => {
+  it('awaits zone-lane and material-swap compiles; only the boot color compile races its budget', () => {
     const source = readFileSync(new URL('../src/render/renderer.ts', import.meta.url), 'utf8');
     const zoneStart = source.indexOf('private async prepareZoneSky(');
     const zoneEnd = source.indexOf('\n  /** Blocking-path neighborhood prepare', zoneStart);
@@ -347,8 +347,24 @@ describe('runBackgroundPrewarm', () => {
     const bootEnd = source.indexOf("id: 'sky.current-zone'", bootStart);
     const bootSlice = source.slice(bootStart, bootEnd);
 
+    // Live lanes must never race a compile: the linker cannot be cancelled, so
+    // a timeout only lets it overlap the next child and gameplay frames.
     expect(zoneSlice).not.toContain('Promise.race');
+    // compileSkinnedShadowPrograms swaps depth materials onto live rigs for
+    // the duration of its await; abandoning it mid-flight would leave the
+    // swap in place. The boot manifest checks its compile budget BETWEEN
+    // groups instead of racing inside one.
     expect(shadowSlice).not.toContain('Promise.race');
-    expect(bootSlice).not.toContain('Promise.race');
+    // The boot-gate color compile is the exception (the world-entry loading
+    // spike): it holds the reveal only for the compile budget's remainder and
+    // lets a slower driver finish linking off-thread under the live world. No
+    // material swaps are involved, so overlap is benign.
+    expect(bootSlice).toContain('Promise.race');
+    const raceAt = bootSlice.indexOf('Promise.race');
+    const shadowLoopAt = bootSlice.indexOf('await this.compileSkinnedShadowPrograms(group)');
+    expect(shadowLoopAt).toBeGreaterThan(-1);
+    expect(shadowLoopAt).toBeLessThan(raceAt);
+    expect(bootSlice).toContain('if (compileBudgetLeft() <= 0)');
+    expect(bootSlice).toContain('if (!settled) compileTimedOut = true;');
   });
 });

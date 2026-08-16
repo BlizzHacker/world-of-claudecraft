@@ -15,6 +15,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import {
   assetsReady,
   beginDeferredPreloads,
+  DEFERRED_START_CONCURRENCY,
   preloadInternalsForTest,
   registerDeferredPreload,
   registerPreload,
@@ -70,6 +71,41 @@ describe('deferred preload lane', () => {
     expect(beginDeferredPreloads()).toBe(1);
     expect(beginDeferredPreloads()).toBe(0);
     expect(preloadInternalsForTest.tasks()).toHaveLength(1);
+  });
+
+  it('opens the lane through a bounded concurrency window, not one synchronous burst', async () => {
+    // The world registers ~424 deferred thunks. Starting them all in one
+    // synchronous loop made their decode work land as a single main-thread
+    // burst at world entry; the window keeps the pipeline full while capping
+    // how many are in flight. The ORDER safety property is unchanged: every
+    // task is awaitable (registered) the moment the lane opens, so the
+    // assetsReady() snapshot still covers all of them.
+    const flush = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 0));
+    const resolvers: (() => void)[] = [];
+    let started = 0;
+    const total = DEFERRED_START_CONCURRENCY + 5;
+    for (let i = 0; i < total; i++) {
+      registerDeferredPreload(
+        () =>
+          new Promise<void>((resolve) => {
+            started++;
+            resolvers.push(resolve);
+          }),
+      );
+    }
+    expect(beginDeferredPreloads()).toBe(total);
+    expect(preloadInternalsForTest.tasks()).toHaveLength(total);
+    expect(started).toBe(DEFERRED_START_CONCURRENCY);
+    expect(preloadInternalsForTest.pendingWindow()).toBe(total - DEFERRED_START_CONCURRENCY);
+    // Each settled task admits the next; draining everything settles assetsReady.
+    while (started < total || resolvers.length > 0) {
+      for (const resolve of resolvers.splice(0, resolvers.length)) resolve();
+      await flush();
+    }
+    await assetsReady();
+    expect(started).toBe(total);
+    expect(preloadInternalsForTest.pendingWindow()).toBe(0);
+    expect(preloadInternalsForTest.activeWindow()).toBe(0);
   });
 
   it('starts a late registration immediately once the lane is open', () => {
