@@ -34,6 +34,7 @@ export function playwrightBrowserCandidates(options = {}) {
       const dir = path.join(root, entry.name);
       out.push(
         path.join(dir, 'chrome-linux', 'chrome'),
+        path.join(dir, 'chrome-linux64', 'chrome'),
         path.join(dir, 'chrome-mac', 'Chromium.app', 'Contents', 'MacOS', 'Chromium'),
         path.join(dir, 'chrome-win', 'chrome.exe'),
       );
