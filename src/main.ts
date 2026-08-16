@@ -3622,6 +3622,32 @@ async function startGame(
     const clickToMoveButton = normalizeClickMoveButton(settings.get('clickToMoveButton'));
     const isClickMoveButton = clickToMove && button === clickToMoveButton;
     if (id === null) {
+      // Click-to-enter buildings: a plain left click that lands on an enterable
+      // building footprint (not an entity) opens the Enter/Cancel prompt when the
+      // player is within an obvious range. Entry itself is server-authoritative
+      // (world.interact() → sim.interact → buildingDoorNear → enterInterior);
+      // leaving is the resident NPC's "Step back outside" option. This hunk is the
+      // PLAYER'S doorway into buildings (with the interact key as the other half),
+      // and the v0.35.1 intake merge dropped it while keeping its import and range
+      // const — every building read as sealed to a clicking player while the sim's
+      // own door tests stayed green. Pinned by tests/client_shell.test.ts.
+      if (button === 0 && !world.player.dead) {
+        const g = renderer.groundPoint(x, y, world.player.pos.y);
+        const hit = g ? buildingAtPoint(g.x, g.z) : null;
+        if (hit) {
+          const pp = world.player.pos;
+          const near = Math.hypot(pp.x - hit.cx, pp.z - hit.cz) <= BUILDING_CLICK_ENTER_RANGE;
+          if (near) {
+            hud.openBuildingEnterPrompt(hit.interiorType, () => world.interact());
+          } else {
+            // Too far — walk toward the building's near edge, then they can click again.
+            if (wantClickFeedback) renderer.spawnClickMarker(g!.x, g!.z, false);
+            const target = resolvedClickMoveTarget(g!);
+            input.setClickMoveTarget(target, 0.5, null, clickMovePathTo(target));
+          }
+          return;
+        }
+      }
       // Classic behavior clears the target on a ground left-click; the opt-in
       // stickyTarget setting keeps it (only the clear is skipped, click-to-move
       // below is untouched). Decision table: src/game/target_click.ts.

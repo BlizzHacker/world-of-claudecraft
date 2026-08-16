@@ -17311,7 +17311,14 @@ export class Hud {
   // interact that teleports the player into the interior room. Leaving is done by talking
   // to the resident NPC inside (its dialog carries the Leave option).
   openBuildingEnterPrompt(interiorType: number, onEnter: () => void): void {
-    const name = interiorType === 0 ? 'the shop' : interiorType === 1 ? 'the inn' : 'the house';
+    const name =
+      interiorType === 0
+        ? 'the shop'
+        : interiorType === 1
+          ? 'the inn'
+          : interiorType === 3
+            ? 'the chapel'
+            : 'the house';
     const title = tOptional('buildings.enterTitle', { place: name }) ?? `Enter ${name}?`;
     const body =
       tOptional('buildings.enterBody') ??

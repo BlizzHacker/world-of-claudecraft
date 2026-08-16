@@ -147,6 +147,35 @@ export function tryNearbyInteraction(
     if (availability.hasLoot) return world.lootCorpse(bestCorpse);
     return availability.harvestable;
   }
+  // Building entry arbitrates on DISTANCE against every arm below the corpse
+  // press, mirroring the sim's own rule (sim/interaction.ts: the door enters
+  // only when door.d2 <= bestObjD2 && door.d2 <= bestQuestD2): the door the
+  // player is standing right AT wins over a doorstep NPC or ambient prop,
+  // while any of those strictly closer than the door point still claims the
+  // press. This arm cannot sit only at the bottom of the ladder: an NPC
+  // stands within interact range of six of seven Eastbrook doorsteps (the
+  // smith, the cook, the weaver, the tinker...), so a bottom-only door arm
+  // means the client NEVER SENDS the interact — the server's arbitration,
+  // which would have entered, is never consulted, and the church and mill
+  // read as sealed to a real player even though the sim's own door path is
+  // green (the v0.35.1 "doors dead on live" report).
+  const door = player.dead ? null : buildingDoorNear(player.pos.x, player.pos.z);
+  if (door) {
+    const doorDistance = Math.sqrt(door.d2);
+    // Each comparison is gated on that arm actually having a candidate: the
+    // unclaimed initial best distances are range caps, not contenders, and
+    // letting a cap outrank the door would hand the press back to a FARTHER
+    // NPC (ties go to the door, exactly like the sim).
+    const doorWins =
+      (bestDelve === null || doorDistance <= bestDelveDistance) &&
+      (bestObject === null || doorDistance <= bestObjectDistance) &&
+      (bestNpc === null || doorDistance <= bestNpcDistance) &&
+      (bestNode === null || doorDistance <= bestNodeDistance);
+    if (doorWins) {
+      world.interact();
+      return true;
+    }
+  }
   if (bestDelve !== null) {
     return world.delveInteract(bestDelve);
   }

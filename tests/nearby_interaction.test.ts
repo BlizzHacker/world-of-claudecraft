@@ -1,5 +1,8 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { tryNearbyInteraction } from '../src/game/nearby_interaction';
+import { getActiveWorldContent } from '../src/sim/data';
+import { computeBuildingDoors } from '../src/sim/interiors';
+import { setRealmHostEnv } from '../src/sim/realms/registry';
 import type { Entity, GatherNodeDef, QuestProgress } from '../src/sim/types';
 
 function entity(overrides: Partial<Entity> & Pick<Entity, 'id' | 'kind'>): Entity {
@@ -375,6 +378,88 @@ describe('tryNearbyInteraction', () => {
 
     await expect(interact(r)).resolves.toBe(false);
     expect(r.calls).toEqual(['pickup:2']);
+  });
+});
+
+// Building doors compete on DISTANCE with the arms below the corpse press,
+// mirroring the sim's own arbitration (sim/interaction.ts): the door the player
+// stands right at wins over a doorstep NPC/prop; anything strictly closer still
+// claims the press. The live "doors dead" regression: an NPC stands within
+// interact range of six of seven Eastbrook doorsteps, and a bottom-of-the-ladder
+// door arm meant the client NEVER sent the interact — the sim's green door path
+// was simply never consulted by a real player's keypress.
+describe('tryNearbyInteraction building-door arbitration (real infernal doors)', () => {
+  afterEach(() => setRealmHostEnv(null));
+  function forceInfernal() {
+    setRealmHostEnv({
+      queryParam: (n: string) => (n === 'realm' ? 'infernal' : null),
+      storageGet: () => null,
+      storageSet: () => {},
+    });
+  }
+  // The Eastbrook chapel door — the operator's "church". Resolved from the real
+  // active world content, so the pin tracks the shipped town, not a fixture.
+  function chapelDoor() {
+    const buildings = getActiveWorldContent().props.buildings;
+    const chapel = buildings.find((b) => b.kind === 'chapel')!;
+    expect(chapel).toBeTruthy();
+    const doors = computeBuildingDoors(buildings);
+    return doors.reduce((a, b) =>
+      Math.hypot(a.x - chapel.x, a.z - chapel.z) <= Math.hypot(b.x - chapel.x, b.z - chapel.z)
+        ? a
+        : b,
+    );
+  }
+
+  it('the door underfoot beats a doorstep NPC (the live church/mill regression)', () => {
+    forceInfernal();
+    const door = chapelDoor();
+    const priest = entity({
+      id: 2,
+      kind: 'npc',
+      templateId: 'elder_maren',
+      pos: { x: door.x + 2, y: 0, z: door.z },
+    });
+    const r = rig([priest]);
+    r.player.pos = { x: door.x, y: 0, z: door.z };
+    expect(interact(r)).toBe(true);
+    // The press goes to the authoritative interact (the server/sim enters the
+    // building), NOT to the NPC dialog.
+    expect(r.calls).toEqual(['interact']);
+  });
+
+  it('a strictly closer NPC still wins the press inside a door ring', () => {
+    forceInfernal();
+    const door = chapelDoor();
+    // Player inside the ring but 3.5yd off the door point; the NPC at 1yd.
+    const priest = entity({
+      id: 2,
+      kind: 'npc',
+      templateId: 'elder_maren',
+      pos: { x: door.x + 4.5, y: 0, z: door.z },
+    });
+    const r = rig([priest]);
+    r.player.pos = { x: door.x + 3.5, y: 0, z: door.z };
+    expect(interact(r)).toBe(true);
+    expect(r.calls).toEqual(['quest:2']);
+  });
+
+  it('a corpse at the feet still beats the door underfoot', () => {
+    forceInfernal();
+    const door = chapelDoor();
+    const corpse = entity({
+      id: 2,
+      kind: 'mob',
+      templateId: 'forest_wolf',
+      dead: true,
+      lootable: true,
+      loot: { copper: 1, items: [] },
+      pos: { x: door.x + 0.5, y: 0, z: door.z },
+    });
+    const r = rig([corpse]);
+    r.player.pos = { x: door.x, y: 0, z: door.z };
+    expect(interact(r)).toBe(true);
+    expect(r.calls).toEqual(['harvestCorpse:2', 'loot:2']);
   });
 });
 

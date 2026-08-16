@@ -2101,6 +2101,24 @@ describe('client HTML shell', () => {
       "import { stopAutorunForInteraction } from './game/interaction_autorun';",
     );
     expect(mainTs).toContain("import { tryNearbyInteraction } from './game/nearby_interaction';");
+    // Click-to-enter buildings: the PLAYER's doorway (with the interact key as
+    // the other half). The v0.35.1 intake merge dropped this handlePick hunk
+    // while keeping its import and range const, leaving openBuildingEnterPrompt
+    // with zero callers — clicking any building did nothing on live while the
+    // sim-level door tests stayed green. Pin the full wiring: footprint
+    // hit-test, range gate, prompt, authoritative enter.
+    expect(mainTs).toContain(
+      "import { buildingAtPoint, buildingDoorNear } from './sim/interiors';",
+    );
+    expect(mainTs).toContain('const hit = g ? buildingAtPoint(g.x, g.z) : null;');
+    expect(mainTs).toContain(
+      'Math.hypot(pp.x - hit.cx, pp.z - hit.cz) <= BUILDING_CLICK_ENTER_RANGE',
+    );
+    expect(mainTs).toContain(
+      'hud.openBuildingEnterPrompt(hit.interiorType, () => world.interact());',
+    );
+    // The interact-key half (the door arbitrating by distance against a
+    // doorstep NPC) is pinned behaviorally in tests/nearby_interaction.test.ts.
     // The fork routes the pick through handlePickedEntity and feeds its outcome
     // to stopAutorunForInteraction, instead of upstream's inline
     // tryNearbyInteraction composition. Same contract: an attempted interaction
