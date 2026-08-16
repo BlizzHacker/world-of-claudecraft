@@ -20,6 +20,7 @@ import {
   ZONES,
 } from '../sim/data';
 import { getActiveRealm, REALMS } from '../sim/realms/registry';
+import { waypointDefs } from '../sim/waypoints';
 import type { ItemDef, PlayerClass } from '../sim/types';
 import {
   en,
@@ -441,6 +442,12 @@ const REALM_RIFT_RANK_WORDS: boolean = Object.values(REALMS).some(
   (realm) => realm.entityText?.riftRanks !== undefined,
 );
 
+// Waypoint ids any realm overlays (same one-time union as REALM_ENTITY_TEXT_IDS:
+// a waypoint no realm renames never resolves the active realm).
+const REALM_WAYPOINT_IDS: ReadonlySet<string> = new Set(
+  Object.values(REALMS).flatMap((realm) => Object.keys(realm.entityText?.waypoints ?? {})),
+);
+
 function requestGateKey(request: EntityTranslationRequest): string {
   switch (request.kind) {
     case 'questObjective':
@@ -560,6 +567,46 @@ export function zonePoiLabel(zoneId: string, poiIndex: number): string {
 
 export function dungeonDisplayName(dungeonId: string): string {
   return tEntity({ kind: 'dungeon', id: dungeonId, field: 'name' });
+}
+
+// --- Waypoint display names (realm overlay on a SERVER-FED surface) ----------
+//
+// Waypoint names ride the wire as display strings (waypointMenu payload, the
+// pylon ground-object's entity name, and baked into sim log sentences), so the
+// overlay applies at render, never to the payload: the sim keeps emitting the
+// canonical English name and non-overlaid realms keep rendering it unchanged.
+// Waypoint IDS (wp_<zoneId>[_wild]) are identifiers - save data
+// (waypointsActivated) and the travel command token - and never rename.
+
+/** The wire-supplied waypoint name for canonical-name -> id reverse mapping
+ *  (the sim_i18n locZone pattern): built lazily from waypointDefs() only when
+ *  some realm actually overlays a waypoint. */
+let waypointNameToId: Map<string, string> | null = null;
+
+function waypointIdForWireName(wireName: string): string | null {
+  if (waypointNameToId === null) {
+    waypointNameToId = new Map();
+    for (const def of waypointDefs()) waypointNameToId.set(def.name, def.id);
+  }
+  return waypointNameToId.get(wireName) ?? null;
+}
+
+/** The active realm's display name for a waypoint, falling back to the
+ *  wire-supplied name (which is also the canonical English). */
+export function waypointDisplayName(waypointId: string, wireName: string): string {
+  if (!REALM_WAYPOINT_IDS.has(waypointId)) return wireName;
+  const overlay = getActiveRealm().entityText?.waypoints;
+  const name = overlay ? ownEntry(overlay, waypointId) : undefined;
+  return name ?? wireName;
+}
+
+/** Re-skin a canonical waypoint name spliced into a sim log sentence: the
+ *  name maps back to its waypoint id, then through the realm overlay. Returns
+ *  the input unchanged for a non-waypoint name or a realm without renames. */
+export function realmWaypointName(wireName: string): string {
+  if (REALM_WAYPOINT_IDS.size === 0) return wireName;
+  const id = waypointIdForWireName(wireName);
+  return id === null ? wireName : waypointDisplayName(id, wireName);
 }
 
 /** The label a live rift floor (IWorld.riftFloor) shows wherever a surface needs

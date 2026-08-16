@@ -302,8 +302,10 @@ import {
   itemDisplayName,
   itemSetBonusField,
   knownLetterId,
+  realmWaypointName,
   riftFloorLabel,
   tEntity,
+  waypointDisplayName,
   zoneDisplayName,
   zonePoiLabel,
 } from './entity_i18n';
@@ -14402,6 +14404,28 @@ export class Hud {
       return t('hudChrome.dailyRewards.pointsGained', {
         points: formatNumber(Number(match[1]), { maximumFractionDigits: 0 }),
       });
+    // Waypoint travel log lines splice the CANONICAL waypoint name into an
+    // English sentence (src/sim/waypoints.ts); re-skin the name through the
+    // realm lore overlay (realmWaypointName) so the Cinderveil renames reach
+    // the chat log too. The sentence itself stays English source text - these
+    // lines carry no i18n key today, and a non-overlaid realm passes through
+    // byte-identically.
+    match = /^Waypoint activated: (.+)\. Travel here from any other waypoint\.$/.exec(text);
+    if (match) {
+      const name = realmWaypointName(match[1]);
+      if (name !== match[1])
+        return `Waypoint activated: ${name}. Travel here from any other waypoint.`;
+    }
+    match = /^(.+) waypoint\. Choose a destination to travel\.$/.exec(text);
+    if (match) {
+      const name = realmWaypointName(match[1]);
+      if (name !== match[1]) return `${name} waypoint. Choose a destination to travel.`;
+    }
+    match = /^You travel to (.+)\.$/.exec(text);
+    if (match) {
+      const name = realmWaypointName(match[1]);
+      if (name !== match[1]) return `You travel to ${name}.`;
+    }
     // Server-sent friends/guild/who/world messages arrive as 'log' events; fall
     // back to the shared server-message localizer (same as localizeErrorText /
     // localizeLootText) so they are not displayed in raw English.
@@ -18856,7 +18880,10 @@ export class Hud {
     for (const w of waypoints) {
       const btn = document.createElement('button');
       btn.className = 'btn waypoint-dest';
-      btn.textContent = w.known ? w.name : `${w.name} (undiscovered)`;
+      // The wire carries the canonical English name; the realm lore overlay
+      // (RealmContent.entityText.waypoints) re-skins it at render only.
+      const name = waypointDisplayName(w.id, w.name);
+      btn.textContent = w.known ? name : `${name} (undiscovered)`;
       btn.disabled = !w.known;
       if (w.known) {
         btn.addEventListener('click', () => {

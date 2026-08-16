@@ -8,6 +8,8 @@ import type { Provider } from '@reown/appkit-adapter-solana';
 import { Transaction, VersionedTransaction } from '@solana/web3.js';
 import bs58 from 'bs58';
 
+import { getActiveRealm } from '../sim/realms/registry';
+
 export interface WalletConnectState {
   address: string | null;
   chain: string | null;
@@ -86,6 +88,13 @@ export function deserializeSolanaTransaction(
   return versioned.version === 'legacy' ? Transaction.from(bytes) : versioned;
 }
 
+/** The player-visible dapp name for the wallet dialog: the active realm's
+ *  brand text, falling back to the realm's picker name. */
+function walletDappBrand(): string {
+  const realm = getActiveRealm();
+  return realm.branding?.brandText ?? realm.name;
+}
+
 function metadataUrl(): string {
   if (typeof window !== 'undefined' && /^https?:$/.test(window.location.protocol)) {
     return window.location.origin;
@@ -115,8 +124,12 @@ export async function createWalletConnectClient(projectId: string): Promise<Wall
     networks: [solana],
     defaultNetwork: solana,
     metadata: {
-      name: 'World of ClaudeCraft',
-      description: 'Connect a Solana wallet to World of ClaudeCraft',
+      // The wallet approval dialog shows this to the player: brand it for the
+      // ACTIVE realm (Cryptic Realm - Infernal, ...) instead of the baked
+      // upstream 'World of ClaudeCraft'. The claudecraft realm still reads its
+      // own brandText, so it keeps the upstream name verbatim.
+      name: walletDappBrand(),
+      description: `Connect a Solana wallet to ${walletDappBrand()}`,
       url: metadataUrl(),
       icons: ['https://worldofclaudecraft.com/icons/icon-512.png'],
     },

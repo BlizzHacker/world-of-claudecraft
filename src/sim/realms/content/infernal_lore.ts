@@ -429,38 +429,229 @@ export const INFERNAL_ENTITY_TEXT: RealmEntityText = {
       "body": "Traveler,\n\nThe Ravenpost has opened its perches across the vale. Seek the raven pillars in Candlebrook, Fenbridge and Highwatch: from any of them you may send letters, coin and goods to other adventurers, and collect whatever the ravens bring you.\n\nEnclosed is a small courtesy for your first stamp.\n\nWings up,\nThe Ravenpost"
     }
   },
+  "deeds": {
+    "chr_farshore_first_cast": {
+      "desc": "Catch a fish from the waters of Lastlight Isle."
+    },
+    "chr_farshore_gatherer": {
+      "desc": "Harvest an ore vein, a wood stand, and an herb patch on Lastlight Isle."
+    },
+    "chr_galecrest_first_cast": {
+      "desc": "Catch a fish from the waters of the Keening Scar."
+    },
+    "chr_galecrest_gatherer": {
+      "desc": "Harvest an ore vein, a wood stand, and an herb patch in the Keening Scar."
+    },
+    "chr_marsh_chapter_iii": {
+      "name": "Chronicle of the Sorrowfen",
+      "desc": "See the fen's whole story through: the cult camp broken, the Fogbinder silenced in the Drowned Chancel, and every named terror of the mist laid low.",
+      "title": "of the Sorrowfen"
+    },
+    "chr_marsh_first_cast": {
+      "desc": "Catch a fish from the waters of Sorrowfen."
+    },
+    "chr_marsh_gatherer": {
+      "desc": "Harvest an ore vein, a wood stand, and an herb patch in Sorrowfen."
+    },
+    "chr_marsh_rares": {
+      "desc": "Slay the three named terrors of Sorrowfen: Mirejaw the Ravenous, Sloomtooth the Drowned, and Sister Nhalia."
+    },
+    "chr_marsh_rares_ii": {
+      "desc": "Slay Grubjaw the Glutton, a fourth named terror of Sorrowfen left off the first reckoning."
+    },
+    "chr_peaks_chapter_iii": {
+      "name": "Chronicle of Martyrspike",
+      "title": "of Martyrspike"
+    },
+    "chr_peaks_gatherer": {
+      "desc": "Harvest an ore vein, a wood stand, and an herb patch in Martyrspike Heights."
+    },
+    "chr_peaks_rares": {
+      "desc": "Slay the four named terrors of Martyrspike Heights: the Ironvein Foreman, Brutok Skullsmasher, Voskar the Emberwing, and Marrowlord Varkas."
+    },
+    "chr_peaks_rares_ii": {
+      "desc": "Slay Old Cragmaw and Shardlord Kazzix, two more named terrors of Martyrspike Heights left off the first reckoning."
+    },
+    "chr_vale_chapter_i": {
+      "desc": "Finish the first chapter of Saul's chronicle: Candlebrook's opening errands, the lay of the Vale, and a first taste of its trades."
+    },
+    "chr_vale_chapter_ii": {
+      "desc": "Finish the second chapter of Saul's chronicle: bandits, murlocs, and mine vermin put down, Harrowfield played, and the Reliquary braved."
+    },
+    "chr_vale_chapter_iii": {
+      "desc": "See the Vale's whole story through: the Gravecaller unmasked, the Hollowmass Ossuary cleansed, and every named terror of the Vale laid low."
+    },
+    "chr_vale_cup_debut": {
+      "desc": "Take the field and touch the ball in a Tallow Cup match at Harrowfield."
+    },
+    "chr_vale_first_cast": {
+      "desc": "Catch a fish from the waters of Candlebrook Vale."
+    },
+    "chr_vale_gatherer": {
+      "desc": "Harvest an ore vein, a wood stand, and an herb patch in Candlebrook Vale."
+    },
+    "chr_vale_rares": {
+      "desc": "Slay the five named terrors of Candlebrook Vale: Old Greyjaw, Mogger, Grix the Tunnelking, Captain Verlan, and Wraithbinder Maldrec."
+    },
+    "chr_wraithwood_first_cast": {
+      "desc": "Catch a fish from the waters of Gallowsroot."
+    },
+    "chr_wraithwood_gatherer": {
+      "desc": "Harvest an ore vein, a wood stand, and an herb patch in Gallowsroot."
+    },
+    "dgn_hollow_crypt": {
+      "desc": "Defeat Morthen the Gravecaller in the Hollowmass Ossuary."
+    },
+    "dgn_hollow_crypt_heroic": {
+      "name": "Heroic: The Hollowmass Ossuary",
+      "desc": "Defeat Morthen the Gravecaller in the Hollowmass Ossuary on Heroic difficulty."
+    },
+    "dgn_nythraxis": {
+      "desc": "Defeat Nythraxis, Scourge of Martyrspike, beyond the sealed royal door."
+    },
+    "dgn_nythraxis_deathless": {
+      "desc": "Defeat Nythraxis, Scourge of Martyrspike, on Heroic difficulty without a single raider dying."
+    },
+    "dgn_nythraxis_heroic": {
+      "desc": "Defeat Nythraxis, Scourge of Martyrspike, on Heroic difficulty."
+    },
+    "dgn_sunken_bastion": {
+      "desc": "Defeat Vael the Fogbinder in the Drowned Chancel."
+    },
+    "dgn_sunken_bastion_heroic": {
+      "name": "Heroic: The Drowned Chancel",
+      "desc": "Defeat Vael the Fogbinder in the Drowned Chancel on Heroic difficulty."
+    },
+    "dgn_thornpeak_rounds": {
+      "desc": "Clear the Hollowmass Ossuary, the Drowned Chancel, the Drowned Temple, and Gravewyrm Sanctum."
+    },
+    "exp_long_road_north": {
+      "desc": "Visit all three hub settlements: Candlebrook, Fenbridge, and Highwatch."
+    },
+    "exp_marsh_wayfarer": {
+      "desc": "Visit all eight named places of Sorrowfen."
+    },
+    "exp_peaks_wayfarer": {
+      "desc": "Visit all ten named places of Martyrspike Heights."
+    },
+    "exp_vale_wayfarer": {
+      "desc": "Visit all eleven named places of Candlebrook Vale."
+    },
+    "prog_callused_hands": {
+      "desc": "Complete A Trade for Every Hand and earn your first callus in Candlebrook's trades."
+    },
+    "pvp_card_duel_first_win": {
+      "desc": "Win a Card Duel at the Bonedealer."
+    },
+    "pvp_vcup_clean_sheet": {
+      "desc": "Win a rated Tallow Cup match as keeper without conceding a goal, in the 3v3 bracket or larger."
+    },
+    "pvp_vcup_first_goal": {
+      "desc": "Score a goal in a rated Tallow Cup match."
+    },
+    "pvp_vcup_first_match": {
+      "desc": "See out a full Tallow Cup match at Harrowfield, win or lose."
+    },
+    "pvp_vcup_first_save": {
+      "desc": "Make a save as keeper in a rated Tallow Cup match, in the 3v3 bracket or larger. Only a shot moving fast enough to test your grip counts: a soft catch does not."
+    },
+    "pvp_vcup_first_win": {
+      "desc": "Win a rated Tallow Cup match."
+    },
+    "pvp_vcup_golden_goal": {
+      "desc": "Score the golden goal that decides a rated Tallow Cup match."
+    },
+    "pvp_vcup_guild_win": {
+      "desc": "Win a rated Tallow Cup match entered under your guild's banner."
+    },
+    "pvp_vcup_hat_trick": {
+      "desc": "Score three goals in a single rated Tallow Cup match, in the 3v3 bracket or larger."
+    },
+    "pvp_vcup_wins_10": {
+      "desc": "Win 10 rated Tallow Cup matches."
+    },
+    "pvp_vcup_wins_25": {
+      "desc": "Win 25 rated Tallow Cup matches."
+    },
+    "soc_meet_bursar": {
+      "desc": "Pay your respects to Bursar Ferrand, keeper of the Gilded Strongbox in Candlebrook."
+    }
+  },
   "catalog": {
+    "hud.core.riftLabelRanked": "{rank}: {name}",
     "hudChrome.keybinds.valecup": "Tallow Cup",
-    "hudChrome.vcup.title": "The Tallow Cup",
+    "hudChrome.vcup.bannerDraw": "A draw at Harrowfield.",
+    "hudChrome.vcup.bannerFound": "The Tallow Cup calls: {nationA} vs {nationB}!",
+    "hudChrome.vcup.bannerLoss": "Defeat at Harrowfield.",
+    "hudChrome.vcup.bannerWin": "Victory at Harrowfield!",
+    "hudChrome.vcup.bet.aria": "Tallow Cup match betting",
+    "hudChrome.vcup.bet.lostLog": "Your Tallow Cup bet lost: {amount}.",
+    "hudChrome.vcup.bet.wonLog": "Your Tallow Cup bet won: {amount} returned.",
     "hudChrome.vcup.close": "Close the Tallow Cup window",
-    "hudChrome.vcup.offlineNote": "The fixture book is closed. The Tallow Cup is not available right now.",
-    "hudChrome.vcup.queueNote": "Queue from anywhere; the whistle calls you to Harrowfield.",
-    "hudChrome.vcup.liveHeading": "Now at Harrowfield",
-    "hudChrome.vcup.liveAria": "Tallow Cup: {nationA} {scoreA}, {nationB} {scoreB}",
-    "hudChrome.vcup.walkUp": "Walk up to Harrowfield to watch from the stands.",
-    "hudChrome.vcup.indicatorQueued": "Tallow Cup queue: {bracket}, position {position} of {count}",
+    "hudChrome.vcup.gossipOpenAria": "Open the Tallow Cup window",
     "hudChrome.vcup.indicatorLive": "Tallow Cup",
     "hudChrome.vcup.indicatorOpen": "Open the Tallow Cup window",
-    "hudChrome.vcup.bannerFound": "The Tallow Cup calls: {nationA} vs {nationB}!",
-    "hudChrome.vcup.bannerWin": "Victory at Harrowfield!",
-    "hudChrome.vcup.bannerDraw": "A draw at Harrowfield.",
-    "hudChrome.vcup.bannerLoss": "Defeat at Harrowfield.",
+    "hudChrome.vcup.indicatorQueued": "Tallow Cup queue: {bracket}, position {position} of {count}",
+    "hudChrome.vcup.liveAria": "Tallow Cup: {nationA} {scoreA}, {nationB} {scoreB}",
+    "hudChrome.vcup.liveHeading": "Now at Harrowfield",
+    "hudChrome.vcup.logDraw": "The bout at Harrowfield ends in a draw.",
+    "hudChrome.vcup.logFound": "Your Tallow Cup match is ready: {nationA} vs {nationB}.",
+    "hudChrome.vcup.logLoss": "You lose the bout at Harrowfield.",
     "hudChrome.vcup.logQueued": "You join the Tallow Cup queue for {bracket} (position {position}).",
     "hudChrome.vcup.logUnqueued": "You leave the Tallow Cup queue.",
-    "hudChrome.vcup.logFound": "Your Tallow Cup match is ready: {nationA} vs {nationB}.",
     "hudChrome.vcup.logWin": "You win the bout at Harrowfield.",
-    "hudChrome.vcup.logDraw": "The bout at Harrowfield ends in a draw.",
-    "hudChrome.vcup.logLoss": "You lose the bout at Harrowfield.",
-    "hudChrome.vcup.gossipOpenAria": "Open the Tallow Cup window",
-    "hudChrome.vcup.bet.aria": "Tallow Cup match betting",
-    "hudChrome.vcup.bet.wonLog": "Your Tallow Cup bet won: {amount} returned.",
-    "hudChrome.vcup.bet.lostLog": "Your Tallow Cup bet lost: {amount}.",
-    "hud.core.riftLabelRanked": "{rank}: {name}"
+    "hudChrome.vcup.offlineNote": "The fixture book is closed. The Tallow Cup is not available right now.",
+    "hudChrome.vcup.queueNote": "Queue from anywhere; the whistle calls you to Harrowfield.",
+    "hudChrome.vcup.title": "The Tallow Cup",
+    "hudChrome.vcup.walkUp": "Walk up to Harrowfield to watch from the stands.",
+    "hudChrome.wocStore.skins.brasscrown_staff.lore": "Turned from seasoned hardwood and crowned with a brass finial the Candlebrook smiths cast by the hundred but perfect by the one. It belongs to the sort of traveller who wants to be taken seriously at Fenbridge's gate and Highwatch's wall alike. A walking stick that has never truly needed to walk; the dyed band matches a coat you can guess the price of.",
+    "hudChrome.wocStore.skins.cinderlatch_crossbow.lore": "The strangest of the ember-forged: the mountain's fire poured into a machine. Orange seeps from cracks in the prod, and a smouldering coal in the tiller keeps the string from ever stiffening in Martyrspike's cold or Sorrowfen's damp. Its bolts leave the groove already warm and land warmer. A hunter's answer to a wall where the enemy does not feel the cold either.",
+    "hudChrome.wocStore.skins.cosmarch_staff.lore": "A shaft of star-metal crowned with a molten-gold core and a ring of golden shards that march around it in slow, endless orbit: a little cosmos, etched with constellations that match no sky over Martyrspike. Aurora winds up its length like smoke that forgot to rise. Those who bore it claimed they could feel the void turning through it, the way Ysolei's mere 'drinks the moonlight': patient, and cold, and looking back.",
+    "hudChrome.wocStore.skins.emberwish_wand.lore": "Not the fallen star itself but the last mote of a dying one: a single molten-gold ember of a sun already gone out, wreathed in the sparks that were its final light. Its cosmos-black shaft is etched with the constellations that watched it die. The Sorrowfen crofters say it grants one wish to whoever holds it at true dusk; they also say every soul who held it wished for more time, and that the Drowned Moon granted none of them any.",
+    "hudChrome.wocStore.skins.fletcher_s_guild_bow.lore": "The closest thing the realm has to a guild is a fletcher's stamp on the riser, a promise about what's inside, the way a vintner seals a cask. Lacquered walnut, brass at the limb tips, a waxed linen string that won't fray through a Sorrowfen rain. Every joint argues for the price. Draw it once past the Widow Thicket and the argument wins.",
+    "hudChrome.wocStore.skins.frostbite_dagger.lore": "Thin as a held breath and twice as cold: a splinter of Martyrspike glacier honed to a single glowing vein, so keen the wound is frozen shut before the blood remembers to run. Its name is borrowed from the grave-chill the dead carry down off the peaks. It never needs sharpening; ice does not dull, Loremaster Caddis notes drily, it only waits.",
+    "hudChrome.wocStore.skins.glaciersplit_axe.lore": "Hewn from the blue heart of the Martyrspike glacier, where two centuries of ice have pressed the cold until it glows on its own. It trails vapour even at rest, and the crack of it landing is a crevasse opening under Stalker Ridge. Highwatch gives its fallen to the ice up there; so this is a weapon meant to keep the thaw, and whatever the thaw would wake, at bay.",
+    "hudChrome.wocStore.skins.ice_fang_sword.lore": "The flagship of the frozen grade, and the piece every collector reaches for first. Ice Fang was carved, not forged, from a fang of the glacier that caps Martyrspike above Highwatch, its cyan core burning cold as the light off the Glimmermere. It rimes the very air it cuts. The wall-guard swear one soldier carried it the night the high snows held the Wyrmcult back, and 'bought the wall a winter.'",
+    "hudChrome.wocStore.skins.meteorlatch_crossbow.lore": "Forged of raw meteoric star-metal while the Sorrowfen crater still glowed, debris 'too hot to handle,' hammered into limbs of cosmos-black etched with constellations, a molten-gold core banked along the tiller. It nocks no bolt but conjures one: a shaft of starfire, loosed like a verdict and landing like the end of one. When Highwatch feared even the deathless crown of Nythraxis might not be the worst thing beneath the peaks, this is the weapon they wanted on the wall. Aim it well.",
+    "hudChrome.wocStore.skins.rimecrusher_mace.lore": "Not carved but grown: Martyrspike ice coaxed around a cold cyan core until it set as hard as Hode's best steel. Hoarfrost creeps down the silvered haft toward the hand and never quite arrives. Where it strikes, water freezes; where it rests, the ground whitens. The grave-cold of the peaks, made small enough to swing at the things that climb the wall.",
+    "hudChrome.wocStore.skins.skyrender_axe.lore": "Beaten from the crater's rim, where the fallen star tore the sky's own reflection out of Sorrowfen and left a wound that still steams. The head looks like a piece of torn night: molten-gold cracks, constellations no scholar at Highwatch can name, an aurora bleeding off the edge with every swing. Brother Aldric blessed it and would not touch it. To lift it is to hold the hole the heavens left.",
+    "hudChrome.wocStore.skins.solheim_sword.lore": "When the star fell out of the western sky and 'burst like a forge' beyond the Widow Thicket, Brother Aldric pulled its still-smouldering heart from the Sorrowfen crater and begged the realm's smiths to work 'a thing that does not belong to this world.' They made one greatsword of it: Solheim. Its molten-gold core splits the cosmos-black blade like dawn cracking a night sky, and shards of star-metal orbit the guard on paths no hand set. Only one was ever forged. There will not be another.",
+    "hudChrome.wocStore.skins.starfall_mace.lore": "A star-core caught the instant before it died, ringed with the debris that fell with it, frozen an inch from oblivion. Its cosmos-black flanges run with trapped starlight, and aurora spills from the seams when it is raised. The old Priests of the Light called a falling star a judgment, a verdict handed down from above that no shield was meant to stop, and named this after the one that came down on Sorrowfen.",
+    "hudChrome.wocStore.skins.winterbite.lore": "A bow of silvered steel and Martyrspike ice, its riser lit by a cold cyan core that freezes the arrow to the string. It nocks a shaft of solid glacier-ice that reforms each draw; the archer carries no quiver on the wall, only the cold. Highwatch held Stalker Ridge through a siege with one like it: a single bowman, they say, and a winter's worth of arrows that were always already there.",
+    "loading.connectingRealm": "Reaching through the Cinderveil...",
+    "loading.enteringWorld": "The Cinderveil awaits...",
+    "loading.world": "Entering the Cinderveil...",
+    "loading.worldProgress": "Entering the Cinderveil... {done}/{total}"
   },
   "riftRanks": {
-    "C": "Fray",
-    "B": "Tear",
     "A": "Rend",
+    "B": "Tear",
+    "C": "Fray",
     "S": "Sundering"
-  }
+  },
+  "waypoints": {
+    "wp_eastbrook_vale": "Candlebrook",
+    "wp_eastbrook_vale_wild": "Candlebrook Trail"
+  },
+  "musicZones": {
+    "dungeon_hollow_crypt": "Hollowmass Ossuary",
+    "dungeon_sunken_bastion": "The Drowned Chancel",
+    "marsh": "The Sorrowfen",
+    "peaks": "Martyrspike Heights",
+    "town_eastbrook": "Candlebrook Vale (Town)",
+    "vale": "The Ashen Vale",
+    "vale_cup": "The Tallow Cup",
+    "vale_legacy": "Candlebrook Vale"
+  },
+  "vcBotNames": [
+    "Old Sallow",
+    "Reeve Mourne",
+    "Tally Sexton",
+    "Bess Harrow",
+    "Wick Tallow",
+    "Sorrel Ash",
+    "Hen Gallows",
+    "Pip Cinder",
+    "Mott Graves"
+  ]
 };

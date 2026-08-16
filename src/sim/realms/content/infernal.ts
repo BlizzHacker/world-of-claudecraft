@@ -7,10 +7,10 @@ import { INFERNAL_ENTITY_TEXT } from './infernal_lore';
 export const INFERNAL_REALM: RealmContent = {
   id: 'infernal',
   name: 'Infernal Realm',
-  tagline: 'Dark gothic ARPG — blood, fire, and forgotten crypts',
+  tagline: 'The Cinderveil — blood, candlelight, and forgotten crypts',
   description:
-    'Descend into a shattered underworld where ember-lit cathedrals crumble above ' +
-    'pits of molten sin. Every corridor hides a boss, every boss hides a relic.',
+    'Descend into the Cinderveil, a shattered underworld where ember-lit cathedrals ' +
+    'crumble above pits of molten sin. Every corridor hides a boss, every boss hides a relic.',
   mood: 'Dark · Gothic · Brutal',
   season: {
     eyebrow: 'Season 1',

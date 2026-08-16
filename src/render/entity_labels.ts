@@ -5,7 +5,7 @@
 // a renderer <-> painter import cycle.
 
 import type { Entity } from '../sim/types';
-import { dungeonDisplayName, tEntity } from '../ui/entity_i18n';
+import { dungeonDisplayName, tEntity, waypointDisplayName } from '../ui/entity_i18n';
 import { t } from '../ui/i18n';
 
 export function mobDisplayName(mobId: string): string {
@@ -17,6 +17,13 @@ export function npcDisplayName(npcId: string): string {
 }
 
 export function objectDisplayName(entity: Entity): string {
+  // Waypoint pylons: the wire name is the canonical English waypoint name; the
+  // realm lore overlay (RealmContent.entityText.waypoints) re-skins it at
+  // render. Checked before the objectItemId fallback because the landmark
+  // pylons carry their ASSET key there, which is not an item id.
+  if (entity.templateId === 'waypoint' && entity.waypointId) {
+    return waypointDisplayName(entity.waypointId, entity.name);
+  }
   if (entity.templateId === 'mailbox') {
     return t('worldContent.mailboxName');
   }

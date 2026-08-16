@@ -9,6 +9,7 @@
 // exactly as before while playback costs no synthesis CPU and no up-front
 // download. Each fight opens on one of the two battle themes at random.
 
+import { getActiveRealm, REALMS } from '../sim/realms/registry';
 import type { BiomeId } from '../sim/types';
 import { resumeWhenAllowed } from './audio_unlock';
 import { MUSIC_OVERRIDES } from './music_overrides.generated';
@@ -61,6 +62,15 @@ const MUSIC_ZONE_LABELS: Partial<Record<MusicZone, string>> = {
   dungeon_sunken_bastion: 'Sunken Bastion',
   dungeon_gravewyrm_sanctum: 'Gravewyrm Sanctum',
 };
+
+// Realm lore overlay on the now-playing LABEL only (RealmContent.entityText.
+// musicZones, keyed by the same MusicZone keys): the keys, TOWN_MUSIC/
+// ZONE_MUSIC/BIOME_MUSIC tables and ZONE_STREAM_URLS file names are identifiers
+// and never rename. One-time union gate (the entity_i18n cost discipline): when
+// no realm overlays a label, nowPlaying never resolves the active realm.
+const REALM_MUSIC_LABELS: boolean = Object.values(REALMS).some(
+  (realm) => realm.entityText?.musicZones !== undefined,
+);
 
 // Set by cryptic_music.ts when the MP3 soundtrack is on/off. Kept as a plain
 // module flag (not an import) to avoid a circular dependency — cryptic_music
@@ -4852,7 +4862,10 @@ export class MusicDirector {
    *  for the music UI. Null before the first update(). */
   nowPlaying(): string | null {
     if (!this.zone) return null;
-    const name = MUSIC_ZONE_LABELS[this.zone] ?? this.zone;
+    const realmLabel = REALM_MUSIC_LABELS
+      ? getActiveRealm().entityText?.musicZones?.[this.zone]
+      : undefined;
+    const name = realmLabel ?? MUSIC_ZONE_LABELS[this.zone] ?? this.zone;
     return this.combat ? `${name} — Combat` : name;
   }
 

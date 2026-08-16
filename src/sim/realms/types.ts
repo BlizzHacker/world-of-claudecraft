@@ -204,6 +204,16 @@ export interface RealmLetterText {
   body?: string;
 }
 
+/** Deed display override (the Book of Deeds): name/desc, plus the title-reward
+ *  display string for title deeds. Keys of the parent record are canonical deed
+ *  ids (save data - never renamed). Resolved in src/ui/deed_i18n.ts before the
+ *  deed locale tables, mirroring the tEntity precedence. */
+export interface RealmDeedText {
+  name?: string;
+  desc?: string;
+  title?: string;
+}
+
 /** A realm's sparse LORE OVERLAY: display strings the realm re-skins on top of
  *  the shared world content. Keyed by canonical entity ids and resolved inside
  *  tEntity() (src/ui/entity_i18n.ts) BEFORE the locale table; t() consults the
@@ -224,11 +234,24 @@ export interface RealmEntityText {
   dungeons?: Record<string, RealmInstanceText>;
   delves?: Record<string, RealmInstanceText>;
   letters?: Record<string, RealmLetterText>;
+  /** Deed display overrides keyed by canonical deed id (see RealmDeedText). */
+  deeds?: Record<string, RealmDeedText>;
   /** Dotted t() catalog keys (chrome copy) this realm overrides. */
   catalog?: Record<string, string>;
   /** Rift rank display words keyed by the wire rank letter (C/B/A/S). The UI
    *  keeps the letter for sorting and prepends the word. */
   riftRanks?: Record<string, string>;
+  /** Waypoint display names keyed by waypoint id (wp_<zoneId>[_wild], ...).
+   *  The sim wire keeps carrying the canonical English name; the client
+   *  translates at render (waypointDisplayName in src/ui/entity_i18n.ts). */
+  waypoints?: Record<string, string>;
+  /** Now-playing display labels keyed by MusicZone KEY (src/game/music.ts
+   *  MUSIC_ZONE_LABELS). Keys are identifiers - only the label changes. */
+  musicZones?: Record<string, string>;
+  /** Vale Cup bot name pool for this realm (display-only identity strings;
+   *  bots are transient match participants, never save data). Falls back to
+   *  the canonical VC_BOT_NAMES pool when omitted. */
+  vcBotNames?: readonly string[];
 }
 
 export interface RealmContent {

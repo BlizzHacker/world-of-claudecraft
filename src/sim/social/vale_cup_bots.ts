@@ -14,6 +14,7 @@
 
 import { VC_ALLROUNDER_ONLY_MAX_BRACKET, VC_NATION_IDS } from '../content/vale_cup';
 import { DUNGEON_X_THRESHOLD } from '../data';
+import { getActiveRealm } from '../realms/registry';
 import type { PlayerMeta, Sim } from '../sim';
 import {
   angleTo,
@@ -75,16 +76,27 @@ function botRoleForSeat(seat: number, bracket: VcBracket): SportRole {
   return 'striker';
 }
 
+/** The bot name pool for the active realm: the realm lore overlay may re-skin
+ *  the roster (RealmContent.entityText.vcBotNames - the Cinderveil's grim
+ *  Tallow Cup cast on infernal); every other realm keeps the canonical
+ *  vale/harvest names. Display-only identity strings: bots are transient match
+ *  participants, never save data, and the pool is realm-static so replay
+ *  determinism per realm is unchanged. */
+function botNamePool(): readonly string[] {
+  return getActiveRealm().entityText?.vcBotNames ?? VC_BOT_NAMES;
+}
+
 function nextBotName(sim: Sim): string {
+  const pool = botNamePool();
   const taken = new Set<string>();
   for (const meta of sim.players.values()) taken.add(meta.name.toLowerCase());
-  for (const name of VC_BOT_NAMES) {
+  for (const name of pool) {
     if (!taken.has(name.toLowerCase())) return name;
   }
   // Every lore name is in use (nine bots is the ceiling, so only a name clash
   // with real players lands here): suffix deterministically.
   for (let i = 2; ; i++) {
-    const name = `${VC_BOT_NAMES[0]} ${i}`;
+    const name = `${pool[0]} ${i}`;
     if (!taken.has(name.toLowerCase())) return name;
   }
 }

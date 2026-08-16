@@ -8,7 +8,10 @@
 // English (clean English is preferable to a broken guess).
 
 import { DEEDS } from '../sim/content/deeds';
+import { getActiveRealm, REALMS } from '../sim/realms/registry';
+import type { RealmDeedText } from '../sim/realms/types';
 import { getLanguage, isPseudoActive, type SupportedLanguage, t } from './i18n';
+import { ownEntry } from './known_item';
 
 export type DeedTranslationField = 'name' | 'desc' | 'title';
 
@@ -238,18 +241,34 @@ function localeEntry(id: string): DeedLocaleEntry | undefined {
   return residentDeedLocales[lang]?.[id];
 }
 
+// Realm lore overlay (RealmContent.entityText.deeds): the Cinderveil re-skin of
+// deed display text, resolved BEFORE the deed locale tables - the same
+// precedence tEntity gives the realm overlay over the entity locale tables
+// (src/ui/entity_i18n.ts realmEntityText). Deed IDS are save data and never
+// rename. One-time union gate: a deed no realm overlays never resolves the
+// active realm; own-property reads because deed ids arrive from the wire.
+const REALM_DEED_IDS: ReadonlySet<string> = new Set(
+  Object.values(REALMS).flatMap((realm) => Object.keys(realm.entityText?.deeds ?? {})),
+);
+
+function realmDeedEntry(id: string): RealmDeedText | undefined {
+  if (!REALM_DEED_IDS.has(id)) return undefined;
+  const deeds = getActiveRealm().entityText?.deeds;
+  return deeds ? ownEntry(deeds, id) : undefined;
+}
+
 /** Localized deed name; the raw id for a catalog-unknown id (content drift). */
 export function deedName(id: string): string {
   const def = DEEDS[id];
   if (!def) return id;
-  return maybePseudo(localeEntry(id)?.name ?? def.name);
+  return maybePseudo(realmDeedEntry(id)?.name ?? localeEntry(id)?.name ?? def.name);
 }
 
 /** Localized deed description; '' for a catalog-unknown id. */
 export function deedDesc(id: string): string {
   const def = DEEDS[id];
   if (!def) return '';
-  return maybePseudo(localeEntry(id)?.desc ?? def.desc);
+  return maybePseudo(realmDeedEntry(id)?.desc ?? localeEntry(id)?.desc ?? def.desc);
 }
 
 /** The localized display title for a title-reward deed; '' when the deed is
@@ -257,7 +276,7 @@ export function deedDesc(id: string): string {
 export function deedTitleText(id: string): string {
   const def = DEEDS[id];
   if (!def || def.reward?.kind !== 'title') return '';
-  return maybePseudo(localeEntry(id)?.title ?? def.reward.text);
+  return maybePseudo(realmDeedEntry(id)?.title ?? localeEntry(id)?.title ?? def.reward.text);
 }
 
 /** The guild-chat news template for another player's marquee unlock with the
