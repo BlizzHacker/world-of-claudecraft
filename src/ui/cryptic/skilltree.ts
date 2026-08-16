@@ -7,6 +7,7 @@
 import './realm_env';
 import { getActiveRealm } from '../../sim/realms';
 import type { RealmClassSkin, RealmRole } from '../../sim/realms/types';
+import { ensureToolsHost } from './tools_host';
 
 const MODAL_ID = 'cr-skilltree-modal';
 const BTN_ID = 'cr-skilltree-btn';
@@ -150,8 +151,10 @@ function closeModal(): void {
 }
 function onEsc(e: KeyboardEvent): void { if (e.key === 'Escape') closeModal(); }
 
-/** Mount a Skill Tree launcher into #cr-bestiary-host (shared realm-panel
- *  surface) or body. Shown when the active realm defines classes. */
+/** Mount a Skill Tree launcher into a page-provided #cr-bestiary-host, or the
+ *  shared fixed in-game toolbar (see tools_host.ts — a bare document.body
+ *  append lands under the fixed #game-canvas and is never visible in the
+ *  world). Shown when the active realm defines classes. */
 export function mountSkillTree(): void {
   if (typeof document === 'undefined') return;
   try {
@@ -160,10 +163,10 @@ export function mountSkillTree(): void {
   } catch { return; }
   if (document.getElementById(BTN_ID)) return;
   ensureStyle();
-  const host = document.getElementById('cr-bestiary-host');
+  const host = document.getElementById('cr-bestiary-host') ?? ensureToolsHost();
   const btn = document.createElement('button');
   btn.id = BTN_ID; btn.type = 'button';
   btn.innerHTML = '<span aria-hidden="true">🌳</span> Skill Trees';
   btn.addEventListener('click', openModal);
-  (host ?? document.body).appendChild(btn);
+  host.appendChild(btn);
 }

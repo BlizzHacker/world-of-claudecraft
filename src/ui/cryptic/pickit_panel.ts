@@ -10,6 +10,7 @@ import {
   RARITY_ORDER, ITEM_SLOTS, RARITY, generateRealmItem,
   type RealmItemSlot, type RealmItem,
 } from '../../sim/realms/rarity';
+import { ensureToolsHost } from './tools_host';
 
 const MODAL_ID = 'cr-pickit-modal';
 const BTN_ID = 'cr-pickit-btn';
@@ -142,15 +143,18 @@ function closeModal(): void {
 }
 function onEsc(e: KeyboardEvent): void { if (e.key === 'Escape') closeModal(); }
 
-/** Mount the Pickit editor launcher in the shared realm-panel surface. */
+/** Mount the Pickit editor launcher into a page-provided #cr-bestiary-host,
+ *  or the shared fixed in-game toolbar (see tools_host.ts — a bare
+ *  document.body append lands under the fixed #game-canvas and is never
+ *  visible in the world). */
 export function mountPickitPanel(): void {
   if (typeof document === 'undefined') return;
   if (document.getElementById(BTN_ID)) return;
   ensureStyle();
-  const host = document.getElementById('cr-bestiary-host');
+  const host = document.getElementById('cr-bestiary-host') ?? ensureToolsHost();
   const btn = document.createElement('button');
   btn.id = BTN_ID; btn.type = 'button';
   btn.innerHTML = '<span aria-hidden="true">🎯</span> Pickit Filter';
   btn.addEventListener('click', openModal);
-  (host ?? document.body).appendChild(btn);
+  host.appendChild(btn);
 }

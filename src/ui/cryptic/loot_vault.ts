@@ -11,6 +11,7 @@ import {
   type RarityId, type RealmItemSlot, type RealmItem,
 } from '../../sim/realms/rarity';
 import { getActiveRealm } from '../../sim/realms';
+import { ensureToolsHost } from './tools_host';
 
 const MODAL_ID = 'cr-loot-modal';
 const BTN_ID = 'cr-loot-btn';
@@ -138,15 +139,18 @@ function closeModal(): void {
 }
 function onEsc(e: KeyboardEvent): void { if (e.key === 'Escape') closeModal(); }
 
-/** Mount the Loot Vault launcher in the shared realm-panel surface. */
+/** Mount the Loot Vault launcher into a page-provided #cr-bestiary-host, or
+ *  the shared fixed in-game toolbar (see tools_host.ts — a bare document.body
+ *  append lands under the fixed #game-canvas and is never visible in the
+ *  world). */
 export function mountLootVault(): void {
   if (typeof document === 'undefined') return;
   if (document.getElementById(BTN_ID)) return;
   ensureStyle();
-  const host = document.getElementById('cr-bestiary-host');
+  const host = document.getElementById('cr-bestiary-host') ?? ensureToolsHost();
   const btn = document.createElement('button');
   btn.id = BTN_ID; btn.type = 'button';
   btn.innerHTML = '<span aria-hidden="true">💰</span> Loot Vault';
   btn.addEventListener('click', openModal);
-  (host ?? document.body).appendChild(btn);
+  host.appendChild(btn);
 }

@@ -7,6 +7,7 @@
 import './realm_env';
 import { getActiveRealm } from '../../sim/realms';
 import type { RealmAct, RealmBoss, RealmMonster } from '../../sim/realms/types';
+import { ensureToolsHost } from './tools_host';
 
 const MODAL_ID = 'cr-bestiary-modal';
 const BTN_ID = 'cr-bestiary-btn';
@@ -145,8 +146,10 @@ function onEsc(e: KeyboardEvent): void {
   if (e.key === 'Escape') closeModal();
 }
 
-/** Mount a Bestiary launcher button into the element with id `cr-bestiary-host`
- *  (or append to body if absent), only when the active realm has a bestiary. */
+/** Mount a Bestiary launcher button into a page-provided #cr-bestiary-host,
+ *  or the shared fixed in-game toolbar (see tools_host.ts — a bare
+ *  document.body append lands under the fixed #game-canvas and is never
+ *  visible in the world). Only when the active realm has a bestiary. */
 export function mountBestiary(): void {
   if (typeof document === 'undefined') return;
   try {
@@ -155,11 +158,11 @@ export function mountBestiary(): void {
   } catch { return; }
   if (document.getElementById(BTN_ID)) return;
   ensureStyle();
-  const host = document.getElementById('cr-bestiary-host');
+  const host = document.getElementById('cr-bestiary-host') ?? ensureToolsHost();
   const btn = document.createElement('button');
   btn.id = BTN_ID;
   btn.type = 'button';
   btn.innerHTML = '<span aria-hidden="true">📖</span> Monster Chronicle';
   btn.addEventListener('click', openModal);
-  (host ?? document.body).appendChild(btn);
+  host.appendChild(btn);
 }

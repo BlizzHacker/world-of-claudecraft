@@ -1632,6 +1632,7 @@ const UI_DOM_MODULES = [
   'src/ui/cryptic/session.ts',
   'src/ui/cryptic/skilltree.ts',
   'src/ui/cryptic/theme_select.ts',
+  'src/ui/cryptic/tools_host.ts',
   'src/ui/cryptic/user_dropdown.ts',
   'src/ui/cryptic/wallet_panel.ts',
   'src/ui/cryptic/world_builder.ts',
