@@ -16,6 +16,10 @@ import {
   type ModularLook,
   modularBuildSignature,
 } from './modular';
+import {
+  applyExternalAppearanceTint,
+  disposeExternalAppearanceTint,
+} from './override_appearance';
 import { chooseExternalPreviewClipName } from './preview_clip';
 import {
   appearanceSignature,
@@ -97,6 +101,12 @@ export class CharacterPreview {
         }
         const root = buildExternalPreviewInstance(gltf.scene);
         this.externalRoot = root;
+        // A realm body mounted while the appearance editor is open takes the
+        // authored hair/skin recolour immediately (no-op for item/prop mounts
+        // and for bodies without a published mask sidecar).
+        if (this.externalAppearance) {
+          applyExternalAppearanceTint(root, url, this.externalAppearance);
+        }
         this.characterGroup.add(root);
         if (gltf.animations.length) {
           const mixer = new THREE.AnimationMixer(root);
@@ -147,6 +157,10 @@ export class CharacterPreview {
   private appearanceSig: string | null = null;
   /** Look handed to the next modular rebuild (setVisualKey reads it back). */
   private pendingLook: ModularLook | null = null;
+  /** Appearance driving the region-mask tint on an external REALM-BODY mount
+   *  (override_appearance.ts); persists across remounts (a sex swap loads a
+   *  different GLB) so the picked colours survive the body change. */
+  private externalAppearance: ModularAppearance | null = null;
   // The body key most recently ASKED for, which is not the mounted one while a
   // lazy GLB is in flight. An arriving fetch only mounts if it still matches.
   private requestedVisualKey: string | null = null;
@@ -398,6 +412,26 @@ export class CharacterPreview {
       this.characterGroup.rotation.y = 0;
     } catch (err) {
       console.error(`Failed to load preview character visual for ${visualKey}:`, err);
+    }
+  }
+
+  /** Whether an external model (a realm body / operator GLB) is the mounted
+   *  or in-flight turntable subject. The appearance editor uses this to tell
+   *  "recolour the realm body in place" from "recompose the modular body". */
+  hasExternalModel(): boolean {
+    return this.externalModelUrl !== null;
+  }
+
+  /** Set (or clear) the appearance whose hair/skin colours tint the external
+   *  realm-body mount. Applying to an already-mounted body is pure uniform
+   *  writes — cheap enough for the colour wheel's per-pointermove emits. The
+   *  first application on a mount clones+hooks the materials; a body with no
+   *  published mask sidecar stays untouched (404-tolerant no-op). */
+  setExternalAppearance(app: ModularAppearance | null): void {
+    if (this.destroyed) return;
+    this.externalAppearance = app;
+    if (app && this.externalRoot) {
+      applyExternalAppearanceTint(this.externalRoot, this.externalModelUrl, app);
     }
   }
 
@@ -792,6 +826,9 @@ export class CharacterPreview {
       this.externalMixer = null;
     }
     if (this.externalRoot) {
+      // Release the appearance-tint material clones (the loader-cached
+      // originals the clone was mounted from stay shared and cached).
+      disposeExternalAppearanceTint(this.externalRoot);
       this.characterGroup.remove(this.externalRoot);
       this.externalRoot = null;
     }

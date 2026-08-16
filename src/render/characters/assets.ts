@@ -28,6 +28,11 @@ import { resolveClipMap } from './clip_resolution';
 import { dequantizeAttribute } from './dequantize_attribute';
 import { type HandGrip, KAYKIT_SHIELD_ACCESSORIES, KAYKIT_SHIELD_GRIPS } from './held_item_grips';
 import { buildMakeupDecal } from './makeup';
+import {
+  attachAppearanceMaskTint,
+  overrideAppearanceCacheKey,
+  type OverrideAppearanceSpec,
+} from './override_appearance';
 import { chooseExternalPreviewClipName } from './preview_clip';
 import {
   type AttachDef,
@@ -1746,8 +1751,9 @@ export function tintedMaterial(
   skinTex: THREE.Texture | null = null,
   emisTex: THREE.Texture | null = null,
   role: MaterialRole = 'body',
+  ap: OverrideAppearanceSpec | null = null,
 ): THREE.Material {
-  const key = `${src.uuid}|${tint ?? 'n'}|${tint === null ? 0 : strength}|${GFX.standardMaterials ? 's' : 'l'}|${skinTex ? skinTex.uuid : 'n'}|${emisTex ? emisTex.uuid : 'n'}|${role}`;
+  const key = `${src.uuid}|${tint ?? 'n'}|${tint === null ? 0 : strength}|${GFX.standardMaterials ? 's' : 'l'}|${skinTex ? skinTex.uuid : 'n'}|${emisTex ? emisTex.uuid : 'n'}|${role}${overrideAppearanceCacheKey(ap)}`;
   const cached = matCache.get(key);
   if (cached) return cached;
 
@@ -1825,6 +1831,12 @@ export function tintedMaterial(
     std.roughness = Math.min(Math.max(std.roughness, 0.55), 0.9);
   }
   if (!GFX.standardMaterials) applyLowReadabilityLift(mat, role);
+  // Realm-override appearance tint (region-mask hair/skin recolour), attached
+  // LAST so its folded program key carries every hook above (dye, rim glow,
+  // surface detail). Works on the low tier too: Lambert compiles the same
+  // map_fragment stage. The clone above is already private to this cache key
+  // (the ap fragment is folded in), so no shared material is ever hooked.
+  if (ap) attachAppearanceMaskTint(mat, ap);
   matCache.set(key, mat);
   return mat;
 }
@@ -1842,6 +1854,7 @@ export function applyMaterials(
   entityColor: number,
   skinTex: THREE.Texture | null = null,
   emisTex: THREE.Texture | null = null,
+  ap: OverrideAppearanceSpec | null = null,
 ): void {
   const tint = tintFor(def, entityColor);
   const strength = def.tintStrength ?? DEFAULT_TINT_STRENGTH;
@@ -1868,10 +1881,15 @@ export function applyMaterials(
     // skin/emissive override only touches the character's own atlas meshes, not weapons
     const sk = skinTex && mesh.userData.bodyMesh ? skinTex : null;
     const em = emisTex && mesh.userData.bodyMesh ? emisTex : null;
+    // The appearance mask belongs to the BODY atlas: a held weapon's UVs land
+    // arbitrarily in mask space, so the tint never rides a weapon material.
+    const matAp = role === 'weapon' ? null : ap;
     if (Array.isArray(source)) {
-      mesh.material = source.map((m) => tintedMaterial(m, materialTint, strength, sk, em, role));
+      mesh.material = source.map((m) =>
+        tintedMaterial(m, materialTint, strength, sk, em, role, matAp),
+      );
     } else {
-      mesh.material = tintedMaterial(source, materialTint, strength, sk, em, role);
+      mesh.material = tintedMaterial(source, materialTint, strength, sk, em, role, matAp);
     }
   });
 }

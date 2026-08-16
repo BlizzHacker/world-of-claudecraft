@@ -36,6 +36,7 @@ import { HairSwayDriver } from './hair_sway';
 import { buildHalo } from './halo';
 import type { EmoteClipSpec, VisualDef, WeaponLayoutOverride } from './manifest';
 import type { ModularAppearance, ModularLook } from './modular';
+import { type OverrideAppearanceSpec, resolveOverrideAppearanceSpec } from './override_appearance';
 import { SkeletonUpdateCache, type SkeletonUpdateStats } from './skeleton_update_cache';
 import {
   type OneShotKind,
@@ -114,7 +115,13 @@ const STOW_SWAP_FRACTION = 0.28;
 const STOW_ARM_BONE = 'upperarmr';
 const STOW_ARM_LIFT_RAD = -0.85;
 // Ledge climb, posed by hand: the KayKit rigs ship no climb clip, so the pull
-export interface CharacterVisualOptions extends AssembleModelOptions {}
+export interface CharacterVisualOptions extends AssembleModelOptions {
+  /** The entity's authored appearance, for realm OVERRIDE bodies only: drives
+   *  the region-mask hair/skin recolour (override_appearance.ts) on bodies
+   *  whose def.url lives under /cr-realms/. A modular body ignores this and
+   *  keeps composing from `look`; a fixed class rig has no mask and no-ops. */
+  appearance?: ModularAppearance | null;
+}
 
 // up is built from the airborne base pose plus additive bone work, sequenced
 // like a real mantle: hands FLY to the lip first, the torso curls in behind
@@ -383,6 +390,11 @@ export class CharacterVisual {
     return this.look;
   }
 
+  /** Region-mask appearance tint for a realm override body (null for every
+   *  other visual); resolved once in the constructor and re-passed on every
+   *  material sweep so skin/weapon swaps keep the recolour. */
+  private apSpec: OverrideAppearanceSpec | null = null;
+
   /** Move the face/body sliders on the LIVE body: morph influences are
    *  per-instance over shared geometry, so a slider drag repaints without the
    *  dispose-and-recompose a geometry change needs (which is why the sliders
@@ -579,6 +591,11 @@ export class CharacterVisual {
     // for a non-modular def, this makes the visual agree, so nothing
     // downstream can read a look the geometry never used.
     this.look = prep.def.modular ? look : null;
+    // Realm-override appearance tint (hair/skin region masks): resolved once —
+    // null unless this is a /cr-realms body AND the caller handed an
+    // appearance. Deliberately NOT threaded into tintedFarMaterials: the far
+    // LOD swaps in 40+ units out, where a hair recolour is sub-pixel noise.
+    this.apSpec = resolveOverrideAppearanceSpec(this.def, opts.appearance ?? null);
     this.model = assembleModel(this.def, weaponItemId, offhandItemId, look);
     configureTightBoneTextures(this.model);
     applyMaterials(
@@ -587,6 +604,7 @@ export class CharacterVisual {
       entityColor,
       skinTexture(key, skinIndex),
       skinEmissiveTexture(key, skinIndex),
+      this.apSpec,
     );
     // Class halo (the priest's Light): a glowing ring behind the head bone.
     // Added AFTER applyMaterials (its additive material must not be re-mapped)
@@ -1462,6 +1480,7 @@ export class CharacterVisual {
       this.entityColor,
       skinTexture(this.key, skinIndex),
       skinEmissiveTexture(this.key, skinIndex),
+      this.apSpec,
     );
     // re-snapshot the material map ghost/restore relies on, then re-ghost if stealthed
     this.originalMaterials.clear();
@@ -1633,6 +1652,7 @@ export class CharacterVisual {
       this.entityColor,
       skinTexture(this.key, this.skinIndex),
       skinEmissiveTexture(this.key, this.skinIndex),
+      this.apSpec,
     );
     // A VFX-tier skin's emissive derive mutates its payload materials in place,
     // so give each payload exclusive clones BEFORE the caster snapshot: the

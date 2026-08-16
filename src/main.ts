@@ -5695,6 +5695,11 @@ function syncAppearanceUi(panelId: string, cls: PlayerClass): void {
     return;
   }
   host.hidden = false;
+  // The authored colours must reach a realm body even before any wheel is
+  // touched: seed the preview's external-appearance tint with the stored
+  // appearance. Applied lazily — it only ever bites when a realm-body GLB is
+  // (or becomes) the external mount, and is a no-op without a mask sidecar.
+  characterPreview?.setExternalAppearance(modularAppearance);
   if (existing) {
     // The panel survives class switches; poke it so live-coloured chips (the
     // outfit swatches read the class kit) repaint for the new class.
@@ -5715,12 +5720,27 @@ function syncAppearanceUi(panelId: string, cls: PlayerClass): void {
         // grid's chips in step when the pick came from the customizer.
         if (genderChanged) syncCreateSexChips(next.gender);
         const c = panelClass();
+        // Realm grids mount the published realm body as an EXTERNAL model; a
+        // hair/skin edit recolours it in place through the region-mask tint
+        // (override_appearance.ts) instead of recomposing the modular KayKit
+        // body over it, which is what used to shove the realm body off the
+        // turntable the moment any wheel was touched. A sex change picks a
+        // DIFFERENT realm GLB, so it re-resolves through the grid's own
+        // preview path first; the stored appearance re-applies on mount.
+        if (characterPreview?.hasExternalModel()) {
+          if (genderChanged) showClassPreview(c);
+          characterPreview.setExternalAppearance(next);
+          return;
+        }
         characterPreview?.setModular(next, creationLoadout(c), c);
       },
       helm: creationHelm,
       onHelm: (on) => {
         creationHelm = on;
         const c = panelClass();
+        // A realm body has no composable helm layer: the toggle only concerns
+        // the modular turntable, so never let it displace an external mount.
+        if (characterPreview?.hasExternalModel()) return;
         characterPreview?.setModular(modularAppearance, creationLoadout(c), c);
       },
       // The chips must preview against the set the composed body actually

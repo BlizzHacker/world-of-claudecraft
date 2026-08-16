@@ -78,6 +78,12 @@ export function createCharacterVisual(
   const realmBodyKey = resolveActiveRealmId() === 'claudecraft' ? null : overrideVisualKeyForEntity(e);
   const look =
     formKey || isMechWearer(e) || realmBodyKey ? null : (modularLookProvider?.(e) ?? null);
+  // A realm body OWNS the geometry, but the authored appearance still drives
+  // its region-mask hair/skin recolour (override_appearance.ts): read the
+  // look provider for the COLOURS only, never for composition. claudecraft
+  // never resolves a realmBodyKey, so it can never see the hook.
+  const appearance =
+    realmBodyKey && !formKey && !isMechWearer(e) ? (modularLookProvider?.(e)?.app ?? null) : null;
   const key = formKey ?? (look ? modularKeyFor(e) : visualKeyFor(e));
   // The class-agnostic Combat Mech adopts the wearer's independent mainhand and
   // offhand layout. e.templateId is the player's class on every host, so this
@@ -95,6 +101,7 @@ export function createCharacterVisual(
       weaponOverride,
       formKey ? null : e.offhandItemId,
       look,
+      { appearance },
     );
   } catch (err) {
     // key the dedupe on visual key PLUS message: two models failing with an
