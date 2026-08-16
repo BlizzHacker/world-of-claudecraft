@@ -1,0 +1,2 @@
+/opt/cr-realms-store/infernal/infernal_class_amazon.glb
+/opt/cr-realms-store/infernal/infernal_class_assassin.glb

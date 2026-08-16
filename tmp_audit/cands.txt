@@ -1,0 +1,8 @@
+/opt/cr-realms-store/infernal/realm_infernal_ironthorn_dread_knight_character_019dd422.glb
+/opt/cr-realms-store/infernal/realm_infernal_armored_abyssal_warden_character_0196497f.glb
+/opt/cr-realms-store/infernal/realm_infernal_sentinel_abyss_armor_characters_01974158.glb
+/opt/cr-realms-store/infernal/realm_infernal_dreadful_knight_abyss_characters_0197a322.glb
+/opt/cr-realms-store/infernal/realm_infernal_dreadlord_s_embrace_characters_0194037f.glb
+/opt/cr-realms-store/infernal/realm_infernal_dread_rider_characters_01972c7e.glb
+/opt/cr-realms-store/infernal/realm_infernal_nightmare_revenant_fantasy_skele_019498fe.glb
+/opt/cr-realms-store/infernal/realm_infernal_warlord_shadows_fantasy_warlord_019b65bc.glb

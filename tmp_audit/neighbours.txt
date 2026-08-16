@@ -1,0 +1,9 @@
+/opt/cr-realms-store/classic/realm_classic_gaunt_revenant_01956758.glb
+/opt/cr-realms-store/classic/props/dual_head_gargoyle_statute_01956759.glb
+/opt/cr-realms-store/classic/realm_classic_game_figure_satanic_beast_0195b9e2.glb
+/opt/cr-realms-store/classic/realm_classic_game_figure_satanic_beast_0195b9e8.glb
+/opt/cr-realms-store/classic/realm_classic_game_figure_satanic_beast_0195b9ea.glb
+/opt/cr-realms-store/classic/realm_classic_goblin_warrior_characters_weapon_0196ca24.glb
+/opt/cr-realms-store/classic/realm_classic_perfect_rig_symmetrical_01944c45.glb
+/opt/cr-realms-store/classic/realm_classic_steel_guardian_sciencetechnology_0193fb9e.glb
+/opt/cr-realms-store/classic/realm_classic_toxin_warden_01961ade.glb

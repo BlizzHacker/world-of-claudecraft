@@ -1,0 +1,15 @@
+/opt/cr-realms-store/dominion/realm_dominion_white_armor_trooper_01942e95.glb
+/opt/cr-realms-store/dominion/realm_dominion_white_armor_trooper_01942e99.glb
+/opt/cr-realms-store/dominion/realm_dominion_white_armor_trooper_01942e9e.glb
+/opt/cr-realms-store/fps/realm_fps_action_figure_hero_characters_01944c02.glb
+/opt/cr-realms-store/fps/realm_fps_action_figure_hero_characters_01944c21.glb
+/opt/cr-realms-store/fps/realm_fps_extremely_muscular_female_hero_01947d05.glb
+/opt/cr-realms-store/fps/realm_fps_extremely_muscular_female_hero_01947f73.glb
+/opt/cr-realms-store/classic/realm_classic_perfect_rig_symmetrical_0194487b.glb
+/opt/cr-realms-store/classic/realm_classic_perfect_rig_symmetrical_01944c1e.glb
+/opt/cr-realms-store/classic/realm_classic_perfect_rig_symmetrical_01945b0c.glb
+/opt/cr-realms-store/classic/realm_classic_perfect_rig_symmetrical_019462a7.glb
+/opt/cr-realms-store/infernal/realm_infernal_spiky_haired_imp_01947c8b.glb
+/opt/cr-realms-store/infernal/realm_infernal_serpent_stalker_019639f2.glb
+/opt/cr-realms-store/classic/realm_classic_barbarian_champion_019548ae.glb
+/opt/cr-realms-store/classic/realm_classic_titan_strongman_019548a7.glb

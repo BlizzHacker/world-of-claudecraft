@@ -1,0 +1,5 @@
+/opt/cr-realms-store/fps/realm_fps_size_executioner_no_shirt_0193fba7.glb
+/opt/cr-realms-store/classic/realm_classic_pirate_orc_characters_019450ce.glb
+/opt/cr-realms-store/infernal/buildings/gaunt_revenant_the_object_features_a_hum_019450ce.glb
+/opt/cr-realms-store/infernal/realm_infernal_demon_lord_pose_no_0194c860.glb
+/opt/cr-realms-store/classic/realm_classic_scarred_pugilist_0195b9e3.glb

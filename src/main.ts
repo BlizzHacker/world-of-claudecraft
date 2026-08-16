@@ -7931,6 +7931,7 @@ async function refreshCharacters(): Promise<void> {
           cls: c.class,
           visualKey: c.visualKey,
           skinCatalog: c.skinCatalog,
+          gender: (c.appearance as { gender?: 'male' | 'female' } | null)?.gender ?? null,
         }),
         // A pre-rendered portrait png beside the body GLB, when one exists: it
         // skips the offscreen 3D render entirely. Its absence (or a 404) now
@@ -8267,6 +8268,7 @@ function charselectAppearance(c: CharacterSummary): PreviewAppearance {
       cls: c.class,
       visualKey: c.visualKey,
       skinCatalog: c.skinCatalog,
+      gender: (c.appearance as { gender?: 'male' | 'female' } | null)?.gender ?? null,
     }),
     skin: c.skin ?? 0,
     skinCatalog: c.skinCatalog ?? 'class',

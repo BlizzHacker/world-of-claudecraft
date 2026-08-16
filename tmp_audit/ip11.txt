@@ -1,0 +1,11 @@
+/opt/cr-realms-store/infernal/realm_infernal_warrior_damned_characters_0196ca26.glb
+/opt/cr-realms-store/infernal/realm_infernal_warrior_shadows_characters_01963a09.glb
+/opt/cr-realms-store/infernal/realm_infernal_black_myth_wukong_demon_0194b9b6.glb
+/opt/cr-realms-store/infernal/realm_infernal_nosferatu_shadow_sketchto3d_mons_019834ac.glb
+/opt/cr-realms-store/classic/realm_classic_game_figure_orc_warhost_0195b538.glb
+/opt/cr-realms-store/classic/realm_classic_goblin_boss_head_warhost_01956cfa.glb
+/opt/cr-realms-store/fps/realm_fps_action_figure_hero_toys_0194183a.glb
+/opt/cr-realms-store/dominion/realm_dominion_void_legionary_characters_weaponsm_0193fb93.glb
+/opt/cr-realms-store/infernal/realm_infernal_create_3d_grinch_cyborg_0193b2bb.glb
+/opt/cr-realms-store/infernal/realm_infernal_pose_ninja_storm_shadow_0194841a.glb
+/opt/cr-realms-store/infernal/realm_infernal_eddie_somewhere_time_appears_0193ea76.glb

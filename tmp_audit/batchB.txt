@@ -1,0 +1,10 @@
+/opt/cr-realms-store/infernal/infernal_class_monk.glb
+/opt/cr-realms-store/infernal/infernal_class_spiritborn.glb
+/opt/cr-realms-store/infernal/infernal_human_assassin.glb
+/opt/cr-realms-store/review/body_audit_2026_08_08/infernal_human_forge_worker.CLAIM.glb
+/opt/cr-realms-store/review/body_audit_2026_08_08/infernal_human_hermit.CLAIM.glb
+/opt/cr-realms-store/infernal/infernal_human_forge_worker.glb
+/opt/cr-realms-store/infernal/infernal_human_hermit.glb
+/opt/cr-realms-store/infernal/infernal_class_blood_knight.glb
+/opt/cr-realms-store/infernal/infernal_human_iron_warden.glb
+/opt/cr-realms-store/infernal/infernal_class_paladin.glb

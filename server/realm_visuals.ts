@@ -21,7 +21,10 @@ import { loadRealmVisualsState, mutateRealmVisualsState } from './realm_visuals_
 import { adminRolesForAccount } from './staff_db';
 
 const REALM_RE = /^[a-z0-9][a-z0-9_-]{0,31}$/;
-const OVERRIDE_KEY_RE = /^(class|hero|npc|mob):[A-Za-z0-9][A-Za-z0-9 _/'.-]{0,79}$/;
+// The optional :f / :m tail is the sex dimension (2026-08-16): class:mage:f
+// selects the female realm body; the unsuffixed key stays the default so
+// realms without pairs keep working unchanged.
+const OVERRIDE_KEY_RE = /^(class|hero|npc|mob):[A-Za-z0-9][A-Za-z0-9 _/'.-]{0,79}(:[fm])?$/;
 const ASSET_URL_RE =
   /^\/(cr-realms|asset-library|forged|models|api\/assets)\/[A-Za-z0-9 _.()/'-]+\.glb$/;
 const MAX_OVERRIDES = 500;

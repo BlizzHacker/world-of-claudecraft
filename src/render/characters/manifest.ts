@@ -3293,6 +3293,7 @@ function overrideEntryForCharacter(
   realm: string,
   realmHeroId: string | null | undefined,
   cls: PlayerClass,
+  gender?: 'male' | 'female' | null,
 ): BodyOverrideEntry | undefined {
   const map = BODY_OVERRIDES[realm];
   if (!map) return undefined;
@@ -3302,12 +3303,20 @@ function overrideEntryForCharacter(
   // the canonical selection it presents under (e.g. hero:infernal-hero-sorcerer-m
   // -> hero:infernal-hero-sorcerer-sorceress until a male body is published).
   if (!entry && selection?.variantOf) entry = map[`hero:${selection.variantOf}`];
-  return entry ?? map[`class:${cls}`];
+  if (entry) return entry;
+  // The appearance editor's Male/Female choice selects the realm body: a
+  // sex-suffixed override (class:mage:f) wins over the unsuffixed one, which
+  // stays the male/default body so realms without pairs keep working.
+  if (gender) {
+    const suffixed = map[`class:${cls}:${gender === 'female' ? 'f' : 'm'}`];
+    if (suffixed) return suffixed;
+  }
+  return map[`class:${cls}`];
 }
 
 /** The override visual key for an entity, or null. A realm hero assignment is
  *  most specific, followed by class, NPC, and mob template assignments. */
-function overrideVisualKeyForEntity(e: Entity): string | null {
+export function overrideVisualKeyForEntity(e: Entity): string | null {
   const realm = resolveActiveRealmId();
   const map = BODY_OVERRIDES[realm];
   if (!map) return null;
@@ -3346,9 +3355,11 @@ export interface CharacterVisualQuery {
   realm?: string | null;
   realmHeroId?: string | null;
   /** The server-published body for this character (CharacterSummary.visualKey /
-   *  the wire's `vk`). Used when no operator override claims the character. */
+   *  the wire's `vk`, (e.modularAppearance as { gender?: 'male' | 'female' } | null)?.gender ?? null). Used when no operator override claims the character. */
   visualKey?: string | null;
   skinCatalog?: 'class' | 'mech' | null;
+  /** The authored look's body sex, when known: selects class:<cls>:f/:m. */
+  gender?: 'male' | 'female' | null;
 }
 
 /**
@@ -3372,7 +3383,7 @@ export interface CharacterVisualQuery {
 export function visualKeyForCharacter(q: CharacterVisualQuery): string {
   if (q.skinCatalog === 'mech') return 'player_mech';
   const realm = q.realm ?? resolveActiveRealmId();
-  const entry = overrideEntryForCharacter(realm, q.realmHeroId ?? null, q.cls);
+  const entry = overrideEntryForCharacter(realm, q.realmHeroId ?? null, q.cls, q.gender ?? null);
   if (entry) return registerOverrideVisual(entry);
   if (q.visualKey && VISUALS[q.visualKey]) return q.visualKey;
   // The server omits `vk` for older rows; the compiled per-realm table is the

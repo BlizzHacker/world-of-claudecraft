@@ -1,0 +1,10 @@
+/opt/cr-realms-store/infernal/realm_infernal_infernal_warlord_characters_0196a816.glb
+/opt/cr-realms-store/infernal/realm_infernal_infernal_warrior_019a51c1.glb
+/opt/cr-realms-store/infernal/realm_infernal_warrior_damned_characters_0196ca26.glb
+/opt/cr-realms-store/infernal/realm_infernal_warrior_abyss_019ab358.glb
+/opt/cr-realms-store/infernal/realm_infernal_warrior_shadows_characters_01963a09.glb
+/opt/cr-realms-store/infernal/realm_infernal_evil_warlord_armor_made_0196a11d.glb
+/opt/cr-realms-store/infernal/realm_infernal_infernal_majesty_characters_01964448.glb
+/opt/cr-realms-store/infernal/meshy_ai_cursed_knight_s_iro_0616234359_texture_abda8208.glb
+/opt/cr-realms-store/infernal/realm_infernal_infernal_sovereign_fantasy_chara_019a5459.glb
+/opt/cr-realms-store/infernal/realm_infernal_infernal_monarch_fantasy_charact_0199fa0a.glb

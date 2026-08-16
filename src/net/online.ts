@@ -221,6 +221,9 @@ export interface CharacterSummary {
   // optional for back-compat with an older server that omits them: absent
   // skinCatalog defaults to the class rig, absent hand fields show no item.
   skinCatalog?: 'class' | 'mech';
+  /** The authored modular look (server-sanitized). gender selects the
+   *  sex-suffixed realm body (class:<cls>:f/:m). */
+  appearance?: ({ gender?: 'male' | 'female' } & Record<string, unknown>) | null;
   mainhandItemId?: string | null;
   offhandItemId?: string | null;
   /** The account's active Armory weapon skin for this character (server-resolved

@@ -1,0 +1,15 @@
+/opt/cr-realms-store/infernal/realm_infernal_hero_sorcerer.glb
+/opt/cr-realms-store/infernal/realm_infernal_hero_warlock.glb
+/opt/cr-realms-store/infernal/realm_infernal_hero_wizard.glb
+/opt/cr-realms-store/infernal/realm_infernal_hero_amazon.glb
+/opt/cr-realms-store/infernal/realm_infernal_hero_crusader.glb
+/opt/cr-realms-store/infernal/realm_infernal_hero_spiritborn.glb
+/opt/cr-realms-store/infernal/realm_infernal_hero_tempest.glb
+/opt/cr-realms-store/infernal/realm_infernal_hero_assassin.glb
+/opt/cr-realms-store/infernal/realm_infernal_meshy_necro_warlord.glb
+/opt/cr-realms-store/infernal/realm_infernal_hero_blood_knight.glb
+/opt/cr-realms-store/infernal/realm_infernal_hero_monk.glb
+/opt/cr-realms-store/infernal/realm_infernal_hero_druid.glb
+/opt/cr-realms-store/infernal/realm_infernal_hero_demon_hunter.glb
+/opt/cr-realms-store/infernal/realm_infernal_hero_witch_doctor.glb
+/opt/cr-realms-store/infernal/realm_infernal_hero_barbarian.glb

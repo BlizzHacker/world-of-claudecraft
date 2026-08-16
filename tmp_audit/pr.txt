@@ -1,0 +1,3 @@
+/opt/cr-realms-store/classic/realm_classic_blue_power_ranger_characters_0194371d.glb
+/opt/cr-realms-store/classic/realm_classic_iron_ranger_019f42a1.glb
+/opt/cr-realms-store/classic/realm_classic_verdant_ranger_019d3f70.glb

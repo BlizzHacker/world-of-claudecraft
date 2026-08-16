@@ -4,7 +4,7 @@
 // the Renderer constructs views.
 import { type Entity, isMechWearer, type PlayerClass } from '../../sim/types';
 import { logAssetMissOnce } from './asset_miss_log';
-import { mechHeldWeaponOverride, modularVisualKey, VISUALS, visualKeyFor } from './manifest';
+import { mechHeldWeaponOverride, modularVisualKey, overrideVisualKeyForEntity, VISUALS, visualKeyFor } from './manifest';
 import { MODULAR_WARRIOR_KEY, type ModularLook } from './modular';
 import { CharacterVisual, type CharacterVisualOptions } from './visual';
 
@@ -71,7 +71,12 @@ export function createCharacterVisual(
   // Shapeshift forms are their own model and never compose, and neither does a
   // Combat Mech wearer: the mech is a whole replacement body, so the cosmetic
   // must win over the authored look (composing over it hid a purchased skin).
-  const look = formKey || isMechWearer(e) ? null : (modularLookProvider?.(e) ?? null);
+  // Operator rule (2026-08-16): on Cryptic Realm realms a published realm body
+  // (sex-aware) OWNS the character; the modular composed body renders only when
+  // no realm body claims it. The claudecraft realm stays 100% modular/source.
+  const realmBodyKey = resolveActiveRealmId() === 'claudecraft' ? null : overrideVisualKeyForEntity(e);
+  const look =
+    formKey || isMechWearer(e) || realmBodyKey ? null : (modularLookProvider?.(e) ?? null);
   const key = formKey ?? (look ? modularKeyFor(e) : visualKeyFor(e));
   // The class-agnostic Combat Mech adopts the wearer's independent mainhand and
   // offhand layout. e.templateId is the player's class on every host, so this
