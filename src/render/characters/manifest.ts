@@ -2,32 +2,28 @@
 // NPC id, druid/polymorph form) onto a rigged glTF asset + clip names + kit.
 // Pure data + dispatch — no three.js imports, no loading.
 
-import { isBoundedResidency } from './residency';
 import { MECH_CHROMAS, type MechChroma } from '../../sim/content/skins';
 import { offhandMirrorsWeaponSkin } from '../../sim/content/weapon_skin_rules';
 import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
 import { ITEMS, MOBS } from '../../sim/data';
-import { ALL_CLASSES, type Entity, isMechWearer, type PlayerClass } from '../../sim/types';
 import { resolveRealmCharacterVisual } from '../../sim/realms/class_visuals';
 import { infernalCharacterSelection } from '../../sim/realms/infernal_classes';
 import { resolveActiveRealmId } from '../../sim/realms/registry';
+import { ALL_CLASSES, type Entity, isMechWearer, type PlayerClass } from '../../sim/types';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
 import type { OverheadEmoteId } from '../../world_api';
-import {
-  KAYKIT_EMOTES,
-  MESHY_CLIP_BANK_URL,
-  MESHY_BANK_EMOTES,
-  withMeshyBank,
-} from './clip_vocab';
-import { GENERATED_REALM_BODIES, GENERATED_VISUALS } from './manifest.generated';
-import { GENERATED_CREATURE_BODIES, GENERATED_CREATURE_VISUALS } from './creatures.generated';
+import { isSelectableBody, selectBodyFromPool } from './body_shape_gate';
+import { KAYKIT_EMOTES, MESHY_BANK_EMOTES, MESHY_CLIP_BANK_URL, withMeshyBank } from './clip_vocab';
 import { GENERATED_CREATURE_BODY_PINS } from './creature_pins.generated';
+import { GENERATED_CREATURE_BODIES, GENERATED_CREATURE_VISUALS } from './creatures.generated';
 import {
   hostileHumanoidVisualKey,
   infernalNpcVisualKey,
   infernalOpponentVisualKey,
   infernalUndeadVisualKey,
 } from './infernal_roster';
+import { GENERATED_REALM_BODIES, GENERATED_VISUALS } from './manifest.generated';
+import { isBoundedResidency } from './residency';
 
 export interface EmoteClipSpec {
   clips: readonly string[];
@@ -3330,7 +3326,9 @@ function overrideEntryForCharacter(
     const clsF = map[`class:${cls}:f`];
     if (clsF) return clsF;
   }
-  let entry = selection ? (map[`hero:${selection.id}`] ?? map[`hero:${selection.name}`]) : undefined;
+  let entry = selection
+    ? (map[`hero:${selection.id}`] ?? map[`hero:${selection.name}`])
+    : undefined;
   // A hidden hero variant with no published body of its own falls back to
   // the canonical selection it presents under (e.g. hero:infernal-hero-sorcerer-m
   // -> hero:infernal-hero-sorcerer-sorceress until a male body is published).
@@ -3429,15 +3427,16 @@ export function visualKeyForCharacter(q: CharacterVisualQuery): string {
   return VISUALS[`player_${q.cls}`] ? `player_${q.cls}` : 'player_warrior';
 }
 
-
-
-
-// Families the generated bodies can legitimately stand in for. Every generated
-// body passed a humanoid shape gate, so lending one to a spider, mudfin or
-// dragonkin would look worse than the existing family fallback.
-const GENERATED_POOL_FAMILIES = new Set([
-  'humanoid', 'undead', 'demon', 'troll', 'ogre',
-]);
+// Families the generated bodies can legitimately stand in for. Lending one to a
+// spider, mudfin or dragonkin would look worse than the existing family
+// fallback.
+//
+// This comment used to claim "Every generated body passed a humanoid shape
+// gate". It did not. scripts/realm_assets/humanoid_gate.mjs exists but was only
+// ever called at RIG time, never at emit time and never here, so the pool has
+// always been able to contain a prop or a monster head. body_shape_gate.ts is
+// the gate that actually runs on this path.
+const GENERATED_POOL_FAMILIES = new Set(['humanoid', 'undead', 'demon', 'troll', 'ogre']);
 
 /** FNV-1a. Small, stable, and dependency-free — the pick must be identical on
  *  every client and across restarts, so Math.random() is not an option. */
@@ -3466,17 +3465,24 @@ function generatedBodyFor(
   // costs visible variety and keeps the world on screen.
   if (isBoundedResidency()) return null;
   if (!family || !GENERATED_POOL_FAMILIES.has(family)) return null;
-  const pool = GENERATED_REALM_BODIES[realm];
-  if (!pool || pool.length === 0) return null;
+  // The pool is whatever files were sitting in a staging directory when
+  // emit_manifest.mjs last ran, so it can and does contain assets that are not
+  // people. selectBodyFromPool drops those (body_shape_gate.ts) and picks by
+  // RENDEZVOUS hashing instead of `stableHash(seed) % pool.length`: the modulo
+  // form re-rolled every template in the realm whenever the pool changed size,
+  // which made removing one bad asset a townwide reskin.
   const seed = `${realm}:${family}:${templateId ?? 'anon'}`;
-  return pool[stableHash(seed) % pool.length] ?? null;
+  return selectBodyFromPool(GENERATED_REALM_BODIES[realm], seed);
 }
-
 
 /** Pool lookup used by every realm branch. Runs AFTER an explicit per-template
  *  override so curated art always wins, but BEFORE the family fallbacks that would
  *  otherwise collapse a whole family onto one shared body. */
-function poolFirst(realm: string, family: string | undefined, templateId: string | undefined): string | null {
+function poolFirst(
+  realm: string,
+  family: string | undefined,
+  templateId: string | undefined,
+): string | null {
   return generatedBodyFor(realm, family, templateId);
 }
 
@@ -3541,7 +3547,35 @@ function generatedCreatureBodyFor(
   return pool[stableHash(seed) % pool.length] ?? null;
 }
 
+/**
+ * The visual key for `e`, with the non-body gate applied to whatever the
+ * resolution below chose.
+ *
+ * The gate sits OUTSIDE the resolver rather than inside each branch because a
+ * prop has reached the world down every one of them: the generated pool, a
+ * hand-authored opponent rotation, and a published operator override made
+ * before anyone knew the file was a wall ornament. One choke point is the only
+ * arrangement that cannot be routed around by adding a new branch.
+ */
 export function visualKeyFor(e: Entity): string {
+  const key = resolveVisualKeyFor(e);
+  if (isSelectableBody(key)) return key;
+  return substituteForNonBody(e);
+}
+
+/** Body used when the resolved key turned out not to be a character at all.
+ *  Deliberately dull: a known-good shared body beats a dragon-face shield, and
+ *  the real repair is an operator override or a generated replacement. */
+function substituteForNonBody(e: Entity): string {
+  if (e.kind === 'player') return 'player_warrior';
+  if (e.kind === 'npc') return 'npc_villager';
+  const family = MOBS[e.templateId]?.family;
+  const byFamily = family ? FAMILY_KEYS[family] : undefined;
+  if (isSelectableBody(byFamily)) return byFamily as string;
+  return 'mob_bandit';
+}
+
+function resolveVisualKeyFor(e: Entity): string {
   const bodyOverride = overrideVisualKeyForEntity(e);
   if (bodyOverride) return bodyOverride;
   if (e.kind === 'player') {

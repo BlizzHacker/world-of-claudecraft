@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 // Stage 7: turn the staged rigged GLBs into a GENERATED companion module for
 // src/render/characters/manifest.ts.
 //
@@ -13,11 +14,21 @@
 //
 //   node emit_manifest.mjs --staging /staging --out src/render/characters/manifest.generated.ts
 
-import { readdirSync, writeFileSync, readFileSync, existsSync, statSync,
-         openSync, closeSync, unlinkSync, renameSync } from 'node:fs';
 import { execSync } from 'node:child_process';
+import {
+  closeSync,
+  existsSync,
+  openSync,
+  readdirSync,
+  readFileSync,
+  renameSync,
+  statSync,
+  unlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { humanoidVerdict } from './humanoid_gate.mjs';
 
 function arg(n, d = null) {
   const i = process.argv.indexOf(`--${n}`);
@@ -34,7 +45,8 @@ const REJECTS = arg('rejects', '/tmp/rejects.json');
 // Words that mean the mesh ships holding a weapon -> NPC/enemy only, per directive:
 // "IF they already are holding a weapon then they are an npc / enemy character asset only".
 // Such bodies get NO attach[] and are never player-selectable.
-const ARMED = /\b(warlord|warrior|knight|soldier|archer|gunner|swordsman|axeman|spearman|wielding|holding|armed|with (a |an )?(sword|axe|spear|staff|bow|gun|rifle|blade|hammer|shield|scythe|dagger))/i;
+const ARMED =
+  /\b(warlord|warrior|knight|soldier|archer|gunner|swordsman|axeman|spearman|wielding|holding|armed|with (a |an )?(sword|axe|spear|staff|bow|gun|rifle|blade|hammer|shield|scythe|dagger))/i;
 
 // Attack clip sets by flavour, so a mage does not chop and a gunner does not slice.
 function attacksFor(name, realm) {
@@ -47,7 +59,9 @@ function attacksFor(name, realm) {
   if (/(archer|ranger|hunter|bow|crossbow|gun|rifle|sniper|shooter|marksman)/.test(s)) {
     return ["'2H_Ranged_Shoot'"];
   }
-  if (/(berserk|barbarian|ogre|giant|troll|brute|warlord|executioner|greatsword|2h|two.hand)/.test(s)) {
+  if (
+    /(berserk|barbarian|ogre|giant|troll|brute|warlord|executioner|greatsword|2h|two.hand)/.test(s)
+  ) {
     return ["'2H_Melee_Attack_Chop'"];
   }
   if (/(rogue|assassin|thief|ninja|dual)/.test(s)) {
@@ -55,7 +69,6 @@ function attacksFor(name, realm) {
   }
   return ["'1H_Melee_Attack_Chop'", "'1H_Melee_Attack_Slice_Diagonal'"];
 }
-
 
 // Realms that fight with firearms. One weapon set, shared: build guns once and every
 // gun-carrying realm inherits them rather than each realm needing its own pass.
@@ -72,7 +85,10 @@ const GUN_REALMS = new Set(['fps', 'dominion', 'arcadevoid']);
 // empty-handed. Realms without their own bucket now borrow the owning realm's
 // files (the store is one shared tree served at /cr-realms, so a cross-realm URL
 // resolves on every realm host).
-const ARMS_INDEX = arg('arms', join(dirname(fileURLToPath(import.meta.url)), 'arms_index.generated.json'));
+const ARMS_INDEX = arg(
+  'arms',
+  join(dirname(fileURLToPath(import.meta.url)), 'arms_index.generated.json'),
+);
 const ARMS = existsSync(ARMS_INDEX) ? JSON.parse(readFileSync(ARMS_INDEX, 'utf8')) : null;
 
 // Fallback for a checkout without the arms index: the historical four models.
@@ -166,10 +182,15 @@ const byKey = new Map(entries.map((e) => [e.key, e]));
 const rejects = new Set(existsSync(REJECTS) ? JSON.parse(readFileSync(REJECTS, 'utf8')) : []);
 
 const realms = readdirSync(STAGING).filter((d) => {
-  try { return statSync(join(STAGING, d)).isDirectory(); } catch { return false; }
+  try {
+    return statSync(join(STAGING, d)).isDirectory();
+  } catch {
+    return false;
+  }
 });
 
 const out = [];
+const shapeRejects = [];
 const stats = {};
 const familyKeys = {};
 
@@ -178,7 +199,9 @@ const familyKeys = {};
 // file) rather than duplicating 2.7GB of geometry — assets are meant to be re-used
 // across realms, e.g. every humanoid is FPS-eligible.
 for (const realm of realms.sort()) {
-  const files = readdirSync(join(STAGING, realm)).filter((f) => f.endsWith('.glb')).sort();
+  const files = readdirSync(join(STAGING, realm))
+    .filter((f) => f.endsWith('.glb'))
+    .sort();
   const kept = [];
   for (const f of files) {
     const key = f.replace(/\.glb$/, '');
@@ -190,9 +213,37 @@ for (const realm of realms.sort()) {
     // clip is `Armature|Unreal Take|baselayer`. Handing those the KayKit clip
     // vocabulary would name clips they do not contain, so nothing would animate.
     if (!meta || !key.startsWith('realm_')) continue;
+    // SHAPE, not name. The lexicon this pipeline runs on matches plenty of
+    // non-characters, and the ip_rename pass laundered the filenames on top of
+    // that, so `meta.name` cannot be trusted to say what the mesh is. This gate
+    // exists (humanoid_gate.mjs) and was written for exactly this job, but it
+    // was only ever called from rig_batch.mjs — anything that reached staging by
+    // another route walked straight into the pools. That is how a heraldic
+    // shield and a monster head ended up bodying NPCs on the live Infernal ring
+    // on 2026-08-17. Running it here means the pool cannot be rebuilt with one
+    // in it. Bodies already registered are also gated at runtime, in
+    // src/render/characters/body_shape_gate.ts, because this file is only
+    // rewritten when the pipeline runs.
+    try {
+      const shape = humanoidVerdict(join(STAGING, realm, f));
+      if (!shape.ok) {
+        shapeRejects.push(`${key}: ${shape.reason}`);
+        continue;
+      }
+    } catch (err) {
+      shapeRejects.push(`${key}: unreadable (${String(err.message || err).slice(0, 60)})`);
+      continue;
+    }
     const name = meta.name ?? key;
     const armed = ARMED.test(name);
-    kept.push({ key, realm, name, armed, attacks: attacksFor(name, realm), realms: meta?.realms ?? [realm] });
+    kept.push({
+      key,
+      realm,
+      name,
+      armed,
+      attacks: attacksFor(name, realm),
+      realms: meta?.realms ?? [realm],
+    });
   }
   stats[realm] = kept.length;
   out.push(...kept);
@@ -225,9 +276,7 @@ if (all.length) {
   familyKeys.arcadevoid = rot(evenSpread(120), 40);
   familyKeys.exchange = rot(evenSpread(90), 15);
 }
-const poolStats = Object.fromEntries(
-  Object.entries(familyKeys).map(([r, v]) => [r, v.length]),
-);
+const poolStats = Object.fromEntries(Object.entries(familyKeys).map(([r, v]) => [r, v.length]));
 
 const lines = [];
 lines.push('// GENERATED FILE - DO NOT EDIT BY HAND.');
@@ -244,11 +293,13 @@ lines.push('// player-selectable. Clean-handed bodies get live weapon sockets.')
 lines.push('');
 lines.push("import type { ClipMap, VisualDef } from './manifest';");
 lines.push('');
-lines.push('const REALM_MODELS = \'/cr-realms\';');
+lines.push("const REALM_MODELS = '/cr-realms';");
 lines.push("const WEAPONS = 'models/weapons';");
 lines.push('const GEN_H = 2.6; // matches HUMANOID_H; manual_rig fits every body to the reference');
 lines.push('');
-lines.push('/** Local copy of the KayKit ClipMap shape (manifest.ts keeps its own private one). */');
+lines.push(
+  '/** Local copy of the KayKit ClipMap shape (manifest.ts keeps its own private one). */',
+);
 lines.push('const genClips = (attack: string[]): ClipMap => ({');
 lines.push("  idle: 'Idle',");
 lines.push("  walk: 'Walking_A',");
@@ -349,7 +400,9 @@ for (let i = 0; i < 60; i++) {
   }
 }
 if (lockFd === null) {
-  console.error(`[emit] could not take ${LOCK} after 2 minutes — another emit is running; refusing to clobber it`);
+  console.error(
+    `[emit] could not take ${LOCK} after 2 minutes — another emit is running; refusing to clobber it`,
+  );
   process.exit(3);
 }
 try {
@@ -359,12 +412,19 @@ try {
     writeFileSync(`${ARM_PICKS_PATH}.tmp`, JSON.stringify(ARM_PICKS, null, 0));
     renameSync(`${ARM_PICKS_PATH}.tmp`, ARM_PICKS_PATH);
   }
-  console.log(`[emit] weapon picks: ${armPicksKept} kept, ${armPicksFresh} new, ${armPicksLost} re-drawn (weapon gone)`);
+  console.log(
+    `[emit] weapon picks: ${armPicksKept} kept, ${armPicksFresh} new, ${armPicksLost} re-drawn (weapon gone)`,
+  );
 } finally {
   closeSync(lockFd);
-  try { unlinkSync(LOCK); } catch {}
+  try {
+    unlinkSync(LOCK);
+  } catch {}
 }
 const armed = out.filter((e) => e.armed).length;
+console.log(
+  `[emit] shape gate rejected ${shapeRejects.length}: ${shapeRejects.slice(0, 20).join(' | ')}`,
+);
 console.log(`[emit] ${out.length} visuals -> ${OUT}`);
 console.log('[emit] authored per realm (owns the GLB):', stats);
 console.log('[emit] POOL per realm (incl. re-used bodies):', poolStats);
