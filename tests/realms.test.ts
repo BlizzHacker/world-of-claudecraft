@@ -66,11 +66,18 @@ describe('realm registry', () => {
     expect(ex.classes).toEqual([]);
   });
 
-  it('Arcane Void uses the local private realm asset pack for branding', () => {
+  it('Arcane Void keeps the Cryptic Realm mark and serves no realm-pack art', () => {
     const arcade = getRealm('arcadevoid');
     expect(arcade.name).toBe('Arcane Void');
-    expect(arcade.branding?.loadingScreenSrc).toBe('/cr-realms/arcadevoid/cr-loggedin.png');
     expect(arcade.classes.length).toBeGreaterThanOrEqual(3);
+    // This realm's source art drop is third-party material (see the note in
+    // realms/content/arcade_void.ts), so no branding surface may point into
+    // its asset-pack directory until original art replaces it.
+    const branding = Object.values(arcade.branding ?? {}).filter(
+      (v): v is string => typeof v === 'string',
+    );
+    for (const src of branding) expect(src).not.toContain('/cr-realms/arcadevoid/');
+    expect(arcade.branding?.loadingScreenSrc).toBe('/cryptic-realm-loading.png');
   });
 
   it('isRealmId narrows correctly', () => {

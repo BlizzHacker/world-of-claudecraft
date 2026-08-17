@@ -217,11 +217,11 @@ function normalizeText(text) {
 
 export function classifyRealmFromText(text, fallback = 'crypticrealm') {
   const n = normalizeText(text);
-  if (
-    /\b(starcraft|arcane void|arcade void|arcadevoid|space marine|protoss|zerg|terran|battlecruiser|spaceship|void)\b/.test(
-      n,
-    )
-  ) {
+  // Routes on the realm's own vocabulary. The franchise tokens this used to
+  // carry (starcraft / space marine / protoss / zerg / terran / battlecruiser)
+  // were dropped: the source drops they were written for are all named
+  // "arcade void ..." or land on `void`/`spaceship` anyway.
+  if (/\b(arcane void|arcade void|arcadevoid|neon|spaceship|void)\b/.test(n)) {
     return 'arcadevoid';
   }
   if (

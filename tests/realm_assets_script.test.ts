@@ -32,7 +32,7 @@ describe('realm asset build helpers', () => {
 
   it('classifies Meshy prompts into the intended realm buckets', () => {
     expect(classifyRealmFromText('Baal butcher demon lord')).toBe('infernal');
-    expect(classifyRealmFromText('Protoss starcraft void cruiser')).toBe('arcadevoid');
+    expect(classifyRealmFromText('neon void cruiser')).toBe('arcadevoid');
     expect(classifyRealmFromText('ClaudeCraft voxel knight')).toBe('claudecraft');
     expect(classifyRealmFromText('mystic rune mage crystal')).toBe('arcane');
     expect(classifyRealmFromText('Serpentbound Archmage')).toBe('arcane');

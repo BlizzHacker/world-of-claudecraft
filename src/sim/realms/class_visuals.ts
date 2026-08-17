@@ -111,13 +111,13 @@ export function normalizeRealmVisualId(name: string | null | undefined): RealmId
   const key = (name ?? '').toLowerCase().replace(/[^a-z0-9]+/g, '');
   if (!key) return null;
   if (key.includes('infernal')) return 'infernal';
+  // Franchise-name aliases (starcraft/terran/protoss/zerg) were dropped here:
+  // no visual key, roster row, store filename or published realm_visuals
+  // override has ever carried one, so they matched nothing and only kept the
+  // names alive in source. The realm's own aliases below still resolve it.
   if (
     key.includes('arcanevoid') ||
     key.includes('arcadevoid') ||
-    key.includes('starcraft') ||
-    key.includes('terran') ||
-    key.includes('protoss') ||
-    key.includes('zerg') ||
     key.includes('arcade')
   )
     return 'arcadevoid';

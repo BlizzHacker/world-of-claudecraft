@@ -144,26 +144,38 @@ export const REALM_FACTIONS: Readonly<Record<RealmId, readonly RealmFactionRoste
       ['rogue', 'mage', 'warlock'],
     ),
   ],
+  // Arcane Void's three powers are named off the realm's OWN spine — the void
+  // shipyards, the derelict hulls between them, and the light that predates
+  // both — and they are the same three names the generated roster uses
+  // (REALM_FACTIONS in rosters.generated.ts). Order is load-bearing: index 0 is
+  // styled as the 'heaven' side in rosterSelectionsFor (infernal_classes.ts).
+  //
+  // These ids are safe to have been renamed because a faction id never leaves
+  // this module: factionForRealmClass / factionForRealmCharacter return the
+  // whole record and every caller reads `.name`, factionIdsForRealm has no
+  // non-test consumer, and no id is persisted, wired, or routed. Roster entry
+  // ids (rosters.generated.ts) are the opposite case and did NOT move — those
+  // are `realmHeroId` save data validated in server/characters.ts.
   arcadevoid: [
     faction(
-      'terran-dominion',
-      'Terran Dominion',
+      'shipyard-compact',
+      'Shipyard Compact',
       'neutral',
-      'A militarized human power fighting to keep its worlds intact.',
+      'A militarized salvage charter fighting to keep its shipyards intact.',
       ['warrior', 'hunter', 'shaman'],
     ),
     faction(
-      'protoss-alliance',
-      'Protoss Alliance',
+      'luminate',
+      'Luminate',
       'good',
-      'Psi-blade guardians defending the last crystal worlds.',
+      'Lightforged guardians defending the last crystal worlds.',
       ['paladin', 'priest', 'mage'],
     ),
     faction(
-      'zerg-swarm',
-      'Zerg Swarm',
+      'hullrot-brood',
+      'Hullrot Brood',
       'evil',
-      'An adaptive brood that treats every battlefield as a nest.',
+      'An adaptive brood that treats every derelict hull as a nest.',
       ['rogue', 'warlock', 'druid'],
     ),
   ],

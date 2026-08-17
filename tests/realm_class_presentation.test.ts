@@ -82,9 +82,9 @@ describe('realm class presentation', () => {
   it('keeps Classic and Arcane Void split by their expected factions', () => {
     expect(presentationFactionsForRealm(getRealm('classic')).sort()).toEqual(['Alliance', 'Horde']);
     expect(presentationFactionsForRealm(getRealm('arcadevoid')).sort()).toEqual([
-      'Protoss Alliance',
-      'Terran Dominion',
-      'Zerg Swarm',
+      'Hullrot Brood',
+      'Luminate',
+      'Shipyard Compact',
     ]);
   });
 

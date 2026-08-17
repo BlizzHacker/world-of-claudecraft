@@ -28,7 +28,14 @@ export const ARCADE_VOID_REALM: RealmContent = {
     // in-world surfaces where it cannot replace the product identity.
     logoSrc: '/cryptic-realm-logo-512.webp',
     brandText: 'Cryptic Realm - Arcane Void',
-    loadingScreenSrc: '/cr-realms/arcadevoid/cr-loggedin.png',
+    // Was '/cr-realms/arcadevoid/cr-loggedin.png'. That file is a third-party
+    // capital-ship render that shipped in with the realm's source art drop, and
+    // the loading screen is the one surface that puts it in front of every
+    // player who enters this realm — so it falls back to the shared Cryptic
+    // Realm plate until an original Arcane Void loading plate exists. The rest
+    // of that art drop (the sibling PNGs in the same directory) is unreferenced
+    // by code but still served from public/; it needs an out-of-band purge.
+    loadingScreenSrc: '/cryptic-realm-loading.png',
     discordUrl: 'https://discord.gg/WnxcamHJdh',
     showDonate: false,
     showAuthentikSso: true,

@@ -24,7 +24,18 @@ const POOLS = {};
 
 const C = { war: 'warrior', pal: 'paladin', hun: 'hunter', rog: 'rogue', pri: 'priest', mag: 'mage', wlk: 'warlock', dru: 'druid' };
 
-// [name, engineClass, faction]
+// [name, engineClass, faction, canonicalKey?]
+//
+// `canonicalKey` pins the two things derived from the display name so a RENAME
+// stays display-only. Both derivations are load-bearing and neither may move:
+//   - id = slug(key). That id is `realmHeroId` save data — the client sends it
+//     back at character create and server/characters.ts validates it through
+//     infernalCharacterSelection(). Reslugging it orphans existing characters.
+//   - body = pool[fnv(realm + ':' + key) % pool.length]. Rehashing re-rolls the
+//     entry's body, and because the collision-skip loop below walks forward from
+//     the pick, one changed hash cascades into every LATER entry's body too.
+// Omit it and the name is the key (the original behaviour, right for new rows).
+// Set it, to the name the row shipped under, whenever a name changes.
 const ROSTERS = {
   // Warcraft-shaped: two-faction, race+class flavoured.
   classic: {
@@ -117,15 +128,17 @@ const ROSTERS = {
   },
   // StarCraft-shaped: three asymmetric factions.
   arcadevoid: {
-    factions: ['Terran Compact', 'Hive Swarm', 'Luminate'],
+    factions: ['Shipyard Compact', 'Hullrot Brood', 'Luminate'],
     list: [
-      ['Void Marine', C.war, 'Terran Compact'], ['Ghost Pilot', C.rog, 'Terran Compact'],
-      ['Turretwright', C.hun, 'Terran Compact'], ['Firebrand', C.war, 'Terran Compact'],
-      ['Field Corpsman', C.pri, 'Terran Compact'], ['Siege Marshal', C.hun, 'Terran Compact'],
-      ['Brood Render', C.rog, 'Hive Swarm'], ['Carapace Tyrant', C.war, 'Hive Swarm'],
-      ['Spore Caller', C.wlk, 'Hive Swarm'], ['Hive Mender', C.dru, 'Hive Swarm'],
-      ['Zealot Ascendant', C.pal, 'Luminate'], ['High Seer', C.mag, 'Luminate'],
-      ['Phase Stalker', C.rog, 'Luminate'], ['Lightbinder', C.pri, 'Luminate'],
+      ['Void Marine', C.war, 'Shipyard Compact'], ['Ghost Pilot', C.rog, 'Shipyard Compact'],
+      ['Turretwright', C.hun, 'Shipyard Compact'], ['Firebrand', C.war, 'Shipyard Compact'],
+      ['Field Corpsman', C.pri, 'Shipyard Compact'], ['Siege Marshal', C.hun, 'Shipyard Compact'],
+      ['Brood Render', C.rog, 'Hullrot Brood'], ['Carapace Tyrant', C.war, 'Hullrot Brood'],
+      ['Spore Caller', C.wlk, 'Hullrot Brood'], ['Hive Mender', C.dru, 'Hullrot Brood'],
+      ['Lumen Ascendant', C.pal, 'Luminate', 'Zealot Ascendant'],
+      ['High Seer', C.mag, 'Luminate'],
+      ['Phase Lancer', C.rog, 'Luminate', 'Phase Stalker'],
+      ['Lightbinder', C.pri, 'Luminate'],
     ],
   },
   // Deliberately unknowable — the namesake realm keeps its mystery.
@@ -178,13 +191,16 @@ for (const [realm, spec] of Object.entries(ROSTERS)) {
   if (!pool.length) { console.log(`  ! ${realm}: no pool, skipped`); continue; }
   const used = new Set();
   L.push(`  ${realm}: [`);
-  for (const [name, cls, faction] of spec.list) {
+  for (const [name, cls, faction, canonicalKey] of spec.list) {
+    // The id and the body both key off `canonicalKey` (default: the name), so a
+    // display rename never moves save data or re-rolls a body — see ROSTERS.
+    const key = canonicalKey ?? name;
     // Deterministic body pick, skipping collisions so each character looks distinct.
-    let idx = fnv(realm + ':' + name) % pool.length;
+    let idx = fnv(realm + ':' + key) % pool.length;
     let guard = 0;
     while (used.has(pool[idx]) && guard++ < pool.length) idx = (idx + 1) % pool.length;
     used.add(pool[idx]);
-    L.push(`    { id: '${slug(name)}', name: ${JSON.stringify(name)}, engineClass: '${cls}', faction: ${JSON.stringify(faction)}, visualKey: '${pool[idx]}' },`);
+    L.push(`    { id: '${slug(key)}', name: ${JSON.stringify(name)}, engineClass: '${cls}', faction: ${JSON.stringify(faction)}, visualKey: '${pool[idx]}' },`);
     total++;
   }
   L.push('  ],');
