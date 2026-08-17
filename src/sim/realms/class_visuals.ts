@@ -38,50 +38,36 @@ export type RealmRuntimeVisualKeyLegacy =
   | 'realm_infernal_class_warlock'
   | 'realm_infernal_class_blood_knight'
   | 'realm_infernal_class_tempest'
-  | 'realm_infernal_human_iron_warden'
-  | 'realm_infernal_human_vanguard'
-  | 'realm_infernal_human_forge_worker'
-  | 'realm_infernal_human_white_sage'
-  | 'realm_infernal_human_tainted_hood'
-  | 'realm_infernal_human_weathered_elder'
-  | 'realm_infernal_human_road_mercenary'
-  | 'realm_infernal_human_iron_ranger'
-  | 'realm_infernal_human_hooded_wanderer'
-  | 'realm_infernal_human_hermit'
-  | 'realm_infernal_human_barbarian'
-  | 'realm_infernal_human_veil_adept'
-  | 'realm_infernal_human_assassin'
-  | 'realm_infernal_human_monk'
-  | 'realm_infernal_human_crusader'
-  | 'realm_infernal_human_spiritborn'
-  | 'realm_infernal_human_blood_knight'
-  | 'realm_infernal_human_tempest'
+  // The condemned body bank's 18 keys were removed from this union on
+  // 2026-08-17; see docs/condemned-body-bank.md.
   | 'realm_infernal_durance_humanoid';
 
 const REALM_CLASS_VISUALS: Partial<
   Record<RealmId, Partial<Record<PlayerClass, RealmRuntimeVisualKey>>>
 > = {
-  // Six of these nine pointed at a body whose arms do not move. Repointed
-  // 2026-08-08 onto bodies rendered at four phases each of Idle, Walk and
-  // Attack and looked at; see INFERNAL_DEFECTIVE_BODY_KEYS for what each one
-  // was doing wrong. The bank cannot currently field nine distinct working
-  // bodies, so classes share until it is repaired.
+  // The whole condemned body bank came out of here on 2026-08-17. The nine
+  // classes below no longer share four bodies between them: each names a
+  // distinct body from the approved catalog (verdict ship / ship-with-caveat
+  // AND examinedCellByCell), each looked at on its phase-1 contact sheet, none
+  // with a weapon baked into its hands. The audit record for what was removed
+  // and why is docs/condemned-body-bank.md.
+  //
+  // These are the RUNTIME keys and they are kept in step with the compiled card
+  // bodies in ui/cryptic/realm_class_presentation.ts, so the create screen and
+  // the world agree for a player who has no published override. Six of the nine
+  // are additionally published as `class:*` overrides, which win over both.
+  //
+  // The three marked GAP are placeholders held until their real bodies land.
   crypticrealm: {
-    warrior: 'realm_infernal_human_iron_warden',
-    // was vanguard: no forearms and no hands, frozen stubs at the pauldrons
-    paladin: 'realm_infernal_human_iron_warden',
-    // was iron_ranger: LeftHand carries no weight and the lower body shears flat
-    hunter: 'realm_infernal_human_hooded_wanderer',
-    // was road_mercenary: forearms end in flat blades, no hands
-    rogue: 'realm_infernal_human_hooded_wanderer',
-    // was white_sage: no face under the hat, arm stubs, plank feet
-    priest: 'realm_infernal_human_hooded_wanderer',
-    shaman: 'realm_infernal_human_weathered_elder',
-    mage: 'realm_infernal_human_hooded_wanderer',
-    // was forge_worker: arms locked straight out in a T through every clip
-    warlock: 'realm_infernal_human_hooded_wanderer',
-    // was hermit: same kite failure, plus a LeftHand that carries no weight
-    druid: 'realm_infernal_human_weathered_elder',
+    warrior: 'realm_infernal_hero_dark_paladin',
+    paladin: 'realm_infernal_evil_warlord_armor_made_0196a156', // GAP: Gargoyle Oathsworn
+    hunter: 'realm_infernal_hero_demon_hunter',
+    rogue: 'realm_crypticrealm_realistic_humanoid_assassin_wearing_01942e8f',
+    priest: 'realm_arcane_all_seeing_sage_sage_019e1733',
+    shaman: 'realm_infernal_class_shaman_f', // GAP: Grave Totemist
+    mage: 'realm_arcane_mystic_sentinel_characters_01968757',
+    warlock: 'realm_infernal_hero_warlock',
+    druid: 'realm_infernal_class_druid_f', // GAP: Chimera Warden
   },
   // Seven of these nine pointed at a body that fails in motion; see
   // INFERNAL_DEFECTIVE_CLASS_BODY_KEYS. The three survivors of the class bank

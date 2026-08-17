@@ -19,7 +19,6 @@
     "build:bundle": "npm run sitemap:build && npm run sfx:manifest && npm run assets:realms -- --skip-api && node scripts/build_media_manifest.mjs generate && vite build && node scripts/check_backdrop_survival.mjs && node scripts/build_media_manifest.mjs emit",
     "build": "npm run i18n:gen && npm run wiki:content && npm run build:bundle",
     "assets:realms": "node scripts/build_realm_assets.mjs",
-    "assets:infernal-rigs": "node scripts/build_infernal_human_rigs.mjs",
     "assets:infernal-waypoint": "node scripts/build_infernal_waypoint.mjs",
     "wiki:content": "node scripts/wiki/build_content.mjs",
     "wiki:stills": "node scripts/wiki/render_model_stills.mjs",

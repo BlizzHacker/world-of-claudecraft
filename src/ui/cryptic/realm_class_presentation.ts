@@ -552,25 +552,79 @@ function infernalHumanAsset(fileName: string, assetName: string): RealmClassAsse
   });
 }
 
-const INFERNAL_NPC_ASSETS = {
-  ironWarden: infernalHumanAsset('infernal_human_iron_warden.glb', 'Iron Warden'),
-  vanguard: infernalHumanAsset('infernal_human_vanguard.glb', 'Vanguard'),
-  forgeWorker: infernalHumanAsset('infernal_human_forge_worker.glb', 'Forge Worker'),
-  whiteSage: infernalHumanAsset('infernal_human_white_sage.glb', 'White Sage'),
-  taintedHood: infernalHumanAsset('infernal_human_tainted_hood.glb', 'Redeemed Hunter'),
-  weatheredElder: infernalHumanAsset('infernal_human_weathered_elder.glb', 'Weathered Elder'),
-  roadMercenary: infernalHumanAsset('infernal_human_road_mercenary.glb', 'Road Mercenary'),
-  ironRanger: infernalHumanAsset('infernal_human_iron_ranger.glb', 'Iron Ranger'),
-  hoodedWanderer: infernalHumanAsset('infernal_human_hooded_wanderer.glb', 'Hooded Wanderer'),
-  hermit: infernalHumanAsset('infernal_human_hermit.glb', 'Hermit'),
-  barbarian: infernalHumanAsset('infernal_human_barbarian.glb', 'Ashland Barbarian'),
-  veilAdept: infernalHumanAsset('infernal_human_veil_adept.glb', 'Veil Adept'),
-  assassin: infernalHumanAsset('infernal_human_assassin.glb', 'Night Assassin'),
-  monk: infernalHumanAsset('infernal_human_monk.glb', 'Road Monk'),
-  crusader: infernalHumanAsset('infernal_human_crusader.glb', 'Dawn Crusader'),
-  spiritborn: infernalHumanAsset('infernal_human_spiritborn.glb', 'Wild Spiritborn'),
-  bloodKnight: infernalHumanAsset('infernal_human_blood_knight.glb', 'Blood Knight'),
-  tempest: infernalHumanAsset('infernal_human_tempest.glb', 'Tempest Adept'),
+/**
+ * A body from anywhere in the shared realm store, not just the infernal folder.
+ * The Cryptic bodies below are drawn from three realm folders, so they cannot go
+ * through infernalHumanAsset()'s hardcoded `/cr-realms/infernal/` prefix.
+ */
+function realmStoreAsset(storePath: string, assetName: string): RealmClassAsset {
+  return asset('ready', 'Playable human GLB', {
+    assetUrl: `/cr-realms/${storePath}`,
+    assetName,
+    assetAnimated: true,
+  });
+}
+
+/**
+ * Compiled fallback bodies for the Cryptic Realm class cards.
+ *
+ * These replace the condemned body bank, which was rejected in full (owner,
+ * 2026-08-17; and independently by the phase-1 body catalog, which marks 15 of
+ * its 18 GLBs `reject`, 2 `marginal`, 0 `ship`). See docs/condemned-body-bank.md
+ * for the audit record and the name of the bank - it is deliberately not spelled
+ * here, because tests/condemned_body_bank_guard.test.ts bans the string outright.
+ *
+ * Every body here is from the approved catalog (verdict ship / ship-with-caveat
+ * AND examinedCellByCell) and was looked at on its phase-1 contact sheet before
+ * being written down - no body is picked from its file name, because an
+ * ip_rename pass laundered those and they no longer describe what is in the GLB.
+ * None has a weapon or prop baked into its hands; realm_infernal_class_paladin_f
+ * was the natural paladin fit and is deliberately NOT used, because the render
+ * shows a red greatsword fused to its hand.
+ *
+ * SIX of these nine now merely mirror what the operator has already published as
+ * `class:*` overrides for crypticrealm, so the live cards resolve through the
+ * override and these entries are the fallback. The THREE marked GAP are
+ * placeholders standing in until their real bodies land (Gargoyle Oathsworn,
+ * Grave Totemist, Chimera Warden are in generation): they have no override, so
+ * these compiled entries ARE what those cards render today.
+ */
+const CRYPTIC_BODY_ASSETS = {
+  // Published as class:warrior. Black ornate plate, horned helm, hands free.
+  darkPaladin: realmStoreAsset('infernal/realm_infernal_hero_dark_paladin.glb', 'Rune Warden'),
+  // Published as class:rogue. Dark hooded assassin, red sigil accents, hands free.
+  cipherBlade: realmStoreAsset(
+    'crypticrealm/realm_crypticrealm_realistic_humanoid_assassin_wearing_01942e8f.glb',
+    'Cipher Blade',
+  ),
+  // Published as class:hunter. Dark hooded ranger, strapped leathers, no weapon.
+  cryptStalker: realmStoreAsset(
+    'infernal/realm_infernal_hero_demon_hunter.glb',
+    'Crypt Stalker',
+  ),
+  // Published as class:mage. Black shrouded horned faceless figure, hands free.
+  voidSeer: realmStoreAsset(
+    'arcane/realm_arcane_mystic_sentinel_characters_01968757.glb',
+    'Void Seer',
+  ),
+  // Published as class:priest. Tall veiled sage in layered dark robes, no prop.
+  oracle: realmStoreAsset('arcane/realm_arcane_all_seeing_sage_sage_019e1733.glb', 'Oracle'),
+  // Published as class:warlock. Deep-blue full-length hooded robe, faceless.
+  gravecaller: realmStoreAsset('infernal/realm_infernal_hero_warlock.glb', 'Gravecaller'),
+
+  // GAP - placeholder until cr_gargoyle_oathsworn lands. Horned-helm armoured
+  // warlord, hands free; stands in for a monumental sworn guardian.
+  gargoyleStandIn: realmStoreAsset(
+    'infernal/realm_infernal_evil_warlord_armor_made_0196a156.glb',
+    'Gargoyle Oathsworn',
+  ),
+  // GAP - placeholder until cr_grave_totemist lands. Leather-clad figure, hands free.
+  totemistStandIn: realmStoreAsset(
+    'infernal/realm_infernal_class_shaman_f.glb',
+    'Grave Totemist',
+  ),
+  // GAP - placeholder until cr_chimera_warden lands. Antlered figure in wraps.
+  wardenStandIn: realmStoreAsset('infernal/realm_infernal_class_druid_f.glb', 'Chimera Warden'),
 } satisfies Record<string, RealmClassAsset>;
 
 const INFERNAL_CLASS_ASSETS = {
@@ -611,15 +665,15 @@ const INFERNAL_HERO_ASSETS: Readonly<Record<string, RealmClassAsset>> = {
 };
 
 const CRYPTIC_HUMAN_BASE_CLASS_ASSETS: Record<PlayerClass, RealmClassAsset> = {
-  warrior: INFERNAL_NPC_ASSETS.ironWarden,
-  paladin: INFERNAL_NPC_ASSETS.vanguard,
-  hunter: INFERNAL_NPC_ASSETS.ironRanger,
-  rogue: INFERNAL_NPC_ASSETS.roadMercenary,
-  priest: INFERNAL_NPC_ASSETS.whiteSage,
-  shaman: INFERNAL_NPC_ASSETS.weatheredElder,
-  mage: INFERNAL_NPC_ASSETS.hoodedWanderer,
-  warlock: INFERNAL_NPC_ASSETS.forgeWorker,
-  druid: INFERNAL_NPC_ASSETS.hermit,
+  warrior: CRYPTIC_BODY_ASSETS.darkPaladin,
+  paladin: CRYPTIC_BODY_ASSETS.gargoyleStandIn, // GAP
+  hunter: CRYPTIC_BODY_ASSETS.cryptStalker,
+  rogue: CRYPTIC_BODY_ASSETS.cipherBlade,
+  priest: CRYPTIC_BODY_ASSETS.oracle,
+  shaman: CRYPTIC_BODY_ASSETS.totemistStandIn, // GAP
+  mage: CRYPTIC_BODY_ASSETS.voidSeer,
+  warlock: CRYPTIC_BODY_ASSETS.gravecaller,
+  druid: CRYPTIC_BODY_ASSETS.wardenStandIn, // GAP
 };
 
 interface InfernalEnemySeed {
@@ -801,8 +855,48 @@ function sourceForBaseClass(
   return null;
 }
 
+/**
+ * The body a class card shows, with the operator's published override winning
+ * over the compiled table.
+ *
+ * This used to return the compiled entry verbatim, which meant the create-screen
+ * CARD ART and the TURNTABLE PREVIEW ignored published `class:*` overrides on
+ * every realm except Infernal. Infernal looked correct only by accident: its
+ * cards come from infernalClassChoice(), which does its own override lookup, and
+ * that path is unreachable for other realms (infernalHeroChoicesForRealm returns
+ * [] unless realm.id === 'infernal'). So publishing a crypticrealm class body
+ * changed the character in the world and on the portrait - because
+ * overrideEntryForCharacter runs ahead of resolveRealmCharacterVisual in
+ * manifest.ts - while the card you picked it from still advertised the old one.
+ *
+ * Precedence is deliberately the same as the world path: override first,
+ * compiled table as the fallback. Realms and classes with no published override
+ * keep rendering exactly what they render today, which is what keeps the gap
+ * cards (a class whose body is still being made) on their compiled default
+ * instead of blanking.
+ *
+ * Unsuffixed `class:<cls>` only, matching infernalClassChoice's class-level key.
+ * The sex-suffixed bodies (`class:<cls>:f` / `:m`) are resolved separately, at
+ * pick time, by charCreateSexPick/showClassPreview in main.ts.
+ */
 function assetForBaseClass(realm: RealmContent, baseClass: PlayerClass): RealmClassAsset {
-  return ASSETS_BY_REALM_CLASS[realm.id]?.[baseClass] ?? COMING_SOON_ASSET;
+  const compiled: RealmClassAsset =
+    ASSETS_BY_REALM_CLASS[realm.id]?.[baseClass] ?? COMING_SOON_ASSET;
+  const override = firstRealmVisualOverride(realm.id, [`class:${baseClass}`]);
+  if (!override) return compiled;
+  // A published body is a real, playable GLB even when the compiled entry it
+  // replaces was still a "Coming Soon" placeholder - so drop that placeholder's
+  // assetIssue too, or the card keeps showing "character job queued" underneath
+  // a body that has already shipped.
+  const { assetIssue: _replaced, ...rest } = compiled;
+  return {
+    ...rest,
+    assetStatus: 'ready',
+    assetStatusLabel: 'Playable',
+    assetUrl: override.assetUrl,
+    assetName: override.assetName ?? compiled.assetName,
+    assetAnimated: true,
+  };
 }
 
 export function realmHasClassOverlay(realm: RealmContent): boolean {

@@ -63,6 +63,10 @@ STORE_ROOTS=(
   "/opt/cr-realms-store"
   "/mnt/usb4/moveweight-assets/cr-realms-staging"
 )
+# `served` deliberately includes /opt/cr-stages, which holds a `live/scripts`
+# copy of the rebuild recipe per realm as well as the GLBs. Those copies are
+# quarantined on purpose: a script that regenerates the whole bank is a
+# reintroduction route the source string-ban cannot see.
 SERVED_ROOTS=(
   "/opt/cryptic-realm/public/cr-realms"
   "/opt/cryptic-realm/dist/cr-realms"

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 const ROOT = path.resolve(__dirname, '..');
@@ -69,20 +69,20 @@ function countOccurrences(rel: string): number {
  * through). Every entry must reach 0 and be deleted from this map; when the map
  * is empty the ban below becomes absolute for src/ as well.
  *
- * These five are all blocked on the same thing: the bank's real job is bodying
- * ~105 Infernal townspeople and 18 Cryptic class cards, and the approved pool
- * has no townspeople in it — it is casters, knights, necromancers, goblins and
- * demons. Re-pointing a blacksmith at a skull-faced warlord is the fault the
- * owner already called out (a horned demoness cast as a human mercenary is
- * "why the town read wrong"), so these wait for the civilian bodies now in
- * generation rather than getting a worse body today.
+ * Both remaining files are blocked on the same thing: what is left of the bank
+ * bodies ~105 Infernal townspeople, and the approved pool has no townspeople in
+ * it — it is casters, knights, necromancers, goblins and demons. Re-pointing a
+ * blacksmith at a skull-faced warlord is the fault the owner already called out
+ * (a horned demoness cast as a human mercenary is "why the town read wrong"),
+ * so these wait for the craftsman/merchant/guard/townswoman/townsman bodies now
+ * in generation rather than getting a worse body today.
+ *
+ * manifest.ts holds the 18 body REGISTRATIONS, which cannot go until
+ * infernal_roster.ts stops naming their keys, or the roster keys dangle.
  */
 const AWAITING_REPLACEMENT: Readonly<Record<string, number>> = {
-  'src/render/characters/infernal_roster.ts': 65,
-  'src/render/characters/manifest.ts': 40,
-  'src/sim/realms/class_visuals.ts': 27,
-  'src/ui/cryptic/realm_class_presentation.ts': 18,
-  'src/sim/realms/infernal_classes.ts': 18,
+  'src/render/characters/infernal_roster.ts': 64,
+  'src/render/characters/manifest.ts': 37,
 };
 
 const WHY = [
@@ -146,6 +146,25 @@ describe('condemned infernal_human_* body bank', () => {
         '                     AWAITING_REPLACEMENT in this file to match, and delete the\n' +
         '                     entry entirely once it reaches 0.',
     ).toEqual(AWAITING_REPLACEMENT);
+  });
+
+  // A rebuild recipe is a reintroduction route the string ban cannot see: the
+  // source could be spotless while `npm run assets:infernal-rigs` regenerates
+  // all 18 GLBs straight back into the store. Both the script and any task that
+  // invokes it are banned outright.
+  it('keeps the rebuild recipe deleted, and unreferenced by any npm script', () => {
+    expect(
+      existsSync(path.join(ROOT, 'scripts/build_infernal_human_rigs.mjs')),
+      `${WHY}\n\nThe rebuild script is back. It regenerates the whole bank from source ` +
+        'assets, so its presence undoes the purge no matter how clean src/ looks.',
+    ).toBe(false);
+
+    const pkg = readFileSync(path.join(ROOT, 'package.json'), 'utf8');
+    expect(
+      pkg.includes(CONDEMNED),
+      `${WHY}\n\npackage.json names the bank — almost certainly a resurrected ` +
+        '"assets:infernal-rigs" task. A build recipe is a way back in.',
+    ).toBe(false);
   });
 
   it('has no allowance left once the bank is gone', () => {

@@ -501,6 +501,10 @@ const meshyBiped = (
 });
 
 // Curated Infernal humans are rebuilt by build_infernal_human_rigs.mjs. Exact-rig
+// NOTE (purge, 2026-08-17): that rebuild script has been REMOVED from the repo.
+// It regenerated the condemned body bank, so leaving it in place was a way back
+// in that the source string-ban cannot see. The sentence above is Wade's and is
+// left as written - it was true when written. See docs/condemned-body-bank.md.
 // actions are used where available and donor actions are transferred as rest-pose
 // deltas, so each distinct body stays upright through every gameplay state.
 // meshy24, the clip bank's own rig family, so the bank fills everything the 10
@@ -3168,7 +3172,7 @@ const REALM_NPC_KEYS: Partial<Record<string, Record<string, string>>> = {
 };
 
 const REALM_MOB_DEFAULTS: Partial<Record<string, string>> = {
-  crypticrealm: 'realm_infernal_human_tainted_hood',
+  crypticrealm: 'realm_infernal_evil_warlord_armor_made_0196a11d',
   infernal: 'realm_infernal_horned_demon',
   classic: 'realm_classic_orc',
   claudecraft: 'realm_claudecraft_dark_wanderer',
@@ -3177,7 +3181,7 @@ const REALM_MOB_DEFAULTS: Partial<Record<string, string>> = {
 const REALM_MOB_FAMILY_KEYS: Partial<Record<string, Partial<Record<string, string>>>> = {
   crypticrealm: {
     beast: 'mob_wolf',
-    humanoid: 'realm_infernal_human_tainted_hood',
+    humanoid: 'realm_infernal_evil_warlord_armor_made_0196a11d',
     undead: 'realm_cryptic_bone_herald',
     demon: 'realm_infernal_horned_demon',
     elemental: 'mob_elemental',
@@ -3187,7 +3191,7 @@ const REALM_MOB_FAMILY_KEYS: Partial<Record<string, Partial<Record<string, strin
     // Generic beasts remain animals; Infernal demon bodies are reserved for
     // demon-family mobs and named Hellmaw encounters.
     beast: 'mob_wolf',
-    humanoid: 'realm_infernal_human_tainted_hood',
+    humanoid: 'realm_infernal_evil_warlord_armor_made_0196a11d',
     undead: 'skel_warrior',
     demon: 'hellmaw_husk_body',
     elemental: 'hellmaw_lava_fiend_body',

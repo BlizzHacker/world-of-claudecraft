@@ -31,10 +31,11 @@ describe('realm class runtime visuals', () => {
   it('maps only classes with playable runtime GLBs', () => {
     expect(realmClassVisualKey('Classic', 'priest')).toBe('realm_classic_female_elf');
     expect(realmClassVisualKey('Infernal', 'rogue')).toBe('realm_infernal_class_rogue');
-    // was forge_worker, barred 2026-08-08: its arms are weighted to the spine,
-    // so they hold a T-pose through every clip
+    // The condemned body bank came out of the Cryptic table on 2026-08-17
+    // (docs/condemned-body-bank.md). Warlock now names a body from the
+    // approved catalog, and it is the same one published as `class:warlock`.
     expect(realmClassVisualKey('Cryptic Realm', 'warlock')).toBe(
-      'realm_infernal_human_hooded_wanderer',
+      'realm_infernal_hero_warlock',
     );
     expect(realmClassVisualKey('Classic', 'warlock')).toBeNull();
   });
@@ -98,14 +99,27 @@ describe('realm class runtime visuals', () => {
     ];
     const keys = classes.map((cls) => realmClassVisualKey('Cryptic Realm', cls));
 
-    // Was one distinct body per class. Six of the nine pointed at a body that
-    // fails in motion, and the civilian bank has only three survivors, so the
-    // nine share three. The prefix and no-demon rules below are unchanged -
-    // only the variety count gave way. RAISE THIS BACK as bodies are repaired.
-    expect(new Set(keys).size).toBeGreaterThanOrEqual(3);
-    for (const key of keys) {
-      expect(key).toMatch(/^realm_infernal_human_/);
-      expect(key).not.toMatch(/bone_herald|elf|orc|demon/i);
+    // RAISED BACK to one distinct body per class, which is what the note here
+    // asked for: purging the condemned bank on 2026-08-17 removed the reason
+    // nine classes were sharing three bodies. All nine are now distinct.
+    expect(new Set(keys).size).toBe(9);
+    for (const maybeKey of keys) {
+      // realmClassVisualKey is string | null; every Cryptic class must map.
+      expect(maybeKey).toBeTruthy();
+      const key = maybeKey as string;
+      // The old rule here REQUIRED the `realm_infernal_human_` prefix - that
+      // prefix WAS the condemned bank, so the assertion is inverted: these
+      // bodies must now come from anywhere BUT it. Cryptic draws from the
+      // infernal, arcane and crypticrealm store folders.
+      expect(key, key).not.toMatch(/^realm_infernal_human_/);
+      expect(key, key).toMatch(/^realm_(infernal|arcane|crypticrealm)_/);
+      expect(VISUALS[key as keyof typeof VISUALS], key).toBeTruthy();
+      // Same no-monster-body intent as before, with the same carve-out the
+      // Infernal test makes: a Demon Hunter is a hunter OF demons, a human
+      // archetype, and is a TOP PICK in the approved catalog.
+      if (key !== 'realm_infernal_hero_demon_hunter') {
+        expect(key, key).not.toMatch(/bone_herald|elf|orc|demon/i);
+      }
     }
   });
 
