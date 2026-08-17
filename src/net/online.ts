@@ -5198,6 +5198,9 @@ export class ClientWorld implements IWorld {
   leaveInterior(): void {
     this.cmd({ cmd: 'leave_building' });
   }
+  enterBuilding(): void {
+    this.cmd({ cmd: 'enter_building' });
+  }
   dungeonDifficulty(): DungeonDifficulty {
     return this.selectedDungeonDifficulty ?? 'normal';
   }

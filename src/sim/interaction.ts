@@ -1121,3 +1121,20 @@ export function interact(
     return;
   }
 }
+
+/** The click-to-enter menu's EXPLICIT entry (cmd 'enter_building'): enter the
+ *  enterable building nearest the player within the menu range, skipping the
+ *  bare press's distance arbitration entirely. The player already said "Enter"
+ *  on the prompt, so a porch NPC must not swallow the intent - a bare interact
+ *  from a workshop doorstep always loses to its artisan (tinker_gizzel stands
+ *  0.7-2.6yd off the mill door on every approach), which made the accepted
+ *  menu talk to nobody and enter nothing. No-op when nothing is in range or
+ *  the player is dead (enterInterior refuses dead-not-ghost itself). */
+export function enterNearbyBuilding(ctx: SimContext, pid?: number): void {
+  const r = ctx.resolve(pid);
+  if (!r) return;
+  const p = r.e;
+  const nearBuilding = buildingEnterableNear(p.pos.x, p.pos.z, BUILDING_ENTER_RANGE);
+  if (nearBuilding == null) return;
+  enterInterior(ctx, nearBuilding, p.id);
+}

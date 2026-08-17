@@ -8200,6 +8200,14 @@ export class GameServer {
         sim.leaveInterior(pid);
         break;
       }
+      case 'enter_building': {
+        // The click-to-enter menu's explicit Enter. The sim range-gates it
+        // (buildingEnterableNear) and skips the bare interact's distance
+        // arbitration: the player said "Enter", so the porch NPC that outranks
+        // every doorstep press must not swallow the intent.
+        sim.enterBuilding(pid);
+        break;
+      }
       case 'set_dungeon_difficulty': {
         if (isDungeonDifficulty(msg.difficulty)) sim.setDungeonDifficulty(msg.difficulty, pid);
         break;

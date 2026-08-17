@@ -9869,6 +9869,13 @@ export class Sim {
     interaction.interact(this.ctx, pid, this.noticeboardDefinitions);
   }
 
+  // The click-to-enter menu's explicit building entry (cmd 'enter_building'):
+  // unlike the bare interact above it carries INTENT, so it skips distance
+  // arbitration against porch NPCs/props (see interaction.enterNearbyBuilding).
+  enterBuilding(pid?: number): void {
+    interaction.enterNearbyBuilding(this.ctx, pid);
+  }
+
   private isQuestInteractionEntity(e: Entity): boolean {
     if (e.kind === 'npc') return true;
     return e.kind === 'mob' && !e.hostile && !e.dead && e.questIds.length > 0;

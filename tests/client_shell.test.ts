@@ -2100,9 +2100,7 @@ describe('client HTML shell', () => {
     expect(mainTs).toContain(
       "import { stopAutorunForInteraction } from './game/interaction_autorun';",
     );
-    expect(mainTs).toContain(
-      "import { buildingDoorWinsPress, tryNearbyInteraction } from './game/nearby_interaction';",
-    );
+    expect(mainTs).toContain("import { tryNearbyInteraction } from './game/nearby_interaction';");
     // Click-to-enter buildings: the PLAYER's doorway (with the interact key as
     // the other half). The v0.35.1 intake merge dropped this handlePick hunk
     // while keeping its import and range const, leaving openBuildingEnterPrompt
@@ -2110,21 +2108,18 @@ describe('client HTML shell', () => {
     // sim-level door tests stayed green. Pin the full wiring: footprint
     // hit-test, range gate, prompt, authoritative enter.
     expect(mainTs).toContain(
-      "import { buildingAtPoint, buildingDoorForPoint, buildingDoorNear } from './sim/interiors';",
+      "import { buildingAtPoint, buildingDoorNear } from './sim/interiors';",
     );
     expect(mainTs).toContain('const hit = g ? buildingAtPoint(g.x, g.z) : null;');
     expect(mainTs).toContain(
       'Math.hypot(pp.x - hit.cx, pp.z - hit.cz) <= BUILDING_CLICK_ENTER_RANGE',
     );
-    // Enter WALKS to the door point before pressing the interact: a bare
-    // interact from the click spot loses the sim's distance arbitration to any
-    // doorstep NPC (the mill's tinker), so the menu accepted and nothing
-    // happened. The walk ends inside DOOR_ENTER_PRESS_RANGE, where the door
-    // wins everywhere.
-    expect(mainTs).toContain('hud.openBuildingEnterPrompt(hit.interiorType, () => {');
-    expect(mainTs).toContain('const door = buildingDoorForPoint(g!.x, g!.z);');
+    // Enter sends the DEDICATED entry command: a bare interact from a workshop
+    // doorstep always loses the sim's distance arbitration to the porch
+    // artisan, so the accepted menu used to enter nothing. The command carries
+    // the stated intent end-to-end (online: cmd 'enter_building').
     expect(mainTs).toContain(
-      'input.setClickMoveTarget(target, 0.5, null, clickMovePathTo(target));',
+      'hud.openBuildingEnterPrompt(hit.interiorType, () => world.enterBuilding());',
     );
     // The interact-key half (the door arbitrating by distance against a
     // doorstep NPC) is pinned behaviorally in tests/nearby_interaction.test.ts.

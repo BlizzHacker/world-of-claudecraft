@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { buildingDoorWinsPress, tryNearbyInteraction } from '../src/game/nearby_interaction';
+import { tryNearbyInteraction } from '../src/game/nearby_interaction';
 import { getActiveWorldContent } from '../src/sim/data';
 import { computeBuildingDoors } from '../src/sim/interiors';
 import { setRealmHostEnv } from '../src/sim/realms/registry';
@@ -442,33 +442,6 @@ describe('tryNearbyInteraction building-door arbitration (real infernal doors)',
     r.player.pos = { x: door.x + 3.5, y: 0, z: door.z };
     expect(interact(r)).toBe(true);
     expect(r.calls).toEqual(['quest:2']);
-  });
-
-  it('buildingDoorWinsPress: fires only when the door outranks every press candidate', () => {
-    // The click-to-enter walk polls this to time its deferred interact: the
-    // building collider stops the body ~2yd from the door point while the
-    // porch NPC stands ~2.2yd out, so a fixed radius either never fires or
-    // fires into the NPC dialog. Only the arbitration verdict is safe.
-    forceInfernal();
-    const door = chapelDoor();
-    // Player 2.0yd off the door point, NPC 2.2yd from the player: door wins.
-    const npc = entity({
-      id: 2,
-      kind: 'npc',
-      templateId: 'elder_maren',
-      pos: { x: door.x + 0.5, y: 0, z: door.z + 4.1 },
-    });
-    const winning = rig([npc]);
-    winning.player.pos = { x: door.x, y: 0, z: door.z + 2.0 };
-    expect(buildingDoorWinsPress(winning.world)).toBe(true);
-    // NPC strictly closer than the door point: the press would talk, not enter.
-    const losing = rig([npc]);
-    losing.player.pos = { x: door.x + 0.5, y: 0, z: door.z + 3.0 };
-    expect(buildingDoorWinsPress(losing.world)).toBe(false);
-    // Outside every door ring: nothing to win.
-    const nowhere = rig([]);
-    nowhere.player.pos = { x: door.x + 60, y: 0, z: door.z + 60 };
-    expect(buildingDoorWinsPress(nowhere.world)).toBe(false);
   });
 
   it('a corpse at the feet still beats the door underfoot', () => {

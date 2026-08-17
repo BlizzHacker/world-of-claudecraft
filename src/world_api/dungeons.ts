@@ -46,6 +46,10 @@ export interface IWorldDungeons {
   // Leave the current building interior (talk-to-leave via the resident NPC's dialog).
   // Server-authoritative; no-op when the player is not inside an interior room.
   leaveInterior(): void;
+  // Enter the enterable building near the player (the click-to-enter menu's
+  // explicit Enter). Carries intent, so the sim skips the bare press's distance
+  // arbitration against porch NPCs; no-op when nothing enterable is in range.
+  enterBuilding(): void;
   // Still-locked raids for the local player (unlock countdown in ms), driving the
   // minimap raid-lockout badge + panel. Empty when nothing is locked.
   raidLockouts(): RaidLockout[];

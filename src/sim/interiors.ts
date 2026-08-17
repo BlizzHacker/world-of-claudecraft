@@ -293,37 +293,6 @@ export function buildingAtPoint(
   return null;
 }
 
-/** The DOOR of the enterable building whose FOOTPRINT (plus the same forgiving
- *  margin as buildingAtPoint) contains (x,z), or null. The click-to-enter flow
- *  walks the player HERE before sending the interact: a bare interact from the
- *  click spot loses the sim's distance arbitration to any NPC nearer than the
- *  door point — the artisan on every workshop porch — so the Enter menu looked
- *  accepted while the sim talked to the tinker instead (the live "mill prompt
- *  enters nothing" half of the v0.35.1 report). At the door point the door wins
- *  everywhere, online and offline, with no protocol change. */
-export function buildingDoorForPoint(x: number, z: number): BuildingDoor | null {
-  if (!getActiveRealm().worldTheme) return null;
-  const MARGIN = 1.5; // keep in lockstep with buildingAtPoint
-  const buildings = getActiveWorldContent().props.buildings;
-  const doors = computeBuildingDoors(buildings);
-  let doorIdx = 0;
-  let houseSeen = 0;
-  for (const b of buildings) {
-    const interiorType = interiorTypeForBuilding(b.kind, houseSeen);
-    if (isHouseKind(b.kind)) houseSeen++;
-    if (interiorType == null) continue;
-    const idx = doorIdx++;
-    const s = Math.sin(-b.rot);
-    const c = Math.cos(-b.rot);
-    const lx = (x - b.x) * c - (z - b.z) * s;
-    const lz = (x - b.x) * s + (z - b.z) * c;
-    if (Math.abs(lx) <= b.w / 2 + MARGIN && Math.abs(lz) <= b.d / 2 + MARGIN) {
-      return doors[idx] ?? null;
-    }
-  }
-  return null;
-}
-
 /** The interior type of an enterable building whose CENTRE is within `range` of (x,z),
  *  or null. A generous footprint-based proximity used server-side so an Enter chosen
  *  from the click-to-enter menu succeeds from anywhere the client offered it (the client

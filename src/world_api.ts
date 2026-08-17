@@ -474,6 +474,7 @@ export const COMMAND_NAMES = [
   'leave_crypt',
   'leave_dungeon',
   'leave_building',
+  'enter_building',
   'enter_delve',
   'leave_delve',
   'delve_interact',
@@ -907,6 +908,7 @@ export const COMMAND_FACETS = {
   enter_dungeon: 'IWorldDungeons',
   leave_dungeon: 'IWorldDungeons',
   leave_building: 'IWorldDungeons',
+  enter_building: 'IWorldDungeons',
   set_dungeon_difficulty: 'IWorldDungeons',
   heroic_buy: 'IWorldDungeons',
   // IWorldDelves: delve enter/leave + interact + companion upgrade + Marks-vendor buy

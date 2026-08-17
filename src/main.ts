@@ -106,7 +106,7 @@ import { watchMobileMoreState } from './game/mobile_more_diagnostics';
 import { mouselookReleaseFacing } from './game/mouselook_release';
 import { diagonalMovementVisualFacing } from './game/movement_visual';
 import { music } from './game/music';
-import { buildingDoorWinsPress, tryNearbyInteraction } from './game/nearby_interaction';
+import { tryNearbyInteraction } from './game/nearby_interaction';
 import { isOfflineModeAvailable, isPackagedConsoleApp } from './game/offline_mode_gate';
 import { loadOfflineSave, mountOfflineAutosave } from './game/offline_save';
 import { padReelItemId } from './game/pad_reel';
@@ -285,7 +285,7 @@ import {
   ZONES,
 } from './sim/data';
 import { canEquipItem } from './sim/equipment_rules';
-import { buildingAtPoint, buildingDoorForPoint, buildingDoorNear } from './sim/interiors';
+import { buildingAtPoint, buildingDoorNear } from './sim/interiors';
 import { findPlayerPath, resolvePlayerDestination } from './sim/pathfind';
 // CR overlay: heavy game runtime (Renderer, Sim, Hud, audio, music, voice, sfx,
 // MobileControls, perf, Input, Keybinds, camera-follow yaw helpers, CharacterPreview,
@@ -530,9 +530,6 @@ const ATTACK_MOVE_ACQUIRE_RANGE = 12; // yards; an attack-move toward open groun
 // How close (to a building's centre) a click-to-enter prompt appears. Generous so
 // "click a building near me" reliably offers Enter; the server re-validates entry.
 const BUILDING_CLICK_ENTER_RANGE = 26;
-// Give up on a blocked/abandoned click-to-enter walk quietly; a later manual
-// interact behaves normally.
-const DOOR_ENTER_WALK_TIMEOUT_MS = 25000;
 // Aura kinds that stop the player from moving (mirrors the sim's isRooted/isStunned):
 // while one of these is up, click-to-move can't make progress, so the destination
 // marker shows a "held" state instead of looking like a stuck game.
@@ -3641,37 +3638,14 @@ async function startGame(
           const pp = world.player.pos;
           const near = Math.hypot(pp.x - hit.cx, pp.z - hit.cz) <= BUILDING_CLICK_ENTER_RANGE;
           if (near) {
-            // Enter = WALK TO THE DOOR, then interact. A bare interact from the
-            // click spot loses the sim's distance arbitration to any NPC nearer
-            // than the door point (the artisan on every workshop porch: the
-            // tinker at 2.6yd beat the mill door at 2.9yd), so the menu read as
-            // accepted while the sim talked to the NPC instead. At the door
-            // point the door wins everywhere — online and offline, no protocol
-            // change. Headless player-path probe: doorprobe v13/v14.
-            const door = buildingDoorForPoint(g!.x, g!.z);
-            hud.openBuildingEnterPrompt(hit.interiorType, () => {
-              // Fire the interact the moment the DOOR WINS the press (the same
-              // arbitration the dispatcher and the sim apply) - never at a
-              // fixed radius: the building's collider stops the body ~2yd from
-              // the door point while the porch NPC stands ~2.2yd out, so any
-              // distance threshold either never fires or fires into the NPC.
-              if (!door || buildingDoorWinsPress(world)) {
-                world.interact();
-                return;
-              }
-              const dp = { x: door.x, z: door.z };
-              const target = resolvedClickMoveTarget(dp);
-              input.setClickMoveTarget(target, 0.5, null, clickMovePathTo(target));
-              const startedAt = performance.now();
-              const timer = window.setInterval(() => {
-                if (buildingDoorWinsPress(world)) {
-                  window.clearInterval(timer);
-                  world.interact();
-                } else if (performance.now() - startedAt > DOOR_ENTER_WALK_TIMEOUT_MS) {
-                  window.clearInterval(timer);
-                }
-              }, 200);
-            });
+            // Enter sends the DEDICATED entry command, never a bare interact:
+            // a bare press from a workshop doorstep always loses the sim's
+            // distance arbitration to the porch artisan (the tinker stands
+            // 0.7-2.6yd off the mill door on every approach), so the accepted
+            // menu used to talk to nobody and enter nothing. 'enter_building'
+            // carries the player's stated intent; the sim range-gates it via
+            // buildingEnterableNear and teleports them inside.
+            hud.openBuildingEnterPrompt(hit.interiorType, () => world.enterBuilding());
           } else {
             // Too far — walk toward the building's near edge, then they can click again.
             if (wantClickFeedback) renderer.spawnClickMarker(g!.x, g!.z, false);

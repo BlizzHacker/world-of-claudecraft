@@ -1640,6 +1640,7 @@ const FACET_DUNGEONS = [
   'enterDungeon',
   'leaveDungeon',
   'leaveInterior',
+  'enterBuilding',
   'raidLockouts',
   'riftFloor',
   'riftCollisionToken',
