@@ -5024,6 +5024,15 @@
     min-height: 0;
   }
 
+  /* The offline creator's scrolling middle (index.html #offline-select). It is
+     TRANSPARENT by default: every stacked layout - phones, mobile-touch, the
+     <900px card - orders the form's rows itself and must keep seeing them as
+     direct children of .char-create, so the wrapper contributes no box there.
+     Only the >=900px desktop card below turns it into a real scroll region. */
+  .cs-offline-flow {
+    display: contents;
+  }
+
   .char-preview-container {
     width: 100%;
     height: 240px;
@@ -5178,6 +5187,152 @@
     /* Logo scales up with the viewport on desktop, bigger screen, bigger wordmark. */
     #title-logo {
       width: clamp(204px, 12vw, 264px) !important;
+    }
+
+    /* ---------- Offline creator: three bands, a footer that cannot move ----
+       The panel above is a FIXED-height card (640px cap, overflow:hidden) and
+       the left column's form simply flowed: name, realm picker, class grid,
+       appearance customizer, then Enter World / Back last. Anything the form
+       grew past the card's ~486px of column height was therefore CLIPPED, and
+       the actions - being last - were the first thing to go.
+
+       It was already over budget on a plain realm: the eight-card realm picker
+       (166px) plus the appearance customizer (197px) put the action row about
+       118px below the card's bottom edge. Painting the Infernal hero roster
+       into this host (a 560px scroller in place of a 140px nine-button grid)
+       took the form to ~990px, so the appearance editor AND both buttons sat
+       300-550px below the card: rendered, never visible, never clickable.
+
+       Three bands instead of one flow. .char-create is the column, the middle
+       (.cs-offline-flow) is the ONE scroll region, and .auth-actions is its
+       SIBLING - a footer outside the scroller, so no roster length can reach
+       it. Inside the region the roster and the appearance customizer are each
+       capped, because both already scroll internally: neither may eat the
+       region and hide the other.
+
+       Scoped to #offline-select throughout. The online creator on this page
+       (#charcreate-panel) lays its form out with .cs-body-create/.cs-create-col
+       and has no .cs-offline-flow, so none of this reaches it. */
+    body:not(.mobile-touch) #offline-select .char-create {
+      justify-content: flex-start;
+      min-height: 0;
+    }
+    body:not(.mobile-touch) #offline-select .cs-offline-flow {
+      display: flex;
+      flex-direction: column;
+      /* .char-create is align-items:center; the region itself must still span
+         the column or the rows inside it lose their full width. */
+      align-self: stretch;
+      align-items: center;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      /* the landing page sits behind this panel: a wheel that reaches either
+         end of the region must not start scrolling it */
+      overscroll-behavior: contain;
+      padding-right: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(200, 168, 56, 0.35) transparent;
+    }
+    body:not(.mobile-touch) #offline-select .cs-offline-flow > * {
+      flex-shrink: 0;
+    }
+    /* A clipped row has to read as "there is more below", not as the broken
+       clip this whole block exists to fix: force a classic gutter rather than
+       an overlay scrollbar, on the region and on the roster inside it. */
+    body:not(.mobile-touch) #offline-select .cs-offline-flow,
+    body:not(.mobile-touch) #offline-select .mini-class-row.infernal-hero-roster {
+      scrollbar-gutter: stable;
+    }
+    body:not(.mobile-touch) #offline-select .cs-offline-flow::-webkit-scrollbar,
+    body:not(.mobile-touch)
+      #offline-select
+      .mini-class-row.infernal-hero-roster::-webkit-scrollbar {
+      width: 8px;
+    }
+    body:not(.mobile-touch) #offline-select .cs-offline-flow::-webkit-scrollbar-track,
+    body:not(.mobile-touch)
+      #offline-select
+      .mini-class-row.infernal-hero-roster::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+    }
+    body:not(.mobile-touch) #offline-select .cs-offline-flow::-webkit-scrollbar-thumb,
+    body:not(.mobile-touch)
+      #offline-select
+      .mini-class-row.infernal-hero-roster::-webkit-scrollbar-thumb {
+      background: rgba(200, 168, 56, 0.42);
+      border-radius: 4px;
+    }
+    /* Keyboard and gamepad: focus moving into a row that is scrolled out of
+       the region scrolls it back in (browser default), and this keeps it off
+       the region's own edge when it lands. */
+    body:not(.mobile-touch) #offline-select
+      .cs-offline-flow
+      :is(button, input, [tabindex], .mini-class, .skin-swatch) {
+      scroll-margin: 14px;
+    }
+    /* THE footer. Outside .cs-offline-flow by construction (see index.html),
+       so Enter World / Back are on screen and hit-testable at every viewport
+       and every roster length. Full-width band, centred button pair, so the
+       separator reads as the panel's edge rather than a stray 275px rule. */
+    body:not(.mobile-touch) #offline-select .auth-actions {
+      flex: 0 0 auto;
+      align-self: stretch;
+      grid-template-columns: repeat(2, minmax(120px, 170px));
+      justify-content: center;
+      margin-top: 0;
+      padding-top: 12px;
+      border-top: 1px solid rgba(78, 61, 29, 0.45);
+    }
+    /* The roster keeps its own scroller but may not take the whole region:
+       without a cap the 18-card Infernal grid alone is taller than the card. */
+    body:not(.mobile-touch) #offline-select .mini-class-row.infernal-hero-roster {
+      max-height: min(34vh, 300px);
+    }
+    /* Right column as two explicit rows: the turntable at its natural height,
+       the class sheet in whatever is left, scrolling. Previously both were
+       flex items sized from content, so a long abilities list ran the sheet
+       past the card's bottom edge and its last stat rows (Intellect, Spirit)
+       were sliced by the panel border. */
+    body:not(.mobile-touch) #offline-select .charselect-col-right {
+      display: grid;
+      /* The turntable takes its 240px unless the card is short enough that the
+         sheet would be squeezed under 150px; then it gives height back rather
+         than the sheet becoming a two-line slot. */
+      grid-template-rows: minmax(0, auto) minmax(150px, 1fr);
+      align-content: stretch;
+    }
+    body:not(.mobile-touch) #offline-select #offline-preview-container {
+      align-self: stretch;
+      min-height: 0;
+    }
+    body:not(.mobile-touch) #offline-select #offline-class-details {
+      min-height: 0;
+      overflow-y: auto;
+      /* Same reason as the form region: the sheet is taller than its slot on
+         every realm, and a stat row sliced by the frame is exactly what got
+         reported as "Intellect / Spirit half-hidden". Give it a real gutter so
+         the cut reads as a scroll, and end the content clear of the frame. */
+      scrollbar-gutter: stable;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(200, 168, 56, 0.35) transparent;
+    }
+    body:not(.mobile-touch) #offline-select #offline-class-details::-webkit-scrollbar {
+      width: 8px;
+    }
+    body:not(.mobile-touch) #offline-select #offline-class-details::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+    }
+    body:not(.mobile-touch) #offline-select #offline-class-details::-webkit-scrollbar-thumb {
+      background: rgba(200, 168, 56, 0.42);
+      border-radius: 4px;
+    }
+    body:not(.mobile-touch) #offline-select #offline-class-details .class-details-content::after {
+      content: "";
+      display: block;
+      height: 10px;
     }
   }
 
@@ -6773,7 +6928,11 @@
       min-height: 0;
       gap: 3px;
     }
-    body.mobile-touch #offline-select .char-create > * {
+    /* .cs-offline-flow is display:contents on this body, so the form's real
+       flex items are ITS children here - both lists so the rule keeps holding
+       every row at its natural size (see the shrink note above). */
+    body.mobile-touch #offline-select .char-create > *,
+    body.mobile-touch #offline-select .cs-offline-flow > * {
       flex-shrink: 0;
     }
     body.mobile-touch #offline-select .auth-label {
@@ -8411,7 +8570,9 @@
       border: 0;
       border-radius: 999px;
     }
-    body:not(.mobile-touch) #charselect-panel.cs-wow .class-details-panel::-webkit-scrollbar-thumb:hover {
+    body:not(.mobile-touch)
+      #charselect-panel.cs-wow
+      .class-details-panel::-webkit-scrollbar-thumb:hover {
       background: color-mix(in srgb, var(--scrollbar-thumb) 68%, transparent);
     }
     body:not(.mobile-touch) #charselect-panel.cs-wow .class-details-grid {
@@ -8451,7 +8612,8 @@
   }
 }
 @layer shell {
-  body.mobile-touch #charselect-panel #charselect-class-details, body.mobile-touch #charselect-panel #online-class-details {
+  body.mobile-touch #charselect-panel #charselect-class-details,
+  body.mobile-touch #charselect-panel #online-class-details {
     flex: 1 1 auto;
     width: 100%;
     height: auto;
@@ -8460,11 +8622,13 @@
     margin-bottom: 0;
     overflow: visible;
   }
-  body.mobile-touch #charselect-panel #charselect-class-details .class-details-content, body.mobile-touch #charselect-panel #online-class-details .class-details-content {
+  body.mobile-touch #charselect-panel #charselect-class-details .class-details-content,
+  body.mobile-touch #charselect-panel #online-class-details .class-details-content {
     min-height: 100%;
     height: auto;
   }
-  body.mobile-touch #charselect-panel #charselect-class-details .class-details-grid, body.mobile-touch #charselect-panel #online-class-details .class-details-grid {
+  body.mobile-touch #charselect-panel #charselect-class-details .class-details-grid,
+  body.mobile-touch #charselect-panel #online-class-details .class-details-grid {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
@@ -8605,7 +8769,9 @@
     body.mobile-touch #charselect-panel #charselect-class-details .details-stat-val {
       flex: 0 0 22px;
     }
-    body.mobile-touch #charselect-panel #charselect-class-details .details-stat-label, body.mobile-touch #charselect-panel #charselect-class-details .details-stat-val, body.mobile-touch #charselect-panel #charselect-class-details .details-gear-row {
+    body.mobile-touch #charselect-panel #charselect-class-details .details-stat-label,
+    body.mobile-touch #charselect-panel #charselect-class-details .details-stat-val,
+    body.mobile-touch #charselect-panel #charselect-class-details .details-gear-row {
       font-size: 10.5px;
       margin-bottom: 3px;
       line-height: 1.15;
@@ -8662,7 +8828,7 @@
 @layer shell {
   #gpu-notice {
     position: fixed;
-    
+
     top: calc(var(--spacing-md) + 56px + env(safe-area-inset-top, 0px));
     right: var(--spacing-md);
     z-index: 260;
@@ -8694,7 +8860,7 @@
   #gpu-notice button {
     flex-shrink: 0;
     padding: 4px 10px;
-    
+
     min-height: 24px;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid var(--color-border-default);
@@ -8754,7 +8920,7 @@
   #perf-nudge button {
     flex-shrink: 0;
     padding: 4px 10px;
-    
+
     min-height: 24px;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid var(--color-border-default);
@@ -9551,7 +9717,13 @@
    dock and the page area inside it scrolls, so the column never collides with
    the rail whatever a tab holds. */
 @media (min-width: 861px) {
-  #offline-select .appearance-customizer,
+  /* .cs-wow on the offline arm too (2026-08-17): #offline-select only ever
+     carries cs-wow on a full-viewport takeover, and index.html - the only page
+     that has the offline panel - never adds it. So this dock was landing on
+     the CARD layout, where a 318px-wide box capped at calc(100% - 322px) is
+     measured against the card, not a viewport stage. That cap, not the
+     position, is what the static-position patch below was chasing. */
+  #offline-select.cs-wow .appearance-customizer,
   body:not(.mobile-touch) #charcreate-panel.cs-wow .appearance-customizer {
     position: absolute;
     left: 22px;
@@ -9577,7 +9749,6 @@
   display: none;
 }
 
-
 /* The character-select news dock was removed. It was position:absolute at 30vw over
    the stage, so an empty container still covered the roster and the class details.
    Hard-hide it: `hidden` alone loses to the .cs-news-panel display rule. */
@@ -9596,7 +9767,9 @@ body:not(.mobile-touch) #charselect-panel.cs-wow #charselect-news[hidden] {
    text/plain and every page rendered unstyled. Changing content changes the
    content hash, which yields a URL the edge has never cached. */
 
-:root { --cr-asset-epoch: 20260728; }
+:root {
+  --cr-asset-epoch: 20260728;
+}
 
 /* --- appearance customizer: never over the name field (Wade, 2026-08-10) ---
    The cs-wow desktop layout flattens .char-create with display: contents, so
@@ -9625,4 +9798,17 @@ body:not(.mobile-touch) #charcreate-panel.cs-wow #charcreate-appearance {
   top: auto !important;
   left: auto !important;
   margin: 12px 0 0 !important;
+}
+
+/* Card layout (index.html runs the creators as cards, never the cs-wow
+   takeover): the customizer is one row inside the offline form's scroll
+   region, so cap it - Face and Style are a dozen rows each and .ac-pages
+   already scrolls inside the panel. Unlayered like the dock rules it sits
+   beside, so it out-ranks .appearance-customizer's own unlayered base. */
+@media (min-width: 900px) {
+  body:not(.mobile-touch) #offline-select #offline-appearance.appearance-customizer {
+    max-height: min(38vh, 330px);
+    width: auto;
+    max-width: 348px;
+  }
 }

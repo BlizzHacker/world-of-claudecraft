@@ -1280,30 +1280,43 @@
             <!-- Left Column: Character Name & Class Chips & Actions -->
             <div class="charselect-col-left">
               <div class="char-create">
-                <label for="char-name" class="auth-label" data-i18n="auth.characterName">Character Name</label>
-                <div class="char-input-group">
-                  <input id="char-name" maxlength="16" data-i18n-placeholder="auth.characterNamePlaceholder" placeholder="Character name" value="" aria-describedby="offline-error" autocomplete="off" />
-                  <div id="offline-error" class="auth-error" aria-live="polite"></div>
+                <!-- .cs-offline-flow is the form's ONE scroll region on the
+                     desktop card, and .auth-actions below is deliberately its
+                     SIBLING rather than its last child: Enter World / Back are
+                     a footer outside the scroller, so no roster length can
+                     push them past the panel's fixed height. The wrapper is
+                     display:contents everywhere else (phones, mobile-touch,
+                     the <900px card), so those layouts order these rows
+                     exactly as they did before it existed. -->
+                <div class="cs-offline-flow">
+                  <label for="char-name" class="auth-label" data-i18n="auth.characterName">Character Name</label>
+                  <div class="char-input-group">
+                    <input id="char-name" maxlength="16" data-i18n-placeholder="auth.characterNamePlaceholder" placeholder="Character name" value="" aria-describedby="offline-error" autocomplete="off" />
+                    <div id="offline-error" class="auth-error" aria-live="polite"></div>
+                  </div>
+                  <!-- Offline realm pick: cards render from the client-side realm
+                       registry (main.ts renderOfflineRealmCards), so the picker
+                       works with zero connectivity. Realm names/taglines are realm
+                       content and intentionally untranslated (theme_select.ts
+                       precedent), hence no data-i18n here. -->
+                  <div id="offline-realm-row" class="offline-realm-row" role="radiogroup" aria-label="Realm"></div>
+                  <!-- ensureRealmFactionFilter() inserts #offline-faction-filter
+                       immediately before this row, so the tab strip lands in the
+                       scroll region with the roster it filters. -->
+                  <div class="mini-class-row">
+                    <button type="button" class="mini-class" data-class="warrior" data-i18n-aria="classes.warriorAria" data-i18n="classes.warrior" aria-label="Warrior class" aria-pressed="false">Warrior</button>
+                    <button type="button" class="mini-class" data-class="paladin" data-i18n-aria="classes.paladinAria" data-i18n="classes.paladin" aria-label="Paladin class" aria-pressed="false">Paladin</button>
+                    <button type="button" class="mini-class" data-class="hunter" data-i18n-aria="classes.hunterAria" data-i18n="classes.hunter" aria-label="Hunter class" aria-pressed="false">Hunter</button>
+                    <button type="button" class="mini-class" data-class="rogue" data-i18n-aria="classes.rogueAria" data-i18n="classes.rogue" aria-label="Rogue class" aria-pressed="false">Rogue</button>
+                    <button type="button" class="mini-class" data-class="priest" data-i18n-aria="classes.priestAria" data-i18n="classes.priest" aria-label="Priest class" aria-pressed="false">Priest</button>
+                    <button type="button" class="mini-class" data-class="shaman" data-i18n-aria="classes.shamanAria" data-i18n="classes.shaman" aria-label="Shaman class" aria-pressed="false">Shaman</button>
+                    <button type="button" class="mini-class" data-class="mage" data-i18n-aria="classes.mageAria" data-i18n="classes.mage" aria-label="Mage class" aria-pressed="false">Mage</button>
+                    <button type="button" class="mini-class" data-class="warlock" data-i18n-aria="classes.warlockAria" data-i18n="classes.warlock" aria-label="Warlock class" aria-pressed="false">Warlock</button>
+                    <button type="button" class="mini-class" data-class="druid" data-i18n-aria="classes.druidAria" data-i18n="classes.druid" aria-label="Druid class" aria-pressed="false">Druid</button>
+                  </div>
+                  <div id="offline-skin-row" class="skin-row"></div>
+                  <div id="offline-appearance"></div>
                 </div>
-                <!-- Offline realm pick: cards render from the client-side realm
-                     registry (main.ts renderOfflineRealmCards), so the picker
-                     works with zero connectivity. Realm names/taglines are realm
-                     content and intentionally untranslated (theme_select.ts
-                     precedent), hence no data-i18n here. -->
-                <div id="offline-realm-row" class="offline-realm-row" role="radiogroup" aria-label="Realm"></div>
-                <div class="mini-class-row">
-                  <button type="button" class="mini-class" data-class="warrior" data-i18n-aria="classes.warriorAria" data-i18n="classes.warrior" aria-label="Warrior class" aria-pressed="false">Warrior</button>
-                  <button type="button" class="mini-class" data-class="paladin" data-i18n-aria="classes.paladinAria" data-i18n="classes.paladin" aria-label="Paladin class" aria-pressed="false">Paladin</button>
-                  <button type="button" class="mini-class" data-class="hunter" data-i18n-aria="classes.hunterAria" data-i18n="classes.hunter" aria-label="Hunter class" aria-pressed="false">Hunter</button>
-                  <button type="button" class="mini-class" data-class="rogue" data-i18n-aria="classes.rogueAria" data-i18n="classes.rogue" aria-label="Rogue class" aria-pressed="false">Rogue</button>
-                  <button type="button" class="mini-class" data-class="priest" data-i18n-aria="classes.priestAria" data-i18n="classes.priest" aria-label="Priest class" aria-pressed="false">Priest</button>
-                  <button type="button" class="mini-class" data-class="shaman" data-i18n-aria="classes.shamanAria" data-i18n="classes.shaman" aria-label="Shaman class" aria-pressed="false">Shaman</button>
-                  <button type="button" class="mini-class" data-class="mage" data-i18n-aria="classes.mageAria" data-i18n="classes.mage" aria-label="Mage class" aria-pressed="false">Mage</button>
-                  <button type="button" class="mini-class" data-class="warlock" data-i18n-aria="classes.warlockAria" data-i18n="classes.warlock" aria-label="Warlock class" aria-pressed="false">Warlock</button>
-                  <button type="button" class="mini-class" data-class="druid" data-i18n-aria="classes.druidAria" data-i18n="classes.druid" aria-label="Druid class" aria-pressed="false">Druid</button>
-                </div>
-                <div id="offline-skin-row" class="skin-row"></div>
-                <div id="offline-appearance"></div>
                 <div class="auth-actions">
                   <button type="button" class="btn btn-primary" id="btn-start-offline" data-i18n="auth.enterWorld">Enter World</button>
                   <button type="button" class="btn btn-secondary" id="btn-offline-back" data-i18n="auth.back">Back</button>
