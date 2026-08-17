@@ -5,12 +5,19 @@
 import { resolveActiveRealmId } from '../../sim/realms/registry';
 import { type Entity, isMechWearer, type PlayerClass } from '../../sim/types';
 import { logAssetMissOnce } from './asset_miss_log';
-import { mechHeldWeaponOverride, modularVisualKey, overrideVisualKeyForEntity, VISUALS, visualKeyFor } from './manifest';
+import { forcedHeldLayoutFor } from './held_props_policy';
+import {
+  mechHeldWeaponOverride,
+  modularVisualKey,
+  overrideVisualKeyForEntity,
+  VISUALS,
+  visualKeyFor,
+} from './manifest';
 import { MODULAR_WARRIOR_KEY, type ModularLook } from './modular';
 import { CharacterVisual, type CharacterVisualOptions } from './visual';
 
-export { CharacterPreview } from './preview';
 export type { ExternalPreviewState } from './preview';
+export { CharacterPreview } from './preview';
 export type { PreviewAppearance } from './preview_appearance';
 export type { PreviewFramingName } from './preview_framing';
 export type { AnimState } from './visual';
@@ -75,7 +82,8 @@ export function createCharacterVisual(
   // Operator rule (2026-08-16): on Cryptic Realm realms a published realm body
   // (sex-aware) OWNS the character; the modular composed body renders only when
   // no realm body claims it. The claudecraft realm stays 100% modular/source.
-  const realmBodyKey = resolveActiveRealmId() === 'claudecraft' ? null : overrideVisualKeyForEntity(e);
+  const realmBodyKey =
+    resolveActiveRealmId() === 'claudecraft' ? null : overrideVisualKeyForEntity(e);
   const look =
     formKey || isMechWearer(e) || realmBodyKey ? null : (modularLookProvider?.(e) ?? null);
   // A realm body OWNS the geometry, but the authored appearance still drives
@@ -88,10 +96,17 @@ export function createCharacterVisual(
   // The class-agnostic Combat Mech adopts the wearer's independent mainhand and
   // offhand layout. e.templateId is the player's class on every host, so this
   // matches offline and online.
-  const weaponOverride =
-    !formKey && key === 'player_mech' && e.kind === 'player'
-      ? mechHeldWeaponOverride(e.templateId as PlayerClass)
-      : null;
+  //
+  // A forced EMPTY layout comes second: every generated library body was given
+  // a hash-drawn melee weapon and a round shield by emit_manifest.mjs, whether
+  // or not the entity wearing it is a fighter, which is why a fish vendor stood
+  // in Eastbrook holding an infernal scythe. held_props_policy decides from the
+  // entity's ROLE; players keep their sockets so equipped gear still renders.
+  const weaponOverride = formKey
+    ? null
+    : ((key === 'player_mech' && e.kind === 'player'
+        ? mechHeldWeaponOverride(e.templateId as PlayerClass)
+        : null) ?? forcedHeldLayoutFor(e, key));
   try {
     return new CharacterVisual(
       key,

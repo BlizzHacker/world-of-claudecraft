@@ -12,6 +12,35 @@
 import type { AbilityDef, MobTemplate, SportRole, VcNationId } from '../types';
 import type { KnownAbility } from './classes';
 
+/**
+ * Bodies the Vale Cup bots wear, cycled by spawn order.
+ *
+ * These are villagers, not adventurers. Before this the bots resolved through
+ * `class:<engine class>` like any player character, so on Infernal they took
+ * the operator's own published class bodies and a 3v3 fielded a necromancer
+ * with a staff at centre-forward, plus several bodies that carry ZERO baked
+ * clips and therefore could not run at all.
+ *
+ * There are three. That is not a design choice - it is the whole supply. The
+ * estate's civilian shortage (docs: body_catalog/gaps.json) means these are the
+ * only realistic, clothed, complete, weapon-free bodies with the full 22-clip
+ * vocabulary that read as an ordinary person who could chase a ball. A pitch of
+ * near-identical villagers reads as a kit; a necromancer at centre-forward does
+ * not. Widen this the moment civilian bodies exist.
+ *
+ * The set doubles as the bot MARKER: a player entity whose server-assigned
+ * `visualKey` is one of these is a bot, which is how the renderer knows to skip
+ * the operator's class overrides and to leave its hands empty without a new
+ * wire field. tests/vale_cup_bot_bodies.test.ts pins that no realm class table
+ * assigns any of them, so a real character can never be mistaken for a bot. If
+ * that ever stops holding, this becomes an entity flag and a synced field.
+ */
+export const VC_BOT_BODY_KEYS = [
+  'realm_classic_warrior_elder_019880da',
+  'realm_classic_warrior_north_character_warrior_019be231',
+  'realm_classic_desert_warrior_019b8b6a',
+] as const;
+
 // ---------------------------------------------------------------------------
 // The eight banner nations. Names/blurbs are localized client-side from the id
 // (vcup.nation.<id> keys); colors feed the procedural flags and team tints.

@@ -12,7 +12,11 @@
 // of sim state (pid parity picks the stagger slot, positions pick the play), so
 // a backfilled match on the live server perturbs no shared rng draw order.
 
-import { VC_ALLROUNDER_ONLY_MAX_BRACKET, VC_NATION_IDS } from '../content/vale_cup';
+import {
+  VC_ALLROUNDER_ONLY_MAX_BRACKET,
+  VC_BOT_BODY_KEYS,
+  VC_NATION_IDS,
+} from '../content/vale_cup';
 import { DUNGEON_X_THRESHOLD } from '../data';
 import { getActiveRealm } from '../realms/registry';
 import type { PlayerMeta, Sim } from '../sim';
@@ -117,8 +121,20 @@ const VC_BOT_CLASSES = [
 ] as const;
 
 function spawnCupBot(sim: Sim, role: SportRole): { pid: number; role: SportRole } {
-  const cls = VC_BOT_CLASSES[sim.vcup.botPids.length % VC_BOT_CLASSES.length];
-  const pid = sim.addPlayer(cls, nextBotName(sim));
+  const seat = sim.vcup.botPids.length;
+  const cls = VC_BOT_CLASSES[seat % VC_BOT_CLASSES.length];
+  // The bot's BODY is assigned here rather than inherited from its class.
+  // Class is cosmetic for a bot (the kit swap overrides meta.known and the
+  // truce floors its stats), but the renderer still resolved the body through
+  // `class:<cls>`, so on Infernal the bots wore the operator's own published
+  // class bodies: a necromancer with a staff at centre-forward, and several
+  // bodies with zero baked clips that could not run. addPlayer already carries
+  // a visualKey, so naming a villager body here is the whole fix - and because
+  // both hosts run this same function inside the sim tick, the online server
+  // syncs it as `vk` for free.
+  const pid = sim.addPlayer(cls, nextBotName(sim), {
+    visualKey: VC_BOT_BODY_KEYS[seat % VC_BOT_BODY_KEYS.length],
+  });
   sim.vcup.botPids.push(pid);
   return { pid, role };
 }

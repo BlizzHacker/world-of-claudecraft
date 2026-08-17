@@ -16,6 +16,7 @@ import { isSelectableBody, selectBodyFromPool } from './body_shape_gate';
 import { KAYKIT_EMOTES, MESHY_BANK_EMOTES, MESHY_CLIP_BANK_URL, withMeshyBank } from './clip_vocab';
 import { GENERATED_CREATURE_BODY_PINS } from './creature_pins.generated';
 import { GENERATED_CREATURE_BODIES, GENERATED_CREATURE_VISUALS } from './creatures.generated';
+import { isValeCupBotBody } from './held_props_policy';
 import {
   hostileHumanoidVisualKey,
   infernalNpcVisualKey,
@@ -3576,6 +3577,17 @@ function substituteForNonBody(e: Entity): string {
 }
 
 function resolveVisualKeyFor(e: Entity): string {
+  // A Vale Cup bot is scenery wearing a player's shape, and its body is chosen
+  // by the module that spawns it (VC_BOT_BODY_KEYS). It has to be read BEFORE
+  // the override lookup: the operator's `class:<cls>` rows describe PLAYER
+  // CHARACTERS, and letting them claim the bots is how a necromancer ended up
+  // at centre-forward on the Sowfield pitch. Deliberately keyed on the body the
+  // spawner assigned rather than a new synced entity flag - see the note on
+  // VC_BOT_BODY_KEYS, and tests/vale_cup_bot_bodies.test.ts, which pins that no
+  // realm class table can hand one of these to a real character.
+  if (e.kind === 'player' && isValeCupBotBody(e.visualKey) && VISUALS[e.visualKey as string]) {
+    return e.visualKey as string;
+  }
   const bodyOverride = overrideVisualKeyForEntity(e);
   if (bodyOverride) return bodyOverride;
   if (e.kind === 'player') {
