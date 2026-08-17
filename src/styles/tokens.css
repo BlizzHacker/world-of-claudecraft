@@ -431,6 +431,163 @@
     --cursor-sword: var(--cursor-point);
     --cursor-shield: var(--cursor-point);
 
+    /* ---------------------------------------------------------------------
+       The REST of the vocabulary a45d20eb32 orphaned.
+
+       That commit ("revert PR #1736 interface overhaul", 2026-07-12) deleted a
+       109-line token block from this file and left every consuming rule in
+       components.css / hud.css / hud.mobile.css standing. An undefined custom
+       property is invalid at computed-value time and takes its WHOLE
+       declaration down, so each orphaned name silently deleted the rule that
+       read it: panels painted nothing and the 3D world showed through, borders
+       and focus rings vanished, and text fell back to the inherited body size.
+
+       b3f3cbfc42 restored the three --panel-l*-bg names plus nine aliases,
+       which was everything the character sheet read. It was not everything the
+       branch reads: 39 more names were still declared nowhere, across the
+       vendor/market/delve/exchange windows, the notification badges, the
+       mobile shell and the nameplates. They are restored here, and
+       tests/styles_declared_tokens.test.ts now fails if any rule under
+       src/styles/ ever reads a name nothing declares again.
+
+       Values marked RESTORED are the authored ones, recovered verbatim from
+       a45d20eb32^:src/styles/tokens.css. Values marked DERIVED were never in
+       that block - nothing in this repo's history ever declared them - so they
+       are anchored on tokens that already exist here (following b3f3cbfc42:
+       aliases and --panel-base/--panel-edge mixes, never new literals, so
+       src/ui/theme.ts keeps driving them per preset).
+       --------------------------------------------------------------------- */
+
+    /* Density. RESTORED. The 16px touch input floor stays in base.css (its
+       !important rule is the guard) and is not re-tokenized here. */
+    --control-h-compact: 28px;
+    --control-h: 36px;
+    --control-h-touch: 44px;
+    --touch-min: 40px;
+    /* Touch twin of the slot-cell floor: --touch-min is the bare tap-target
+       minimum, but a grid of icon squares at that density reads too small on a
+       phone (live user feedback on the bank 50/50 dock). Its own token so the
+       touch tap-size guarantee stands even if the desktop floor diverges. */
+    --touch-cell: 56px;
+
+    /* Type scale, RESTORED. --text-xs / --text-sm are already above (b3f3cbfc42
+       brought them back for the character sheet); these are the three steps
+       over them, read by section titles, window headings and the mobile shell.
+       Without them those rules had no font-size at all and inherited the body
+       size, which is why headings and captions read flat. */
+    --text-md: 15px;
+    --text-lg: 18px;
+    --text-title: 22px;
+
+    /* Motion. RESTORED. Animated durations are authored as
+       calc(var(--dur-*) * var(--motion-scale)) so they inherit the existing
+       reduced-motion behaviour for free - and an invalid --dur-fast took that
+       whole calc() down, dropping the transition entirely. Only --dur-fast has
+       readers on this branch; --dur-base / --dur-slow are left out rather than
+       restored as dead tokens. */
+    --dur-fast: 120ms;
+
+    /* Window chrome. RESTORED. Shared titlebar heights and ornament size;
+       ornaments themselves render only at fx medium+. */
+    --window-titlebar-h: 40px;
+    --window-titlebar-h-touch: 48px;
+    --window-title-color: var(--color-gold);
+    --window-border: var(--color-border-default);
+    --window-ornament-size: 12px;
+
+    /* Focus ring. RESTORED. One shared token set for a single :focus-visible
+       rule; forced-colors: active swaps to the system Highlight colour. With
+       these gone the rules that read them had no outline at all - a keyboard
+       and gamepad accessibility regression, not just a cosmetic one. */
+    --focus-ring-color: var(--color-border-focus);
+    --focus-ring-width: 2px;
+    --focus-ring-offset: 2px;
+    /* DERIVED: the bare --focus-ring name, read by four `outline: 2px solid
+       var(--focus-ring)` rules (the Claudium store, the launcher, the dev
+       command bar) that were written against a name the deleted block never
+       held either. Same anchor as --focus-ring-color above, so one preset
+       change moves every focus outline together. */
+    --focus-ring: var(--color-border-focus);
+
+    /* Rarity. RESTORED VERBATIM and deliberately not derived: these mirror the
+       QUALITY_COLOR table in src/ui/icons.ts exactly, so a CSS border and the
+       canvas icon frame beside it share one value without either side
+       hand-syncing hex. --color-quality-default (elsewhere in this file) covers
+       no-quality. */
+    --color-quality-poor: #9d9d9d;
+    --color-quality-common: #ffffff;
+    --color-quality-uncommon: #1eff00;
+    --color-quality-rare: #0070dd;
+    --color-quality-epic: #a335ee;
+    --color-quality-legendary: #ff8000;
+
+    /* Combat urgency and notification priority. RESTORED. The theme system
+       (src/ui/theme.ts) recomputes these per preset so a badge border stays
+       readable on a light panel; these are the pre-theme :root defaults.
+       Critical persists and is not auto-dismissed. The --notify-dur-* timings
+       from the same block have no reader on this branch and are not restored. */
+    --color-urgency-warn: #ff8800;
+    --color-notify-info: var(--color-border-default);
+    --color-notify-success: var(--color-text-success);
+    --color-notify-warning: var(--color-urgency-warn);
+    --color-notify-critical: var(--color-text-error);
+
+    /* The OLDER --color-panel-* spelling. Distinct names from the --panel-l*-bg
+       ramp above, not duplicates of it: three rules in components.css and
+       hud.mobile.css still read this spelling and nothing declared it.
+       --color-panel-l2-base is the fully solid dark base a modal composites
+       over so the 3D world can never show through it. */
+    --color-panel-l2-base: var(--color-bg-dark);
+    --color-panel-l0-border: var(--color-border-default);
+    /* DERIVED, and the one authored value not restored as its literal: it
+       shipped as rgba(21, 21, 31, 0.86), which its own comment documented as
+       "--panel-base #15151f at 0.86 alpha". Written as that mix instead, it is
+       byte-identical under the default preset and now follows --panel-base
+       when theme.ts repaints it - the reasoning b3f3cbfc42 applied to l0/l2. */
+    --color-panel-l0-bg: color-mix(in srgb, var(--panel-base) 86%, transparent);
+
+    /* DERIVED. Six names read across components.css and hud.css that NOTHING in
+       this repository's history ever declared - they predate the revert and are
+       its own separate half-landed edit. Each is aliased onto the token the
+       rules beside it already use, so nothing new is invented:
+
+       --panel-border  14 rules paint `1px solid var(--panel-border)` on the
+                       delve, vendor and exchange cards, which meant they had no
+                       border; same anchor as --window-border above.
+       --color-text    12 rules set it as the body colour next to
+                       var(--color-text-light) siblings.
+       --text-muted    the exchange listing's small text, beside rules using
+                       var(--color-text-muted).
+       --cursor-pointer a near-miss for the declared --cursor-point that six
+                       store rules read; without it they fell back to the
+                       default arrow instead of the gauntlet.
+       --color-bg-deep the spectate badge's fill and the quest-marker ring,
+                       both near-black - anchored on --panel-edge so it tracks
+                       the theme rather than freezing #08080d.
+       --shadow-panel  the spectate badge's only box-shadow. No --shadow-* token
+                       exists in this file, so this is the house floating-panel
+                       drop (`0 6px 18px #000a`, the most common shape in
+                       components.css) re-expressed over --panel-edge. */
+    --panel-border: var(--color-border-default);
+    --color-text: var(--color-text-light);
+    --text-muted: var(--color-text-muted);
+    --cursor-pointer: var(--cursor-point);
+    --color-bg-deep: var(--panel-edge);
+    --shadow-panel: 0 6px 18px color-mix(in srgb, var(--panel-edge) 67%, transparent);
+
+    /* DERIVED, and a live bug this makes safe rather than a colour choice.
+       .np-name.np-sig-dev builds --dev-ring from color-mix(... var(--dev-outline)
+       ...) and hud.css documents the hue as "supplied by the painter per-tier" -
+       but no painter sets it: grep finds --dev-outline nowhere outside hud.css
+       itself. So --dev-ring was invalid, and it took the whole ten-layer
+       text-shadow with it, including the plain `0 1px 1px #000` drop every other
+       nameplate gets. Its sibling --dev-glow is read as var(--dev-glow,
+       transparent) for exactly this case; this default gives --dev-outline the
+       same contract without hardcoding a hue the comment forbids. The ring stays
+       invisible until a painter supplies a tier colour, and the black drop
+       shadow paints again meanwhile. */
+    --dev-outline: transparent;
+
     /* Badge halo (the static "stand out" glow), shared by the holder and
        contributor ladders. The hue is supplied per tier by the nameplate/inspect
        painter via --holder-glow / --dev-glow; these two tunables set the blur
