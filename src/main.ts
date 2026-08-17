@@ -458,6 +458,12 @@ import {
 } from './sim/realms';
 import { mountBestiary } from './ui/cryptic/bestiary';
 import { mountRealmBranding } from './ui/cryptic/branding';
+import {
+  type CharGridHost,
+  charGridHost,
+  pickedRealmHeroId,
+  usesRealmHeroRoster,
+} from './ui/cryptic/char_grid_host';
 import { mountChatFrame } from './ui/cryptic/chat_frame';
 import { loadDocFragment } from './ui/cryptic/doc_fragment';
 import { mountDownloadLaunchers } from './ui/cryptic/download_launchers';
@@ -5300,6 +5306,7 @@ async function startOffline(
   world?: WorldContent,
   seedOverride?: number,
   realmId?: RealmId,
+  realmHeroId?: string | null,
 ): Promise<void> {
   // The picked realm IS this offline session's active realm context. Install
   // it before ANYTHING realm-derived runs: the loading art, the themed world
@@ -5335,6 +5342,14 @@ async function startOffline(
     seed: seedOverride ?? WORLD_SEED,
     playerClass,
     playerName: name,
+    // The picked roster card's realm hero identity. Online the server stamps
+    // this onto the character row and the world reads it back off the wire;
+    // offline nothing else carries it, so the Sim takes it directly and
+    // entity.realmHeroId drives the SAME body resolution the world already
+    // runs (overrideEntryForCharacter: hero -> hidden variant -> class).
+    // Omitted for a plain class card, which leaves a resumed offline save's
+    // own stored hero id intact.
+    ...(realmHeroId ? { realmHeroId } : {}),
     characterState: savedCharacter ?? undefined,
     devCommands: import.meta.env.DEV,
     // The offline world runs the ranked rift portal scheduler like the live
@@ -5894,6 +5909,19 @@ function realmPreviewIdFromName(name: string | null | undefined): string {
   return key;
 }
 
+/**
+ * Which creator grid the realm-content readers must consult.
+ *
+ * Both creators paint the SAME realm roster into their own panel, so anything
+ * that answers "what did the player pick" (realmClassPresentation,
+ * charCreateSexPick, the appearance customizer host) has to know WHICH grid to
+ * read. It used to be hardwired to '#charcreate-panel', which is one half of
+ * why the offline creator could never show a hero. Set by show() and by the
+ * offline realm pick; '#charcreate-panel' is the safe default because
+ * play.html has no offline panel at all.
+ */
+let activeCharUiPanel: CharGridHost = '#charcreate-panel';
+
 function realmContentForCharacterUi(): RealmContent {
   // The active realm already follows the explicit URL, persisted picker, and
   // server-directory selection in that order. Reading api.realm here made the
@@ -5928,9 +5956,9 @@ function realmClassDisplayDescription(cls: PlayerClass): string {
 
 function realmClassPresentation(cls: PlayerClass) {
   const realm = realmContentForCharacterUi();
-  if (realm.id === 'infernal') {
+  if (usesRealmHeroRoster(realm.id)) {
     const selected = document.querySelector<HTMLElement>(
-      '#charcreate-panel .mini-class.sel[data-hero-id]',
+      `${charGridHost(activeCharUiPanel).selectedCard}[data-hero-id]`,
     );
     const selectedId = selected?.dataset.heroId;
     const hero = infernalHeroChoicesForRealm(realm).find(
@@ -5948,10 +5976,15 @@ function realmClassPresentation(cls: PlayerClass) {
  * canonical resolution (the un-suffixed/hero body serves it). Scoped to the
  * create grid's selected card - the same DOM the hero special case reads - so
  * the offline picker and the char-select fallback preview are untouched.
+ *
+ * SUPERSEDED (offline roster): the offline creator now paints the same grid
+ * through the same painter, so "the create grid" is whichever host is active
+ * (charGridHost(activeCharUiPanel)) rather than the online panel by name. The
+ * char-select fallback preview is still untouched - it has no .mini-class grid.
  */
 function charCreateSexPick(cls: PlayerClass): Gender | null {
   const card = document.querySelector<HTMLElement>(
-    '#charcreate-panel .mini-class.sel[data-sex-toggle="1"]',
+    `${charGridHost(activeCharUiPanel).selectedCard}[data-sex-toggle="1"]`,
   );
   if (!card || card.dataset.class !== cls) return null;
   const gender: Gender = modularAppearance.gender === 'female' ? 'female' : 'male';
@@ -6097,13 +6130,23 @@ function setSelectedCreateFaction(realm: RealmContent, faction: string): void {
   }
 }
 
-function ensureCharCreateFactionFilter(): void {
-  const row = document.querySelector<HTMLElement>('#charcreate-panel .mini-class-row');
+/**
+ * The realm's faction tabs above a creator's class grid, for EITHER host.
+ *
+ * A 30+ card infernal roster is unusable without them, and the offline creator
+ * is the Xbox lane, so the strip is a roving-tabindex group (one tab stop,
+ * arrows move within it) with explicit Enter/Space handlers: the console shell
+ * dispatches synthesized, untrusted key events that never fire a <button>'s
+ * built-in activation. Same contract as the offline realm cards.
+ */
+function ensureRealmFactionFilter(panel: CharGridHost = '#charcreate-panel'): void {
+  const grid = charGridHost(panel);
+  const row = document.querySelector<HTMLElement>(grid.row);
   if (!row) return;
-  let host = document.getElementById('charcreate-faction-filter') as HTMLElement | null;
+  let host = document.getElementById(grid.factionFilterId) as HTMLElement | null;
   if (!host) {
     host = document.createElement('div');
-    host.id = 'charcreate-faction-filter';
+    host.id = grid.factionFilterId;
     host.className = 'realm-faction-filter';
     row.parentElement?.insertBefore(host, row);
   }
@@ -6118,18 +6161,39 @@ function ensureCharCreateFactionFilter(): void {
   host.hidden = false;
   host.innerHTML = factions
     .map((faction) => {
-      const pressed = faction === active ? 'true' : 'false';
-      return `<button type="button" class="realm-faction-tab${faction === active ? ' sel' : ''}" data-faction="${escapeHtml(faction)}" aria-pressed="${pressed}">${escapeHtml(faction)}</button>`;
+      const sel = faction === active;
+      const pressed = sel ? 'true' : 'false';
+      return `<button type="button" class="realm-faction-tab${sel ? ' sel' : ''}" data-faction="${escapeHtml(faction)}" aria-pressed="${pressed}" tabindex="${sel ? '0' : '-1'}">${escapeHtml(faction)}</button>`;
     })
     .join('');
-  host.querySelectorAll<HTMLElement>('.realm-faction-tab').forEach((button) => {
-    button.addEventListener('click', () => {
-      const faction = button.dataset.faction;
-      if (!faction) return;
-      setSelectedCreateFaction(realm, faction);
-      ensureCharCreateFactionFilter();
-      paintRealmClassChoices();
-      ensureVisibleClassSelection('#charcreate-panel');
+  const tabs = Array.from(host.querySelectorAll<HTMLElement>('.realm-faction-tab'));
+  const pick = (button: HTMLElement): void => {
+    const faction = button.dataset.faction;
+    if (!faction) return;
+    setSelectedCreateFaction(realm, faction);
+    ensureRealmFactionFilter(panel);
+    paintRealmClassChoices(panel);
+    ensureVisibleClassSelection(panel);
+    // The strip was rebuilt: keep focus on the tab that was just chosen so pad
+    // navigation does not fall back to the top of the document.
+    document
+      .getElementById(grid.factionFilterId)
+      ?.querySelector<HTMLElement>('.realm-faction-tab.sel')
+      ?.focus();
+  };
+  tabs.forEach((button, index) => {
+    button.addEventListener('click', () => pick(button));
+    button.addEventListener('keydown', (event) => {
+      const e = event as KeyboardEvent;
+      const target = rovingTarget(e.key, index, tabs.length, 'both');
+      if (target !== null) {
+        e.preventDefault();
+        tabs[target].focus();
+        return;
+      }
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      pick(button);
     });
   });
 }
@@ -6275,7 +6339,9 @@ function sexToggleChipsHtml(name: string): string {
  *  grid never shows two different picks at once. */
 function syncCreateSexChips(gender: Gender): void {
   document
-    .querySelectorAll<HTMLElement>('#charcreate-panel .mini-class-variant[data-gender]')
+    .querySelectorAll<HTMLElement>(
+      '#charcreate-panel .mini-class-variant[data-gender], #offline-select .mini-class-variant[data-gender]',
+    )
     .forEach((chip) => {
       const sel = chip.dataset.gender === gender;
       chip.classList.toggle('sel', sel);
@@ -6290,7 +6356,7 @@ function syncCreateSexChips(gender: Gender): void {
  *  the body for the same reason the customizer's own control sets them. */
 function setCharCreateGender(gender: Gender): void {
   if (modularAppearance.gender === gender) return;
-  const ui = appearanceUis.get('charcreate-class-details');
+  const ui = appearanceUis.get(charGridHost(activeCharUiPanel).detailsId);
   if (ui) {
     ui.set({ gender, lashes: defaultLashes(gender) });
     return;
@@ -6335,7 +6401,9 @@ function paintInfernalHeroRoster(
   row: HTMLElement,
   choices: ReturnType<typeof infernalHeroChoicesForRealm>,
   activeFaction: string | null,
+  panel: CharGridHost = '#charcreate-panel',
 ): void {
+  const grid = charGridHost(panel);
   const realmId = realmContentForCharacterUi().id;
   row.classList.add('infernal-hero-roster');
   row.innerHTML = choices
@@ -6376,23 +6444,51 @@ function paintInfernalHeroRoster(
     })
     .join('');
   hydrateHeroCardPortraits(row);
-  row.querySelectorAll<HTMLElement>('.mini-class').forEach((card) => {
+  const cards = Array.from(row.querySelectorAll<HTMLElement>('.mini-class'));
+  // Roving tabindex: a thirty-card roster is ONE tab stop and the arrows move
+  // inside it, matching the offline realm cards. Without it the console lane
+  // needs thirty focus steps to reach the last hero.
+  const syncRoving = (selected: HTMLElement): void => {
+    for (const other of cards) other.tabIndex = other === selected ? 0 : -1;
+  };
+  if (cards[0]) syncRoving(cards[0]);
+  cards.forEach((card, index) => {
     const select = () => {
-      row.querySelectorAll<HTMLElement>('.mini-class').forEach((other) => {
+      for (const other of cards) {
         other.classList.remove('sel');
         other.setAttribute('aria-pressed', 'false');
-      });
+      }
       card.classList.add('sel');
       card.setAttribute('aria-pressed', 'true');
-      currentlyRenderedClass['charcreate-class-details'] = null;
+      syncRoving(card);
+      currentlyRenderedClass[grid.detailsId] = null;
       const cls = card.dataset.class as PlayerClass;
-      renderClassDetails('charcreate-class-details', cls);
-      refreshOnlineSkins(cls);
+      renderClassDetails(grid.detailsId, cls);
+      // Offline has no server to accept the pick, so the card IS the commit:
+      // arm Enter World and rebuild the offline skin row for the new class.
+      if (panel === '#offline-select') {
+        refreshOfflineSkins(cls);
+        ($('#btn-start-offline') as HTMLElement | null)?.removeAttribute('disabled');
+      } else {
+        refreshOnlineSkins(cls);
+      }
     };
     card.addEventListener('click', select);
-    card.addEventListener('keydown', (event) =>
-      handleKeyboardActivation(event as KeyboardEvent, select),
-    );
+    card.addEventListener('keydown', (event) => {
+      const e = event as KeyboardEvent;
+      // Arrows rove WITHOUT selecting: a roster card commits a whole identity,
+      // so it takes an explicit Enter/Space (unlike the realm radiogroup, where
+      // roving is itself the pick). handleKeyboardActivation binds that
+      // explicitly because the console shell's synthesized key events never
+      // trigger a <button>'s native activation.
+      const target = rovingTarget(e.key, index, cards.length, 'both');
+      if (target !== null) {
+        e.preventDefault();
+        cards[target].focus();
+        return;
+      }
+      handleKeyboardActivation(e, select);
+    });
     // Variant toggle: picking one swaps the pending create's hero id
     // (data-hero-id) while the card stays selected, then reruns the select
     // flow so details/preview resolve through the variant id. A variant with
@@ -6425,7 +6521,7 @@ function paintInfernalHeroRoster(
     // appearance.gender and reruns the same select flow the variant chips use.
     wireSexToggleChips(card, select);
   });
-  const first = row.querySelector<HTMLElement>('.mini-class');
+  const first = cards[0];
   if (first) first.click();
 }
 
@@ -6469,7 +6565,7 @@ window.addEventListener('cr-realm-visuals-changed', () => {
   // the pre-edit body until a full reload — which is how "still the old face"
   // survived an edit that had visibly worked in the world.
   clearPortraitCache();
-  paintRealmClassChoices();
+  paintRealmClassChoices(activeCharUiPanel);
   refreshPortraits(document);
   // A roster row bakes its resolved body into data-visual at paint time, so a
   // reassignment needs the rows rebuilt, not just repainted — otherwise the
@@ -6508,31 +6604,78 @@ function ensureRealmEditorButton(): void {
   })();
 }
 
-function paintRealmClassChoices(): void {
+// The nine engine-class buttons are STATIC markup in both entry documents, and
+// a hero roster paints straight over them (innerHTML). Remember each host's
+// original row the first time it is painted so a later realm WITHOUT a roster
+// can put the real buttons back - and rebind them, because both panels wire
+// their chips once at init, to elements the roster paint destroyed.
+const staticClassRowHtml = new Map<CharGridHost, string>();
+const classRowRewire = new Map<CharGridHost, () => void>();
+
+function rememberStaticClassRow(panel: CharGridHost, row: HTMLElement): void {
+  if (staticClassRowHtml.has(panel)) return;
+  if (row.classList.contains('infernal-hero-roster')) return;
+  staticClassRowHtml.set(panel, row.innerHTML);
+}
+
+/** Put a host's nine static class buttons back after a hero roster replaced
+ *  them, restoring both their emblems and their event wiring. */
+function restoreStaticClassRow(panel: CharGridHost, row: HTMLElement): void {
+  if (!row.classList.contains('infernal-hero-roster')) return;
+  const html = staticClassRowHtml.get(panel);
+  if (html === undefined) return;
+  row.classList.remove('infernal-hero-roster');
+  row.innerHTML = html;
+  decorateClassChips();
+  classRowRewire.get(panel)?.();
+}
+
+/**
+ * Paint the active realm's playable roster into ONE creator host.
+ *
+ * Both hosts run this same painter (see char_grid_host.ts): the online creator
+ * (#charcreate-panel) and the offline creator (#offline-select) show the same
+ * realm content and differ only in element ids. This was hardwired to the
+ * online panel, which is why the offline creator kept showing the nine stock
+ * engine classes on a realm whose roster is thirty authored heroes.
+ */
+function paintRealmClassChoices(panel: CharGridHost = '#charcreate-panel'): void {
   ensureRealmEditorButton();
-  currentlyRenderedClass['charcreate-class-details'] = null;
+  const grid = charGridHost(panel);
+  currentlyRenderedClass[grid.detailsId] = null;
   const realm = realmContentForCharacterUi();
   document
-    .getElementById('charcreate-panel')
-    ?.classList.toggle('infernal-roster-active', realm.id === 'infernal');
+    .querySelector(grid.panel)
+    ?.classList.toggle('infernal-roster-active', usesRealmHeroRoster(realm.id));
   // Pull the operator's live body-asset overrides once per realm, then repaint
   // so a reassigned class/hero body shows without a code deploy.
   if (!realmVisualOverridesFetched.has(realm.id)) {
     realmVisualOverridesFetched.add(realm.id);
     void ensureRealmVisualOverridesLoaded(realm.id).then((loaded) => {
-      if (loaded) paintRealmClassChoices();
+      if (loaded) paintRealmClassChoices(panel);
     });
   }
-  const row = document.querySelector<HTMLElement>('#charcreate-panel .mini-class-row');
-  if (row && realm.id === 'infernal') {
-    paintInfernalHeroRoster(row, infernalHeroChoicesForRealm(realm), selectedCreateFaction(realm));
+  const row = document.querySelector<HTMLElement>(grid.row);
+  if (!row) return;
+  rememberStaticClassRow(panel, row);
+  if (usesRealmHeroRoster(realm.id)) {
+    paintInfernalHeroRoster(
+      row,
+      infernalHeroChoicesForRealm(realm),
+      selectedCreateFaction(realm),
+      panel,
+    );
     return;
   }
+  // Coming back from a roster realm: the nine buttons the loop below re-skins
+  // were overwritten by the roster paint, so restore them first or there is
+  // nothing to skin (and the offline lane would sit on the old hero cards).
+  restoreStaticClassRow(panel, row);
   const choices = classChoicesForRealm(realm);
   const byClass = new Map(choices.map((choice) => [choice.baseClass, choice]));
   const overlay = realmHasClassOverlay(realm) && choices.length > 0;
   const activeFaction = selectedCreateFaction(realm);
-  document.querySelectorAll<HTMLElement>('#charcreate-panel .mini-class').forEach((button) => {
+  document.querySelectorAll<HTMLElement>(grid.cards).forEach((button) => {
     const cls = button.dataset.class as PlayerClass;
     const label = labelForMiniClass(button);
     const baseI18n = button.dataset.baseI18n ?? button.dataset.i18n ?? label.dataset.i18n ?? '';
@@ -6609,15 +6752,14 @@ function paintRealmClassChoices(): void {
   });
 }
 
-function ensureVisibleClassSelection(panelId: '#charcreate-panel' | '#offline-select'): void {
-  const selected = document.querySelector<HTMLElement>(`${panelId} .mini-class.sel:not([hidden])`);
+function ensureVisibleClassSelection(panelId: CharGridHost): void {
+  const grid = charGridHost(panelId);
+  const selected = document.querySelector<HTMLElement>(`${grid.selectedCard}:not([hidden])`);
   if (selected) {
-    if (panelId === '#charcreate-panel') {
-      renderClassDetails('charcreate-class-details', selected.dataset.class as PlayerClass);
-    }
+    renderClassDetails(grid.detailsId, selected.dataset.class as PlayerClass);
     return;
   }
-  const first = document.querySelector<HTMLElement>(`${panelId} .mini-class:not([hidden])`);
+  const first = document.querySelector<HTMLElement>(`${grid.cards}:not([hidden])`);
   if (first) first.click();
 }
 
@@ -6625,17 +6767,22 @@ onPortraitUpdate((visualKey, skin) => {
   refreshStartSkinPickerPortraits(document, visualKey, skin, playerPortraitDataUrl);
 });
 
+/** The turntable container a start panel previews into. ONE mapping, read by
+ *  the panel switcher, the lazy mount and the boot-time mount alike - each had
+ *  its own before, which is how a preview built at boot could end up bound to a
+ *  different container than the panel actually on screen. */
+function previewContainerIdFor(panelId: string): string {
+  if (panelId === '#charcreate-panel' || panelId === '#offline-select')
+    return charGridHost(panelId).previewContainer;
+  return '#online-preview-container';
+}
+
 function updatePreviewContainer(panelId: string): void {
   if (!characterPreview) {
     scheduleCharacterPreview(panelId);
     return;
   }
-  const containerId =
-    panelId === '#charselect-panel'
-      ? '#online-preview-container'
-      : panelId === '#charcreate-panel'
-        ? '#charcreate-preview-container'
-        : '#offline-preview-container';
+  const containerId = previewContainerIdFor(panelId);
   const container = $(containerId);
   if (!container) return;
   characterPreview.setContainer(container);
@@ -6656,15 +6803,17 @@ function updatePreviewContainer(panelId: string): void {
     return;
   }
 
-  const selSelector =
-    panelId === '#charcreate-panel'
-      ? '#charcreate-panel .mini-class.sel'
-      : '#offline-select .mini-class.sel';
-  const selEl = document.querySelector(selSelector) as HTMLElement | null;
+  // The realm-content readers (realmClassPresentation / charCreateSexPick) must
+  // consult the grid this turntable belongs to, or the offline preview resolves
+  // through the online grid's selection.
+  const gridPanel: CharGridHost =
+    panelId === '#charcreate-panel' ? '#charcreate-panel' : '#offline-select';
+  activeCharUiPanel = gridPanel;
+  const selEl = document.querySelector(charGridHost(gridPanel).selectedCard) as HTMLElement | null;
   if (selEl) {
     const cls = selEl.dataset.class as PlayerClass;
     showClassPreview(cls);
-    if (panelId === '#charcreate-panel') refreshOnlineSkins(cls);
+    if (gridPanel === '#charcreate-panel') refreshOnlineSkins(cls);
     else refreshOfflineSkins(cls);
   }
 
@@ -6693,11 +6842,13 @@ async function ensureCharacterPreview(panelId: string): Promise<void> {
   characterPreviewLoadPromise = (async () => {
     const { assetsReady, CharacterPreview } = await loadGameRuntime();
     await assetsReady();
-    const containerId =
-      panelId === '#offline-select' ? '#offline-preview-container' : '#online-preview-container';
-    const container = $(containerId);
+    const container = $(previewContainerIdFor(panelId));
     const canvas = $('#char-preview-canvas') as HTMLCanvasElement | null;
-    if (container && canvas) characterPreview = new CharacterPreview(container, canvas);
+    // Same memory policy as the boot-time mount: whichever path wins the race
+    // must build the SAME renderer, or the packaged app's constrained-memory
+    // preview depended on who got there first.
+    if (container && canvas)
+      characterPreview = new CharacterPreview(container, canvas, { constrainedMemory: NATIVE_APP });
   })().finally(() => {
     characterPreviewLoadPromise = null;
   });
@@ -6865,14 +7016,22 @@ function show(el: string): void {
   // Ensure the main view is switched to hero-view so play sub-panels are visible
   switchMainView('#hero-view');
 
+  // Whichever creator grid is coming up owns the realm-content reads
+  // (realmClassPresentation, charCreateSexPick, the appearance customizer host)
+  // until the other one opens.
+  if (el === '#charcreate-panel' || el === '#offline-select') activeCharUiPanel = el;
+
   // Mount the Turnstile widget the first time the login/register form appears.
   if (el === '#login-panel') {
     ensureTurnstile();
     authModeApply?.('login');
   }
-  if (el === '#charcreate-panel') {
-    ensureCharCreateFactionFilter();
-    paintRealmClassChoices();
+  // BOTH creators paint the same realm roster through the same painter. The
+  // offline panel used to keep its nine static engine-class buttons no matter
+  // which realm was picked.
+  if (el === '#charcreate-panel' || el === '#offline-select') {
+    ensureRealmFactionFilter(el);
+    paintRealmClassChoices(el);
   }
 
   const logoImg = $('#title-logo');
@@ -11249,6 +11408,13 @@ function wireStartScreens(): void {
     // same memoized load, so this costs one fetch total (localStorage-cached
     // through server blips).
     void ensureRealmVisualOverridesLoaded(id).catch(() => false);
+    // The picked realm's ROSTER is the offline class grid: same painter, same
+    // faction tabs, same hero cards the online creator shows. Repainted on
+    // every pick (and on panel open, from show()).
+    activeCharUiPanel = '#offline-select';
+    ensureRealmFactionFilter('#offline-select');
+    paintRealmClassChoices('#offline-select');
+    ensureVisibleClassSelection('#offline-select');
     const selCard = document.querySelector<HTMLElement>('#offline-select .mini-class.sel');
     const cls = (selCard?.dataset.class as PlayerClass | undefined) ?? 'warrior';
     currentlyRenderedClass['offline-class-details'] = null;
@@ -11356,6 +11522,10 @@ function wireStartScreens(): void {
 
     // audio/music/sfx init happens in startGame() (runtime-scoped).
     const name = sanitizeOfflineName(rawName);
+    // A roster card is an IDENTITY, not just an engine class: carry its hero id
+    // into the Sim exactly as the online creator posts it to createCharacter,
+    // or picking Blood Knight silently spawns a generic paladin.
+    const pickedCard = document.querySelector<HTMLElement>('#offline-select .mini-class.sel');
     void startOffline(
       cls,
       name,
@@ -11363,6 +11533,7 @@ function wireStartScreens(): void {
       undefined,
       undefined,
       offlineRealmId,
+      pickedRealmHeroId(pickedCard?.dataset),
     );
   };
 
@@ -11379,10 +11550,13 @@ function wireStartScreens(): void {
     renderOfflineRealmCards();
     applyOfflineRealmPick(offlineRealmId);
 
-    // Select warrior by default and render details
-    const warriorCard = document.querySelector(
-      '#offline-select .mini-class[data-class="warrior"]',
-    ) as HTMLElement | null;
+    // A roster realm already selected its first hero card during the paint
+    // above; only fall back to the stock warrior default when nothing is.
+    const warriorCard = document.querySelector('#offline-select .mini-class.sel')
+      ? null
+      : (document.querySelector(
+          '#offline-select .mini-class[data-class="warrior"]',
+        ) as HTMLElement | null);
     if (warriorCard) {
       document.querySelectorAll('#offline-select .mini-class').forEach((c) => {
         c.classList.remove('sel');
@@ -11393,6 +11567,8 @@ function wireStartScreens(): void {
       renderClassDetails('offline-class-details', 'warrior');
       btnStartOffline.removeAttribute('disabled');
       refreshOfflineSkins('warrior');
+    } else {
+      btnStartOffline.removeAttribute('disabled');
     }
   };
 
@@ -11613,8 +11789,10 @@ function wireStartScreens(): void {
     void resumeOnlineSession();
   }
 
-  // offline class chips
-  document.querySelectorAll('#offline-select .mini-class').forEach((card) => {
+  // offline class chips. Named + registered so the wiring can be re-applied:
+  // a realm with a hero roster replaces this row's buttons wholesale, and the
+  // restored static buttons are new elements carrying no listeners.
+  const wireOfflineClassChip = (card: Element): void => {
     const handleClassSelect = () => {
       if (hoverTimeouts['offline-class-details'] !== null) {
         window.clearTimeout(hoverTimeouts['offline-class-details']);
@@ -11712,7 +11890,12 @@ function wireStartScreens(): void {
         revertTimeouts['offline-class-details'] = null;
       }, 100);
     });
-  });
+  };
+  const wireOfflineClassChips = (): void => {
+    document.querySelectorAll('#offline-select .mini-class').forEach(wireOfflineClassChip);
+  };
+  wireOfflineClassChips();
+  classRowRewire.set('#offline-select', wireOfflineClassChips);
 
   const offlineBackBtn = $('#btn-offline-back');
   const handleOfflineBack = () => {
@@ -12157,8 +12340,8 @@ function wireStartScreens(): void {
   // New Character opens the dedicated create screen; create's Back returns here.
   $('#btn-new-character').addEventListener('click', () => {
     applyPopulationPrefToCharCreate();
-    ensureCharCreateFactionFilter();
-    paintRealmClassChoices();
+    ensureRealmFactionFilter('#charcreate-panel');
+    paintRealmClassChoices('#charcreate-panel');
     show('#charcreate-panel');
   });
   $('#btn-charcreate-back').addEventListener('click', () => show('#charselect-panel'));
@@ -12186,8 +12369,10 @@ function wireStartScreens(): void {
     if (sortDropdownOpen && e.key === 'Escape') closeSortDropdown();
   });
 
-  // character creation
-  document.querySelectorAll('#charcreate-panel .mini-class').forEach((el) => {
+  // character creation. Named + registered for the same reason as the offline
+  // chips above: a hero roster paint destroys these buttons, and the restored
+  // ones need their listeners back.
+  const wireCharCreateClassChip = (el: Element): void => {
     const handleMiniClassSelect = () => {
       if (hoverTimeouts['charcreate-class-details'] !== null) {
         window.clearTimeout(hoverTimeouts['charcreate-class-details']);
@@ -12304,7 +12489,12 @@ function wireStartScreens(): void {
         revertTimeouts['charcreate-class-details'] = null;
       }, 100);
     });
-  });
+  };
+  const wireCharCreateClassChips = (): void => {
+    document.querySelectorAll('#charcreate-panel .mini-class').forEach(wireCharCreateClassChip);
+  };
+  wireCharCreateClassChips();
+  classRowRewire.set('#charcreate-panel', wireCharCreateClassChips);
 
   // Default select warrior in online character creator
   const defaultOnlineClass = document.querySelector(
@@ -13254,15 +13444,27 @@ function wireStartScreens(): void {
   charactersReady()
     .then(() => {
       // Resolve each panel defensively: play.html (online-only) has no #offline-select.
-      const activePanelId = ['#charselect-panel', '#offline-select'].find((id) => {
-        const panel = $(id) as HTMLElement | null;
-        return panel !== null && !panel.hasAttribute('hidden');
-      });
-      const containerId =
-        activePanelId === '#offline-select'
-          ? '#offline-preview-container'
-          : '#online-preview-container';
-      const container = $(containerId);
+      const activePanelId = ['#charselect-panel', '#charcreate-panel', '#offline-select'].find(
+        (id) => {
+          const panel = $(id) as HTMLElement | null;
+          return panel !== null && !panel.hasAttribute('hidden');
+        },
+      );
+      // THE turntable is one CharacterPreview over one shared <canvas>. Another
+      // surface may already have mounted it: the create/offline panels mount
+      // lazily the moment they open, which on a cold first load happens BEFORE
+      // charactersReady resolves. Constructing a second CharacterPreview here
+      // handed a second THREE.WebGLRenderer the SAME WebGL context off that one
+      // canvas (getContext returns the context already created), so the two
+      // renderers fought over GL state every frame - GL_INVALID_OPERATION:
+      // glDrawElements: Insufficient buffer size - and the turntable stayed
+      // permanently black. THAT is the empty #offline-preview-container: not a
+      // missing mount, a duplicated one. Adopt the live preview instead.
+      if (characterPreview || characterPreviewLoadPromise) {
+        if (activePanelId) updatePreviewContainer(activePanelId);
+        return;
+      }
+      const container = $(previewContainerIdFor(activePanelId ?? '#charselect-panel'));
       const canvas = $('#char-preview-canvas') as HTMLCanvasElement | null;
       if (container && canvas) {
         characterPreview = new CharacterPreview(container, canvas, {
@@ -13270,15 +13472,17 @@ function wireStartScreens(): void {
         });
         // If a token auto-login already rendered the roster and selected a
         // character before assets finished, show its real appearance; otherwise
-        // fall back to the selected class chip (create/offline panels).
+        // hand the visible creator panel to the SAME resolver the panel switcher
+        // uses, so a realm body (showClassPreview) mounts instead of the stock
+        // KayKit rig previewClassBody would have shown.
         if (charselectSelected) {
           characterPreview.setAppearance(charselectAppearance(charselectSelected));
+        } else if (activePanelId && activePanelId !== '#charselect-panel') {
+          updatePreviewContainer(activePanelId);
         } else {
-          const selSelector =
-            activePanelId === '#offline-select'
-              ? '#offline-select .mini-class.sel'
-              : '#charcreate-panel .mini-class.sel';
-          const selEl = document.querySelector(selSelector) as HTMLElement | null;
+          const selEl = document.querySelector(
+            '#charcreate-panel .mini-class.sel',
+          ) as HTMLElement | null;
           const cls = selEl ? (selEl.dataset.class as PlayerClass) : 'warrior';
           previewClassBody(cls);
         }

@@ -5974,6 +5974,12 @@ export interface SimConfig {
   respawnSeconds?: number;
   autoEquip?: boolean; // auto-equip better gear on loot (headless convenience)
   playerName?: string;
+  // The realm hero identity this character was created as (offline lane). Online
+  // the server persists it on the character row and addPlayer reads it off the
+  // login; offline the creator is the only source, so it comes in here and lands
+  // on the player entity, where the renderer's hero-body resolution reads it.
+  // Render-only: it draws no rng and changes no simulation.
+  realmHeroId?: string | null;
   noPlayer?: boolean; // multiplayer server: start with an empty world and addPlayer() later
   // Offline continue: a previously serialized character (serializeCharacter output)
   // hydrated into the primary player at construction, exactly as the server does

@@ -1937,7 +1937,15 @@ export class Sim {
   minigameArcadeState: ArcadeState | null = null;
   // `world` stays optional (a custom map for play-test, else undefined for the
   // built-in world); everything else is defaulted to a concrete value below.
-  cfg: Required<Omit<SimConfig, 'noPlayer' | 'characterState' | 'world' | 'perfLap' | 'respawnSeconds'>> &
+  // `realmHeroId` joins the construction-only fields: it is consumed once by
+  // addPlayer below and lives on the player entity afterwards, so it is never
+  // defaulted onto cfg.
+  cfg: Required<
+    Omit<
+      SimConfig,
+      'noPlayer' | 'characterState' | 'world' | 'perfLap' | 'respawnSeconds' | 'realmHeroId'
+    >
+  > &
     Pick<SimConfig, 'world' | 'perfLap' | 'respawnSeconds'>;
   /**
    * The authored world this simulation owns. The active registry is a host/render
@@ -2690,6 +2698,10 @@ export class Sim {
       this.addPlayer(this.cfg.playerClass, this.cfg.playerName, {
         autoEquip: this.cfg.autoEquip,
         state: cfg.characterState,
+        // Offline creation's realm hero pick. Left undefined by every other
+        // caller, so addPlayer falls through to the saved character's own
+        // realmHeroId exactly as before.
+        realmHeroId: cfg.realmHeroId,
       });
     }
 
