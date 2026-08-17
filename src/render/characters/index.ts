@@ -42,6 +42,24 @@ export function modularLookFor(e: Entity): ModularLook | null {
   return modularLookProvider?.(e) ?? null;
 }
 
+/**
+ * The realm body that OWNS this entity's geometry, or null when none does.
+ *
+ * Operator rule (2026-08-16): on a Cryptic Realm realm a published realm body
+ * (hero id -> hidden-variant fallback -> sex-suffixed class body) owns the
+ * character and the modular composition does not run; the claudecraft realm
+ * stays 100% stock and never resolves one.
+ *
+ * THE reason this is a named export rather than two lines inlined in
+ * createCharacterVisual: the character sheet's paperdoll had its own copy of
+ * the precedence and got it wrong, so a player whose world body is a realm GLB
+ * saw the stock KayKit mini on their own sheet. One function, one answer, both
+ * surfaces.
+ */
+export function realmBodyKeyForEntity(e: Entity): string | null {
+  return resolveActiveRealmId() === 'claudecraft' ? null : overrideVisualKeyForEntity(e);
+}
+
 /** The composed-body visual key for an entity the look provider claimed: the
  *  class's own modular def (its clips, ability mapping and hand layout), with
  *  the warrior's as the fallback for a templateId without one. */
@@ -82,8 +100,7 @@ export function createCharacterVisual(
   // Operator rule (2026-08-16): on Cryptic Realm realms a published realm body
   // (sex-aware) OWNS the character; the modular composed body renders only when
   // no realm body claims it. The claudecraft realm stays 100% modular/source.
-  const realmBodyKey =
-    resolveActiveRealmId() === 'claudecraft' ? null : overrideVisualKeyForEntity(e);
+  const realmBodyKey = realmBodyKeyForEntity(e);
   const look =
     formKey || isMechWearer(e) || realmBodyKey ? null : (modularLookProvider?.(e) ?? null);
   // A realm body OWNS the geometry, but the authored appearance still drives

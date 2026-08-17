@@ -29,6 +29,7 @@ import {
   modularKeyFor,
   modularLookFor,
   type PreviewFramingName,
+  realmBodyKeyForEntity,
 } from '../render/characters';
 import { preloadMechAssets } from '../render/characters/assets';
 import { mechHeldWeaponOverride, skinCount } from '../render/characters/manifest';
@@ -17079,16 +17080,35 @@ export class Hud {
     previewKey?: string,
   ): void {
     const mainhand = this.sim.equipment.mainhand ?? null;
-    // The sheet shows the body the WORLD draws, read through the same look
-    // seam the portrait uses: the player's own face, hair and kit, including
-    // the helmet-visibility choice. A Combat Mech is a whole replacement body
-    // and wins over the authored look, matching createCharacterVisual's own
-    // precedence in-world (composing over it hid a purchased cosmetic).
-    const look = previewKey === 'player_mech' ? null : modularLookFor(this.sim.player);
+    // The sheet shows the body the WORLD draws, resolved by the SAME function
+    // the world's visual factory calls (realmBodyKeyForEntity), in the same
+    // precedence:
+    //
+    //   1. a Combat Mech cosmetic - a whole replacement body, so it wins over
+    //      everything (composing over it hid a purchased cosmetic),
+    //   2. the realm body the character actually renders on - hero id, hidden
+    //      variant, then the sex-suffixed class body, and never on claudecraft,
+    //   3. the authored modular look (face, hair, kit, helmet choice).
+    //
+    // Only step 3 composes. A realm override body is a single mesh with a
+    // single material, so there is no per-slot armour to layer onto it; what
+    // the player is wearing is told by the equipment sockets that flank this
+    // turntable, exactly as it is in the world. Before this the look was read
+    // unconditionally and step 3 therefore always won, which is why a realm
+    // character's own sheet showed the stock KayKit body while their portrait
+    // chip - which already resolved through the shared chain - showed the real
+    // one.
+    const realmBodyKey =
+      previewKey === 'player_mech' ? null : realmBodyKeyForEntity(this.sim.player);
+    const look =
+      previewKey === 'player_mech' || realmBodyKey ? null : modularLookFor(this.sim.player);
     this.mountSharedPreview(container, {
       cls,
       skin,
-      previewKey,
+      // A caller that only knows "class vs mech" (the cosmetic skin picker)
+      // still gets the realm body, so picking a class skin cannot drop the
+      // character back onto the KayKit rig mid-session.
+      previewKey: realmBodyKey ?? previewKey,
       look,
       mainhand,
       offhand: this.sim.equipment.offhand ?? null,

@@ -39,6 +39,57 @@
        shipped gradient from it (overwritten wholesale by the theme system). */
     --panel-base: #15151f;
     --panel-bg: linear-gradient(170deg, #15151ff2 0%, #0b0b12f2 60%, #08080df2 100%);
+    /* The panel LAYER ramp (l0 deepest -> l2 lit): the fill language the
+       showcase window family paints with. --panel-l2-bg is the lit corner of a
+       frame gradient and the raised/hover state, --panel-l1-bg the inset card,
+       --panel-l0-bg the shadowed floor.
+
+       Twenty-three rules in components.css read these three names and, until
+       this line, NOTHING on this branch declared any of them. An undefined
+       custom property is invalid at computed-value time and takes its WHOLE
+       declaration with it, so every one of those backgrounds painted nothing:
+       the character sheet had no frame fill, no body fill, no identity strip,
+       no socket or card fills, and the 3D world showed straight through it.
+
+       It is a half-landed revert, not a typo. a45d20eb32 ("revert PR #1736
+       interface overhaul", 2026-07-12) deleted the token block from this file
+       and left every consuming rule in components.css standing; the character
+       sheet then grew MORE rules against the same vocabulary afterwards
+       (565b15550b, 2e42cd8ab7, 60578e895d), including l0 and l2, which the
+       deleted block had never held either.
+
+       l1 is restored verbatim to its authored value below. l0 and l2 are
+       derived from --panel-base / --panel-edge rather than written as
+       literals, because src/ui/theme.ts overwrites BOTH per preset and always
+       mixes the edge darker than the base (the light Parchment panel
+       included), so the ramp keeps its order and its theme everywhere. The 95%
+       alpha is the one --panel-bg already ships, so a layered surface reads as
+       the same material as a plain .panel. */
+    --panel-l0-bg: color-mix(in srgb, var(--panel-edge) 95%, transparent);
+    --panel-l2-bg: color-mix(in srgb, var(--panel-base) 95%, transparent);
+    /* l1 is the AUTHORED value, restored verbatim: it aliases the shipped
+       --panel-bg gradient. It has to stay a gradient and not a flat colour -
+       three rules paint it through background-image, where a colour is invalid
+       and would leave them as blank as the sheet was. */
+    --panel-l1-bg: var(--panel-bg);
+    /* The rest of the vocabulary the same showcase family reads and this
+       branch does not declare. Every one is an ALIAS onto a token that already
+       exists here, not a new colour: without them the character sheet had no
+       card borders, no focus ring on its tabs, and section titles and slot
+       captions at the inherited body size. Aliased rather than re-anchored so
+       src/ui/theme.ts keeps driving them per preset. */
+    --color-text-primary: var(--color-text-light);
+    --color-text-heading: var(--color-gold);
+    --color-border-subtle: var(--color-border-showcase);
+    --color-focus-ring: var(--color-border-focus);
+    --color-overlay-strong: rgb(0 0 0 / 62%);
+    --color-surface-raised: var(--panel-l2-bg);
+    /* The three steps of the type scale the sheet uses. --text-xs/--text-sm
+       are the authored values the same revert deleted; --text-2xs is the one
+       step below them that never existed and the bag-count chip needs. */
+    --text-2xs: 10px;
+    --text-xs: 12px;
+    --text-sm: 13px;
     /* quest-marker tooltip TAG text: the rare-adjacent blue lifted to the
        4.5:1 text tier over the default panel stops (the glyph channels keep
        the #0070dd anchor). The theme system re-emits this per preset via

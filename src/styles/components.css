@@ -1463,6 +1463,52 @@
       grid-template-columns: repeat(8, minmax(0, 1fr));
     }
   }
+  /* Desktop character sheet: the sheet's COLUMNS scroll, not the whole body.
+     #char-window is a fixed-height frame, so the body was one ~1300px scroll
+     inside ~860px of frame: at 1366x768 the paperdoll's own sockets, the BAGS
+     tray (clipped mid-word) and the tail of the stat column all sat below the
+     fold, and the only way to reach a socket was to scroll the model out of
+     view. Giving each column the leftover height instead keeps the turntable,
+     both socket columns and the stat column on screen together at every
+     supported size, and keeps every scroll INSIDE the panel.
+
+     Not applied on mobile-touch (hud.mobile.css owns that layout) and not
+     below the 920px breakpoint above, where the grid is a single stacked
+     column that must scroll as one flow. */
+  @media (min-width: 921px) {
+    body:not(.mobile-touch) #char-window > .window-frame > .window-body {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    body:not(.mobile-touch) #char-window > .window-frame > .window-body > .char-sheet {
+      flex: 1 1 auto;
+      min-height: 0;
+      align-items: stretch;
+    }
+    /* Every other body row (identity strip, tab rail, share row) keeps its
+       natural height so only the sheet gives ground. */
+    body:not(.mobile-touch) #char-window > .window-frame > .window-body > :not(.char-sheet) {
+      flex: 0 0 auto;
+    }
+    body:not(.mobile-touch) #char-window .char-sheet > * {
+      min-height: 0;
+      overflow-y: auto;
+      /* the world sits behind this window: a wheel that reaches either end of
+         a column must not start scrolling anything else */
+      overscroll-behavior: contain;
+      /* a clipped row has to read as "there is more below", and a reserved
+         gutter stops the column reflowing the moment it becomes scrollable */
+      scrollbar-gutter: stable;
+      scrollbar-width: thin;
+    }
+    /* Keyboard and gamepad (the Xbox lane): moving focus into a socket or a
+       control that is scrolled out of its column scrolls it back in (browser
+       default), and this keeps it off the column's own edge when it lands. */
+    body:not(.mobile-touch) #char-window .char-sheet :is(button, [tabindex], .equip-slot) {
+      scroll-margin: 14px;
+    }
+  }
   /* Paperdoll: two flexing equipment columns flank a FIXED-WIDTH model stage. The
      columns own all leftover width and each socket row floats centered in its band,
      so the gap window-edge -> row unit matches the gap row unit -> stage (the band
