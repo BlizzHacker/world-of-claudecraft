@@ -2044,10 +2044,13 @@ export const ZONE1_PROPS: ZonePropsDef = {
   graveyards: [{ ...EASTBROOK_LAYOUT.services.graveyard.position }, { x: 4, z: -56 }],
   delveMarkers: [
     { x: -5, z: -52, delveId: 'collapsed_reliquary' },
-    // The Hellmaw Well portal: a red-void gate beside the town well, next to
-    // Cainhurst the Sage (at 0,2). Infernal-realm exclusive — entry is gated in
-    // the server enter handler (realm + q_save_cainhurst). Offset a few units east
-    // of the well so the arch stands at Cainhurst's side, not on top of him.
+    // The Hellmaw Well: the town WELL is the door (DelveDef doorPos 0,2 — entry
+    // is gated in the server enter handler on realm + q_save_cainhurst, and delve
+    // exits drop from doorPos, not from this marker). The marker draws NO arch
+    // and registers NO slab (paired skips in render/props.ts + sim/colliders.ts):
+    // the generic 3.6x delve arch landed at (5,-2), three yards from playerStart
+    // (2,-2) — a giant hellgate in the town square. The row stays because the
+    // terrain calm anchor and the realm-decor keep-clear ring still read it.
     { x: 5, z: 2, delveId: 'hellmaw_well' },
   ],
 };

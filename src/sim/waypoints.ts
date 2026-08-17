@@ -52,13 +52,20 @@ export function waypointDefs(): WaypointDef[] {
   }
   out.push({
     // The player's Infernal Dungeon Entrance is a large landmark, not a town-plaza
-    // pylon. Keep it on the south-road shoulder inside Eastbrook's protected town
-    // radius, clear of both the road and the Infernal realm's 1.9x / 2.6x-spread
-    // chapel and inn. Its coordinates are already final (see the zero offset below).
+    // pylon. Its old spot (0,-22) predates the authored Eastbrook rebuild: it was
+    // chosen when the infernal 2.6x ORIGIN-anchored building spread left the south
+    // road wide open, but the rebuild's compact plaza (playerStart 2,-2) put that
+    // spot in the spawn scene — a giant hellgate towering over Candlebrook's
+    // square, its waypoint node soaking up plaza clicks ("Waypoint activated:
+    // Hellmaw Dungeon" while walking the square). The landmark belongs in the
+    // zone's crypt neighbourhood instead: east of the southern graveyard (4,-56)
+    // and the Collapsed Reliquary approach (-5,-52), outside the TOWN_RADIUS 26
+    // ring, clear of the bandit road (nearest polyline point ~24yd) and of the
+    // reliquary arch slab (~23yd). Travel arrival lands 3yd south (waypointTravel).
     id: 'wp_infernal_dungeon',
     name: 'Hellmaw Dungeon',
-    x: 0,
-    z: -22,
+    x: 18,
+    z: -52,
     zoneId: 'zone1',
     realmId: 'infernal',
     assetKey: 'infernal_dungeon_entrance',

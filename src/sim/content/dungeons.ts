@@ -802,8 +802,8 @@ export const DUNGEON_DEFS: Record<string, DungeonDef> = {
     index: 0,
     // Free-standing portal at the Fallen Chapel ruin (landmark at 80,80, with
     // the restless_bones camp around it). It briefly took the TOWN WELL as its
-    // mouth, but the well is the Hellmaw Well delve's door (doorPos 0,2, arch at
-    // 5,2 beside Cainhurst) — two dungeons on one point rendered two overlapping
+    // mouth, but the well is the Hellmaw Well delve's door (doorPos 0,2; its
+    // marker draws no arch) — two dungeons on one point rendered two overlapping
     // portals, so the authored infernal easter egg keeps the well and the crypt
     // came back here. dungeon_door_clearance.ts projects camp mobs out of the
     // 20-yard ring around this door, so walking up to it can never pull the camp.

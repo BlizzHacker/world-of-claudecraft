@@ -272,7 +272,11 @@ export const CAINHURST_SAGE: NpcDef = {
   id: 'cainhurst_sage',
   name: 'Cainhurst the Sage',
   title: 'Keeper of the Hellmaw',
-  pos: { x: 0, z: 2 },
+  // (0,2) was "at the well" when the well was open ground; the Eastbrook rebuild
+  // gave the well a solid beacon (circle r1.5 at -0.75,2) that swallowed his
+  // spot — the physics audit's NPC-overlap sweep flagged him embedded. He keeps
+  // vigil from the beacon's NE rim instead.
+  pos: { x: 1.6, z: 3.6 },
   facing: 0,
   color: 0x2a1520,
   questIds: [],

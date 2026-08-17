@@ -2065,10 +2065,14 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
   }
   for (const dm of getActiveWorldContent().props.delveMarkers ?? []) {
     if (!delveArchAsset) continue;
-    // The Hellmaw Well is an infernal-realm exclusive: its portal only renders on
-    // the infernal realm (entry is server-gated there too). On every other realm
-    // the town well stays a plain well with no infernal portal beside it.
-    if (dm.delveId === 'hellmaw_well' && getActiveRealm().id !== 'infernal') continue;
+    // The Hellmaw Well draws no generic delve arch AT ALL: its door is the town
+    // well itself (Cainhurst's board opens it; exits drop at DelveDef doorPos),
+    // and the 3.6x arch slab would stand three yards from the plaza playerStart —
+    // the giant "THE HELLMAW WELL" hellgate that dominated Candlebrook's square
+    // the moment movement-audit 2 let colliding props draw on every tier. Paired
+    // with the identical skip in sim/colliders.ts (a drawn slab and the wall it
+    // presents must always be the same box — even when both are "none").
+    if (dm.delveId === 'hellmaw_well') continue;
     const isDrowned = dm.delveId === 'drowned_litany';
     // The portal mouth faces the hub the players approach from: Reliquary Hill's
     // town is north (+z) of its door, Mirefen Marsh's hub (z~300) is SOUTH (-z)

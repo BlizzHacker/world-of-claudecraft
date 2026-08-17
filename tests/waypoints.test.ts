@@ -8,8 +8,8 @@ describe('realm waypoints', () => {
       name: 'Hellmaw Dungeon',
       realmId: 'infernal',
       assetKey: 'infernal_dungeon_entrance',
-      x: 0,
-      z: -22,
+      x: 18,
+      z: -52,
     });
     expect(pylonOffset('wp_infernal_dungeon')).toEqual({ x: 0, z: 0 });
   });

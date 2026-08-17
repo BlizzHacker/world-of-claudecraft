@@ -227,6 +227,14 @@ describe('interactable landmarks are solid (the v0.31 walk-through sweep)', () =
   it('the delve arch slab is solid and the exit drop lands clear of it', () => {
     for (const dm of BUILTIN_WORLD.props.delveMarkers ?? []) {
       const az = delveArchZ(dm.z, dm.delveId);
+      // The Hellmaw Well draws no arch on any realm (its door is the town well;
+      // paired skips in render/props.ts + sim/colliders.ts), so it must present
+      // no slab either — a blocked sample here would be exactly the phantom
+      // spawn-side wall this suite exists to catch.
+      if (dm.delveId === 'hellmaw_well') {
+        expect(isBlocked(SEED, dm.x, az, 0.5), dm.delveId).toBe(false);
+        continue;
+      }
       expect(isBlocked(SEED, dm.x, az, 0.5), dm.delveId).toBe(true);
       const dropZ = delveExitDropZ(dm.z, dm.delveId);
       expect(isBlocked(SEED, dm.x, dropZ, 0.6), `${dm.delveId} exit drop`).toBe(false);

@@ -794,10 +794,17 @@ function staticWorldColliders(seed: number): Collider[] {
   // (players enter by talking to the warden; leaveDelve drops them mouth-side
   // of this collider, see prop_layout delveExitDropZ).
   for (const dm of PROPS.delveMarkers ?? []) {
-    // The Hellmaw Well portal renders only in the infernal realm (render/props.ts
-    // skips it elsewhere), so its slab must not collide elsewhere either: an
-    // invisible wall beside the town well is what it was outside infernal.
-    if (dm.delveId === 'hellmaw_well' && getActiveRealm().id !== 'infernal') continue;
+    // The Hellmaw Well draws NO arch on ANY realm (render/props.ts skips it), so
+    // it must never collide either. Its marker (5,2) was authored beside the old
+    // open well, but the generic 3.6x arch slab lands at (5,-2) — three yards
+    // from the rebuild's playerStart (2,-2). The delve's door is the town WELL
+    // itself (DelveDef doorPos 0,2: entry is board-gated behind q_save_cainhurst
+    // and exits drop from doorPos), so the slab was pure scenery: an invisible
+    // spawn-side wall until movement-audit 2 made colliding props draw, then a
+    // giant hellgate dominating Candlebrook's plaza. The marker row itself STAYS
+    // (terrain calm anchor + realm-decor keep-clear still read it; dropping the
+    // row would reshape ground near spawn).
+    if (dm.delveId === 'hellmaw_well') continue;
     const az = delveArchZ(dm.z, dm.delveId);
     out.push({
       type: 'obb',
