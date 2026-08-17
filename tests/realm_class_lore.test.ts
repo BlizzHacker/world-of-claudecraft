@@ -18,6 +18,7 @@ import {
   CINDERVEIL_ABILITIES,
   CINDERVEIL_CLASSES,
   CINDERVEIL_SYSTEMS,
+  CINDERVEIL_TALENT_MASTERIES,
   CINDERVEIL_TALENT_SPECS,
 } from '../src/sim/realms/content/infernal_lore_classes';
 import { REALMS, setRealmHostEnv } from '../src/sim/realms/registry';
@@ -72,6 +73,22 @@ describe('the Cinderveil class layer', () => {
     if (balance) expect(tTalent({ kind: 'talentSpec', spec: balance, field: 'name' })).toBe('Drowned Moon');
     useRealm('claudecraft');
     if (balance) expect(tTalent({ kind: 'talentSpec', spec: balance, field: 'name' })).toBe('Moongrove');
+  });
+
+  it('renames the mastery each spec card headlines, not just the spec', async () => {
+    const { tTalent } = await import('../src/ui/talent_i18n');
+    const balance = talentsFor('druid')?.specs.find((s) => s.id === 'balance');
+    expect(balance).toBeDefined();
+    if (!balance) return;
+    useRealm('infernal');
+    expect(tTalent({ kind: 'talentMastery', spec: balance, field: 'name' })).toBe('Drowned Rage');
+    // The talent-granted signature the same card advertises.
+    expect(tEntity({ kind: 'ability', id: 'moonkin_form', field: 'name' })).toBe(
+      'Drowned Moon Form',
+    );
+    useRealm('claudecraft');
+    expect(tTalent({ kind: 'talentMastery', spec: balance, field: 'name' })).toBe('Moonrage');
+    expect(tEntity({ kind: 'ability', id: 'moonkin_form', field: 'name' })).toBe('Moonwing Form');
   });
 
   it('retitles the built-in windows through the catalog map that already existed', () => {
@@ -143,6 +160,14 @@ describe('every id in the overlay is a real canonical id', () => {
       return !talentsFor(cls as PlayerClass)?.specs.some((s) => s.id === specId);
     });
     expect(missing, `unknown spec keys: ${missing.join(', ')}`).toEqual([]);
+  });
+
+  it('mastery keys name a real <class>.<specId> pair', () => {
+    const missing = Object.keys(CINDERVEIL_TALENT_MASTERIES).filter((key) => {
+      const [cls, specId] = key.split('.');
+      return !talentsFor(cls as PlayerClass)?.specs.some((s) => s.id === specId);
+    });
+    expect(missing, `unknown mastery keys: ${missing.join(', ')}`).toEqual([]);
   });
 
   it('every named system carries a title', () => {

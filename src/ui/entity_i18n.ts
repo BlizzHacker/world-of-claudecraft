@@ -459,6 +459,25 @@ export function realmTalentSpecName(cls: string, specId: string): string | null 
   return specs[key] ?? null;
 }
 
+// Talent MASTERY labels any realm overlays, same `<class>.<specId>` keying and
+// same one-time union as the spec names above.
+const REALM_TALENT_MASTERY_KEYS: ReadonlySet<string> = new Set(
+  Object.values(REALMS).flatMap((realm) => Object.keys(realm.entityText?.talentMasteries ?? {})),
+);
+
+/**
+ * The active realm's display name for one spec's mastery, or null to fall
+ * through to the authored/localized label. Called from tTalent, which owns
+ * every other mastery-title path.
+ */
+export function realmTalentMasteryName(cls: string, specId: string): string | null {
+  const key = `${cls}.${specId}`;
+  if (!REALM_TALENT_MASTERY_KEYS.has(key)) return null;
+  const masteries = getActiveRealm().entityText?.talentMasteries;
+  if (!masteries || !Object.hasOwn(masteries, key)) return null;
+  return masteries[key] ?? null;
+}
+
 /** True when any realm ships rift-rank display words (riftFloorLabel gate). */
 const REALM_RIFT_RANK_WORDS: boolean = Object.values(REALMS).some(
   (realm) => realm.entityText?.riftRanks !== undefined,

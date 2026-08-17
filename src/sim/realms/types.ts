@@ -263,6 +263,10 @@ export interface RealmEntityText {
    *  across classes ('holy' is both paladin and priest), so the class qualifies
    *  the key. Resolved in src/ui/talent_i18n.ts before the locale titles. */
   talentSpecs?: Record<string, string>;
+  /** Talent MASTERY display names, keyed `<class>.<specId>` like talentSpecs.
+   *  The spec card headlines its mastery, so a realm that renames the spec but
+   *  not its mastery still reads half shared-world. */
+  talentMasteries?: Record<string, string>;
   /** Display titles for the fork's named UI systems (see RealmSystemId). */
   systems?: Partial<Record<RealmSystemId, string>>;
   items?: Record<string, RealmNamedText>;
