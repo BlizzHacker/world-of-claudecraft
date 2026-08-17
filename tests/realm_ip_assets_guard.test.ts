@@ -52,29 +52,34 @@ const ASSET_DENY: readonly RegExp[] = [
   /\bcybe(?:ar)?tron\b/,              // Transformers
   /\bgroudon\b/,                      // Pokemon
   /\brobocop\b/,                      // MGM / Orion
+  /\biron ?spider\b/,                  // Marvel — the suit name, both spellings
   /arcade void realm assets/,         // the scrape drop itself
 ];
 
-/** Assets the 2026-08-17 audit found that are NOT safe to remove unilaterally.
- *  Pinned by FULL UNIQUE STEM (including the id suffix), never by franchise
- *  token — exempting `/groudon/` wholesale would silently bless the next
- *  Groudon asset too. Same contract as KNOWN_UNCLEARED in realm_ip_guard:
- *  it cannot grow quietly, and it cannot go stale (see the pin test below).
+/** Assets found by an audit that are NOT safe to remove unilaterally, pinned by
+ *  FULL UNIQUE STEM (including the id suffix), never by franchise token —
+ *  exempting `/groudon/` wholesale would silently bless the next Groudon asset
+ *  too. Same contract as KNOWN_UNCLEARED in realm_ip_guard: it cannot grow
+ *  quietly, and it cannot go stale (see the pin test below).
  *
- *  - primal groudon: bound to a LIVE Infernal mob (`hellmaw_primal_beast_body`
- *    in manifest.ts). Its display name is already original — 'Primal
- *    Emberbeast' — and only the FILENAME carries the Pokemon prompt it was
- *    generated from. Deleting it breaks a live mob; it needs an original
- *    replacement body and a URL swap.
- *  - steampunk robocop: a member of the dominion body POOL
- *    (GENERATED_REALM_BODIES). No roster row or realm_visuals override selects
- *    it, but removing a pool member re-rolls hash-assigned bodies, so it is not
- *    a unilateral call.
- *  Both are generated derivatives, not verbatim rips like the arcadevoid drop. */
-const KNOWN_UNCLEARED_ASSETS: readonly string[] = [
-  'a primal groudon emer 0616234337',
-  'steampunk robocop sciencetechnol 0197fa8c',
-];
+ *  EMPTY as of 2026-08-17. Both original pins were cleared by REPLACEMENT rather
+ *  than deletion, which is what they were waiting for:
+ *
+ *  - primal groudon bodied a LIVE Infernal mob (`hellmaw_primal_beast_body`).
+ *    The mob keeps its key and its already-original display name, 'Primal
+ *    Emberbeast'; the url now points at an original brute
+ *    (realm_infernal_primal_emberbeast_019df95e) and the Pokemon-prompted file
+ *    is in the dated quarantine.
+ *  - steampunk robocop was a member of the dominion body POOL. Swapping a pool
+ *    member is only safe because selectBodyFromPool is rendezvous hashing and
+ *    not `hash % pool.length` (body_shape_gate.ts) — under modulo this edit
+ *    would have re-bodied every template in the realm. It was replaced by
+ *    realm_dominion_ballistic_exo_vanguard_0194241b.
+ *
+ *  Leave this array empty rather than deleting it: an empty pin list is the
+ *  statement that nothing is currently excused, and the test below keeps it
+ *  honest the moment something is added. */
+const KNOWN_UNCLEARED_ASSETS: readonly string[] = [];
 
 const isPinned = (s: string): boolean =>
   KNOWN_UNCLEARED_ASSETS.some((stem) => normalize(s).includes(stem));

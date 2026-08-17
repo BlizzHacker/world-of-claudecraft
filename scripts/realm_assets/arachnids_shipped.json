@@ -1,0 +1,23 @@
+[
+  {
+    "key": "realm_arcadevoid_brainjar_walker_01977e14",
+    "realm": "arcadevoid",
+    "file": "realm_arcadevoid_brainjar_walker_01977e14.glb",
+    "height": 1.3,
+    "note": "brain in a jar carried on a skittering six-strut walker; dome reads as the head, no weapon"
+  },
+  {
+    "key": "realm_arcadevoid_scorpion_mech_01938038",
+    "realm": "arcadevoid",
+    "file": "realm_arcadevoid_scorpion_mech_01938038.glb",
+    "height": 1.6,
+    "note": "hulking eight-legged robotic scorpion, segmented tail held over the back"
+  },
+  {
+    "key": "realm_arcadevoid_siege_weaver_019d87d3",
+    "realm": "arcadevoid",
+    "file": "realm_arcadevoid_siege_weaver_019d87d3.glb",
+    "height": 2.0,
+    "note": "armoured siege spider, the largest of the three; broad plated abdomen over eight heavy legs"
+  }
+]

@@ -8487,6 +8487,14 @@
   "handL": 1,
   "handRY": 0.508
  },
+ "dominion/realm_dominion_ballistic_exo_vanguard_0194241b.glb": {
+  "height": 1.8887,
+  "width": 1.3631,
+  "depth": 0.5073,
+  "handR": 1,
+  "handL": 1,
+  "handRY": 0.5555
+ },
  "dominion/realm_dominion_battle_ready_alien_characters_0196c061.glb": {
   "height": 2.0359,
   "width": 1.6348,
@@ -9030,14 +9038,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.3826
- },
- "dominion/realm_dominion_steampunk_robocop_sciencetechnol_0197fa8c.glb": {
-  "height": 2.3916,
-  "width": 1.5688,
-  "depth": 0.7214,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4432
  },
  "dominion/realm_dominion_techno_goliath_sciencetechnology_01972cc2.glb": {
   "height": 2.2816,

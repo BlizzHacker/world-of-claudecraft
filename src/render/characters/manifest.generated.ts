@@ -12883,6 +12883,18 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_dominion_ballistic_exo_vanguard_0194241b: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_ballistic_exo_vanguard_0194241b.glb`,
+    height: GEN_H,
+    lazyPreload: true,
+    clips: genClips(['2H_Ranged_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
+    attach: [
+      { url: '/cr-realms/fps/weapons/futuristic_energy_rifle_019a9c67.glb', bone: 'handslot.r' },
+    ],
+    weaponSlots: [0],
+  },
   realm_dominion_battle_ready_alien_characters_0196c061: {
     url: `${REALM_MODELS}/dominion/realm_dominion_battle_ready_alien_characters_0196c061.glb`,
     height: GEN_H,
@@ -13681,18 +13693,6 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tintStrength: 0.18,
     attach: [
       { url: '/cr-realms/fps/weapons/tactical_precision_019a5ea3.glb', bone: 'handslot.r' },
-    ],
-    weaponSlots: [0],
-  },
-  realm_dominion_steampunk_robocop_sciencetechnol_0197fa8c: {
-    url: `${REALM_MODELS}/dominion/realm_dominion_steampunk_robocop_sciencetechnol_0197fa8c.glb`,
-    height: GEN_H,
-    lazyPreload: true,
-    clips: genClips(['2H_Ranged_Shoot']),
-    tint: 'entity',
-    tintStrength: 0.18,
-    attach: [
-      { url: '/cr-realms/fps/weapons/futuristic_energy_rifle_019a9c67.glb', bone: 'handslot.r' },
     ],
     weaponSlots: [0],
   },
@@ -21303,6 +21303,7 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_dominion_alien_punk_rebel_characters_0195d98d',
     'realm_dominion_alien_warlord_characters_01968d0f',
     'realm_dominion_alien_warlord_characters_019691b8',
+    'realm_dominion_ballistic_exo_vanguard_0194241b',
     'realm_dominion_battle_ready_alien_characters_0196c061',
     'realm_dominion_boss_exosuit_019e6f47',
     'realm_dominion_buzz_boxer_bot_characters_01976edf',
@@ -21371,7 +21372,6 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_dominion_serpentbound_archmage_fantasy_ma_019dc23d',
     'realm_dominion_steampunk_explorer_characters_fa_0196d56a',
     'realm_dominion_steampunk_explorer_fashionstyle__0196deeb',
-    'realm_dominion_steampunk_robocop_sciencetechnol_0197fa8c',
     'realm_dominion_techno_goliath_sciencetechnology_01972cc2',
     'realm_dominion_techno_goliath_sciencetechnology_01972cca',
     'realm_dominion_titanium_sentinel_sciencetechnol_01965431',

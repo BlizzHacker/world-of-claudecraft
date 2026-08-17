@@ -17,6 +17,7 @@ import { resolveActiveRealmId } from '../../sim/realms/registry';
 import { ALL_CLASSES, type Entity, isMechWearer, type PlayerClass } from '../../sim/types';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
 import type { OverheadEmoteId } from '../../world_api';
+import { GENERATED_ARACHNID_VISUALS } from './arachnids.generated';
 import { isSelectableBody, selectBodyFromPool } from './body_shape_gate';
 import { KAYKIT_EMOTES, MESHY_BANK_EMOTES, MESHY_CLIP_BANK_URL, withMeshyBank } from './clip_vocab';
 import { GENERATED_CREATURE_BODY_PINS } from './creature_pins.generated';
@@ -29,6 +30,7 @@ import {
   infernalUndeadVisualKey,
 } from './infernal_roster';
 import { GENERATED_REALM_BODIES, GENERATED_VISUALS } from './manifest.generated';
+import { GENERATED_MACHINE_VISUALS } from './machines.generated';
 import { isBoundedResidency } from './residency';
 
 export interface EmoteClipSpec {
@@ -1700,8 +1702,8 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     lazyPreload: true,
   },
   hellmaw_primal_beast_body: {
-    // Primal Emberbeast: a huge quadruped brute (Groudon-esque).
-    url: `${REALM_MODELS}/infernal/meshy_ai_a_primal_groudon_emer_0616234337_texture_194376eb.glb`,
+    // Primal Emberbeast: a huge quadruped brute.
+    url: `${REALM_MODELS}/infernal/realm_infernal_primal_emberbeast_019df95e.glb`,
     height: 3.6,
     clips: meshyBiped(),
     lazyPreload: true,
@@ -3053,6 +3055,14 @@ export const VISUALS: Record<string, VisualDef> = {
   // Same precedence rule as above: generated first, HAND last, so a curated key
   // always wins and re-running the asset pipeline stays safe.
   ...GENERATED_CREATURE_VISUALS,
+  // Arachnids bound onto the arachnid donor rig (arachnids.generated.ts).
+  // A separate record because that donor baked a different clip vocabulary;
+  // same precedence rule, so HAND_VISUALS still wins over both.
+  ...GENERATED_ARACHNID_VISUALS,
+  // Turrets, catapults and vehicles rigged by machine_rig.mjs
+  // (machines.generated.ts). Synthesised clips, no donor, no handslots;
+  // same precedence rule, so HAND_VISUALS still wins over all three.
+  ...GENERATED_MACHINE_VISUALS,
   ...HAND_VISUALS,
 };
 

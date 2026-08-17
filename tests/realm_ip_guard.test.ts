@@ -56,6 +56,17 @@ const DENYLIST: readonly string[] = [
   'master chief', 'forerunner', 'cortana',
   // EA/BioWare — Mass Effect
   'turian', 'asari', 'krogan', 'salarian',
+  // Marvel. 'Iron Spider' is a coined suit name; the two words are ordinary
+  // English apart, which is exactly how it survived. A 2026-08-17 sweep
+  // quarantined the Protoss-named Dragoon assets by name pattern and left
+  // arcadevoid/mechs/ironspider_colossus_019d87d3 sitting next to them,
+  // because nothing on this list matched it. Both spellings, since the asset
+  // drops use the closed compound and the franchise uses the open one.
+  // The asset itself was cleared later that day: the store file and its decor
+  // registration in src/sim/realm_decor.generated.ts both moved to
+  // siege_weaver_019d87d3, and the original is in the dated quarantine. These
+  // entries stay so the NEXT one cannot arrive quietly.
+  'ironspider', 'iron spider',
   // Other franchises seen in this estate's asset drops
   'cybertron', 'ncc-1701', 'white walker', 'he-man', 'trap jaw', 'grinch',
 ];
