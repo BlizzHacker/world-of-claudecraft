@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  INFERNAL_HUMAN_VISUAL_KEYS,
+  CIVILIAN_VISUAL_KEYS,
   infernalNpcVisualKey,
   infernalOpponentVisualKey,
   infernalUndeadVisualKey,
@@ -54,23 +54,33 @@ describe('Infernal visual roster', () => {
   it('assigns the full starter cast to varied authored humans without KayKit or elves', () => {
     const keys = STARTER_HUMANS.map((id) => infernalNpcVisualKey(id));
 
-    // Was 7. The 2026-08-08 render audit cut the civilian rotation to the three
-    // bodies whose arms actually move through Walk; eleven more were barred for
-    // frozen, missing or shredded limbs (see INFERNAL_DEFECTIVE_BODY_KEYS).
-    // RAISE THIS BACK as bodies are repaired - reweight_topo's claim rule
-    // already brings forge_worker and hermit back inside the healthy band, which
-    // would take this to 5 once their renders are signed off.
-    expect(new Set(keys).size).toBeGreaterThanOrEqual(3);
+    // RAISED BACK. The condemned bank is gone and the civilian rotation is eight
+    // real townspeople, so the starter cast no longer collapses onto three
+    // repeated men. This is the variety floor the old note kept asking for.
+    expect(new Set(keys).size).toBeGreaterThanOrEqual(5);
     for (const key of keys) {
-      expect(INFERNAL_HUMAN_VISUAL_KEYS).toContain(key);
+      // The rotation plus the two role-only bodies: a guard and a craftsman,
+      // kept out of the hash on purpose so they never land on a random villager
+      // but legitimately named by the role pins.
+      expect(
+        [
+          ...CIVILIAN_VISUAL_KEYS,
+          'realm_crypticrealm_town_guard_female_armored_019875c0',
+          'realm_crypticrealm_craftsman_warrior_monk_019ee5e1',
+        ],
+        key,
+      ).toContain(key);
       expect(key).not.toMatch(/npc_|elf|orc|demon/i);
     }
-    // was veil_adept, barred: its RightHand carries no weight, so that arm
-    // holds bind pose while the rest of the body animates
+    // Brother Aldric recurs in every hub under suffixed ids, so he is pinned by
+    // prefix rather than hashed - one recognisable man across all of them.
     expect(infernalNpcVisualKey('brother_aldric_raid')).toBe(
-      'realm_infernal_human_hooded_wanderer',
+      'realm_crypticrealm_village_elder_white_robe_019521ee',
     );
-    expect(infernalNpcVisualKey('a_future_infernal_civilian')).toMatch(/^realm_infernal_human_/);
+    // An id nobody has pinned still lands on a real townsperson.
+    expect(infernalNpcVisualKey('a_future_infernal_civilian')).toMatch(
+      /^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/,
+    );
   });
 
   it('gives the nine runtime classes bodies that survived the render audit', () => {
@@ -123,14 +133,18 @@ describe('Infernal visual roster', () => {
       const keys = Object.keys(NPCS).map((templateId) =>
         visualKeyFor({ kind: 'npc', templateId } as never),
       );
-      // Every NPC must draw from the civilian pool. The pool is down to three
-      // after the 2026-08-08 render audit barred fifteen bodies for frozen,
-      // missing or shredded limbs (see INFERNAL_DEFECTIVE_BODY_KEYS), so this
-      // now checks containment only.
-      const pool = new Set<string>(INFERNAL_HUMAN_VISUAL_KEYS);
+      // The condemned bank is gone (docs/condemned-body-bank.md). The pool is
+      // the eight-body civilian rotation, plus the two role-only bodies the
+      // pins may name - a guard and a craftsman, which are deliberately kept
+      // out of the hash so they never land on a random villager.
+      const pool = new Set<string>([
+        ...CIVILIAN_VISUAL_KEYS,
+        'realm_crypticrealm_town_guard_female_armored_019875c0',
+        'realm_crypticrealm_craftsman_warrior_monk_019ee5e1',
+      ]);
       for (const key of new Set(keys)) expect(pool.has(key), `${realm}:${key}`).toBe(true);
       for (const key of keys) {
-        expect(key, `${realm}:${key}`).toMatch(/^realm_infernal_human_/);
+        expect(key, `${realm}:${key}`).toMatch(/^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/);
         expect(VISUALS[key], `${realm}:${key}`).toBeTruthy();
       }
     }

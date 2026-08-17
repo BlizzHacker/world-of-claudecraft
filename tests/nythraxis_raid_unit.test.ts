@@ -1780,7 +1780,7 @@ describe('Nythraxis raid encounter', () => {
     // the rotation and de-registered for indecency, so Aldric now falls to the
     // explicit `brother_aldric` rule in infernalNpcVisualKey instead of the
     // hash. Still the curated bank, which is what this assertion is for.
-    expect(visualKeyFor(aldric!)).toBe('realm_infernal_human_hooded_wanderer');
+    expect(visualKeyFor(aldric!)).toBe('realm_crypticrealm_village_elder_white_robe_019521ee');
   });
 
   it('stuns active Nythraxis adds for the full Aldric transition', () => {

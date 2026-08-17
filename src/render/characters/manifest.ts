@@ -497,17 +497,18 @@ const meshyBiped = (
   jump: opts.jump ?? 'Basic_Jump',
 });
 
-// Curated Infernal humans are rebuilt by build_infernal_human_rigs.mjs. Exact-rig
-// NOTE (purge, 2026-08-17): that rebuild script has been REMOVED from the repo.
-// It regenerated the condemned body bank, so leaving it in place was a way back
-// in that the source string-ban cannot see. The sentence above is Wade's and is
-// left as written - it was true when written. See docs/condemned-body-bank.md.
-// actions are used where available and donor actions are transferred as rest-pose
-// deltas, so each distinct body stays upright through every gameplay state.
-// meshy24, the clip bank's own rig family, so the bank fills everything the 10
-// baked takes leave empty: walkBack, sit, swim, the extra swings, and 20 real
-// emote gestures instead of aliasing four of them onto Wave and Taunt. Their own
-// Wave/Taunt stay as the fallback behind each bank clip.
+// The meshy24 clip map. The bodies it was originally written for - the condemned
+// civilian bank - are gone, and it now serves the realm_infernal_class_* bodies,
+// which were never part of that bank. Wade's paragraph describing the rebuild
+// pipeline moved VERBATIM to docs/condemned-body-bank.md when the bank was
+// purged, because the script it names no longer exists: it regenerated the whole
+// bank, which was a way back in that a source string-ban cannot see.
+//
+// What still holds, and why this map is shaped the way it is: these bodies carry
+// only a handful of baked takes, so the shared bank fills everything they leave
+// empty - walkBack, sit, swim, the extra swings, and real emote gestures rather
+// than aliasing four of them onto Wave and Taunt. Their own Wave/Taunt stay as
+// the fallback behind each bank clip.
 const INFERNAL_HUMAN_CLIPS: ClipMap = withMeshyBank({
   idle: 'Idle',
   walk: 'Walk',
@@ -1383,23 +1384,141 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   // Visually reviewed PICKTURA civilians. These share a compatible Meshy biped
   // skeleton and a compact action pack, so every NPC can stop, run, attack,
   // cast, react, die, jump, wave, and taunt.
-  realm_infernal_human_iron_warden: infernalHuman('infernal_human_iron_warden.glb', 2.3),
-  realm_infernal_human_vanguard: infernalHuman('infernal_human_vanguard.glb', 2.25),
-  realm_infernal_human_forge_worker: infernalHuman('infernal_human_forge_worker.glb', 2.2),
-  realm_infernal_human_white_sage: infernalHuman('infernal_human_white_sage.glb', 2.2),
-  realm_infernal_human_tainted_hood: infernalHuman('infernal_human_tainted_hood.glb', 2.2),
-  realm_infernal_human_weathered_elder: infernalHuman('infernal_human_weathered_elder.glb', 2.15),
-  realm_infernal_human_road_mercenary: infernalHuman('infernal_human_road_mercenary.glb', 2.25),
-  realm_infernal_human_iron_ranger: infernalHuman('infernal_human_iron_ranger.glb', 2.2),
-  realm_infernal_human_hooded_wanderer: infernalHuman('infernal_human_hooded_wanderer.glb', 2.15),
-  realm_infernal_human_hermit: infernalHuman('infernal_human_hermit.glb', 2.15),
-  realm_infernal_human_barbarian: infernalHuman('infernal_human_barbarian.glb', 2.3),
-  realm_infernal_human_veil_adept: infernalHuman('infernal_human_veil_adept.glb', 2.2),
-  realm_infernal_human_assassin: infernalHuman('infernal_human_assassin.glb', 2.2),
-  realm_infernal_human_crusader: infernalHuman('infernal_human_crusader.glb', 2.3),
-  realm_infernal_human_spiritborn: infernalHuman('infernal_human_spiritborn.glb', 2.25),
-  realm_infernal_human_blood_knight: infernalHuman('infernal_human_blood_knight.glb', 2.25),
-  realm_infernal_human_tempest: infernalHuman('infernal_human_tempest.glb', 2.25),
+  // ── Civilian bank ──────────────────────────────────────────────────────────
+  // Replaces the condemned bank that used to sit here, all 18 of which were
+  // rejected outright (docs/condemned-body-bank.md). These are real townspeople
+  // and they were already in the store, filed under classic/ and arcane/ - the
+  // "no civilians exist" conclusion was a search failure, not a supply problem.
+  //
+  // Verified from the GLBs themselves, not their names (an ip_rename pass
+  // laundered the names): joint counts, clip inventories and ZERO scale
+  // channels on every one.
+  //
+  // TWO RIG FAMILIES, and they need different wiring:
+  //   mass_rig 23-joint - 22 baked KayKit clips, driven by kaykit() below.
+  //   meshy24  24-joint - Walk/Run/Idle ONLY, so they need the shared meshy clip
+  //                       bank explicitly. They are registered here by hand
+  //                       rather than through MESHY_RIGGED_GENERATED, which only
+  //                       matches /^realm_infernal_/ and would silently miss
+  //                       every realm_crypticrealm_ body - leaving four
+  //                       townswomen with no idle, no death and no emotes.
+
+  // mass_rig 23-joint, full 22-clip vocabulary.
+  realm_crypticrealm_village_elder_white_robe_019521ee: {
+    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_village_elder_white_robe_019521ee.glb`,
+    height: HUMANOID_H,
+    clips: kaykit(['1H_Melee_Attack_Chop']),
+    lazyPreload: true,
+  },
+  realm_crypticrealm_village_elder_brown_robe_01952165: {
+    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_village_elder_brown_robe_01952165.glb`,
+    height: HUMANOID_H,
+    clips: kaykit(['1H_Melee_Attack_Chop']),
+    lazyPreload: true,
+  },
+  realm_crypticrealm_townsman_tan_trenchcoat_01944c9a5744: {
+    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_townsman_tan_trenchcoat_01944c9a5744.glb`,
+    height: HUMANOID_H,
+    clips: kaykit(['1H_Melee_Attack_Chop']),
+    lazyPreload: true,
+  },
+  realm_crypticrealm_townsman_brown_trenchcoat_01944c9abf1e: {
+    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_townsman_brown_trenchcoat_01944c9abf1e.glb`,
+    height: HUMANOID_H,
+    clips: kaykit(['1H_Melee_Attack_Chop']),
+    lazyPreload: true,
+  },
+  realm_crypticrealm_town_guard_female_armored_019875c0: {
+    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_town_guard_female_armored_019875c0.glb`,
+    height: HUMANOID_H,
+    clips: kaykit(['1H_Melee_Attack_Chop', '2H_Melee_Attack_Chop']),
+    lazyPreload: true,
+  },
+  realm_crypticrealm_craftsman_warrior_monk_019ee5e1: {
+    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_craftsman_warrior_monk_019ee5e1.glb`,
+    height: HUMANOID_H,
+    clips: kaykit(['1H_Melee_Attack_Chop']),
+    lazyPreload: true,
+  },
+  realm_infernal_cipher_assassin_hooded_red_01942e8f: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_cipher_assassin_hooded_red_01942e8f.glb`,
+    height: HUMANOID_H,
+    clips: kaykit(['1H_Melee_Attack_Slice_Diagonal']),
+    lazyPreload: true,
+  },
+  realm_infernal_village_elder_brown_robe_01952165: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_village_elder_brown_robe_01952165.glb`,
+    height: HUMANOID_H,
+    clips: kaykit(['1H_Melee_Attack_Chop']),
+    lazyPreload: true,
+  },
+
+  // meshy24, three baked takes each (Walk/Run/Idle). The bank supplies hit,
+  // death, cast, jump, sit, swim and the emotes; their own gait is kept.
+  realm_crypticrealm_townswoman_practical_monk_f: {
+    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_townswoman_practical_monk_f.glb`,
+    height: HUMANOID_H,
+    animUrls: [MESHY_CLIP_BANK_URL],
+    // attack/hit/cast/jump/sit/swim/emotes all come from the bank; only the
+    // three baked takes are the body's own. `death` is passed through by
+    // withMeshyBank rather than filled, so it has to name the bank's clip.
+    clips: withMeshyBank({
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: [],
+      death: 'Death_A',
+    }),
+    lazyPreload: true,
+  },
+  realm_crypticrealm_townswoman_robed_priest_f: {
+    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_townswoman_robed_priest_f.glb`,
+    height: HUMANOID_H,
+    animUrls: [MESHY_CLIP_BANK_URL],
+    // attack/hit/cast/jump/sit/swim/emotes all come from the bank; only the
+    // three baked takes are the body's own. `death` is passed through by
+    // withMeshyBank rather than filled, so it has to name the bank's clip.
+    clips: withMeshyBank({
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: [],
+      death: 'Death_A',
+    }),
+    lazyPreload: true,
+  },
+  realm_crypticrealm_townswoman_hooded_mage_f: {
+    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_townswoman_hooded_mage_f.glb`,
+    height: HUMANOID_H,
+    animUrls: [MESHY_CLIP_BANK_URL],
+    // attack/hit/cast/jump/sit/swim/emotes all come from the bank; only the
+    // three baked takes are the body's own. `death` is passed through by
+    // withMeshyBank rather than filled, so it has to name the bank's clip.
+    clips: withMeshyBank({
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: [],
+      death: 'Death_A',
+    }),
+    lazyPreload: true,
+  },
+  realm_crypticrealm_townswoman_hooded_rogue_f: {
+    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_townswoman_hooded_rogue_f.glb`,
+    height: HUMANOID_H,
+    animUrls: [MESHY_CLIP_BANK_URL],
+    // attack/hit/cast/jump/sit/swim/emotes all come from the bank; only the
+    // three baked takes are the body's own. `death` is passed through by
+    // withMeshyBank rather than filled, so it has to name the bank's clip.
+    clips: withMeshyBank({
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: [],
+      death: 'Death_A',
+    }),
+    lazyPreload: true,
+  },
   // DuranceTester is always the armored human Warrior body, never a demon.
   // Character identity, house ownership, inventory, and persistence are not
   // changed by this presentation-only override.

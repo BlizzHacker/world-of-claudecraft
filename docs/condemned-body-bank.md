@@ -251,6 +251,21 @@ them survived being looked at.
 ---------------------------------------------------------------------------
 ```
 
+### On the curated-human rebuild pipeline
+
+*Origin: src/render/characters/manifest.ts, above `INFERNAL_HUMAN_CLIPS`. Moved
+here when the rebuild script it names was deleted with the bank.*
+
+```text
+Curated Infernal humans are rebuilt by build_infernal_human_rigs.mjs. Exact-rig
+actions are used where available and donor actions are transferred as rest-pose
+deltas, so each distinct body stays upright through every gameplay state.
+meshy24, the clip bank's own rig family, so the bank fills everything the 10
+baked takes leave empty: walkBack, sit, swim, the extra swings, and 20 real
+emote gestures instead of aliasing four of them onto Wave and Taunt. Their own
+Wave/Taunt stay as the fallback behind each bank clip.
+```
+
 ### On the crypticrealm class table
 
 *Origin: src/sim/realms/class_visuals.ts, above `REALM_CLASS_VISUALS.crypticrealm`.*

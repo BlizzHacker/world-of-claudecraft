@@ -69,20 +69,17 @@ function countOccurrences(rel: string): number {
  * through). Every entry must reach 0 and be deleted from this map; when the map
  * is empty the ban below becomes absolute for src/ as well.
  *
- * Both remaining files are blocked on the same thing: what is left of the bank
- * bodies ~105 Infernal townspeople, and the approved pool has no townspeople in
- * it — it is casters, knights, necromancers, goblins and demons. Re-pointing a
- * blacksmith at a skull-faced warlord is the fault the owner already called out
- * (a horned demoness cast as a human mercenary is "why the town read wrong"),
- * so these wait for the craftsman/merchant/guard/townswoman/townsman bodies now
- * in generation rather than getting a worse body today.
- *
- * manifest.ts holds the 18 body REGISTRATIONS, which cannot go until
- * infernal_roster.ts stops naming their keys, or the roster keys dangle.
+ * It is empty, and staying empty is the point. The civilians that unblocked
+ * this were in the store all along under classic/ and arcane/; the earlier
+ * "no townspeople exist" reading was a search failure. If a future change needs
+ * a body here, take one from the civilian bank in infernal_roster.ts - do not
+ * re-add a row to this map.
  */
 const AWAITING_REPLACEMENT: Readonly<Record<string, number>> = {
-  'src/render/characters/infernal_roster.ts': 63,
-  'src/render/characters/manifest.ts': 35,
+  // EMPTY as of 2026-08-17. The civilian bodies landed, the roster and the
+  // registrations were repointed onto them, and the ban below is now ABSOLUTE
+  // for src/ as well as server/ and the generated tables. Nothing may be added
+  // back to this map: an entry here would mean the bank had returned.
 };
 
 const WHY = [

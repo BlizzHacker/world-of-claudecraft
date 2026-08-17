@@ -5,68 +5,57 @@
  * quests, vendors, housing, and persistence. Only their rendered bodies vary.
  */
 
-// The bodies named below are the CONDEMNED bank: reviewed body by body on a
-// render sheet and rejected in full by the owner on 2026-08-17, and marked
-// 15 reject / 2 marginal / 0 ship by the phase-1 body catalog independently.
-//
-// They are still named here ONLY because the replacement civilian bodies do
-// not exist yet: this rotation bodies ~105 townspeople, and the approved pool
-// has no townspeople in it. Casting a shopkeeper as a necromancer is the
-// fault this purge exists to end, so these wait for the craftsman, merchant,
-// guard, townswoman and townsman bodies now in generation.
-//
-// Wade's 2026-08-08 audit, which is why the rotation is this short, moved
-// VERBATIM to docs/condemned-body-bank.md when the bank was purged.
-// tests/condemned_body_bank_guard.test.ts holds these counts on a ratchet
-// that can only shrink.
-export const INFERNAL_HUMAN_VISUAL_KEYS = [
-  'realm_infernal_human_iron_warden',
-  'realm_infernal_human_weathered_elder',
-  'realm_infernal_human_hooded_wanderer',
-  'realm_infernal_human_assassin',
-] as const;
-// 2026-08-17: the shirtless-monk body was REMOVED from this rotation, and its
-// manifest registration deleted, so the renderer can no longer reach it at
-// all. It is a modern MMA fighter in gym shorts, and the operator found one of
-// them (Pit Master Grott) walking the Infernal town: "i don't like seeing
-// someone walking around in their underwear". Every template that resolved to
-// it is covered by a published override on both infernal and crypticrealm, but
-// overrides only cover templates that EXIST - leaving the body in this array
-// meant the next NPC added could hash straight back onto it. Taking it out of
-// the rotation closes that. Rendezvous hashing only re-rolls the ids that were
-// using the removed key, and every one of those is overridden, so no other
-// townsperson changes body.
-
 /**
- * Bodies kept registered (an explicit assignment or an operator override can
- * still name one) but barred from the civilian rotation.
+ * The civilian bank.
  *
- * Wade's audit - what is wrong with each one, grouped by fault, and what the
- * repair attempts did and did not fix - moved VERBATIM to
- * docs/condemned-body-bank.md when the condemned bank was purged.
+ * These replace the condemned bank, all 18 of which were rejected outright; the
+ * audit record is docs/condemned-body-bank.md. The bodies here were already in
+ * the store the whole time, filed under classic/ and arcane/ - the earlier
+ * conclusion that "the approved pool contains no townspeople" was a search
+ * failure, not a supply problem.
+ *
+ * Every one was verified from the GLB rather than its name (an ip_rename pass
+ * laundered the names): correct joint counts, real clip inventories, zero scale
+ * channels, and hands checked empty so nobody carries a welded prop.
+ *
+ * Registration and the two rig families are handled in manifest.ts - the four
+ * townswomen are meshy24 and need the shared clip bank wired explicitly.
  */
-export const INFERNAL_DEFECTIVE_BODY_KEYS = [
-  'realm_infernal_human_forge_worker',
-  'realm_infernal_human_white_sage',
-  'realm_infernal_human_hermit',
-  'realm_infernal_human_vanguard',
-  'realm_infernal_human_road_mercenary',
-  'realm_infernal_human_iron_ranger',
-  'realm_infernal_human_barbarian',
-  'realm_infernal_human_veil_adept',
-  'realm_infernal_human_crusader',
-  'realm_infernal_human_spiritborn',
-  'realm_infernal_human_tempest',
-  'realm_infernal_human_tainted_hood',
-  'realm_infernal_human_blood_knight',
-  // assassin was here until 2026-08-15; repaired and rendered, see the note on
-  // INFERNAL_HUMAN_VISUAL_KEYS above.
+const ELDER_WHITE = 'realm_crypticrealm_village_elder_white_robe_019521ee';
+const ELDER_BROWN = 'realm_crypticrealm_village_elder_brown_robe_01952165';
+const TOWNSMAN_TAN = 'realm_crypticrealm_townsman_tan_trenchcoat_01944c9a5744';
+const TOWNSMAN_BROWN = 'realm_crypticrealm_townsman_brown_trenchcoat_01944c9abf1e';
+const WOMAN_WORKER = 'realm_crypticrealm_townswoman_practical_monk_f';
+const WOMAN_GOWN = 'realm_crypticrealm_townswoman_robed_priest_f';
+const WOMAN_HOODED = 'realm_crypticrealm_townswoman_hooded_mage_f';
+const WOMAN_SCOUT = 'realm_crypticrealm_townswoman_hooded_rogue_f';
+const TOWN_GUARD = 'realm_crypticrealm_town_guard_female_armored_019875c0';
+const CRAFTSMAN = 'realm_crypticrealm_craftsman_warrior_monk_019ee5e1';
+
+/**
+ * The rotation the hash draws from for any NPC without an explicit pin.
+ *
+ * Eight bodies, up from the condemned bank's four, and deliberately only the
+ * GENERIC townsfolk: the guard and the craftsman are role-specific and would
+ * read wrong on a random villager, so they are pinned below instead of left to
+ * the hash. Four men and four women, two of them elders, so a crowd reads as a
+ * town rather than as one man repeated.
+ */
+export const CIVILIAN_VISUAL_KEYS = [
+  ELDER_WHITE,
+  ELDER_BROWN,
+  TOWNSMAN_TAN,
+  TOWNSMAN_BROWN,
+  WOMAN_WORKER,
+  WOMAN_GOWN,
+  WOMAN_HOODED,
+  WOMAN_SCOUT,
 ] as const;
 
 /**
- * The playable class bank has the same disease. These keys are still
- * registered and still selectable as hero cards, but no class table may point
- * at one.
+ * The playable class bank is a separate problem from the civilian one. These
+ * keys are still registered and still selectable as hero cards, but no class
+ * table may point at one.
  *
  * Wade's body-by-body audit of this list moved VERBATIM to
  * docs/condemned-body-bank.md when the condemned bank was purged.
@@ -86,76 +75,93 @@ export const INFERNAL_DEFECTIVE_CLASS_BODY_KEYS = [
   'realm_infernal_class_spiritborn',
 ] as const;
 
-export type InfernalHumanVisualKey = (typeof INFERNAL_HUMAN_VISUAL_KEYS)[number];
+export type CivilianVisualKey = (typeof CIVILIAN_VISUAL_KEYS)[number];
+/** Any body a townsperson may wear: the rotation plus the two role-only bodies. */
+type TownBodyKey = CivilianVisualKey | typeof TOWN_GUARD | typeof CRAFTSMAN;
 
-// Every role that used to name a barred body now names one of the three that
-// work. The mapping is deliberately explicit rather than falling through to the
-// hash so the intent per role survives the next time the bank changes:
-//   iron_warden      -> anyone armed, armoured, or physically heavy
-//   weathered_elder  -> anyone older, seated behind a counter, or keeping records
-//   hooded_wanderer  -> anyone robed, hooded, scholarly, or on the road
-//   monk             -> bare-chested fighters only. It reads as a pit fighter,
-//                       so it is cast where that is the point rather than left
-//                       to the hash, which would put a shirtless man behind a
-//                       shop counter.
-const NPC_ROLE_VISUALS: Record<string, InfernalHumanVisualKey> = {
-  the_merchant: 'realm_infernal_human_hooded_wanderer',
-  marshal_redbrook: 'realm_infernal_human_iron_warden',
-  warden_fenwick: 'realm_infernal_human_iron_warden',
-  // was vanguard: that body has no forearms and no hands
-  captain_thessaly: 'realm_infernal_human_iron_warden',
-  trader_wilkes: 'realm_infernal_human_weathered_elder',
-  // was veil_adept: its right hand carries no weight, so that arm never moves
-  apothecary_lin: 'realm_infernal_human_hooded_wanderer',
-  herbalist_yara: 'realm_infernal_human_hooded_wanderer',
-  // was barbarian: hands fused to the belt on every clip
-  smith_haldren: 'realm_infernal_human_iron_warden',
-  armorer_hode: 'realm_infernal_human_iron_warden',
-  foreman_odell: 'realm_infernal_human_iron_warden',
-  fisherman_brandt: 'realm_infernal_human_weathered_elder',
-  stable_master_wren: 'realm_infernal_human_iron_warden',
-  // was blood_knight: a blue horned demoness standing in as a human mercenary
-  mercenary_kael: 'realm_infernal_human_iron_warden',
-  // was iron_ranger: its lower body shears into a single flat plank
-  huntress_verr: 'realm_infernal_human_hooded_wanderer',
-  bursar_fernando: 'realm_infernal_human_hooded_wanderer',
-  realtor_maribel: 'realm_infernal_human_weathered_elder',
-  // was monk (the shirtless MMA body). Live he is on a published override
-  // (realm_infernal_hero_demon_hunter); this keeps the compiled fallback legal.
-  pit_master_grott: 'realm_infernal_human_iron_warden',
-  race_marshal_pip: 'realm_infernal_human_hooded_wanderer',
-  groundskeeper_bram: 'realm_infernal_human_weathered_elder',
-  loremaster_caddis: 'realm_infernal_human_hooded_wanderer',
-  cainhurst_sage: 'realm_infernal_human_hooded_wanderer',
-  brother_halven: 'realm_infernal_human_hooded_wanderer',
-  brother_halven_marsh: 'realm_infernal_human_hooded_wanderer',
-  // was tainted_hood: its hem tears into a slab that lies on the ground
-  spirit_healer: 'realm_infernal_human_hooded_wanderer',
-  scout_maren: 'realm_infernal_human_hooded_wanderer',
-  // was tempest: frozen arms, no hands
-  scout_maren_highwatch: 'realm_infernal_human_hooded_wanderer',
-  tidewatcher_ondrel: 'realm_infernal_human_hooded_wanderer',
-  provisioner_hale: 'realm_infernal_human_weathered_elder',
-  // was road_mercenary: forearms end in flat blades, no hands
-  quartermaster_bree: 'realm_infernal_human_hooded_wanderer',
-  interior_merchant: 'realm_infernal_human_iron_warden',
-  interior_innkeeper: 'realm_infernal_human_weathered_elder',
-  interior_villager: 'realm_infernal_human_hooded_wanderer',
-  skirmish_builder: 'realm_infernal_human_iron_warden',
-  skirmish_footman: 'realm_infernal_human_iron_warden',
+/**
+ * Explicit body per role, so intent survives the next time the bank changes.
+ *
+ * Assigned by what the character DOES, not by hash, and neighbours in the same
+ * hub are deliberately given different bodies - the Eastbrook block below is the
+ * clearest case, where a smith, a weaver, a cook and a tanner all stand within
+ * sight of each other.
+ *
+ *   ELDER_WHITE / ELDER_BROWN  keepers of records, sages, long-settled trades
+ *   TOWNSMAN_TAN / _BROWN      general men: counters, yards, road jobs
+ *   WOMAN_WORKER               physical trades
+ *   WOMAN_GOWN                 hosts, front-of-house
+ *   WOMAN_HOODED               scholarly women
+ *   WOMAN_SCOUT                anyone on the road or watching a boundary
+ *   TOWN_GUARD                 militia and named authority
+ *   CRAFTSMAN                  forge and workshop
+ *
+ * KNOWN GAPS, deliberately not faked (generation queued): there is no blacksmith
+ * with an apron, no dockhand and no municipal militia body. CRAFTSMAN stands in
+ * at the forge and TOWN_GUARD - the only guard body, and female - carries every
+ * militia role, so the three authority figures repeat. That repetition is
+ * visible and intended; substituting a necromancer or a bare-chested warlord to
+ * avoid it is the exact fault this purge exists to end.
+ */
+const NPC_ROLE_VISUALS: Record<string, TownBodyKey> = {
+  // --- authority and militia ---------------------------------------------------
+  marshal_redbrook: TOWN_GUARD,
+  captain_thessaly: TOWN_GUARD,
+  warden_fenwick: TOWN_GUARD,
+  skirmish_footman: TOWNSMAN_BROWN,
+  skirmish_builder: CRAFTSMAN,
+  mercenary_kael: TOWNSMAN_BROWN,
+  pit_master_grott: TOWNSMAN_BROWN,
+
+  // --- forge and workshop ------------------------------------------------------
+  smith_haldren: CRAFTSMAN,
+  armorer_hode: CRAFTSMAN,
+  toolmaster_gethin: CRAFTSMAN,
+  forgemistress_darva: WOMAN_WORKER,
+  foreman_odell: TOWNSMAN_BROWN,
+  wren_saddleworth: TOWNSMAN_TAN,
+  stable_master_wren: TOWNSMAN_TAN,
+
+  // --- counters and trade ------------------------------------------------------
+  the_merchant: TOWNSMAN_TAN,
+  trader_wilkes: ELDER_BROWN,
+  interior_merchant: TOWNSMAN_TAN,
+  provisioner_hale: ELDER_BROWN,
+  quartermaster_bree: WOMAN_WORKER,
+  realtor_maribel: WOMAN_GOWN,
+  bursar_fernando: TOWNSMAN_TAN,
+  interior_innkeeper: WOMAN_GOWN,
+  interior_villager: TOWNSMAN_BROWN,
+  card_master: TOWNSMAN_TAN,
+
+  // --- remedies and rites ------------------------------------------------------
+  apothecary_lin: WOMAN_HOODED,
+  herbalist_yara: WOMAN_WORKER,
+  alchemist_sable: WOMAN_HOODED,
+  spirit_healer: WOMAN_GOWN,
+  brother_halven: ELDER_WHITE,
+  brother_halven_marsh: ELDER_WHITE,
+  cainhurst_sage: ELDER_WHITE,
+  loremaster_caddis: ELDER_WHITE,
+
+  // --- records -----------------------------------------------------------------
+  chronicler_saul: ELDER_BROWN,
+  chronicler_osric_fenn: ELDER_WHITE,
+  chronicler_edda_hartwell: WOMAN_HOODED,
+
+  // --- road, water and boundary ------------------------------------------------
+  huntress_verr: WOMAN_SCOUT,
+  scout_maren: WOMAN_SCOUT,
+  scout_maren_highwatch: WOMAN_SCOUT,
+  tidewatcher_ondrel: TOWNSMAN_BROWN,
+  fisherman_brandt: TOWNSMAN_BROWN,
+  race_marshal_pip: TOWNSMAN_TAN,
+  groundskeeper_bram: ELDER_BROWN,
 
   // --- Eastbrook townsfolk -----------------------------------------------------
-  forgemistress_darva: 'realm_infernal_human_iron_warden',
-  weaver_ottilie: 'realm_infernal_human_hooded_wanderer',
-  toolmaster_gethin: 'realm_infernal_human_iron_warden',
-  cook_marlow: 'realm_infernal_human_weathered_elder',
-  tanner_briggs: 'realm_infernal_human_hooded_wanderer',
-  alchemist_sable: 'realm_infernal_human_hooded_wanderer',
-  card_master: 'realm_infernal_human_hooded_wanderer',
-  chronicler_saul: 'realm_infernal_human_weathered_elder',
-  chronicler_osric_fenn: 'realm_infernal_human_weathered_elder',
-  chronicler_edda_hartwell: 'realm_infernal_human_weathered_elder',
-  wren_saddleworth: 'realm_infernal_human_iron_warden',
+  weaver_ottilie: WOMAN_HOODED,
+  cook_marlow: WOMAN_WORKER,
+  tanner_briggs: TOWNSMAN_BROWN,
 };
 
 const OPPONENT_KEYS = ['hellmaw_cursed_knight_body', 'hellmaw_sigilbound_body'] as const;
@@ -212,12 +218,13 @@ function stablePick<T extends string>(value: string, keys: readonly T[]): T {
   return best;
 }
 
-export function infernalNpcVisualKey(templateId: string): InfernalHumanVisualKey {
-  // was veil_adept, whose right arm never moves
-  if (templateId.startsWith('brother_aldric')) return 'realm_infernal_human_hooded_wanderer';
+export function infernalNpcVisualKey(templateId: string): TownBodyKey {
+  // Brother Aldric recurs in every hub under suffixed ids and must stay one
+  // recognisable man rather than re-rolling per hub.
+  if (templateId.startsWith('brother_aldric')) return ELDER_WHITE;
   return (
     NPC_ROLE_VISUALS[templateId] ??
-    stablePick(templateId, INFERNAL_HUMAN_VISUAL_KEYS)
+    stablePick(templateId, CIVILIAN_VISUAL_KEYS)
   );
 }
 

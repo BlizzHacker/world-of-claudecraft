@@ -81,11 +81,13 @@ describe('character visual manifest', () => {
     expect(visualKeyFor({ kind: 'mob', templateId: 'mire_prowler' } as never)).toMatch(
       /^realm_infernal_/,
     );
+    // Both the pinned official and an unpinned id land on a real townsperson
+    // from the civilian bank that replaced the condemned one.
     expect(visualKeyFor({ kind: 'npc', templateId: 'warden_fenwick' } as never)).toMatch(
-      /^realm_infernal_human_/,
+      /^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/,
     );
     expect(visualKeyFor({ kind: 'npc', templateId: 'unlisted_infernal_npc' } as never)).toMatch(
-      /^realm_infernal_human_/,
+      /^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/,
     );
     setRealmHostEnv(null);
   });
@@ -126,61 +128,58 @@ describe('character visual manifest', () => {
       'a_future_cryptic_civilian',
     ];
     const npcKeys = npcIds.map((templateId) => visualKeyFor({ kind: 'npc', templateId } as never));
-    // Was 6. The 2026-08-08 render audit cut the civilian rotation to the three
-    // bodies whose limbs actually animate (see INFERNAL_DEFECTIVE_BODY_KEYS).
-    // RAISE THIS BACK as bodies are repaired.
-    expect(new Set(npcKeys).size).toBeGreaterThanOrEqual(3);
+    // RAISED BACK from 3. The condemned bank is gone and the civilian rotation
+    // is eight real townspeople; see docs/condemned-body-bank.md.
+    expect(new Set(npcKeys).size).toBeGreaterThanOrEqual(5);
     for (const key of npcKeys) {
-      expect(key).toMatch(/^realm_infernal_human_/);
+      expect(key).toMatch(/^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/);
       expect(key).not.toMatch(/bone_herald|npc_|elf|orc|demon/i);
     }
     setRealmHostEnv(null);
   });
 
-  it('drives both curated Infernal humanoid banks through complete semantic clip packs', () => {
-    const npcKeys = Object.keys(VISUALS).filter(
-      (key) => key.startsWith('realm_infernal_human_') && key !== 'realm_infernal_durance_humanoid',
-    );
+  it('drives the curated body banks through complete semantic clip packs', () => {
+    // The CONDEMNED bank used to be the other half of this test. It is gone
+    // (docs/condemned-body-bank.md), so what is checked now is the CIVILIAN
+    // bank that replaced it plus the class bank, which was never condemned.
+    const npcKeys = [
+      'realm_crypticrealm_village_elder_white_robe_019521ee',
+      'realm_crypticrealm_village_elder_brown_robe_01952165',
+      'realm_crypticrealm_townsman_tan_trenchcoat_01944c9a5744',
+      'realm_crypticrealm_townsman_brown_trenchcoat_01944c9abf1e',
+      'realm_crypticrealm_town_guard_female_armored_019875c0',
+      'realm_crypticrealm_craftsman_warrior_monk_019ee5e1',
+      'realm_crypticrealm_townswoman_practical_monk_f',
+      'realm_crypticrealm_townswoman_robed_priest_f',
+      'realm_crypticrealm_townswoman_hooded_mage_f',
+      'realm_crypticrealm_townswoman_hooded_rogue_f',
+    ];
     const classKeys = Object.keys(VISUALS).filter((key) => key.startsWith('realm_infernal_class_'));
-    // npcKeys are the CONDEMNED bank's 18 registrations. They survive only
-    // because infernal_roster.ts still names their keys; when the roster purge
-    // lands (docs/condemned-body-bank.md) this count drops to 0 and BOTH the
-    // length check and the clip-pack loop below go with it. Expect to edit
-    // this test again then - that is planned, not a regression.
-    // 17, not 18: the shirtless-monk registration was deleted on 2026-08-17 for
-    // indecency (see infernal_roster.ts). The rest go when the roster purge lands.
-    expect(npcKeys).toHaveLength(17);
-    // 18 authored class bodies + the 9 female variants (realm_infernal_class_*_f)
-    // added after this test was written. It expected 18 and had been red ever
-    // since; the bodies are legitimate, the number was just stale.
     expect(classKeys).toHaveLength(27);
-    // Every key in both banks resolves to its OWN GLB - no two share a url.
-    expect(new Set(npcKeys.map((key) => VISUALS[key].url)).size).toBe(17);
+    // Every civilian is registered and resolves to its OWN GLB - no two share a url.
+    for (const key of npcKeys) expect(VISUALS[key], key).toBeTruthy();
+    expect(new Set(npcKeys.map((key) => VISUALS[key].url)).size).toBe(npcKeys.length);
     expect(new Set(classKeys.map((key) => VISUALS[key].url)).size).toBe(27);
-    expect(new Set([...npcKeys, ...classKeys].map((key) => VISUALS[key].url)).size).toBe(44);
+    // 10 civilians + 27 class bodies, every one a distinct GLB.
+    expect(new Set([...npcKeys, ...classKeys].map((key) => VISUALS[key].url)).size).toBe(
+      npcKeys.length + classKeys.length,
+    );
+    // Both banks must drive a COMPLETE semantic pack. The two rig families name
+    // the same slots differently - meshy24 carries Idle/Walk/Run/Attack/Cast/
+    // Hit/Death/Jump, KayKit mass_rig23 carries Idle/Walking_A/Running_A/
+    // 1H_Melee_Attack_Chop/Spellcasting/Hit_A/Death_A/Jump_Idle - so this pins
+    // that every slot is BOUND and leaves the clip NAME to the family. Pinning
+    // names here is what made this test rot every time a body was added.
     for (const key of [...npcKeys, ...classKeys]) {
       const clips = VISUALS[key].clips;
-      expect(clips.idle).toBe('Idle');
-      expect(clips.walk).toBe('Walk');
-      expect(clips.run).toBe('Run');
-      // These were `toEqual(['Attack'])` / `toEqual(['Hit'])`, i.e. that the
-      // semantic slot held EXACTLY one clip. The female class bodies bind the
-      // shared meshy clip bank, which fills the same slots with a richer
-      // vocabulary (Attack_Spin, Attack_Combo, the 1H_Melee swings...). The
-      // point of this test is that the pack is COMPLETE, not that it is minimal,
-      // so require the canonical clip to be present and allow extras.
-      expect(clips.attack).toContain('Attack');
-      expect(clips.cast).toBe('Cast');
-      expect(clips.hit).toContain('Hit');
-      expect(clips.death).toBe('Death');
-      // 'Jump' on the meshy24 bodies, 'Jump_Idle' in the KayKit mass-rig-23
-      // vocabulary the newer bodies bake. The slot must be BOUND; the clip name
-      // is the skeleton family's business.
-      expect(clips.jump).toMatch(/^Jump/);
-      // Emote clip NAMES differ by skeleton family - meshy24 bodies carry
-      // 'Wave'/'Taunt', the KayKit mass-rig-23 bodies carry 'Emote_Wave'/'Cheer'.
-      // What this test is actually for is that the emote slots are BOUND, so
-      // assert that and leave the naming to the family.
+      expect(clips.idle, `${key} idle`).toBeTruthy();
+      expect(clips.walk, `${key} walk`).toMatch(/^Walk/);
+      expect(clips.run, `${key} run`).toMatch(/^Run/);
+      expect(clips.attack?.length, `${key} attack`).toBeGreaterThan(0);
+      expect(clips.cast, `${key} cast`).toBeTruthy();
+      expect(clips.hit?.length, `${key} hit`).toBeGreaterThan(0);
+      expect(clips.death, `${key} death`).toBeTruthy();
+      expect(clips.jump, `${key} jump`).toMatch(/^Jump|^Basic_Jump/);
       expect(clips.emote?.wave?.clips?.length, `${key} wave`).toBeGreaterThan(0);
       expect(clips.emote?.cheer?.clips?.length, `${key} cheer`).toBeGreaterThan(0);
     }
