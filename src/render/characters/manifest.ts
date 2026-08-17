@@ -1519,6 +1519,104 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     }),
     lazyPreload: true,
   },
+  // --- Cryptic Realm class bodies -----------------------------------------
+  // The first bodies the crypticrealm class cards get that were authored FOR
+  // this realm instead of borrowed from infernal/arcane. meshy24, same rig and
+  // same wiring as the four townswomen above.
+  //
+  // Registered BY HAND for the same reason they are: MESHY_RIGGED_GENERATED is
+  // /^realm_infernal_/, so generatedVisualCorrections() silently skips every
+  // realm_crypticrealm_ body. Left to the pattern these five would ship with no
+  // idle, no death and no emotes.
+  //
+  // Each carries Walk/Run from the Meshy merge plus an Idle retargeted from
+  // hero_amazon's authored standing take (rotations only, world-delta retarget:
+  // a retargeted rest frame reproduces THIS body's rest pose, not the donor's).
+  // That baked Idle is load-bearing - the shared bank has no clip named 'Idle'
+  // at all, and its Idle_Alt_* takes are lookaround gestures that render
+  // hunched, so the /^idle/i resolver would otherwise mount one as the standing
+  // pose. `death` is passed through by withMeshyBank rather than filled, so
+  // every entry names the bank's Death_A explicitly.
+  //
+  // Scale channels: these five were merged BEFORE 2b2856629e, so they arrived
+  // carrying the donor's scale channels (48 each, all pinned at 1.0 over a unit
+  // rest pose - inert, but the shape of the body-resize bug). All 240 were
+  // stripped before install; every clip here is rotation + translation only.
+  realm_crypticrealm_rune_warden: {
+    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_rune_warden.glb`,
+    height: HUMANOID_H,
+    animUrls: [MESHY_CLIP_BANK_URL],
+    autoClip: true,
+    // class:warrior - black horned plate, rune medallions, red visor. Empty hands.
+    clips: withMeshyBank({
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: [],
+      death: 'Death_A',
+    }),
+    lazyPreload: true,
+  },
+  realm_crypticrealm_gargoyle_oathsworn: {
+    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_gargoyle_oathsworn.glb`,
+    height: HUMANOID_H,
+    animUrls: [MESHY_CLIP_BANK_URL],
+    autoClip: true,
+    // class:paladin - winged stone construct. NOT humanoid-proportioned (digitigrade, tailed, winged), so the bank's humanoid takes are the risk flagged in clip_vocab.ts; verified on a motion sheet, not on channel counts.
+    clips: withMeshyBank({
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: [],
+      death: 'Death_A',
+    }),
+    lazyPreload: true,
+  },
+  realm_crypticrealm_gravecaller: {
+    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_gravecaller.glb`,
+    height: HUMANOID_H,
+    animUrls: [MESHY_CLIP_BANK_URL],
+    autoClip: true,
+    // class:warlock - hooded grave shroud, bone charms. Empty hands.
+    clips: withMeshyBank({
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: [],
+      death: 'Death_A',
+    }),
+    lazyPreload: true,
+  },
+  realm_crypticrealm_oracle: {
+    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_oracle.glb`,
+    height: HUMANOID_H,
+    animUrls: [MESHY_CLIP_BANK_URL],
+    autoClip: true,
+    // class:priest - pale veiled seer, red eyes. Barefoot by design. Empty hands.
+    clips: withMeshyBank({
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: [],
+      death: 'Death_A',
+    }),
+    lazyPreload: true,
+  },
+  realm_crypticrealm_void_seer: {
+    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_void_seer.glb`,
+    height: HUMANOID_H,
+    animUrls: [MESHY_CLIP_BANK_URL],
+    autoClip: true,
+    // class:mage - dark robed figure. Empty hands.
+    clips: withMeshyBank({
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: [],
+      death: 'Death_A',
+    }),
+    lazyPreload: true,
+  },
   // DuranceTester is always the armored human Warrior body, never a demon.
   // Character identity, house ownership, inventory, and persistence are not
   // changed by this presentation-only override.
