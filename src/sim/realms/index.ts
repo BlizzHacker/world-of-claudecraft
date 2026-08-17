@@ -43,10 +43,12 @@ export {
   HOME_REALM_LIST,
   isCrossRealm,
   isRealmId,
+  offlineRealmPick,
   persistActiveRealm,
   REALM_LIST,
   REALMS,
   resolveActiveRealmId,
+  setActiveRealmForOffline,
 } from './registry';
 export type { RealmStage, StageMeta } from './stages';
 export {

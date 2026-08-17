@@ -1285,6 +1285,12 @@
                   <input id="char-name" maxlength="16" data-i18n-placeholder="auth.characterNamePlaceholder" placeholder="Character name" value="" aria-describedby="offline-error" autocomplete="off" />
                   <div id="offline-error" class="auth-error" aria-live="polite"></div>
                 </div>
+                <!-- Offline realm pick: cards render from the client-side realm
+                     registry (main.ts renderOfflineRealmCards), so the picker
+                     works with zero connectivity. Realm names/taglines are realm
+                     content and intentionally untranslated (theme_select.ts
+                     precedent), hence no data-i18n here. -->
+                <div id="offline-realm-row" class="offline-realm-row" role="radiogroup" aria-label="Realm"></div>
                 <div class="mini-class-row">
                   <button type="button" class="mini-class" data-class="warrior" data-i18n-aria="classes.warriorAria" data-i18n="classes.warrior" aria-label="Warrior class" aria-pressed="false">Warrior</button>
                   <button type="button" class="mini-class" data-class="paladin" data-i18n-aria="classes.paladinAria" data-i18n="classes.paladin" aria-label="Paladin class" aria-pressed="false">Paladin</button>

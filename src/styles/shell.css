@@ -2743,6 +2743,61 @@
     box-shadow: 0 0 10px var(--class-color);
   }
 
+  /* Offline realm picker: sibling row to .mini-class-row above it. Same chip
+     language (border/glow follows the pick), but each card carries its realm's
+     accent (--realm-color, set inline from RealmContent.accentHex) and a
+     preview-gradient swatch, so the row reads as "pick a universe". */
+  .offline-realm-row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    margin-bottom: var(--spacing-md);
+  }
+  .offline-realm-card {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    text-align: left;
+    padding: 7px 8px;
+    border: 2px solid var(--color-border-default);
+    border-radius: 5px;
+    cursor: var(--cursor-point);
+    font-size: 11px;
+    color: var(--color-text-muted);
+    background: #15151f;
+    font-family: var(--font-heading);
+    transition:
+      border-color var(--transition-speed),
+      color var(--transition-speed),
+      box-shadow var(--transition-speed);
+  }
+  .offline-realm-card:hover,
+  .offline-realm-card:focus-visible {
+    border-color: var(--realm-color, var(--color-primary));
+    color: var(--color-text-light);
+    box-shadow: 0 0 8px var(--color-primary-glow);
+    outline: none;
+  }
+  .offline-realm-card.sel {
+    border-color: var(--realm-color, var(--color-primary));
+    color: #fff;
+    box-shadow: 0 0 10px var(--realm-color, var(--color-primary));
+  }
+  .offline-realm-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex: none;
+    box-shadow: inset 0 0 0 1px #0006;
+  }
+  .offline-realm-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   /* WoW-style full-screen character screens (the offline panel plus the two
      online panels carry the cs-wow class). Desktop only: below 861px the
      classic card layout above stays, and the ONLINE panels additionally keep

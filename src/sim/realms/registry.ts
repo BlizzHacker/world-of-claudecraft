@@ -99,7 +99,38 @@ export function realmHostEnv(): RealmHostEnv | null {
   return hostEnv;
 }
 
+// ---------------------------------------------------------------------------
+// Offline realm pick.
+//
+// The offline lane boots ANY realm's full experience from ANY origin — the hub
+// included — with no game-server session behind it. Origin resolution
+// (hostRealmId below) exists to keep an ONLINE client consistent with the
+// server process its host fronts; an offline session has no such process, so
+// the player's explicit pick must outrank every weaker source, the origin
+// included. Deliberately session-scoped module state, never persisted: leaving
+// a world reloads the page (which resets it), and the offline UI clears it on
+// Back / entering the online flow, so an online session can never resolve
+// through a stale offline pick.
+let offlineRealmOverride: RealmId | null = null;
+
+/** Install (or clear, with null) the offline session's realm context. Must be
+ *  set BEFORE the world is built and the realm visual overrides are installed:
+ *  everything realm-derived (world theme, waypoints, bodies, lore overlay,
+ *  branding, loading art, music) resolves through resolveActiveRealmId. */
+export function setActiveRealmForOffline(id: RealmId | null): void {
+  offlineRealmOverride = id;
+}
+
+/** The offline session's picked realm, or null when no offline pick is live. */
+export function offlineRealmPick(): RealmId | null {
+  return offlineRealmOverride;
+}
+
 export function resolveActiveRealmId(): RealmId {
+  // The offline pick is the player's most recent, most explicit choice — and
+  // on a realm host nothing weaker (storage) could out-vote the origin, so an
+  // override slot is the only way the hub can boot another realm offline.
+  if (offlineRealmOverride) return offlineRealmOverride;
   try {
     if (hostEnv) {
       const q = hostEnv.queryParam('realm');

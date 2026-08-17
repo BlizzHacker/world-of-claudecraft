@@ -415,6 +415,7 @@ import {
   refreshPortraits,
 } from './ui/portrait_chip';
 import { hideReconnectOverlay, showReconnectOverlay } from './ui/reconnect_overlay';
+import { rovingTarget } from './ui/roving_index';
 import { createSpectateBadge } from './ui/spectate_badge';
 import { refreshStartSkinPickerPortraits } from './ui/start_skin_picker_portraits';
 import { refreshSteamLinkStatus, wireSteamLink } from './ui/steam_link';
@@ -444,11 +445,16 @@ import './ui/cryptic/realm_env';
 import { crypticMusic } from './game/cryptic_music';
 import { mountXboxEnv } from './game/xbox_env';
 import {
+  DEFAULT_REALM,
   getActiveRealm,
   getRealm,
+  HOME_REALM_LIST,
   isRealmId,
   persistActiveRealm,
   type RealmContent,
+  type RealmId,
+  resolveActiveRealmId,
+  setActiveRealmForOffline,
 } from './sim/realms';
 import { mountBestiary } from './ui/cryptic/bestiary';
 import { mountRealmBranding } from './ui/cryptic/branding';
@@ -5293,13 +5299,26 @@ async function startOffline(
   skin = 0,
   world?: WorldContent,
   seedOverride?: number,
+  realmId?: RealmId,
 ): Promise<void> {
+  // The picked realm IS this offline session's active realm context. Install
+  // it before ANYTHING realm-derived runs: the loading art, the themed world
+  // (getActiveWorldContent), the Sim's waypoints, the lore/branding overlays
+  // and the body overrides all resolve through resolveActiveRealmId(), and the
+  // override is the only source that outranks the origin — which is what lets
+  // the hub (or any realm's domain) boot any other realm offline. The picker
+  // UI normally installed it at card-select time already; this re-install
+  // covers callers that pass a realm without ever showing the picker. Cleared
+  // by the offline UI on Back/online; a world exit reloads the page.
+  if (realmId) setActiveRealmForOffline(realmId);
   if (!(await prepareWorldEntry())) return;
   enterLoadingState(t('loading.world'));
   // Offline is a rendering lane, not a disconnected one: the page came from the
   // web, so the published realm bodies load here too (cached fetch; the
   // localStorage fallback serves it even through a server blip). Without this
   // the offline player and every NPC render modular KayKit on themed realms.
+  // With the offline override installed, getActiveRealm() IS the picked realm,
+  // so the hub origin fetches (say) infernal's document here.
   await ensureRealmVisualOverridesLoaded(getActiveRealm().id).catch(() => false);
   // Editor play-test: route terrain + props at the custom world too (the renderer
   // reaches it by module global), in addition to the Sim reading cfg.world.
@@ -5325,6 +5344,19 @@ async function startOffline(
     world,
   });
   sim.setPlayerSkin(sim.playerId, skin);
+  // The authored look IS the offline character's appearance: stamp its gender
+  // onto the player entity so the realm-body resolver
+  // (overrideVisualKeyForEntity) picks the sex-suffixed realm body
+  // (class:<cls>:f) exactly as the creator preview promised. Online the server
+  // compiles the choice into the character; offline nothing else carries it.
+  // Render-only state: the offline save never serializes entities.
+  {
+    const me = sim.entities.get(sim.playerId);
+    if (me) {
+      (me as unknown as { modularAppearance?: { gender?: 'male' | 'female' } }).modularAppearance =
+        { gender: modularAppearance.gender === 'female' ? 'female' : 'male' };
+    }
+  }
   if (!world && seedOverride === undefined) {
     stopOfflineAutosave?.();
     stopOfflineAutosave = mountOfflineAutosave(sim, playerClass, name);
@@ -11084,6 +11116,9 @@ function wireStartScreens(): void {
   );
 
   const resumeOnlineSession = async (): Promise<void> => {
+    // Same guard as handleOnlineSelect: a resumed online session must resolve
+    // the origin's realm, never a leftover offline pick.
+    setActiveRealmForOffline(null);
     if (!api.token && !hydrateApiFromSavedSession()) {
       show('#login-panel');
       return;
@@ -11146,6 +11181,9 @@ function wireStartScreens(): void {
   };
 
   const handleOnlineSelect = () => {
+    // Belt-and-braces: an online session must never resolve through a stale
+    // offline realm pick (Back already cleared it on the normal path).
+    setActiveRealmForOffline(null);
     if (api.token || hydrateApiFromSavedSession()) {
       goToLoggedInPlay();
       return;
@@ -11157,6 +11195,142 @@ function wireStartScreens(): void {
     // via the worldofclaudecraft://desktop-login deep link (onLoginCode ->
     // completeDesktopAppLogin).
     show('#login-panel');
+  };
+
+  // --- Offline realm picker -------------------------------------------------
+  // The offline lane boots ANY realm's full experience from ANY origin (the
+  // hub included): themed world, lore overlay/branding, published bodies. The
+  // cards render from the client-side registry (HOME_REALM_LIST), never the
+  // online directory, so the picker works with zero connectivity. Picking a
+  // card installs the registry's offline realm override
+  // (setActiveRealmForOffline) IMMEDIATELY — not at Enter World — so every
+  // realm-derived surface already on screen (class details, the turntable
+  // bodies, page branding, the skin row's realm-body gate) re-reads the pick,
+  // and startOffline's world build + override load inherit it. Back / the
+  // online flow clear it, so an online session never resolves a stale pick.
+  const offlineRealmRow = $('#offline-realm-row') as HTMLElement | null;
+  let offlineRealmId: RealmId = (() => {
+    const id = resolveActiveRealmId();
+    // A cross-realm hub (exchange) is not a home: characters visit, they
+    // don't live there — the flagship realm stands in as the default pick.
+    return HOME_REALM_LIST.some((r) => r.id === id) ? id : DEFAULT_REALM;
+  })();
+
+  const syncOfflineRealmCards = (): void => {
+    if (!offlineRealmRow) return;
+    offlineRealmRow.querySelectorAll<HTMLElement>('.offline-realm-card').forEach((card) => {
+      const selected = card.dataset.realm === offlineRealmId;
+      card.classList.toggle('sel', selected);
+      card.setAttribute('aria-checked', selected ? 'true' : 'false');
+      // Roving tabindex: the group is ONE tab stop (the selected card); arrows
+      // move within it. Matches the options/talents pad-nav contract, so the
+      // Xbox shell's synthesized key events drive it like any other control.
+      card.tabIndex = selected ? 0 : -1;
+    });
+  };
+
+  const applyOfflineRealmPick = (id: RealmId): void => {
+    offlineRealmId = id;
+    setActiveRealmForOffline(id);
+    // The realm CSS theme (page palette) follows the pick like the header
+    // theme-picker's own selections do; cleared/restored on Back.
+    document.documentElement.setAttribute('data-theme', id);
+    // Re-brand every live consumer (branding.ts logos/title, wallet gate) and
+    // re-render the translated DOM: t() resolves the realm catalog overlay +
+    // brand tokens per call, but text already painted stays stale without a
+    // translatePage pass.
+    try {
+      window.dispatchEvent(new CustomEvent('cr-realm-change'));
+    } catch {
+      /* noop */
+    }
+    translatePage();
+    // Warm the picked realm's published bodies now; startOffline awaits the
+    // same memoized load, so this costs one fetch total (localStorage-cached
+    // through server blips).
+    void ensureRealmVisualOverridesLoaded(id).catch(() => false);
+    const selCard = document.querySelector<HTMLElement>('#offline-select .mini-class.sel');
+    const cls = (selCard?.dataset.class as PlayerClass | undefined) ?? 'warrior';
+    currentlyRenderedClass['offline-class-details'] = null;
+    renderClassDetails('offline-class-details', cls);
+    refreshOfflineSkins(cls);
+    updatePreviewContainer('#offline-select');
+    syncOfflineRealmCards();
+  };
+
+  const clearOfflineRealmPick = (): void => {
+    setActiveRealmForOffline(null);
+    // Back on the origin's own realm: restore its theme + branding + copy.
+    document.documentElement.setAttribute('data-theme', resolveActiveRealmId());
+    try {
+      window.dispatchEvent(new CustomEvent('cr-realm-change'));
+    } catch {
+      /* noop */
+    }
+    translatePage();
+  };
+
+  const renderOfflineRealmCards = (): void => {
+    if (!offlineRealmRow) return;
+    if (offlineRealmRow.childElementCount === 0) {
+      for (const realm of HOME_REALM_LIST) {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'offline-realm-card';
+        card.dataset.realm = realm.id;
+        card.setAttribute('role', 'radio');
+        card.setAttribute('aria-label', `${realm.name} — ${realm.tagline}`);
+        card.title = realm.tagline;
+        card.style.setProperty('--realm-color', realm.accentHex);
+        const swatch = document.createElement('span');
+        swatch.className = 'offline-realm-swatch';
+        swatch.style.background = `linear-gradient(135deg, ${realm.previewColors.primary}, ${realm.previewColors.secondary})`;
+        swatch.setAttribute('aria-hidden', 'true');
+        const label = document.createElement('span');
+        label.className = 'offline-realm-name';
+        label.textContent = realm.name;
+        card.append(swatch, label);
+        offlineRealmRow.appendChild(card);
+      }
+      offlineRealmRow.addEventListener('click', (ev) => {
+        const card = (ev.target as HTMLElement | null)?.closest<HTMLElement>('.offline-realm-card');
+        const id = card?.dataset.realm;
+        if (isRealmId(id)) applyOfflineRealmPick(id);
+      });
+      // Pad/keyboard: arrows rove AND select (radio semantics — one dpad press
+      // per realm, no extra commit), Enter/Space select explicitly. Wired as
+      // handlers, not native activation, because the Xbox shell dispatches
+      // synthesized (untrusted) key events that never trigger a <button>'s
+      // built-in Enter behavior — same reason the class chips wire their own.
+      offlineRealmRow.addEventListener('keydown', (ev) => {
+        const e = ev as KeyboardEvent;
+        const cards = Array.from(
+          offlineRealmRow.querySelectorAll<HTMLElement>('.offline-realm-card'),
+        );
+        if (cards.length === 0) return;
+        const focused = cards.indexOf(document.activeElement as HTMLElement);
+        const target = rovingTarget(e.key, Math.max(0, focused), cards.length, 'both');
+        if (target !== null) {
+          e.preventDefault();
+          const next = cards[target];
+          next.focus();
+          const id = next.dataset.realm;
+          if (isRealmId(id)) applyOfflineRealmPick(id);
+          return;
+        }
+        if (e.key === 'Enter' || e.key === ' ') {
+          const card = (e.target as HTMLElement | null)?.closest<HTMLElement>(
+            '.offline-realm-card',
+          );
+          const id = card?.dataset.realm;
+          if (isRealmId(id)) {
+            e.preventDefault();
+            applyOfflineRealmPick(id);
+          }
+        }
+      });
+    }
+    syncOfflineRealmCards();
   };
 
   const handleOfflineStart = (cls: PlayerClass) => {
@@ -11182,7 +11356,14 @@ function wireStartScreens(): void {
 
     // audio/music/sfx init happens in startGame() (runtime-scoped).
     const name = sanitizeOfflineName(rawName);
-    void startOffline(cls, name, selectedSkin('#offline-skin-row', offlineSkin));
+    void startOffline(
+      cls,
+      name,
+      selectedSkin('#offline-skin-row', offlineSkin),
+      undefined,
+      undefined,
+      offlineRealmId,
+    );
   };
 
   const handleOfflineSelect = () => {
@@ -11191,6 +11372,12 @@ function wireStartScreens(): void {
     // since the dropdown option and trigger are also not wired below.
     if (!offlineAvailable) return;
     show('#offline-select');
+
+    // Realm first: the cards render (client registry, offline-safe) and the
+    // current pick's realm context installs before the class default below,
+    // so the warrior details/preview/skins already read the picked realm.
+    renderOfflineRealmCards();
+    applyOfflineRealmPick(offlineRealmId);
 
     // Select warrior by default and render details
     const warriorCard = document.querySelector(
@@ -11529,6 +11716,9 @@ function wireStartScreens(): void {
 
   const offlineBackBtn = $('#btn-offline-back');
   const handleOfflineBack = () => {
+    // Leaving the offline lane: drop the realm override so the menu (and any
+    // online session started after it) resolves the origin's realm again.
+    clearOfflineRealmPick();
     show('#mode-select');
     offlineError.textContent = '';
     offlineNameInput.value = '';
