@@ -147,15 +147,17 @@ describe('character visual manifest', () => {
     // lands (docs/condemned-body-bank.md) this count drops to 0 and BOTH the
     // length check and the clip-pack loop below go with it. Expect to edit
     // this test again then - that is planned, not a regression.
-    expect(npcKeys).toHaveLength(18);
+    // 17, not 18: the shirtless-monk registration was deleted on 2026-08-17 for
+    // indecency (see infernal_roster.ts). The rest go when the roster purge lands.
+    expect(npcKeys).toHaveLength(17);
     // 18 authored class bodies + the 9 female variants (realm_infernal_class_*_f)
     // added after this test was written. It expected 18 and had been red ever
     // since; the bodies are legitimate, the number was just stale.
     expect(classKeys).toHaveLength(27);
     // Every key in both banks resolves to its OWN GLB - no two share a url.
-    expect(new Set(npcKeys.map((key) => VISUALS[key].url)).size).toBe(18);
+    expect(new Set(npcKeys.map((key) => VISUALS[key].url)).size).toBe(17);
     expect(new Set(classKeys.map((key) => VISUALS[key].url)).size).toBe(27);
-    expect(new Set([...npcKeys, ...classKeys].map((key) => VISUALS[key].url)).size).toBe(45);
+    expect(new Set([...npcKeys, ...classKeys].map((key) => VISUALS[key].url)).size).toBe(44);
     for (const key of [...npcKeys, ...classKeys]) {
       const clips = VISUALS[key].clips;
       expect(clips.idle).toBe('Idle');

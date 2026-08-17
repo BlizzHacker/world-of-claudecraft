@@ -81,8 +81,8 @@ function countOccurrences(rel: string): number {
  * infernal_roster.ts stops naming their keys, or the roster keys dangle.
  */
 const AWAITING_REPLACEMENT: Readonly<Record<string, number>> = {
-  'src/render/characters/infernal_roster.ts': 64,
-  'src/render/characters/manifest.ts': 37,
+  'src/render/characters/infernal_roster.ts': 63,
+  'src/render/characters/manifest.ts': 35,
 };
 
 const WHY = [

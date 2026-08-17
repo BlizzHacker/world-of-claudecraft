@@ -1776,7 +1776,11 @@ describe('Nythraxis raid encounter', () => {
     expect(tank.auras.some((a) => a.id === 'nythraxis_transition_stun')).toBe(false);
     // Brother Aldric renders through the curated Infernal human bank (see
     // infernal_roster.ts) rather than the legacy KayKit npc_aldric body.
-    expect(visualKeyFor(aldric!)).toBe('realm_infernal_human_monk');
+    // Was the shirtless-monk body until 2026-08-17. That body was pulled from
+    // the rotation and de-registered for indecency, so Aldric now falls to the
+    // explicit `brother_aldric` rule in infernalNpcVisualKey instead of the
+    // hash. Still the curated bank, which is what this assertion is for.
+    expect(visualKeyFor(aldric!)).toBe('realm_infernal_human_hooded_wanderer');
   });
 
   it('stuns active Nythraxis adds for the full Aldric transition', () => {

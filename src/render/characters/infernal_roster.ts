@@ -23,9 +23,19 @@ export const INFERNAL_HUMAN_VISUAL_KEYS = [
   'realm_infernal_human_iron_warden',
   'realm_infernal_human_weathered_elder',
   'realm_infernal_human_hooded_wanderer',
-  'realm_infernal_human_monk',
   'realm_infernal_human_assassin',
 ] as const;
+// 2026-08-17: the shirtless-monk body was REMOVED from this rotation, and its
+// manifest registration deleted, so the renderer can no longer reach it at
+// all. It is a modern MMA fighter in gym shorts, and the operator found one of
+// them (Pit Master Grott) walking the Infernal town: "i don't like seeing
+// someone walking around in their underwear". Every template that resolved to
+// it is covered by a published override on both infernal and crypticrealm, but
+// overrides only cover templates that EXIST - leaving the body in this array
+// meant the next NPC added could hash straight back onto it. Taking it out of
+// the rotation closes that. Rendezvous hashing only re-rolls the ids that were
+// using the removed key, and every one of those is overridden, so no other
+// townsperson changes body.
 
 /**
  * Bodies kept registered (an explicit assignment or an operator override can
@@ -110,7 +120,9 @@ const NPC_ROLE_VISUALS: Record<string, InfernalHumanVisualKey> = {
   huntress_verr: 'realm_infernal_human_hooded_wanderer',
   bursar_fernando: 'realm_infernal_human_hooded_wanderer',
   realtor_maribel: 'realm_infernal_human_weathered_elder',
-  pit_master_grott: 'realm_infernal_human_monk',
+  // was monk (the shirtless MMA body). Live he is on a published override
+  // (realm_infernal_hero_demon_hunter); this keeps the compiled fallback legal.
+  pit_master_grott: 'realm_infernal_human_iron_warden',
   race_marshal_pip: 'realm_infernal_human_hooded_wanderer',
   groundskeeper_bram: 'realm_infernal_human_weathered_elder',
   loremaster_caddis: 'realm_infernal_human_hooded_wanderer',

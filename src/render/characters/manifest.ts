@@ -1399,7 +1399,6 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   realm_infernal_human_barbarian: infernalHuman('infernal_human_barbarian.glb', 2.3),
   realm_infernal_human_veil_adept: infernalHuman('infernal_human_veil_adept.glb', 2.2),
   realm_infernal_human_assassin: infernalHuman('infernal_human_assassin.glb', 2.2),
-  realm_infernal_human_monk: infernalHuman('infernal_human_monk.glb', 2.2),
   realm_infernal_human_crusader: infernalHuman('infernal_human_crusader.glb', 2.3),
   realm_infernal_human_spiritborn: infernalHuman('infernal_human_spiritborn.glb', 2.25),
   realm_infernal_human_blood_knight: infernalHuman('infernal_human_blood_knight.glb', 2.25),
