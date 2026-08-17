@@ -5296,6 +5296,11 @@ async function startOffline(
 ): Promise<void> {
   if (!(await prepareWorldEntry())) return;
   enterLoadingState(t('loading.world'));
+  // Offline is a rendering lane, not a disconnected one: the page came from the
+  // web, so the published realm bodies load here too (cached fetch; the
+  // localStorage fallback serves it even through a server blip). Without this
+  // the offline player and every NPC render modular KayKit on themed realms.
+  await ensureRealmVisualOverridesLoaded(getActiveRealm().id).catch(() => false);
   // Editor play-test: route terrain + props at the custom world too (the renderer
   // reaches it by module global), in addition to the Sim reading cfg.world.
   if (world) setActiveWorldContent(world);

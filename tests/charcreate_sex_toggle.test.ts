@@ -66,14 +66,24 @@ describe('charcreate class-card sex toggle', () => {
       gender: 'male',
     });
     expect(VISUALS[maleKey]?.url).toBe(CLASS_URL);
-    // A hero override shadows the suffixed class key when a realmHeroId is
-    // passed - the documented reason the charcreate preview resolves an
-    // explicit pick hero-neutrally.
-    const heroKey = visualKeyForCharacter({
+    // An explicit Female pick outranks the hero body even WITH a realmHeroId:
+    // the creator previews class:<cls>:f, and the world must render the same
+    // or the toggle lies. (This flipped from hero-first when the world path
+    // started threading gender.)
+    const heroFemaleKey = visualKeyForCharacter({
       realm: REALM,
       realmHeroId: 'infernal-hero-warrior',
       cls: 'warrior',
       gender: 'female',
+    });
+    expect(VISUALS[heroFemaleKey]?.url).toBe(FEMALE_URL);
+    // Without a gender the hero body still wins - existing characters with no
+    // appearance choice keep their hero look byte-identical.
+    const heroKey = visualKeyForCharacter({
+      realm: REALM,
+      realmHeroId: 'infernal-hero-warrior',
+      cls: 'warrior',
+      gender: null,
     });
     expect(VISUALS[heroKey]?.url).toBe(HERO_URL);
   });

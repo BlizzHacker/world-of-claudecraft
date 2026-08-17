@@ -3317,6 +3317,16 @@ function overrideEntryForCharacter(
   const map = BODY_OVERRIDES[realm];
   if (!map) return undefined;
   const selection = infernalCharacterSelection(realm, realmHeroId ?? null, cls);
+  // An explicit Female pick outranks the hero body: the creator previews the
+  // sex-suffixed class body hero-neutrally, so the world must render the same
+  // or the toggle is a lie. A published female HERO variant is still the most
+  // specific and wins first; realms without pairs fall through unchanged.
+  if (gender === 'female') {
+    const heroF = selection ? map[`hero:${selection.id}:f`] : undefined;
+    if (heroF) return heroF;
+    const clsF = map[`class:${cls}:f`];
+    if (clsF) return clsF;
+  }
   let entry = selection ? (map[`hero:${selection.id}`] ?? map[`hero:${selection.name}`]) : undefined;
   // A hidden hero variant with no published body of its own falls back to
   // the canonical selection it presents under (e.g. hero:infernal-hero-sorcerer-m
@@ -3326,8 +3336,8 @@ function overrideEntryForCharacter(
   // The appearance editor's Male/Female choice selects the realm body: a
   // sex-suffixed override (class:mage:f) wins over the unsuffixed one, which
   // stays the male/default body so realms without pairs keep working.
-  if (gender) {
-    const suffixed = map[`class:${cls}:${gender === 'female' ? 'f' : 'm'}`];
+  if (gender === 'male') {
+    const suffixed = map[`class:${cls}:m`];
     if (suffixed) return suffixed;
   }
   return map[`class:${cls}`];
@@ -3341,7 +3351,10 @@ export function overrideVisualKeyForEntity(e: Entity): string | null {
   if (!map) return null;
   let entry: BodyOverrideEntry | undefined;
   if (e.kind === 'player') {
-    entry = overrideEntryForCharacter(realm, e.realmHeroId, e.templateId as PlayerClass);
+    const gender =
+      (e as unknown as { modularAppearance?: { gender?: 'male' | 'female' } | null })
+        .modularAppearance?.gender ?? null;
+    entry = overrideEntryForCharacter(realm, e.realmHeroId, e.templateId as PlayerClass, gender);
   } else if (e.kind === 'npc') {
     entry = map[`npc:${e.templateId}`];
   } else if (e.kind === 'mob') {
