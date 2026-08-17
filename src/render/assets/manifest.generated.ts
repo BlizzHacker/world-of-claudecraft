@@ -282,7 +282,7 @@ export const MEDIA_ASSETS: Record<string, string> =
   "models/chars/players/bow_anims.glb": "/media/models/chars/players/bow_anims.11f1982870b3.glb",
   "models/chars/players/bow_hold_anim.glb": "/media/models/chars/players/bow_hold_anim.55a03fd920b3.glb",
   "models/chars/players/druid.glb": "/media/models/chars/players/druid.b1156d55834d.glb",
-  "models/chars/players/knight.glb": "/media/models/chars/players/knight.063f81b53c35.glb",
+  "models/chars/players/knight.glb": "/media/models/chars/players/knight.f0e7f6dc57e1.glb",
   "models/chars/players/mage.glb": "/media/models/chars/players/mage.28bbbc7a04fa.glb",
   "models/chars/players/mage_ability_anims.glb": "/media/models/chars/players/mage_ability_anims.3e6d02173484.glb",
   "models/chars/players/mage_classic.glb": "/media/models/chars/players/mage_classic.2c7dfd4d882e.glb",

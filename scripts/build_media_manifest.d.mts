@@ -21,3 +21,17 @@ export function planMediaDuplicatePrune(
   entries: Record<string, string>,
   hashedCopyExists: (hashedUrl: string) => boolean,
 ): MediaDuplicatePrunePlan;
+
+/** Absolute path of the artifact `generate` writes: src/render/assets/manifest.generated.ts. */
+export const GENERATED_PATH: string;
+
+/**
+ * Hash every media file under public/{models,textures,env,vfx} and map its logical path
+ * to the content-addressed url the bundle requests. This is the single source of the
+ * hashing rules - the guard test compares the committed artifact through it rather than
+ * re-implementing them.
+ */
+export function manifestEntries(): Record<string, string>;
+
+/** The exact file body `generate` writes for those entries. */
+export function renderManifest(entries: Record<string, string>): string;
