@@ -145,6 +145,37 @@ describe('condemned infernal_human_* body bank', () => {
     ).toEqual(AWAITING_REPLACEMENT);
   });
 
+  /**
+   * scripts/ is where the bank actually came back from, and it took a live
+   * deploy to prove it.
+   *
+   * After src/, server/ and the generated tables were clean, the condemned
+   * bodies still reappeared in every stage minutes after being quarantined -
+   * not copied from a surviving mirror (every mirror read zero), but
+   * MANUFACTURED. scripts/build_realm_assets.mjs held an 18-entry
+   * CURATED_INFERNAL_HUMANS table that rebuilt them from the source meshes, and
+   * `assets:realms` runs inside `build:bundle`, so every single build of every
+   * stage recreated the whole bank.
+   *
+   * A ban that stops at src/ is therefore not a ban. This covers scripts/ too.
+   *
+   * scripts/ops/ is exempt BY NECESSITY: the quarantine and sweep tooling has to
+   * name the pattern in order to find the files. That exemption is narrow, and
+   * those tools only ever MOVE the bank out - none of them can produce a body.
+   */
+  it('never appears in scripts/, except the quarantine tooling that must name it', () => {
+    const offenders = walk('scripts', (rel) => SOURCE_EXT.test(rel) || rel.endsWith('.sh'))
+      .filter((rel) => !rel.startsWith('scripts/ops/'))
+      .filter((rel) => countOccurrences(rel) > 0);
+    expect(
+      offenders,
+      `${WHY}\n\nA build recipe or helper in scripts/ names the bank. This is the ` +
+        'route that survived every other check: a script here can REGENERATE the ' +
+        'bodies during a normal build, so the store being clean proves nothing.\n' +
+        'Offending files:',
+    ).toEqual([]);
+  });
+
   // A rebuild recipe is a reintroduction route the string ban cannot see: the
   // source could be spotless while `npm run assets:infernal-rigs` regenerates
   // all 18 GLBs straight back into the store. Both the script and any task that

@@ -67,80 +67,16 @@ const PICKTURA_FORMATS = new Set(
     .filter(Boolean),
 );
 
-export const CURATED_INFERNAL_HUMANS = [
-  {
-    sourceName: '0196e403-d466-7e25-9af0-61b10b968cf3__x__Walking.glb',
-    outputName: 'infernal_human_iron_warden.glb',
-  },
-  {
-    sourceName: '019b7548-998a-7eb1-84f7-9f6f58a8c25a__x__Walking.glb',
-    outputName: 'infernal_human_vanguard.glb',
-  },
-  {
-    sourceName: '01983db1-95e8-79c9-89f9-6f3fb9b618fa__x__Walking.glb',
-    outputName: 'infernal_human_forge_worker.glb',
-  },
-  {
-    sourceName: '0193ef2a-c488-7a92-80d7-88721cea2733__x__Walking.glb',
-    outputName: 'infernal_human_white_sage.glb',
-  },
-  {
-    sourceName: '0193fbb1-8ae7-70c7-b19a-f7d70d481434__x__Walking.glb',
-    outputName: 'infernal_human_tainted_hood.glb',
-  },
-  {
-    sourceName: '01941042-31a3-7674-860a-6d2cbd7ddc89__x__Walking.glb',
-    outputName: 'infernal_human_weathered_elder.glb',
-  },
-  {
-    sourceName: '0194372a-72aa-78d6-b9b7-f2c701b90f98__x__Walking.glb',
-    outputName: 'infernal_human_road_mercenary.glb',
-  },
-  {
-    sourceName: '019f4324-96c3-7112-a909-e3ffa340c077__Iron_Ranger__Walking.glb',
-    outputName: 'infernal_human_iron_ranger.glb',
-  },
-  {
-    sourceName: '0193fba8-bc38-70c6-8650-590af9f5a58a__x__Walking.glb',
-    outputName: 'infernal_human_hooded_wanderer.glb',
-  },
-  {
-    sourceName: '0194089a-19e3-7972-9ede-1dcc4ab02434__x__Walking.glb',
-    outputName: 'infernal_human_hermit.glb',
-  },
-  {
-    sourceName: '0193ef47-c2a1-7a95-acf9-0aa03703e20f__x__Walking.glb',
-    outputName: 'infernal_human_barbarian.glb',
-  },
-  {
-    sourceName: '019b5889-fdb6-7340-a135-73f138ee070b__x__Walking.glb',
-    outputName: 'infernal_human_veil_adept.glb',
-  },
-  {
-    sourceName: '0194621e-1f9e-73e5-84e4-44dd72a21fb9__x__Walking.glb',
-    outputName: 'infernal_human_assassin.glb',
-  },
-  {
-    sourceName: '01943e21-4e36-79bc-82f3-8fda196238db__x__Walking.glb',
-    outputName: 'infernal_human_monk.glb',
-  },
-  {
-    sourceName: '01941871-e476-7751-86e9-81504bcf0bc6__x__Walking.glb',
-    outputName: 'infernal_human_crusader.glb',
-  },
-  {
-    sourceName: '0193ef44-54af-7a95-9cd9-6cb81c84e530__x__Walking.glb',
-    outputName: 'infernal_human_spiritborn.glb',
-  },
-  {
-    sourceName: '0193ea64-4951-7a19-b197-09d50f83908f__x__Walking.glb',
-    outputName: 'infernal_human_blood_knight.glb',
-  },
-  {
-    sourceName: '0193ef07-b83b-7a8d-9b26-71ad9da48f1b__x__Walking.glb',
-    outputName: 'infernal_human_tempest.glb',
-  },
-];
+// CURATED_INFERNAL_HUMANS lived here: an 18-entry table that REBUILT the
+// condemned body bank from the PICKTURA source meshes on every single build,
+// because `assets:realms` is a step inside `build:bundle`. That is why the bank
+// kept reappearing in each stage minutes after being quarantined - it was not
+// being copied from a surviving mirror, it was being MANUFACTURED, one stage at
+// a time, by the deploy's own build.
+//
+// It is removed. See docs/condemned-body-bank.md.
+// tests/condemned_body_bank_guard.test.ts now covers scripts/ as well as src/
+// and server/, so a build recipe cannot reintroduce the bank again.
 
 export const CURATED_INFERNAL_CLASSES = [
   'warrior',
@@ -551,26 +487,7 @@ async function gatherCuratedInfernalHumans() {
   const animatedDir = path.join(PICKTURA_ROOT, 'animated');
   const forgedInfernalDir = path.join(FORGED_DIR, 'infernal');
   const curated = [];
-  for (const asset of CURATED_INFERNAL_HUMANS) {
-    const mergedPath = path.join(forgedInfernalDir, asset.outputName);
-    const mergedStat = await fs.stat(mergedPath).catch(() => null);
-    const sourcePath = mergedStat?.isFile() ? mergedPath : path.join(animatedDir, asset.sourceName);
-    const stat = await fs.stat(sourcePath).catch(() => null);
-    if (!stat?.isFile()) continue;
-    curated.push({
-      source: 'approved-asset',
-      realmId: 'infernal',
-      sourcePath,
-      sourceName: asset.sourceName,
-      outputName: asset.outputName,
-      sourceRelative: `PICKTURA/animated/${asset.sourceName}`,
-      size: stat.size,
-      kind: 'character',
-      license: 'approved-local',
-      author: 'PICKTURA',
-      action: mergedStat?.isFile() ? 'Full animation pack' : 'Walking',
-    });
-  }
+  // The condemned-bank loop was here; see the note above.
   for (const asset of INFERNAL_BIPED_ACTIONS) {
     const sourceName = `${INFERNAL_BIPED_DONOR}__x__${asset.action}_armature.glb`;
     const sourcePath = path.join(animatedDir, sourceName);
