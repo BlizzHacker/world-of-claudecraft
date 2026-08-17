@@ -352,11 +352,46 @@ describe('realm visual target catalog', () => {
     expect(targets.some((target) => target.key.startsWith('mob:'))).toBe(true);
   });
 
-  it('does not leak Infernal faction choices into other realms', () => {
-    expect(
-      realmVisualTargets('crypticrealm').targets.some(
-        (target) => target.section === 'Faction characters',
-      ),
-    ).toBe(false);
+  // This asserted that crypticrealm has NO 'Faction characters' section at all,
+  // which was the wrong invariant and would have been the wrong fix. The catalog
+  // was never handing other realms INFERNAL's heroes: every realm gets its own
+  // roster (crypticrealm gets Cipherblade and Runewarden, classic gets Ironbrand
+  // Champion). Deleting the section would have stranded twelve crypticrealm hero
+  // targets that already carry published body overrides.
+  //
+  // What actually leaked was the faction NAME - every realm's heroes were
+  // labelled with Infernal's own two factions. That is what these pin.
+  it('gives every realm its OWN faction characters, never Infernal\'s', () => {
+    const cryptic = realmVisualTargets('crypticrealm').targets.filter(
+      (target) => target.section === 'Faction characters',
+    );
+    expect(cryptic.length).toBeGreaterThan(0);
+    // Crypticrealm's own roster ids, not Infernal's.
+    expect(cryptic.some((t) => t.key === 'hero:cipherblade')).toBe(true);
+    expect(cryptic.some((t) => t.key.startsWith('hero:infernal-'))).toBe(false);
+  });
+
+  it('never labels another realm with an Infernal faction name', () => {
+    const INFERNAL_NAMES = ['Heavenly Host', 'Ashen Court'];
+    for (const realm of ['crypticrealm', 'classic', 'arcane', 'arcadevoid', 'dominion', 'fps']) {
+      for (const target of realmVisualTargets(realm).targets) {
+        if (target.section !== 'Faction characters') continue;
+        for (const name of INFERNAL_NAMES) {
+          expect(target.label.endsWith(`— ${name}`), `${realm}: ${target.label}`).toBe(false);
+        }
+      }
+    }
+  });
+
+  // Infernal's own selections are authored and their factionSide is real, so it
+  // KEEPS those names. Deriving them from the class registry instead relabels
+  // its Heavenly Host warrior "Abyssal Legion", which is how this was first got
+  // wrong: the class map answers "who fields warriors", not "whose side is he".
+  it('keeps Infernal on its own authored faction names', () => {
+    const infernal = realmVisualTargets('infernal').targets.filter(
+      (target) => target.section === 'Faction characters',
+    );
+    const warrior = infernal.find((t) => t.key === 'hero:infernal-hero-warrior');
+    expect(warrior?.label).toBe('Warrior — Heavenly Host');
   });
 });

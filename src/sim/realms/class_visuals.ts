@@ -54,10 +54,14 @@ const REALM_CLASS_VISUALS: Partial<
   //
   // These are the RUNTIME keys and they are kept in step with the compiled card
   // bodies in ui/cryptic/realm_class_presentation.ts, so the create screen and
-  // the world agree for a player who has no published override. Six of the nine
-  // are additionally published as `class:*` overrides, which win over both.
+  // the world agree for a player who has no published override.
   //
-  // The three marked GAP are placeholders held until their real bodies land.
+  // STATUS 2026-08-17: the operator reviewed the six published class bodies and
+  // REJECTED FIVE - only hunter (Crypt Stalker) survived. Eight of these nine are
+  // therefore PLACEHOLDERS awaiting generated bodies, not endorsed choices, and
+  // the approved catalog is spent for this realm - do not swap in another pool
+  // body, that is what produced the rejections. See the status table in
+  // realm_class_presentation.ts and docs/condemned-body-bank.md.
   crypticrealm: {
     warrior: 'realm_infernal_hero_dark_paladin',
     paladin: 'realm_infernal_evil_warlord_armor_made_0196a156', // GAP: Gargoyle Oathsworn

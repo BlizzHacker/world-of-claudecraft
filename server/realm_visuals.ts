@@ -5,6 +5,8 @@
 
 import type http from 'node:http';
 import { CLASSES, MOBS, NPCS } from '../src/sim/data';
+import { factionForRealmClass } from '../src/sim/realms/factions';
+import type { RealmId } from '../src/sim/realms/types';
 import { infernalCharacterSelectionsForRealm } from '../src/sim/realms/infernal_classes';
 import { ALL_CLASSES } from '../src/sim/types';
 import type { AdminPermission } from './admin_permissions';
@@ -134,13 +136,41 @@ export function realmVisualTargets(realmInput: string): {
   targets: RealmVisualTarget[];
 } {
   const realm = validRealm(realmInput);
+  // Every realm's faction characters come from ITS OWN roster - crypticrealm
+  // gets Cipherblade and Runewarden, classic gets Ironbrand Champion, and so on
+  // (infernalCharacterSelectionsForRealm falls through to rosterSelectionsFor
+  // for any realm but Infernal). What used to be wrong was only the LABEL: the
+  // faction name was hardcoded to Infernal's own two, so the editor announced
+  // every realm's heroes as "Heavenly Host" / "Ashen Court". That is six realms,
+  // not just crypticrealm.
+  //
+  // The real name comes from the canonical faction registry, matched on the
+  // selection's engine class - the same lookup the creator screen uses, so the
+  // editor now says what the operator sees on the card (Rune Court, Gravebound,
+  // Voidbound, Ciphered). `factionSide` stays as-is: it is the two-value styling
+  // hint, not a name, and the admin UI groups on it.
   const heroes: RealmVisualTarget[] = infernalCharacterSelectionsForRealm(realm).map(
-    (selection) => ({
-      key: `hero:${selection.id}`,
-      label: `${selection.name} — ${selection.factionSide === 'hell' ? 'Ashen Court' : 'Heavenly Host'}`,
-      section: 'Faction characters',
-      faction: selection.factionSide,
-    }),
+    (selection) => {
+      // Infernal's selections are AUTHORED and their factionSide is real: a
+      // Heavenly Host warrior is genuinely Heavenly Host. Deriving its name from
+      // the class registry instead would relabel that warrior "Abyssal Legion",
+      // because the class map answers "which faction fields warriors", not
+      // "which side is this character on". So Infernal keeps the side mapping.
+      //
+      // Every other realm's selections come from a generated roster, where
+      // rosterSelectionsFor() folds the real faction away into heaven/hell purely
+      // by array index - there the side carries no meaning and the class registry
+      // is the only real name available.
+      const named =
+        realm === 'infernal' ? null : factionForRealmClass(realm as RealmId, selection.engineClass);
+      const side = selection.factionSide === 'hell' ? 'Ashen Court' : 'Heavenly Host';
+      return {
+        key: `hero:${selection.id}`,
+        label: `${selection.name} — ${named?.name ?? side}`,
+        section: 'Faction characters' as const,
+        faction: selection.factionSide,
+      };
+    },
   );
   const classes: RealmVisualTarget[] = ALL_CLASSES.map((classId) => ({
     key: `class:${classId}`,

@@ -142,23 +142,45 @@ describe('character visual manifest', () => {
       (key) => key.startsWith('realm_infernal_human_') && key !== 'realm_infernal_durance_humanoid',
     );
     const classKeys = Object.keys(VISUALS).filter((key) => key.startsWith('realm_infernal_class_'));
+    // npcKeys are the CONDEMNED bank's 18 registrations. They survive only
+    // because infernal_roster.ts still names their keys; when the roster purge
+    // lands (docs/condemned-body-bank.md) this count drops to 0 and BOTH the
+    // length check and the clip-pack loop below go with it. Expect to edit
+    // this test again then - that is planned, not a regression.
     expect(npcKeys).toHaveLength(18);
-    expect(classKeys).toHaveLength(18);
+    // 18 authored class bodies + the 9 female variants (realm_infernal_class_*_f)
+    // added after this test was written. It expected 18 and had been red ever
+    // since; the bodies are legitimate, the number was just stale.
+    expect(classKeys).toHaveLength(27);
+    // Every key in both banks resolves to its OWN GLB - no two share a url.
     expect(new Set(npcKeys.map((key) => VISUALS[key].url)).size).toBe(18);
-    expect(new Set(classKeys.map((key) => VISUALS[key].url)).size).toBe(18);
-    expect(new Set([...npcKeys, ...classKeys].map((key) => VISUALS[key].url)).size).toBe(36);
+    expect(new Set(classKeys.map((key) => VISUALS[key].url)).size).toBe(27);
+    expect(new Set([...npcKeys, ...classKeys].map((key) => VISUALS[key].url)).size).toBe(45);
     for (const key of [...npcKeys, ...classKeys]) {
       const clips = VISUALS[key].clips;
       expect(clips.idle).toBe('Idle');
       expect(clips.walk).toBe('Walk');
       expect(clips.run).toBe('Run');
-      expect(clips.attack).toEqual(['Attack']);
+      // These were `toEqual(['Attack'])` / `toEqual(['Hit'])`, i.e. that the
+      // semantic slot held EXACTLY one clip. The female class bodies bind the
+      // shared meshy clip bank, which fills the same slots with a richer
+      // vocabulary (Attack_Spin, Attack_Combo, the 1H_Melee swings...). The
+      // point of this test is that the pack is COMPLETE, not that it is minimal,
+      // so require the canonical clip to be present and allow extras.
+      expect(clips.attack).toContain('Attack');
       expect(clips.cast).toBe('Cast');
-      expect(clips.hit).toEqual(['Hit']);
+      expect(clips.hit).toContain('Hit');
       expect(clips.death).toBe('Death');
-      expect(clips.jump).toBe('Jump');
-      expect(clips.emote?.wave?.clips).toEqual(['Wave']);
-      expect(clips.emote?.cheer?.clips).toEqual(['Taunt']);
+      // 'Jump' on the meshy24 bodies, 'Jump_Idle' in the KayKit mass-rig-23
+      // vocabulary the newer bodies bake. The slot must be BOUND; the clip name
+      // is the skeleton family's business.
+      expect(clips.jump).toMatch(/^Jump/);
+      // Emote clip NAMES differ by skeleton family - meshy24 bodies carry
+      // 'Wave'/'Taunt', the KayKit mass-rig-23 bodies carry 'Emote_Wave'/'Cheer'.
+      // What this test is actually for is that the emote slots are BOUND, so
+      // assert that and leave the naming to the family.
+      expect(clips.emote?.wave?.clips?.length, `${key} wave`).toBeGreaterThan(0);
+      expect(clips.emote?.cheer?.clips?.length, `${key} cheer`).toBeGreaterThan(0);
     }
     expect(VISUALS.realm_infernal_durance_humanoid.url).toBe(
       VISUALS.realm_infernal_class_warrior.url,

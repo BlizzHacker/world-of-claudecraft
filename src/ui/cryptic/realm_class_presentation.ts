@@ -582,12 +582,26 @@ function realmStoreAsset(storePath: string, assetName: string): RealmClassAsset 
  * was the natural paladin fit and is deliberately NOT used, because the render
  * shows a red greatsword fused to its hand.
  *
- * SIX of these nine now merely mirror what the operator has already published as
- * `class:*` overrides for crypticrealm, so the live cards resolve through the
- * override and these entries are the fallback. The THREE marked GAP are
- * placeholders standing in until their real bodies land (Gargoyle Oathsworn,
- * Grave Totemist, Chimera Warden are in generation): they have no override, so
- * these compiled entries ARE what those cards render today.
+ * STATUS, 2026-08-17 (read before reusing any of these): the operator reviewed
+ * the six published class bodies and REJECTED FIVE - "failures except 1". Only
+ * hunter -> Crypt Stalker survived. So EIGHT of these nine are placeholders, not
+ * choices, and the approved catalog is considered spent for this realm: do not
+ * "improve" them by scavenging another pool body, because that is the same move
+ * that produced the five rejections.
+ *
+ *   hunter                          KEPT. The one that passed.
+ *   warrior rogue priest mage warlock
+ *                                   REJECTED - awaiting batch B (cr_rune_warden,
+ *                                   cr_cipher_blade, cr_oracle, cr_void_seer,
+ *                                   cr_gravecaller).
+ *   paladin shaman druid (GAP)      never had a body - awaiting batch A
+ *                                   (cr_gargoyle_oathsworn, cr_grave_totemist,
+ *                                   cr_chimera_warden).
+ *
+ * The five rejected ones still MIRROR their published override, so the live card
+ * resolves through the override and lands in the same place either way; when the
+ * generated body replaces the override, update the entry here to match so the
+ * fallback does not drift back to a rejected body.
  */
 const CRYPTIC_BODY_ASSETS = {
   // Published as class:warrior. Black ornate plate, horned helm, hands free.
