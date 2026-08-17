@@ -429,6 +429,8 @@ const REALM_ENTITY_TEXT_IDS: ReadonlySet<string> = (() => {
       ids.add(`questObjective:${id}`);
     }
     for (const id of Object.keys(overlay.mobs ?? {})) ids.add(`mob:${id}`);
+    for (const id of Object.keys(overlay.classes ?? {})) ids.add(`class:${id}`);
+    for (const id of Object.keys(overlay.abilities ?? {})) ids.add(`ability:${id}`);
     for (const id of Object.keys(overlay.items ?? {})) ids.add(`item:${id}`);
     for (const id of Object.keys(overlay.dungeons ?? {})) ids.add(`dungeon:${id}`);
     for (const id of Object.keys(overlay.delves ?? {})) ids.add(`delve:${id}`);
@@ -436,6 +438,26 @@ const REALM_ENTITY_TEXT_IDS: ReadonlySet<string> = (() => {
   }
   return ids;
 })();
+
+// Talent spec names any realm overlays, keyed `<class>.<specId>` (spec ids
+// repeat across classes). Same one-time union as REALM_ENTITY_TEXT_IDS: a spec
+// no realm renames never resolves the active realm.
+const REALM_TALENT_SPEC_KEYS: ReadonlySet<string> = new Set(
+  Object.values(REALMS).flatMap((realm) => Object.keys(realm.entityText?.talentSpecs ?? {})),
+);
+
+/**
+ * The active realm's display name for one talent spec, or null to fall through
+ * to the authored/localized title. Called from tTalent (talent_i18n.ts), which
+ * owns every other spec-title path.
+ */
+export function realmTalentSpecName(cls: string, specId: string): string | null {
+  const key = `${cls}.${specId}`;
+  if (!REALM_TALENT_SPEC_KEYS.has(key)) return null;
+  const specs = getActiveRealm().entityText?.talentSpecs;
+  if (!specs || !Object.hasOwn(specs, key)) return null;
+  return specs[key] ?? null;
+}
 
 /** True when any realm ships rift-rank display words (riftFloorLabel gate). */
 const REALM_RIFT_RANK_WORDS: boolean = Object.values(REALMS).some(
@@ -498,6 +520,19 @@ function realmEntityText(request: EntityTranslationRequest): string | null {
     case 'mob': {
       const mob = overlay.mobs ? ownEntry(overlay.mobs, request.id) : undefined;
       return mob?.name ?? null;
+    }
+    // The two arms that answer "why is my Skullbeast casting Druid skills":
+    // a themed realm re-voices the engine class and its kit without renaming a
+    // single id, so talents, saved hotbars and the combat wire are untouched.
+    case 'class': {
+      const cls = overlay.classes ? ownEntry(overlay.classes, request.id) : undefined;
+      if (!cls) return null;
+      return (request.field === 'name' ? cls.name : cls.description) ?? null;
+    }
+    case 'ability': {
+      const ability = overlay.abilities ? ownEntry(overlay.abilities, request.id) : undefined;
+      if (!ability) return null;
+      return (request.field === 'name' ? ability.name : ability.description) ?? null;
     }
     case 'item': {
       const item = overlay.items ? ownEntry(overlay.items, request.id) : undefined;

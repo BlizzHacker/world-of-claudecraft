@@ -78,6 +78,19 @@ const STYLE = `
     border: 1px solid var(--cr-border, #5f4b1a); border-radius: 6px; padding: 6px;
   }
   #cr-hud-edit-bar.show { display: flex; }
+  /* The admin body editor. It used to be a fixed bottom-right button at
+     z-index 9000, which put it OVER every window and modal in the game and
+     could never be moved. It is HUD chrome now: parked above the Move HUD
+     button, in the same z band, and registered as a Move HUD target below so
+     the operator can drag it wherever they want (position persists). */
+  #cr-edit-bodies-btn {
+    position: fixed; right: 12px; bottom: 156px; z-index: 60;
+    background: #2a1e10; color: #f4e6c8; border: 1px solid #7a5a2a;
+    border-radius: 8px; padding: 8px 12px; cursor: pointer;
+    font: 600 13px var(--cr-font-ui, system-ui, sans-serif);
+    box-shadow: 0 4px 16px rgba(0,0,0,.4);
+  }
+  #cr-edit-bodies-btn:hover { border-color: var(--cr-gold, #ffd166); }
   #cr-hud-edit-bar button {
     padding: 5px 9px; border-radius: 4px; border: 1px solid #5f4b1a;
     background: rgba(0,0,0,0.3); color: #d7c9a8; font-size: 11px; font-weight: 700; cursor: pointer;
@@ -117,6 +130,28 @@ function makeDraggable(el: HTMLElement, id: string): void {
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', up, { once: true });
   });
+}
+
+/**
+ * Add one more element to the Move HUD editor's target list at runtime.
+ *
+ * The static TARGETS above all exist by the time mountHudLayout runs. The admin
+ * "Edit Bodies" button does not: it is appended only after an async /me role
+ * check, which is exactly why it was previously stranded as an unmovable fixed
+ * button. Registering here gives it the same treatment as the minimap or the
+ * globes: its saved position is applied immediately, and if the operator is
+ * already in Move HUD mode it picks up the drag handle without a re-toggle.
+ * Idempotent.
+ */
+export function registerHudLayoutTarget(id: string, label: string): void {
+  if (typeof document === 'undefined') return;
+  if (TARGETS.some((t) => t.id === id)) return;
+  TARGETS.push({ id, label });
+  ensureStyle();
+  const el = document.getElementById(id);
+  const saved = el ? readPos(id) : null;
+  if (el && saved) applyPos(el, saved);
+  if (editing) setEditing(true);
 }
 
 // Exported so the single master "Move HUD" button (move_hud_button.ts) drives HUD-layout

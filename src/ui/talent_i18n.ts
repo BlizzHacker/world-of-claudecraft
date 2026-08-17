@@ -13,7 +13,7 @@ import {
 } from '../sim/content/talents';
 import { ABILITIES, CLASSES } from '../sim/data';
 import type { AbilityEffect, PlayerClass } from '../sim/types';
-import { tEntity } from './entity_i18n';
+import { realmTalentSpecName, tEntity } from './entity_i18n';
 import {
   getLanguage,
   type InterpolationValues,
@@ -10203,6 +10203,14 @@ function className(id: PlayerClass): string {
 
 export function tTalent(request: TalentTranslationRequest): string {
   const lang = getLanguage();
+  // The realm lore overlay wins over both the authored English title and the
+  // localized one, exactly like RealmEntityText does inside tEntity: on a themed
+  // realm the spec rail must not read "Battlecraft / Bloodrush / Ironguard" out
+  // of the shared world. Spec IDS are untouched, so saved allocations survive.
+  if (request.kind === 'talentSpec' && request.field === 'name') {
+    const realmName = realmTalentSpecName(request.spec.class, request.spec.id);
+    if (realmName !== null) return realmName;
+  }
   // English is the authored source of truth: the hand-written `description` strings carry
   // the real numbers (kept honest against the effect by tests/talent_tooltip_accuracy.ts).
   // Release locales generate ordinary effects from data. The narrow retained-description

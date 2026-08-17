@@ -11,9 +11,10 @@ import {
   type RarityId, type RealmItemSlot, type RealmItem,
 } from '../../sim/realms/rarity';
 import { getActiveRealm } from '../../sim/realms';
-import { ensureToolsHost } from './tools_host';
+import { realmSystemTitle } from '../../sim/realms/system_text';
+import { mountToolLauncher, renderToolWindow, toggleToolWindow } from './tools_host';
 
-const MODAL_ID = 'cr-loot-modal';
+const WINDOW_ID = 'cr-loot-window';
 const BTN_ID = 'cr-loot-btn';
 const STYLE_ID = 'cr-loot-style';
 
@@ -65,14 +66,8 @@ function rarityFilter(): string {
 }
 
 const STYLE = `
-  #${BTN_ID} { display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border:1px solid var(--cr-border,#5f4b1a); border-radius:5px; background:rgba(171,212,115,0.07); color:#abd473; font:700 12px/1 var(--cr-font-ui,system-ui,sans-serif); letter-spacing:.5px; cursor:pointer; }
-  #${BTN_ID}:hover { border-color:#abd473; background:rgba(171,212,115,0.14); }
-  #${MODAL_ID} { position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; padding:16px; background:rgba(4,4,8,0.82); backdrop-filter:blur(6px); }
-  #${MODAL_ID}.open { display:flex; }
-  #${MODAL_ID} .cr-loot-shell { width:min(860px,100%); max-height:88vh; overflow-y:auto; background:linear-gradient(180deg,rgba(20,16,10,0.98),rgba(8,8,12,0.98)); border:1px solid #abd473; border-radius:10px; padding:18px 20px; color:#f4ead0; font-family:var(--cr-font-ui,system-ui,sans-serif); }
-  #${MODAL_ID} .cr-loot-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-  #${MODAL_ID} h2 { margin:0; color:#abd473; font-size:20px; }
-  #${MODAL_ID} .cr-loot-close { background:none; border:1px solid #5f4b1a; color:#f4ead0; border-radius:5px; width:30px; height:30px; cursor:pointer; }
+  #${WINDOW_ID} { border-color:#abd473; }
+
   .cr-loot-controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:14px; }
   .cr-loot-controls .lbl { font-size:11px; color:#b8aa82; letter-spacing:.5px; }
   .cr-loot-rbtn { padding:4px 9px; border-radius:4px; border:1px solid; background:transparent; font-size:11px; font-weight:700; cursor:pointer; }
@@ -97,60 +92,51 @@ function ensureStyle(): void {
 }
 
 function renderGrid(): void {
-  const grid = document.querySelector(`#${MODAL_ID} .cr-loot-grid`);
+  const grid = document.querySelector(`#${WINDOW_ID} .cr-loot-grid`);
   if (grid) grid.innerHTML = rollBatch().map(itemCard).join('');
 }
 
-function openModal(): void {
+/** Paint the window body: rarity floor controls, the roll button, the grid. */
+function paintWindow(): void {
   const realm = getActiveRealm();
-  let modal = document.getElementById(MODAL_ID);
-  if (!modal) {
-    modal = document.createElement('div'); modal.id = MODAL_ID;
-    document.body.appendChild(modal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-  }
-  modal.innerHTML = `<div class="cr-loot-shell" role="dialog" aria-modal="true" aria-label="Loot Vault">
-    <div class="cr-loot-top"><h2>${escapeHtml(realm.name)} — Loot Vault</h2><button type="button" class="cr-loot-close" aria-label="Close">✕</button></div>
-    <div class="cr-loot-controls">
+  const body = renderToolWindow(
+    WINDOW_ID,
+    `${realm.name} - ${realmSystemTitle('lootVault', 'Loot Vault')}`,
+  );
+  body.innerHTML = `<div class="cr-loot-controls">
       <span class="lbl">MIN RARITY</span>
       ${rarityFilter()}
-      <button type="button" class="cr-loot-roll">🎲 Roll Loot</button>
+      <button type="button" class="cr-loot-roll">Roll Loot</button>
     </div>
-    <div class="cr-loot-grid"></div>
-  </div>`;
-  modal.querySelector('.cr-loot-close')?.addEventListener('click', closeModal);
-  modal.querySelector('.cr-loot-roll')?.addEventListener('click', renderGrid);
-  modal.querySelectorAll<HTMLButtonElement>('.cr-loot-rbtn').forEach((b) => {
+    <div class="cr-loot-grid"></div>`;
+  body.querySelector('.cr-loot-roll')?.addEventListener('click', renderGrid);
+  body.querySelectorAll<HTMLButtonElement>('.cr-loot-rbtn').forEach((b) => {
     b.addEventListener('click', () => {
       minRarity = b.dataset.rarity as RarityId;
-      modal!.querySelectorAll('.cr-loot-rbtn').forEach((x) => x.classList.remove('active'));
+      for (const x of body.querySelectorAll('.cr-loot-rbtn')) x.classList.remove('active');
       b.classList.add('active');
       renderGrid();
     });
   });
   renderGrid();
-  modal.classList.add('open');
-  document.addEventListener('keydown', onEsc);
 }
 
-function closeModal(): void {
-  document.getElementById(MODAL_ID)?.classList.remove('open');
-  document.removeEventListener('keydown', onEsc);
+/** Open or close the Loot Vault window (rail button + keybind share this). */
+export function toggleLootVault(): void {
+  if (typeof document === 'undefined') return;
+  ensureStyle();
+  toggleToolWindow(WINDOW_ID, paintWindow);
 }
-function onEsc(e: KeyboardEvent): void { if (e.key === 'Escape') closeModal(); }
 
-/** Mount the Loot Vault launcher into a page-provided #cr-bestiary-host, or
- *  the shared fixed in-game toolbar (see tools_host.ts — a bare document.body
- *  append lands under the fixed #game-canvas and is never visible in the
- *  world). */
+/** Mount the Loot Vault launcher onto the game's micro-menu rail. */
 export function mountLootVault(): void {
   if (typeof document === 'undefined') return;
-  if (document.getElementById(BTN_ID)) return;
   ensureStyle();
-  const host = document.getElementById('cr-bestiary-host') ?? ensureToolsHost();
-  const btn = document.createElement('button');
-  btn.id = BTN_ID; btn.type = 'button';
-  btn.innerHTML = '<span aria-hidden="true">💰</span> Loot Vault';
-  btn.addEventListener('click', openModal);
-  host.appendChild(btn);
+  mountToolLauncher({
+    id: BTN_ID,
+    icon: 'chest',
+    glyph: '\u{1F4B0}',
+    label: realmSystemTitle('lootVault', 'Loot Vault'),
+    onOpen: toggleLootVault,
+  });
 }

@@ -7,9 +7,10 @@
 import './realm_env';
 import { getActiveRealm } from '../../sim/realms';
 import type { RealmAct, RealmBoss, RealmMonster } from '../../sim/realms/types';
-import { ensureToolsHost } from './tools_host';
+import { realmSystemTitle } from '../../sim/realms/system_text';
+import { mountToolLauncher, renderToolWindow, toggleToolWindow } from './tools_host';
 
-const MODAL_ID = 'cr-bestiary-modal';
+const WINDOW_ID = 'cr-bestiary-window';
 const BTN_ID = 'cr-bestiary-btn';
 const STYLE_ID = 'cr-bestiary-style';
 
@@ -60,29 +61,8 @@ function actSection(act: RealmAct): string {
 }
 
 const STYLE = `
-  #${BTN_ID} {
-    display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px;
-    border: 1px solid var(--cr-border, #5f4b1a); border-radius: 5px;
-    background: rgba(255,209,0,0.06); color: var(--cr-gold, #ffd100);
-    font: 700 12px/1 var(--cr-font-ui, system-ui, sans-serif);
-    letter-spacing: .5px; cursor: pointer;
-  }
-  #${BTN_ID}:hover { border-color: var(--cr-gold, #ffd100); background: rgba(255,209,0,0.12); }
-  #${MODAL_ID} {
-    position: fixed; inset: 0; z-index: 200; display: none;
-    align-items: center; justify-content: center; padding: 16px;
-    background: rgba(4,4,8,0.82); backdrop-filter: blur(6px);
-  }
-  #${MODAL_ID}.open { display: flex; }
-  #${MODAL_ID} .cr-best-shell {
-    width: min(820px, 100%); max-height: 88vh; overflow-y: auto;
-    background: linear-gradient(180deg, rgba(20,16,10,0.98), rgba(8,8,12,0.98));
-    border: 1px solid var(--cr-gold, #ffd100); border-radius: 10px; padding: 18px 20px;
-    color: #f4ead0; font-family: var(--cr-font-ui, system-ui, sans-serif);
-  }
-  #${MODAL_ID} .cr-best-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
-  #${MODAL_ID} h2 { margin: 0; color: var(--cr-gold, #ffd100); font-size: 20px; }
-  #${MODAL_ID} .cr-best-close { background: none; border: 1px solid #5f4b1a; color: #f4ead0; border-radius: 5px; width: 30px; height: 30px; cursor: pointer; font-size: 16px; }
+  #${WINDOW_ID} { border-color: var(--cr-gold, #ffd100); }
+
   .cr-best-act { margin-top: 18px; border-top: 1px solid rgba(255,209,0,0.18); padding-top: 12px; }
   .cr-best-act-title { color: #ffd100; font-size: 16px; margin: 0 0 2px; }
   .cr-best-act-title span { color: #b8aa82; font-size: 12px; font-weight: 400; }
@@ -113,56 +93,46 @@ function ensureStyle(): void {
   document.head.appendChild(s);
 }
 
-function openModal(): void {
+/** Paint the window body from the active realm's bestiary acts. */
+function paintWindow(): void {
   const realm = getActiveRealm();
   const bestiary = realm.bestiary;
   if (!bestiary || bestiary.length === 0) return;
-  let modal = document.getElementById(MODAL_ID);
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = MODAL_ID;
-    document.body.appendChild(modal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-  }
-  modal.innerHTML = `
-    <div class="cr-best-shell" role="dialog" aria-modal="true" aria-label="Monster Chronicle">
-      <div class="cr-best-top">
-        <h2>${escapeHtml(realm.name)} — Monster Chronicle</h2>
-        <button type="button" class="cr-best-close" aria-label="Close">✕</button>
-      </div>
-      ${bestiary.map(actSection).join('')}
-    </div>`;
-  modal.querySelector('.cr-best-close')?.addEventListener('click', closeModal);
-  modal.classList.add('open');
-  document.addEventListener('keydown', onEsc);
+  const body = renderToolWindow(
+    WINDOW_ID,
+    `${realm.name} - ${realmSystemTitle('bestiary', 'Monster Chronicle')}`,
+  );
+  body.innerHTML = bestiary.map(actSection).join('');
 }
 
-function closeModal(): void {
-  document.getElementById(MODAL_ID)?.classList.remove('open');
-  document.removeEventListener('keydown', onEsc);
-}
-
-function onEsc(e: KeyboardEvent): void {
-  if (e.key === 'Escape') closeModal();
-}
-
-/** Mount a Bestiary launcher button into a page-provided #cr-bestiary-host,
- *  or the shared fixed in-game toolbar (see tools_host.ts — a bare
- *  document.body append lands under the fixed #game-canvas and is never
- *  visible in the world). Only when the active realm has a bestiary. */
-export function mountBestiary(): void {
-  if (typeof document === 'undefined') return;
+function realmHasBestiary(): boolean {
   try {
     const realm = getActiveRealm();
-    if (!realm.bestiary || realm.bestiary.length === 0) return;
-  } catch { return; }
-  if (document.getElementById(BTN_ID)) return;
+    return !!realm.bestiary && realm.bestiary.length > 0;
+  } catch {
+    return false;
+  }
+}
+
+/** Open or close the Monster Chronicle (rail button + keybind share this). */
+export function toggleBestiary(): void {
+  if (typeof document === 'undefined' || !realmHasBestiary()) return;
   ensureStyle();
-  const host = document.getElementById('cr-bestiary-host') ?? ensureToolsHost();
-  const btn = document.createElement('button');
-  btn.id = BTN_ID;
-  btn.type = 'button';
-  btn.innerHTML = '<span aria-hidden="true">📖</span> Monster Chronicle';
-  btn.addEventListener('click', openModal);
-  host.appendChild(btn);
+  toggleToolWindow(WINDOW_ID, paintWindow);
+}
+
+/**
+ * Mount the Monster Chronicle launcher onto the game's micro-menu rail. Only
+ * when the active realm ships a bestiary.
+ */
+export function mountBestiary(): void {
+  if (typeof document === 'undefined' || !realmHasBestiary()) return;
+  ensureStyle();
+  mountToolLauncher({
+    id: BTN_ID,
+    icon: 'skull',
+    glyph: '\u{1F4D6}',
+    label: realmSystemTitle('bestiary', 'Monster Chronicle'),
+    onOpen: toggleBestiary,
+  });
 }

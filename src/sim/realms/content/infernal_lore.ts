@@ -9,8 +9,14 @@
 // Style: no em/en dashes, no emoji in player-facing strings.
 
 import type { RealmEntityText } from '../types';
+import { CINDERVEIL_CLASS_LAYER, CINDERVEIL_SYSTEM_CATALOG } from './infernal_lore_classes';
 
 export const INFERNAL_ENTITY_TEXT: RealmEntityText = {
+  // The CLASS layer (infernal_lore_classes.ts): class names + lore, ability
+  // names, talent spec names, and the fork tool window titles. Kept in its own
+  // module because this file is a generated world sweep and that one is hand
+  // authored.
+  ...CINDERVEIL_CLASS_LAYER,
   "zones": {
     "drakelands": {
       "name": "The Cinderscale Barrens"
@@ -578,6 +584,10 @@ export const INFERNAL_ENTITY_TEXT: RealmEntityText = {
     }
   },
   "catalog": {
+    // Titles of the BUILT-IN windows (Talents, Spell Book, Items, Dungeon
+    // Finder). Ordinary catalog keys, so they ride the mechanism that already
+    // existed rather than a new one.
+    ...CINDERVEIL_SYSTEM_CATALOG,
     "hud.core.riftLabelRanked": "{rank}: {name}",
     "hudChrome.bg.blurb": "Two ruined keeps face each other across a walled hollow in the shadow of Martyrspike: Crimson to the south, Azure to the north, and the older Ruin Courtyard between them that neither has ever held. Five a side, one banner each, and the first to carry three of theirs home takes the field.",
     "hudChrome.keybinds.valecup": "Tallow Cup",

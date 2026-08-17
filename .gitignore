@@ -201,3 +201,11 @@ docs/music/renders/
 /TESTING-TALENTS-2-0.md
 parse-spool/
 chrome/
+
+# Third-party art drop, quarantined 2026-08-17 (see tests/realm_ip_assets_guard.test.ts).
+# The "arcade void realm assets" folder was a scrape of StarCraft renders — its own
+# subfolders were named characters/marines, characters/protoss, characters/zerg.
+# build_realm_assets.mjs maps this folder name onto realm `arcadevoid`, so leaving it
+# tracked regenerated the infringing art into public/cr-realms on every build.
+arcade void realm assets/
+tmp_audit/

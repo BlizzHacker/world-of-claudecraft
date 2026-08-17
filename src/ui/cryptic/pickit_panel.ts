@@ -10,9 +10,10 @@ import {
   RARITY_ORDER, ITEM_SLOTS, RARITY, generateRealmItem,
   type RealmItemSlot, type RealmItem,
 } from '../../sim/realms/rarity';
-import { ensureToolsHost } from './tools_host';
+import { realmSystemTitle } from '../../sim/realms/system_text';
+import { mountToolLauncher, renderToolWindow, toggleToolWindow } from './tools_host';
 
-const MODAL_ID = 'cr-pickit-modal';
+const WINDOW_ID = 'cr-pickit-window';
 const BTN_ID = 'cr-pickit-btn';
 const STYLE_ID = 'cr-pickit-style';
 const STORE_KEY = 'cr_pickit_filter';
@@ -79,14 +80,8 @@ function renderResults(text: string): string {
 }
 
 const STYLE = `
-  #${BTN_ID} { display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border:1px solid var(--cr-border,#5f4b1a); border-radius:5px; background:rgba(214,153,55,0.08); color:#e0a93b; font:700 12px/1 var(--cr-font-ui,system-ui,sans-serif); letter-spacing:.5px; cursor:pointer; }
-  #${BTN_ID}:hover { border-color:#e0a93b; background:rgba(214,153,55,0.16); }
-  #${MODAL_ID} { position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; padding:16px; background:rgba(4,4,8,0.82); backdrop-filter:blur(6px); }
-  #${MODAL_ID}.open { display:flex; }
-  #${MODAL_ID} .cr-pk-shell { width:min(820px,100%); max-height:88vh; overflow-y:auto; background:linear-gradient(180deg,rgba(20,16,10,0.98),rgba(8,8,12,0.98)); border:1px solid #e0a93b; border-radius:10px; padding:18px 20px; color:#f4ead0; font-family:var(--cr-font-ui,system-ui,sans-serif); }
-  #${MODAL_ID} .cr-pk-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
-  #${MODAL_ID} h2 { margin:0; color:#e0a93b; font-size:20px; }
-  #${MODAL_ID} .cr-pk-close { background:none; border:1px solid #5f4b1a; color:#f4ead0; border-radius:5px; width:30px; height:30px; cursor:pointer; }
+  #${WINDOW_ID} { border-color:#e0a93b; }
+
   .cr-pk-hint { font-size:12px; color:#b8aa82; line-height:1.55; margin-bottom:8px; }
   .cr-pk-hint code { color:#7bdff2; }
   .cr-pk-textarea { width:100%; min-height:140px; box-sizing:border-box; background:#0c0a07; color:#f4ead0; border:1px solid #5f4b1a; border-radius:6px; padding:10px; font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace; resize:vertical; }
@@ -107,54 +102,48 @@ function ensureStyle(): void {
   document.head.appendChild(s);
 }
 
-function openModal(): void {
-  let modal = document.getElementById(MODAL_ID);
-  if (!modal) {
-    modal = document.createElement('div'); modal.id = MODAL_ID;
-    document.body.appendChild(modal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-  }
+/** Paint the window body: the rule textarea, its actions, and the test table. */
+function paintWindow(): void {
+  const body = renderToolWindow(WINDOW_ID, realmSystemTitle('pickit', 'Pickit Filter'));
   const filter = loadFilter();
-  modal.innerHTML = `<div class="cr-pk-shell" role="dialog" aria-modal="true" aria-label="Pickit Filter Editor">
-    <div class="cr-pk-top"><h2>Pickit Filter Editor</h2><button type="button" class="cr-pk-close" aria-label="Close">✕</button></div>
-    <p class="cr-pk-hint">Write rules to control which loot is shown. First match wins.<br>
+  body.innerHTML = `<p class="cr-pk-hint">Write rules to control which loot is shown. First match wins.<br>
       <code>SHOW|HIDE rarity&gt;=rare slot=weapon level&gt;=20 [HIGHLIGHT] [COLOR:#ff8c00]</code></p>
     <textarea class="cr-pk-textarea" spellcheck="false">${escapeHtml(filter)}</textarea>
     <div class="cr-pk-actions">
-      <button type="button" class="cr-pk-btn primary" data-act="test">▶ Test &amp; Save</button>
+      <button type="button" class="cr-pk-btn primary" data-act="test">Test and Save</button>
       <button type="button" class="cr-pk-btn" data-act="reset">Reset to default</button>
     </div>
-    <div class="cr-pk-results"></div>
-  </div>`;
-  const ta = modal.querySelector<HTMLTextAreaElement>('.cr-pk-textarea')!;
-  const results = modal.querySelector<HTMLElement>('.cr-pk-results')!;
-  const runTest = () => { saveFilter(ta.value); results.innerHTML = renderResults(ta.value); };
-  modal.querySelector('.cr-pk-close')?.addEventListener('click', closeModal);
-  modal.querySelector('[data-act="test"]')?.addEventListener('click', runTest);
-  modal.querySelector('[data-act="reset"]')?.addEventListener('click', () => { ta.value = DEFAULT_FILTER; runTest(); });
+    <div class="cr-pk-results"></div>`;
+  const ta = body.querySelector('.cr-pk-textarea') as HTMLTextAreaElement;
+  const results = body.querySelector('.cr-pk-results') as HTMLElement;
+  const runTest = () => {
+    saveFilter(ta.value);
+    results.innerHTML = renderResults(ta.value);
+  };
+  body.querySelector('[data-act="test"]')?.addEventListener('click', runTest);
+  body.querySelector('[data-act="reset"]')?.addEventListener('click', () => {
+    ta.value = DEFAULT_FILTER;
+    runTest();
+  });
   results.innerHTML = renderResults(filter);
-  modal.classList.add('open');
-  document.addEventListener('keydown', onEsc);
 }
 
-function closeModal(): void {
-  document.getElementById(MODAL_ID)?.classList.remove('open');
-  document.removeEventListener('keydown', onEsc);
+/** Open or close the Pickit editor window (rail button + keybind share this). */
+export function togglePickitPanel(): void {
+  if (typeof document === 'undefined') return;
+  ensureStyle();
+  toggleToolWindow(WINDOW_ID, paintWindow);
 }
-function onEsc(e: KeyboardEvent): void { if (e.key === 'Escape') closeModal(); }
 
-/** Mount the Pickit editor launcher into a page-provided #cr-bestiary-host,
- *  or the shared fixed in-game toolbar (see tools_host.ts — a bare
- *  document.body append lands under the fixed #game-canvas and is never
- *  visible in the world). */
+/** Mount the Pickit editor launcher onto the game's micro-menu rail. */
 export function mountPickitPanel(): void {
   if (typeof document === 'undefined') return;
-  if (document.getElementById(BTN_ID)) return;
   ensureStyle();
-  const host = document.getElementById('cr-bestiary-host') ?? ensureToolsHost();
-  const btn = document.createElement('button');
-  btn.id = BTN_ID; btn.type = 'button';
-  btn.innerHTML = '<span aria-hidden="true">🎯</span> Pickit Filter';
-  btn.addEventListener('click', openModal);
-  host.appendChild(btn);
+  mountToolLauncher({
+    id: BTN_ID,
+    icon: 'target',
+    glyph: '\u{1F3AF}',
+    label: realmSystemTitle('pickit', 'Pickit Filter'),
+    onOpen: togglePickitPanel,
+  });
 }

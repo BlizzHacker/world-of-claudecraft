@@ -476,7 +476,7 @@ import {
   setFpsMode,
 } from './ui/cryptic/fps_mode';
 import { mountHudGlobes, resolveHudSkin, setHudSkin } from './ui/cryptic/globes';
-import { mountHudLayout } from './ui/cryptic/hud_layout';
+import { mountHudLayout, registerHudLayoutTarget } from './ui/cryptic/hud_layout';
 import { mountIngameOptions } from './ui/cryptic/ingame_options';
 import { mountLootVault } from './ui/cryptic/loot_vault';
 import { mountMusicWidget } from './ui/cryptic/music_widget';
@@ -1658,7 +1658,10 @@ async function startGame(
     renderer.onZonePrepared = (zoneId) => hud.queueMapBgPrewarm(zoneId);
     hydrateIcons(); // swap [data-icon] placeholders (micro-menu, mobile bar, meters) for inline SVG
     // In-game reference tools, moved here from the landing so they live in the
-    // game, not on the realm selector. They self-mount floating buttons + modals.
+    // game, not on the realm selector. They mount launcher buttons onto the
+    // micro-menu rail (#side-buttons-col-b, built by the Hud constructed just
+    // above) and open as ordinary managed .window.panel windows. See
+    // src/ui/cryptic/tools_host.ts for why they are no longer a floating bar.
     mountBestiary();
     mountSkillTree();
     mountLootVault();
@@ -6678,14 +6681,17 @@ function ensureRealmEditorButton(): void {
     btn.id = 'cr-edit-bodies-btn';
     btn.type = 'button';
     btn.textContent = 'Edit Bodies (admin)';
-    btn.style.cssText =
-      'position:fixed;bottom:16px;right:16px;z-index:9000;background:#2a1e10;color:#f4e6c8;' +
-      'border:1px solid #7a5a2a;border-radius:8px;padding:8px 12px;cursor:pointer;' +
-      'font:600 13px system-ui,sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.4)';
+    btn.title = 'Edit Bodies (admin). Unlock Move HUD to drag this anywhere.';
     btn.addEventListener('click', () => {
       void openRealmVisualEditor(realmContentForCharacterUi());
     });
     document.body.appendChild(btn);
+    // Position and z-band now come from the fork HUD stylesheet, not an inline
+    // z-index:9000 that parked it over every window in the game; and the button
+    // joins the master Move HUD editor so it can be dragged and its position
+    // persists. Admin gating is unchanged: this whole block is behind the
+    // roles.isAdmin check above.
+    registerHudLayoutTarget('cr-edit-bodies-btn', 'Edit Bodies');
   })();
 }
 

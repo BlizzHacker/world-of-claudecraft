@@ -191,6 +191,27 @@ export interface RealmNamedText {
   name?: string;
 }
 
+/** A named UI SYSTEM a realm can re-title. The built-in windows are catalog
+ *  keys and re-skin through `catalog` below; these four are the fork's own
+ *  in-game reference tools, which have no catalog keys (src/sim/realms/system_text.ts). */
+export type RealmSystemId = 'skillTrees' | 'lootVault' | 'pickit' | 'bestiary';
+
+/** Class display override, keyed by canonical PlayerClass id ('druid'). The
+ *  save wire, the class registry and every talent/ability lookup keep the
+ *  canonical id; only what the player READS changes. */
+export interface RealmClassText {
+  name?: string;
+  description?: string;
+}
+
+/** Ability display override, keyed by canonical ability id ('moonfire'). Same
+ *  display-only contract as RealmClassText: hotbar slot maps, talent grants and
+ *  the combat wire all keep the canonical id. */
+export interface RealmAbilityText {
+  name?: string;
+  description?: string;
+}
+
 /** Dungeon / delve display override. */
 export interface RealmInstanceText {
   name?: string;
@@ -230,6 +251,20 @@ export interface RealmEntityText {
   npcs?: Record<string, RealmNpcText>;
   quests?: Record<string, RealmQuestText>;
   mobs?: Record<string, RealmNamedText>;
+  /** Class display names/lore keyed by canonical PlayerClass id. This is what
+   *  stops a themed realm's hero reading as "Druid" in Talents, the Spell Book,
+   *  the character sheet and every tooltip that names a class. */
+  classes?: Record<string, RealmClassText>;
+  /** Ability display names/descriptions keyed by canonical ability id: the
+   *  spell book, the action bar, talent tooltips and combat log all resolve
+   *  through tEntity, so one entry re-voices the skill everywhere it appears. */
+  abilities?: Record<string, RealmAbilityText>;
+  /** Talent SPEC display names keyed by `<class>.<specId>` - spec ids repeat
+   *  across classes ('holy' is both paladin and priest), so the class qualifies
+   *  the key. Resolved in src/ui/talent_i18n.ts before the locale titles. */
+  talentSpecs?: Record<string, string>;
+  /** Display titles for the fork's named UI systems (see RealmSystemId). */
+  systems?: Partial<Record<RealmSystemId, string>>;
   items?: Record<string, RealmNamedText>;
   dungeons?: Record<string, RealmInstanceText>;
   delves?: Record<string, RealmInstanceText>;

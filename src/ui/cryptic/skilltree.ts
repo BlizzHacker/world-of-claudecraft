@@ -7,9 +7,10 @@
 import './realm_env';
 import { getActiveRealm } from '../../sim/realms';
 import type { RealmClassSkin, RealmRole } from '../../sim/realms/types';
-import { ensureToolsHost } from './tools_host';
+import { realmSystemTitle } from '../../sim/realms/system_text';
+import { mountToolLauncher, renderToolWindow, toggleToolWindow } from './tools_host';
 
-const MODAL_ID = 'cr-skilltree-modal';
+const WINDOW_ID = 'cr-skilltree-window';
 const BTN_ID = 'cr-skilltree-btn';
 const STYLE_ID = 'cr-skilltree-style';
 
@@ -78,14 +79,8 @@ function classBlock(cls: RealmClassSkin): string {
 }
 
 const STYLE = `
-  #${BTN_ID} { display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border:1px solid var(--cr-border,#5f4b1a); border-radius:5px; background:rgba(123,223,242,0.06); color:#7bdff2; font:700 12px/1 var(--cr-font-ui,system-ui,sans-serif); letter-spacing:.5px; cursor:pointer; }
-  #${BTN_ID}:hover { border-color:#7bdff2; background:rgba(123,223,242,0.12); }
-  #${MODAL_ID} { position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; padding:16px; background:rgba(4,4,8,0.82); backdrop-filter:blur(6px); }
-  #${MODAL_ID}.open { display:flex; }
-  #${MODAL_ID} .cr-st-shell { width:min(860px,100%); max-height:88vh; overflow-y:auto; background:linear-gradient(180deg,rgba(20,16,10,0.98),rgba(8,8,12,0.98)); border:1px solid #7bdff2; border-radius:10px; padding:18px 20px; color:#f4ead0; font-family:var(--cr-font-ui,system-ui,sans-serif); }
-  #${MODAL_ID} .cr-st-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
-  #${MODAL_ID} h2 { margin:0; color:#7bdff2; font-size:20px; }
-  #${MODAL_ID} .cr-st-close { background:none; border:1px solid #5f4b1a; color:#f4ead0; border-radius:5px; width:30px; height:30px; cursor:pointer; }
+  #${WINDOW_ID} { border-color:#7bdff2; }
+
   .cr-st-class { margin-top:16px; border-top:1px solid rgba(123,223,242,0.18); padding-top:12px; }
   .cr-st-head { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
   .cr-st-icon { width:50px; height:50px; border-radius:10px; border:2px solid; display:flex; align-items:center; justify-content:center; font-size:26px; background:rgba(0,0,0,0.3); }
@@ -114,59 +109,63 @@ function rebuildGrid(clsId: string, treeIdx: number): void {
   const cls = realm.classes.find((c) => c.id === clsId);
   if (!cls) return;
   const trees = cls.skillTrees ?? [];
-  const grid = document.querySelector(`#${MODAL_ID} [data-grid-for="${CSS.escape(clsId)}"]`);
+  const grid = document.querySelector(`#${WINDOW_ID} [data-grid-for="${CSS.escape(clsId)}"]`);
   if (!grid || !trees[treeIdx]) return;
   grid.innerHTML = generateTreeNodes(cls, trees[treeIdx]).map((n) => nodeCell(n, cls.color)).join('');
 }
 
-function openModal(): void {
+/** Paint the window body from the active realm's class skins. Cold path: runs
+ *  on open, never per frame. */
+function paintWindow(): void {
   const realm = getActiveRealm();
-  if (!realm.classes || realm.classes.length === 0) return;
-  let modal = document.getElementById(MODAL_ID);
-  if (!modal) {
-    modal = document.createElement('div'); modal.id = MODAL_ID;
-    document.body.appendChild(modal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-  }
-  modal.innerHTML = `<div class="cr-st-shell" role="dialog" aria-modal="true" aria-label="Skill Trees">
-    <div class="cr-st-top"><h2>${escapeHtml(realm.name)} — Skill Trees</h2><button type="button" class="cr-st-close" aria-label="Close">✕</button></div>
-    ${realm.classes.map(classBlock).join('')}
-  </div>`;
-  modal.querySelector('.cr-st-close')?.addEventListener('click', closeModal);
-  modal.querySelectorAll<HTMLButtonElement>('.cr-st-tab').forEach((tab) => {
+  const body = renderToolWindow(
+    WINDOW_ID,
+    `${realm.name} - ${realmSystemTitle('skillTrees', 'Skill Trees')}`,
+  );
+  body.innerHTML = realm.classes.map(classBlock).join('');
+  body.querySelectorAll<HTMLButtonElement>('.cr-st-tab').forEach((tab) => {
     tab.addEventListener('click', () => {
-      const clsId = tab.dataset.cls!; const idx = Number(tab.dataset.tree);
-      modal!.querySelectorAll(`.cr-st-tab[data-cls="${CSS.escape(clsId)}"]`).forEach((t) => t.classList.remove('active'));
+      const clsId = tab.dataset.cls as string;
+      const idx = Number(tab.dataset.tree);
+      for (const t of body.querySelectorAll(`.cr-st-tab[data-cls="${CSS.escape(clsId)}"]`)) {
+        t.classList.remove('active');
+      }
       tab.classList.add('active');
       rebuildGrid(clsId, idx);
     });
   });
-  modal.classList.add('open');
-  document.addEventListener('keydown', onEsc);
 }
 
-function closeModal(): void {
-  document.getElementById(MODAL_ID)?.classList.remove('open');
-  document.removeEventListener('keydown', onEsc);
-}
-function onEsc(e: KeyboardEvent): void { if (e.key === 'Escape') closeModal(); }
-
-/** Mount a Skill Tree launcher into a page-provided #cr-bestiary-host, or the
- *  shared fixed in-game toolbar (see tools_host.ts — a bare document.body
- *  append lands under the fixed #game-canvas and is never visible in the
- *  world). Shown when the active realm defines classes. */
-export function mountSkillTree(): void {
-  if (typeof document === 'undefined') return;
+function realmHasClasses(): boolean {
   try {
     const realm = getActiveRealm();
-    if (!realm.classes || realm.classes.length === 0) return;
-  } catch { return; }
-  if (document.getElementById(BTN_ID)) return;
+    return !!realm.classes && realm.classes.length > 0;
+  } catch {
+    return false;
+  }
+}
+
+/** Open or close the Skill Trees window. The rail button and the keybind share
+ *  this one path, exactly like the built-in windows. */
+export function toggleSkillTree(): void {
+  if (typeof document === 'undefined' || !realmHasClasses()) return;
   ensureStyle();
-  const host = document.getElementById('cr-bestiary-host') ?? ensureToolsHost();
-  const btn = document.createElement('button');
-  btn.id = BTN_ID; btn.type = 'button';
-  btn.innerHTML = '<span aria-hidden="true">🌳</span> Skill Trees';
-  btn.addEventListener('click', openModal);
-  host.appendChild(btn);
+  toggleToolWindow(WINDOW_ID, paintWindow);
+}
+
+/**
+ * Mount the Skill Trees launcher onto the game's micro-menu rail (see
+ * tools_host.ts for why it is not a floating button any more). Shown when the
+ * active realm defines classes.
+ */
+export function mountSkillTree(): void {
+  if (typeof document === 'undefined' || !realmHasClasses()) return;
+  ensureStyle();
+  mountToolLauncher({
+    id: BTN_ID,
+    icon: 'talents',
+    glyph: '\u{1F333}',
+    label: realmSystemTitle('skillTrees', 'Skill Trees'),
+    onOpen: toggleSkillTree,
+  });
 }
