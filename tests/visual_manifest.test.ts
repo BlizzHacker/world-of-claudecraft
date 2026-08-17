@@ -212,6 +212,26 @@ describe('character visual manifest', () => {
     // One def, three tints: the per-NPC NpcDef color carries each identity,
     // so the def must keep tint 'entity', and the three colors must stay
     // pairwise distinct and off the bursar gold and auctioneer amethyst.
+    //
+    // REALM MATTERS HERE, and it did not when this was written. DEFAULT_REALM is
+    // 'crypticrealm', so a test that sets NO realm does not get generic
+    // behaviour - it gets Cryptic's, and Cryptic (like Infernal) deliberately
+    // routes EVERY npc through the civilian roster so a KayKit mini can never
+    // appear in an authored realm. npc_chronicler is a KayKit mage body, so in
+    // those two realms the roster pin wins by design.
+    //
+    // The steer for this fix was to let an explicit NPC_KEYS entry beat the
+    // roster. The code argues otherwise and the measurement settled it: doing
+    // that would move ELEVEN authored-realm NPCs back onto generic KayKit
+    // bodies (npc_knight, npc_villager, npc_smith, npc_scout...), including
+    // ones just placed on real civilians. So NPC_KEYS keeps winning in realms
+    // WITHOUT a roster, and the roster keeps winning in the two that have one.
+    // This test now says which is which instead of assuming.
+    setRealmHostEnv({
+      queryParam: (name) => (name === 'realm' ? 'classic' : null),
+      storageGet: () => null,
+      storageSet: () => undefined,
+    });
     for (const templateId of [
       'chronicler_saul',
       'chronicler_osric_fenn',
@@ -219,6 +239,23 @@ describe('character visual manifest', () => {
     ]) {
       expect(visualKeyFor({ kind: 'npc', templateId } as never)).toBe('npc_chronicler');
     }
+    // ...and in an authored realm the civilian roster owns them instead.
+    setRealmHostEnv({
+      queryParam: (name) => (name === 'realm' ? 'crypticrealm' : null),
+      storageGet: () => null,
+      storageSet: () => undefined,
+    });
+    for (const templateId of [
+      'chronicler_saul',
+      'chronicler_osric_fenn',
+      'chronicler_edda_hartwell',
+    ]) {
+      const key = visualKeyFor({ kind: 'npc', templateId } as never);
+      expect(key, templateId).toMatch(
+        /^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/,
+      );
+    }
+    setRealmHostEnv(null);
     const visual = VISUALS.npc_chronicler;
     expect(visual.url).toBe('models/chars/players/mage.glb');
     expect(visual.show).toEqual(['Mage_Hat']);

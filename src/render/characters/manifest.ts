@@ -3683,6 +3683,20 @@ export function visualKeyFor(e: Entity): string {
   return substituteForNonBody(e);
 }
 
+/**
+ * The generic stand-in bodies: KayKit adventurers and the dull substitutes this
+ * module falls back to. These must never be allowed to claim an authored realm's
+ * creature, which is what an over-broad `mob_` prefix test used to cause.
+ * Authored creature keys (mob_spearjaw, mob_wolf, mob_boar...) are NOT generic.
+ */
+const GENERIC_FALLBACK_BODIES = new Set(['mob_bandit', 'mob_dark_caster', 'npc_villager']);
+
+function isGenericFallbackBody(key: string): boolean {
+  return (
+    GENERIC_FALLBACK_BODIES.has(key) || /^(npc_|player_|delve_mob_)/.test(key)
+  );
+}
+
 /** Body used when the resolved key turned out not to be a character at all.
  *  Deliberately dull: a known-good shared body beats a dragon-face shield, and
  *  the real repair is an operator override or a generated replacement. */
@@ -3761,7 +3775,15 @@ function resolveVisualKeyFor(e: Entity): string {
         return override ?? realmFamily ?? FAMILY_KEYS[family];
       }
       if (family === 'humanoid') return hostileHumanoidVisualKey(e.templateId);
-      if (override && !/^((mob|npc|player)_|delve_mob_)/.test(override)) return override;
+      // An AUTHORED creature override wins here. This used to reject every key
+      // starting with `mob_`, which was aimed at the generic KayKit adventurer
+      // fallbacks - but `mob_` is also the prefix of the realm's own authored
+      // creatures, so it threw those away too. deepfen_spearjaw is the case that
+      // exposed it: its explicit mob_spearjaw raptor was discarded and the
+      // reptile fell through to a hostile humanoid, because a family retag left
+      // it outside every family branch above. Only the generic bodies are
+      // filtered now; a hand-authored pin is a deliberate statement.
+      if (override && !isGenericFallbackBody(override)) return override;
       return hostileHumanoidVisualKey(e.templateId);
     }
     if (realm === 'infernal') {

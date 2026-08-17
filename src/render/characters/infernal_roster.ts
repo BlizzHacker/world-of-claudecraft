@@ -164,11 +164,31 @@ const NPC_ROLE_VISUALS: Record<string, TownBodyKey> = {
   tanner_briggs: TOWNSMAN_BROWN,
 };
 
-const OPPONENT_KEYS = ['hellmaw_cursed_knight_body', 'hellmaw_sigilbound_body'] as const;
+/**
+ * hellmaw_cursed_knight_body was removed from both rotations on 2026-08-17.
+ *
+ * It is not a body. body_shape_gate.ts records what the render shows: a heraldic
+ * wall shield - dragon face, glowing eyes, no torso, no limbs - and the owner's
+ * own words for it were "the asset currently being used for the Deeprock Digger
+ * is a wall ornament". The gate correctly refuses to let visualKeyFor return it.
+ *
+ * Leaving it named here was not harmless. Every opponent whose hash landed on it
+ * was silently substituted for `mob_bandit`, a generic KayKit adventurer - so
+ * roughly half of Infernal's opponents were quietly generic, in the one realm
+ * whose npc branch exists specifically to keep KayKit minis out. Naming a body
+ * the gate rejects buys a generic fallback, not the body.
+ *
+ * The armoured warlord replacing it is from the approved catalog and is already
+ * the realm's humanoid mob default, so the two-body variety is kept.
+ */
+const OPPONENT_KEYS = [
+  'realm_infernal_evil_warlord_armor_made_0196a11d',
+  'hellmaw_sigilbound_body',
+] as const;
 
 const HOSTILE_HUMANOID_KEYS = [
   'realm_infernal_dark_paladin',
-  'hellmaw_cursed_knight_body',
+  'realm_infernal_evil_warlord_armor_made_0196a11d',
   'hellmaw_sigilbound_body',
 ] as const;
 
