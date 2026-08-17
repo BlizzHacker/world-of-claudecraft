@@ -5,7 +5,7 @@
 // (triangles, KB) and shape (aspect, foot) the placer budgets and scales with,
 // so the solver never needs to load a GLB to decide anything.
 //
-// 1381 store GLBs scanned, 838 admitted.
+// 1370 store GLBs scanned, 830 admitted.
 // Held items (melee/weapons), rows flagged `ip`, and scenery that is really a
 // bust/mask/wearable are excluded — see the script header for why.
 
@@ -42,7 +42,6 @@ export const REALM_DECOR_CATALOG: Readonly<Record<string, readonly RealmDecorAss
     { key: 'realm:arcadevoid/buildings/star_fortress_019afa57', role: 'structure', tris: 29398, kb: 1883, aspect: 2.874, foot: 1.437 },
     { key: 'realm:arcadevoid/buildings/techno_haunt_mansion_christmas2025_019b18e9', role: 'structure', tris: 369112, kb: 7078, aspect: 1, foot: 0.485 },
     { key: 'realm:arcadevoid/mechs/a_hulking_highly_detailed_robotic_8_legged_scorp_01938038', role: 'mech', tris: 39200, kb: 1228, aspect: 1.623, foot: 0.812 },
-    { key: 'realm:arcadevoid/mechs/a_white_walker_is_a_tall_humanoid_creature_with_0193e4a7', role: 'mech', tris: 39200, kb: 742, aspect: 1, foot: 0.277 },
     { key: 'realm:arcadevoid/mechs/ancient_mech_walker_x_019c01e2', role: 'mech', tris: 86434, kb: 3589, aspect: 1, foot: 0.487 },
     { key: 'realm:arcadevoid/mechs/ascension_machine_019b46a0', role: 'mech', tris: 39193, kb: 2671, aspect: 1, foot: 0.298 },
     { key: 'realm:arcadevoid/mechs/automaton_factory_x_019bd641', role: 'mech', tris: 374571, kb: 7592, aspect: 1.189, foot: 0.595 },
@@ -52,7 +51,6 @@ export const REALM_DECOR_CATALOG: Readonly<Record<string, readonly RealmDecorAss
     { key: 'realm:arcadevoid/mechs/centient_robot_muscular_nano_cryo_armor_full_det_0194486f', role: 'mech', tris: 39200, kb: 679, aspect: 1, foot: 0.411 },
     { key: 'realm:arcadevoid/mechs/centient_robot_muscular_nano_cryo_armor_full_det_019450c5', role: 'mech', tris: 39200, kb: 641, aspect: 1, foot: 0.411 },
     { key: 'realm:arcadevoid/mechs/crimson_eye_juggernaut_019c72f0', role: 'mech', tris: 39193, kb: 1601, aspect: 1, foot: 0.434 },
-    { key: 'realm:arcadevoid/mechs/cybeartron_019736ca', role: 'mech', tris: 39200, kb: 697, aspect: 1, foot: 0.34 },
     { key: 'realm:arcadevoid/mechs/cybernetic_sentinel_019b609d', role: 'mech', tris: 39169, kb: 1096, aspect: 1, foot: 0.3 },
     { key: 'realm:arcadevoid/mechs/cycloptic_automaton_019b8a81', role: 'mech', tris: 441533, kb: 7078, aspect: 1.174, foot: 0.587 },
     { key: 'realm:arcadevoid/mechs/emerald_sentinel_x_019ce3a8', role: 'mech', tris: 39154, kb: 1688, aspect: 1.037, foot: 0.518 },
@@ -62,7 +60,6 @@ export const REALM_DECOR_CATALOG: Readonly<Record<string, readonly RealmDecorAss
     { key: 'realm:arcadevoid/mechs/infernal_automaton_pbr_0199100e', role: 'mech', tris: 22804, kb: 1845, aspect: 1, foot: 0.391 },
     { key: 'realm:arcadevoid/mechs/infernal_mechanoid_019b70a9', role: 'mech', tris: 39190, kb: 1176, aspect: 1, foot: 0.357 },
     { key: 'realm:arcadevoid/mechs/iron_sentinel_019aa43e', role: 'mech', tris: 39190, kb: 1927, aspect: 1.007, foot: 0.503 },
-    { key: 'realm:arcadevoid/mechs/ironspider_colossus_019d87d3', role: 'mech', tris: 39186, kb: 2347, aspect: 1.098, foot: 0.549 },
     { key: 'realm:arcadevoid/mechs/low_poly_mech_019a7b32', role: 'mech', tris: 39196, kb: 1366, aspect: 1, foot: 0.405 },
     { key: 'realm:arcadevoid/mechs/mecha_fly_019e55a9', role: 'mech', tris: 39199, kb: 1458, aspect: 2.663, foot: 1.331 },
     { key: 'realm:arcadevoid/mechs/mecha_genesis_019b532b', role: 'mech', tris: 39159, kb: 1123, aspect: 1, foot: 0.308 },
@@ -77,11 +74,10 @@ export const REALM_DECOR_CATALOG: Readonly<Record<string, readonly RealmDecorAss
     { key: 'realm:arcadevoid/mechs/necroclaw_mech_019a9375', role: 'mech', tris: 39187, kb: 1053, aspect: 1.074, foot: 0.537 },
     { key: 'realm:arcadevoid/mechs/robo_street_style_0196d02e', role: 'mech', tris: 39199, kb: 944, aspect: 1, foot: 0.313 },
     { key: 'realm:arcadevoid/mechs/rustic_sentinel_0196fe83', role: 'mech', tris: 39200, kb: 603, aspect: 1, foot: 0.403 },
-    { key: 'realm:arcadevoid/mechs/salamanders_intercessors_are_clad_in_emerald_gre_01940e23', role: 'mech', tris: 20917, kb: 457, aspect: 1, foot: 0.305 },
-    { key: 'realm:arcadevoid/mechs/salamanders_intercessors_are_clad_in_emerald_gre_01940e28', role: 'mech', tris: 20925, kb: 559, aspect: 1, foot: 0.305 },
     { key: 'realm:arcadevoid/mechs/sentinel_automaton_01945674', role: 'mech', tris: 39200, kb: 724, aspect: 1, foot: 0.285 },
     { key: 'realm:arcadevoid/mechs/sentinel_automaton_01945678', role: 'mech', tris: 39199, kb: 676, aspect: 1, foot: 0.285 },
     { key: 'realm:arcadevoid/mechs/sentinel_automaton_01946230', role: 'mech', tris: 39198, kb: 697, aspect: 1, foot: 0.278 },
+    { key: 'realm:arcadevoid/mechs/siege_weaver_019d87d3', role: 'mech', tris: 39186, kb: 2347, aspect: 1.098, foot: 0.549 },
     { key: 'realm:arcadevoid/mechs/skull_walker_0194036e', role: 'mech', tris: 39195, kb: 775, aspect: 1, foot: 0.447 },
     { key: 'realm:arcadevoid/mechs/skullbot_titan_01969bef', role: 'mech', tris: 39191, kb: 992, aspect: 1, foot: 0.459 },
     { key: 'realm:arcadevoid/mechs/titan_sentinel_x_019bec51', role: 'mech', tris: 50281, kb: 2701, aspect: 1.098, foot: 0.549 },
@@ -113,9 +109,6 @@ export const REALM_DECOR_CATALOG: Readonly<Record<string, readonly RealmDecorAss
     { key: 'realm:arcadevoid/props/neon_viper_war_rig_019ec53f', role: 'vehicle', tris: 10688, kb: 673, aspect: 1.691, foot: 0.845 },
     { key: 'realm:arcadevoid/props/quantum_core_generator_019a794c', role: 'camp', tris: 19600, kb: 1402, aspect: 1, foot: 0.377 },
     { key: 'realm:arcadevoid/props/retro_tech_fusion_019ab668', role: 'camp', tris: 65805, kb: 2258, aspect: 2.066, foot: 1.033 },
-    { key: 'realm:arcadevoid/props/the_dragoon_is_a_four_legged_spider_like_war_mac_0193e6cf', role: 'camp', tris: 17185, kb: 652, aspect: 1.454, foot: 0.727 },
-    { key: 'realm:arcadevoid/props/the_dragoon_is_a_four_legged_spider_like_war_mac_0193e6d3', role: 'camp', tris: 9257, kb: 432, aspect: 1.522, foot: 0.761 },
-    { key: 'realm:arcadevoid/props/the_dragoon_is_a_four_legged_spider_like_war_mac_01943c5d', role: 'camp', tris: 17185, kb: 623, aspect: 1.454, foot: 0.727 },
     { key: 'realm:arcadevoid/props/the_object_is_an_intricate_sculpture_of_a_white_01946037', role: 'monument', tris: 19598, kb: 533, aspect: 1.388, foot: 0.694 },
     { key: 'realm:arcadevoid/props/the_object_is_an_intricate_sculpture_of_a_white_01946040', role: 'monument', tris: 19596, kb: 654, aspect: 1.02, foot: 0.51 },
     { key: 'realm:arcadevoid/props/the_object_is_an_intricate_sculpture_of_a_white_01946041', role: 'monument', tris: 19600, kb: 498, aspect: 1.149, foot: 0.575 },
@@ -158,7 +151,6 @@ export const REALM_DECOR_CATALOG: Readonly<Record<string, readonly RealmDecorAss
     { key: 'realm:arcadevoid/ships/star_cruiser_x_adventure_019ae113', role: 'ship', tris: 39199, kb: 1450, aspect: 3.681, foot: 1.841 },
     { key: 'realm:arcadevoid/ships/star_defender_christmas2025_019b116d', role: 'ship', tris: 39188, kb: 2194, aspect: 1.834, foot: 0.917 },
     { key: 'realm:arcadevoid/ships/star_voyager_c3_019acf13', role: 'ship', tris: 39198, kb: 1574, aspect: 1.799, foot: 0.899 },
-    { key: 'realm:arcadevoid/ships/starship_ncc_1701_019a73c8', role: 'ship', tris: 39196, kb: 1539, aspect: 4.662, foot: 2.331 },
     { key: 'realm:arcadevoid/ships/starship_odyssey_019b0aa6', role: 'ship', tris: 39200, kb: 1280, aspect: 2.715, foot: 1.357 },
     { key: 'realm:arcadevoid/ships/starship_odyssey_thanksgiving_019acb16', role: 'ship', tris: 39198, kb: 2065, aspect: 4.67, foot: 2.335 },
     { key: 'realm:arcadevoid/ships/starship_odyssey_x_019ae10a', role: 'ship', tris: 39200, kb: 1361, aspect: 6.867, foot: 3.433 },
