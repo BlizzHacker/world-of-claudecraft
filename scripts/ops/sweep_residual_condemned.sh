@@ -109,25 +109,39 @@ if [ "$MODE" = "dry" ]; then
   exit 0
 fi
 
-MOVED=0; BAD=0
+# `mv -n` REFUSES to clobber and still exits 0. A file this sweep had already
+# quarantined on an earlier run therefore stayed exactly where it was while being
+# counted as moved - and the md5 check could not catch it, because it compared
+# the ALREADY-QUARANTINED copy, which hashes identically by construction. That is
+# how a run reported moved=144 and then found the same 144 still on disk.
+#
+# So: never clobber, but give a pre-existing destination a distinct name, and
+# verify by the only thing that actually proves a move - THE SOURCE IS GONE.
+MOVED=0; BAD=0; DUP=0
 while IFS= read -r f; do
   sum="$(nice -n 15 md5sum "$f" | awk '{print $1}')"
   dest="$QUAR${f}"
   mkdir -p "$(dirname "$dest")"
-  if mv -n "$f" "$dest"; then
-    printf '%s  %s\n' "$sum" "$f" >> "$MANIFEST"
-    now="$(nice -n 15 md5sum "$dest" | awk '{print $1}')"
-    [ "$now" = "$sum" ] || { say "  ! md5 mismatch: $dest"; BAD=$((BAD+1)); }
-    MOVED=$((MOVED+1))
-  else
-    say "  ! failed to move: $f"; BAD=$((BAD+1))
+  if [ -e "$dest" ]; then
+    n=2
+    while [ -e "${dest}.dup${n}" ]; do n=$((n+1)); done
+    dest="${dest}.dup${n}"
+    DUP=$((DUP+1))
   fi
+  mv "$f" "$dest" 2>/dev/null
+  if [ -e "$f" ]; then
+    say "  ! STILL PRESENT after move: $f"; BAD=$((BAD+1)); continue
+  fi
+  printf '%s  %s\n' "$sum" "$f" >> "$MANIFEST"
+  now="$(nice -n 15 md5sum "$dest" | awk '{print $1}')"
+  [ "$now" = "$sum" ] || { say "  ! md5 mismatch: $dest"; BAD=$((BAD+1)); }
+  MOVED=$((MOVED+1))
 done < "$SAFE"
 
 LEFT=$(find / -xdev -type f -name "*${PATTERN}*" -not -path "$QUAR/*" \
   -not -path '*/proc/*' -not -path '*/sys/*' 2>/dev/null | wc -l)
 
 say
-say "RESULT: moved=$MOVED  verify-failures=$BAD  still-on-disk=$LEFT"
+say "RESULT: moved=$MOVED  duplicate-names=$DUP  verify-failures=$BAD  still-on-disk=$LEFT"
 say "        manifest now: $(wc -l < "$MANIFEST") entries"
 if [ "$LEFT" = "0" ]; then say "        CLEAN."; else say "        remaining = the skipped tracked files listed above."; fi
