@@ -62,18 +62,25 @@ for (const arg of clipArgs) {
   }
   const srcAnim = donorAnims[0];
   const anim = target.createAnimation(clipName);
+  // Cloned on first use, so a channel we drop below never leaves an orphaned
+  // sampler and its two accessors behind in the merged file.
   const samplerMap = new Map();
-  for (const srcSampler of srcAnim.listSamplers()) {
-    const sampler = target
-      .createAnimationSampler()
-      .setInterpolation(srcSampler.getInterpolation())
-      .setInput(cloneAccessor(srcSampler.getInput()))
-      .setOutput(cloneAccessor(srcSampler.getOutput()));
-    samplerMap.set(srcSampler, sampler);
-    anim.addSampler(sampler);
-  }
+  const samplerFor = (srcSampler) => {
+    let sampler = samplerMap.get(srcSampler);
+    if (!sampler) {
+      sampler = target
+        .createAnimationSampler()
+        .setInterpolation(srcSampler.getInterpolation())
+        .setInput(cloneAccessor(srcSampler.getInput()))
+        .setOutput(cloneAccessor(srcSampler.getOutput()));
+      samplerMap.set(srcSampler, sampler);
+      anim.addSampler(sampler);
+    }
+    return sampler;
+  };
   const skipped = new Set();
   let channels = 0;
+  let droppedScale = 0;
   for (const srcChannel of srcAnim.listChannels()) {
     const srcNode = srcChannel.getTargetNode();
     const name = srcNode ? srcNode.getName() : '';
@@ -82,17 +89,31 @@ for (const arg of clipArgs) {
       skipped.add(name || '(unnamed)');
       continue;
     }
+    // Bone scale belongs to the bind pose, never to a clip. Meshy's donor takes
+    // pin Hips at a constant (the Idle takes ship 1.17647), so a body merged
+    // with them renders 17.65% larger while that clip plays and snaps back the
+    // instant any other clip starts - the "body shrinks as characters do
+    // animations" bug that hit all 21 Infernal heroes. Since Hips is the
+    // skeleton root, one such channel resizes the ENTIRE body.
+    // Translation IS carried through: unlike the shared clip bank, these donors
+    // are the target's own rig, so hip travel is authored at the right
+    // proportions and the takes need it (Death drops the Hips to the floor).
+    if (srcChannel.getTargetPath() === 'scale') {
+      droppedScale++;
+      continue;
+    }
     anim.addChannel(
       target
         .createAnimationChannel()
         .setTargetNode(dstNode)
         .setTargetPath(srcChannel.getTargetPath())
-        .setSampler(samplerMap.get(srcChannel.getSampler())),
+        .setSampler(samplerFor(srcChannel.getSampler())),
     );
     channels++;
   }
   console.log(
     `  ${clipName}: ${channels} channels from ${donorPath}` +
+      (droppedScale ? ` (dropped ${droppedScale} scale channels)` : '') +
       (skipped.size ? ` (skipped: ${[...skipped].join(', ')})` : ''),
   );
 }
