@@ -6994,6 +6994,19 @@ export const ja_JP: EnTranslations = {
     "sortRecent": "最近プレイ",
     "sortPlaytime": "プレイ時間"
   },
+  "bodySkins": {
+    "groupLabel": "Appearance tier",
+    "base": "Class Body",
+    "baseNote": "Your class's own look.",
+    "available": "Ready to wear",
+    "lockedLevel": "Unlocks at level {level}",
+    "lockedPremium": "Purchase with {price} $CR",
+    "lockedNoArt": "No body for this class yet",
+    "heavenlyHost": "Angelic",
+    "famousHeroes": "Famous Heroes",
+    "locked": "Locked",
+    "premiumBadge": "Paid"
+  },
   "deleteCharacter": {
     "title": "キャラクターを削除",
     "body": "{name}を完全に削除します。この操作は元に戻せません。",

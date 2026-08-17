@@ -231,6 +231,15 @@ export interface CharacterSummary {
   weaponSkinId?: string | null;
   visualKey?: string | null;
   realmHeroId?: string | null;
+  /** The AUTHORIZED tiered body skin, already gated by the server against this
+   *  character's level and the account's entitlements. Never a wish. */
+  bodySkinId?: string | null;
+  /** Whether this character has reached the unlocked tier's level. Published
+   *  rather than derived from `level` on the client so one server decides what
+   *  the gate is, and the picker can never disagree with the world. */
+  bodySkinUnlocked?: boolean;
+  /** Paid skin entitlements the ACCOUNT holds. */
+  bodySkinEntitlements?: string[];
 }
 
 function stringList(value: unknown): string[] {
@@ -840,6 +849,18 @@ export class Api {
 
   async renameCharacter(characterId: number, name: string): Promise<void> {
     await this.post(`/api/characters/${characterId}/rename`, { name });
+  }
+
+  // Select a tiered body skin, or clear it back to the class body with null.
+  // The server authorizes the choice against the character's persisted level
+  // and the account's paid entitlements and answers with what it actually
+  // stored, so the caller repaints from the RESPONSE, not from its own wish.
+  async setCharacterBodySkin(
+    characterId: number,
+    bodySkinId: string | null,
+  ): Promise<string | null> {
+    const data = await this.post(`/api/characters/${characterId}/body-skin`, { bodySkinId });
+    return typeof data.bodySkinId === 'string' ? data.bodySkinId : null;
   }
 
   async deleteCharacter(characterId: number, name: string): Promise<void> {
@@ -1485,6 +1506,7 @@ function blankEntity(id: number): Entity {
     skin: 0,
     visualKey: null,
     realmHeroId: null,
+    bodySkinId: null,
     mountKey: '',
     mountCastRemaining: 0,
     mountCastKey: '',
@@ -2944,6 +2966,7 @@ export class ClientWorld implements IWorld {
         e.skin = w.sk ?? 0;
         e.visualKey = typeof w.vk === 'string' ? w.vk : null;
         e.realmHeroId = typeof w.rh === 'string' ? w.rh : null;
+        e.bodySkinId = typeof w.bs === 'string' ? w.bs : null;
         e.mountKey = w.mnt ?? ''; // active rideable mount ('' dismounted); feeds speed + render
         e.mainhandItemId = w.mh ?? null; // equipped mainhand → held weapon model (render-only)
         e.offhandItemId = w.oh ?? null; // equipped offhand → held weapon model (render-only)

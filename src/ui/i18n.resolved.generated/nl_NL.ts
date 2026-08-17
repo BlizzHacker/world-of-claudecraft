@@ -6994,6 +6994,19 @@ export const nl_NL: EnTranslations = {
     "sortRecent": "Onlangs gespeeld",
     "sortPlaytime": "Speeltijd"
   },
+  "bodySkins": {
+    "groupLabel": "Appearance tier",
+    "base": "Class Body",
+    "baseNote": "Your class's own look.",
+    "available": "Ready to wear",
+    "lockedLevel": "Unlocks at level {level}",
+    "lockedPremium": "Purchase with {price} $CR",
+    "lockedNoArt": "No body for this class yet",
+    "heavenlyHost": "Angelic",
+    "famousHeroes": "Famous Heroes",
+    "locked": "Locked",
+    "premiumBadge": "Paid"
+  },
   "deleteCharacter": {
     "title": "Personage verwijderen",
     "body": "Dit verwijdert {name} permanent. Dit kan niet ongedaan worden gemaakt.",

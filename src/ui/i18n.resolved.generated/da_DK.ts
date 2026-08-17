@@ -6994,6 +6994,19 @@ export const da_DK: EnTranslations = {
     "sortRecent": "Senest spillet",
     "sortPlaytime": "Spilletid"
   },
+  "bodySkins": {
+    "groupLabel": "Appearance tier",
+    "base": "Class Body",
+    "baseNote": "Your class's own look.",
+    "available": "Ready to wear",
+    "lockedLevel": "Unlocks at level {level}",
+    "lockedPremium": "Purchase with {price} $CR",
+    "lockedNoArt": "No body for this class yet",
+    "heavenlyHost": "Angelic",
+    "famousHeroes": "Famous Heroes",
+    "locked": "Locked",
+    "premiumBadge": "Paid"
+  },
   "deleteCharacter": {
     "title": "Slet Karakter",
     "body": "Dette sletter {name} permanent. Det kan ikke fortrydes.",

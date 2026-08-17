@@ -6994,6 +6994,19 @@ export const ru_RU: EnTranslations = {
     "sortRecent": "Недавно сыгранные",
     "sortPlaytime": "Время в игре"
   },
+  "bodySkins": {
+    "groupLabel": "Appearance tier",
+    "base": "Class Body",
+    "baseNote": "Your class's own look.",
+    "available": "Ready to wear",
+    "lockedLevel": "Unlocks at level {level}",
+    "lockedPremium": "Purchase with {price} $CR",
+    "lockedNoArt": "No body for this class yet",
+    "heavenlyHost": "Angelic",
+    "famousHeroes": "Famous Heroes",
+    "locked": "Locked",
+    "premiumBadge": "Paid"
+  },
   "deleteCharacter": {
     "title": "Удалить персонажа",
     "body": "{name} будет удален навсегда. Это действие нельзя отменить.",

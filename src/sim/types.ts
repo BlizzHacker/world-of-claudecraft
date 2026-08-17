@@ -4110,6 +4110,13 @@ export interface Entity extends ClientMirroredEntityFields {
   // `infernal-hero-necromancer`). Render-only identity used by the runtime
   // body editor before its broader `class:<id>` fallback.
   realmHeroId: string | null;
+  // Authorized tiered body skin (src/sim/cosmetics/body_skins.ts), or null for
+  // the BASE body. Render-only, and SERVER-STAMPED: the join path re-authorizes
+  // the character's stored pick against its real level and the account's paid
+  // entitlements, so a client that edits its own save cannot wear a skin it has
+  // not earned, and no peer ever sees one. Optional so every existing entity
+  // factory and every pre-feature save keeps type-checking.
+  bodySkinId?: string | null;
   // Equipped mainhand item id (players only; null otherwise). Render-only: the
   // client maps it to a held weapon model. Recomputed in recalcPlayerStats and
   // synced in identity fields (terse `mh`). The sim never reads it for gameplay.

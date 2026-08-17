@@ -6994,6 +6994,19 @@ export const vi_VN: EnTranslations = {
     "sortRecent": "Chơi Gần Đây",
     "sortPlaytime": "Thời Gian Chơi"
   },
+  "bodySkins": {
+    "groupLabel": "Appearance tier",
+    "base": "Class Body",
+    "baseNote": "Your class's own look.",
+    "available": "Ready to wear",
+    "lockedLevel": "Unlocks at level {level}",
+    "lockedPremium": "Purchase with {price} $CR",
+    "lockedNoArt": "No body for this class yet",
+    "heavenlyHost": "Angelic",
+    "famousHeroes": "Famous Heroes",
+    "locked": "Locked",
+    "premiumBadge": "Paid"
+  },
   "deleteCharacter": {
     "title": "Xóa Nhân Vật",
     "body": "Thao tác này sẽ xóa vĩnh viễn {name}. Không thể hoàn tác.",

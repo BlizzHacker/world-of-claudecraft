@@ -6,6 +6,11 @@ import { MECH_CHROMAS, type MechChroma } from '../../sim/content/skins';
 import { offhandMirrorsWeaponSkin } from '../../sim/content/weapon_skin_rules';
 import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
 import { ITEMS, MOBS } from '../../sim/data';
+import {
+  bodySkinAssetUrl,
+  bodySkinOverrideKeys,
+  isTieredSkinBody,
+} from '../../sim/cosmetics/body_skins';
 import { resolveRealmCharacterVisual } from '../../sim/realms/class_visuals';
 import { infernalCharacterSelection } from '../../sim/realms/infernal_classes';
 import { resolveActiveRealmId } from '../../sim/realms/registry';
@@ -3519,6 +3524,49 @@ function registerOverrideVisual(entry: BodyOverrideEntry): string {
   return key;
 }
 
+/**
+ * A body a tier above BASE has claimed can never serve as a DEFAULT body.
+ *
+ * This is the un-welding, and it is deliberately enforced on READ rather than by
+ * rewriting the published document. The Heavenly Host bodies are live rows in
+ * the Infernal realm-visuals doc (`hero:infernal-hero-warrior` and friends,
+ * revision 27) because that is how they were shipped; deleting those rows is an
+ * operator action against a live realm. Stepping over them here reclassifies
+ * them with no database write: the card falls through to its own class body,
+ * and the same three bodies are reachable again through the skin picker, by any
+ * class the family has art for.
+ */
+function baseEntry(entry: BodyOverrideEntry | undefined): BodyOverrideEntry | undefined {
+  return entry && isTieredSkinBody(entry.assetUrl) ? undefined : entry;
+}
+
+/**
+ * The body an AUTHORIZED tiered skin puts on this class, or undefined.
+ *
+ * Precedence inside the tier: a realm that published its own art for the family
+ * (`skin:<id>:<cls>`, with the usual :f/:m tail) wins over the compiled catalog,
+ * matching how every other body assignment in this file works.
+ *
+ * The caller has already checked entitlement and level. Nothing here re-checks
+ * them, and nothing here can: the renderer has no truthful level. Only pass a
+ * `bodySkinId` the server authorized.
+ */
+function skinEntryFor(
+  map: Record<string, BodyOverrideEntry> | undefined,
+  skinId: string,
+  cls: PlayerClass,
+  gender?: 'male' | 'female' | null,
+): BodyOverrideEntry | undefined {
+  if (map) {
+    for (const key of bodySkinOverrideKeys(skinId, cls, gender)) {
+      const published = map[key];
+      if (published) return published;
+    }
+  }
+  const assetUrl = bodySkinAssetUrl(skinId, cls);
+  return assetUrl ? { assetUrl } : undefined;
+}
+
 /** The operator's override row for a CHARACTER (no Entity required), in the same
  *  precedence the world uses: hero id, hero display name, the canonical selection
  *  a hidden variant presents under, then the base class. Split out of
@@ -3530,8 +3578,14 @@ function overrideEntryForCharacter(
   realmHeroId: string | null | undefined,
   cls: PlayerClass,
   gender?: 'male' | 'female' | null,
+  bodySkinId?: string | null,
 ): BodyOverrideEntry | undefined {
   const map = BODY_OVERRIDES[realm];
+  // A tiered skin is resolvable with NO override document: its bodies are
+  // compiled into the catalog, so an unlocked look survives a realm-visuals
+  // fetch that failed or has not landed yet.
+  const skinned = bodySkinId ? skinEntryFor(map, bodySkinId, cls, gender) : undefined;
+  if (skinned) return skinned;
   if (!map) return undefined;
   const selection = infernalCharacterSelection(realm, realmHeroId ?? null, cls);
   // An explicit Female pick outranks the hero body: the creator previews the
@@ -3539,27 +3593,27 @@ function overrideEntryForCharacter(
   // or the toggle is a lie. A published female HERO variant is still the most
   // specific and wins first; realms without pairs fall through unchanged.
   if (gender === 'female') {
-    const heroF = selection ? map[`hero:${selection.id}:f`] : undefined;
+    const heroF = selection ? baseEntry(map[`hero:${selection.id}:f`]) : undefined;
     if (heroF) return heroF;
-    const clsF = map[`class:${cls}:f`];
+    const clsF = baseEntry(map[`class:${cls}:f`]);
     if (clsF) return clsF;
   }
   let entry = selection
-    ? (map[`hero:${selection.id}`] ?? map[`hero:${selection.name}`])
+    ? (baseEntry(map[`hero:${selection.id}`]) ?? baseEntry(map[`hero:${selection.name}`]))
     : undefined;
   // A hidden hero variant with no published body of its own falls back to
   // the canonical selection it presents under (e.g. hero:infernal-hero-sorcerer-m
   // -> hero:infernal-hero-sorcerer-sorceress until a male body is published).
-  if (!entry && selection?.variantOf) entry = map[`hero:${selection.variantOf}`];
+  if (!entry && selection?.variantOf) entry = baseEntry(map[`hero:${selection.variantOf}`]);
   if (entry) return entry;
   // The appearance editor's Male/Female choice selects the realm body: a
   // sex-suffixed override (class:mage:f) wins over the unsuffixed one, which
   // stays the male/default body so realms without pairs keep working.
   if (gender === 'male') {
-    const suffixed = map[`class:${cls}:m`];
+    const suffixed = baseEntry(map[`class:${cls}:m`]);
     if (suffixed) return suffixed;
   }
-  return map[`class:${cls}`];
+  return baseEntry(map[`class:${cls}`]);
 }
 
 /** The override visual key for an entity, or null. A realm hero assignment is
@@ -3573,7 +3627,16 @@ export function overrideVisualKeyForEntity(e: Entity): string | null {
     const gender =
       (e as unknown as { modularAppearance?: { gender?: 'male' | 'female' } | null })
         .modularAppearance?.gender ?? null;
-    entry = overrideEntryForCharacter(realm, e.realmHeroId, e.templateId as PlayerClass, gender);
+    entry = overrideEntryForCharacter(
+      realm,
+      e.realmHeroId,
+      e.templateId as PlayerClass,
+      gender,
+      // Server-published only: the join path authorizes the character's stored
+      // pick against its real level and the account's entitlements before it
+      // ever reaches an entity, so the renderer can trust this string.
+      (e as unknown as { bodySkinId?: string | null }).bodySkinId ?? null,
+    );
   } else if (e.kind === 'npc') {
     entry = map[`npc:${e.templateId}`];
   } else if (e.kind === 'mob') {
@@ -3611,6 +3674,11 @@ export interface CharacterVisualQuery {
   skinCatalog?: 'class' | 'mech' | null;
   /** The authored look's body sex, when known: selects class:<cls>:f/:m. */
   gender?: 'male' | 'female' | null;
+  /** An AUTHORIZED tiered skin (src/sim/cosmetics/body_skins.ts). Outranks the
+   *  hero and class chain; null/absent means the base body. Surfaces that let a
+   *  player browse skins pass the previewed id here; every other caller passes
+   *  what the server published and nothing else. */
+  bodySkinId?: string | null;
 }
 
 /**
@@ -3634,7 +3702,13 @@ export interface CharacterVisualQuery {
 export function visualKeyForCharacter(q: CharacterVisualQuery): string {
   if (q.skinCatalog === 'mech') return 'player_mech';
   const realm = q.realm ?? resolveActiveRealmId();
-  const entry = overrideEntryForCharacter(realm, q.realmHeroId ?? null, q.cls, q.gender ?? null);
+  const entry = overrideEntryForCharacter(
+    realm,
+    q.realmHeroId ?? null,
+    q.cls,
+    q.gender ?? null,
+    q.bodySkinId ?? null,
+  );
   if (entry) return registerOverrideVisual(entry);
   if (q.visualKey && VISUALS[q.visualKey]) return q.visualKey;
   // The server omits `vk` for older rows; the compiled per-realm table is the

@@ -1,0 +1,65 @@
+/* body_skin_rail.css: the appearance-tier rail (src/ui/cryptic/body_skin_rail.ts).
+   Shell layer, because it renders on the pre-game character screens.
+
+   Sized for a finger first: every chip clears the 44px tap target on its own,
+   the row wraps rather than scrolling horizontally, and nothing is revealed by
+   hover, so a locked chip reads the same under a mouse, a thumb and a D-pad. */
+@layer shell {
+  .body-skin-rail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0 2px;
+  }
+
+  .body-skin-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-height: 46px;
+    padding: 6px 12px;
+    border: 1px solid #5a4a2a;
+    border-radius: 8px;
+    background: #1a150e;
+    color: #f4e6c8;
+    font:
+      600 12px / 1.25 system-ui,
+      sans-serif;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .body-skin-chip-note {
+    font-weight: 400;
+    font-size: 11px;
+    opacity: 0.75;
+  }
+
+  .body-skin-chip.sel {
+    border-color: #d4af37;
+    box-shadow: 0 0 0 1px #d4af37 inset;
+  }
+
+  /* Focus is drawn on the chip itself, not only on :focus-visible: the console
+     shell synthesizes focus without a pointer heuristic, so a D-pad move has to
+     leave a visible mark. */
+  .body-skin-chip:focus {
+    outline: 2px solid #9fc8ff;
+    outline-offset: 2px;
+  }
+
+  .body-skin-chip.locked {
+    cursor: not-allowed;
+    opacity: 0.62;
+    border-style: dashed;
+  }
+
+  .body-skin-chip.tier-unlocked .body-skin-chip-label {
+    color: #9fc8ff;
+  }
+
+  .body-skin-chip.tier-premium .body-skin-chip-label {
+    color: #d4af37;
+  }
+}

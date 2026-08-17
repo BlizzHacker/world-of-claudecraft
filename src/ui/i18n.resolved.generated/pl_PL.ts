@@ -6994,6 +6994,19 @@ export const pl_PL: EnTranslations = {
     "sortRecent": "Ostatnio grane",
     "sortPlaytime": "Czas gry"
   },
+  "bodySkins": {
+    "groupLabel": "Appearance tier",
+    "base": "Class Body",
+    "baseNote": "Your class's own look.",
+    "available": "Ready to wear",
+    "lockedLevel": "Unlocks at level {level}",
+    "lockedPremium": "Purchase with {price} $CR",
+    "lockedNoArt": "No body for this class yet",
+    "heavenlyHost": "Angelic",
+    "famousHeroes": "Famous Heroes",
+    "locked": "Locked",
+    "premiumBadge": "Paid"
+  },
   "deleteCharacter": {
     "title": "Usuń postać",
     "body": "To trwale usuwa {name}. Tej operacji nie można cofnąć.",

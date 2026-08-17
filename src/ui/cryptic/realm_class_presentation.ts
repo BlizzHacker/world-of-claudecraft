@@ -1,3 +1,4 @@
+import { isTieredSkinBody } from '../../sim/cosmetics/body_skins';
 import { factionForRealmClass } from '../../sim/realms/factions';
 import {
   infernalCharacterSelectionsForRealm,
@@ -896,7 +897,7 @@ function sourceForBaseClass(
 function assetForBaseClass(realm: RealmContent, baseClass: PlayerClass): RealmClassAsset {
   const compiled: RealmClassAsset =
     ASSETS_BY_REALM_CLASS[realm.id]?.[baseClass] ?? COMING_SOON_ASSET;
-  const override = firstRealmVisualOverride(realm.id, [`class:${baseClass}`]);
+  const override = baseOverride(realm.id, [`class:${baseClass}`]);
   if (!override) return compiled;
   // A published body is a real, playable GLB even when the compiled entry it
   // replaces was still a "Coming Soon" placeholder - so drop that placeholder's
@@ -911,6 +912,25 @@ function assetForBaseClass(realm: RealmContent, baseClass: PlayerClass): RealmCl
     assetName: override.assetName ?? compiled.assetName,
     assetAnimated: true,
   };
+}
+
+/**
+ * The published override for a BASE card, with tiered-skin bodies stepped over.
+ *
+ * Same rule as the renderer's baseEntry (render/characters/manifest.ts): a body
+ * that an unlocked or paid tier claims is not a default body, so a row still
+ * pointing a card at one is ignored here and the card falls back to its own
+ * compiled class body. Without this the create screen would keep advertising
+ * the Heavenly Host on Warrior and Rogue while the world had already stopped
+ * giving it to them, which is the card-versus-world drift this file's header
+ * was written about.
+ */
+function baseOverride(
+  realmId: string,
+  keys: readonly string[],
+): ReturnType<typeof firstRealmVisualOverride> {
+  const hit = firstRealmVisualOverride(realmId, keys);
+  return hit && isTieredSkinBody(hit.assetUrl) ? null : hit;
 }
 
 export function realmHasClassOverlay(realm: RealmContent): boolean {
@@ -976,7 +996,7 @@ function infernalClassChoice(
   // swaps the body asset live, ahead of the compiled default.
   // A hidden variant with no override of its own falls back to the canonical
   // selection's keys, so the toggle can offer a variant before its body exists.
-  const override = firstRealmVisualOverride(realm.id, [
+  const override = baseOverride(realm.id, [
     ...infernalHeroOverrideKeys(realm.id, { id: heroId, name, variantOf }),
     `class:${baseClass}`,
   ]);

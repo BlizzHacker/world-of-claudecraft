@@ -246,6 +246,8 @@ import { discordFlairForAccount, grantRewardPoints } from './discord_db';
 import { enqueueLinkChange } from './discord_link_changes';
 import { enqueueRelay } from './discord_relay';
 import { isDuranceTesterCharacter } from './durance_tester_entitlement';
+import { authorizeBodySkin } from '../src/sim/cosmetics/body_skins';
+import { bodySkinEntitlementsFor } from './body_skin_entitlement';
 import { isHomeownerCharacter } from './homeowner_entitlement';
 import { formatDuration } from './duration';
 import {
@@ -1397,6 +1399,9 @@ function identityFields(e: Entity): Record<string, unknown> {
   if (e.skin) out.sk = e.skin;
   if (e.kind === 'player' && e.visualKey) out.vk = e.visualKey;
   if (e.kind === 'player' && e.realmHeroId) out.rh = e.realmHeroId;
+  // Authorized tiered skin. Only ever set by the join gate below, so what a peer
+  // receives is what the server allowed, never what the wearer's client claims.
+  if (e.kind === 'player' && e.bodySkinId) out.bs = e.bodySkinId;
   // Active rideable mount ('' omitted). This identity field is intentionally
   // distinct from the self-only persisted pick (`mntSel`): using `mnt` for both
   // made the appended self delta overwrite the live riding state in JSON.
@@ -3738,6 +3743,17 @@ export class GameServer {
       hardcore: meta.hardcore ?? false,
       visualKey: duranceTester ? 'realm_infernal_durance_humanoid' : realmAppearance.visualKey,
       realmHeroId: duranceTester ? null : realmAppearance.realmHeroId,
+      // THE LEVEL/PAID GATE, server side. `state.level` is the persisted row,
+      // never a number the joining client sent, and the entitlements come from
+      // the account, so a level 98 character carrying `bodySkinId` in its save
+      // is authorized straight back down to its base body here and the wire
+      // never carries the skin at all.
+      bodySkinId: duranceTester
+        ? null
+        : authorizeBodySkin(state?.bodySkinId ?? null, cls, {
+            level: state?.level ?? 1,
+            entitlements: bodySkinEntitlementsFor(name, REALM),
+          }).skinId,
       bankBonus: meta.bankBonus,
       duranceTester,
       homeowner: isHomeownerCharacter(name, REALM),

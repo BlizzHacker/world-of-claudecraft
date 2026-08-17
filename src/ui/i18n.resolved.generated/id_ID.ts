@@ -6994,6 +6994,19 @@ export const id_ID: EnTranslations = {
     "sortRecent": "Baru Dimainkan",
     "sortPlaytime": "Waktu Bermain"
   },
+  "bodySkins": {
+    "groupLabel": "Appearance tier",
+    "base": "Class Body",
+    "baseNote": "Your class's own look.",
+    "available": "Ready to wear",
+    "lockedLevel": "Unlocks at level {level}",
+    "lockedPremium": "Purchase with {price} $CR",
+    "lockedNoArt": "No body for this class yet",
+    "heavenlyHost": "Angelic",
+    "famousHeroes": "Famous Heroes",
+    "locked": "Locked",
+    "premiumBadge": "Paid"
+  },
   "deleteCharacter": {
     "title": "Hapus Karakter",
     "body": "Ini akan menghapus {name} secara permanen. Tindakan ini tidak dapat dibatalkan.",

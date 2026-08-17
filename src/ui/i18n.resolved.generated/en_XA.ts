@@ -6994,6 +6994,19 @@ export const en_XA: EnTranslations = {
     "sortRecent": "[Ŕéçéñţļý Þļáýéð]",
     "sortPlaytime": "[Þļáýţíɱé]"
   },
+  "bodySkins": {
+    "groupLabel": "[Áþþéáŕáñçé ţíéŕ]",
+    "base": "[Çļášš Ɓóðý]",
+    "baseNote": "[Ýóúŕ çļášš'š óŵñ ļóóķ.]",
+    "available": "[Ŕéáðý ţó ŵéáŕ]",
+    "lockedLevel": "[Úñļóçķš áţ ļéʋéļ {level}]",
+    "lockedPremium": "[Þúŕçĥášé ŵíţĥ {price} $ÇŔ]",
+    "lockedNoArt": "[Ñó ƀóðý ƒóŕ ţĥíš çļášš ýéţ]",
+    "heavenlyHost": "[Áñĝéļíç]",
+    "famousHeroes": "[Ƒáɱóúš Ĥéŕóéš]",
+    "locked": "[Ļóçķéð]",
+    "premiumBadge": "[Þáíð]"
+  },
   "deleteCharacter": {
     "title": "[Ðéļéţé Çĥáŕáçţéŕ]",
     "body": "[Ţĥíš þéŕɱáñéñţļý ðéļéţéš {name}. Ţĥíš çáññóţ ƀé úñðóñé.]",

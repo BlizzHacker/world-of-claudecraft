@@ -6994,6 +6994,19 @@ export const ko_KR: EnTranslations = {
     "sortRecent": "최근 플레이",
     "sortPlaytime": "플레이 시간"
   },
+  "bodySkins": {
+    "groupLabel": "Appearance tier",
+    "base": "Class Body",
+    "baseNote": "Your class's own look.",
+    "available": "Ready to wear",
+    "lockedLevel": "Unlocks at level {level}",
+    "lockedPremium": "Purchase with {price} $CR",
+    "lockedNoArt": "No body for this class yet",
+    "heavenlyHost": "Angelic",
+    "famousHeroes": "Famous Heroes",
+    "locked": "Locked",
+    "premiumBadge": "Paid"
+  },
   "deleteCharacter": {
     "title": "캐릭터 삭제",
     "body": "{name} 캐릭터가 영구 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",

@@ -485,6 +485,12 @@ import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
 import { mountPickitPanel } from './ui/cryptic/pickit_panel';
 import { mountPwaInstall } from './ui/cryptic/pwa_install';
 import {
+  type BodySkinRailLabels,
+  bodySkinRailHtml,
+  bodySkinRailRows,
+  unlockLevelSentence,
+} from './ui/cryptic/body_skin_rail';
+import {
   classChoicesForRealm,
   classPresentationForRealm,
   classSexToggleAvailable,
@@ -492,6 +498,7 @@ import {
   presentationFactionsForRealm,
   realmHasClassOverlay,
 } from './ui/cryptic/realm_class_presentation';
+import { UNLOCKED_SKIN_LEVEL } from './sim/cosmetics/body_skins';
 import { openRealmVisualEditor } from './ui/cryptic/realm_visual_editor';
 import {
   fetchRealmVisualOverrides,
@@ -5994,6 +6001,84 @@ function charCreateSexPick(cls: PlayerClass): Gender | null {
     : null;
 }
 
+/** The tier rail's labels, resolved once per paint from the shell catalog. */
+function bodySkinRailLabels(): BodySkinRailLabels {
+  return {
+    base: t('bodySkins.base'),
+    baseNote: t('bodySkins.baseNote'),
+    names: {
+      heavenlyHost: t('bodySkins.heavenlyHost'),
+      famousHeroes: t('bodySkins.famousHeroes'),
+    },
+    lockedLevel: unlockLevelSentence(t('bodySkins.lockedLevel')),
+    lockedPremium: {
+      default: t('bodySkins.lockedPremium').replace('{price}', '500'),
+      famousHeroes: t('bodySkins.lockedPremium').replace('{price}', '500'),
+    },
+    lockedNoArt: t('bodySkins.lockedNoArt'),
+    available: t('bodySkins.available'),
+    groupLabel: t('bodySkins.groupLabel'),
+  };
+}
+
+/**
+ * Paint the appearance-tier rail into `host`.
+ *
+ * `onPick` is what separates the two mounts. The CREATE screen has no character
+ * yet, so it has no level and no entitlements: its rail is informational, every
+ * tier above BASE reads "Unlocks at level 99", and there is nothing to pick
+ * (you cannot create a level 99 character, and pretending otherwise would be
+ * the lie the whole tier system exists to remove). CHARACTER SELECT has a real
+ * row with a server-published level and entitlement list, so its rail picks.
+ */
+function paintBodySkinRail(
+  host: HTMLElement,
+  cls: PlayerClass,
+  grants: { level: number; entitlements?: readonly string[] },
+  selectedSkinId: string | null,
+  onPick?: (skinId: string | null) => void,
+): void {
+  const labels = bodySkinRailLabels();
+  const rows = bodySkinRailRows({ cls, grants, selectedSkinId, labels });
+  host.innerHTML = bodySkinRailHtml(rows, labels);
+  const chips = Array.from(host.querySelectorAll<HTMLElement>('.body-skin-chip'));
+  chips.forEach((chip, index) => {
+    const pick = () => {
+      // A locked chip stays reachable and readable but never selects: the note
+      // it carries IS its purpose.
+      if (chip.dataset.locked || !onPick) return;
+      onPick(chip.dataset.skinId ? chip.dataset.skinId : null);
+    };
+    chip.addEventListener('click', pick);
+    chip.addEventListener('keydown', (event) => {
+      const e = event as KeyboardEvent;
+      // Same arrangement as the hero roster: one tab stop, arrows rove without
+      // committing, Enter/Space commits. handleKeyboardActivation is bound
+      // explicitly because the console shell's synthesized key events never
+      // trigger a button's native activation.
+      const target = rovingTarget(e.key, index, chips.length, 'both');
+      if (target !== null) {
+        e.preventDefault();
+        for (const other of chips) other.tabIndex = -1;
+        chips[target].tabIndex = 0;
+        chips[target].focus();
+        return;
+      }
+      handleKeyboardActivation(e, pick);
+    });
+  });
+}
+
+/** The rail's host under a creator grid, created on first paint. */
+function bodySkinRailHostFor(row: HTMLElement): HTMLElement {
+  const existing = row.parentElement?.querySelector<HTMLElement>('.body-skin-rail-host');
+  if (existing) return existing;
+  const host = document.createElement('div');
+  host.className = 'body-skin-rail-host';
+  row.insertAdjacentElement('afterend', host);
+  return host;
+}
+
 function showClassPreview(cls: PlayerClass): void {
   // The card's compact Female/Male toggle: an explicit sex pick resolves
   // hero-neutrally (realmHeroId: null) through THE character resolver
@@ -6658,6 +6743,14 @@ function paintRealmClassChoices(panel: CharGridHost = '#charcreate-panel'): void
   const row = document.querySelector<HTMLElement>(grid.row);
   if (!row) return;
   rememberStaticClassRow(panel, row);
+  // Informational on this screen: a brand new character is level 1, so every
+  // tier above BASE paints locked with its condition spelled out. This is where
+  // a player learns the Heavenly Host exists and what reaching it costs.
+  {
+    const selected = document.querySelector<HTMLElement>(grid.selectedCard);
+    const cls = (selected?.dataset.class as PlayerClass) ?? 'warrior';
+    paintBodySkinRail(bodySkinRailHostFor(row), cls, { level: 1 }, null);
+  }
   if (usesRealmHeroRoster(realm.id)) {
     paintInfernalHeroRoster(
       row,
@@ -8415,6 +8508,7 @@ async function refreshCharacters(): Promise<void> {
         // same class can still differ in gear, skin, or cosmetic body.
         characterPreview?.setAppearance(charselectAppearance(c));
         charselectSelected = c;
+        paintCharselectBodySkinRail(c);
         syncCharselectEnterButton();
         setCharselectPreviewName(c.name);
         void renderCharacterSelectAssetShelf();
@@ -8667,6 +8761,57 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
 const activeClassDetailsTimeouts: Record<string, number | null> = {};
 
 // The char-select roster row's real, in-world appearance for the 3D preview.
+/**
+ * The tier rail on character select, where a character HAS a level.
+ *
+ * Both the grants and the current selection come off the roster row, which the
+ * server built by running the same authorize call the world join runs, so this
+ * rail cannot offer a skin the world would refuse. The pick posts to
+ * /api/characters/:id/body-skin, which authorizes AGAIN on the persisted row;
+ * the optimistic repaint below is reverted by the refresh if it is refused.
+ */
+function paintCharselectBodySkinRail(c: CharacterSummary): void {
+  const container = document.querySelector<HTMLElement>('#online-preview-container');
+  if (!container?.parentElement) return;
+  let host = container.parentElement.querySelector<HTMLElement>('.body-skin-rail-host');
+  if (!host) {
+    host = document.createElement('div');
+    host.className = 'body-skin-rail-host';
+    container.insertAdjacentElement('afterend', host);
+  }
+  paintBodySkinRail(
+    host,
+    c.class,
+    {
+      // The server publishes the verdict, not the raw number, so the client
+      // never re-derives the gate; `level` is only the fallback for an older
+      // server that predates the field.
+      level: c.bodySkinUnlocked === true ? UNLOCKED_SKIN_LEVEL : (c.level ?? 1),
+      entitlements: c.bodySkinEntitlements ?? [],
+    },
+    c.bodySkinId ?? null,
+    (skinId) => {
+      void selectCharacterBodySkin(c, skinId);
+    },
+  );
+}
+
+async function selectCharacterBodySkin(
+  c: CharacterSummary,
+  skinId: string | null,
+): Promise<void> {
+  c.bodySkinId = skinId;
+  paintCharselectBodySkinRail(c);
+  characterPreview?.setAppearance(charselectAppearance(c));
+  try {
+    c.bodySkinId = await api.setCharacterBodySkin(c.id, skinId);
+    paintCharselectBodySkinRail(c);
+  } catch (err) {
+    console.error('failed to save the body skin selection:', err);
+    void refreshCharacters();
+  }
+}
+
 function charselectAppearance(c: CharacterSummary): PreviewAppearance {
   // The packaged iOS shell streams the Armory weapon-skin GLBs after world
   // entry instead of holding all of them at the launcher, so the preview of a
@@ -8690,6 +8835,7 @@ function charselectAppearance(c: CharacterSummary): PreviewAppearance {
       visualKey: c.visualKey,
       skinCatalog: c.skinCatalog,
       gender: (c.appearance as { gender?: 'male' | 'female' } | null)?.gender ?? null,
+      bodySkinId: c.bodySkinId ?? null,
     }),
     skin: c.skin ?? 0,
     skinCatalog: c.skinCatalog ?? 'class',

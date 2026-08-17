@@ -229,6 +229,7 @@ function baseEntity(id: number, pos: Vec3): Entity {
     skin: 0,
     visualKey: null,
     realmHeroId: null,
+    bodySkinId: null,
     mountKey: '',
     mountCastRemaining: 0,
     mountCastKey: '',

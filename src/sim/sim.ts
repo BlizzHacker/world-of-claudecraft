@@ -1761,6 +1761,12 @@ export interface CharacterState {
   realmHeroId?: string;
   /** Auditable resolved body key; the realm server revalidates it on join. */
   visualKey?: string;
+  /** The tiered body skin this character has SELECTED. Stored as a wish, not as
+   *  a permission: the server re-authorizes it on every join (level 99 for the
+   *  unlocked tier, an account entitlement for the paid one), so a character
+   *  that levelled past the gate and then had the grant revoked simply falls
+   *  back to its base body without the save needing to be rewritten. */
+  bodySkinId?: string | null;
   // Pending skin-select event rank (JSONB; optional so older saves load as null).
   pendingSkinRank?: SkinRank | null;
   pendingSkinCatalog?: SkinCatalog | null;
@@ -2939,6 +2945,8 @@ export class Sim {
       ladder?: boolean;
       hardcore?: boolean;
       visualKey?: string | null;
+      /** Already authorized by the caller (server/game.ts join). */
+      bodySkinId?: string | null;
       realmHeroId?: string | null;
       /** Host-verified narrow test entitlement; never client supplied. */
       duranceTester?: boolean;
@@ -3168,6 +3176,10 @@ export class Sim {
     player.skin = meta.skin; // mirror onto the entity so the renderer + wire can read it
     player.visualKey = opts?.visualKey ?? savedState?.visualKey ?? null;
     player.realmHeroId = opts?.realmHeroId ?? savedState?.realmHeroId ?? null;
+    // Offline has no entitlement service and no account, so the saved wish is
+    // taken at face value there; online, opts is the server's authorized answer
+    // and is the only thing that ever reaches an entity.
+    player.bodySkinId = opts?.bodySkinId ?? savedState?.bodySkinId ?? null;
     if (this.primaryId === -1) this.primaryId = player.id;
 
     if (savedState) {
@@ -4301,6 +4313,7 @@ export class Sim {
       skinCatalog: meta.skinCatalog,
       ...(e.realmHeroId ? { realmHeroId: e.realmHeroId } : {}),
       ...(e.visualKey ? { visualKey: e.visualKey } : {}),
+      ...(e.bodySkinId ? { bodySkinId: e.bodySkinId } : {}),
       pendingSkinRank: meta.pendingSkinRank,
       pendingSkinCatalog: meta.pendingSkinCatalog,
       pendingSkinItemId: meta.pendingSkinItemId,

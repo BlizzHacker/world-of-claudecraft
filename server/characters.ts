@@ -69,6 +69,11 @@ import {
   saveCharacterState,
   scopeAllowsMutation,
 } from './db';
+import {
+  authorizeBodySkin,
+  UNLOCKED_SKIN_LEVEL,
+} from '../src/sim/cosmetics/body_skins';
+import { bodySkinEntitlementsFor } from './body_skin_entitlement';
 import { recentDeedsForCharacter } from './deeds_db';
 import { ctxAccountId } from './http/context';
 import { gameMetricsCounters } from './http/game_signals';
@@ -300,6 +305,19 @@ export function buildCharacterList(
       playtimeSeconds: Number(c.playtime_seconds ?? 0),
       realmHeroId: appearance.realmHeroId,
       visualKey: appearance.visualKey,
+      // The SAME gate the world join runs (server/game.ts), against the same
+      // persisted level, so the turntable can never advertise a skin the
+      // character would lose the moment it entered the world.
+      bodySkinId: authorizeBodySkin(c.state?.bodySkinId ?? null, c.class, {
+        level: c.level,
+        entitlements: bodySkinEntitlementsFor(c.name, charRealm),
+      }).skinId,
+      // What this character COULD wear, for the appearance editor's tier rail.
+      // Published rather than derived on the client because the client has no
+      // truthful entitlement list, and a picker that offers what the server
+      // will refuse is worse than one that greys it out.
+      bodySkinUnlocked: c.level >= UNLOCKED_SKIN_LEVEL,
+      bodySkinEntitlements: bodySkinEntitlementsFor(c.name, charRealm),
       // Keep the migrated RouteDef byte-identical with the retained legacy arm:
       // character select renders the same body and held items as the live world.
       skinCatalog: c.state?.skinCatalog === 'mech' ? 'mech' : 'class',
@@ -742,6 +760,39 @@ async function takeoverHandler(ctx: Ctx): Promise<void> {
   json(ctx.res, 200, { ok: true, takenOver: result === 'taken-over' });
 }
 
+/**
+ * POST /api/characters/:id/body-skin: select a tiered body skin, or clear it.
+ *
+ * The request is a WISH and is stored as one. Authorization happens here, on
+ * the persisted row (`character.level`, and the account's entitlements), and it
+ * happens again at every join, so nothing downstream has to trust this route
+ * either. A level 98 character asking for an unlocked skin is refused with the
+ * reason, not silently downgraded, because the picker needs to say why.
+ */
+async function bodySkinHandler(ctx: Ctx): Promise<void> {
+  const character = ownedCharacter(ctx);
+  const body = (ctx.body ?? {}) as Record<string, unknown>;
+  const raw = body.bodySkinId;
+  const requested = typeof raw === 'string' && raw.length > 0 && raw.length <= 64 ? raw : null;
+  if (raw !== null && raw !== undefined && requested === null) {
+    json(ctx.res, 400, { ok: false, code: 'body_skin_invalid' });
+    return;
+  }
+  const decision = requested
+    ? authorizeBodySkin(requested, character.class, {
+        level: character.level,
+        entitlements: bodySkinEntitlementsFor(character.name, REALM),
+      })
+    : { skinId: null, tier: 'base' as const };
+  if (requested && decision.skinId === null) {
+    json(ctx.res, 403, { ok: false, code: 'body_skin_locked', reason: decision.denied ?? 'unknown' });
+    return;
+  }
+  const state = { ...(character.state ?? {}), bodySkinId: decision.skinId } as CharacterState;
+  await charactersDb.saveCharacterState(character.id, character.level, state);
+  json(ctx.res, 200, { ok: true, bodySkinId: decision.skinId, tier: decision.tier });
+}
+
 /** DELETE /api/characters/:id: delete after an offline + name-confirmation check. */
 async function deleteHandler(ctx: Ctx): Promise<void> {
   const rt = useRuntime();
@@ -858,6 +909,22 @@ export const routes: RouteDef[] = [
       requireOwnedCharacter(NOT_FOUND),
     ],
     handler: takeoverHandler,
+    meta: OWNED_CHARACTER_META,
+  },
+  {
+    method: 'POST',
+    path: '/api/characters/:id/body-skin',
+    surface: 'api',
+    // Registry-only (the new-route rule). Same gate pair as rename: a write on
+    // an owned character, with the body parsed before ownership so a malformed
+    // body answers withBody's 400 uniformly.
+    middleware: [
+      activeGuard,
+      rateLimit(CHARACTER_RENAME_POLICY),
+      withBody(),
+      requireOwnedCharacter(CHARACTER_NOT_FOUND),
+    ],
+    handler: bodySkinHandler,
     meta: OWNED_CHARACTER_META,
   },
   {

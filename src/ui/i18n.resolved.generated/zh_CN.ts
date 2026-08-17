@@ -6994,6 +6994,19 @@ export const zh_CN: EnTranslations = {
     "sortRecent": "最近游玩",
     "sortPlaytime": "游戏时长"
   },
+  "bodySkins": {
+    "groupLabel": "Appearance tier",
+    "base": "Class Body",
+    "baseNote": "Your class's own look.",
+    "available": "Ready to wear",
+    "lockedLevel": "Unlocks at level {level}",
+    "lockedPremium": "Purchase with {price} $CR",
+    "lockedNoArt": "No body for this class yet",
+    "heavenlyHost": "Angelic",
+    "famousHeroes": "Famous Heroes",
+    "locked": "Locked",
+    "premiumBadge": "Paid"
+  },
   "deleteCharacter": {
     "title": "删除角色",
     "body": "这将永久删除 {name}。此操作无法撤销。",
