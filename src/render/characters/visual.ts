@@ -53,7 +53,7 @@ import {
   disposeOwnedWeaponSkinMaterials,
   markOwnedWeaponSkinMaterials,
 } from './weapon_skin_materials';
-import { firstPersonMeshRole } from './first_person_parts';
+import { firstPersonSelfMeshVisible } from './first_person_parts';
 import { resolveClipMap } from './clip_resolution';
 
 export type { AnimState, BaseState } from './anim_state';
@@ -101,7 +101,6 @@ const BOW_PIN_BLEND_S = 0.12; // engage/disengage fade for the orientation pins
 const FADE = 0.22;
 const ONESHOT_FADE = 0.1;
 // Z-key sheathe gesture: the 1H chop's WINDUP raises the hand over the shoulder
-const FIRST_PERSON_FALLBACK_OPACITY = 0.08;
 // toward the back (grabbing/planting the hilt). The held-prop swap lands at the
 // windup peak, where update() also cuts the clip so the downswing never plays.
 const STOW_GESTURE_TIMESCALE = 1.15;
@@ -456,7 +455,6 @@ export class CharacterVisual {
   private weaponAuraColor: number | null = null;
   private weaponAuraTip = false;
   private ghostMaterials = new Map<THREE.Material, THREE.Material>();
-  private firstPersonGhostMaterials = new Map<THREE.Material, THREE.Material>();
   private originalVisibility = new Map<THREE.Mesh, boolean>();
   private firstPersonSelf = false;
   private preserveFirstPersonParts = false;
@@ -596,7 +594,9 @@ export class CharacterVisual {
     // appearance. Deliberately NOT threaded into tintedFarMaterials: the far
     // LOD swaps in 40+ units out, where a hair recolour is sub-pixel noise.
     this.apSpec = resolveOverrideAppearanceSpec(this.def, opts.appearance ?? null);
-    this.model = assembleModel(this.def, weaponItemId, offhandItemId, look);
+    this.model = assembleModel(this.def, weaponItemId, offhandItemId, look, {
+      preserveFirstPersonParts: this.preserveFirstPersonParts,
+    });
     configureTightBoneTextures(this.model);
     applyMaterials(
       this.model,
@@ -2138,11 +2138,16 @@ export class CharacterVisual {
     return marked;
   }
 
-  private toFirstPersonFallbackMaterial<T extends THREE.Material | THREE.Material[]>(material: T): T {
-    if (Array.isArray(material)) return material.map((m) => this.firstPersonFallbackMaterial(m)) as T;
-    return this.firstPersonFallbackMaterial(material) as T;
-  }
-
+  /** Hide the owner's own body so first person looks at the WORLD.
+   *
+   *  The gate keyed off `userData.bodyMesh`, which is not a statement about
+   *  anatomy: assembleModular sets it only on PLATE (it gates the legacy skin
+   *  atlas), so on a modular character the head, hair and face were never
+   *  "body" meshes and fell to the branch that made every mesh visible. On a
+   *  merged generated body the flag is on everything, so the head came back at
+   *  8% opacity instead. Both roads ended at the same place, which is why this
+   *  now asks first_person_parts what the OWNER may see and asks nothing else.
+   */
   private applyFirstPersonSelfOverrides(): void {
     for (const [mesh, original] of this.originalMaterials) {
       const wasVisible = this.originalVisibility.get(mesh) ?? true;
@@ -2150,20 +2155,12 @@ export class CharacterVisual {
         mesh.visible = false;
         continue;
       }
-      const role = firstPersonMeshRole(mesh.name);
-      const isBodyMesh = mesh.userData.bodyMesh === true;
-      if (this.preserveFirstPersonParts && isBodyMesh) {
-        if (role === 'hide' || role === 'other') {
-          mesh.visible = false;
-          continue;
-        }
-        mesh.visible = true;
-        mesh.material = original;
+      if (!firstPersonSelfMeshVisible(mesh.name, mesh.userData.weaponMesh === true)) {
+        mesh.visible = false;
         continue;
       }
       mesh.visible = true;
-      if (isBodyMesh) mesh.material = this.toFirstPersonFallbackMaterial(original);
-      else mesh.material = original;
+      mesh.material = original;
     }
     if (this.farMesh) this.farMesh.visible = false;
     if (this.shadowProxy) this.shadowProxy.visible = false;
@@ -2198,17 +2195,6 @@ export class CharacterVisual {
     ghost.depthWrite = true;
     this.ghostMaterials.set(material, ghost);
     return ghost;
-  }
-
-  private firstPersonFallbackMaterial(material: THREE.Material): THREE.Material {
-    const cached = this.firstPersonGhostMaterials.get(material);
-    if (cached) return cached;
-    const fp = material.clone();
-    fp.transparent = true;
-    fp.opacity = FIRST_PERSON_FALLBACK_OPACITY;
-    fp.depthWrite = false;
-    this.firstPersonGhostMaterials.set(material, fp);
-    return fp;
   }
 
   private soulRendMaterial(material: THREE.Material): THREE.Material {

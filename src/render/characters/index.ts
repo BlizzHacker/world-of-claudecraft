@@ -91,6 +91,7 @@ export function createCharacterVisual(
     | 'mount_stag'
     | 'mount_raptor'
     | 'mount_wyrm',
+  opts: CharacterVisualOptions = {},
 ): CharacterVisual | null {
   // forms (sheep/bear/cat/travel) are their own models — skins and held weapons
   // only apply to the base body
@@ -133,7 +134,10 @@ export function createCharacterVisual(
       weaponOverride,
       formKey ? null : e.offhandItemId,
       look,
-      { appearance },
+      // `appearance` is resolved here and is not the caller's to set; anything
+      // else the caller asked for (today: preserveFirstPersonParts, for the
+      // OWNER's own rig) rides along.
+      { ...opts, appearance },
     );
   } catch (err) {
     // key the dedupe on visual key PLUS message: two models failing with an

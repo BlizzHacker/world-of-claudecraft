@@ -167,7 +167,15 @@ export function mountFpsMode(input: Input, opts: MountFpsOptions = {}): void {
   // settings slider, scripted zooms).
   const tick = () => {
     if (!runtime) return;
-    if (locked) { requestAnimationFrame(tick); return; }
+    if (locked) {
+      // An FPS-locked realm is first person and stays first person. Re-asserted
+      // per frame for the same reason Diablo mode is: camDist has several other
+      // writers (the remembered-zoom restore, the wheel, pinch, scripted zooms)
+      // and a value written ONCE at mount loses to every one of them.
+      input.camDist = FPS_CAM_DIST;
+      requestAnimationFrame(tick);
+      return;
+    }
     // Diablo mode is a LOCKED camera: re-assert the fixed D2 angle/zoom every
     // frame so scroll-wheel zoom, pinch, or scripted moves can't drift it. This
     // is what "save diablo mode and lock it" needs — the angle stays put.

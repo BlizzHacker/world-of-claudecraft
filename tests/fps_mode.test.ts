@@ -120,3 +120,39 @@ describe('fps mode (CR overlay)', () => {
     expect(isFpsActive()).toBe(false);
   });
 });
+
+
+describe('an FPS-locked realm keeps the camera at the eye', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+    document.body.className = '';
+    window.localStorage.clear();
+    vi.resetModules();
+  });
+
+  it('takes the camera back after another writer moves it', async () => {
+    // The realm's premise is that the camera never leaves your eyes, and
+    // mountFpsMode sets that ONCE. camDist has several other writers — the
+    // remembered-zoom restore on entry, the wheel, pinch, scripted zooms — so a
+    // write-once lock loses to all of them and the realm settles at the
+    // third-person default. It shipped that way: booted into the FPS realm and
+    // the player was looking at their own back from 12 yards.
+    const frames: Array<(t: number) => void> = [];
+    vi.stubGlobal('requestAnimationFrame', (cb: (t: number) => void) => frames.push(cb));
+    const { setActiveRealmForOffline } = await import('../src/sim/realms');
+    setActiveRealmForOffline('fps');
+    try {
+      const { mountFpsMode } = await import('../src/ui/cryptic/fps_mode');
+      const inp = makeInput();
+      mountFpsMode(inp as never);
+      expect(inp.camDist).toBeLessThan(1);
+      // Something else writes the camera, exactly as the settings restore does.
+      inp.camDist = 12;
+      for (const cb of frames.splice(0)) cb(0);
+      expect(inp.camDist).toBeLessThan(1);
+    } finally {
+      setActiveRealmForOffline(null);
+      vi.unstubAllGlobals();
+    }
+  });
+});

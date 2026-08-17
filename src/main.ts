@@ -4661,6 +4661,11 @@ async function startGame(
       } finally {
         perf.finishTrace('camera.follow', traceStart, 'mode', 'offline', 'frameDtMs', frameDtMs);
       }
+      // Camera presets win over this frame's input handlers, at the frame the
+      // renderer reads the pose: first-person zoom lock, the locked Diablo
+      // angle, and the Durance of Hate's authored top-down view.
+      enforceDiabloLock(input);
+      if (world.delveRun?.delveId === 'hellmaw_well') forceDiabloForDelve(input);
       introCameraTick(now);
       renderer.camYaw = input.camYaw;
       renderer.camPitch = input.camPitch;
@@ -4898,6 +4903,8 @@ async function startGame(
         cameraLastSnapAge,
       );
     }
+    enforceDiabloLock(input);
+    if (world.delveRun?.delveId === 'hellmaw_well') forceDiabloForDelve(input);
     introCameraTick(now);
     renderer.camYaw = input.camYaw;
     renderer.camPitch = input.camPitch;

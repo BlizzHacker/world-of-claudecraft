@@ -1467,11 +1467,18 @@ export function assembleModel(
   weaponItemId?: string | null,
   offhandItemId?: string | null,
   look?: ModularLook | null,
+  opts: AssembleModelOptions = {},
 ): THREE.Object3D {
   if (def.modular) {
     return assembleModular(def, look ?? DEFAULT_LOOK, weaponItemId, offhandItemId);
   }
-  const root = cloneSkinned(optimizedScene(def.url));
+  // `opts` exists to carry preserveFirstPersonParts down to mergeSkinnedParts:
+  // the OWNER's rig has to keep its arms and hands as separate meshes, or first
+  // person has nothing left to draw once the head is hidden. This argument was
+  // dropped by the v0.30.0 upstream merge (f07988f845) while every call site
+  // upstream of it kept reading as though it were live, which is how the whole
+  // first-person part system went inert without anyone deleting a line of it.
+  const root = cloneSkinned(optimizedScene(def.url, opts));
   // tag the character's own meshes (body + accessories share one texture atlas)
   // so a skin override hits them but not the separate weapons attached below
   root.traverse((o) => {

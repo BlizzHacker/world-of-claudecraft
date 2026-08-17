@@ -4734,7 +4734,15 @@ export class Renderer {
   ): CharacterVisual | null {
     const now = performance.now();
     if (!this.viewCreateRetry.canAttempt(e.id, slot, now)) return null;
-    const visual = createCharacterVisual(e, formKey);
+    // The OWNER's rig keeps its first-person parts unmerged, every time it is
+    // built: at spawn, and again on the body swap that lands when a realm body
+    // finishes streaming. Both go through here, and the swap is the one that
+    // matters — a self view built correctly at spawn is replaced by the streamed
+    // body seconds later. Never pooled either (createView keeps visualPoolKey
+    // null for the player), so this cannot leak an unmerged rig onto an NPC.
+    const visual = createCharacterVisual(e, formKey, {
+      preserveFirstPersonParts: e.id === this.sim.playerId,
+    });
     if (visual) this.viewCreateRetry.markSucceeded(e.id, slot);
     else this.viewCreateRetry.markFailed(e.id, slot, now);
     return visual;
@@ -10160,6 +10168,9 @@ export class Renderer {
       v.sheepVisual?.setFirstPersonSelf(selfFirstPerson && active === v.sheepVisual);
       v.bearVisual?.setFirstPersonSelf(selfFirstPerson && active === v.bearVisual);
       v.catVisual?.setFirstPersonSelf(selfFirstPerson && active === v.catVisual);
+      // travelVisual is in applyFirstPersonSelfViewToLocal but was missing here,
+      // so mounting up inside first person put the mount's body on the lens.
+      v.travelVisual?.setFirstPersonSelf(selfFirstPerson && active === v.travelVisual);
       active.setSoulRend(hasSoulRend);
       // Shadowform tints the base priest rig shadow-purple (no rig swap). Moonkin Form and
       // Metamorphosis reuse the same tint treatment (a bright violet, and a dark fel demon);
