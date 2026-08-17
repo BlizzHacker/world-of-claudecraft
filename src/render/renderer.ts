@@ -8186,16 +8186,36 @@ export class Renderer {
     this.dungeons?.retireHideables(doomed);
   }
 
+  /** Build an interior room/instance shell. When `key` is given, the build is
+   *  tracked like the delve modules (pendingInteriors while in flight,
+   *  builtInteriors only on SUCCESS): a failed asset load — one flaky fetch of
+   *  the dungeon kit — un-latches the key so the per-frame caller retries,
+   *  instead of the old add-before-build latch that left the player standing in
+   *  a flat fog void (no walls/floor) for the rest of the session. */
   private buildInterior(
     interior: string,
     ox: number,
     oz: number,
     opts?: Parameters<DungeonInteriors['buildInterior']>[3],
+    key?: string,
   ): void {
+    if (key) {
+      if (this.builtInteriors.has(key) || this.pendingInteriors.has(key)) return;
+      this.pendingInteriors.add(key);
+    }
     this.dungeons ??= new DungeonInteriors(this.scene, this.lowGfx, this.flames, this.fireLights);
-    void this.dungeons.buildInterior(interior, ox, oz, opts).catch((err) => {
-      console.error('Failed to build dungeon interior:', err);
-    });
+    void this.dungeons.buildInterior(interior, ox, oz, opts).then(
+      () => {
+        if (key) {
+          this.builtInteriors.add(key);
+          this.pendingInteriors.delete(key);
+        }
+      },
+      (err) => {
+        if (key) this.pendingInteriors.delete(key);
+        console.error('Failed to build dungeon interior:', err);
+      },
+    );
   }
 
   // Outdoor fog presets per biome (high tier eases between them as the player
@@ -8665,11 +8685,15 @@ export class Renderer {
       // slot 0 per type). Small furnished chamber via the sanctum kit.
       void ensureDungeonAssets().catch(() => undefined);
       const o = interiorOriginAt(px, pz);
-      const key = `interior:${o.typeIndex}:${o.slot}`;
-      if (!this.builtInteriors.has(key)) {
-        this.builtInteriors.add(key);
-        this.buildInterior('sanctum', o.x, o.z, { layout: INTERIOR_ROOM_LAYOUT });
-      }
+      // Keyed build: retries on a failed kit load (see buildInterior) so a
+      // transient fetch error can no longer void the room for the whole session.
+      this.buildInterior(
+        'sanctum',
+        o.x,
+        o.z,
+        { layout: INTERIOR_ROOM_LAYOUT },
+        `interior:${o.typeIndex}:${o.slot}`,
+      );
     } else if (isDelvePos(px) && !inPractice) {
       this.ensureDelveInteriorsNear(px, pz);
     } else if (inside && isYumiMazePos(px)) {
@@ -8703,14 +8727,12 @@ export class Renderer {
       }
     } else if (inside && isArenaPos(px)) {
       void ensureDungeonAssets().catch(() => undefined);
-      // build the Ashen Coliseum copy the player was matched into
+      // build the Ashen Coliseum copy the player was matched into (keyed build:
+      // retries on a failed kit load, see buildInterior)
       for (let i = 0; i < ARENA_SLOT_COUNT; i++) {
-        const key = `arena:${i}`;
-        if (this.builtInteriors.has(key)) continue;
         const o = arenaOrigin(i);
         if (Math.abs(px - o.x) < 200 && Math.abs(pz - o.z) < 120) {
-          this.builtInteriors.add(key);
-          this.buildInterior('arena', o.x, o.z);
+          this.buildInterior('arena', o.x, o.z, undefined, `arena:${i}`);
         }
       }
     } else if (isRiftPos(px)) {
@@ -8760,15 +8782,13 @@ export class Renderer {
       }
     } else if (inside) {
       void ensureDungeonAssets().catch(() => undefined);
-      // build the interior copy the player is standing in
+      // build the interior copy the player is standing in (keyed build: retries
+      // on a failed kit load, see buildInterior)
       for (const dungeon of DUNGEON_LIST) {
         for (let i = 0; i < INSTANCE_SLOT_COUNT; i++) {
-          const key = `${dungeon.id}:${i}`;
-          if (this.builtInteriors.has(key)) continue;
           const o = instanceOrigin(dungeon.index, i);
           if (Math.abs(px - o.x) < 200 && Math.abs(this.sim.player.pos.z - o.z) < 250) {
-            this.builtInteriors.add(key);
-            this.buildInterior(dungeon.interior, o.x, o.z);
+            this.buildInterior(dungeon.interior, o.x, o.z, undefined, `${dungeon.id}:${i}`);
           }
         }
       }

@@ -359,6 +359,9 @@ function extractModule(name: string, pack: Pack, gltf: GLTF): void {
 }
 
 function loadModuleAsset(name: string, pack: Pack): Promise<void> {
+  // Already extracted (a previous partly-failed batch got this far): a retry
+  // must only refetch the modules that are still missing, never the whole kit.
+  if (moduleAssets.has(name)) return Promise.resolve();
   const url = `models/dungeon/${name}.glb`;
   return loadGltf(url).then((g) => {
     extractModule(name, pack, g);
@@ -366,11 +369,34 @@ function loadModuleAsset(name: string, pack: Pack): Promise<void> {
   });
 }
 
+// After a failed batch, hold off fresh attempts briefly: per-frame callers (the
+// interior/arena/dungeon build loops) would otherwise refire the whole fetch
+// fan-out every frame while the network is down.
+const DUNGEON_ASSETS_RETRY_DELAY_MS = 3000;
+let dungeonAssetsBackoffUntil = 0;
+
 export function ensureDungeonAssets(): Promise<void> {
-  dungeonAssetsPromise ??= Promise.all([
+  // A REJECTED batch must not be memoized: one transient network failure here
+  // used to latch every dungeon, delve, arena and building-interior build into
+  // a permanent "flat fog void" for the rest of the session (each caller got
+  // the same cached rejection back forever). Clear the memo on failure (with a
+  // short backoff) so a later caller retries; loadModuleAsset above keeps the
+  // retry incremental — only still-missing modules are refetched.
+  if (dungeonAssetsPromise) return dungeonAssetsPromise;
+  if (Date.now() < dungeonAssetsBackoffUntil) {
+    return Promise.reject(new Error('dungeon assets unavailable (retry backoff)'));
+  }
+  dungeonAssetsPromise = Promise.all([
     ...KIT_MODELS.map((name) => loadModuleAsset(name, 'kit')),
     ...BITS_MODELS.map((name) => loadModuleAsset(name, 'bits')),
-  ]).then(() => undefined);
+  ]).then(
+    () => undefined,
+    (err) => {
+      dungeonAssetsPromise = null;
+      dungeonAssetsBackoffUntil = Date.now() + DUNGEON_ASSETS_RETRY_DELAY_MS;
+      throw err;
+    },
+  );
   return dungeonAssetsPromise;
 }
 
@@ -384,7 +410,11 @@ export function loadKitModules(names: readonly string[]): Promise<void> {
     names.map((name) => {
       let task = extraModulePromises.get(name);
       if (!task) {
-        task = loadModuleAsset(name, 'kit');
+        task = loadModuleAsset(name, 'kit').catch((err) => {
+          // Same retryability rule as ensureDungeonAssets: never memoize a failure.
+          extraModulePromises.delete(name);
+          throw err;
+        });
         extraModulePromises.set(name, task);
       }
       return task;
