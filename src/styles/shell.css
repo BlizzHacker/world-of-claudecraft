@@ -5972,37 +5972,110 @@
     #offline-select .char-input-group {
       order: 2;
     }
-    #offline-select .mini-class-row {
+    /* ensureRealmFactionFilter() inserts the tab strip immediately before the
+       roster, but it had no `order` here, so on phones it defaulted to 0 and
+       floated to the very top of the stack - above Character Name, three rows
+       away from the roster it filters. Order it with the roster. */
+    #offline-select #offline-faction-filter {
       order: 3;
+    }
+    #offline-select .mini-class-row {
+      order: 4;
       margin-bottom: 0;
     }
-    /* The preview rides along: pinned under the 58px sticky site header while
-       the appearance rows scroll, so every change lands on a character you can
-       still see. Height gives shorter phones their options back; the solid
-       backdrop stops the rows reading through it while stuck; z-index sits
-       above the dock (auto) and below the site header (20). */
+    /* The preview rides along: pinned to the top of the panel's scrollport
+       while the appearance rows scroll, so every change lands on a character
+       you can still see. Height gives shorter phones their options back; the
+       solid backdrop stops the rows reading through it while stuck; z-index
+       sits above the dock (auto) and below the action row (12). */
     #offline-select .char-preview-container {
-      order: 4;
+      order: 5;
       position: sticky;
-      top: 62px;
+      /* The scrollport here is #offline-select (it is the overflow:auto box on
+         touch, see the block below), NOT the page under the site header, so the
+         sticky offset is 0. The old 62px was measured against that header and
+         blanked 62px of the form at every scroll position. */
+      top: 0;
       z-index: 10;
       height: clamp(180px, 38vh, 300px);
-      background: linear-gradient(180deg, rgba(13, 13, 20, 0.97) 0%, rgba(8, 8, 13, 0.99) 100%);
+      /* Fully opaque, which is what the note above always intended: at .97/.99
+         the appearance rows still ghosted through the pinned turntable. */
+      background: linear-gradient(180deg, rgb(13, 13, 20) 0%, rgb(8, 8, 13) 100%);
       box-shadow: 0 10px 22px rgba(0, 0, 0, 0.55);
     }
     #offline-select #offline-skin-row {
-      order: 5;
-    }
-    #offline-select #offline-appearance {
       order: 6;
     }
-    #offline-select .auth-actions {
+    #offline-select #offline-appearance {
       order: 7;
     }
     #offline-select #offline-class-details {
       order: 8;
     }
+    /* LAST in the flow on purpose: the touch block below pins this row to the
+       bottom of the panel's scrollport, and a sticky-bottom box only stays
+       pinned until its own natural position scrolls into view. Anywhere but
+       last and Enter World would slide away again on the final screenful. */
+    #offline-select .auth-actions {
+      order: 9;
+    }
   }
+  /* ---------- Offline creator on touch: one scroller, a footer under the thumb
+     ----------
+     On a phone #offline-select is itself the scroll box (max-height
+     calc(var(--app-vh) - 40px), overflow-y:auto, set with the panel takeover
+     above) and the form inside it runs past 2000px on a 390x844 screen: realm
+     picker, faction tabs, name, an 18-card hero roster, the turntable, the
+     appearance editor, and only then Enter World / Back. Two things made the
+     bottom of that flow unreachable with a finger:
+
+       - the roster is its OWN scroller (.infernal-hero-roster caps at 52vh and
+         scrolls), and it occupies the middle half of the panel, which is
+         exactly where a thumb lands. The swipe drove the roster, not the form.
+       - the action row was last in a 2000px flow, ~700px below the fold, so
+         even a swipe that DID move the panel had to cross the whole appearance
+         editor to reach it.
+
+     So: nothing inside the panel scrolls except the panel (one swipe anywhere
+     always moves the form), and the action row is pinned to the bottom of the
+     scrollport, so Enter World and Back are on screen at every scroll position
+     and at every roster length. This is the touch twin of the >=900px desktop
+     card's footer band - same rule, different mechanism, because on touch the
+     panel is the scroller and on the desktop card the form's middle is. */
+  body.mobile-touch #offline-select {
+    /* the landing page sits behind the panel: a swipe that reaches either end
+       of the form must not start scrolling the page under it */
+    overscroll-behavior: contain;
+    /* keyboard/pad focus scrolls a row into view; without this it can land
+       under the sticky footer */
+    scroll-padding-bottom: 76px;
+  }
+  body.mobile-touch #offline-select .mini-class-row.infernal-hero-roster,
+  body.mobile-touch #offline-select #offline-class-details {
+    max-height: none;
+    height: auto;
+    overflow-y: visible;
+  }
+  body.mobile-touch #offline-select .auth-actions {
+    position: sticky;
+    bottom: 0;
+    /* above the sticky turntable (z-index 10) - the buttons are the one thing
+       that may never be covered */
+    z-index: 12;
+    margin-top: 10px;
+    padding: 10px 0 max(8px, env(safe-area-inset-bottom));
+    /* Opaque, not tinted: the roster, the appearance editor and the class
+       sheet all scroll UNDER this band, and at 0.9 the rows underneath still
+       read through it. The first 14px stay slightly soft so the band does not
+       cut the content with a hard edge. */
+    background: linear-gradient(180deg, rgba(10, 10, 16, 0.86) 0, rgb(9, 9, 14) 14px);
+    border-top: 1px solid rgba(200, 168, 56, 0.38);
+  }
+  /* 44px is the platform touch floor; the shared .btn is sized for a mouse. */
+  body.mobile-touch #offline-select .auth-actions .btn {
+    min-height: 44px;
+  }
+
   #btn-charcreate-back,
   #btn-charselect-back {
     flex: 0 0 40%;
@@ -6974,7 +7047,11 @@
       gap: 6px;
     }
     body.mobile-touch #offline-select .auth-actions .btn {
-      min-height: 30px;
+      /* Landscape compacts every row in this block, but not below the touch
+         floor: 30px was under it, and this is the one row a player MUST hit.
+         40px is the floor the rest of the touch surfaces use (the preflight
+         Continue button, the install prompt's actions). */
+      min-height: 40px;
       padding: 5px 8px;
       font-size: 11.5px;
     }

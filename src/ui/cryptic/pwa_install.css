@@ -48,3 +48,15 @@
     justify-content: flex-start;
   }
 }
+
+/* The banner is position:fixed at bottom:16px with z-index 12000 (theme.css),
+   which on a 390x844 phone is exactly the band the offline creator's
+   Enter World / Back row occupies: elementFromPoint at the button's centre
+   returned this banner's <strong>, so the tap landed on the prompt and the
+   player could never start a game. It also sits over the in-world HUD once a
+   world is running. The landing page - data-start-panel="mode-select", which
+   is what index.html ships with - is the one place a phone should see it. */
+body.mobile-touch:not([data-start-panel="mode-select"]) #cr-pwa-banner,
+body.game-active #cr-pwa-banner {
+  display: none;
+}
