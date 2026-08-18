@@ -49,7 +49,14 @@ describe('building interiors (enterable town buildings)', () => {
     // One shared room (+ exit door) per interior type: shop, inn, house, chapel.
     expect(objsOfType(sim, 'building_exit').length).toBe(4);
     for (const d of doors()) expect(typeof d.interiorType).toBe('number');
-  });
+    // Explicit budget: this case builds the FIRST themed Sim of the run, so it
+    // pays the cold module graph plus a full themed world construction that the
+    // later cases reuse. It measures ~7s idle and 14-17s under parallel suite
+    // load, which brushes the 20s default in vite.config.ts and fails by
+    // scheduling luck on a loaded box. The work is bounded, not stuck, so the
+    // ceiling moves rather than disappears (same call as the heavy sim cases in
+    // lockpick_hud_sync / loot_master_sim).
+  }, 60000);
 
   it('vanilla realms get NO interiors (solid buildings, no enterable doors)', () => {
     forceRealm('claudecraft');
