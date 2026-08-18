@@ -143,15 +143,19 @@ describe('gfx override application', () => {
       ]),
     );
 
-    // Regenerated for the combined v21 profile controls and maxPooledObjects field. The staged
-    // vista and water tiers plus the bounded ground-object pool move every derived profile byte.
+    // Regenerated for the console work's added boundedResidency field. That key is the ONLY
+    // delta: deleting it from each derived object reproduces the previous six hashes byte for
+    // byte, so no desktop profile value moved. boundedResidency is false on every case pinned
+    // here (they pass no hints, so neither the native-iOS nor the Xbox branch is taken) and the
+    // nativeIosMemoryProfile -> boundedResidency rewrites throughout settingsFor are therefore
+    // value-identical for these profiles; the console tiers are pinned separately.
     expect(hashes).toEqual({
-      low: '4987a6b9a467580e2cb92a69c480991393c2c225ea15c34163d32c2ea1b79421',
-      medium: '631057f9ab877b911d9dc8871ce4618cdbe7e41834e138cdf8fca2ec65605c1a',
-      high: '8bae7a847914010b9c2628b83b71db75071473e4a0454fccc7f5995d99fb5c8c',
-      ultra: '6e4125654ebe9e92439a87a0025e8c2980261381f7519ed4e4151441f709663f',
-      insane: '9b8c9748c3c859e5f205ae1158ac78ed946cc334c0a430220805f35a99a49011',
-      advanced: 'c593310aac361378b53d43809c53c7c1f5f9947b811eea19e5ff0aab456e75e4',
+      low: 'd2055c4b71cc92bdf0227e5df43905413e11bc53ae19600a1e693830016651e5',
+      medium: '6a3bb525a54947317db851efbd81b2930dbcd38fee59e6031aad08b3bfb9df0d',
+      high: '701e5979e99c1ff734c1e14da5abf780dc7aac6a20caae0c99cdc1a3e00f6356',
+      ultra: '212e4a8c751e5cfd5ba9b5f5fd4c0a6308681da32e196353588045b3b808ed24',
+      insane: 'bb4e214af21dac4a0739fa9212eeae0eafc22df5577c95b07a02a021267b167a',
+      advanced: 'ab5583938ad40a8e70a5486b21fbc761f1ea26314a07edb5c6fb45b1726b99b5',
     });
   });
 
