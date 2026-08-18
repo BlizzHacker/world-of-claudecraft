@@ -1059,6 +1059,11 @@ describe('graphics tier resolution', () => {
       );
       vi.stubGlobal('document', {
         createElement: vi.fn(() => ({ getContext })),
+        // runtimeHints() also reads document.documentElement.dataset.console (the Xbox
+        // generation split), so the stub needs a documentElement or every call through
+        // firstRunGraphicsPreset throws before it reaches its assertion. An empty dataset
+        // means no data-console attribute: the ordinary desktop browser these cases describe.
+        documentElement: { dataset: {} },
       });
     }
     afterEach(() => {
