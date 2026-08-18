@@ -194,31 +194,6 @@ export const CINDERVEIL_ABILITIES: Record<string, RealmAbilityText> = {
   rip: { name: 'Gutting Root' },
   hurricane: { name: 'Ashstorm' },
   primal_reflexes: { name: "Grovekeeper's Reflexes" },
-
-  // --- talent-granted signature abilities -----------------------------------
-  // These are not in any class kit array; they arrive from a spec choice, and
-  // the Talents spec card advertises each one by name, so they are the first
-  // ability names a player reads on this screen.
-  moonkin_form: { name: 'Drowned Moon Form' },
-  feral_charge: { name: 'Gaunt Surge' },
-  swiftmend: { name: 'Quickbloom' },
-};
-
-/**
- * Talent MASTERY labels, keyed `<class>.<specId>` exactly like the spec names.
- * Sparse for the same reason: Blood Debt, Grave Mercy, Gloamveil, Redhanded and
- * the rest already read Cinderveil, so they are not repeated here.
- */
-export const CINDERVEIL_TALENT_MASTERIES: Record<string, string> = {
-  'warrior.arms': 'Foundry Master',
-  'paladin.holy': 'Candleflame Faith',
-  'hunter.beast_mastery': 'Houndbond',
-  'priest.discipline': 'Unbroken Vigil',
-  'mage.arcane': 'Hourweave',
-  'mage.fire': 'Emberbrand',
-  'druid.balance': 'Drowned Rage',
-  'druid.feral': 'Gauntheart',
-  'druid.restoration': "The Grove's Last Gift",
 };
 
 /**
@@ -270,11 +245,10 @@ export const CINDERVEIL_SYSTEM_CATALOG: Record<string, string> = {
 /** The class layer, ready to spread into INFERNAL_ENTITY_TEXT. */
 export const CINDERVEIL_CLASS_LAYER: Pick<
   RealmEntityText,
-  'classes' | 'abilities' | 'talentSpecs' | 'talentMasteries' | 'systems'
+  'classes' | 'abilities' | 'talentSpecs' | 'systems'
 > = {
   classes: CINDERVEIL_CLASSES,
   abilities: CINDERVEIL_ABILITIES,
   talentSpecs: CINDERVEIL_TALENT_SPECS,
-  talentMasteries: CINDERVEIL_TALENT_MASTERIES,
   systems: CINDERVEIL_SYSTEMS,
 };

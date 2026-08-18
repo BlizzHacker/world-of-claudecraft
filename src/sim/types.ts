@@ -6192,6 +6192,39 @@ export function xpForLevel(level: number): number {
   return XP_TABLE[Math.min(level - 1, XP_TABLE.length - 1)];
 }
 
+// Cumulative REAL XP to reach each level: XP_CUM[L] = the sum of the XP_TABLE
+// steps 1->2 ... (L-1)->L. Built once, alongside XP_TABLE.
+const XP_CUM: number[] = (() => {
+  const cum: number[] = [0, 0];
+  let total = 0;
+  for (let lvl = 1; lvl < MAX_POSSIBLE_LEVEL; lvl++) {
+    total += XP_TABLE[Math.min(lvl - 1, XP_TABLE.length - 1)];
+    cum[lvl + 1] = total;
+  }
+  return cum;
+})();
+
+/**
+ * Total REAL XP a character must have earned to stand at `level`.
+ *
+ * This is deliberately NOT xpToReachLevel(). That one reads VLEVEL_CUM, the
+ * cosmetic post-cap virtual-level table, whose per-level cost grows a flat 10%
+ * from level 20 onward regardless of what the real curve does. The two agree
+ * EXACTLY at and below MAX_LEVEL - which is why the prestige helpers, which
+ * only ever ask about MAX_LEVEL, may keep using it - and they diverge hard
+ * above it: at level 99 the virtual table reads 431,961,431 against a real
+ * 27,484,509, high by 15.7x.
+ *
+ * That matters because lifetimeXp is what maxPrestigeRank() and the cosmetic
+ * milestones are computed from. Converting a REAL level through the virtual
+ * table inflates lifetimeXp, and the inflation buys ranks nobody earned: a dev
+ * jump to 99 through the wrong table grants 18,611 prestige ranks outright.
+ * Anything turning a real level into a lifetime-XP total belongs here.
+ */
+export function xpToReachRealLevel(level: number): number {
+  return XP_CUM[Math.max(1, Math.min(MAX_POSSIBLE_LEVEL, Math.floor(level)))];
+}
+
 // ---------------------------------------------------------------------------
 // Post-cap progression - "Max-Level XP Overflow" (see docs/prd/…).
 //
@@ -6489,21 +6522,46 @@ export interface DeedStats {
 export const PRESTIGE_XP_PER_RANK = xpForLevel(MAX_LEVEL); // = 23,200
 
 // Highest prestige rank the given lifetime XP can support (post-cap XP / cost).
-export function maxPrestigeRank(lifetimeXp: number): number {
-  const earned = lifetimeXp - xpToReachLevel(MAX_LEVEL);
-  return earned <= 0 ? 0 : Math.floor(earned / PRESTIGE_XP_PER_RANK);
+/**
+ * XP one prestige rank costs in a realm capped at `capLevel`: the price of the
+ * level you would have gained next, had there been one. At the default cap this
+ * returns PRESTIGE_XP_PER_RANK (23,200) exactly, so claudecraft and upstream are
+ * unchanged. At 99 it is the 98->99 step instead, so a rank stays a comparable
+ * effort rather than a rounding error against a multi-million-XP level.
+ */
+export function prestigeXpPerRank(capLevel: number = MAX_LEVEL): number {
+  return xpForLevel(Math.max(1, Math.min(MAX_POSSIBLE_LEVEL, Math.floor(capLevel))));
+}
+
+// Highest prestige rank the given lifetime XP can support (post-cap XP / cost).
+// `capLevel` is the REALM's cap, not the global default: prestige is overflow
+// earned past the last level, so in a 99-cap realm the 20->99 climb is ordinary
+// leveling and must not count. Anchoring on MAX_LEVEL there handed a fresh
+// level-99 character 1,177 ranks for the climb itself.
+export function maxPrestigeRank(lifetimeXp: number, capLevel: number = MAX_LEVEL): number {
+  const earned = lifetimeXp - xpToReachRealLevel(capLevel);
+  return earned <= 0 ? 0 : Math.floor(earned / prestigeXpPerRank(capLevel));
 }
 
 // Authoritative prestige eligibility: at the cap, and with enough unspent
 // post-cap XP for the next rank. Used server-side (enforced) and client-side
 // (to enable/disable the button - display only).
-export function canPrestige(level: number, lifetimeXp: number, prestigeRank: number): boolean {
-  return level >= MAX_LEVEL && prestigeRank < maxPrestigeRank(lifetimeXp);
+export function canPrestige(
+  level: number,
+  lifetimeXp: number,
+  prestigeRank: number,
+  capLevel: number = MAX_LEVEL,
+): boolean {
+  return level >= capLevel && prestigeRank < maxPrestigeRank(lifetimeXp, capLevel);
 }
 
 // Lifetime XP still needed before the next prestige rank unlocks (0 if ready).
-export function xpUntilNextPrestige(lifetimeXp: number, prestigeRank: number): number {
-  const target = xpToReachLevel(MAX_LEVEL) + (prestigeRank + 1) * PRESTIGE_XP_PER_RANK;
+export function xpUntilNextPrestige(
+  lifetimeXp: number,
+  prestigeRank: number,
+  capLevel: number = MAX_LEVEL,
+): number {
+  const target = xpToReachRealLevel(capLevel) + (prestigeRank + 1) * prestigeXpPerRank(capLevel);
   return Math.max(0, target - lifetimeXp);
 }
 

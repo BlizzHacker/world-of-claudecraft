@@ -13,7 +13,7 @@ import {
 } from '../sim/content/talents';
 import { ABILITIES, CLASSES } from '../sim/data';
 import type { AbilityEffect, PlayerClass } from '../sim/types';
-import { realmTalentMasteryName, realmTalentSpecName, tEntity } from './entity_i18n';
+import { realmTalentSpecName, tEntity } from './entity_i18n';
 import {
   getLanguage,
   type InterpolationValues,
@@ -10209,12 +10209,6 @@ export function tTalent(request: TalentTranslationRequest): string {
   // of the shared world. Spec IDS are untouched, so saved allocations survive.
   if (request.kind === 'talentSpec' && request.field === 'name') {
     const realmName = realmTalentSpecName(request.spec.class, request.spec.id);
-    if (realmName !== null) return realmName;
-  }
-  // The spec card headlines its mastery right under the spec name, so leaving
-  // this one on the shared world made the card read half re-skinned.
-  if (request.kind === 'talentMastery' && request.field === 'name') {
-    const realmName = realmTalentMasteryName(request.spec.class, request.spec.id);
     if (realmName !== null) return realmName;
   }
   // English is the authored source of truth: the hand-written `description` strings carry

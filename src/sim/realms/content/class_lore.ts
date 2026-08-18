@@ -20,7 +20,6 @@
 //   classes      canonical PlayerClass id -> { name, description }
 //   abilities    canonical ability id     -> { name, description }
 //   talentSpecs  `<class>.<specId>`       -> display name
-//   talentMasteries `<class>.<specId>`    -> the spec card's mastery label
 //   systems      RealmSystemId            -> fork tool window title
 //   (built-in window titles are ordinary catalog keys and ride `catalog`)
 //
@@ -32,7 +31,7 @@ import type { RealmClassText, RealmEntityText, RealmId } from '../types';
 /** The slice of a realm's overlay this worklist covers. */
 export type RealmClassLore = Pick<
   RealmEntityText,
-  'classes' | 'abilities' | 'talentSpecs' | 'talentMasteries' | 'systems'
+  'classes' | 'abilities' | 'talentSpecs' | 'systems'
 >;
 
 /** The nine canonical engine class ids every realm's `classes` map is keyed by.
@@ -70,10 +69,6 @@ export const REALM_CLASS_LORE_WORKLIST: Readonly<
   // the ability names the shared world was still speaking for.
   infernal: {
     voice: 'The Cinderveil. Dark, gothic, brutal: candle, ash, grave, foundry, oath.',
-    // Still open here, and the shape of what every other realm will meet: the
-    // ~30 talent-granted abilities behind each spec's choice rows, and the
-    // choice-row talent names themselves. Both resolve through tTalent, so they
-    // need no new mechanism, only text.
     lore: {}, // lives in infernal_lore_classes.ts, spread into infernal.ts
   },
   // The flagship. "Arcane mysteries, riddle-locked ruins, forgotten power":

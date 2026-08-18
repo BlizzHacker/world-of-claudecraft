@@ -758,7 +758,7 @@ import {
   type WeaponSkinLoadout,
   type WeaponSkinType,
   type WorldContent,
-  xpToReachLevel,
+  xpToReachRealLevel,
 } from './types';
 import type { VendorBuyOptions } from './vendor_buy_stack';
 import * as weaponStowMod from './weapon_stow';
@@ -3191,7 +3191,7 @@ export class Sim {
       // Backfill lifetimeXp for pre-overflow saves from the level they reached
       // plus their current bar progress, so the leaderboard is meaningful for
       // existing characters from day one.
-      meta.lifetimeXp = s.lifetimeXp ?? xpToReachLevel(player.level) + Math.max(0, s.xp);
+      meta.lifetimeXp = s.lifetimeXp ?? xpToReachRealLevel(player.level) + Math.max(0, s.xp);
       meta.honor = honorMod.normalizeHonorCounter(s.honor);
       meta.lifetimeHonor = Math.max(
         meta.honor,
@@ -5914,7 +5914,7 @@ export class Sim {
     // Keep lifetimeXp consistent with the level so post-cap progression starts
     // from a sane baseline (virtualLevel never falls below the real level). Only
     // ever raises it — lifetimeXp is monotonic.
-    r.meta.lifetimeXp = Math.max(r.meta.lifetimeXp, xpToReachLevel(r.e.level));
+    r.meta.lifetimeXp = Math.max(r.meta.lifetimeXp, xpToReachRealLevel(r.e.level));
     // Re-bake the flat talent mods at the new level before the stat + ability pass:
     // spec mastery magnitudes scale with level (min(1, level/20)), so a dev/GM level
     // jump must strengthen (or weaken) the mastery, exactly like the live ding path

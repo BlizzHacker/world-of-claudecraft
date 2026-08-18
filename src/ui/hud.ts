@@ -17313,14 +17313,14 @@ export class Hud {
         ? `<b class="cp-active-title">${esc(activeTitleText)}</b>`
         : `<span class="cp-none">${t('hudChrome.deeds.charTitleNone')}</span>`
     } <button type="button" class="btn cp-deeds-btn" data-act="open-deeds">${t('hudChrome.deeds.charOpenBook')}</button></div>`;
-    if (level >= MAX_LEVEL) {
+    if (level >= activeMaxLevel(MAX_LEVEL)) {
       // The button reflects the server's authoritative prestige gate (post-cap
       // XP earned). It's disabled — and the requirement shown — until eligible;
       // the server re-checks regardless, so a forged click does nothing.
-      const ready = canPrestige(level, sim.lifetimeXp, sim.prestigeRank);
+      const ready = canPrestige(level, sim.lifetimeXp, sim.prestigeRank, activeMaxLevel(MAX_LEVEL));
       html += `<div class="cp-actions"><button class="btn" data-act="prestige"${ready ? '' : ' disabled'}>${t('game.prestige.action')}${sim.prestigeRank > 0 ? ` (★ ${sim.prestigeRank})` : ''}</button>`;
       if (!ready)
-        html += `<span class="cp-hint">${formatXp(xpUntilNextPrestige(sim.lifetimeXp, sim.prestigeRank))} ${t('game.prestige.needXp')}</span>`;
+        html += `<span class="cp-hint">${formatXp(xpUntilNextPrestige(sim.lifetimeXp, sim.prestigeRank, activeMaxLevel(MAX_LEVEL)))} ${t('game.prestige.needXp')}</span>`;
       html += `</div>`;
     }
     return `<div class="char-progression">${html}</div>`;
@@ -17365,11 +17365,13 @@ export class Hud {
   private openPrestigeDialog(): void {
     const p = this.sim.player;
     // Mirror the server's gate; the server enforces it authoritatively anyway.
-    if (!canPrestige(p.level, this.sim.lifetimeXp, this.sim.prestigeRank)) {
+    if (
+      !canPrestige(p.level, this.sim.lifetimeXp, this.sim.prestigeRank, activeMaxLevel(MAX_LEVEL))
+    ) {
       this.showError(
-        p.level < MAX_LEVEL
+        p.level < activeMaxLevel(MAX_LEVEL)
           ? t('game.prestige.needCap')
-          : `${formatXp(xpUntilNextPrestige(this.sim.lifetimeXp, this.sim.prestigeRank))} ${t('game.prestige.needXp')}`,
+          : `${formatXp(xpUntilNextPrestige(this.sim.lifetimeXp, this.sim.prestigeRank, activeMaxLevel(MAX_LEVEL)))} ${t('game.prestige.needXp')}`,
       );
       return;
     }

@@ -74,7 +74,8 @@ export function prestige(ctx: SimContext, pid?: number): boolean {
   // prestige bar of post-cap XP since the last rank. This caps prestigeRank at
   // what lifetimeXp supports, so spamming the `prestige` command (e.g. from a
   // hacked client) can never inflate the rank beyond XP actually earned.
-  if (!canPrestige(r.e.level, r.meta.lifetimeXp, r.meta.prestigeRank)) return false;
+  if (!canPrestige(r.e.level, r.meta.lifetimeXp, r.meta.prestigeRank, activeMaxLevel(MAX_LEVEL)))
+    return false;
   r.meta.xp = 0;
   r.meta.prestigeRank += 1;
   // The prestige rank is a persisted deed trigger input, so re-check.
