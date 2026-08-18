@@ -181,7 +181,9 @@ const HEAVENLY_HOST: BodySkinDef = {
  *
  *   warrior  horned demon   red muscular biped, curved horns, tail, hands free
  *   paladin  dark paladin   black ornate plate, horned helm, cape, hands free
- *   priest   bone herald    skeletal figure, horned crown, tattered vestments
+ *   priest   bone herald    armoured skeletal warrior: bone-plate cuirass with
+ *                          flame-crested pauldrons, exposed ribcage, a skull at
+ *                          the belt over a tattered loincloth, heavy gauntlets
  *   warlock  sigil acolyte  hooded grey-blue robe, faceless, hands free
  *   druid    skullbeast     hunched bestial skeleton, horned skull, clawed
  *
@@ -207,7 +209,7 @@ const DEMONIC: BodySkinDef = {
   bodies: {
     warrior: '/cr-realms/infernal/realm_infernal_hero_horned_demon.glb',
     paladin: '/cr-realms/infernal/realm_infernal_hero_dark_paladin.glb',
-    priest: '/cr-realms/infernal/realm_infernal_hero_bone_herald.glb',
+    priest: '/cr-realms/infernal/realm_infernal_hero_bone_herald_black.glb',
     warlock: '/cr-realms/infernal/realm_infernal_hero_sigil_acolyte.glb',
     druid: '/cr-realms/infernal/realm_infernal_hero_skullbeast.glb',
   },
