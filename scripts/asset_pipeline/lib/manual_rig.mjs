@@ -51,6 +51,7 @@ import { getBounds } from '@gltf-transform/core';
 import { dedup, mergeDocuments, prune, textureCompress } from '@gltf-transform/functions';
 import { solveGeodesicWeights } from './geodesic_weights.mjs';
 import { openGlb, saveGlb } from './glb.mjs';
+import { stripScaleChannels } from './scale_channels.mjs';
 
 const ROT = ([x, y, z]) => [-z, y, x]; // -90deg about Y: +X facing -> +Z facing
 
@@ -311,11 +312,69 @@ function solveVertex(p, v, segments, side, centerX, sideGuard, K, POW, jointsOut
   }
 }
 
+/** Plausible band for armLine/height on an upright humanoid, used as a guard
+ *  rather than as the estimate. The known-good blacksmith sits at 0.771. */
+const ARM_RATIO_LO = 0.72;
+const ARM_RATIO_HI = 0.80;
+
+/** Arm line as the MEDIAN height of the outermost tenth of each arm's reach,
+ *  measured per side and averaged.
+ *
+ *  The legacy estimator takes the mean height of every vertex beyond 82% of the
+ *  half-span, over both sides at once, and that fails three ways on real
+ *  costume: a bell sleeve is as wide as the hand but hangs below it, a flared
+ *  tabard reaches nearly as wide at hip height, and a sheet whose two arms sit
+ *  at different heights averages to a line that matches neither. All three drag
+ *  the estimate DOWN, and since scale = wristAbove / rawArmY, low reads
+ *  OVERSIZE: measured on the two bodies that prompted this, necromancer_f fit at
+ *  0.673 of height (1.15x too large) and dark_paladin_f at 0.623 (1.24x), whose
+ *  two arms measured 0.567 and 0.672 separately.
+ *
+ *  A median over the outermost tenth is immune to hanging fabric (it is a
+ *  minority of the samples out at the fingertips) and doing it per side exposes
+ *  disagreement instead of averaging it away. The result is clamped into a
+ *  plausible band; when the clamp fires, the mesh is not T-posed and `note`
+ *  carries the numbers so the caller can say so out loud. Returns null when
+ *  there is not enough geometry to measure, so the caller keeps the legacy value.
+ */
+function perSideArmLine(rotatedPerPrim, min, max, note = {}) {
+  const midX = (min[0] + max[0]) / 2;
+  const height = max[1] - min[1];
+  if (!(height > 1e-6)) return null;
+  const meds = [];
+  for (const side of [1, -1]) {
+    const reach = side > 0 ? max[0] - midX : midX - min[0];
+    if (!(reach > 1e-6)) continue;
+    const ys = [];
+    for (const arr of rotatedPerPrim)
+      for (let v = 0; v < arr.length; v += 3)
+        if ((arr[v] - midX) * side > 0.90 * reach) ys.push(arr[v + 1]);
+    if (ys.length < 24) continue;
+    ys.sort((a, b) => a - b);
+    meds.push((ys[ys.length >> 1] - min[1]) / height);
+  }
+  if (!meds.length) return null;
+  note.perSide = meds.map((r) => +r.toFixed(3));
+  note.skew = meds.length > 1 ? +Math.abs(meds[0] - meds[1]).toFixed(3) : null;
+  const raw = meds.reduce((s, r) => s + r, 0) / meds.length;
+  note.ratio = +raw.toFixed(3);
+  const clamped = Math.min(ARM_RATIO_HI, Math.max(ARM_RATIO_LO, raw));
+  note.clamped = clamped !== raw ? +clamped.toFixed(3) : null;
+  return clamped * height;
+}
+
 /** Rig `rawGlbPath` onto `referenceGlbPath`'s skeleton; write to `outPath`.
  *  Options: yaw ('auto' -90deg default via preRotated=false), and fitHeight —
  *  a direct height fit (in reference BIND space) that overrides the arm-line
  *  scale heuristic. Use it whenever the heuristic misfires; see the note at the
  *  scale computation below.
+ *
+ *  armLineModel ('legacy' default, or 'perSide'): 'perSide' swaps the arm-line
+ *  estimate for the per-side clamped median described at perSideArmLine. It is
+ *  opt-in rather than default because the legacy mean is what all 1,672
+ *  registered bodies were fitted with, and a 0.3% scale drift across the library
+ *  is not worth taking as a side effect (the two agree to 0.3% on the one body
+ *  whose fit is known good). New pipelines should pass 'perSide'.
  *
  *  preserveSourceArt (default false): bind the new body to the SOURCE's own
  *  materials instead of hand-copying a subset of PBR slots onto fresh ones, and
@@ -395,7 +454,11 @@ export async function manualRigOntoReference(rawGlbPath, referenceGlbPath, outPa
       }
     }
   }
-  const rawArmY = armYSum / Math.max(1, armN) - min[1]; // above feet
+  let rawArmY = armYSum / Math.max(1, armN) - min[1]; // above feet
+  const armLineNote = {};
+  if (opts.armLineModel === 'perSide') {
+    rawArmY = perSideArmLine(rotatedPerPrim, min, max, armLineNote) ?? rawArmY;
+  }
   // The arm-line heuristic assumes a T-posed humanoid whose widest 5% of
   // vertices ARE the outstretched hands. On an A-posed, winged, caped, based or
   // simply non-humanoid mesh the widest slice sits somewhere else entirely and
@@ -417,6 +480,7 @@ export async function manualRigOntoReference(rawGlbPath, referenceGlbPath, outPa
   const report = {
     scale: +scale.toFixed(3),
     rawArmY: +rawArmY.toFixed(3),
+    armLine: armLineNote,
     wristAbove: +wristAbove.toFixed(3),
     bindGroundY: +groundY.toFixed(3),
     bindCenter: [+centerX.toFixed(3), +centerZ.toFixed(3)],
@@ -543,6 +607,17 @@ export async function manualRigOntoReference(rawGlbPath, referenceGlbPath, outPa
       if (acc.getBuffer() !== buffers[0]) acc.setBuffer(buffers[0]);
     for (const extra of buffers.slice(1)) extra.dispose();
   }
+  // The reference's clip library came across VERBATIM, and the reference has
+  // historically carried a scale channel on every bone of every clip - 444 of
+  // them on knight.glb, all constant (1,1,1), which is why no numeric check
+  // ever saw them. Constant is the dangerous kind: inert on the reference,
+  // whose bind scale IS 1, but on a body bound at any other scale that track
+  // FORCES scale to 1 for its clip and releases it the moment a clip without
+  // the track takes over - the body snaps size at the clip boundary. The
+  // reference itself has been stripped (scripts/realm_assets/strip_scale.mjs);
+  // this is the second lock, so a reference regression cannot reseed 716,000
+  // of these across the library a second time.
+  report.strippedScaleChannels = stripScaleChannels(root);
   await saveGlb(doc, outPath);
   report.clips = root.listAnimations().length;
   report.joints = joints.length;

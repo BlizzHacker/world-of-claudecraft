@@ -650,7 +650,7 @@ const INFERNAL_HERO_ROWS: Record<string, { assetUrl: string }> = {
   },
   'hero:infernal-hero-amazon:f': { assetUrl: '/cr-realms/infernal/realm_infernal_hero_amazon.glb' },
   'hero:infernal-hero-paladin': {
-    assetUrl: '/cr-realms/infernal/realm_infernal_ironthorn_dread_knight_character_019dd422.glb',
+    assetUrl: '/cr-realms/infernal/realm_infernal_blackthorn_knight.glb',
   },
   'hero:infernal-hero-paladin:f': {
     assetUrl: '/cr-realms/crypticrealm/realm_crypticrealm_town_guard_female_armored_019875c0.glb',
@@ -747,7 +747,7 @@ const INFERNAL_HERO_ROWS: Record<string, { assetUrl: string }> = {
     assetUrl: '/cr-realms/infernal/realm_infernal_class_necromancer_f.glb',
   },
   'hero:infernal-hero-tempest:f': {
-    assetUrl: '/cr-realms/classic/realm_classic_fantasy_female_shaman_technology_019590d0.glb',
+    assetUrl: '/cr-realms/classic/realm_classic_empress_ancients_019f209f.glb',
   },
   // The Sorcerer / Sorceress card's two hidden variants (infernal-hero-sorceress,
   // infernal-hero-sorcerer-m) carry the SAME published `:f` row as the canonical
