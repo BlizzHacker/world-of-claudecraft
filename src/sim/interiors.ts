@@ -51,6 +51,22 @@ function interiorTypeForBuilding(kind: string, houseSeen: number): number | null
   return null; // unknown kind — not enterable
 }
 
+/** True when the ACTIVE realm has enterable town buildings: every realm except
+ *  the one that opts out through RealmContent.vanillaWorld (claudecraft, which
+ *  serves the upstream world untouched).
+ *
+ *  Every gate below used to read `getActiveRealm().worldTheme` instead. That is a
+ *  cosmetic block (building scale/spread, lighting, sky) and infernal is the only
+ *  realm that has ever declared one, so "themed realm" silently meant "infernal":
+ *  on the other seven realms spawnBuildingInteriors returned before furnishing a
+ *  single room and every door lookup returned null, which is why clicking a
+ *  building did nothing anywhere but the Infernal Realm. The realm-agnostic work
+ *  underneath (the hollow* kind map, the door/NPC distance arbitration, the
+ *  enter_building intent command) was already correct — only this gate was not. */
+export function realmHasBuildingInteriors(): boolean {
+  return !getActiveRealm().vanillaWorld;
+}
+
 /** Kinds that participate in the first-house-becomes-the-shop count. Every caller
  *  iterating buildings MUST advance `houseSeen` through this predicate (not a raw
  *  `kind === 'house'` check) or the door walk and the click walk disagree on which
@@ -131,7 +147,9 @@ export function spawnBuildingInteriors(
 ): void {
   // Interiors are a themed-realm feature; vanilla (claudecraft) has none. Door areas
   // are computed on demand (buildingDoorNear), so there is no registry to reset.
-  if (!getActiveRealm().worldTheme) return;
+  // The gate above is now realmHasBuildingInteriors(): "vanilla" is the realm's own
+  // vanillaWorld opt-out, not the absence of a cosmetic worldTheme (see that helper).
+  if (!realmHasBuildingInteriors()) return;
   const add = (e: Entity): void => ctx.addEntity(e);
   // 1) Furnish each shared interior room (slot 0): an EXIT door at the south door,
   // furniture props, and the resident NPC.
@@ -246,7 +264,8 @@ export function buildingDoorNear(
   x: number,
   z: number,
 ): { interiorType: number; d2: number } | null {
-  if (!getActiveRealm().worldTheme) return null;
+  // Reads on every realm now; only a vanillaWorld realm (claudecraft) returns null.
+  if (!realmHasBuildingInteriors()) return null;
   let best: BuildingDoor | null = null;
   let bestD2 = Infinity;
   for (const door of computeBuildingDoors(getActiveWorldContent().props.buildings)) {
@@ -274,7 +293,7 @@ export function buildingAtPoint(
   x: number,
   z: number,
 ): { interiorType: number; cx: number; cz: number } | null {
-  if (!getActiveRealm().worldTheme) return null;
+  if (!realmHasBuildingInteriors()) return null;
   const MARGIN = 1.5; // forgiving edge so clicking the wall/roofline still counts
   let houseSeen = 0;
   for (const b of getActiveWorldContent().props.buildings) {
@@ -298,7 +317,7 @@ export function buildingAtPoint(
  *  from the click-to-enter menu succeeds from anywhere the client offered it (the client
  *  offers the menu within the same generous range). Nearest building wins. */
 export function buildingEnterableNear(x: number, z: number, range: number): number | null {
-  if (!getActiveRealm().worldTheme) return null;
+  if (!realmHasBuildingInteriors()) return null;
   const r2 = range * range;
   let best: number | null = null;
   let bestD2 = Infinity;

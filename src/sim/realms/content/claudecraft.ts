@@ -25,6 +25,9 @@ export const CLAUDECRAFT_REALM: RealmContent = {
   bgGradient: 'linear-gradient(135deg, #0a1428 0%, #050a14 100%)',
   previewColors: { primary: '#4a9eff', secondary: '#ffd700', bg: '#0a1428' },
   classes: [],
+  // The one realm that opts OUT of the world overlays: no enterable building
+  // interiors here, because upstream has none. Every other realm gets them.
+  vanillaWorld: true,
   // Pristine upstream branding stays — World of ClaudeCraft logo, GitHub link,
   // Donate button. This is the only realm that keeps the upstream identity.
   branding: {

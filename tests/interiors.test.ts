@@ -232,6 +232,64 @@ describe('building interiors (enterable town buildings)', () => {
     }
   });
 
+  // Every realm a player can pick, minus the one that opts out of the overlay.
+  const ENTERABLE_REALMS = [
+    'crypticrealm',
+    'infernal',
+    'classic',
+    'dominion',
+    'arcane',
+    'arcadevoid',
+    'fps',
+    'exchange',
+  ];
+
+  it(
+    'EVERY realm but claudecraft can enter a building, both ways (the infernal-only gate)',
+    () => {
+      // The regression this pins: entry was gated on `getActiveRealm().worldTheme`,
+      // an optional COSMETIC block (building scale/spread, lighting, sky) that only
+      // the infernal realm has ever declared. So on the other seven realms
+      // spawnBuildingInteriors returned before furnishing a single room and every
+      // door lookup returned null — clicking a town building did nothing at all,
+      // anywhere but the Infernal Realm. Entry now rides RealmContent.vanillaWorld,
+      // an explicit opt-out only claudecraft sets, so a realm added later keeps its
+      // doors by default. FPS is in the list on purpose: it plays the same world, its
+      // buildings open like everyone else's, and there is nothing to special-case.
+      for (const id of ENTERABLE_REALMS) {
+        forceRealm(id);
+        const sim = makeSim();
+        const p = sim.player;
+        const ds = doors();
+        expect(ds.length, `${id}: no building doors computed`).toBeGreaterThan(0);
+        // The four shared rooms (shop/inn/house/chapel) are furnished and reachable.
+        expect(objsOfType(sim, 'building_exit').length, `${id}: no interior rooms`).toBe(4);
+
+        // (1) the interact key at a door face.
+        const door = ds[0];
+        p.pos.x = door.x;
+        p.pos.z = door.z;
+        sim.interact();
+        expect(isInteriorPos(p.pos.x), `${id}: interact at a door did not enter`).toBe(true);
+        expect(p.interiorType).toBe(door.interiorType);
+
+        // ...and the way back out.
+        sim.leaveInterior();
+        expect(isInteriorPos(p.pos.x), `${id}: could not leave the interior`).toBe(false);
+
+        // (2) the click-to-enter menu's explicit intent, off the door face.
+        const b = getActiveWorldContent().props.buildings.find((x) => x.kind === 'house');
+        expect(b, `${id}: no house to click`).toBeTruthy();
+        expect(buildingAtPoint(b!.x, b!.z), `${id}: clicking a house hit nothing`).toBeTruthy();
+        p.pos.x = b!.x + 6;
+        p.pos.z = b!.z + 6;
+        sim.enterBuilding();
+        expect(isInteriorPos(p.pos.x), `${id}: the Enter menu command refused`).toBe(true);
+      }
+    },
+    180000,
+  );
+
   it('the themed world copy still counts as builtin content (invisible-wall regression)', () => {
     // The authored town views (Eastbrook/Fenbridge) and the muster-board colliders
     // gate on "is this the shipped world". Gating on OBJECT IDENTITY made every

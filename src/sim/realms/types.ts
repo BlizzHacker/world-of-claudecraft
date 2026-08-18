@@ -345,6 +345,18 @@ export interface RealmContent {
    *  omits this) stays vanilla / true to upstream. Render-only + prop layout; it
    *  never changes Sim entity spawns or determinism. */
   worldTheme?: RealmWorldTheme;
+  /** VANILLA WORLD opt-out: this realm serves the upstream world untouched, so the
+   *  Cryptic Realm features layered ON the world (today: enterable town-building
+   *  interiors, see sim/interiors.ts realmHasBuildingInteriors) stay off. Only
+   *  claudecraft sets it.
+   *
+   *  Deliberately an opt-OUT. The interiors gate used to be "does this realm have a
+   *  worldTheme", and worldTheme is an optional COSMETIC block that only infernal has
+   *  ever set — so seven realms (crypticrealm, classic, dominion, arcane, arcadevoid,
+   *  fps, exchange) silently had no doors at all: no interior rooms spawned, no door
+   *  areas computed, every town building solid scenery. With an opt-out, a realm added
+   *  tomorrow gets its doors by default and only a deliberate vanilla realm loses them. */
+  vanillaWorld?: boolean;
   /** Per-realm COMBAT FEEL: how snappy the moment-to-moment combat is. The D2
    *  realms collapse cast times + the GCD for instantaneous hack-n-slash; the
    *  vanilla realms (classic, claudecraft) omit this and keep WoW-style timing.
