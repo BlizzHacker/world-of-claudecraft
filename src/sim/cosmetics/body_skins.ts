@@ -209,7 +209,11 @@ const DEMONIC: BodySkinDef = {
   bodies: {
     warrior: '/cr-realms/infernal/realm_infernal_hero_horned_demon.glb',
     paladin: '/cr-realms/infernal/realm_infernal_hero_dark_paladin.glb',
-    priest: '/cr-realms/infernal/realm_infernal_hero_bone_herald_black.glb',
+    // Same URL the Bone Herald hero card resolves to (manifest.ts
+    // realm_cryptic_bone_herald), not a second copy of the file. This row is
+    // documented as wearing the published body of its hell card, and pointing
+    // at a duplicate would let the two drift the next time one is re-rigged.
+    priest: '/cr-realms/crypticrealm/bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb',
     warlock: '/cr-realms/infernal/realm_infernal_hero_sigil_acolyte.glb',
     druid: '/cr-realms/infernal/realm_infernal_hero_skullbeast.glb',
   },
