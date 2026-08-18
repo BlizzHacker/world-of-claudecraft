@@ -5,12 +5,13 @@
 // decides which ground items the realm UI should highlight, hide, or color.
 // Players opt into a filter per-realm; the default is to show everything.
 
+import { ITEM_TIERS, itemTierFor } from '../progression/scale99';
 import { RARITY_ORDER, type RarityId, type RealmItemSlot, type RealmItem } from './rarity';
 
 export type PickitOp = '>=' | '<=' | '=' | '*=';
 
 export interface PickitCondition {
-  /** 'rarity' | 'slot' | 'level' | 'name' | 'stat:<statName>' */
+  /** 'rarity' | 'slot' | 'level' | 'tier' | 'name' | 'stat:<statName>' */
   key: string;
   op: PickitOp;
   value: string;
@@ -77,6 +78,11 @@ function rarityRank(r: string): number {
   return RARITY_ORDER.indexOf(r as RarityId);
 }
 
+/** Ascending rank of a named item tier; -1 when the name is not a known tier. */
+function tierRank(t: string): number {
+  return ITEM_TIERS.findIndex((tier) => tier.id === t.toLowerCase());
+}
+
 function evaluateCondition(cond: PickitCondition, item: RealmItem): boolean {
   const { key, op, value } = cond;
   if (key === 'rarity') {
@@ -89,6 +95,18 @@ function evaluateCondition(cond: PickitCondition, item: RealmItem): boolean {
   }
   if (key === 'slot') {
     return item.slot === (value as RealmItemSlot);
+  }
+  // Named item-level tier (scale99.ts ITEM_TIERS). `tier>=elite` is the readable
+  // spelling of `level>=40`: the tier boundaries ARE round item levels, so the
+  // two forms agree exactly and a player can filter by the name the tooltip shows
+  // instead of memorizing the numeric edges.
+  if (key === 'tier') {
+    const itemRank = tierRank(item.tier ?? itemTierFor(item.itemLevel ?? 1).id);
+    const valRank = tierRank(value);
+    if (itemRank < 0 || valRank < 0) return false;
+    if (op === '>=') return itemRank >= valRank;
+    if (op === '<=') return itemRank <= valRank;
+    if (op === '=') return itemRank === valRank;
   }
   if (key === 'level') {
     const ilvl = item.itemLevel ?? 1;

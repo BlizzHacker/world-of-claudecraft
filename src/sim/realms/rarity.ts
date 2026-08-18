@@ -6,6 +6,7 @@
 // upstream sim still owns the loot table; this module only describes how a
 // realm-themed item should be tagged, colored, glowed, and named.
 
+import { affixMultiplier, itemTierFor, LEVEL_CEILING } from '../progression/scale99';
 import { Rng } from '../rng';
 
 export type RarityId = 'common' | 'magic' | 'rare' | 'legendary' | 'mythic' | 'unique';
@@ -126,6 +127,9 @@ export interface RealmItem {
   slot: RealmItemSlot;
   rarity: RarityId;
   itemLevel: number;
+  /** Named item-level tier (progression/scale99.ts ITEM_TIERS). Boundaries sit on
+   *  round item levels so a Pickit `level>=40` rule lands exactly on a tier edge. */
+  tier?: string;
   color: string;
   glow: string;
   name?: string;
@@ -158,8 +162,15 @@ function shuffle<T>(rng: Rng, arr: T[]): T[] {
   return out;
 }
 
-function rollAffix(rng: Rng, def: AffixDef): RealmAffixRoll {
-  const value = def.min + rng.next() * (def.max - def.min);
+// Roll one affix at an ITEM LEVEL. The authored min/max in AFFIX_POOL is the
+// level-1 band; progression/scale99.ts stretches magnitude stats from there and
+// deliberately leaves percentage/rate stats (resistances, leech, move speed)
+// alone so a `stat:fireRes>=20` Pickit rule keeps its meaning at every level.
+// The rng draw is unchanged in count and order — the scale is applied to the
+// already-drawn value — so seeded loot streams stay bit-identical in shape.
+function rollAffix(rng: Rng, def: AffixDef, itemLevel: number): RealmAffixRoll {
+  const rolled = def.min + rng.next() * (def.max - def.min);
+  const value = rolled * affixMultiplier(def.stat, itemLevel);
   return { name: def.name, stat: def.stat, value: Math.round(value * 100) / 100 };
 }
 
@@ -170,9 +181,13 @@ export function generateRealmItem(
   itemLevel = 1,
 ): RealmItem {
   const r = RARITY[rarity];
-  const id = `item_${itemLevel}_${rng.int(0, 0xffffff).toString(16)}`;
+  // Item level is the master scalar for the whole Pickit vocabulary, so clamp it
+  // to the same 1..99 ceiling the level bands and affix curve are built against.
+  const ilvl = Math.max(1, Math.min(LEVEL_CEILING, Math.floor(itemLevel)));
+  const id = `item_${ilvl}_${rng.int(0, 0xffffff).toString(16)}`;
   const base: RealmItem = {
-    id, slot, rarity, itemLevel,
+    id, slot, rarity, itemLevel: ilvl,
+    tier: itemTierFor(ilvl).id,
     color: r.color, glow: r.glow,
     affixes: [],
   };
@@ -182,8 +197,8 @@ export function generateRealmItem(
   }
   const prefixCount = Math.ceil(r.affixCount / 2);
   const suffixCount = Math.floor(r.affixCount / 2);
-  const prefixes = shuffle(rng, AFFIX_POOL.prefixes).slice(0, prefixCount).map((p) => rollAffix(rng, p));
-  const suffixes = shuffle(rng, AFFIX_POOL.suffixes).slice(0, suffixCount).map((s) => rollAffix(rng, s));
+  const prefixes = shuffle(rng, AFFIX_POOL.prefixes).slice(0, prefixCount).map((p) => rollAffix(rng, p, ilvl));
+  const suffixes = shuffle(rng, AFFIX_POOL.suffixes).slice(0, suffixCount).map((s) => rollAffix(rng, s, ilvl));
   base.affixes = [...prefixes, ...suffixes];
   const prefixName = prefixes[0]?.name ?? '';
   const suffixName = suffixes[0]?.name ?? '';

@@ -17,6 +17,7 @@ import type { SentChat } from './sim';
 import type { SimContext } from './sim_context';
 import { bgQueueJoin, bgQueueSize, devEndBg, devStartBg } from './social/battleground';
 import { revivePlayerAt } from './spirit';
+import { activeMaxLevel } from './realms/registry';
 import { MAX_LEVEL, type RiftTier } from './types';
 
 const MAX_DEV_SPAWNS = 20;
@@ -40,7 +41,9 @@ export function spawnMobsForDev(
 
   const count = clampInteger(requestedCount, 1, MAX_DEV_SPAWNS);
   const defaultLevel = clampInteger(player.level, template.minLevel, template.maxLevel);
-  const level = clampInteger(requestedLevel ?? defaultLevel, 1, MAX_LEVEL);
+  // The realm cap, not the vanilla 20 — otherwise a 99-cap realm can never dev-spawn
+  // a mob above 20 and the whole 21-99 band is untestable.
+  const level = clampInteger(requestedLevel ?? defaultLevel, 1, activeMaxLevel(MAX_LEVEL));
   const ids: number[] = [];
   for (let i = 0; i < count; i++) {
     const ring = Math.floor(i / DEV_SPAWN_RING_SIZE);
@@ -133,7 +136,9 @@ export function handleDevChat(
   if (levelMatch) {
     const level = Number(levelMatch[1]);
     ctx.setPlayerLevel(level, pid);
-    emitDevLog(ctx, pid, `[dev] Level set to ${clampInteger(level, 1, MAX_LEVEL)}.`);
+    // Report the level setPlayerLevel actually applied (it clamps to the realm
+    // cap); echoing a vanilla-20 clamp lied on every 99-cap realm.
+    emitDevLog(ctx, pid, `[dev] Level set to ${clampInteger(level, 1, activeMaxLevel(MAX_LEVEL))}.`);
     return null;
   }
 

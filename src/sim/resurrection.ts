@@ -52,7 +52,10 @@ function levelScaledSicknessDuration(
 ): number {
   if (level < minLevel) return 0;
   const span = MAX_LEVEL - minLevel;
-  const t = span > 0 ? (level - minLevel) / span : 1;
+  // CLAMP to 1. The ramp is authored to reach maxDuration at MAX_LEVEL; without
+  // this, a level-99 character on a D2 realm extrapolates t to ~5.7 and serves
+  // several times the intended maximum sickness. maxDuration means maximum.
+  const t = span > 0 ? Math.min(1, (level - minLevel) / span) : 1;
   return Math.round(minDuration + t * (maxDuration - minDuration));
 }
 

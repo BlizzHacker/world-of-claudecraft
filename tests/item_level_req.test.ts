@@ -1,9 +1,24 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { ITEMS } from '../src/sim/data';
 import { itemSourceLevel } from '../src/sim/item_level';
 import { meetsLevelRequirement, requiredLevelFor } from '../src/sim/item_level_req';
+import { activeMaxLevel, setRealmHostEnv } from '../src/sim/realms/registry';
 import type { ItemDef } from '../src/sim/types';
 import { MAX_LEVEL } from '../src/sim/types';
+
+// The gate is the ACTIVE REALM's cap, not the vanilla 20. The default realm
+// (crypticrealm) caps at 99, so `MAX_LEVEL` is no longer the right yardstick
+// here — it is only the fallback for a realm that declares no cap of its own.
+const ACTIVE_CAP = () => activeMaxLevel(MAX_LEVEL);
+
+function forceRealm(id: string) {
+  setRealmHostEnv({
+    queryParam: (n) => (n === 'realm' ? id : null),
+    storageGet: () => null,
+    storageSet: () => {},
+  });
+}
+afterEach(() => setRealmHostEnv(null));
 
 function gear(quality: ItemDef['quality'], extra: Partial<ItemDef> = {}): ItemDef {
   return {
@@ -37,15 +52,58 @@ describe('requiredLevelFor', () => {
     expect(requiredLevelFor(gear('legendary', { requiredLevel: 3 }))).toBe(3);
   });
 
-  it('clamps the requirement to [1, MAX_LEVEL]', () => {
+  it('clamps the requirement to [1, the active realm cap]', () => {
     expect(requiredLevelFor(gear('common', { requiredLevel: 0 }))).toBe(1);
     expect(requiredLevelFor(gear('common', { requiredLevel: -5 }))).toBe(1);
-    expect(requiredLevelFor(gear('common', { requiredLevel: 999 }))).toBe(MAX_LEVEL);
+    expect(requiredLevelFor(gear('common', { requiredLevel: 999 }))).toBe(ACTIVE_CAP());
   });
 
   it('never gates higher than the level cap, so the rarest gear stays reachable', () => {
     for (const q of ['poor', 'common', 'uncommon', 'rare', 'epic', 'legendary'] as const) {
-      expect(requiredLevelFor(gear(q))).toBeLessThanOrEqual(MAX_LEVEL);
+      expect(requiredLevelFor(gear(q))).toBeLessThanOrEqual(ACTIVE_CAP());
+    }
+  });
+
+  // ---- the 1-99 rescale: explicit vs derived clamp ------------------------
+  //
+  // An EXPLICIT requiredLevel is authoring intent and may reach the realm cap —
+  // that is how 21-99 content declares its gates. A DERIVED requirement stays
+  // pinned to the vanilla 20, because the shipped endgame content authors item
+  // levels ABOVE the old character cap on purpose (heroic 22/25, raid 27) and
+  // taking those literally would un-equip the whole raid set from every existing
+  // level-20 character. See the clampDerived note in item_level_req.ts.
+
+  it('lets an EXPLICIT requiredLevel reach into the 21-99 range on a 99-cap realm', () => {
+    forceRealm('infernal');
+    expect(requiredLevelFor(gear('epic', { requiredLevel: 70 }))).toBe(70);
+    expect(requiredLevelFor(gear('legendary', { requiredLevel: 99 }))).toBe(99);
+    expect(requiredLevelFor(gear('common', { requiredLevel: 999 }))).toBe(99); // clamped to cap
+  });
+
+  it('still clamps an explicit requirement to the VANILLA cap on claudecraft', () => {
+    forceRealm('claudecraft');
+    expect(activeMaxLevel(MAX_LEVEL)).toBe(MAX_LEVEL);
+    expect(requiredLevelFor(gear('epic', { requiredLevel: 70 }))).toBe(MAX_LEVEL);
+  });
+
+  it('keeps DERIVED endgame gates at the vanilla 20 on every realm — save compat', () => {
+    // The regression guard: heroic (25) and raid (27) source levels must keep
+    // folding down to 20 so an existing level-20 character does not lose its gear
+    // the moment the realm cap moved to 99.
+    for (const realm of ['claudecraft', 'classic', 'infernal', 'crypticrealm']) {
+      forceRealm(realm);
+      for (const id of ['heroic_soulflame_cowl', 'soulflame_mantle']) {
+        if (!ITEMS[id]) continue;
+        expect(requiredLevelFor(ITEMS[id])).toBeLessThanOrEqual(MAX_LEVEL);
+      }
+      expect(requiredLevelFor(gear('legendary'))).toBe(MAX_LEVEL);
+    }
+  });
+
+  it('keeps the ungated leveling greens ungated on every realm', () => {
+    for (const realm of ['claudecraft', 'classic', 'infernal']) {
+      forceRealm(realm);
+      expect(requiredLevelFor(gear('uncommon'))).toBe(1);
     }
   });
 });

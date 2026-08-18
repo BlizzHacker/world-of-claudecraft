@@ -39,13 +39,25 @@ export function updateRested(
   meta: PlayerMeta,
   buildings: readonly BuildingDef[] = getActiveWorldContent().props.buildings,
 ): void {
-  if (p.level >= MAX_LEVEL) return;
+  // Cheap, purely local gates first — see the perf note on the cap check below.
   const cap = RESTED_CAP_LEVELS * xpForLevel(p.level);
   if (meta.restedXp >= cap) {
     meta.restedXp = cap;
     return;
   }
   if (!isResting(p, buildings)) return;
+  // At/above the cap there is no level bar left to fill. This reads the REALM's
+  // cap, not the vanilla 20: on a 99-cap realm a level-21 character still has a
+  // bar, so cutting accrual off at 20 silently removed the mechanic for 79 of
+  // the 99 levels.
+  //
+  // Checked HERE rather than at the top, deliberately. updateRested runs inside
+  // the 20 Hz PER-PLAYER tick loop (sim.ts), and activeMaxLevel() resolves
+  // through resolveActiveRealmId(), which is uncached and performs a
+  // localStorage read in the browser client. Behind the isResting gate only the
+  // handful of characters actually standing in an inn pay for it, instead of
+  // every player on every tick.
+  if (p.level >= activeMaxLevel(MAX_LEVEL)) return;
   const fillSeconds = RESTED_FILL_HOURS * RESTED_SECONDS_PER_GAME_HOUR;
   const perSecond = (RESTED_FILL_FRACTION * xpForLevel(p.level)) / fillSeconds;
   meta.restedXp = Math.min(cap, meta.restedXp + perSecond * DT);
