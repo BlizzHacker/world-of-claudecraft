@@ -669,11 +669,14 @@ const INFERNAL_HERO_ROWS: Record<string, { assetUrl: string }> = {
   'hero:infernal-hero-assassin': {
     assetUrl: '/cr-realms/infernal/realm_infernal_hero_assassin.glb',
   },
+  'hero:infernal-hero-assassin:f': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_assassin_f.glb',
+  },
   'hero:infernal-hero-demon-hunter': {
     assetUrl: '/cr-realms/infernal/realm_infernal_hero_demon_hunter.glb',
   },
   'hero:infernal-hero-demon-hunter:f': {
-    assetUrl: '/cr-realms/infernal/realm_infernal_most_beatifull_female_blond_019875df.glb',
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_demon_hunter_f.glb',
   },
   'hero:infernal-hero-monk': { assetUrl: '/cr-realms/infernal/realm_infernal_hero_monk.glb' },
   'hero:infernal-hero-monk:f': { assetUrl: '/cr-realms/infernal/realm_infernal_class_monk_f.glb' },
@@ -732,6 +735,46 @@ const INFERNAL_HERO_ROWS: Record<string, { assetUrl: string }> = {
   },
   'hero:infernal-hell-skullbeast': {
     assetUrl: '/cr-realms/infernal/realm_infernal_hero_skullbeast.glb',
+  },
+  // Revision 33. Every row below is a FEMALE slot that had no `hero:<id>:f` of
+  // its own and therefore fell through to `class:<cls>:f` - which is the same
+  // file another card already wears through its own hero row. Six bodies were
+  // being worn by two to four cards each; the operator reported two of them by
+  // name ("female tempest is the female monk", "female acolyte looks like female
+  // warlock"). Each now names a distinct, already-existing body, chosen from a
+  // render rather than from a file name.
+  'hero:infernal-hero-necromancer:f': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_class_necromancer_f.glb',
+  },
+  'hero:infernal-hero-tempest:f': {
+    assetUrl: '/cr-realms/classic/realm_classic_fantasy_female_shaman_technology_019590d0.glb',
+  },
+  // The Sorcerer / Sorceress card's two hidden variants (infernal-hero-sorceress,
+  // infernal-hero-sorcerer-m) carry the SAME published `:f` row as the canonical
+  // card in the live document: they are the two halves of one card's toggle, not
+  // two cards, and the female path in overrideEntryForCharacter does not consult
+  // `variantOf`, so each variant id needs its own row to stop showing the Wizard's
+  // body. Only the canonical row belongs in this card-level ratchet.
+  'hero:infernal-hero-sorcerer-sorceress:f': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_ember_conclave_mage.glb',
+  },
+  'hero:infernal-hell-dark-paladin:f': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_class_dark_paladin_f.glb',
+  },
+  'hero:infernal-hell-sigil-bound-acolyte:f': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_abyssal_dowager.glb',
+  },
+  'hero:infernal-hell-horned-demon:f': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_void_magistrate.glb',
+  },
+  'hero:infernal-hell-crimson-infernal-behemoth:f': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_pyre_sovereign.glb',
+  },
+  'hero:infernal-hell-bone-herald:f': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_ossuary_archlich.glb',
+  },
+  'hero:infernal-hell-skullbeast:f': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_malevolent_majesty_fantasy_creat_019bb848.glb',
   },
 };
 

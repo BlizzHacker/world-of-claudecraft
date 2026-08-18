@@ -233,12 +233,26 @@ function finiteNonNegativeInt(value: unknown, fallback = 0): number {
   return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0 ? value : fallback;
 }
 
+/**
+ * A row is only served if its value is a JSON OBJECT. A row stored as a JSON
+ * STRING - the shape `{"assetUrl": ...}` serialised once too often - is dropped
+ * here, silently, and the card then falls through to `class:<cls>:f`, wearing
+ * some other card's body. That is not hypothetical: two rows sat inert in the
+ * live infernal document for weeks, and the "demon hunter looks like an amazon"
+ * report was caused by exactly this - the fix had been written, stored, and
+ * never served. Dropping is correct; doing it in silence is not, so the count
+ * is logged. Anything writing this map must store objects, not strings.
+ */
 function sanitizeOverrideMap(raw: unknown): RealmVisualOverrideMap {
   const output: RealmVisualOverrideMap = {};
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return output;
+  let dropped = 0;
   for (const [key, value] of Object.entries(raw as Record<string, unknown>)) {
     if (Object.keys(output).length >= MAX_OVERRIDES) break;
-    if (!OVERRIDE_KEY_RE.test(key) || !value || typeof value !== 'object') continue;
+    if (!OVERRIDE_KEY_RE.test(key) || !value || typeof value !== 'object') {
+      if (OVERRIDE_KEY_RE.test(key)) dropped++;
+      continue;
+    }
     const row = value as Record<string, unknown>;
     if (typeof row.assetUrl !== 'string' || row.assetUrl.includes('..')) continue;
     if (!ASSET_URL_RE.test(row.assetUrl)) continue;
@@ -251,6 +265,12 @@ function sanitizeOverrideMap(raw: unknown): RealmVisualOverrideMap {
       entry.assetName = row.assetName.trim().slice(0, MAX_NAME_LEN);
     }
     output[key] = entry;
+  }
+  if (dropped > 0) {
+    console.warn(
+      `[realm_visuals] ${dropped} override row(s) dropped: value was not a JSON object. ` +
+        `A row stored as a string is never served and the card silently wears another card's body.`,
+    );
   }
   return output;
 }
