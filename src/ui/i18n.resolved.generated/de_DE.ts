@@ -7003,7 +7003,9 @@ export const de_DE: EnTranslations = {
     "lockedPremium": "Purchase with {price} $CR",
     "lockedNoArt": "No body for this class yet",
     "heavenlyHost": "Angelic",
+    "demonic": "Demonic",
     "famousHeroes": "Famous Heroes",
+    "neutral": "Neutral - no faction",
     "locked": "Locked",
     "premiumBadge": "Paid"
   },

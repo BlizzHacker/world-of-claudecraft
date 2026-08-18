@@ -11,6 +11,7 @@ import {
   visualKeyForCharacter,
 } from '../src/render/characters/manifest';
 import {
+  alignedBodySkins,
   authorizeBodySkin,
   BODY_SKINS,
   bodySkinAssetUrl,
@@ -19,8 +20,13 @@ import {
   isTieredSkinBody,
   meetsSkinRequirements,
   missingSkinClassArt,
+  neutralBodySkins,
   UNLOCKED_SKIN_LEVEL,
 } from '../src/sim/cosmetics/body_skins';
+import {
+  bodySkinRailHtml,
+  bodySkinRailRows,
+} from '../src/ui/cryptic/body_skin_rail';
 import { ALL_CLASSES, type PlayerClass } from '../src/sim/types';
 
 const HEAVEN_WARRIOR = '/cr-realms/infernal/realm_infernal_hero_heaven_warrior.glb';
@@ -323,3 +329,293 @@ const INFERNAL_CLASS_ROWS: Record<string, { assetUrl: string }> = {
   'class:druid': { assetUrl: '/cr-realms/infernal/infernal_class_druid.glb' },
   'class:druid:f': { assetUrl: '/cr-realms/infernal/realm_infernal_class_druid_f.glb' },
 };
+
+// ---------------------------------------------------------------------------
+// The Demonic counterpart, the faction axis, and the dev grant (2026-08-17).
+//
+// The operator asked for three things: "Angelic needs a Counter / Demonic";
+// "Famous Heroes can be separate because some heroes may have no faction or
+// alliance but are neutral"; and "Make it so my characters can level to 99 and
+// have all characters unlocked (i'm the dev)". These pin all three, and - the
+// point of the third - pin that granting the dev everything took NOTHING away
+// from the gate that faces everyone else.
+// ---------------------------------------------------------------------------
+
+/** The six Ashen Court bodies as the LIVE Infernal document publishes them
+ *  (revision 27), so "the demonic family did not steal a card's body" is
+ *  checked against the real rows and not against a convenient fiction. */
+const INFERNAL_HELL_HERO_ROWS: Record<string, { assetUrl: string }> = {
+  'hero:infernal-hell-dark-paladin': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_dark_paladin.glb',
+  },
+  'hero:infernal-hell-horned-demon': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_horned_demon.glb',
+  },
+  'hero:infernal-hell-bone-herald': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_bone_herald.glb',
+  },
+  'hero:infernal-hell-skullbeast': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_skullbeast.glb',
+  },
+  'hero:infernal-hell-sigil-bound-acolyte': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_sigil_acolyte.glb',
+  },
+  'hero:infernal-hell-crimson-infernal-behemoth': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_behemoth.glb',
+  },
+};
+
+describe('the faction axis', () => {
+  it('gives the two unlocked families opposite sides and the paid shelf none', () => {
+    expect(bodySkinById('heavenly_host')?.faction).toBe('heavenly');
+    expect(bodySkinById('demonic')?.faction).toBe('ashen');
+    // Null, not undefined and not a third faction id: the picker's whole
+    // neutral-shelf rule keys off this being explicitly absent of a side.
+    expect(bodySkinById('famous_heroes')?.faction).toBeNull();
+  });
+
+  it('splits the catalog into an aligned pair and a neutral shelf', () => {
+    expect(alignedBodySkins().map((s) => s.id)).toEqual(['heavenly_host', 'demonic']);
+    expect(neutralBodySkins().map((s) => s.id)).toEqual(['famous_heroes']);
+    // Every family lands on exactly one shelf.
+    expect(alignedBodySkins().length + neutralBodySkins().length).toBe(BODY_SKINS.length);
+  });
+
+  it('keeps the neutral shelf out of the aligned pair even though it is a different tier', () => {
+    // Tier and faction are independent axes; a future FREE neutral family, or a
+    // PAID angelic one, must not be regrouped by this rule.
+    for (const skin of alignedBodySkins()) expect(skin.faction).not.toBeNull();
+    for (const skin of neutralBodySkins()) expect(skin.faction).toBeNull();
+  });
+});
+
+describe('the Demonic family', () => {
+  it('is an unlocked family on the same level 99 terms as the Angelic one', () => {
+    const demonic = bodySkinById('demonic');
+    expect(demonic?.tier).toBe('unlocked');
+    expect(authorizeBodySkin('demonic', 'warrior', { level: 98 }).denied).toBe('level');
+    expect(authorizeBodySkin('demonic', 'warrior', { level: 99 })).toEqual({
+      skinId: 'demonic',
+      tier: 'unlocked',
+    });
+  });
+
+  it('BORROWS the Ashen Court bodies instead of confiscating them', () => {
+    // The heavenly family strikes its bodies out of base resolution; the
+    // demonic one must not, because the bodies it uses are the correct default
+    // look of the six Ashen Court cards.
+    for (const cls of ALL_CLASSES) {
+      const url = bodySkinAssetUrl('demonic', cls);
+      if (url) expect(isTieredSkinBody(url)).toBe(false);
+    }
+    expect(isTieredSkinBody(HEAVEN_WARRIOR)).toBe(true);
+  });
+
+  it('leaves every Ashen Court hell card wearing its own published body', () => {
+    setBodyOverrides('infernal', { ...INFERNAL_CLASS_ROWS, ...INFERNAL_HELL_HERO_ROWS });
+    const cardBody = (heroId: string, cls: PlayerClass): string | undefined =>
+      VISUALS[visualKeyForCharacter({ realm: 'infernal', cls, realmHeroId: heroId })]?.url;
+    expect(cardBody('infernal-hell-horned-demon', 'warrior')).toBe(
+      INFERNAL_HELL_HERO_ROWS['hero:infernal-hell-horned-demon'].assetUrl,
+    );
+    expect(cardBody('infernal-hell-dark-paladin', 'paladin')).toBe(
+      INFERNAL_HELL_HERO_ROWS['hero:infernal-hell-dark-paladin'].assetUrl,
+    );
+    expect(cardBody('infernal-hell-skullbeast', 'druid')).toBe(
+      INFERNAL_HELL_HERO_ROWS['hero:infernal-hell-skullbeast'].assetUrl,
+    );
+  });
+
+  it('dresses a class in the demonic body once the skin is authorized', () => {
+    setBodyOverrides('infernal', { ...INFERNAL_CLASS_ROWS, ...INFERNAL_HELL_HERO_ROWS });
+    const key = visualKeyForCharacter({
+      realm: 'infernal',
+      cls: 'warrior',
+      gender: 'male',
+      bodySkinId: 'demonic',
+    });
+    expect(VISUALS[key]?.url).toBe('/cr-realms/infernal/realm_infernal_hero_horned_demon.glb');
+  });
+
+  it('reports the four classes it still owes art for', () => {
+    const gaps = missingSkinClassArt(ALL_CLASSES);
+    const demonic = gaps.find((g) => g.skinId === 'demonic');
+    expect(demonic?.classes.sort()).toEqual(['hunter', 'mage', 'rogue', 'shaman'].sort());
+  });
+
+  it('refuses a class it has no art for, at any level', () => {
+    expect(authorizeBodySkin('demonic', 'mage', { level: 99 }).denied).toBe('noArt');
+  });
+
+  it('a realm can publish its own demonic art without a deploy', () => {
+    setBodyOverrides('infernal', {
+      'skin:demonic:warrior': { assetUrl: '/cr-realms/infernal/custom_demon.glb' },
+    });
+    const key = visualKeyForCharacter({
+      realm: 'infernal',
+      cls: 'warrior',
+      bodySkinId: 'demonic',
+    });
+    expect(VISUALS[key]?.url).toBe('/cr-realms/infernal/custom_demon.glb');
+  });
+
+  it('breaks a same-tier tie on CATALOG order, never on request order', () => {
+    const a = authorizeBodySkin(['demonic', 'heavenly_host'], 'warrior', { level: 99 });
+    const b = authorizeBodySkin(['heavenly_host', 'demonic'], 'warrior', { level: 99 });
+    expect(a).toEqual(b);
+    expect(a.skinId).toBe('heavenly_host');
+  });
+});
+
+describe('the dev grant', () => {
+  const dev = { level: 1, dev: true };
+
+  it('opens BOTH unlocked families at level 1', () => {
+    expect(authorizeBodySkin('heavenly_host', 'warrior', dev).skinId).toBe('heavenly_host');
+    expect(authorizeBodySkin('demonic', 'warrior', dev).skinId).toBe('demonic');
+  });
+
+  it('opens the premium shelf with no entitlement held', () => {
+    const premium = bodySkinById('famous_heroes');
+    expect(premium).not.toBeNull();
+    if (premium) {
+      // Checked through meetsSkinRequirements because the paid family ships no
+      // bodies yet: this is the PERMISSION question, and it is the one the dev
+      // grant answers.
+      expect(meetsSkinRequirements(premium, dev)).toEqual({ ok: true });
+      expect(meetsSkinRequirements(premium, { level: 999 })).toEqual({
+        ok: false,
+        denied: 'unowned',
+      });
+    }
+  });
+
+  it('still refuses a class the family has no art for', () => {
+    // The grant is about permission, never about inventing a body. A dev asking
+    // for a mage angel gets the honest answer, not a substituted body.
+    expect(authorizeBodySkin('heavenly_host', 'mage', dev).denied).toBe('noArt');
+    expect(authorizeBodySkin('demonic', 'mage', dev).denied).toBe('noArt');
+  });
+
+  it('still refuses an unknown skin id', () => {
+    expect(authorizeBodySkin('not_a_skin', 'warrior', dev).denied).toBe('unknown');
+  });
+
+  it('DOES NOT WEAKEN THE GATE: a non-dev at 98 is refused everything', () => {
+    // The pin the whole design exists for. Every shape of "not a dev" is tried,
+    // because the grant is a boolean and an accidental truthiness bug here would
+    // hand the tier to every player at once.
+    for (const notDev of [
+      { level: 98 },
+      { level: 98, dev: false },
+      { level: 98, dev: undefined },
+    ] as const) {
+      expect(authorizeBodySkin('heavenly_host', 'warrior', notDev).denied).toBe('level');
+      expect(authorizeBodySkin('demonic', 'warrior', notDev).denied).toBe('level');
+      expect(authorizeBodySkin('famous_heroes', 'warrior', notDev).denied).toBe('unowned');
+    }
+    // And the gate itself is untouched: it was not lowered to meet anyone.
+    expect(UNLOCKED_SKIN_LEVEL).toBe(99);
+  });
+
+  it('a non-dev at 99 still cannot reach the PAID shelf', () => {
+    // Levelling is not a purchase, with or without the dev grant existing.
+    expect(authorizeBodySkin('famous_heroes', 'warrior', { level: 99 }).denied).toBe('unowned');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// The rail's three bands (src/ui/cryptic/body_skin_rail.ts).
+//
+// "the rail reads as: your class body | two unlockable families | a separate
+// neutral premium shelf". Pinned on the view model AND on the markup, because
+// the grouping only means something to a player if it survives into the DOM.
+// ---------------------------------------------------------------------------
+
+const RAIL_LABELS = {
+  base: 'Class Body',
+  baseNote: "Your class's own look.",
+  names: { heavenlyHost: 'Angelic', demonic: 'Demonic', famousHeroes: 'Famous Heroes' },
+  lockedLevel: 'Unlocks at level 99',
+  lockedPremium: { default: 'Purchase with 500 $CR' },
+  lockedNoArt: 'No body for this class yet',
+  available: 'Ready to wear',
+  groupLabel: 'Appearance tier',
+  neutral: 'Neutral - no faction',
+};
+
+describe('the appearance rail', () => {
+  const rowsFor = (grants: { level: number; dev?: boolean }, selectedSkinId: string | null = null) =>
+    bodySkinRailRows({ cls: 'warrior', grants, selectedSkinId, labels: RAIL_LABELS });
+
+  it('orders the bands class body, aligned pair, neutral shelf', () => {
+    const rows = rowsFor({ level: 1 });
+    expect(rows.map((r) => r.shelf)).toEqual(['base', 'aligned', 'aligned', 'neutral']);
+    expect(rows.map((r) => r.label)).toEqual([
+      'Class Body',
+      'Angelic',
+      'Demonic',
+      'Famous Heroes',
+    ]);
+  });
+
+  it('never files the neutral shelf under a faction', () => {
+    const famous = rowsFor({ level: 1 }).find((r) => r.skinId === 'famous_heroes');
+    expect(famous?.faction).toBeNull();
+    expect(famous?.shelf).toBe('neutral');
+    // And the aligned pair keeps its sides, so the grouping is not just "premium
+    // goes last".
+    const aligned = rowsFor({ level: 1 }).filter((r) => r.shelf === 'aligned');
+    expect(aligned.map((r) => r.faction)).toEqual(['heavenly', 'ashen']);
+  });
+
+  it('paints an ordinary level 1 character both families locked, with the reason', () => {
+    const rows = rowsFor({ level: 1 });
+    expect(rows.filter((r) => r.lockedBecause === 'level').map((r) => r.label)).toEqual([
+      'Angelic',
+      'Demonic',
+    ]);
+    expect(rows.find((r) => r.skinId === 'famous_heroes')?.lockedBecause).toBe('unowned');
+    expect(rows.find((r) => r.skinId === null)?.lockedBecause).toBeNull();
+  });
+
+  it('paints the DEV both families reachable at level 1', () => {
+    const rows = rowsFor({ level: 1, dev: true });
+    expect(rows.find((r) => r.skinId === 'heavenly_host')?.lockedBecause).toBeNull();
+    expect(rows.find((r) => r.skinId === 'demonic')?.lockedBecause).toBeNull();
+    // The paid shelf is permitted but has no warrior body, so it reads honestly
+    // rather than pretending to be wearable.
+    expect(rows.find((r) => r.skinId === 'famous_heroes')?.lockedBecause).toBe('noArt');
+  });
+
+  it('shows a selection only while it is still authorized', () => {
+    expect(rowsFor({ level: 1, dev: true }, 'demonic').find((r) => r.skinId === 'demonic')?.selected)
+      .toBe(true);
+    // Same stored pick, no grant: the world already fell back, so the rail must.
+    expect(rowsFor({ level: 98 }, 'demonic').find((r) => r.skinId === 'demonic')?.selected).toBe(
+      false,
+    );
+  });
+
+  it('renders the bands as separate hosts and keeps one flat chip list', () => {
+    const html = bodySkinRailHtml(rowsFor({ level: 1 }), RAIL_LABELS);
+    expect(html).toContain('class="body-skin-shelf shelf-base"');
+    expect(html).toContain('class="body-skin-shelf shelf-aligned"');
+    expect(html).toContain('shelf-neutral');
+    // The caption is what makes the neutrality legible, and it is on the neutral
+    // band only.
+    expect(html).toContain('Neutral - no faction');
+    expect(html.match(/body-skin-shelf-caption/g)?.length).toBe(1);
+    // One roving tab stop across every chip, exactly as before the split: the
+    // main.ts wiring queries `.body-skin-chip` flat and must still find four.
+    expect(html.match(/<button type="button" class="body-skin-chip/g)?.length).toBe(4);
+    expect(html.match(/tabindex="0"/g)?.length).toBe(1);
+  });
+
+  it('marks a locked chip aria-disabled so a D-pad can read it but not pick it', () => {
+    const html = bodySkinRailHtml(rowsFor({ level: 1 }), RAIL_LABELS);
+    expect(html.match(/aria-disabled="true"/g)?.length).toBe(3);
+    expect(html).toContain('data-locked="level"');
+    expect(html).toContain('data-faction="ashen"');
+  });
+});

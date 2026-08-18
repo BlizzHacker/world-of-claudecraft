@@ -134,6 +134,10 @@ function authedDb(overrides: DbOverrides = {}): void {
       weaponSkinIds: [],
       weaponSkinLoadout: {},
     }),
+    // The appearance-tier grant (server/body_skin_dev.ts); default to an
+    // ORDINARY account so a test that says nothing about it gets the player's
+    // answer, not the dev's.
+    isDevAccount: async () => false,
     ...overrides,
   });
 }
@@ -358,6 +362,7 @@ describe('character list handlers', () => {
         weaponSkinIds: ['ice_fang_sword'],
         weaponSkinLoadout: { sword: 'ice_fang_sword' },
       }),
+      isDevAccount: async () => false,
     });
     // Online status comes from the injected runtime: row 1 online, row 2 offline.
     installRuntime({ isCharacterOnline: (id) => id === 1 });
@@ -381,6 +386,10 @@ describe('character list handlers', () => {
           weaponSkinId: 'ice_fang_sword',
           realmHeroId: null,
           visualKey: null,
+          bodySkinId: null,
+          bodySkinUnlocked: false,
+          bodySkinEntitlements: [],
+          bodySkinDev: false,
         },
         {
           id: 2,
@@ -398,6 +407,10 @@ describe('character list handlers', () => {
           weaponSkinId: null,
           realmHeroId: null,
           visualKey: null,
+          bodySkinId: null,
+          bodySkinUnlocked: false,
+          bodySkinEntitlements: [],
+          bodySkinDev: false,
         },
       ],
     };
@@ -420,7 +433,7 @@ describe('character list handlers', () => {
     const previousRealm = process.env.CR_REALM_ID;
     process.env.CR_REALM_ID = 'infernal';
     try {
-      setCharactersDbForTests({
+      authedDb({
         listCharacters: async () => [
           charRow({
             name: 'DuranceTester',
@@ -1748,8 +1761,10 @@ describe('character-mutation limiters (newLimiterCharacterMutations 429)', () =>
 // ---------------------------------------------------------------------------
 
 describe('routes table', () => {
-  it('registers the nine character routes on the api surface', () => {
-    expect(routes).toHaveLength(9);
+  it('registers the ten character routes on the api surface', () => {
+    // Ten since POST /api/characters/:id/body-skin joined the table with the
+    // appearance tiers (2026-08-17).
+    expect(routes).toHaveLength(10);
     for (const r of routes) {
       expect(r.surface).toBe('api');
       expect(typeof r.handler).toBe('function');
@@ -1763,6 +1778,7 @@ describe('routes table', () => {
       'GET /api/characters/:id/deeds-recent',
       'POST /api/characters/:id/rename',
       'POST /api/characters/:id/takeover',
+      'POST /api/characters/:id/body-skin',
       'DELETE /api/characters/:id',
     ];
     for (const key of ownedPaths) {
@@ -1770,5 +1786,103 @@ describe('routes table', () => {
       const route = routeFor(method as Method, path);
       expect(route.meta?.requireOwned).toEqual({ kind: 'character', ownerScope: 'account' });
     }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// The dev/admin appearance grant, through the real routes (2026-08-17).
+//
+// The operator is the dev and wants every family unlocked; everyone else must
+// be exactly as gated as before. Both halves are pinned here, at the seam that
+// actually decides: the account-scoped list and the selection write. The grant
+// is driven through charactersDb.isDevAccount, which is server/body_skin_dev.ts
+// in production and reads accounts.admin_roles - never anything the request
+// carries.
+// ---------------------------------------------------------------------------
+
+describe('appearance-tier dev grant', () => {
+  /** A level-1 character whose SAVE asks for the demonic skin. Level 1 is the
+   *  point: nobody can reach 99 today, so the grant is the only thing that can
+   *  possibly authorize this row. */
+  const wishing = () =>
+    charRow({ id: 1, name: 'Hero', class: 'warrior', level: 1, state: st({ bodySkinId: 'demonic' }) });
+
+  it('a DEV account wears the skin its level could never earn', async () => {
+    authedDb({ listCharacters: async () => [wishing()], isDevAccount: async () => true });
+    const res = await callHandler('GET', '/api/characters', {
+      account: { accountId: 1, scope: 'full' },
+    });
+    expect(res.status).toBe(200);
+    const [row] = bodyRecord(res.body).characters as Record<string, unknown>[];
+    expect(row.bodySkinId).toBe('demonic');
+    expect(row.bodySkinDev).toBe(true);
+    expect(row.bodySkinUnlocked).toBe(true);
+  });
+
+  it('a NON-dev at level 98 is refused the same row, and told nothing about the grant', async () => {
+    authedDb({
+      listCharacters: async () => [{ ...wishing(), level: 98 }],
+      isDevAccount: async () => false,
+    });
+    const res = await callHandler('GET', '/api/characters', {
+      account: { accountId: 7, scope: 'full' },
+    });
+    expect(res.status).toBe(200);
+    const [row] = bodyRecord(res.body).characters as Record<string, unknown>[];
+    // Authorized straight back down to the base body: the wish is stored, the
+    // permission is not.
+    expect(row.bodySkinId).toBeNull();
+    expect(row.bodySkinUnlocked).toBe(false);
+    // THE NON-LEAK. Another account's response never carries a true grant, and
+    // the serialized body contains no other spelling of one either.
+    expect(row.bodySkinDev).toBe(false);
+    expect(JSON.stringify(res.body)).not.toContain('"bodySkinDev":true');
+  });
+
+  it('the grant is read per request, so it cannot ride in from the client', async () => {
+    // Same character, same body, two accounts: only the db predicate differs.
+    const isDevAccount = vi.fn(async () => false);
+    authedDb({ listCharacters: async () => [wishing()], isDevAccount });
+    await callHandler('GET', '/api/characters', { account: { accountId: 7, scope: 'full' } });
+    expect(isDevAccount).toHaveBeenCalledWith(7);
+  });
+
+  it('POST body-skin: a dev at level 1 may select an unlocked family', async () => {
+    const saveCharacterState = vi.fn(async () => true);
+    authedDb({ isDevAccount: async () => true, saveCharacterState });
+    const res = await callHandler('POST', '/api/characters/:id/body-skin', {
+      account: { accountId: 1, scope: 'full' },
+      state: stateWith(charRow({ id: 1, level: 1 })),
+      body: { bodySkinId: 'demonic' },
+    });
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ ok: true, bodySkinId: 'demonic', tier: 'unlocked' });
+    expect(saveCharacterState).toHaveBeenCalledTimes(1);
+  });
+
+  it('POST body-skin: a NON-dev at level 98 is refused with the reason', async () => {
+    const saveCharacterState = vi.fn(async () => true);
+    authedDb({ isDevAccount: async () => false, saveCharacterState });
+    const res = await callHandler('POST', '/api/characters/:id/body-skin', {
+      account: { accountId: 7, scope: 'full' },
+      state: stateWith(charRow({ id: 1, level: 98 })),
+      body: { bodySkinId: 'demonic' },
+    });
+    expect(res.status).toBe(403);
+    expect(res.body).toEqual({ ok: false, code: 'body_skin_locked', reason: 'level' });
+    // Nothing was written: a refused wish must not reach the save blob either.
+    expect(saveCharacterState).not.toHaveBeenCalled();
+  });
+
+  it('POST body-skin: the dev grant does not sell the paid shelf a body it lacks', async () => {
+    // Famous Heroes ships no art, so even the dev gets the honest refusal.
+    authedDb({ isDevAccount: async () => true, saveCharacterState: async () => true });
+    const res = await callHandler('POST', '/api/characters/:id/body-skin', {
+      account: { accountId: 1, scope: 'full' },
+      state: stateWith(charRow({ id: 1, level: 1 })),
+      body: { bodySkinId: 'famous_heroes' },
+    });
+    expect(res.status).toBe(403);
+    expect(res.body).toEqual({ ok: false, code: 'body_skin_locked', reason: 'noArt' });
   });
 });

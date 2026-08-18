@@ -7,9 +7,36 @@
 @layer shell {
   .body-skin-rail {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 8px;
     margin: 10px 0 2px;
+  }
+
+  /* The three bands: class body, the faction-aligned pair, and the neutral
+     shelf. The neutral one is separated by a rule rather than by spacing alone,
+     because "this shelf takes no side" is the claim the layout is making and a
+     gap is too quiet to make it. */
+  .body-skin-shelf-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .body-skin-shelf.shelf-neutral {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 8px;
+    border-top: 1px solid #3a3223;
+  }
+
+  .body-skin-shelf-caption {
+    color: #b6a583;
+    font:
+      600 10px / 1.2 system-ui,
+      sans-serif;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 
   .body-skin-chip {
@@ -61,5 +88,16 @@
 
   .body-skin-chip.tier-premium .body-skin-chip-label {
     color: #d4af37;
+  }
+
+  /* The two aligned families are told apart by colour as well as by name, so
+     the pair reads as a pair. Faction, not tier, drives this: the tier colour
+     above still says "unlocked" for both. */
+  .body-skin-chip.faction-heavenly .body-skin-chip-label {
+    color: #cfe3ff;
+  }
+
+  .body-skin-chip.faction-ashen .body-skin-chip-label {
+    color: #e58b6b;
   }
 }

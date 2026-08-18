@@ -138,6 +138,7 @@ import {
   isDungeonDifficulty,
   isEquipSlot,
   MAX_LEVEL,
+  MAX_POSSIBLE_LEVEL,
   type MobFamily,
   RUN_SPEED,
   type SimEvent,
@@ -3753,6 +3754,14 @@ export class GameServer {
         : authorizeBodySkin(state?.bodySkinId ?? null, cls, {
             level: state?.level ?? 1,
             entitlements: bodySkinEntitlementsFor(name, REALM),
+            // The DEV/ADMIN grant. `meta.isAdmin` is the staff identity the
+            // handshake resolved from the database (ws_auth.ts:
+            // adminRolesForAccount(accountId) !== null) BEFORE this join was
+            // admitted, which is the same predicate server/body_skin_dev.ts
+            // applies on the HTTP routes - so the picker and the world cannot
+            // disagree about who the dev is. A client cannot reach it: it is
+            // never parsed from a frame.
+            dev: meta.isAdmin === true,
           }).skinId,
       bankBonus: meta.bankBonus,
       duranceTester,
@@ -8114,9 +8123,21 @@ export class GameServer {
         break;
       // dev/ops commands, only when ALLOW_DEV_COMMANDS=1 (never in production)
       case 'dev_level': {
-        const canDev = session.isGm || process.env.ALLOW_DEV_COMMANDS === '1';
+        // Staff (session.isAdmin, resolved at the handshake) joins the GM and the
+        // ALLOW_DEV_COMMANDS build here: the operator asked to be able to level
+        // his own characters for testing, and his characters are not flagged
+        // is_gm. Nothing else about the session changes, and a non-staff client
+        // saying it is staff cannot: the flag is stamped from the database at
+        // join and is never read off a frame.
+        const canDev =
+          session.isGm || session.isAdmin || process.env.ALLOW_DEV_COMMANDS === '1';
         if (canDev && typeof msg.level === 'number') {
-          sim.setPlayerLevel(Math.max(1, Math.min(60, msg.level | 0)), pid);
+          // MAX_POSSIBLE_LEVEL, not the old literal 60: sim.setPlayerLevel already
+          // clamps to the ACTIVE realm cap (activeMaxLevel(MAX_LEVEL)), so this
+          // outer bound only exists to keep an absurd number out of the sim. The
+          // literal was a second, staler cap that would have silently held the
+          // operator at 60 the moment the level-99 rescale lands.
+          sim.setPlayerLevel(Math.max(1, Math.min(MAX_POSSIBLE_LEVEL, msg.level | 0)), pid);
         }
         break;
       }

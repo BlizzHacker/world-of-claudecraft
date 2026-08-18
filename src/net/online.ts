@@ -240,6 +240,11 @@ export interface CharacterSummary {
   bodySkinUnlocked?: boolean;
   /** Paid skin entitlements the ACCOUNT holds. */
   bodySkinEntitlements?: string[];
+  /** The account's DEV/ADMIN appearance grant, as the SERVER resolved it for
+   *  this response. Present only on your own roster (the list route is
+   *  account-scoped), and a painting hint only: every selection write and every
+   *  world join re-resolves it server-side, so setting it here buys nothing. */
+  bodySkinDev?: boolean;
 }
 
 function stringList(value: unknown): string[] {

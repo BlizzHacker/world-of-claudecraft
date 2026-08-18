@@ -7003,7 +7003,9 @@ export const en_XA: EnTranslations = {
     "lockedPremium": "[Þúŕçĥášé ŵíţĥ {price} $ÇŔ]",
     "lockedNoArt": "[Ñó ƀóðý ƒóŕ ţĥíš çļášš ýéţ]",
     "heavenlyHost": "[Áñĝéļíç]",
+    "demonic": "[Ðéɱóñíç]",
     "famousHeroes": "[Ƒáɱóúš Ĥéŕóéš]",
+    "neutral": "[Ñéúţŕáļ - ñó ƒáçţíóñ]",
     "locked": "[Ļóçķéð]",
     "premiumBadge": "[Þáíð]"
   },

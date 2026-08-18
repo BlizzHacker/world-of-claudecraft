@@ -338,6 +338,7 @@ import { createRetentionSweep, RETENTION_SWEEP_BATCH_SIZE } from './retention_sw
 import { resolveSfxOverlayFile } from './sfx_overlay';
 import { handleSitePresenceHeartbeat } from './site_presence';
 import { adminRolesForAccount } from './staff_db';
+import { isDevAccount } from './body_skin_dev';
 import {
   cacheControlFor,
   etagFor,
@@ -1191,6 +1192,8 @@ function toSheetRank(rank: { rank: number; total: number } | null): SheetRank | 
 function characterListPayload(
   chars: CharacterRow[],
   weaponSkinLoadout: Record<string, string>,
+  // The requesting account's dev/admin appearance grant (server/body_skin_dev.ts).
+  dev: boolean,
 ): unknown {
   // Delegates to the RouteDef arm's shared builder (review follow-up on the
   // weaponSkinId addition): one implementation means the retained legacy arm
@@ -1202,6 +1205,7 @@ function characterListPayload(
     chars,
     (characterId) => [...liveGame().clients.values()].some((s) => s.characterId === characterId),
     weaponSkinLoadout,
+    dev,
   );
 }
 
@@ -1783,6 +1787,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
         characterListPayload(
           await listCharacters(accountId),
           (await loadAccountCosmetics(accountId)).weaponSkinLoadout,
+          await isDevAccount(accountId),
         ),
       );
     }
@@ -1796,6 +1801,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
           characterListPayload(
             await listCharacters(accountId),
             (await loadAccountCosmetics(accountId)).weaponSkinLoadout,
+            await isDevAccount(accountId),
           ),
         );
       }

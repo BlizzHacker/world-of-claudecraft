@@ -6018,6 +6018,7 @@ function bodySkinRailLabels(): BodySkinRailLabels {
     baseNote: t('bodySkins.baseNote'),
     names: {
       heavenlyHost: t('bodySkins.heavenlyHost'),
+      demonic: t('bodySkins.demonic'),
       famousHeroes: t('bodySkins.famousHeroes'),
     },
     lockedLevel: unlockLevelSentence(t('bodySkins.lockedLevel')),
@@ -6028,6 +6029,7 @@ function bodySkinRailLabels(): BodySkinRailLabels {
     lockedNoArt: t('bodySkins.lockedNoArt'),
     available: t('bodySkins.available'),
     groupLabel: t('bodySkins.groupLabel'),
+    neutral: t('bodySkins.neutral'),
   };
 }
 
@@ -6044,7 +6046,7 @@ function bodySkinRailLabels(): BodySkinRailLabels {
 function paintBodySkinRail(
   host: HTMLElement,
   cls: PlayerClass,
-  grants: { level: number; entitlements?: readonly string[] },
+  grants: { level: number; entitlements?: readonly string[]; dev?: boolean },
   selectedSkinId: string | null,
   onPick?: (skinId: string | null) => void,
 ): void {
@@ -8801,6 +8803,10 @@ function paintCharselectBodySkinRail(c: CharacterSummary): void {
       // server that predates the field.
       level: c.bodySkinUnlocked === true ? UNLOCKED_SKIN_LEVEL : (c.level ?? 1),
       entitlements: c.bodySkinEntitlements ?? [],
+      // Painted from the server's own verdict for THIS account. It only decides
+      // which chips are drawn reachable; the pick that follows is authorized
+      // again by /api/characters/:id/body-skin against a freshly read grant.
+      dev: c.bodySkinDev === true,
     },
     c.bodySkinId ?? null,
     (skinId) => {

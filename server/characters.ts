@@ -74,6 +74,7 @@ import {
   UNLOCKED_SKIN_LEVEL,
 } from '../src/sim/cosmetics/body_skins';
 import { bodySkinEntitlementsFor } from './body_skin_entitlement';
+import { isDevAccount } from './body_skin_dev';
 import { recentDeedsForCharacter } from './deeds_db';
 import { ctxAccountId } from './http/context';
 import { gameMetricsCounters } from './http/game_signals';
@@ -240,6 +241,7 @@ const REAL_CHARACTERS_DB = {
   guildNameForCharacter,
   lifetimeXpRankForCharacter,
   recentDeedsForCharacter,
+  isDevAccount,
 };
 let charactersDb = REAL_CHARACTERS_DB;
 
@@ -282,6 +284,13 @@ export function buildCharacterList(
   chars: CharacterRow[],
   isOnline: (characterId: number) => boolean,
   weaponSkinLoadout: Record<string, string>,
+  // The DEV/ADMIN grant for the account that asked for THIS list
+  // (server/body_skin_dev.ts). Defaults to false so every existing caller and
+  // every test keeps the ordinary player's answer; only a caller that has
+  // resolved the account's staff identity may pass true. It is scoped to the
+  // requester's own roster - the list route is account-scoped - so it can never
+  // describe, or leak into, another account's characters.
+  dev = false,
 ): unknown {
   return {
     realm: REALM,
@@ -311,13 +320,21 @@ export function buildCharacterList(
       bodySkinId: authorizeBodySkin(c.state?.bodySkinId ?? null, c.class, {
         level: c.level,
         entitlements: bodySkinEntitlementsFor(c.name, charRealm),
+        dev,
       }).skinId,
       // What this character COULD wear, for the appearance editor's tier rail.
       // Published rather than derived on the client because the client has no
       // truthful entitlement list, and a picker that offers what the server
       // will refuse is worse than one that greys it out.
-      bodySkinUnlocked: c.level >= UNLOCKED_SKIN_LEVEL,
+      bodySkinUnlocked: dev || c.level >= UNLOCKED_SKIN_LEVEL,
       bodySkinEntitlements: bodySkinEntitlementsFor(c.name, charRealm),
+      // The dev/admin grant, published so the picker paints the paid shelf
+      // reachable too. Only ever true on the requesting account's OWN rows: a
+      // non-dev's list is built with dev=false and carries `false` here, and no
+      // account's list ever contains another account's characters, so the grant
+      // cannot travel. It is a HINT for painting, never a permission - every
+      // write and every join re-resolves it from the database.
+      bodySkinDev: dev,
       // Keep the migrated RouteDef byte-identical with the retained legacy arm:
       // character select renders the same body and held items as the live world.
       skinCatalog: c.state?.skinCatalog === 'mech' ? 'mech' : 'class',
@@ -516,7 +533,12 @@ async function meCharactersHandler(ctx: Ctx): Promise<void> {
   const rt = useRuntime();
   const chars = await charactersDb.listCharacters(ctxAccountId(ctx));
   const cosmetics = await charactersDb.loadAccountCosmetics(ctxAccountId(ctx));
-  json(ctx.res, 200, buildCharacterList(chars, rt.isCharacterOnline, cosmetics.weaponSkinLoadout));
+  const dev = await charactersDb.isDevAccount(ctxAccountId(ctx));
+  json(
+    ctx.res,
+    200,
+    buildCharacterList(chars, rt.isCharacterOnline, cosmetics.weaponSkinLoadout, dev),
+  );
 }
 
 /** GET /api/characters: full-session list (byte-identical body to me/characters). */
@@ -524,7 +546,12 @@ async function listCharactersHandler(ctx: Ctx): Promise<void> {
   const rt = useRuntime();
   const chars = await charactersDb.listCharacters(ctxAccountId(ctx));
   const cosmetics = await charactersDb.loadAccountCosmetics(ctxAccountId(ctx));
-  json(ctx.res, 200, buildCharacterList(chars, rt.isCharacterOnline, cosmetics.weaponSkinLoadout));
+  const dev = await charactersDb.isDevAccount(ctxAccountId(ctx));
+  json(
+    ctx.res,
+    200,
+    buildCharacterList(chars, rt.isCharacterOnline, cosmetics.weaponSkinLoadout, dev),
+  );
 }
 
 /** POST /api/characters: validate, create the capped character, reclaim a freed name once. */
@@ -778,10 +805,15 @@ async function bodySkinHandler(ctx: Ctx): Promise<void> {
     json(ctx.res, 400, { ok: false, code: 'body_skin_invalid' });
     return;
   }
+  // Resolved from the database on THIS request, against the account the request
+  // authenticated as - never from the body, and never carried over from the
+  // list response the picker was painted from.
+  const dev = await charactersDb.isDevAccount(ctxAccountId(ctx));
   const decision = requested
     ? authorizeBodySkin(requested, character.class, {
         level: character.level,
         entitlements: bodySkinEntitlementsFor(character.name, REALM),
+        dev,
       })
     : { skinId: null, tier: 'base' as const };
   if (requested && decision.skinId === null) {
