@@ -29,9 +29,30 @@
 #
 set -uo pipefail
 
+# The bank this was written for. Overridable with --pattern because the chibi
+# `infernal_class_` bank needs the identical treatment and the identical
+# refusal gates; a second copy of this script would be a second place for the
+# gates to rot.
+# NAME COLLISION — READ BEFORE PASSING --pattern infernal_class_
+#
+# `infernal_class_` matches TWO different banks and only one of them is condemned:
+#
+#   infernal_class_warrior.glb          CONDEMNED chibi bank. Unprefixed. 3 copies
+#                                       still in the store, 18 in the build INPUT
+#                                       at moveweight-assets/forged-glbs/infernal,
+#                                       which is why every build re-advertises them
+#                                       in the realm manifest at a store URL that
+#                                       404s.
+#   realm_infernal_class_rogue_f.glb    LEGITIMATE female class bodies. 11 in the
+#                                       store, and 25 LIVE realm_visuals overrides
+#                                       wear them (crypticrealm hero:cipherblade,
+#                                       hero:gravecaller, hero:oracle and more).
+#
+# A bare `--pattern infernal_class_` therefore aims at 25 live hero bodies. Gate 1
+# refuses it, which is the only reason that is a near miss rather than an outage —
+# do not --force past it. Anchor the pattern to the unprefixed form first.
 PATTERN='infernal_human_'
 STAMP="$(date +%Y%m%d)"
-QUAR="/root/condemned_bank_${STAMP}"
 REPO="/opt/cryptic-realm"
 DB="crypticrealm"
 
@@ -43,6 +64,7 @@ while [ $# -gt 0 ]; do
     --commit) MODE="commit" ;;
     --dry-run) MODE="dry" ;;
     --scope) SCOPE="${2:-store}"; shift ;;
+    --pattern) PATTERN="${2:?--pattern needs a value}"; shift ;;
     --force) FORCE=1 ;;
     *) echo "unknown arg: $1" >&2; exit 2 ;;
   esac
@@ -52,7 +74,9 @@ done
 say() { printf '%s\n' "$*"; }
 hr()  { printf '%s\n' "-------------------------------------------------------------------"; }
 
-say "=== QUARANTINE THE CONDEMNED infernal_human_* BANK ==="
+QUAR="/root/condemned_bank_${PATTERN%_}_${STAMP}"
+
+say "=== QUARANTINE THE CONDEMNED ${PATTERN}* BANK ==="
 say "mode=$MODE  scope=$SCOPE  quarantine=$QUAR"
 hr
 
