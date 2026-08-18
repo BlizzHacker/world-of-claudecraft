@@ -25,6 +25,26 @@
 // hot path, the HUD, and the offline tools alike. Consumers combine it with
 // activeMaxLevel() themselves; this module never reads the active realm.
 
+// WIRING STATUS - read this before assuming a number in here is live.
+//
+// The ITEM half IS consumed: realms/rarity.ts calls affixMultiplier() and
+// itemTierFor(), realms/pickit.ts reads ITEM_TIERS, and item_level_req.ts reads
+// LEVEL_CEILING.
+//
+// The MONSTER/ASCENSION half is NOT wired yet. ascendMobLevel(),
+// ascensionForLevel(), ascensionTier(), levelBandFor(), itemLevelForMobLevel(),
+// LEVEL_BANDS and ASCENSION_TIERS have no caller anywhere in src/ - they are
+// exercised only by tests/progression_scale99.test.ts. That suite passing proves
+// the arithmetic is right; it does NOT prove the game uses it. Do not read a
+// green run as evidence that ascension tiers are live.
+//
+// What IS live for monsters past the authored 1-20 band is a separate path:
+// RealmContent.combatScaling, applied by d2MobHpMult()/d2MobDmgMult() in
+// realms/registry.ts and called from entity.ts createMob(). The four 99-cap
+// realms (infernal, crypticrealm, arcane, dominion) all declare combatScaling.
+// classic does not, so despite its cap of 80 its monsters never scale past the
+// level they were authored at - deliberate or not, that asymmetry is real.
+
 /** The hard ceiling the XP table and every band in this file are built against. */
 export const LEVEL_CEILING = 99;
 
