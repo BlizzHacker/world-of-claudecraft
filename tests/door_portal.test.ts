@@ -2,8 +2,8 @@
 // Geometry/material shape, shared-resource tagging, and the Nythraxis click-box
 // special case. Three.js runs headless in Node (no WebGL needed for geometry).
 import * as THREE from 'three';
-import { describe, expect, it } from 'vitest';
-import { buildDoorBody } from '../src/render/door_portal';
+import { afterAll, describe, expect, it } from 'vitest';
+import { buildDoorBody, resetDoorPortalProfileCaches } from '../src/render/door_portal';
 import { isSharedGeometry, isSharedMaterial } from '../src/render/shared_resource';
 
 const meshes = (body: THREE.Group): THREE.Mesh[] =>
@@ -97,5 +97,66 @@ describe('portal material: tint per direction and HDR boost per tier', () => {
     // The boost multiplies the working color channels by 2 (no clamp at this tint).
     expect(enterHigh.color.r).toBeCloseTo(enterLow.color.r * 2);
     expect(enterHigh.color.r).toBeGreaterThan(enterLow.color.r);
+  });
+});
+
+// The swirl membrane. riftPortalTexture() is built from a 2D canvas, so it only
+// exists where a document does; these cases install a minimal fake one (the sim
+// suite runs in plain Node) and assert the shared door/waypoint/town-portal
+// material takes it. Without a map the CircleGeometry fills edge to edge with one
+// additively boosted colour: the flat violet slab that stood inside every D2
+// waypoint pylon in every town square.
+describe('portal material: the swirl membrane (flat-violet-slab regression)', () => {
+  const hadDocument = 'document' in globalThis;
+  const fakeCtx = () => ({
+    fillStyle: '',
+    strokeStyle: '',
+    lineCap: '',
+    lineWidth: 0,
+    globalCompositeOperation: '',
+    createRadialGradient: () => ({ addColorStop: () => {} }),
+    beginPath: () => {},
+    arc: () => {},
+    fill: () => {},
+    moveTo: () => {},
+    lineTo: () => {},
+    stroke: () => {},
+  });
+  const withFakeDocument = <T>(fn: () => T): T => {
+    (globalThis as { document?: unknown }).document = {
+      createElement: () => ({ width: 0, height: 0, getContext: () => fakeCtx() }),
+    };
+    try {
+      return fn();
+    } finally {
+      if (!hadDocument) delete (globalThis as { document?: unknown }).document;
+    }
+  };
+  afterAll(() => resetDoorPortalProfileCaches());
+
+  it('the door/waypoint portal carries a texture, not one flat colour', () => {
+    resetDoorPortalProfileCaches();
+    const mat = withFakeDocument(() => {
+      const { portal } = buildDoorBody(true, null, false);
+      if (!portal) throw new Error('expected a portal mesh');
+      return portal.material as THREE.MeshBasicMaterial;
+    });
+    expect(mat.map, 'the shared portal swirl lost its membrane texture').toBeTruthy();
+    // Still additive + double-sided + tinted per direction: the map is white and
+    // carries only the soft radial falloff and the spiral arms the spin rides on.
+    expect(mat.blending).toBe(THREE.AdditiveBlending);
+    expect(mat.side).toBe(THREE.DoubleSide);
+    expect(mat.transparent).toBe(true);
+  });
+
+  it('entering and leaving markers share the one cached texture', () => {
+    resetDoorPortalProfileCaches();
+    const [enter, exit] = withFakeDocument(() => {
+      const a = buildDoorBody(true, null, false).portal?.material as THREE.MeshBasicMaterial;
+      const b = buildDoorBody(false, null, false).portal?.material as THREE.MeshBasicMaterial;
+      return [a, b];
+    });
+    expect(enter.map).toBe(exit.map);
+    expect(enter.color.getHex()).not.toBe(exit.color.getHex());
   });
 });

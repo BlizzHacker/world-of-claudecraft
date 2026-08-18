@@ -170,11 +170,23 @@ function doorPortalMaterial(entering: boolean, lowGfx: boolean): THREE.MeshBasic
   const existing = portalMats.get(key);
   if (existing) return existing;
   const tint = entering ? 0x9a5df0 : 0x6ab8ff;
+  // The membrane texture is what makes this read as a portal instead of a slab.
+  // Without a map, a MeshBasicMaterial fills the CircleGeometry edge to edge with
+  // one flat colour, additively boosted 2x. That is what stood in every town
+  // square: a D2 waypoint pylon (a town-hub and a trail pylon in each of the 14
+  // zones), a town portal, a building exit and a dungeon door all frame this disc,
+  // and all of them framed a hard-edged, uniformly violet oval that did not even
+  // appear to spin — a constant disc has nothing to rotate. It is the exact
+  // hard-edged oval riftPortalTexture() was written to abolish (see the note
+  // there), and this was the only portal material in the file that never got it:
+  // the rift gate and the Wildheart gate have both passed it since they were
+  // written. Tinted per direction by `color` like those two — the texture is white.
   const material = markSharedMaterial(
     new THREE.MeshBasicMaterial({
       color: tint,
+      map: riftPortalTexture() ?? undefined,
       transparent: true,
-      opacity: 0.55,
+      opacity: 0.72,
       side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
