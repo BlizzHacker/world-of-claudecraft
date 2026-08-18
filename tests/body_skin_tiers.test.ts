@@ -31,7 +31,7 @@ import { ALL_CLASSES, type PlayerClass } from '../src/sim/types';
 
 const HEAVEN_WARRIOR = '/cr-realms/infernal/realm_infernal_hero_heaven_warrior.glb';
 const HEAVEN_ROGUE = '/cr-realms/infernal/realm_infernal_hero_heaven_rogue.glb';
-const CLASS_WARRIOR = '/cr-realms/infernal/infernal_class_warrior.glb';
+const CLASS_WARRIOR = '/cr-realms/crypticrealm/realm_crypticrealm_rune_warden.glb';
 
 /** The live Infernal document, trimmed to the rows this file reasons about. */
 function installInfernalOverrides(): void {
@@ -41,7 +41,11 @@ function installInfernalOverrides(): void {
     'hero:infernal-hero-rogue': { assetUrl: HEAVEN_ROGUE, assetName: 'Heaven Rogue' },
     // The base bodies the cards must fall through to.
     'class:warrior': { assetUrl: CLASS_WARRIOR, assetName: 'Warrior' },
-    'class:rogue': { assetUrl: '/cr-realms/infernal/infernal_class_rogue.glb', assetName: 'Rogue' },
+    'class:rogue': {
+      assetUrl:
+        '/cr-realms/crypticrealm/realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289.glb',
+      assetName: 'Rogue',
+    },
     'class:warrior:f': {
       assetUrl: '/cr-realms/infernal/realm_infernal_class_warrior_f.glb',
       assetName: 'Warrior (F)',
@@ -310,23 +314,32 @@ describe('duplication ratchet', () => {
 
 /** The class rows of the live infernal document (revision 27), as published. */
 const INFERNAL_CLASS_ROWS: Record<string, { assetUrl: string }> = {
-  'class:warrior': { assetUrl: '/cr-realms/infernal/infernal_class_warrior.glb' },
+  'class:warrior': { assetUrl: '/cr-realms/crypticrealm/realm_crypticrealm_rune_warden.glb' },
   'class:warrior:f': { assetUrl: '/cr-realms/infernal/realm_infernal_class_warrior_f.glb' },
-  'class:paladin': { assetUrl: '/cr-realms/infernal/infernal_class_paladin.glb' },
-  'class:hunter': { assetUrl: '/cr-realms/infernal/infernal_class_demon_hunter.glb' },
-  'class:rogue': { assetUrl: '/cr-realms/infernal/infernal_class_rogue.glb' },
+  'class:paladin': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_ironthorn_dread_knight_character_019dd422.glb',
+  },
+  'class:paladin:f': {
+    assetUrl: '/cr-realms/crypticrealm/realm_crypticrealm_town_guard_female_armored_019875c0.glb',
+  },
+  'class:hunter': { assetUrl: '/cr-realms/infernal/realm_infernal_hero_demon_hunter.glb' },
+  'class:hunter:f': { assetUrl: '/cr-realms/infernal/realm_infernal_hero_amazon.glb' },
+  'class:rogue': {
+    assetUrl:
+      '/cr-realms/crypticrealm/realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289.glb',
+  },
   'class:rogue:f': { assetUrl: '/cr-realms/infernal/realm_infernal_class_rogue_f.glb' },
   'class:priest': {
     assetUrl: '/cr-realms/infernal/realm_infernal_violet_necromancer_necromancer_m_019cb976.glb',
   },
   'class:priest:f': { assetUrl: '/cr-realms/infernal/realm_infernal_class_priest_f.glb' },
-  'class:shaman': { assetUrl: '/cr-realms/infernal/infernal_class_witch_doctor.glb' },
+  'class:shaman': { assetUrl: '/cr-realms/infernal/realm_infernal_hero_monk.glb' },
   'class:shaman:f': { assetUrl: '/cr-realms/infernal/realm_infernal_class_monk_f.glb' },
-  'class:mage': { assetUrl: '/cr-realms/infernal/infernal_class_wizard.glb' },
+  'class:mage': { assetUrl: '/cr-realms/infernal/realm_infernal_hero_wizard.glb' },
   'class:mage:f': { assetUrl: '/cr-realms/infernal/realm_infernal_class_mage_f.glb' },
-  'class:warlock': { assetUrl: '/cr-realms/infernal/infernal_class_warlock.glb' },
+  'class:warlock': { assetUrl: '/cr-realms/infernal/realm_infernal_hero_warlock.glb' },
   'class:warlock:f': { assetUrl: '/cr-realms/infernal/realm_infernal_class_warlock_f.glb' },
-  'class:druid': { assetUrl: '/cr-realms/infernal/infernal_class_druid.glb' },
+  'class:druid': { assetUrl: '/cr-realms/infernal/realm_infernal_hero_druid.glb' },
   'class:druid:f': { assetUrl: '/cr-realms/infernal/realm_infernal_class_druid_f.glb' },
 };
 
@@ -617,5 +630,138 @@ describe('the appearance rail', () => {
     expect(html.match(/aria-disabled="true"/g)?.length).toBe(3);
     expect(html).toContain('data-locked="level"');
     expect(html).toContain('data-faction="ashen"');
+  });
+});
+
+const INFERNAL_HERO_ROWS: Record<string, { assetUrl: string }> = {
+  'hero:infernal-hero-warrior': {
+    assetUrl: '/cr-realms/crypticrealm/realm_crypticrealm_rune_warden.glb',
+  },
+  'hero:infernal-hero-warrior:f': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_class_warrior_f.glb',
+  },
+  'hero:infernal-hero-rogue': {
+    assetUrl:
+      '/cr-realms/crypticrealm/realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289.glb',
+  },
+  'hero:infernal-hero-rogue:f': { assetUrl: '/cr-realms/infernal/realm_infernal_class_rogue_f.glb' },
+  'hero:infernal-hero-amazon': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_shadow_warrior_characters_fashio_01942cf0.glb',
+  },
+  'hero:infernal-hero-amazon:f': { assetUrl: '/cr-realms/infernal/realm_infernal_hero_amazon.glb' },
+  'hero:infernal-hero-paladin': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_ironthorn_dread_knight_character_019dd422.glb',
+  },
+  'hero:infernal-hero-paladin:f': {
+    assetUrl: '/cr-realms/crypticrealm/realm_crypticrealm_town_guard_female_armored_019875c0.glb',
+  },
+  'hero:infernal-hero-barbarian': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_barbarian.glb',
+  },
+  'hero:infernal-hero-barbarian:f': {
+    assetUrl: '/cr-realms/classic/realm_classic_stonebound_shieldmaiden_019eacae.glb',
+  },
+  'hero:infernal-hero-necromancer': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_violet_necromancer_necromancer_m_019cb976.glb',
+  },
+  'hero:infernal-hero-druid': { assetUrl: '/cr-realms/infernal/realm_infernal_hero_druid.glb' },
+  'hero:infernal-hero-druid:f': { assetUrl: '/cr-realms/infernal/realm_infernal_class_druid_f.glb' },
+  'hero:infernal-hero-assassin': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_assassin.glb',
+  },
+  'hero:infernal-hero-demon-hunter': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_demon_hunter.glb',
+  },
+  'hero:infernal-hero-demon-hunter:f': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_most_beatifull_female_blond_019875df.glb',
+  },
+  'hero:infernal-hero-monk': { assetUrl: '/cr-realms/infernal/realm_infernal_hero_monk.glb' },
+  'hero:infernal-hero-monk:f': { assetUrl: '/cr-realms/infernal/realm_infernal_class_monk_f.glb' },
+  'hero:infernal-hero-wizard': { assetUrl: '/cr-realms/infernal/realm_infernal_hero_wizard.glb' },
+  'hero:infernal-hero-wizard:f': { assetUrl: '/cr-realms/infernal/realm_infernal_class_mage_f.glb' },
+  'hero:infernal-hero-witch-doctor': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_witch_doctor.glb',
+  },
+  'hero:infernal-hero-witch-doctor:f': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_class_shaman_f.glb',
+  },
+  'hero:infernal-hero-crusader': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_crusader.glb',
+  },
+  'hero:infernal-hero-crusader:f': {
+    assetUrl: '/cr-realms/classic/realm_classic_ironclad_valkyrie_019d15d3.glb',
+  },
+  'hero:infernal-hero-spiritborn': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_spiritborn.glb',
+  },
+  'hero:infernal-hero-spiritborn:f': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_class_priest_f.glb',
+  },
+  'hero:infernal-hero-warlock': { assetUrl: '/cr-realms/infernal/realm_infernal_hero_warlock.glb' },
+  'hero:infernal-hero-warlock:f': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_class_warlock_f.glb',
+  },
+  'hero:infernal-hero-blood-knight': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_blood_knight.glb',
+  },
+  'hero:infernal-hero-blood-knight:f': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_class_paladin_f.glb',
+  },
+  'hero:infernal-hero-tempest': { assetUrl: '/cr-realms/infernal/realm_infernal_hero_tempest.glb' },
+  'hero:infernal-hero-sorcerer-m': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_male_sorcerer.glb',
+  },
+  'hero:infernal-hero-sorcerer-sorceress': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_sorcerer.glb',
+  },
+  'hero:infernal-hell-dark-paladin': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_dark_paladin.glb',
+  },
+  'hero:infernal-hell-sigil-bound-acolyte': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_sigil_acolyte.glb',
+  },
+  'hero:infernal-hell-horned-demon': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_horned_demon.glb',
+  },
+  'hero:infernal-hell-crimson-infernal-behemoth': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_behemoth.glb',
+  },
+  'hero:infernal-hell-bone-herald': {
+    assetUrl:
+      '/cr-realms/crypticrealm/bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb',
+  },
+  'hero:infernal-hell-skullbeast': {
+    assetUrl: '/cr-realms/infernal/realm_infernal_hero_skullbeast.glb',
+  },
+};
+
+describe('the card ratchet: one body, one card', () => {
+  it('no infernal hero card shares its body with another hero card', () => {
+    const byUrl = new Map<string, string[]>();
+    for (const [key, row] of Object.entries(INFERNAL_HERO_ROWS)) {
+      const card = key.replace(/:(f|m)$/, '');
+      const list = byUrl.get(row.assetUrl) ?? [];
+      if (!list.includes(card)) list.push(card);
+      byUrl.set(row.assetUrl, list);
+    }
+    expect([...byUrl.entries()].filter(([, cards]) => cards.length > 1)).toEqual([]);
+  });
+
+  it("a card's male and female bodies are never the same file", () => {
+    for (const key of Object.keys(INFERNAL_HERO_ROWS)) {
+      if (!key.endsWith(':f')) continue;
+      const male = INFERNAL_HERO_ROWS[key.slice(0, -2)];
+      if (!male) continue;
+      expect(INFERNAL_HERO_ROWS[key]?.assetUrl).not.toBe(male.assetUrl);
+    }
+  });
+
+  it('the quarantined chibi class bank is named by no row', () => {
+    // /root/body_quarantine_20260818: the eighteen `infernal_class_*` bodies were
+    // rendered body by body and are chibi, several bare-chested; the operator
+    // rejected infernal_class_warrior.glb by name. Nothing may name them again.
+    for (const row of Object.values({ ...INFERNAL_CLASS_ROWS, ...INFERNAL_HERO_ROWS })) {
+      expect(row.assetUrl).not.toMatch(/\/infernal_class_[a-z_]+\.glb$/);
+    }
   });
 });

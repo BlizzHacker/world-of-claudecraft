@@ -1709,17 +1709,6 @@ export const GUIDE_ZONES: GuideZoneInfo[] = [
       "Reliquary Hill",
       "Brightwood Glade",
       "The Sowfield",
-      "Eastbrook",
-      "Wolf Run",
-      "Boar Meadow",
-      "Mirror Lake",
-      "Sableweb",
-      "Copper Dig",
-      "Bandit Camp",
-      "Fallen Chapel",
-      "Reliquary Hill",
-      "Brightwood Glade",
-      "The Sowfield",
       "Thornwheel Circuit",
       "The Boarpit",
       "Eastbrook Homes",
@@ -2750,7 +2739,9 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 12,
         "rare": false,
         "templateId": "gravecaller_mender",
-        "model": null
+        "model": null,
+        "tint": "#9b59b6",
+        "tintStrength": 0.18
       },
       {
         "name": "Gravecaller Summoner",
@@ -2758,7 +2749,9 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 12,
         "rare": false,
         "templateId": "gravecaller_summoner",
-        "model": null
+        "model": null,
+        "tint": "#884ea0",
+        "tintStrength": 0.18
       },
       {
         "name": "Wyrmcult Zealot",
@@ -3103,7 +3096,10 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 20,
         "rare": false,
         "templateId": "gloam_strider",
-        "model": null
+        "model": "mob_raptor",
+        "tint": "#4c4a72",
+        "tintStrength": 0.35,
+        "still": "/guide-stills/mob_raptor__4c4a72__s35.webp"
       }
     ]
   }
@@ -10727,6 +10723,12 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "idle": "Idle",
     "height": 1.7,
     "tintStrength": 0.3
+  },
+  "mob_raptor": {
+    "url": "models/creatures/velociraptor.glb",
+    "idle": "Velociraptor_Idle",
+    "height": 1.6,
+    "tintStrength": 0.35
   },
   "mob_nightkin": {
     "url": "models/creatures/tribal.glb",

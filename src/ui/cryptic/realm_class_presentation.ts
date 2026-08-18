@@ -609,7 +609,7 @@ const CRYPTIC_BODY_ASSETS = {
   darkPaladin: realmStoreAsset('infernal/realm_infernal_hero_dark_paladin.glb', 'Rune Warden'),
   // Published as class:rogue. Dark hooded assassin, red sigil accents, hands free.
   cipherBlade: realmStoreAsset(
-    'crypticrealm/realm_crypticrealm_realistic_humanoid_assassin_wearing_01942e8f.glb',
+    'crypticrealm/realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289.glb',
     'Cipher Blade',
   ),
   // Published as class:hunter. Dark hooded ranger, strapped leathers, no weapon.
@@ -643,24 +643,31 @@ const CRYPTIC_BODY_ASSETS = {
 } satisfies Record<string, RealmClassAsset>;
 
 const INFERNAL_CLASS_ASSETS = {
-  Warrior: infernalHumanAsset('infernal_class_warrior.glb', 'Warrior'),
-  Rogue: infernalHumanAsset('infernal_class_rogue.glb', 'Rogue'),
-  'Sorcerer / Sorceress': infernalHumanAsset('infernal_class_sorcerer.glb', 'Sorcerer / Sorceress'),
-  Amazon: infernalHumanAsset('infernal_class_amazon.glb', 'Amazon'),
-  Barbarian: infernalHumanAsset('infernal_class_barbarian.glb', 'Barbarian'),
-  Necromancer: infernalHumanAsset('infernal_class_necromancer.glb', 'Necromancer'),
-  Paladin: infernalHumanAsset('infernal_class_paladin.glb', 'Paladin'),
-  Druid: infernalHumanAsset('infernal_class_druid.glb', 'Druid'),
-  Assassin: infernalHumanAsset('infernal_class_assassin.glb', 'Assassin'),
-  'Demon Hunter': infernalHumanAsset('infernal_class_demon_hunter.glb', 'Demon Hunter'),
-  Monk: infernalHumanAsset('infernal_class_monk.glb', 'Monk'),
-  Wizard: infernalHumanAsset('infernal_class_wizard.glb', 'Wizard'),
-  'Witch Doctor': infernalHumanAsset('infernal_class_witch_doctor.glb', 'Witch Doctor'),
-  Crusader: infernalHumanAsset('infernal_class_crusader.glb', 'Crusader'),
-  Spiritborn: infernalHumanAsset('infernal_class_spiritborn.glb', 'Spiritborn'),
-  Warlock: infernalHumanAsset('infernal_class_warlock.glb', 'Warlock'),
-  'Blood Knight': infernalHumanAsset('infernal_class_blood_knight.glb', 'Blood Knight'),
-  Tempest: infernalHumanAsset('infernal_class_tempest.glb', 'Tempest'),
+  // 2026-08-18: repointed OFF the `infernal_class_*` bank, which was rendered body by
+  // body at 320px front and hero and looked at cell by cell. Every one of the eighteen
+  // is chibi (four to five head proportions, mitten hands) and several are bare-chested
+  // or bare-breasted; infernal_class_warrior.glb is the brute the operator rejected by
+  // name. The bank is quarantined (see docs/condemned-body-bank.md). Each entry below
+  // now names the SAME body the live infernal document publishes for that card, so the
+  // compiled fallback and the published override land in the same place.
+  Warrior: realmStoreAsset('crypticrealm/realm_crypticrealm_rune_warden.glb', 'Warrior'),
+  Rogue: realmStoreAsset('crypticrealm/realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289.glb', 'Rogue'),
+  'Sorcerer / Sorceress': realmStoreAsset('infernal/realm_infernal_hero_sorcerer.glb', 'Sorcerer / Sorceress'),
+  Amazon: realmStoreAsset('infernal/realm_infernal_shadow_warrior_characters_fashio_01942cf0.glb', 'Amazon'),
+  Barbarian: realmStoreAsset('infernal/realm_infernal_hero_barbarian.glb', 'Barbarian'),
+  Necromancer: realmStoreAsset('infernal/realm_infernal_violet_necromancer_necromancer_m_019cb976.glb', 'Necromancer'),
+  Paladin: realmStoreAsset('infernal/realm_infernal_ironthorn_dread_knight_character_019dd422.glb', 'Paladin'),
+  Druid: realmStoreAsset('infernal/realm_infernal_hero_druid.glb', 'Druid'),
+  Assassin: realmStoreAsset('infernal/realm_infernal_hero_assassin.glb', 'Assassin'),
+  'Demon Hunter': realmStoreAsset('infernal/realm_infernal_hero_demon_hunter.glb', 'Demon Hunter'),
+  Monk: realmStoreAsset('infernal/realm_infernal_hero_monk.glb', 'Monk'),
+  Wizard: realmStoreAsset('infernal/realm_infernal_hero_wizard.glb', 'Wizard'),
+  'Witch Doctor': realmStoreAsset('infernal/realm_infernal_hero_witch_doctor.glb', 'Witch Doctor'),
+  Crusader: realmStoreAsset('infernal/realm_infernal_hero_crusader.glb', 'Crusader'),
+  Spiritborn: realmStoreAsset('infernal/realm_infernal_hero_spiritborn.glb', 'Spiritborn'),
+  Warlock: realmStoreAsset('infernal/realm_infernal_hero_warlock.glb', 'Warlock'),
+  'Blood Knight': realmStoreAsset('infernal/realm_infernal_hero_blood_knight.glb', 'Blood Knight'),
+  Tempest: realmStoreAsset('infernal/realm_infernal_hero_tempest.glb', 'Tempest'),
 } satisfies Readonly<Record<string, RealmClassAsset>>;
 
 const INFERNAL_BASE_CLASS_ASSETS: Record<PlayerClass, RealmClassAsset> = {

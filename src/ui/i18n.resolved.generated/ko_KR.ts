@@ -15202,45 +15202,12 @@ export const ko_KR: EnTranslations = {
             "label": "먼바다 해안 모래톱 둑길"
           },
           "12": {
-            "label": "Wolf Run"
-          },
-          "13": {
-            "label": "Boar Meadow"
-          },
-          "14": {
-            "label": "Mirror Lake"
-          },
-          "15": {
-            "label": "Sableweb"
-          },
-          "16": {
-            "label": "Copper Dig"
-          },
-          "17": {
-            "label": "Bandit Camp"
-          },
-          "18": {
-            "label": "Fallen Chapel"
-          },
-          "19": {
-            "label": "Reliquary Hill"
-          },
-          "20": {
-            "label": "Brightwood Glade"
-          },
-          "21": {
-            "label": "The Sowfield"
-          },
-          "22": {
-            "label": "Thornwheel Circuit"
-          },
-          "23": {
             "label": "The Boarpit"
           },
-          "24": {
+          "13": {
             "label": "Eastbrook Homes"
           },
-          "25": {
+          "14": {
             "label": "The Farshore Causeway"
           }
         }

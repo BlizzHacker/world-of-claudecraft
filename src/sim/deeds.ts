@@ -86,6 +86,10 @@ export const GROUND_PICKUP_PROVING_QUESTS: readonly string[] = [
   'q_whispers',
   'q_names_of_the_dead',
   'q_gravecallers_trail',
+  // The Hellmaw Well Easter egg (zone1 q_save_cainhurst): its three binding
+  // wards are ground-object-only quest items -- no mob loot row, no vendor
+  // row -- so a completed run can only have gone through the pickup path.
+  'q_save_cainhurst',
   'q_fenbridge_muster',
   'q_fen_supplies',
   'q_drowned_censers',

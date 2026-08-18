@@ -25,10 +25,10 @@ import { VC_BOT_BODY_KEYS } from '../src/sim/content/vale_cup';
 import { MOBS, NPCS } from '../src/sim/data';
 import { realmClassVisualKey } from '../src/sim/realms/class_visuals';
 import { setActiveRealmForOffline } from '../src/sim/realms/registry';
+import { makeWorld } from './vale_cup_util';
 import type { RealmId } from '../src/sim/realms/types';
 import type { Entity } from '../src/sim/types';
 import { ALL_CLASSES } from '../src/sim/types';
-import { makeWorld } from './vale_cup_util';
 
 // A generated body that carries the emit_manifest default layout: a melee
 // weapon in handslot.r and a round shield in handslot.l.

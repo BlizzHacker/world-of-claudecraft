@@ -1627,7 +1627,10 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   // DuranceTester is always the armored human Warrior body, never a demon.
   // Character identity, house ownership, inventory, and persistence are not
   // changed by this presentation-only override.
-  realm_infernal_durance_humanoid: infernalHuman('infernal_class_warrior.glb', 2.3),
+  // 2026-08-18: was infernal_class_warrior.glb, the chibi bare-chested brute the
+  // operator rejected by name; that whole bank is quarantined. Repointed at the
+  // durance tester body that ships beside it in the same store folder.
+  realm_infernal_durance_humanoid: infernalHuman('durance_tester_humanoid.glb', 2.3),
   realm_infernal_dark_paladin: {
     url: `${REALM_MODELS}/infernal/dark_paladin_commander.glb`,
     height: 2.35,

@@ -4380,11 +4380,15 @@ describe('gather node cooldown wire round trip (ncd)', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 66 unique keys in sorted order', () => {
+  it('ALL_DELTA_KEYS contains exactly 73 unique keys in sorted order', () => {
     // +1: guildBank (Guild Bank Phase 2), +1: the battleground bg key, +1: the
-    // commission order board's corder key (issue #1298).
-    expect(ALL_DELTA_KEYS).toHaveLength(66);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(66);
+    // commission order board's corder key (issue #1298), then +7 from the
+    // upstream v0.35.1 intake (b37da7781a): the five venue readouts derby
+    // (Thornwheel Derby), pit (the Boarpit), homes (Eastbrook Homes), horde
+    // (the Dead Road) and skirmish (Warcamp Skirmish), plus the two minigame
+    // session wires mgz (zombie defense) and mga (the arcade cabinet).
+    expect(ALL_DELTA_KEYS).toHaveLength(73);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(73);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -4409,8 +4413,16 @@ describe('delta-key contract pins (anti-drift)', () => {
     // plus the packet's slotted-tool-effects key tslot for 63, the
     // battleground's bg self key for 64, guildBank (Guild Bank Phase 2)
     // for 65, and this branch's commission order board key corder
-    // (issue #1298) for 66.
-    expect(scraped.size).toBe(66);
+    // (issue #1298) for 66. The upstream v0.35.1 intake (b37da7781a) then
+    // landed seven more for 73: derby, pit, homes, horde and skirmish, the five
+    // venue readouts that share the Vale Cup wire cadence (they are encoded
+    // together behind the VC_WIRE_INTERVAL_TICKS gate in game.ts), plus the two
+    // minigame session wires encoded beside party -- mgz (zombie defense) and
+    // mga (the arcade cabinet). That intake grew the key set without moving
+    // these two counts, which is the whole reason they read 66 until now:
+    // ALL_DELTA_KEYS and game.ts have agreed at 73 since the merge landed, so
+    // this was a bookkeeping miss, never a wire regression.
+    expect(scraped.size).toBe(73);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 

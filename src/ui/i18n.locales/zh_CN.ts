@@ -4370,7 +4370,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.zones.farshore_isle.pois.2.label': '守望草甸',
   'entities.zones.farshore_isle.pois.3.label': '碎裂断崖',
   'entities.zones.farshore_isle.pois.4.label': '裂野',
-  'entities.zones.eastbrook_vale.pois.11.label': '远岸沙洲堤道',
+  'entities.zones.eastbrook_vale.pois.14.label': '远岸沙洲堤道',
   'entities.mobs.moor_ram.name': '荒原羊',
   'entities.mobs.gale_wisp.name': '疾风精',
   'entities.mobs.shoal_scuttler.name': '浅滩蟹',

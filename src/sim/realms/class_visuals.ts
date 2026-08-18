@@ -66,7 +66,7 @@ const REALM_CLASS_VISUALS: Partial<
     warrior: 'realm_infernal_hero_dark_paladin',
     paladin: 'realm_infernal_evil_warlord_armor_made_0196a156', // GAP: Gargoyle Oathsworn
     hunter: 'realm_infernal_hero_demon_hunter',
-    rogue: 'realm_crypticrealm_realistic_humanoid_assassin_wearing_01942e8f',
+    rogue: 'realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289',
     priest: 'realm_arcane_all_seeing_sage_sage_019e1733',
     shaman: 'realm_infernal_class_shaman_f', // GAP: Grave Totemist
     mage: 'realm_arcane_mystic_sentinel_characters_01968757',
@@ -78,22 +78,18 @@ const REALM_CLASS_VISUALS: Partial<
   // are warrior, blood_knight and demon_hunter, with rogue and witch_doctor
   // acceptable, so the nine classes share five bodies until the bank is fixed.
   infernal: {
-    warrior: 'realm_infernal_class_warrior',
-    // was paladin: both feet stretch into flat pale planks
-    paladin: 'realm_infernal_class_blood_knight',
-    // was amazon: feet tear off into planks in Attack, plus a finger spike
-    hunter: 'realm_infernal_class_demon_hunter',
-    rogue: 'realm_infernal_class_rogue',
-    // was sorcerer: a full T-pose held through Idle and Walk, shredded sleeves
-    priest: 'realm_infernal_class_witch_doctor',
-    // was monk: bind span 0.94, arms stay splayed through Walk
-    shaman: 'realm_infernal_class_witch_doctor',
-    // was wizard: frozen arms, no hands, slab under the gown every Idle frame
-    mage: 'realm_infernal_class_witch_doctor',
-    // was warlock: the worst body in the bank - no arm weight on either hand
-    warlock: 'realm_infernal_class_witch_doctor',
-    // was druid: hands fused to the belt, feet torn into planks
-    druid: 'realm_infernal_class_rogue',
+    // 2026-08-18: every entry repointed off the `infernal_class_*` chibi bank onto the
+    // body the live infernal document publishes for the same class. Nine distinct bodies,
+    // no sharing; the female halves live in the published class:<cls>:f rows.
+    warrior: 'realm_crypticrealm_rune_warden',
+    paladin: 'realm_infernal_ironthorn_dread_knight_character_019dd422',
+    hunter: 'realm_infernal_hero_demon_hunter',
+    rogue: 'realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289',
+    priest: 'realm_infernal_violet_necromancer_necromancer_m_019cb976',
+    shaman: 'realm_infernal_hero_monk',
+    mage: 'realm_infernal_hero_wizard',
+    warlock: 'realm_infernal_hero_warlock',
+    druid: 'realm_infernal_hero_druid',
   },
   classic: {
     warrior: 'realm_classic_dwarf',

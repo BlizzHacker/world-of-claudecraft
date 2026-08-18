@@ -5068,7 +5068,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.zones.eastbrook_vale.pois.7.label': 'Det fallna kapellet',
   'entities.zones.eastbrook_vale.pois.8.label': 'Relikkullen',
   'entities.zones.eastbrook_vale.pois.9.label': 'Ljusskogsgläntan',
-  'entities.zones.eastbrook_vale.pois.11.label': 'Fjärrkustens vägbank',
+  'entities.zones.eastbrook_vale.pois.14.label': 'Fjärrkustens vägbank',
   'entities.zones.eastbrook_vale.welcome':
     'Hitta marskalk Redbrook i staden - han har arbete åt dig.',
   'entities.zones.mirefen_marsh.name': 'Dykärrsträsket',

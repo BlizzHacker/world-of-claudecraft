@@ -32,7 +32,7 @@ import {
   t,
   tOptional,
 } from './i18n';
-import { ownEntry } from './known_item';
+import { knownItemDef, ownEntry } from './known_item';
 
 export type EntityTranslationGroup = 'classAbility' | 'item' | 'itemSet' | 'world';
 export type EntityTranslationKind =
@@ -253,17 +253,27 @@ function classDescriptionSource(id: PlayerClass): string {
 
 function canonicalEntityText(request: EntityTranslationRequest): string {
   switch (request.kind) {
-    case 'class':
-      return request.field === 'name'
-        ? (CLASSES[request.id]?.name ?? request.id)
-        : classDescriptionSource(request.id);
+    // These three arms read through known_item.ts for the same reason the R34
+    // block below spells out: their ids ride the wire too (the class on a
+    // character snapshot, an ability id on a cast packet, an item id in a chat
+    // link), and the direct Record index they used to do sent 'constructor' down
+    // the known arm, where the Function's .name renders the string "Object" and
+    // its absent .description renders undefined.
+    case 'class': {
+      const cls = ownEntry(CLASSES, request.id);
+      if (!cls) return request.id;
+      return request.field === 'name' ? cls.name : classDescriptionSource(request.id);
+    }
     case 'ability': {
-      const ability = ABILITIES[request.id];
+      const ability = ownEntry(ABILITIES, request.id);
       if (!ability) return request.id;
       return request.field === 'name' ? ability.name : ability.description;
     }
     case 'item':
-      return ITEMS[request.id]?.name ?? request.id;
+      // knownItemDef rather than bare ownEntry: this arm BRANCHES between its
+      // known-item and unknown-item halves, which is the surface known_item.ts
+      // asks to carry the item gate.
+      return knownItemDef(ITEMS, request.id)?.name ?? request.id;
     // Every Record-indexed arm below reads through ownEntry (known_item.ts):
     // these ids can arrive from the wire (the quest log, chat links, snapshot
     // template ids), and on a prototype-bearing Record a bare truthiness test
@@ -339,9 +349,18 @@ function canonicalEntityText(request: EntityTranslationRequest): string {
 export function entityTranslationKey(request: EntityTranslationRequest): string {
   switch (request.kind) {
     case 'class':
+      // The key tables are Records indexed by that same wire-supplied id, so the
+      // R34 gate is needed HERE too, one step ahead of canonicalEntityText: an id
+      // outside the nine reads undefined and a prototype key reads a FUNCTION,
+      // and either one reaches the catalog walk's key.split('.') and throws -- a
+      // crash exactly where the raw-id fallback was supposed to save the surface.
+      // Synthesizing the authored shape keeps all nine shipped keys byte-stable
+      // and leaves an unknown id to miss the catalog and fall through to the raw
+      // id like every other kind.
       return request.field === 'name'
-        ? CLASS_NAME_KEYS[request.id]
-        : CLASS_DESCRIPTION_KEYS[request.id];
+        ? (ownEntry(CLASS_NAME_KEYS, request.id) ?? `classes.${entityPathSegment(request.id)}`)
+        : (ownEntry(CLASS_DESCRIPTION_KEYS, request.id) ??
+            `classDetails.lore.${entityPathSegment(request.id)}`);
     case 'ability':
       return `entities.abilities.${entityPathSegment(request.id)}.${request.field}`;
     case 'item':
@@ -457,6 +476,25 @@ export function realmTalentSpecName(cls: string, specId: string): string | null 
   const specs = getActiveRealm().entityText?.talentSpecs;
   if (!specs || !Object.hasOwn(specs, key)) return null;
   return specs[key] ?? null;
+}
+
+// Talent MASTERY labels any realm overlays, same `<class>.<specId>` keying and
+// same one-time union as the spec names above.
+const REALM_TALENT_MASTERY_KEYS: ReadonlySet<string> = new Set(
+  Object.values(REALMS).flatMap((realm) => Object.keys(realm.entityText?.talentMasteries ?? {})),
+);
+
+/**
+ * The active realm's display name for one spec's mastery, or null to fall
+ * through to the authored/localized label. Called from tTalent, which owns
+ * every other mastery-title path.
+ */
+export function realmTalentMasteryName(cls: string, specId: string): string | null {
+  const key = `${cls}.${specId}`;
+  if (!REALM_TALENT_MASTERY_KEYS.has(key)) return null;
+  const masteries = getActiveRealm().entityText?.talentMasteries;
+  if (!masteries || !Object.hasOwn(masteries, key)) return null;
+  return masteries[key] ?? null;
 }
 
 /** True when any realm ships rift-rank display words (riftFloorLabel gate). */

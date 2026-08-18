@@ -165,30 +165,25 @@ export const INFERNAL_HERO_CLASSES: readonly InfernalHeroClass[] = [
  * the cards exist for. Repairing the bank is the fix; Paladin was repointed
  * because it had no override to hide behind.
  */
-const HERO_VISUALS: Readonly<Record<string, InfernalCharacterVisualKey>> = {
-  Warrior: 'realm_infernal_class_warrior',
-  Rogue: 'realm_infernal_class_rogue',
-  'Sorcerer / Sorceress': 'realm_infernal_class_sorcerer',
-  Amazon: 'realm_infernal_class_amazon',
-  Barbarian: 'realm_infernal_class_barbarian',
-  Necromancer: 'realm_infernal_class_necromancer',
-  // was realm_infernal_class_paladin. That body tears both feet into long pale
-  // planks through Attack (rendered and confirmed 2026-08-08), and Paladin was
-  // the ONE card with no override at all, so the broken fallback was what the
-  // creator screen actually served. A `hero:infernal-hero-paladin` override now
-  // points at a library knight; this keeps the fallback on a body that passed.
-  Paladin: 'realm_infernal_class_blood_knight',
-  Druid: 'realm_infernal_class_druid',
-  Assassin: 'realm_infernal_class_assassin',
-  'Demon Hunter': 'realm_infernal_class_demon_hunter',
-  Monk: 'realm_infernal_class_monk',
-  Wizard: 'realm_infernal_class_wizard',
-  'Witch Doctor': 'realm_infernal_class_witch_doctor',
-  Crusader: 'realm_infernal_class_crusader',
-  Spiritborn: 'realm_infernal_class_spiritborn',
-  Warlock: 'realm_infernal_class_warlock',
-  'Blood Knight': 'realm_infernal_class_blood_knight',
-  Tempest: 'realm_infernal_class_tempest',
+const HERO_VISUALS: Readonly<Record<string, string>> = {
+  Warrior: 'realm_crypticrealm_rune_warden',
+  Rogue: 'realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289',
+  'Sorcerer / Sorceress': 'realm_infernal_hero_sorcerer',
+  Amazon: 'realm_infernal_shadow_warrior_characters_fashio_01942cf0',
+  Barbarian: 'realm_infernal_hero_barbarian',
+  Necromancer: 'realm_infernal_violet_necromancer_necromancer_m_019cb976',
+  Paladin: 'realm_infernal_ironthorn_dread_knight_character_019dd422',
+  Druid: 'realm_infernal_hero_druid',
+  Assassin: 'realm_infernal_hero_assassin',
+  'Demon Hunter': 'realm_infernal_hero_demon_hunter',
+  Monk: 'realm_infernal_hero_monk',
+  Wizard: 'realm_infernal_hero_wizard',
+  'Witch Doctor': 'realm_infernal_hero_witch_doctor',
+  Crusader: 'realm_infernal_hero_crusader',
+  Spiritborn: 'realm_infernal_hero_spiritborn',
+  Warlock: 'realm_infernal_hero_warlock',
+  'Blood Knight': 'realm_infernal_hero_blood_knight',
+  Tempest: 'realm_infernal_hero_tempest',
 };
 
 /** Presentation variants per canonical selection name. Adding an entry here is
