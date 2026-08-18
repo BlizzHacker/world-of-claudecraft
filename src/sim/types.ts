@@ -6096,25 +6096,67 @@ export const RIFT_TIER_COLORS: Record<RiftTier, number> = {
   S: 0xffb020,
 };
 
+// ---------------------------------------------------------------------------
+// XP TAIL SHAPE — the designer dials for levels 21..98.
+//
+// Calibrated against real Diablo II timings, which are the design spec for this
+// curve. D2 reference: most players 120-200 h to 99; optimised team play ~70 h;
+// solo 150-250 h; levels 98->99 ALONE 15-20 h solo; and the majority of the whole
+// run sits between 90 and 99 as monster XP flattens out.
+//
+// The shape that reproduces that is a SATURATING ramp, not a constant one. The
+// per-level increment grows slowly at first (so 21-70 stays brisk and there is no
+// mid-game wall), accelerates through the 70s and 80s, then PLATEAUS at
+// XP_TAIL_PLATEAU_LEVEL and holds flat. Plateauing is the load-bearing part: a
+// ramp that keeps accelerating into 98 dumps everything into the final level or
+// two, whereas D2 makes the entire 90s uniformly brutal. The previous flat
+// "increment x1.035 per level" put only 23% of the run in 90-99 and 2.9% in
+// 98->99, which read as hollow at the top against every D2 figure above.
+//
+// Measured at these values (6 kills/min, the shipped mobXpValue, at-level mobs):
+//   total 172 h  |  90-99 = 52.7% of all time  |  98->99 = 17.7 h (10.3%)
+//   at 12 kills/min: 86 h total, matching the optimised-team end of the spec.
+// Re-measure with scripts/_shape99.ts after changing any of these four numbers.
+// ---------------------------------------------------------------------------
+
+/** Increment growth at the START of the tail (level 21). 1.0 = linear, no growth. */
+export const XP_TAIL_GROWTH_START = 1.0;
+/** Increment growth once the ramp saturates — the cost of every level past the plateau. */
+export const XP_TAIL_GROWTH_MAX = 1.205;
+/** Level at which the growth ramp reaches XP_TAIL_GROWTH_MAX and stops climbing. */
+export const XP_TAIL_PLATEAU_LEVEL = 85;
+/** Ramp curvature. Higher = the climb stays gentle longer, then bites harder. */
+export const XP_TAIL_RAMP_POWER = 3;
+
+/** Increment growth going into `level`. Saturates at XP_TAIL_PLATEAU_LEVEL. */
+function xpTailGrowth(level: number): number {
+  const span = XP_TAIL_PLATEAU_LEVEL - 20;
+  const t = span > 0 ? Math.min(1, Math.max(0, (level - 20) / span)) : 1;
+  return (
+    XP_TAIL_GROWTH_START +
+    (XP_TAIL_GROWTH_MAX - XP_TAIL_GROWTH_START) * Math.pow(t, XP_TAIL_RAMP_POWER)
+  );
+}
+
 // XP required to go from level L to L+1. Levels 1..20 are the exact classic-era
 // curve values (unchanged, so claudecraft/upstream stay byte-identical); levels
-// 21..98 extend the curve for the higher-cap realms (classic 80, D2 realms 99).
-// The tail keeps the same ~arithmetic-then-geometric shape the original 20-step
-// curve implied, so each level costs progressively more without exploding.
+// 21..98 extend the curve for the higher-cap realms (classic 80, D2 realms 99),
+// shaped by the tail dials above.
 export const XP_TABLE = (() => {
   const base = [
     400, 900, 1400, 2100, 2800, 3600, 4500, 5400, 6500, 7600, 8800, 10100, 11400, 12900, 14400,
     16000, 17700, 19400, 21300, 23200,
   ];
-  // Continue past the 19→20 step (23,200). Early extension grows arithmetically
-  // (+~1,900/level like the original tail), easing into a gentle geometric climb
-  // so the level-99 grind has a long but finite tail.
+  // Continue past the 19→20 step (23,200), carrying the final classic increment
+  // forward and growing it by xpTailGrowth(). The step is kept UNROUNDED across
+  // iterations and only the cumulative value is rounded, so rounding error cannot
+  // compound over 78 levels of tail.
   let step = 23200 - 21300; // 1,900: the final classic increment
   let last = 23200;
   for (let lvl = 21; lvl <= 98; lvl++) {
-    step = Math.round(step * 1.035); // each level's increment grows 3.5%
+    step *= xpTailGrowth(lvl);
     last += step;
-    base.push(last);
+    base.push(Math.round(last));
   }
   return base;
 })();

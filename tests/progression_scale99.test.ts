@@ -28,7 +28,10 @@ import { generateRealmItem } from '../src/sim/realms/rarity';
 import { evaluateItem, parsePickitFilter } from '../src/sim/realms/pickit';
 import { activeMaxLevel, setRealmHostEnv } from '../src/sim/realms/registry';
 import { Rng } from '../src/sim/rng';
-import { MAX_LEVEL, XP_TABLE, xpForLevel, xpToReachLevel } from '../src/sim/types';
+import {
+  MAX_LEVEL, mobXpValue, XP_TABLE, xpForLevel, xpToReachLevel,
+  XP_TAIL_GROWTH_MAX, XP_TAIL_PLATEAU_LEVEL,
+} from '../src/sim/types';
 import { resSicknessDuration, unstuckSicknessDuration } from '../src/sim/resurrection';
 
 function forceRealm(id: string) {
@@ -318,5 +321,84 @@ describe('level-shaped systems follow the realm cap, not the vanilla 20', () => 
     for (let lvl = 1; lvl < MAX_LEVEL; lvl++) {
       expect(resSicknessDuration(lvl + 1)).toBeGreaterThanOrEqual(resSicknessDuration(lvl));
     }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 6. THE CURVE'S SHAPE, calibrated against real Diablo II timings.
+//
+// The total alone is not enough: D2 is heavily BACK-LOADED, and a curve that
+// hits the right hour count with a linear shape feels hollow at the top. These
+// pins protect the distribution, not just the sum. Regenerate the underlying
+// numbers with scripts/_shape99.ts after any retune of the XP_TAIL_* dials.
+// ---------------------------------------------------------------------------
+
+/** Kills to go from `lvl` to `lvl+1` farming at-level mobs, via the real formula. */
+function killsForLevel(lvl: number): number {
+  return Math.ceil(xpForLevel(lvl) / mobXpValue(lvl, lvl));
+}
+function killsBetween(lo: number, hi: number): number {
+  let k = 0;
+  for (let l = lo; l < hi; l++) k += killsForLevel(l);
+  return k;
+}
+
+describe('the 1-99 curve is back-loaded like Diablo II', () => {
+  const totalKills = killsBetween(1, 99);
+
+  it('levels 1-20 stay byte-identical to the authored classic curve', () => {
+    // Upstream/claudecraft parity: the rescale may only ever touch the tail.
+    expect(XP_TABLE.slice(0, 20)).toEqual([
+      400, 900, 1400, 2100, 2800, 3600, 4500, 5400, 6500, 7600, 8800, 10100, 11400, 12900, 14400,
+      16000, 17700, 19400, 21300, 23200,
+    ]);
+  });
+
+  it('puts the MAJORITY of the whole run in levels 90-99', () => {
+    // D2: "the majority of time is spent between 90 and 99". A linear curve
+    // would put ~10% here; the pre-calibration curve put 23%.
+    const share = killsBetween(90, 99) / totalKills;
+    expect(share).toBeGreaterThan(0.5);
+  });
+
+  it('spends the last 20 levels on roughly two thirds of the run', () => {
+    expect(killsBetween(80, 99) / totalKills).toBeGreaterThan(0.6);
+  });
+
+  it('makes 98->99 the single most expensive level, at ~10% of the total', () => {
+    // D2 solo: 98->99 alone is 15-20 h of a 150-250 h run.
+    const share = killsForLevel(98) / totalKills;
+    expect(share).toBeGreaterThan(0.06);
+    expect(share).toBeLessThan(0.14);
+    for (let l = 1; l < 98; l++) {
+      expect(killsForLevel(98)).toBeGreaterThan(killsForLevel(l));
+    }
+  });
+
+  it('lands inside the D2 hour band at the reference kill rates', () => {
+    // 6 kills/min = the unoptimised "most players" lane (D2: 120-200 h).
+    const hours6 = totalKills / 6 / 60;
+    expect(hours6).toBeGreaterThan(120);
+    expect(hours6).toBeLessThan(250);
+    // 12 kills/min = optimised play (D2 team-optimised ~70 h).
+    const hours12 = totalKills / 12 / 60;
+    expect(hours12).toBeGreaterThan(55);
+    expect(hours12).toBeLessThan(110);
+  });
+
+  it('keeps the early and mid game brisk — no mid-game wall', () => {
+    // Everything below 70 must stay under a third of the run, or the ramp has
+    // crept forward and the 90s stop being the destination.
+    expect(killsBetween(1, 70) / totalKills).toBeLessThan(0.35);
+  });
+
+  it('the growth ramp actually saturates, rather than exploding into 98', () => {
+    // Past the plateau every level multiplies by the same factor. If this ever
+    // becomes an accelerating ramp, the run collapses into the final level or two.
+    const ratioLate = xpForLevel(97) / xpForLevel(96);
+    const ratioLater = xpForLevel(98) / xpForLevel(97);
+    expect(XP_TAIL_PLATEAU_LEVEL).toBeLessThan(99);
+    expect(XP_TAIL_GROWTH_MAX).toBeGreaterThan(1);
+    expect(Math.abs(ratioLater - ratioLate)).toBeLessThan(0.05);
   });
 });
