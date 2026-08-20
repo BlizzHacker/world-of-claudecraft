@@ -11,8 +11,11 @@ import {
   bodySkinOverrideKeys,
   isTieredSkinBody,
 } from '../../sim/cosmetics/body_skins';
-import { resolveRealmCharacterVisual } from '../../sim/realms/class_visuals';
-import { infernalCharacterSelection } from '../../sim/realms/infernal_classes';
+import { realmClassVisualKey, resolveRealmCharacterVisual } from '../../sim/realms/class_visuals';
+import {
+  infernalCharacterSelection,
+  infernalHeroOverrideKeys,
+} from '../../sim/realms/infernal_classes';
 import { resolveActiveRealmId } from '../../sim/realms/registry';
 import { ALL_CLASSES, type Entity, isMechWearer, type PlayerClass } from '../../sim/types';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
@@ -578,6 +581,33 @@ function infernalHuman(fileName: string, height = 2.15): VisualDef {
     animUrls: [MESHY_CLIP_BANK_URL],
     height,
     clips: INFERNAL_HUMAN_CLIPS,
+    lazyPreload: true,
+  };
+}
+
+/**
+ * A pipeline-published class body with its complete embedded action pack.
+ * These files are the small, production-safe nine-body packs emitted into
+ * each themed realm. They must be registered explicitly: the much larger
+ * generated roster can describe source-library keys that are not present in
+ * the deployed `/cr-realms` catalog, which previously sent every affected
+ * creator card back to a KayKit loading body.
+ */
+function authoredRealmClassBody(realm: string, fileName: string, height = 2.2): VisualDef {
+  return {
+    url: `${REALM_MODELS}/${realm}/${fileName}`,
+    height,
+    clips: INFERNAL_HUMAN_CLIPS,
+    lazyPreload: true,
+  };
+}
+
+/** A fully audited ArcForge hero on the native player action skeleton. */
+function forgedRealmHero(fileName: string, height = 2.2): VisualDef {
+  return {
+    url: `${REALM_MODELS}/infernal/${fileName}`,
+    height,
+    clips: kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     lazyPreload: true,
   };
 }
@@ -1388,6 +1418,77 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   realm_infernal_class_warlock: infernalHuman('infernal_class_warlock.glb', 2.2),
   realm_infernal_class_blood_knight: infernalHuman('infernal_class_blood_knight.glb', 2.25),
   realm_infernal_class_tempest: infernalHuman('infernal_class_tempest.glb', 2.2),
+  realm_infernal_hero_blood_knight_f: forgedRealmHero(
+    'realm_infernal_hero_blood_knight_f.glb',
+    2.2,
+  ),
+  // Compact, deployed nine-class packs for every other authored realm. Only
+  // Claudecraft intentionally omits this table and keeps its modular KayKit
+  // creator. Each GLB carries Idle/Walk/Run/Attack/Hit/Death/Cast/Jump/Wave/
+  // Taunt, so these bodies do not depend on the optional shared clip bank.
+  realm_classic_class_warrior: authoredRealmClassBody('classic', 'classic_class_warrior.glb'),
+  realm_classic_class_paladin: authoredRealmClassBody('classic', 'classic_class_paladin.glb'),
+  realm_classic_class_hunter: authoredRealmClassBody('classic', 'classic_class_hunter.glb'),
+  realm_classic_class_rogue: authoredRealmClassBody('classic', 'classic_class_rogue.glb'),
+  realm_classic_class_priest: authoredRealmClassBody('classic', 'classic_class_priest.glb'),
+  realm_classic_class_shaman: authoredRealmClassBody('classic', 'classic_class_shaman.glb'),
+  realm_classic_class_mage: authoredRealmClassBody('classic', 'classic_class_mage.glb'),
+  realm_classic_class_warlock: authoredRealmClassBody('classic', 'classic_class_warlock.glb'),
+  realm_classic_class_druid: authoredRealmClassBody('classic', 'classic_class_druid.glb'),
+  realm_dominion_class_warrior: authoredRealmClassBody('dominion', 'dominion_class_warrior.glb'),
+  realm_dominion_class_paladin: authoredRealmClassBody('dominion', 'dominion_class_paladin.glb'),
+  realm_dominion_class_hunter: authoredRealmClassBody('dominion', 'dominion_class_hunter.glb'),
+  realm_dominion_class_rogue: authoredRealmClassBody('dominion', 'dominion_class_rogue.glb'),
+  realm_dominion_class_priest: authoredRealmClassBody('dominion', 'dominion_class_priest.glb'),
+  realm_dominion_class_shaman: authoredRealmClassBody('dominion', 'dominion_class_shaman.glb'),
+  realm_dominion_class_mage: authoredRealmClassBody('dominion', 'dominion_class_mage.glb'),
+  realm_dominion_class_warlock: authoredRealmClassBody('dominion', 'dominion_class_warlock.glb'),
+  realm_dominion_class_druid: authoredRealmClassBody('dominion', 'dominion_class_druid.glb'),
+  realm_arcane_class_warrior: authoredRealmClassBody('arcane', 'arcane_class_warrior.glb'),
+  realm_arcane_class_paladin: authoredRealmClassBody('arcane', 'arcane_class_paladin.glb'),
+  realm_arcane_class_hunter: authoredRealmClassBody('arcane', 'arcane_class_hunter.glb'),
+  realm_arcane_class_rogue: authoredRealmClassBody('arcane', 'arcane_class_rogue.glb'),
+  realm_arcane_class_priest: authoredRealmClassBody('arcane', 'arcane_class_priest.glb'),
+  realm_arcane_class_shaman: authoredRealmClassBody('arcane', 'arcane_class_shaman.glb'),
+  realm_arcane_class_mage: authoredRealmClassBody('arcane', 'arcane_class_mage.glb'),
+  realm_arcane_class_warlock: authoredRealmClassBody('arcane', 'arcane_class_warlock.glb'),
+  realm_arcane_class_druid: authoredRealmClassBody('arcane', 'arcane_class_druid.glb'),
+  realm_arcadevoid_class_warrior: authoredRealmClassBody(
+    'arcadevoid',
+    'arcadevoid_class_warrior.glb',
+  ),
+  realm_arcadevoid_class_paladin: authoredRealmClassBody(
+    'arcadevoid',
+    'arcadevoid_class_paladin.glb',
+  ),
+  realm_arcadevoid_class_hunter: authoredRealmClassBody(
+    'arcadevoid',
+    'arcadevoid_class_hunter.glb',
+  ),
+  realm_arcadevoid_class_rogue: authoredRealmClassBody('arcadevoid', 'arcadevoid_class_rogue.glb'),
+  realm_arcadevoid_class_priest: authoredRealmClassBody(
+    'arcadevoid',
+    'arcadevoid_class_priest.glb',
+  ),
+  realm_arcadevoid_class_shaman: authoredRealmClassBody(
+    'arcadevoid',
+    'arcadevoid_class_shaman.glb',
+  ),
+  realm_arcadevoid_class_mage: authoredRealmClassBody('arcadevoid', 'arcadevoid_class_mage.glb'),
+  realm_arcadevoid_class_warlock: authoredRealmClassBody(
+    'arcadevoid',
+    'arcadevoid_class_warlock.glb',
+  ),
+  realm_arcadevoid_class_druid: authoredRealmClassBody('arcadevoid', 'arcadevoid_class_druid.glb'),
+  realm_fps_class_warrior: authoredRealmClassBody('fps', 'fps_class_warrior.glb'),
+  realm_fps_class_paladin: authoredRealmClassBody('fps', 'fps_class_paladin.glb'),
+  realm_fps_class_hunter: authoredRealmClassBody('fps', 'fps_class_hunter.glb'),
+  realm_fps_class_rogue: authoredRealmClassBody('fps', 'fps_class_rogue.glb'),
+  realm_fps_class_priest: authoredRealmClassBody('fps', 'fps_class_priest.glb'),
+  realm_fps_class_shaman: authoredRealmClassBody('fps', 'fps_class_shaman.glb'),
+  realm_fps_class_mage: authoredRealmClassBody('fps', 'fps_class_mage.glb'),
+  realm_fps_class_warlock: authoredRealmClassBody('fps', 'fps_class_warlock.glb'),
+  realm_fps_class_druid: authoredRealmClassBody('fps', 'fps_class_druid.glb'),
   // Visually reviewed PICKTURA civilians. These share a compatible Meshy biped
   // skeleton and a compact action pack, so every NPC can stop, run, attack,
   // cast, react, die, jump, wave, and taunt.
@@ -1627,10 +1728,7 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   // DuranceTester is always the armored human Warrior body, never a demon.
   // Character identity, house ownership, inventory, and persistence are not
   // changed by this presentation-only override.
-  // 2026-08-18: was infernal_class_warrior.glb, the chibi bare-chested brute the
-  // operator rejected by name; that whole bank is quarantined. Repointed at the
-  // durance tester body that ships beside it in the same store folder.
-  realm_infernal_durance_humanoid: infernalHuman('durance_tester_humanoid.glb', 2.3),
+  realm_infernal_durance_humanoid: forgedRealmHero('realm_infernal_hero_blood_knight_f.glb', 2.2),
   realm_infernal_dark_paladin: {
     url: `${REALM_MODELS}/infernal/dark_paladin_commander.glb`,
     height: 2.35,
@@ -1738,17 +1836,21 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     lazyPreload: true,
   },
   realm_classic_orc: {
-    url: `${REALM_MODELS}/classic/another-orc-meshy_ai_meshy_merged_animations_743223cb.glb`,
+    url: `${REALM_MODELS}/classic/classic__another-orc-.glb`,
     height: HUMANOID_H,
-    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
-    // carries the standard 22-clip vocabulary. The Meshy take names this map was
-    // written for are gone from the file, so it bound at most 'Idle' and the body
-    // had no walkBack, sit, swim, stow or emote at all.
-    clips: kaykit(['1H_Melee_Attack_Chop', '2H_Melee_Attack_Chop']),
+    animUrls: [MESHY_CLIP_BANK_URL],
+    clips: withMeshyBank({
+      idle: 'Walking',
+      walk: 'Walking',
+      run: 'Running',
+      attack: ['Attack'],
+      hit: ['Attack'],
+      death: 'Death_A',
+    }),
     lazyPreload: true,
   },
   realm_classic_big_orc: {
-    url: `${REALM_MODELS}/classic/bigass-orc-meshy_ai_meshy_merged_animations_86937638.glb`,
+    url: `${REALM_MODELS}/classic/classic__bigass-orc-.glb`,
     height: 2.8,
     // meshy24 rig, so the shared bank drives it: this export has no idle, no hit,
     // no death and no cast take of its own, which is why Walking used to stand in
@@ -1765,47 +1867,69 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     lazyPreload: true,
   },
   realm_classic_fighting_elf: {
-    url: `${REALM_MODELS}/classic/fighting-elf-meshy_ai_meshy_merged_animations_943c5367.glb`,
+    // The current forged catalog publishes the recovered full-scale armored
+    // humanoid under this canonical name. The pre-v0.35 filename no longer
+    // exists and silently left the creator's KayKit placeholder mounted.
+    url: `${REALM_MODELS}/classic/classic__fighting-elf-.glb`,
     height: HUMANOID_H,
-    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
-    // carries the standard 22-clip vocabulary. The Meshy take names this map was
-    // written for are gone from the file, so it bound at most 'Idle' and the body
-    // had no walkBack, sit, swim, stow or emote at all.
-    clips: kaykit(['1H_Melee_Attack_Slice_Diagonal', 'Dualwield_Melee_Attack_Chop']),
+    clips: {
+      idle: 'Unsteady_Walk',
+      walk: 'Walking',
+      run: 'RunFast',
+      walkBack: 'Injured_Walk',
+      attack: ['Reaping_Swing', 'Counterstrike', 'Dodge_and_Counter'],
+      hit: ['Injured_Walk'],
+      death: 'Injured_Walk',
+      cast: 'Boom_Dance',
+      jump: 'Backflip_Sweep_Kick',
+      emote: {
+        cheer: { clips: ['Boom_Dance'] },
+        dance: { clips: ['Breakdance_1990'] },
+      },
+    },
     lazyPreload: true,
   },
   realm_classic_dwarf: {
-    url: `${REALM_MODELS}/classic/gray-dwarf-meshy_ai_meshy_merged_animations_a33ff315.glb`,
+    url: `${REALM_MODELS}/classic/classic__gray-dwarf-.glb`,
     height: 2.25,
-    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
-    // carries the standard 22-clip vocabulary. The Meshy take names this map was
-    // written for are gone from the file, so it bound at most 'Idle' and the body
-    // had no walkBack, sit, swim, stow or emote at all.
-    clips: kaykit(['1H_Melee_Attack_Chop', '2H_Melee_Attack_Chop']),
+    animUrls: [MESHY_CLIP_BANK_URL],
+    clips: withMeshyBank({
+      idle: 'Idle_Alt_A',
+      walk: 'Walking',
+      run: 'Running',
+      attack: [],
+      death: 'Death_A',
+    }),
     lazyPreload: true,
   },
   realm_classic_female_elf: {
-    url: `${REALM_MODELS}/classic/female-elf-meshy_ai_meshy_merged_animations_2dde3113.glb`,
+    url: `${REALM_MODELS}/classic/classic__female-elf-.glb`,
     height: HUMANOID_H,
-    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
-    // carries the standard 22-clip vocabulary. The Meshy take names this map was
-    // written for are gone from the file, so it bound at most 'Idle' and the body
-    // had no walkBack, sit, swim, stow or emote at all.
-    clips: kaykit(['1H_Melee_Attack_Slice_Diagonal', '2H_Ranged_Shoot']),
+    animUrls: [MESHY_CLIP_BANK_URL],
+    clips: withMeshyBank({
+      idle: 'Idle_Alt_A',
+      walk: 'Walking',
+      run: 'Running',
+      attack: [],
+      death: 'Death_A',
+    }),
     lazyPreload: true,
   },
   realm_classic_female_orc: {
-    url: `${REALM_MODELS}/classic/female-orc-meshy_ai_meshy_merged_animations_a5a08a67.glb`,
+    url: `${REALM_MODELS}/classic/classic__female-orc-.glb`,
     height: HUMANOID_H,
-    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
-    // carries the standard 22-clip vocabulary. The Meshy take names this map was
-    // written for are gone from the file, so it bound at most 'Idle' and the body
-    // had no walkBack, sit, swim, stow or emote at all.
-    clips: kaykit(['1H_Melee_Attack_Chop', '2H_Melee_Attack_Chop']),
+    animUrls: [MESHY_CLIP_BANK_URL],
+    clips: withMeshyBank({
+      idle: 'Idle_Alt_A',
+      walk: 'Walking',
+      run: 'Running',
+      attack: [],
+      death: 'Death_A',
+    }),
     lazyPreload: true,
   },
   realm_classic_treasure_dwarf: {
-    url: `${REALM_MODELS}/classic/treasure-dwarf-meshy_ai_meshy_merged_animations_91488daf.glb`,
+    url: `${REALM_MODELS}/classic/classic__treasure-dwarf-.glb`,
     height: 2.25,
     // meshy24 rig, so the shared bank drives it: this export has no idle, no hit,
     // no death and no cast take of its own, which is why Walking used to stand in
@@ -3380,32 +3504,66 @@ const NPC_KEYS: Record<string, string> = {
 // table without touching the sim identities or NPC behavior.
 const REALM_NPC_KEYS: Partial<Record<string, Record<string, string>>> = {
   classic: {
-    bursar_fernando: 'realm_classic_female_orc',
-    marshal_redbrook: 'realm_classic_orc',
-    warden_fenwick: 'realm_classic_big_orc',
-    captain_thessaly: 'realm_classic_fighting_elf',
-    loremaster_caddis: 'realm_classic_treasure_dwarf',
-    smith_haldren: 'realm_classic_big_orc',
-    armorer_hode: 'realm_classic_dwarf',
-    foreman_odell: 'realm_classic_dwarf',
-    scout_maren: 'realm_classic_female_orc',
-    scout_maren_highwatch: 'realm_classic_female_orc',
-    apothecary_lin: 'realm_classic_female_elf',
-    herbalist_yara: 'realm_classic_female_elf',
-    trader_wilkes: 'realm_classic_dwarf',
-    fisherman_brandt: 'realm_classic_orc',
-    provisioner_hale: 'realm_classic_dwarf',
-    quartermaster_bree: 'realm_classic_big_orc',
-    brother_halven: 'realm_classic_fighting_elf',
-    brother_halven_marsh: 'realm_classic_fighting_elf',
-    spirit_healer: 'realm_classic_female_elf',
+    bursar_fernando: 'realm_classic_class_rogue',
+    marshal_redbrook: 'realm_classic_class_warrior',
+    warden_fenwick: 'realm_classic_class_paladin',
+    captain_thessaly: 'realm_classic_class_hunter',
+    loremaster_caddis: 'realm_classic_class_mage',
+    smith_haldren: 'realm_classic_class_warlock',
+    armorer_hode: 'realm_classic_class_paladin',
+    foreman_odell: 'realm_classic_class_warrior',
+    scout_maren: 'realm_classic_class_rogue',
+    scout_maren_highwatch: 'realm_classic_class_rogue',
+    apothecary_lin: 'realm_classic_class_priest',
+    herbalist_yara: 'realm_classic_class_druid',
+    trader_wilkes: 'realm_classic_class_shaman',
+    fisherman_brandt: 'realm_classic_class_hunter',
+    provisioner_hale: 'realm_classic_class_druid',
+    quartermaster_bree: 'realm_classic_class_warlock',
+    brother_halven: 'realm_classic_class_priest',
+    brother_halven_marsh: 'realm_classic_class_priest',
+    spirit_healer: 'realm_classic_class_mage',
   },
 };
+
+const REALM_NPC_BODY_POOLS: Partial<Record<string, readonly string[]>> = {
+  classic: Object.values(authoredClassPackKeys('classic')),
+  dominion: Object.values(authoredClassPackKeys('dominion')),
+  arcane: Object.values(authoredClassPackKeys('arcane')),
+  arcadevoid: Object.values(authoredClassPackKeys('arcadevoid')),
+  fps: Object.values(authoredClassPackKeys('fps')),
+  // Visitors retain their own persisted player body in the Exchange. Its town
+  // officials use the mixed Cryptic roster so this last non-Claudecraft host
+  // cannot fall back to a miniature villager either.
+  exchange: [
+    'realm_classic_class_warrior',
+    'realm_classic_class_paladin',
+    'realm_arcadevoid_class_hunter',
+    'realm_fps_class_rogue',
+    'realm_dominion_class_priest',
+    'realm_dominion_class_shaman',
+    'realm_arcane_class_mage',
+    'realm_arcane_class_warlock',
+    'realm_classic_class_druid',
+  ],
+};
+
+function authoredClassPackKeys(realm: string): Record<PlayerClass, string> {
+  return Object.fromEntries(
+    ALL_CLASSES.map((cls) => [cls, `realm_${realm}_class_${cls}`]),
+  ) as Record<PlayerClass, string>;
+}
+
+function pooledRealmNpcVisualKey(realm: string, templateId: string): string | null {
+  const pool = REALM_NPC_BODY_POOLS[realm];
+  if (!pool?.length) return null;
+  return pool[stableHash(`${realm}:npc:${templateId}`) % pool.length] ?? null;
+}
 
 const REALM_MOB_DEFAULTS: Partial<Record<string, string>> = {
   crypticrealm: 'realm_infernal_evil_warlord_armor_made_0196a11d',
   infernal: 'realm_infernal_horned_demon',
-  classic: 'realm_classic_orc',
+  classic: 'realm_classic_class_warrior',
   claudecraft: 'realm_claudecraft_dark_wanderer',
 };
 
@@ -3601,30 +3759,28 @@ function overrideEntryForCharacter(
   if (skinned) return skinned;
   if (!map) return undefined;
   const selection = infernalCharacterSelection(realm, realmHeroId ?? null, cls);
-  // An explicit Female pick outranks the hero body: the creator previews the
-  // sex-suffixed class body hero-neutrally, so the world must render the same
-  // or the toggle is a lie. A published female HERO variant is still the most
-  // specific and wins first; realms without pairs fall through unchanged.
-  if (gender === 'female') {
-    const heroF = selection ? baseEntry(map[`hero:${selection.id}:f`]) : undefined;
-    if (heroF) return heroF;
-    const clsF = baseEntry(map[`class:${cls}:f`]);
-    if (clsF) return clsF;
+  if (selection) {
+    const heroKeys = infernalHeroOverrideKeys(realm, selection);
+    const suffix = gender === 'female' ? 'f' : gender === 'male' ? 'm' : null;
+    if (suffix) {
+      for (const key of heroKeys) {
+        const entry = baseEntry(map[`${key}:${suffix}`]);
+        if (entry) return entry;
+      }
+    }
+    for (const key of heroKeys) {
+      const entry = baseEntry(map[key]);
+      if (entry) return entry;
+    }
+    // Expanded heroes share nine mechanical kits but must not share bodies.
+    // A class override is therefore valid only for legacy rows with no valid
+    // realmHeroId; falling through here collapsed Monk, Spiritborn, and Tempest.
+    return undefined;
   }
-  let entry = selection
-    ? (baseEntry(map[`hero:${selection.id}`]) ?? baseEntry(map[`hero:${selection.name}`]))
-    : undefined;
-  // A hidden hero variant with no published body of its own falls back to
-  // the canonical selection it presents under (e.g. hero:infernal-hero-sorcerer-m
-  // -> hero:infernal-hero-sorcerer-sorceress until a male body is published).
-  if (!entry && selection?.variantOf) entry = baseEntry(map[`hero:${selection.variantOf}`]);
-  if (entry) return entry;
-  // The appearance editor's Male/Female choice selects the realm body: a
-  // sex-suffixed override (class:mage:f) wins over the unsuffixed one, which
-  // stays the male/default body so realms without pairs keep working.
-  if (gender === 'male') {
-    const suffixed = baseEntry(map[`class:${cls}:m`]);
-    if (suffixed) return suffixed;
+  const suffix = gender === 'female' ? 'f' : gender === 'male' ? 'm' : null;
+  if (suffix) {
+    const entry = baseEntry(map[`class:${cls}:${suffix}`]);
+    if (entry) return entry;
   }
   return baseEntry(map[`class:${cls}`]);
 }
@@ -3780,6 +3936,25 @@ function generatedBodyFor(
   return selectBodyFromPool(GENERATED_REALM_BODIES[realm], seed);
 }
 
+/** A generated humanoid that physically belongs to this realm. Some recovered
+ * roster rows carry cross-realm affinity aliases (not ownership), which made
+ * Arcane Void spawn Infernal demons and Classic ogres. Runtime theming must use
+ * the GLB's published realm path as the authority. */
+function realmOwnedGeneratedBodyFor(
+  realm: string,
+  family: string | undefined,
+  templateId: string | undefined,
+): string | null {
+  if (isBoundedResidency()) return null;
+  if (!family || !GENERATED_POOL_FAMILIES.has(family)) return null;
+  const prefix = `/cr-realms/${realm}/`;
+  const pool = (GENERATED_REALM_BODIES[realm] ?? []).filter((key) =>
+    VISUALS[key]?.url.startsWith(prefix),
+  );
+  const seed = `${realm}:${family}:${templateId ?? 'anon'}`;
+  return selectBodyFromPool(pool, seed);
+}
+
 /** Pool lookup used by every realm branch. Runs AFTER an explicit per-template
  *  override so curated art always wins, but BEFORE the family fallbacks that would
  *  otherwise collapse a whole family onto one shared body. */
@@ -3877,9 +4052,7 @@ export function visualKeyFor(e: Entity): string {
 const GENERIC_FALLBACK_BODIES = new Set(['mob_bandit', 'mob_dark_caster', 'npc_villager']);
 
 function isGenericFallbackBody(key: string): boolean {
-  return (
-    GENERIC_FALLBACK_BODIES.has(key) || /^(npc_|player_|delve_mob_)/.test(key)
-  );
+  return GENERIC_FALLBACK_BODIES.has(key) || /^(npc_|player_|delve_mob_)/.test(key);
 }
 
 /** Body used when the resolved key turned out not to be a character at all.
@@ -3906,12 +4079,19 @@ function resolveVisualKeyFor(e: Entity): string {
   if (e.kind === 'player' && isValeCupBotBody(e.visualKey) && VISUALS[e.visualKey as string]) {
     return e.visualKey as string;
   }
+  // A purchased/equipped mech is an explicit whole-body cosmetic and must win
+  // over both authored defaults and operator body overrides. Keep this order in
+  // lockstep with visualKeyForCharacter so roster, preview, and world agree.
+  if (e.kind === 'player' && (isMechWearer(e) || e.skinCatalog === 'mech')) {
+    return 'player_mech';
+  }
   const bodyOverride = overrideVisualKeyForEntity(e);
   if (bodyOverride) return bodyOverride;
   if (e.kind === 'player') {
-    if (isMechWearer(e)) return 'player_mech';
-    if (e.skinCatalog === 'mech') return 'player_mech';
     if (e.visualKey && VISUALS[e.visualKey]) return e.visualKey;
+    const cls = ALL_CLASSES.find((candidate) => candidate === e.templateId);
+    const realmBody = cls ? realmClassVisualKey(resolveActiveRealmId(), cls) : null;
+    if (realmBody && VISUALS[realmBody]) return realmBody;
     return VISUALS[`player_${e.templateId}`] ? `player_${e.templateId}` : 'player_warrior';
   }
   if (e.kind === 'mob') {
@@ -3926,7 +4106,7 @@ function resolveVisualKeyFor(e: Entity): string {
       // the full-size opponent roster. Generic KayKit adventurers never leak
       // into this realm through mob_bandit/mob_dark_caster fallbacks.
       if (override === 'mob_training_dummy') return override;
-      if (family && ['beast', 'spider', 'mudfin', 'burrower', 'troll', 'ogre'].includes(family)) {
+      if (family && ['beast', 'spider', 'mudfin', 'burrower'].includes(family)) {
         // The realm's own quadrupeds sit between the curated override and
         // realmFamily: mob_wolf/mob_boar/mob_spider keep their identities, but a
         // generic beast no longer collapses onto the single realmFamily body.
@@ -4004,6 +4184,24 @@ function resolveVisualKeyFor(e: Entity): string {
       }
       return infernalOpponentVisualKey(e.templateId);
     }
+    // Every remaining non-Claudecraft realm owns a full authored class pack and
+    // (where available) a generated humanoid roster. Stock player/npc/mob bodies
+    // are never accepted for humanoid-shaped enemies here: those were the last
+    // KayKit warriors, mages, rogues, and villagers leaking into Classic, Void,
+    // Arcane, Dominion, FPS, and the Exchange after the v0.35 merge.
+    if (realm !== 'claudecraft' && family && GENERATED_POOL_FAMILIES.has(family)) {
+      if (override === 'mob_training_dummy') return override;
+      const realmOwnedOverride =
+        override && VISUALS[override]?.url.startsWith(`/cr-realms/${realm}/`) ? override : null;
+      return (
+        realmOwnedOverride ??
+        realmOwnedGeneratedBodyFor(realm, family, e.templateId) ??
+        pooledRealmNpcVisualKey(realm, `hostile:${e.templateId}`) ??
+        REALM_MOB_DEFAULTS[realm] ??
+        realmClassVisualKey(realm, 'warrior') ??
+        'mob_bandit'
+      );
+    }
     // An explicit creature mapping always wins. In particular, a wolf or boar
     // must never be replaced by the Infernal beast-family fallback just because
     // the active realm has a themed monster family.
@@ -4029,9 +4227,11 @@ function resolveVisualKeyFor(e: Entity): string {
     // future NPC ids cannot fall through to a miniature KayKit villager.
     return infernalNpcVisualKey(e.templateId);
   }
-  if (e.templateId.startsWith('brother_aldric')) return 'npc_aldric';
   const realmKeys = REALM_NPC_KEYS[realm];
-  return realmKeys?.[e.templateId] ?? NPC_KEYS[e.templateId] ?? 'npc_villager';
+  const themedBody = realmKeys?.[e.templateId] ?? pooledRealmNpcVisualKey(realm, e.templateId);
+  if (themedBody) return themedBody;
+  if (e.templateId.startsWith('brother_aldric')) return 'npc_aldric';
+  return NPC_KEYS[e.templateId] ?? 'npc_villager';
 }
 
 /** Held-weapon layout override for the class-agnostic Combat Mech body. The mech

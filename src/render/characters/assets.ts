@@ -823,16 +823,21 @@ export function skinEmissiveTexture(key: string, skinIndex: number): THREE.Textu
 // Lazy fetch for cosmetic or realm-specific bodies: the GLB plus clip donors,
 // attachments, and any key-owned skin/emissive maps. Memoized per key so the
 // preview/open-world retries are cheap, and kept out of the boot sweep so large
-// optional character sets never delay every client's load. prepareVisual
-// resolves every animUrls entry and THROWS on one that is not resident, so a
-// lazyPreload def must not depend on another def staying eager for its clips.
+// optional character sets never delay every client's load. A supplemental
+// animation bank is optional presentation data: when one is missing, the real
+// authored body must still mount with its embedded clips instead of leaving the
+// KayKit loading stand-in on screen forever.
 const lazyVisualPromises = new Map<string, Promise<void>>();
+const unavailableOptionalGltfUrls = new Set<string>();
 
-function visualGltfUrls(def: VisualDef): string[] {
+function requiredVisualGltfUrls(def: VisualDef): string[] {
   const urls = new Set<string>([def.url]);
-  for (const url of def.animUrls ?? []) urls.add(url);
   for (const a of def.attach ?? []) urls.add(a.url);
   return [...urls];
+}
+
+function optionalVisualGltfUrls(def: VisualDef): string[] {
+  return [...new Set(def.animUrls ?? [])];
 }
 
 function loadGltfInto(url: string): Promise<void> {
@@ -848,7 +853,20 @@ export function preloadVisualAssets(key: string): Promise<void> {
   if (hit) return hit;
   const def = VISUALS[key];
   if (!def) return Promise.resolve();
-  const jobs: Promise<unknown>[] = visualGltfUrls(def).map((url) => loadGltfInto(url));
+  const jobs: Promise<unknown>[] = requiredVisualGltfUrls(def).map((url) => loadGltfInto(url));
+  for (const url of optionalVisualGltfUrls(def)) {
+    const resolvedUrl = assetUrl(url);
+    jobs.push(
+      loadGltfInto(url).catch((err: unknown) => {
+        unavailableOptionalGltfUrls.add(resolvedUrl);
+        logAssetMissOnce(
+          `optional-animation-bank:${resolvedUrl}`,
+          `optional animation bank unavailable; using embedded body clips (${key} <- ${url}):`,
+          err,
+        );
+      }),
+    );
+  }
   for (const url of SKINS[key] ?? []) if (url) jobs.push(loadSkinTexInto(url, skinTexByUrl));
   if (GFX.standardMaterials) {
     for (const url of SKIN_EMISSIVE[key] ?? [])
@@ -862,7 +880,14 @@ export function preloadVisualAssets(key: string): Promise<void> {
 export function visualAssetsReady(key: string): boolean {
   const def = VISUALS[key];
   if (!def) return false;
-  if (!visualGltfUrls(def).every((url) => gltfByUrl.has(assetUrl(url)))) return false;
+  if (!requiredVisualGltfUrls(def).every((url) => gltfByUrl.has(assetUrl(url)))) return false;
+  if (
+    !optionalVisualGltfUrls(def).every((url) => {
+      const resolvedUrl = assetUrl(url);
+      return gltfByUrl.has(resolvedUrl) || unavailableOptionalGltfUrls.has(resolvedUrl);
+    })
+  )
+    return false;
   const skinsReady = (SKINS[key] ?? []).every((url) => !url || skinTexByUrl.has(url));
   if (!GFX.standardMaterials) return skinsReady;
   return skinsReady && (SKIN_EMISSIVE[key] ?? []).every((url) => !url || skinEmisTexByUrl.has(url));
@@ -1995,9 +2020,18 @@ export function prepareVisual(key: string): PreparedVisual {
   for (const clip of gltf.animations) clips.set(clip.name, clip);
   const rigNodes = animatableNodeNames(gltf.scene);
   for (const url of def.animUrls ?? []) {
+    const donor = gltfByUrl.get(assetUrl(url));
+    if (!donor) {
+      logAssetMissOnce(
+        `animation-bank-missing:${key}:${url}`,
+        `animation bank was not loaded; keeping embedded body clips (${key} <- ${url}):`,
+        new Error('optional animation bank unavailable'),
+      );
+      continue;
+    }
     let merged = 0;
     let inert = 0;
-    for (const clip of resolvedGltf(url).animations) {
+    for (const clip of donor.animations) {
       // A donor clip authored on a DIFFERENT skeleton still yields a live
       // AnimationAction (three binds tracks by node name, and a miss is only a
       // console warning), so the body would list the clip, report it as the

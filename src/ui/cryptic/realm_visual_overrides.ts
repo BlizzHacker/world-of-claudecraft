@@ -11,6 +11,105 @@ export interface RealmVisualOverrideEntry {
 }
 
 let overridesByRealm: Record<string, Record<string, RealmVisualOverrideEntry>> = {};
+const publishedAssetUrlsPromises = new Map<string, Promise<Set<string> | null>>();
+const CATALOG_FETCH_TIMEOUT_MS = 2500;
+const RUNTIME_ASSET_PATH = /^\/(?:asset-library|forged|models|api\/assets)\/.+\.glb$/;
+
+function localAssetPath(url: string): string | null {
+  try {
+    const parsed = new URL(url, 'https://crypticrealm.invalid');
+    if (parsed.origin !== 'https://crypticrealm.invalid') return null;
+    return parsed.pathname;
+  } catch {
+    return null;
+  }
+}
+
+/** Drop stale editor rows whose GLB is not part of the build's published asset
+ * catalog. A v0.35 merge preserved database overrides for old `realm_*` files
+ * while removing those files from `/cr-realms`; the creator then held its
+ * KayKit loading stand-in forever. Cross-realm assignments remain valid because
+ * this checks the complete catalog, not only the active realm's manifest. */
+export function publishedRealmVisualOverrides(
+  overrides: Record<string, RealmVisualOverrideEntry>,
+  publishedUrls: ReadonlySet<string>,
+): Record<string, RealmVisualOverrideEntry> {
+  return Object.fromEntries(
+    Object.entries(overrides).filter(([, entry]) => {
+      const path = localAssetPath(entry.assetUrl);
+      if (path === null) return false;
+      if (RUNTIME_ASSET_PATH.test(path)) return true;
+      return path.startsWith('/cr-realms/') && publishedUrls.has(path);
+    }),
+  );
+}
+
+async function fetchCatalogJson(url: string): Promise<unknown> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), CATALOG_FETCH_TIMEOUT_MS);
+  try {
+    const response = await fetch(url, {
+      headers: { accept: 'application/json' },
+      signal: controller.signal,
+    });
+    if (!response.ok) throw new Error(`asset manifest unavailable: ${url}`);
+    return await response.json();
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function catalogRealmsForOverrides(overrides: Record<string, RealmVisualOverrideEntry>): string[] {
+  const realms = new Set<string>();
+  for (const entry of Object.values(overrides)) {
+    const path = localAssetPath(entry.assetUrl);
+    const match = path?.match(/^\/cr-realms\/([a-z0-9][a-z0-9_-]{0,31})\//);
+    if (match) realms.add(match[1]);
+  }
+  return [...realms].sort();
+}
+
+async function loadPublishedAssetUrls(
+  overrides: Record<string, RealmVisualOverrideEntry>,
+): Promise<Set<string> | null> {
+  const realms = catalogRealmsForOverrides(overrides);
+  if (realms.length === 0) return new Set();
+  const cacheKey = realms.join(',');
+  const cached = publishedAssetUrlsPromises.get(cacheKey);
+  if (cached) return cached;
+  const promise = (async () => {
+    try {
+      const manifests = await Promise.all(
+        realms.map(
+          async (realm) =>
+            (await fetchCatalogJson(`/cr-realms/${realm}/manifest.json`)) as {
+              assets?: readonly { url?: string; forgedUrl?: string }[];
+            },
+        ),
+      );
+      const published = new Set<string>();
+      for (const manifest of manifests) {
+        for (const asset of manifest.assets ?? []) {
+          for (const url of [asset.url, asset.forgedUrl]) {
+            if (typeof url !== 'string') continue;
+            const path = localAssetPath(url);
+            if (path) published.add(path);
+          }
+        }
+      }
+      return published;
+    } catch {
+      // Catalog validation is a safety net, not a new availability dependency.
+      // If a relevant catalog cannot be read, fail closed for /cr-realms rows;
+      // compiled bodies remain usable and dynamic editor URLs stay valid.
+      return null;
+    }
+  })();
+  publishedAssetUrlsPromises.set(cacheKey, promise);
+  const result = await promise;
+  if (result === null) publishedAssetUrlsPromises.delete(cacheKey);
+  return result;
+}
 
 /** Replace the override set for one realm (called after a fetch). */
 export function setRealmVisualOverrides(
@@ -39,6 +138,7 @@ export function firstRealmVisualOverride(
 
 export function clearRealmVisualOverrides(): void {
   overridesByRealm = {};
+  publishedAssetUrlsPromises.clear();
 }
 
 /** The full override map for a realm (for pushing into the in-world renderer). */
@@ -110,7 +210,12 @@ async function fetchRealmVisualOverridesLegacy(realm: string): Promise<boolean> 
     });
     if (!res.ok) return false;
     const data = (await res.json()) as { overrides?: Record<string, RealmVisualOverrideEntry> };
-    setRealmVisualOverrides(realm, data.overrides ?? {});
+    const overrides = data.overrides ?? {};
+    const published = await loadPublishedAssetUrls(overrides);
+    setRealmVisualOverrides(
+      realm,
+      publishedRealmVisualOverrides(overrides, published ?? new Set()),
+    );
     return true;
   } catch {
     return false;

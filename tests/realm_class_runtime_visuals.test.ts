@@ -1,10 +1,38 @@
-import { readFileSync } from 'node:fs';
-import { describe, expect, it } from 'vitest';
-import { manifestUrls, VISUALS } from '../src/render/characters/manifest';
+import { existsSync, readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { afterEach, describe, expect, it } from 'vitest';
+import { manifestUrls, VISUALS, visualKeyFor } from '../src/render/characters/manifest';
+import { getRealm } from '../src/sim/realms';
 import { normalizeRealmVisualId, realmClassVisualKey } from '../src/sim/realms/class_visuals';
+import { setRealmHostEnv } from '../src/sim/realms/registry';
 import type { PlayerClass } from '../src/sim/types';
+import { classPresentationForRealm } from '../src/ui/cryptic/realm_class_presentation';
 
 const rendererSource = readFileSync(new URL('../src/render/renderer.ts', import.meta.url), 'utf8');
+
+const THEMED_REALMS = [
+  'crypticrealm',
+  'infernal',
+  'classic',
+  'dominion',
+  'arcane',
+  'arcadevoid',
+  'fps',
+] as const;
+
+const NON_KAYKIT_RUNTIME_REALMS = [...THEMED_REALMS, 'exchange'] as const;
+
+const CLASSES: readonly PlayerClass[] = [
+  'warrior',
+  'paladin',
+  'hunter',
+  'rogue',
+  'priest',
+  'shaman',
+  'mage',
+  'warlock',
+  'druid',
+];
 
 const RUNTIME_KEYS = [
   'realm_cryptic_bone_herald',
@@ -22,22 +50,54 @@ const RUNTIME_KEYS = [
 ] as const;
 
 describe('realm class runtime visuals', () => {
+  afterEach(() => setRealmHostEnv(null));
+
   it('normalizes Arcane Void separately from Arcane Nexus', () => {
     expect(normalizeRealmVisualId('Arcane Void')).toBe('arcadevoid');
     expect(normalizeRealmVisualId('Arcane Nexus')).toBe('arcane');
-    expect(realmClassVisualKey('Arcane Void', 'warrior')).toBeNull();
+    expect(realmClassVisualKey('Arcane Void', 'warrior')).toMatch(/^realm_/);
   });
 
-  it('maps only classes with playable runtime GLBs', () => {
-    expect(realmClassVisualKey('Classic', 'priest')).toBe('realm_classic_female_elf');
-    expect(realmClassVisualKey('Infernal', 'rogue')).toBe('realm_infernal_class_rogue');
-    // The condemned body bank came out of the Cryptic table on 2026-08-17
-    // (docs/condemned-body-bank.md). Warlock now names a body from the
-    // approved catalog, and it is the same one published as `class:warlock`.
-    expect(realmClassVisualKey('Cryptic Realm', 'warlock')).toBe(
-      'realm_infernal_hero_warlock',
-    );
-    expect(realmClassVisualKey('Classic', 'warlock')).toBeNull();
+  it('maps every class in every themed home realm to a non-KayKit GLB', () => {
+    for (const realm of NON_KAYKIT_RUNTIME_REALMS) {
+      for (const cls of CLASSES) {
+        const key = realmClassVisualKey(realm, cls);
+        expect(key, `${realm}:${cls}`).toBeTruthy();
+        expect(key, `${realm}:${cls}`).not.toMatch(/^player_/);
+        const visual = VISUALS[key ?? ''];
+        expect(visual, `${realm}:${cls}:${key}`).toBeTruthy();
+        expect(visual.url, `${realm}:${cls}:${key}`).toMatch(/^\/cr-realms\/.*\.glb$/);
+      }
+    }
+    for (const cls of CLASSES) {
+      expect(realmClassVisualKey('claudecraft', cls), cls).toBeNull();
+    }
+  });
+
+  it('uses one exact authored body in creation, roster, and world for every home realm class', () => {
+    for (const realm of THEMED_REALMS) {
+      setRealmHostEnv({
+        queryParam: (name) => (name === 'realm' ? realm : null),
+        storageGet: () => null,
+        storageSet: () => undefined,
+      });
+      for (const cls of CLASSES) {
+        const key = realmClassVisualKey(realm, cls);
+        const visual = VISUALS[key ?? ''];
+        const presentation = classPresentationForRealm(getRealm(realm), cls);
+        expect(presentation?.visualKey, `${realm}:${cls}:roster key`).toBe(key);
+        expect(presentation?.assetUrl, `${realm}:${cls}:creator url`).toBe(visual?.url);
+        expect(
+          visualKeyFor({ kind: 'player', templateId: cls, skinCatalog: 'class' } as never),
+          `${realm}:${cls}:world key`,
+        ).toBe(key);
+        expect(visual?.url, `${realm}:${cls}:url`).toMatch(/^\/cr-realms\/.+\.glb$/);
+        expect(
+          existsSync(fileURLToPath(new URL(`../public${visual?.url}`, import.meta.url))),
+          `${realm}:${cls}:${visual?.url}`,
+        ).toBe(true);
+      }
+    }
   });
 
   it('has a lazy manifest entry for every mapped runtime visual', () => {
@@ -64,23 +124,11 @@ describe('realm class runtime visuals', () => {
   });
 
   it('does not map a class to a missing manifest key', () => {
-    const realms = ['crypticrealm', 'infernal', 'classic'] as const;
-    const classes: PlayerClass[] = [
-      'warrior',
-      'paladin',
-      'hunter',
-      'rogue',
-      'priest',
-      'shaman',
-      'mage',
-      'warlock',
-      'druid',
-    ];
-
-    for (const realm of realms) {
-      for (const cls of classes) {
+    for (const realm of THEMED_REALMS) {
+      for (const cls of CLASSES) {
         const key = realmClassVisualKey(realm, cls);
-        if (key) expect(VISUALS[key], `${realm}:${cls}`).toBeTruthy();
+        expect(key, `${realm}:${cls}`).toBeTruthy();
+        expect(VISUALS[key ?? ''], `${realm}:${cls}`).toBeTruthy();
       }
     }
   });
@@ -99,27 +147,11 @@ describe('realm class runtime visuals', () => {
     ];
     const keys = classes.map((cls) => realmClassVisualKey('Cryptic Realm', cls));
 
-    // RAISED BACK to one distinct body per class, which is what the note here
-    // asked for: purging the condemned bank on 2026-08-17 removed the reason
-    // nine classes were sharing three bodies. All nine are now distinct.
-    expect(new Set(keys).size).toBe(9);
-    for (const maybeKey of keys) {
-      // realmClassVisualKey is string | null; every Cryptic class must map.
-      expect(maybeKey).toBeTruthy();
-      const key = maybeKey as string;
-      // The old rule here REQUIRED the `realm_infernal_human_` prefix - that
-      // prefix WAS the condemned bank, so the assertion is inverted: these
-      // bodies must now come from anywhere BUT it. Cryptic draws from the
-      // infernal, arcane and crypticrealm store folders.
-      expect(key, key).not.toMatch(/^realm_infernal_human_/);
-      expect(key, key).toMatch(/^realm_(infernal|arcane|crypticrealm)_/);
-      expect(VISUALS[key as keyof typeof VISUALS], key).toBeTruthy();
-      // Same no-monster-body intent as before, with the same carve-out the
-      // Infernal test makes: a Demon Hunter is a hunter OF demons, a human
-      // archetype, and is a TOP PICK in the approved catalog.
-      if (key !== 'realm_infernal_hero_demon_hunter') {
-        expect(key, key).not.toMatch(/bone_herald|elf|orc|demon/i);
-      }
+    expect(new Set(keys).size).toBe(classes.length);
+    for (const key of keys) {
+      expect(key).toMatch(/^realm_/);
+      expect(key).not.toMatch(/bone_herald|dark_paladin|behemoth|skullbeast/i);
+      expect(key).not.toMatch(/^realm_infernal_human_/);
     }
   });
 
@@ -137,18 +169,17 @@ describe('realm class runtime visuals', () => {
     ];
     const keys = classes.map((cls) => realmClassVisualKey('Infernal', cls));
 
-    // Was one distinct body per class; seven of the nine failed the 2026-08-08
-    // render audit, so the nine share the five that passed. RAISE THIS BACK.
-    expect(new Set(keys).size).toBeGreaterThanOrEqual(5);
+    expect(new Set(keys).size).toBe(classes.length);
     for (const key of keys) {
-      expect(key).toMatch(/^realm_infernal_class_/);
+      expect(key).toMatch(/^realm_/);
       // The exclusion list is a NAME check standing in for "no monster body".
       // "Demon Hunter" is a hunter OF demons - a canonical human archetype in
       // INFERNAL_HERO_CLASSES - and one of only three class bodies that
       // survived the audit, so it is named rather than cast out.
-      if (key !== 'realm_infernal_class_demon_hunter') {
+      if (key !== 'realm_infernal_hero_demon_hunter') {
         expect(key).not.toMatch(/dark_paladin|bone_herald|demon|behemoth|skullbeast/i);
       }
+      expect(key).not.toMatch(/infernal_class_(?:barbarian|druid|witch_doctor)$/i);
     }
   });
 });

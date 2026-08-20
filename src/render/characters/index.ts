@@ -16,6 +16,12 @@ import {
 import { MODULAR_WARRIOR_KEY, type ModularLook } from './modular';
 import { CharacterVisual, type CharacterVisualOptions } from './visual';
 
+export {
+  applyCreationPreview,
+  type CreationPreviewRequest,
+  type CreationPreviewTarget,
+  creationUsesModularBody,
+} from './creation_preview';
 export type { ExternalPreviewState } from './preview';
 export { CharacterPreview } from './preview';
 export type { PreviewAppearance } from './preview_appearance';
@@ -66,6 +72,20 @@ export function realmBodyKeyForEntity(e: Entity): string | null {
 export function modularKeyFor(e: Entity): string {
   const key = modularVisualKey(e.templateId as PlayerClass);
   return VISUALS[key] ? key : MODULAR_WARRIOR_KEY;
+}
+
+/** A modular look is allowed only while the entity has no authored replacement
+ * body. This is the renderer-level guard that prevents a caller from composing
+ * `player_<class>_modular` over a server-issued `realm_*` or operator override
+ * visual. Combat Mech is also a whole-body replacement. */
+export function canComposeModularBody(e: Entity): boolean {
+  if (isMechWearer(e)) return false;
+  return !(
+    e.kind === 'player' &&
+    typeof e.visualKey === 'string' &&
+    e.visualKey.length > 0 &&
+    !e.visualKey.startsWith('player_')
+  );
 }
 
 /** Build a rideable mount's visual: no skin, no held weapon, authored colours

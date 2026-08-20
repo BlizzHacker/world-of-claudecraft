@@ -5,21 +5,33 @@
 // (browser + jsdom tests); Node/RL hosts never import this and keep the
 // DEFAULT_REALM fallback. Import this module (for its side effect) from any UI
 // module that resolves the active realm or stage.
-import { setRealmHostEnv } from '../../sim/realms/registry';
+import { isRealmId, setRealmHostEnv } from '../../sim/realms/registry';
 
-// Hosts that serve the flagship realm but are not named after it. The apex and
-// www are the landing origins; play.crypticrealm.com is the legacy alias that
-// still routes to the same Cryptic Realm process.
-const APEX_HOSTS = new Set([
-  'crypticrealm.com',
-  'www.crypticrealm.com',
-  'play.crypticrealm.com',
-]);
-
-// Left over from the four-ring era. DNS records for beta-/alpha-/dev- hosts may
-// outlive the rings themselves, so strip the prefix and resolve to the realm
-// rather than failing to a default that renders the wrong world.
-const STAGE_PREFIX_RE = /^(?:beta|alpha|dev)-/;
+/** Resolve the single-label live/stage host contract without accepting a
+ * lookalike suffix. Apex and its beta/alpha/dev labels are Cryptic Realm;
+ * themed stages use `<stage>-<realm>.crypticrealm.com`. */
+export function realmIdForHostname(
+  hostname: string,
+): import('../../sim/realms/types').RealmId | null {
+  const host = hostname.trim().toLowerCase().replace(/:\d+$/, '').replace(/\.$/, '');
+  if (host === 'fps.moveweight.com') return 'fps';
+  if (host === 'crypticrealm.com') return 'crypticrealm';
+  const suffix = '.crypticrealm.com';
+  if (!host.endsWith(suffix)) return null;
+  const label = host.slice(0, -suffix.length);
+  if (!label || label.includes('.')) return null;
+  if (
+    label === 'www' ||
+    label === 'play' ||
+    label === 'beta' ||
+    label === 'alpha' ||
+    label === 'dev'
+  ) {
+    return 'crypticrealm';
+  }
+  const candidate = label.replace(/^(?:beta|alpha|dev)-/, '');
+  return isRealmId(candidate) ? candidate : null;
+}
 
 /**
  * The realm id this ORIGIN serves, or null when the host names no realm.
@@ -32,12 +44,7 @@ const STAGE_PREFIX_RE = /^(?:beta|alpha|dev)-/;
 export function realmIdFromHostname(rawHost: string | null | undefined): string | null {
   const host = (rawHost ?? '').trim().toLowerCase().replace(/:\d+$/, '');
   if (!host) return null;
-  if (APEX_HOSTS.has(host)) return 'crypticrealm';
-  const label = (host.split('.')[0] ?? '').replace(STAGE_PREFIX_RE, '');
-  // Bare IPs, localhost and www carry no realm: fall through to storage so a
-  // dev hitting 127.0.0.1:8810 can still pick a realm by hand.
-  if (!label || label === 'www' || label === 'localhost' || /^\d+$/.test(label)) return null;
-  return label;
+  return realmIdForHostname(host);
 }
 
 export function installBrowserRealmEnv(): void {
@@ -52,7 +59,7 @@ export function installBrowserRealmEnv(): void {
     },
     hostRealmId: () => {
       try {
-        return realmIdFromHostname(window.location.hostname);
+        return realmIdForHostname(window.location.hostname);
       } catch {
         return null;
       }
@@ -73,7 +80,9 @@ export function installBrowserRealmEnv(): void {
     },
     notifyStageChange: (realmId, stage) => {
       try {
-        window.dispatchEvent(new CustomEvent('cr-realm-stage-change', { detail: { realmId, stage } }));
+        window.dispatchEvent(
+          new CustomEvent('cr-realm-stage-change', { detail: { realmId, stage } }),
+        );
       } catch {
         /* no CustomEvent (non-DOM host) */
       }

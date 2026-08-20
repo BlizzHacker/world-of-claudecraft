@@ -1,7 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import * as THREE from 'three';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
+import { canComposeModularBody } from '../src/render/characters';
 import { applyModularSliderMorphs } from '../src/render/characters/assets';
 import {
   type ClipMap,
@@ -57,8 +58,11 @@ import {
   stubbleDecals,
 } from '../src/render/characters/modular';
 import { UNDERHAIR } from '../src/render/characters/underhair.generated';
+import { setRealmHostEnv } from '../src/sim/realms/registry';
 import type { PlayerClass } from '../src/sim/types';
 import { ALL_CLASSES, isMechWearer } from '../src/sim/types';
+
+afterEach(() => setRealmHostEnv(null));
 
 const app = (over: Partial<ModularAppearance> = {}): ModularAppearance => ({
   ...DEFAULT_APPEARANCE,
@@ -611,6 +615,11 @@ describe('the mech cosmetic replaces the character', () => {
   });
 
   it('routes a wearer to the mech body, never to a composed one', () => {
+    setRealmHostEnv({
+      queryParam: (name) => (name === 'realm' ? 'claudecraft' : null),
+      storageGet: () => null,
+      storageSet: () => undefined,
+    });
     expect(visualKeyFor(mechPlayer as never)).toBe('player_mech');
     expect(visualKeyFor(normalPlayer as never)).toBe('player_warrior');
   });
@@ -626,6 +635,28 @@ describe('the mech cosmetic replaces the character', () => {
     for (const cls of ['warrior', 'mage', 'druid'] as const) {
       expect(VISUALS[modularVisualKey(cls)]?.modular, cls).toBe(true);
     }
+  });
+});
+
+describe('authored realm bodies replace the modular character', () => {
+  it('never composes KayKit over a server-issued realm visual', () => {
+    expect(
+      canComposeModularBody({
+        kind: 'player',
+        templateId: 'rogue',
+        skinCatalog: 'class',
+        visualKey: 'realm_infernal_class_rogue',
+      } as never),
+    ).toBe(false);
+    expect(
+      canComposeModularBody({
+        kind: 'player',
+        templateId: 'rogue',
+        skinCatalog: 'class',
+        visualKey: null,
+      } as never),
+    ).toBe(true);
+    expect(canComposeModularBody({ kind: 'player', skinCatalog: 'mech' } as never)).toBe(false);
   });
 });
 

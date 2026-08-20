@@ -1,10 +1,11 @@
 import { isTieredSkinBody } from '../../sim/cosmetics/body_skins';
+import { realmClassVisualKey } from '../../sim/realms/class_visuals';
 import { factionForRealmClass } from '../../sim/realms/factions';
+import type { InfernalHeroVariant } from '../../sim/realms/infernal_classes';
 import {
   infernalCharacterSelectionsForRealm,
   infernalHeroOverrideKeys,
 } from '../../sim/realms/infernal_classes';
-import type { InfernalHeroVariant } from '../../sim/realms/infernal_classes';
 import type { RealmClassSkin, RealmContent, RealmId, RealmRole } from '../../sim/realms/types';
 import type { PlayerClass } from '../../sim/types';
 import { firstRealmVisualOverride } from './realm_visual_overrides';
@@ -34,6 +35,9 @@ export interface RealmClassPresentation {
   assetUrl?: string;
   assetName?: string;
   assetAnimated?: boolean;
+  /** Registered renderer body. The creator and in-world resolver share this
+   *  key, so a themed realm never has to fall back to a stock class body. */
+  visualKey?: string;
   source?: RealmClassSkin;
 }
 
@@ -56,7 +60,13 @@ type PresentationSeed = Pick<
 >;
 type RealmClassAsset = Pick<
   RealmClassPresentation,
-  'assetUrl' | 'assetName' | 'assetAnimated' | 'assetStatus' | 'assetStatusLabel' | 'assetIssue'
+  | 'assetUrl'
+  | 'assetName'
+  | 'assetAnimated'
+  | 'assetStatus'
+  | 'assetStatusLabel'
+  | 'assetIssue'
+  | 'visualKey'
 >;
 
 const ROLE_BY_CLASS: Record<PlayerClass, RealmRole> = {
@@ -605,18 +615,16 @@ function realmStoreAsset(storePath: string, assetName: string): RealmClassAsset 
  * fallback does not drift back to a rejected body.
  */
 const CRYPTIC_BODY_ASSETS = {
-  // Published as class:warrior. Black ornate plate, horned helm, hands free.
-  darkPaladin: realmStoreAsset('infernal/realm_infernal_hero_dark_paladin.glb', 'Rune Warden'),
+  // Full-size authored Cryptic warrior; this is intentionally not the Infernal
+  // Dark Paladin enemy body.
+  runeWarden: realmStoreAsset('crypticrealm/realm_crypticrealm_rune_warden.glb', 'Rune Warden'),
   // Published as class:rogue. Dark hooded assassin, red sigil accents, hands free.
   cipherBlade: realmStoreAsset(
     'crypticrealm/realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289.glb',
     'Cipher Blade',
   ),
   // Published as class:hunter. Dark hooded ranger, strapped leathers, no weapon.
-  cryptStalker: realmStoreAsset(
-    'infernal/realm_infernal_hero_demon_hunter.glb',
-    'Crypt Stalker',
-  ),
+  cryptStalker: realmStoreAsset('infernal/realm_infernal_hero_demon_hunter.glb', 'Crypt Stalker'),
   // Published as class:mage. Black shrouded horned faceless figure, hands free.
   voidSeer: realmStoreAsset(
     'arcane/realm_arcane_mystic_sentinel_characters_01968757.glb',
@@ -634,13 +642,15 @@ const CRYPTIC_BODY_ASSETS = {
     'Gargoyle Oathsworn',
   ),
   // GAP - placeholder until cr_grave_totemist lands. Leather-clad figure, hands free.
-  totemistStandIn: realmStoreAsset(
-    'infernal/realm_infernal_class_shaman_f.glb',
-    'Grave Totemist',
-  ),
+  totemistStandIn: realmStoreAsset('infernal/realm_infernal_class_shaman_f.glb', 'Grave Totemist'),
   // GAP - placeholder until cr_chimera_warden lands. Antlered figure in wraps.
   wardenStandIn: realmStoreAsset('infernal/realm_infernal_class_druid_f.glb', 'Chimera Warden'),
 } satisfies Record<string, RealmClassAsset>;
+
+const SCARLET_BLOOD_KNIGHT = infernalHumanAsset(
+  'realm_infernal_hero_blood_knight_f.glb',
+  'Scarlet Blood Knight',
+);
 
 const INFERNAL_CLASS_ASSETS = {
   // 2026-08-18: repointed OFF the `infernal_class_*` bank, which was rendered body by
@@ -651,12 +661,27 @@ const INFERNAL_CLASS_ASSETS = {
   // now names the SAME body the live infernal document publishes for that card, so the
   // compiled fallback and the published override land in the same place.
   Warrior: realmStoreAsset('crypticrealm/realm_crypticrealm_rune_warden.glb', 'Warrior'),
-  Rogue: realmStoreAsset('crypticrealm/realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289.glb', 'Rogue'),
-  'Sorcerer / Sorceress': realmStoreAsset('infernal/realm_infernal_hero_sorcerer.glb', 'Sorcerer / Sorceress'),
-  Amazon: realmStoreAsset('infernal/realm_infernal_shadow_warrior_characters_fashio_01942cf0.glb', 'Amazon'),
+  Rogue: realmStoreAsset(
+    'crypticrealm/realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289.glb',
+    'Rogue',
+  ),
+  'Sorcerer / Sorceress': realmStoreAsset(
+    'infernal/realm_infernal_hero_sorcerer.glb',
+    'Sorcerer / Sorceress',
+  ),
+  Amazon: realmStoreAsset(
+    'infernal/realm_infernal_shadow_warrior_characters_fashio_01942cf0.glb',
+    'Amazon',
+  ),
   Barbarian: realmStoreAsset('infernal/realm_infernal_hero_barbarian.glb', 'Barbarian'),
-  Necromancer: realmStoreAsset('infernal/realm_infernal_violet_necromancer_necromancer_m_019cb976.glb', 'Necromancer'),
-  Paladin: realmStoreAsset('infernal/realm_infernal_ironthorn_dread_knight_character_019dd422.glb', 'Paladin'),
+  Necromancer: realmStoreAsset(
+    'infernal/realm_infernal_violet_necromancer_necromancer_m_019cb976.glb',
+    'Necromancer',
+  ),
+  Paladin: realmStoreAsset(
+    'infernal/realm_infernal_ironthorn_dread_knight_character_019dd422.glb',
+    'Paladin',
+  ),
   Druid: realmStoreAsset('infernal/realm_infernal_hero_druid.glb', 'Druid'),
   Assassin: realmStoreAsset('infernal/realm_infernal_hero_assassin.glb', 'Assassin'),
   'Demon Hunter': realmStoreAsset('infernal/realm_infernal_hero_demon_hunter.glb', 'Demon Hunter'),
@@ -666,16 +691,16 @@ const INFERNAL_CLASS_ASSETS = {
   Crusader: realmStoreAsset('infernal/realm_infernal_hero_crusader.glb', 'Crusader'),
   Spiritborn: realmStoreAsset('infernal/realm_infernal_hero_spiritborn.glb', 'Spiritborn'),
   Warlock: realmStoreAsset('infernal/realm_infernal_hero_warlock.glb', 'Warlock'),
-  'Blood Knight': realmStoreAsset('infernal/realm_infernal_hero_blood_knight.glb', 'Blood Knight'),
+  'Blood Knight': SCARLET_BLOOD_KNIGHT,
   Tempest: realmStoreAsset('infernal/realm_infernal_hero_tempest.glb', 'Tempest'),
 } satisfies Readonly<Record<string, RealmClassAsset>>;
 
 const INFERNAL_BASE_CLASS_ASSETS: Record<PlayerClass, RealmClassAsset> = {
   warrior: INFERNAL_CLASS_ASSETS.Warrior,
-  paladin: INFERNAL_CLASS_ASSETS.Paladin,
-  hunter: INFERNAL_CLASS_ASSETS.Amazon,
+  paladin: SCARLET_BLOOD_KNIGHT,
+  hunter: INFERNAL_CLASS_ASSETS['Demon Hunter'],
   rogue: INFERNAL_CLASS_ASSETS.Rogue,
-  priest: INFERNAL_CLASS_ASSETS['Sorcerer / Sorceress'],
+  priest: INFERNAL_CLASS_ASSETS.Necromancer,
   shaman: INFERNAL_CLASS_ASSETS.Monk,
   mage: INFERNAL_CLASS_ASSETS.Wizard,
   warlock: INFERNAL_CLASS_ASSETS.Warlock,
@@ -686,16 +711,24 @@ const INFERNAL_HERO_ASSETS: Readonly<Record<string, RealmClassAsset>> = {
   ...INFERNAL_CLASS_ASSETS,
 };
 
+function classPackAsset(realm: string, cls: PlayerClass, label: string): RealmClassAsset {
+  return asset('ready', 'Playable realm GLB', {
+    assetUrl: `/cr-realms/${realm}/${realm}_class_${cls}.glb`,
+    assetName: label,
+    assetAnimated: true,
+  });
+}
+
 const CRYPTIC_HUMAN_BASE_CLASS_ASSETS: Record<PlayerClass, RealmClassAsset> = {
-  warrior: CRYPTIC_BODY_ASSETS.darkPaladin,
-  paladin: CRYPTIC_BODY_ASSETS.gargoyleStandIn, // GAP
+  warrior: CRYPTIC_BODY_ASSETS.runeWarden,
+  paladin: classPackAsset('classic', 'paladin', 'Oathbound Champion'),
   hunter: CRYPTIC_BODY_ASSETS.cryptStalker,
-  rogue: CRYPTIC_BODY_ASSETS.cipherBlade,
-  priest: CRYPTIC_BODY_ASSETS.oracle,
-  shaman: CRYPTIC_BODY_ASSETS.totemistStandIn, // GAP
-  mage: CRYPTIC_BODY_ASSETS.voidSeer,
-  warlock: CRYPTIC_BODY_ASSETS.gravecaller,
-  druid: CRYPTIC_BODY_ASSETS.wardenStandIn, // GAP
+  rogue: classPackAsset('fps', 'rogue', 'Shadow Operative'),
+  priest: classPackAsset('dominion', 'priest', 'Astral Oracle'),
+  shaman: classPackAsset('dominion', 'shaman', 'Runic Machinist'),
+  mage: classPackAsset('arcane', 'mage', 'Void Caster'),
+  warlock: classPackAsset('arcane', 'warlock', 'Entropy Binder'),
+  druid: classPackAsset('classic', 'druid', 'Wildshape Warden'),
 };
 
 interface InfernalEnemySeed {
@@ -764,83 +797,14 @@ const INFERNAL_HELL_ENEMIES: readonly InfernalEnemySeed[] = [
   },
 ];
 
-const CLASSIC_ORC = asset('ready', 'Playable GLB', {
-  assetUrl: '/cr-realms/classic/another-orc-meshy_ai_meshy_merged_animations_743223cb.glb',
-  assetName: 'Animated Orc',
-  assetAnimated: true,
-});
-
-const CLASSIC_BIG_ORC = asset(
-  'preview',
-  'Animation Pass',
-  {
-    assetUrl: '/cr-realms/classic/bigass-orc-meshy_ai_meshy_merged_animations_86937638.glb',
-    assetName: 'Armored Orc',
-    assetAnimated: true,
-  },
-  'Movement/jump pack present; combat, cast, hit, and death clips still needed.',
-);
-
-const CLASSIC_FIGHTING_ELF = asset('ready', 'Playable GLB', {
-  assetUrl: '/cr-realms/classic/fighting-elf-meshy_ai_meshy_merged_animations_943c5367.glb',
-  assetName: 'Fighting Elf',
-  assetAnimated: true,
-});
-
-const CLASSIC_DWARF = asset(
-  'preview',
-  'Animation Pass',
-  {
-    assetUrl: '/cr-realms/classic/gray-dwarf-meshy_ai_meshy_merged_animations_a33ff315.glb',
-    assetName: 'Gray Dwarf',
-    assetAnimated: true,
-  },
-  'Run/walk only; queued for attack, cast, hit, and death clips.',
-);
-
-const CLASSIC_FEMALE_ELF = asset(
-  'preview',
-  'Animation Pass',
-  {
-    assetUrl: '/cr-realms/classic/female-elf-meshy_ai_meshy_merged_animations_2dde3113.glb',
-    assetName: 'Female Elf',
-    assetAnimated: true,
-  },
-  'Run/walk only; queued for healer/caster animation coverage.',
-);
-
-const CLASSIC_FEMALE_ORC = asset(
-  'preview',
-  'Animation Pass',
-  {
-    assetUrl: '/cr-realms/classic/female-orc-meshy_ai_meshy_merged_animations_a5a08a67.glb',
-    assetName: 'Female Orc',
-    assetAnimated: true,
-  },
-  'Run/walk only; queued for rogue attack and hit reactions.',
-);
-
-const CLASSIC_TREASURE_DWARF = asset(
-  'preview',
-  'Animation Pass',
-  {
-    assetUrl: '/cr-realms/classic/treasure-dwarf-meshy_ai_meshy_merged_animations_91488daf.glb',
-    assetName: 'Treasure Dwarf',
-    assetAnimated: true,
-  },
-  'Run/walk only; queued for spellcast and death clips.',
-);
-
-const CLASSIC_KITTY = asset(
-  'preview',
-  'Animation Pass',
-  {
-    assetUrl: '/cr-realms/classic/kitty_a4be04fa.glb',
-    assetName: 'Kitty',
-    assetAnimated: true,
-  },
-  'Single imported clip; queued for normalized locomotion and class action set.',
-);
+function classPackAssets(realm: string, title: string): Record<PlayerClass, RealmClassAsset> {
+  return Object.fromEntries(
+    PLAYER_CLASS_ORDER.map((cls) => [
+      cls,
+      classPackAsset(realm, cls, `${title} ${cls.charAt(0).toUpperCase()}${cls.slice(1)}`),
+    ]),
+  ) as Record<PlayerClass, RealmClassAsset>;
+}
 
 const ASSETS_BY_REALM_CLASS: Partial<
   Record<RealmId, Partial<Record<PlayerClass, RealmClassAsset>>>
@@ -849,16 +813,11 @@ const ASSETS_BY_REALM_CLASS: Partial<
     ...CRYPTIC_HUMAN_BASE_CLASS_ASSETS,
   },
   infernal: INFERNAL_BASE_CLASS_ASSETS,
-  classic: {
-    warrior: CLASSIC_DWARF,
-    paladin: CLASSIC_FIGHTING_ELF,
-    hunter: CLASSIC_ORC,
-    rogue: CLASSIC_FEMALE_ORC,
-    priest: CLASSIC_FEMALE_ELF,
-    shaman: CLASSIC_BIG_ORC,
-    mage: CLASSIC_TREASURE_DWARF,
-    druid: CLASSIC_KITTY,
-  },
+  classic: classPackAssets('classic', 'Classic'),
+  dominion: classPackAssets('dominion', 'Dominion'),
+  arcane: classPackAssets('arcane', 'Arcane'),
+  arcadevoid: classPackAssets('arcadevoid', 'Arcane Void'),
+  fps: classPackAssets('fps', 'FPS'),
 };
 
 function seed(name: string, faction: string, role: RealmRole, lore: string): PresentationSeed {
@@ -904,8 +863,9 @@ function sourceForBaseClass(
 function assetForBaseClass(realm: RealmContent, baseClass: PlayerClass): RealmClassAsset {
   const compiled: RealmClassAsset =
     ASSETS_BY_REALM_CLASS[realm.id]?.[baseClass] ?? COMING_SOON_ASSET;
+  const visualKey = realmClassVisualKey(realm.id, baseClass);
   const override = baseOverride(realm.id, [`class:${baseClass}`]);
-  if (!override) return compiled;
+  if (!override) return visualKey ? { ...compiled, visualKey } : compiled;
   // A published body is a real, playable GLB even when the compiled entry it
   // replaces was still a "Coming Soon" placeholder - so drop that placeholder's
   // assetIssue too, or the card keeps showing "character job queued" underneath
@@ -918,6 +878,7 @@ function assetForBaseClass(realm: RealmContent, baseClass: PlayerClass): RealmCl
     assetUrl: override.assetUrl,
     assetName: override.assetName ?? compiled.assetName,
     assetAnimated: true,
+    ...(visualKey ? { visualKey } : {}),
   };
 }
 
@@ -1003,10 +964,16 @@ function infernalClassChoice(
   // swaps the body asset live, ahead of the compiled default.
   // A hidden variant with no override of its own falls back to the canonical
   // selection's keys, so the toggle can offer a variant before its body exists.
-  const override = baseOverride(realm.id, [
-    ...infernalHeroOverrideKeys(realm.id, { id: heroId, name, variantOf }),
-    `class:${baseClass}`,
-  ]);
+  // Expanded archetypes share only nine mechanical kits. A class-level body is
+  // therefore not a valid fallback for a selected hero: applying
+  // `class:shaman` here made Monk, Spiritborn, and Tempest all show the same
+  // Witch Doctor. Class overrides remain available to legacy characters that
+  // have no realmHeroId; a hero card accepts only its own (or canonical variant)
+  // override and otherwise keeps its distinct compiled body.
+  const override = baseOverride(
+    realm.id,
+    infernalHeroOverrideKeys(realm.id, { id: heroId, name, variantOf }),
+  );
   const resolvedAsset: RealmClassAsset = override
     ? {
         ...assetChoice,
@@ -1052,8 +1019,7 @@ export function infernalHeroChoicesForRealm(realm: RealmContent): InfernalHeroPr
   const compiledAsset = (selection: (typeof selections)[number]): RealmClassAsset =>
     selection.factionSide === 'hell'
       ? (enemyAssets.get(selection.name) ?? INFERNAL_BASE_CLASS_ASSETS[selection.engineClass])
-      : (INFERNAL_HERO_ASSETS[selection.name] ??
-          INFERNAL_BASE_CLASS_ASSETS[selection.engineClass]);
+      : (INFERNAL_HERO_ASSETS[selection.name] ?? INFERNAL_BASE_CLASS_ASSETS[selection.engineClass]);
   return selections.map((selection) =>
     infernalClassChoice(
       realm,
@@ -1062,9 +1028,7 @@ export function infernalHeroChoicesForRealm(realm: RealmContent): InfernalHeroPr
       selection.factionSide,
       // A hidden variant ships no compiled asset of its own: it presents the
       // canonical card's body until an override for its own id is published.
-      compiledAsset(
-        selection.variantOf ? (byId.get(selection.variantOf) ?? selection) : selection,
-      ),
+      compiledAsset(selection.variantOf ? (byId.get(selection.variantOf) ?? selection) : selection),
       selection.id,
       selection.variantOf,
       selection.variants,

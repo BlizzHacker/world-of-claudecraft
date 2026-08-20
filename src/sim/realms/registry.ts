@@ -16,15 +16,15 @@
 //   2. localStorage 'cr_active_realm' (last-picked).
 //   3. DEFAULT_REALM ('crypticrealm') — the namesake landing experience.
 
-import { CRYPTICREALM_REALM } from './content/crypticrealm';
-import { CLAUDECRAFT_REALM } from './content/claudecraft';
-import { INFERNAL_REALM } from './content/infernal';
-import { CLASSIC_REALM } from './content/classic';
-import { DOMINION_REALM } from './content/dominion';
-import { ARCANE_REALM } from './content/arcane';
 import { ARCADE_VOID_REALM } from './content/arcade_void';
-import { FPS_REALM } from './content/fps';
+import { ARCANE_REALM } from './content/arcane';
+import { CLASSIC_REALM } from './content/classic';
+import { CLAUDECRAFT_REALM } from './content/claudecraft';
+import { CRYPTICREALM_REALM } from './content/crypticrealm';
+import { DOMINION_REALM } from './content/dominion';
 import { EXCHANGE_REALM } from './content/exchange';
+import { FPS_REALM } from './content/fps';
+import { INFERNAL_REALM } from './content/infernal';
 import type { RealmContent, RealmId } from './types';
 
 export const REALMS: Record<RealmId, RealmContent> = {
@@ -55,9 +55,7 @@ export const REALM_LIST: readonly RealmContent[] = [
 
 /** Realms a player calls home. The Exchange is intentionally excluded —
  *  characters don't live there, they visit. */
-export const HOME_REALM_LIST: readonly RealmContent[] = REALM_LIST.filter(
-  (r) => !r.crossRealm,
-);
+export const HOME_REALM_LIST: readonly RealmContent[] = REALM_LIST.filter((r) => !r.crossRealm);
 
 /** True when the given realm is a cross-realm hub (today: only Exchange). */
 export function isCrossRealm(id: RealmId): boolean {
@@ -82,6 +80,9 @@ export function getRealm(id: RealmId): RealmContent {
 // Node/RL hosts leave it unset and get DEFAULT_REALM.
 export interface RealmHostEnv {
   queryParam(name: string): string | null;
+  /** Realm encoded by the public hostname, when the browser is on a realm or
+   *  stage subdomain. Kept injected so the deterministic sim never reads DOM. */
+  hostRealmId?(): string | null;
   storageGet(key: string): string | null;
   storageSet(key: string, value: string): void;
   notifyStageChange?(realmId: string, stage: string): void;
@@ -148,14 +149,18 @@ export function resolveActiveRealmId(): RealmId {
       const ls = hostEnv.storageGet(STORE_KEY);
       if (isRealmId(ls)) return ls;
     }
-  } catch { /* SSR / sandboxed env: fall through */ }
+  } catch {
+    /* SSR / sandboxed env: fall through */
+  }
   return DEFAULT_REALM;
 }
 
 export function persistActiveRealm(id: RealmId): void {
   try {
     hostEnv?.storageSet(STORE_KEY, id);
-  } catch { /* storage unavailable */ }
+  } catch {
+    /* storage unavailable */
+  }
 }
 
 export function getActiveRealm(): RealmContent {

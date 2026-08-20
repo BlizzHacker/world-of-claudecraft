@@ -9,6 +9,10 @@ import {
   presentationFactionsForRealm,
   realmHasClassOverlay,
 } from '../src/ui/cryptic/realm_class_presentation';
+import {
+  clearRealmVisualOverrides,
+  setRealmVisualOverrides,
+} from '../src/ui/cryptic/realm_visual_overrides';
 
 const ALL_CLASSES: readonly PlayerClass[] = [
   'warrior',
@@ -54,7 +58,8 @@ const HELL_ENEMY_CHOICES = [
 
 const INFERNAL_VERSION_LABEL = /Diablo (?:I|II|III|IV|Immortal)/i;
 const HELL_ONLY_MODEL =
-  /diablo|demon|dark[ _-]?paladin|bone[ _-]?herald|behemoth|skullbeast|cursed|corrupt|tainted/i;
+  /diablo|demon|dark[ _-]?paladin|bone[ _-]?herald|behemoth|skullbeast|cursed|corrupt/i;
+const MINIATURE_CLASS_BODY = /infernal_class_(?:barbarian|druid|witch_doctor)\.glb$/i;
 
 describe('realm class presentation', () => {
   it('offers a realm-flavored choice for every playable base class', () => {
@@ -75,6 +80,8 @@ describe('realm class presentation', () => {
         expect(choice.name).toBeTruthy();
         expect(choice.faction).toBeTruthy();
         expect(choice.lore.length).toBeGreaterThan(20);
+        expect(choice.visualKey, `${id}:${choice.baseClass}`).toMatch(/^realm_/);
+        expect(choice.assetStatus, `${id}:${choice.baseClass}`).not.toBe('comingSoon');
       }
     }
   });
@@ -99,9 +106,12 @@ describe('realm class presentation', () => {
       for (const choice of choices) {
         expect(choice.assetStatus, `${id}:${choice.baseClass}`).toMatch(/ready|preview|comingSoon/);
         expect(choice.assetStatusLabel, `${id}:${choice.baseClass}`).toBeTruthy();
-        if (choice.assetUrl) {
-          expect(choice.assetUrl, `${id}:${choice.baseClass}`).toMatch(/\.glb$/);
-          expect(choice.assetName, `${id}:${choice.baseClass}`).toBeTruthy();
+        if (choice.assetUrl || choice.visualKey) {
+          if (choice.assetUrl) {
+            expect(choice.assetUrl, `${id}:${choice.baseClass}`).toMatch(/\.glb$/);
+            expect(choice.assetName, `${id}:${choice.baseClass}`).toBeTruthy();
+          }
+          expect(choice.visualKey, `${id}:${choice.baseClass}`).toMatch(/^realm_/);
           expect(choice.assetStatus, `${id}:${choice.baseClass}`).not.toBe('comingSoon');
         } else {
           expect(choice.assetStatus, `${id}:${choice.baseClass}`).toBe('comingSoon');
@@ -117,7 +127,7 @@ describe('realm class presentation', () => {
     );
     expect(
       classChoicesForRealm(getRealm('arcadevoid')).every(
-        (choice) => choice.assetStatus === 'comingSoon',
+        (choice) => choice.assetStatus !== 'comingSoon' && !!choice.visualKey,
       ),
     ).toBe(true);
   });
@@ -133,9 +143,7 @@ describe('realm class presentation', () => {
     const choices = infernalHeroChoicesForRealm(getRealm('infernal'));
     // Hidden variant entries (variantOf) back a card's Female/Male toggle and
     // never render as cards; the card-grid invariants ignore them.
-    const heroes = choices.filter(
-      (choice) => choice.factionSide === 'heaven' && !choice.variantOf,
-    );
+    const heroes = choices.filter((choice) => choice.factionSide === 'heaven' && !choice.variantOf);
 
     expect(heroes.map((choice) => [choice.name, choice.baseClass])).toEqual(
       INFERNAL_HERO_ARCHETYPES,
@@ -148,9 +156,8 @@ describe('realm class presentation', () => {
     for (const choice of heroes) {
       expect(choice.assetStatus, choice.name).toBe('ready');
       expect(choice.assetAnimated, choice.name).toBe(true);
-      expect(choice.assetUrl, choice.name).toMatch(
-        /^\/cr-realms\/infernal\/(?:characters\/)?infernal_class_[a-z_]+\.glb$/,
-      );
+      expect(choice.assetUrl, choice.name).toMatch(/^\/cr-realms\/.+\.glb$/);
+      expect(choice.assetUrl, choice.name).not.toMatch(MINIATURE_CLASS_BODY);
       if (choice.name !== 'Demon Hunter') {
         expect(`${choice.assetName} ${choice.assetUrl}`, choice.name).not.toMatch(HELL_ONLY_MODEL);
       }
@@ -168,12 +175,11 @@ describe('realm class presentation', () => {
     const baseChoices = classChoicesForRealm(getRealm('infernal'));
     expect(baseChoices).toHaveLength(ALL_CLASSES.length);
     expect(
-      baseChoices.every((choice) =>
-        /^\/cr-realms\/infernal\/(?:characters\/)?infernal_class_[a-z_]+\.glb$/.test(
-          choice.assetUrl ?? '',
-        ),
-      ),
+      baseChoices.every((choice) => /^\/cr-realms\/.+\.glb$/.test(choice.assetUrl ?? '')),
     ).toBe(true);
+    expect(baseChoices.every((choice) => !MINIATURE_CLASS_BODY.test(choice.assetUrl ?? ''))).toBe(
+      true,
+    );
     expect(new Set(heroes.map((choice) => choice.assetUrl)).size).toBe(heroes.length);
     expect(new Set(baseChoices.map((choice) => choice.assetUrl)).size).toBe(baseChoices.length);
   });
@@ -194,6 +200,47 @@ describe('realm class presentation', () => {
       expect(hidden?.baseClass, variant.heroId).toBe('mage');
       // No body of its own yet: it presents the canonical card's compiled asset.
       expect(hidden?.assetUrl, variant.heroId).toBe(canonical?.assetUrl);
+    }
+  });
+
+  it('does not collapse distinct Infernal heroes onto one mechanical-class override', () => {
+    setRealmVisualOverrides('infernal', {
+      'class:shaman': {
+        assetUrl: '/cr-realms/infernal/infernal_class_witch_doctor.glb',
+      },
+    });
+    try {
+      const choices = infernalHeroChoicesForRealm(getRealm('infernal'));
+      const shamanHeroes = choices.filter(
+        (choice) =>
+          !choice.variantOf && choice.factionSide === 'heaven' && choice.baseClass === 'shaman',
+      );
+      expect(shamanHeroes.map((choice) => choice.name)).toEqual(['Monk', 'Spiritborn', 'Tempest']);
+      expect(new Set(shamanHeroes.map((choice) => choice.assetUrl)).size).toBe(3);
+      expect(shamanHeroes.every((choice) => !choice.assetUrl?.endsWith('witch_doctor.glb'))).toBe(
+        true,
+      );
+    } finally {
+      clearRealmVisualOverrides();
+    }
+  });
+
+  it('applies an ArcForge class override to an ordinary non-Infernal creator card', () => {
+    setRealmVisualOverrides('classic', {
+      'class:mage': {
+        assetUrl: '/asset-library/classic/custom-human-mage.glb',
+        assetName: 'Custom Human Mage',
+      },
+    });
+    try {
+      expect(classPresentationForRealm(getRealm('classic'), 'mage')).toMatchObject({
+        assetUrl: '/asset-library/classic/custom-human-mage.glb',
+        assetName: 'Custom Human Mage',
+        assetStatus: 'ready',
+        visualKey: 'realm_classic_class_mage',
+      });
+    } finally {
+      clearRealmVisualOverrides();
     }
   });
 
@@ -218,12 +265,13 @@ describe('realm class presentation', () => {
     ]);
   });
 
-  it('leaves pristine and exchange realms on vanilla class labels', () => {
-    for (const id of ['claudecraft', 'exchange'] as const) {
-      const realm = getRealm(id);
-      expect(realmHasClassOverlay(realm)).toBe(false);
-      expect(classChoicesForRealm(realm)).toEqual([]);
-      expect(classPresentationForRealm(realm, 'warrior')).toBeNull();
-    }
+  it('leaves only Claudecraft home characters on the modular KayKit creator', () => {
+    const realm = getRealm('claudecraft');
+    expect(realmHasClassOverlay(realm)).toBe(false);
+    expect(classChoicesForRealm(realm)).toEqual([]);
+    expect(classPresentationForRealm(realm, 'warrior')).toBeNull();
+
+    // Exchange is a visitor hub, not a home realm with character creation.
+    expect(realmHasClassOverlay(getRealm('exchange'))).toBe(false);
   });
 });

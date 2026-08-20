@@ -668,10 +668,16 @@
         <img class="main-logo" id="title-logo" src="/cryptic-realm-logo.png" data-i18n-alt="serverUnavailable.logoAlt" alt="Cryptic Realm" />
 
         <div id="mode-select">
-          <div class="play-console">
+          <div class="play-console play-console-solo">
             <!-- Realm selector: a themed dropdown that defaults to Online and can switch to Offline.
                  It only chooses the destination; the Play button below commits. -->
-            <div class="server-select" id="server-select" data-mode="online">
+            <div
+              class="server-select"
+              id="server-select"
+              data-mode="online"
+              hidden
+              aria-hidden="true"
+            >
               <button type="button" class="server-select-trigger" id="server-select-trigger"
                 aria-haspopup="listbox" aria-expanded="false" aria-controls="server-select-menu"
                 data-i18n-aria="mode.serverAria" aria-label="Select realm: Online or Offline">

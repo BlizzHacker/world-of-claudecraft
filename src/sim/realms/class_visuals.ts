@@ -42,47 +42,45 @@ export type RealmRuntimeVisualKeyLegacy =
   // 2026-08-17; see docs/condemned-body-bank.md.
   | 'realm_infernal_durance_humanoid';
 
+function authoredClassPack(realmId: 'classic' | 'dominion' | 'arcane' | 'arcadevoid' | 'fps') {
+  return {
+    warrior: `realm_${realmId}_class_warrior`,
+    paladin: `realm_${realmId}_class_paladin`,
+    hunter: `realm_${realmId}_class_hunter`,
+    rogue: `realm_${realmId}_class_rogue`,
+    priest: `realm_${realmId}_class_priest`,
+    shaman: `realm_${realmId}_class_shaman`,
+    mage: `realm_${realmId}_class_mage`,
+    warlock: `realm_${realmId}_class_warlock`,
+    druid: `realm_${realmId}_class_druid`,
+  } satisfies Record<PlayerClass, RealmRuntimeVisualKey>;
+}
+
 const REALM_CLASS_VISUALS: Partial<
   Record<RealmId, Partial<Record<PlayerClass, RealmRuntimeVisualKey>>>
 > = {
-  // The whole condemned body bank came out of here on 2026-08-17. The nine
-  // classes below no longer share four bodies between them: each names a
-  // distinct body from the approved catalog (verdict ship / ship-with-caveat
-  // AND examinedCellByCell), each looked at on its phase-1 contact sheet, none
-  // with a weapon baked into its hands. The audit record for what was removed
-  // and why is docs/condemned-body-bank.md.
-  //
-  // These are the RUNTIME keys and they are kept in step with the compiled card
-  // bodies in ui/cryptic/realm_class_presentation.ts, so the create screen and
-  // the world agree for a player who has no published override.
-  //
-  // STATUS 2026-08-17: the operator reviewed the six published class bodies and
-  // REJECTED FIVE - only hunter (Crypt Stalker) survived. Eight of these nine are
-  // therefore PLACEHOLDERS awaiting generated bodies, not endorsed choices, and
-  // the approved catalog is spent for this realm - do not swap in another pool
-  // body, that is what produced the rejections. See the status table in
-  // realm_class_presentation.ts and docs/condemned-body-bank.md.
+  // Cryptic Realm deliberately mixes the authored realm packs. Every class has
+  // a distinct full-size body and the creator/runtime resolve the same key.
   crypticrealm: {
-    warrior: 'realm_infernal_hero_dark_paladin',
-    paladin: 'realm_infernal_evil_warlord_armor_made_0196a156', // GAP: Gargoyle Oathsworn
+    warrior: 'realm_crypticrealm_rune_warden',
+    paladin: 'realm_classic_class_paladin',
     hunter: 'realm_infernal_hero_demon_hunter',
-    rogue: 'realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289',
-    priest: 'realm_arcane_all_seeing_sage_sage_019e1733',
-    shaman: 'realm_infernal_class_shaman_f', // GAP: Grave Totemist
-    mage: 'realm_arcane_mystic_sentinel_characters_01968757',
-    warlock: 'realm_infernal_hero_warlock',
-    druid: 'realm_infernal_class_druid_f', // GAP: Chimera Warden
+    rogue: 'realm_fps_class_rogue',
+    priest: 'realm_dominion_class_priest',
+    shaman: 'realm_dominion_class_shaman',
+    mage: 'realm_arcane_class_mage',
+    warlock: 'realm_arcane_class_warlock',
+    druid: 'realm_classic_class_druid',
   },
-  // Seven of these nine pointed at a body that fails in motion; see
-  // INFERNAL_DEFECTIVE_CLASS_BODY_KEYS. The three survivors of the class bank
-  // are warrior, blood_knight and demon_hunter, with rogue and witch_doctor
-  // acceptable, so the nine classes share five bodies until the bank is fixed.
+  // The base-class fallback is human and distinct. Infernal's expanded creator
+  // still persists a realmHeroId, which resolves to its specific 18-class or
+  // Ashen Court body ahead of these nine compatibility entries.
   infernal: {
     // 2026-08-18: every entry repointed off the `infernal_class_*` chibi bank onto the
     // body the live infernal document publishes for the same class. Nine distinct bodies,
     // no sharing; the female halves live in the published class:<cls>:f rows.
     warrior: 'realm_crypticrealm_rune_warden',
-    paladin: 'realm_infernal_ironthorn_dread_knight_character_019dd422',
+    paladin: 'realm_infernal_hero_blood_knight_f',
     hunter: 'realm_infernal_hero_demon_hunter',
     rogue: 'realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289',
     priest: 'realm_infernal_violet_necromancer_necromancer_m_019cb976',
@@ -91,15 +89,26 @@ const REALM_CLASS_VISUALS: Partial<
     warlock: 'realm_infernal_hero_warlock',
     druid: 'realm_infernal_hero_druid',
   },
-  classic: {
-    warrior: 'realm_classic_dwarf',
-    paladin: 'realm_classic_fighting_elf',
-    hunter: 'realm_classic_orc',
-    rogue: 'realm_classic_female_orc',
-    priest: 'realm_classic_female_elf',
-    shaman: 'realm_classic_big_orc',
-    mage: 'realm_classic_treasure_dwarf',
-    druid: 'realm_classic_kitty',
+  // The compact Classic pack is the only Classic roster in the published
+  // catalog with all ten gameplay clips. The older hand-written keys still
+  // point at pre-recovery filenames and silently fall back to KayKit.
+  classic: authoredClassPack('classic'),
+  dominion: authoredClassPack('dominion'),
+  arcane: authoredClassPack('arcane'),
+  arcadevoid: authoredClassPack('arcadevoid'),
+  fps: authoredClassPack('fps'),
+  // The Exchange is a visitor hub rather than a creator, but an old character
+  // row without its persisted home-realm key still must not become KayKit.
+  exchange: {
+    warrior: 'realm_classic_class_warrior',
+    paladin: 'realm_classic_class_paladin',
+    hunter: 'realm_arcadevoid_class_hunter',
+    rogue: 'realm_fps_class_rogue',
+    priest: 'realm_dominion_class_priest',
+    shaman: 'realm_dominion_class_shaman',
+    mage: 'realm_arcane_class_mage',
+    warlock: 'realm_arcane_class_warlock',
+    druid: 'realm_classic_class_druid',
   },
 };
 
@@ -111,11 +120,7 @@ export function normalizeRealmVisualId(name: string | null | undefined): RealmId
   // no visual key, roster row, store filename or published realm_visuals
   // override has ever carried one, so they matched nothing and only kept the
   // names alive in source. The realm's own aliases below still resolve it.
-  if (
-    key.includes('arcanevoid') ||
-    key.includes('arcadevoid') ||
-    key.includes('arcade')
-  )
+  if (key.includes('arcanevoid') || key.includes('arcadevoid') || key.includes('arcade'))
     return 'arcadevoid';
   if (key === 'arcane' || key.includes('arcanenexus') || key.includes('arcanecrystal'))
     return 'arcane';
@@ -145,6 +150,20 @@ export function resolveRealmCharacterVisual(
   realmHeroId: unknown,
 ): { realmHeroId: string | null; visualKey: RealmRuntimeVisualKey | null } {
   const selected = infernalCharacterSelection(realmNameOrId ?? '', realmHeroId, cls);
-  if (selected) return { realmHeroId: selected.id, visualKey: selected.visualKey };
+  // Generated non-Infernal hero ids are still accepted for backward
+  // compatibility, but their old generated GLBs were removed from the
+  // published catalog. Preserve the chosen identity while routing its body to
+  // the realm's working class pack. Infernal owns a curated, published hero
+  // roster and keeps its per-archetype visual.
+  if (selected) {
+    const realm = normalizeRealmVisualId(realmNameOrId);
+    return {
+      realmHeroId: selected.id,
+      visualKey:
+        realm === 'infernal'
+          ? selected.visualKey
+          : (realmClassVisualKey(realmNameOrId, cls) ?? selected.visualKey),
+    };
+  }
   return { realmHeroId: null, visualKey: realmClassVisualKey(realmNameOrId, cls) };
 }

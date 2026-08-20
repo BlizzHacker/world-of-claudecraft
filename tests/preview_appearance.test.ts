@@ -210,13 +210,12 @@ describe('CharacterPreview.setAppearance', () => {
     });
 
     preview.setAppearance(mech);
-    expect(setVisualKey).toHaveBeenCalledOnce();
-    expect(setVisualKey).toHaveBeenLastCalledWith('player_rogue', 'dagger_x', null, 'dagger_y');
+    expect(setVisualKey).not.toHaveBeenCalled();
 
     await finishMechLoad();
 
     expect(preloadMechAssets).toHaveBeenCalledOnce();
-    expect(setVisualKey).toHaveBeenCalledTimes(2);
+    expect(setVisualKey).toHaveBeenCalledOnce();
     expect(setVisualKey).toHaveBeenLastCalledWith(
       'player_mech',
       'dagger_x',
@@ -232,12 +231,12 @@ describe('CharacterPreview.setAppearance', () => {
       appearance({ cls: 'mage', skin: 1, skinCatalog: 'class', mainhandItemId: 'staff_x' }),
     );
 
-    expect(setVisualKey).toHaveBeenCalledTimes(2);
+    expect(setVisualKey).toHaveBeenCalledOnce();
     expect(setVisualKey).toHaveBeenLastCalledWith('player_mage', 'staff_x', null, null);
 
     await finishMechLoad();
 
-    expect(setVisualKey).toHaveBeenCalledTimes(2);
+    expect(setVisualKey).toHaveBeenCalledOnce();
     expect(setVisualKey).toHaveBeenLastCalledWith('player_mage', 'staff_x', null, null);
   });
 });
@@ -380,6 +379,19 @@ describe('CharacterPreview.setVisualKey: the weapon-skin rebuild contract', () =
     await Promise.resolve();
     await Promise.resolve();
     expect(visualDoubles.built).toHaveLength(1);
+  });
+
+  it('evicts a mounted KayKit body before a themed body starts loading', () => {
+    lazyBodies.notReady.add('realm_infernal_human_iron_warden');
+    const preview = rawPreview(null);
+    preview.setVisualKey('player_warrior', null, null, null);
+    const stock = visualInstances[0];
+
+    preview.setVisualKey('realm_infernal_human_iron_warden', null, null, null);
+
+    expect(stock.dispose).toHaveBeenCalledOnce();
+    expect(visualDoubles.built).toHaveLength(1);
+    expect(preloadVisualAssets).toHaveBeenCalledWith('realm_infernal_human_iron_warden');
   });
 
   it('drops a late body fetch when a newer selection superseded it', async () => {

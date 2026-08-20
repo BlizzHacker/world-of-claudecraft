@@ -36,6 +36,7 @@ export type InfernalCharacterVisualKey =
   | 'realm_infernal_class_warlock'
   | 'realm_infernal_class_blood_knight'
   | 'realm_infernal_class_tempest'
+  | 'realm_infernal_hero_blood_knight_f'
   // The condemned body bank's 18 keys were removed from this union on
   // 2026-08-17. HERO_VISUALS never named one of them, so they were dead union
   // members. See docs/condemned-body-bank.md.
@@ -44,7 +45,8 @@ export type InfernalCharacterVisualKey =
   | 'realm_infernal_horned_demon'
   | 'realm_infernal_crimson_behemoth'
   | 'realm_cryptic_bone_herald'
-  | 'realm_infernal_skullbeast';
+  | 'realm_infernal_skullbeast'
+  | 'realm_classic_fighting_elf';
 
 export interface InfernalHeroVariant {
   /** Short user-facing label for the card's segmented toggle (e.g. 'Female'). */
@@ -182,7 +184,7 @@ const HERO_VISUALS: Readonly<Record<string, string>> = {
   Crusader: 'realm_infernal_hero_crusader',
   Spiritborn: 'realm_infernal_hero_spiritborn',
   Warlock: 'realm_infernal_hero_warlock',
-  'Blood Knight': 'realm_infernal_hero_blood_knight',
+  'Blood Knight': 'realm_infernal_hero_blood_knight_f',
   Tempest: 'realm_infernal_hero_tempest',
 };
 

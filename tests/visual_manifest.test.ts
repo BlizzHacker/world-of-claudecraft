@@ -132,7 +132,9 @@ describe('character visual manifest', () => {
     // is eight real townspeople; see docs/condemned-body-bank.md.
     expect(new Set(npcKeys).size).toBeGreaterThanOrEqual(5);
     for (const key of npcKeys) {
-      expect(key).toMatch(/^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/);
+      expect(key).toMatch(
+        /^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/,
+      );
       expect(key).not.toMatch(/bone_herald|npc_|elf|orc|demon/i);
     }
     setRealmHostEnv(null);
@@ -184,7 +186,7 @@ describe('character visual manifest', () => {
       expect(clips.emote?.cheer?.clips?.length, `${key} cheer`).toBeGreaterThan(0);
     }
     expect(VISUALS.realm_infernal_durance_humanoid.url).toBe(
-      VISUALS.realm_infernal_class_warrior.url,
+      VISUALS.realm_infernal_hero_blood_knight_f.url,
     );
   });
 
@@ -212,23 +214,10 @@ describe('character visual manifest', () => {
     // One def, three tints: the per-NPC NpcDef color carries each identity,
     // so the def must keep tint 'entity', and the three colors must stay
     // pairwise distinct and off the bursar gold and auctioneer amethyst.
-    //
-    // REALM MATTERS HERE, and it did not when this was written. DEFAULT_REALM is
-    // 'crypticrealm', so a test that sets NO realm does not get generic
-    // behaviour - it gets Cryptic's, and Cryptic (like Infernal) deliberately
-    // routes EVERY npc through the civilian roster so a KayKit mini can never
-    // appear in an authored realm. npc_chronicler is a KayKit mage body, so in
-    // those two realms the roster pin wins by design.
-    //
-    // The steer for this fix was to let an explicit NPC_KEYS entry beat the
-    // roster. The code argues otherwise and the measurement settled it: doing
-    // that would move ELEVEN authored-realm NPCs back onto generic KayKit
-    // bodies (npc_knight, npc_villager, npc_smith, npc_scout...), including
-    // ones just placed on real civilians. So NPC_KEYS keeps winning in realms
-    // WITHOUT a roster, and the roster keeps winning in the two that have one.
-    // This test now says which is which instead of assuming.
+    // Claudecraft deliberately retains the source KayKit chronicler. Every
+    // authored realm routes the same template onto its own civilian pool.
     setRealmHostEnv({
-      queryParam: (name) => (name === 'realm' ? 'classic' : null),
+      queryParam: (name) => (name === 'realm' ? 'claudecraft' : null),
       storageGet: () => null,
       storageSet: () => undefined,
     });
@@ -281,6 +270,7 @@ describe('character visual manifest', () => {
     // template id stays (save compatibility); pin the English so a revert
     // cannot land silently.
     expect(NPCS.chronicler_edda_hartwell.name).toBe('Chronicler Zenzie');
+    setRealmHostEnv(null);
   });
 
   it('uses the custom boar death clip without relying on a speed override', () => {
@@ -564,9 +554,15 @@ describe('character visual manifest', () => {
   it('keeps deepfen_spearjaw on its raptor model despite its reptile family retag', () => {
     // Prose-only claim otherwise (FAMILY_KEYS.reptile comment): the explicit MOB_KEYS
     // override this pins is what actually keeps the model, and nothing else does.
+    setRealmHostEnv({
+      queryParam: (name) => (name === 'realm' ? 'claudecraft' : null),
+      storageGet: () => null,
+      storageSet: () => undefined,
+    });
     expect(visualKeyFor({ kind: 'mob', templateId: 'deepfen_spearjaw' } as never)).toBe(
       'mob_spearjaw',
     );
+    setRealmHostEnv(null);
   });
 
   it('keeps every player class default (skin 0) free of a corrupting full-body tint wash (issue #2678)', () => {

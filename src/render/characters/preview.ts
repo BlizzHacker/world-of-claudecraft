@@ -1,7 +1,8 @@
-import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
 import * as THREE from 'three';
+import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
 import { CLASSES } from '../../sim/data';
 import type { PlayerClass } from '../../sim/types';
+import { loadGltf } from '../assets/loader';
 import { trackWebGLContext } from '../context_release';
 import {
   mechAssetsReady,
@@ -16,22 +17,17 @@ import {
   type ModularLook,
   modularBuildSignature,
 } from './modular';
-import {
-  applyExternalAppearanceTint,
-  disposeExternalAppearanceTint,
-} from './override_appearance';
-import { chooseExternalPreviewClipName } from './preview_clip';
+import { applyExternalAppearanceTint, disposeExternalAppearanceTint } from './override_appearance';
 import {
   appearanceSignature,
   type PreviewAppearance,
   previewAppearanceVisual,
 } from './preview_appearance';
+import { chooseExternalPreviewClipName } from './preview_clip';
 import { PREVIEW_FRAMING, type PreviewFramingName } from './preview_framing';
 import { characterPreviewFrameVisible, resolveCharacterPreviewPolicy } from './preview_policy';
 import { CharacterVisual } from './visual';
-import { loadGltf } from '../assets/loader';
 export type ExternalPreviewState = 'idle' | 'loading' | 'ready' | 'error';
-
 
 export type { PreviewAppearance } from './preview_appearance';
 
@@ -73,10 +69,7 @@ export function shouldReloadExternalPreview(
 }
 
 export class CharacterPreview {
-  setExternalModel(
-    url: string,
-    onState?: (state: ExternalPreviewState) => void,
-  ): void {
+  setExternalModel(url: string, onState?: (state: ExternalPreviewState) => void): void {
     if (this.destroyed) return;
     this.externalStateListener = onState ?? null;
     if (!shouldReloadExternalPreview(this.externalModelUrl, url)) {
@@ -98,6 +91,7 @@ export class CharacterPreview {
           this.characterGroup.remove(this.currentVisual.root);
           this.currentVisual.dispose();
           this.currentVisual = null;
+          this.currentVisualKey = null;
         }
         const root = buildExternalPreviewInstance(gltf.scene);
         this.externalRoot = root;
@@ -110,9 +104,7 @@ export class CharacterPreview {
         this.characterGroup.add(root);
         if (gltf.animations.length) {
           const mixer = new THREE.AnimationMixer(root);
-          const clipName = chooseExternalPreviewClipName(
-            gltf.animations.map((clip) => clip.name),
-          );
+          const clipName = chooseExternalPreviewClipName(gltf.animations.map((clip) => clip.name));
           const clip =
             gltf.animations.find((animation) => animation.name === clipName) ?? gltf.animations[0];
           mixer.clipAction(clip).play();
@@ -139,6 +131,10 @@ export class CharacterPreview {
   private camera: THREE.PerspectiveCamera;
   private characterGroup: THREE.Group;
   private currentVisual: CharacterVisual | null = null;
+  /** Exact mounted body. Used to evict a stock/KayKit stand-in before a themed
+   *  lazy body starts loading; an authored body may remain while another
+   *  authored selection streams in. */
+  private currentVisualKey: string | null = null;
   private externalRoot: THREE.Object3D | null = null;
   private externalMixer: THREE.AnimationMixer | null = null;
   private externalLoadToken = 0;
@@ -268,8 +264,7 @@ export class CharacterPreview {
    *  cosmetic body, its appearance skin, and the actually-equipped hands. Mirrors
    *  createCharacterVisual so the char-select roster and character sheet match the
    *  world. The mech's cosmetic assets load
-   *  lazily; while they are not ready this shows the class body and re-applies once
-   *  loaded, unless a newer selection has superseded this one. */
+   *  lazily and re-apply once loaded, unless a newer selection superseded this one. */
   setAppearance(a: PreviewAppearance): void {
     if (this.destroyed) return;
     this.currentSkin = a.skin;
@@ -277,23 +272,14 @@ export class CharacterPreview {
     const sig = appearanceSignature(a);
     this.appearanceSig = sig;
     if (a.skinCatalog === 'mech' && !mechAssetsReady()) {
-      this.setVisualKey(`player_${a.cls}`, a.mainhandItemId ?? null, null, a.offhandItemId ?? null);
-      this.currentVisual?.setSkin(a.skin);
+      this.discardStockVisual();
       void preloadMechAssets().then(() => {
-    this.clearExternalModel();
+        this.clearExternalModel();
         if (!this.destroyed && this.appearanceSig === sig) this.setAppearance(a);
       });
       return;
     }
     const v = previewAppearanceVisual(a);
-    // setVisualKey fetches a non-resident body and mounts it on arrival, which
-    // leaves the turntable EMPTY for the length of that fetch when nothing was
-    // mounted before — the first roster click on char-select. Stand the class
-    // rig up first, exactly as the mech branch above does, so the panel is never
-    // blank; the real body replaces it and a failure leaves something up.
-    if (!visualAssetsReady(v.visualKey)) {
-      this.setVisualKey(`player_${a.cls}`, v.weaponItemId, null, v.offhandItemId);
-    }
     this.setVisualKey(v.visualKey, v.weaponItemId, v.weaponOverride, v.offhandItemId);
     // setVisualKey is intentionally idempotent. If only the skin changed, keep
     // the warm rig and update its shared material bindings in place.
@@ -354,6 +340,7 @@ export class CharacterPreview {
     // A composed modular body builds synchronously from its parts; only a
     // single-GLB body (realm bodies, operator overrides) takes the lazy fetch.
     if (!VISUALS[visualKey]?.modular && !visualAssetsReady(visualKey)) {
+      if (!visualKey.startsWith('player_')) this.discardStockVisual();
       // An external model requested while this body is in flight must win: the
       // rebuild below calls clearExternalModel, so a late arrival would other-
       // wise wipe a create-screen preview that loaded in the meantime.
@@ -388,6 +375,7 @@ export class CharacterPreview {
       this.characterGroup.remove(this.currentVisual.root);
       this.currentVisual.dispose();
       this.currentVisual = null;
+      this.currentVisualKey = null;
     }
     this.currentVisualSig = null;
 
@@ -402,6 +390,7 @@ export class CharacterPreview {
         look,
       );
       this.currentVisualSig = nextSig;
+      this.currentVisualKey = visualKey;
       this.characterGroup.add(this.currentVisual.root);
       // Re-apply the persisted weapon-skin cosmetic to the rebuilt visual (the
       // constructor attaches the equipped item's own model).
@@ -798,6 +787,7 @@ export class CharacterPreview {
       this.characterGroup.remove(this.currentVisual.root);
       this.currentVisual.dispose();
       this.currentVisual = null;
+      this.currentVisualKey = null;
     }
     this.currentVisualSig = null;
     this.closeupCache.clear();
@@ -832,6 +822,20 @@ export class CharacterPreview {
       this.characterGroup.remove(this.externalRoot);
       this.externalRoot = null;
     }
+  }
+
+  /** Remove only stock player bodies. This is intentionally narrower than a
+   *  normal replacement: keeping the previous authored GLB avoids a blank
+   *  flash between two realm selections, while a missing themed GLB can never
+   *  expose or strand a KayKit miniature. */
+  private discardStockVisual(): void {
+    if (!this.currentVisual || !this.currentVisualKey?.startsWith('player_')) return;
+    this.characterGroup.remove(this.currentVisual.root);
+    this.currentVisual.dispose();
+    this.currentVisual = null;
+    this.currentVisualKey = null;
+    this.currentVisualSig = null;
+    this.closeupCache.clear();
   }
 }
 

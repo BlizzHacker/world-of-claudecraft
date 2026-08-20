@@ -16,18 +16,11 @@ const mainTs = read('src/main.ts');
 const playExtraCss = read('src/styles/play.extra.css');
 
 describe('/play is online-only', () => {
-  it('play.html has no realm dropdown and no offline flow', () => {
-    for (const id of [
-      'server-select',
-      'server-select-menu',
-      'server-opt-offline',
-      'offline-select',
-      'btn-offline',
-      'btn-start-offline',
-      'btn-offline-back',
-    ]) {
+  it('play.html hides its compatibility selector and has no offline flow', () => {
+    for (const id of ['offline-select', 'btn-offline', 'btn-start-offline', 'btn-offline-back']) {
       expect(playHtml).not.toContain(`id="${id}"`);
     }
+    expect(playHtml).toMatch(/id="server-select"[\s\S]*?hidden[\s\S]*?aria-hidden="true"/);
     // The online compat trigger stays: E2E tours drive the online flow through it.
     expect(playHtml).toContain('id="btn-online"');
     // The solo console keeps the single Play CTA plus the live stats line.
@@ -57,6 +50,9 @@ describe('/play is online-only', () => {
     // The character-preview boot probe must skip a missing #offline-select, not
     // dereference it (and a missing panel must not be treated as the active one).
     expect(mainTs).toContain('return panel !== null && !panel.hasAttribute(');
+    // A guarded listener followed by a duplicate unguarded listener still
+    // crashes /play during module boot because this entry has no offline CTA.
+    expect(mainTs.match(/btnStartOffline\.addEventListener\('click'/g)).toHaveLength(1);
   });
 });
 
@@ -82,10 +78,7 @@ describe('/play footer carries the legal links', () => {
 });
 
 describe('/play uses the landing hero backdrop', () => {
-  it('play.html defers the trailer exactly like index.html (poster paints first)', () => {
-    // Same lazily-attached pattern as the landing hero: data-trailer-src, no
-    // eager <source>, no autoplay, preload="none" (applyLandingBackdrop attaches
-    // and plays the trailer only on capable devices).
+  it('play.html defers its trailer while the app shell keeps a source-less mirror', () => {
     expect(playHtml).toContain('data-trailer-src="/home-bg.mp4"');
     expect(playHtml).toContain('poster="/home-bg.png"');
     expect(playHtml).not.toContain('<source src="/home-bg.mp4"');
@@ -93,7 +86,8 @@ describe('/play uses the landing hero backdrop', () => {
     const indexVideoTag = /<video id="bg-home"[^>]*>/.exec(indexHtml)?.[0] ?? '';
     expect(playVideoTag).not.toContain('autoplay');
     expect(playVideoTag).toContain('preload="none"');
-    expect(playVideoTag).toBe(indexVideoTag);
+    expect(indexVideoTag).not.toContain('data-trailer-src');
+    expect(indexVideoTag).toContain('hidden');
   });
 });
 
@@ -105,10 +99,8 @@ describe('/play keeps its tracking and SEO head', () => {
   });
 
   it('play.html keeps its canonical /play SEO surface', () => {
-    expect(playHtml).toContain(
-      '<link rel="canonical" href="https://worldofclaudecraft.com/play" />',
-    );
-    expect(playHtml).toContain('property="og:url" content="https://worldofclaudecraft.com/play"');
+    expect(playHtml).toContain('<link rel="canonical" href="https://crypticrealm.com/play" />');
+    expect(playHtml).toContain('property="og:url" content="https://crypticrealm.com/play"');
   });
 });
 

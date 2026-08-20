@@ -100,7 +100,14 @@ import { shouldUseStaticBackdrop } from './game/landing_backdrop';
 import { createLandingThemeAudio } from './game/landing_theme';
 import { LOADING_FADE_MS, setLoadingProgress } from './game/loading_screen';
 // mobile_controls: landing-safe helpers only; the MobileControls class is runtime (GameRuntime).
-import { interfaceModeFromSetting, isPhoneTouchDevice, MobileControls, PHONE_TOUCH_QUERY, setInterfaceMode, useTouchInterface } from './game/mobile_controls';
+import {
+  interfaceModeFromSetting,
+  isPhoneTouchDevice,
+  MobileControls,
+  PHONE_TOUCH_QUERY,
+  setInterfaceMode,
+  useTouchInterface,
+} from './game/mobile_controls';
 import { applyMobileHudLayout } from './game/mobile_hud_layout_applier';
 import { watchMobileMoreState } from './game/mobile_more_diagnostics';
 import { mouselookReleaseFacing } from './game/mouselook_release';
@@ -131,8 +138,6 @@ import {
   spawnCinematicPose,
 } from './game/spawn_cinematic';
 import { safeStartupGraphicsPreset } from './game/startup_graphics_safety';
-import { probeMajorPerformanceCaveat } from './render/software_renderer';
-import { gfxSoftwareRendering } from './render/gfx';
 import { shouldClearTargetOnGroundClick } from './game/target_click';
 import { loadingCurtainFadeMs, resolveUiEffectsProfile } from './game/ui_effects_profile';
 import { currentUtcDay } from './game/utc_day';
@@ -208,7 +213,9 @@ import {
 } from './render/assets/graphics_profile';
 import { assetsReady, beginDeferredPreloads } from './render/assets/preload';
 import {
+  applyCreationPreview,
   CharacterPreview,
+  creationUsesModularBody,
   type PreviewAppearance,
   setModularLookProvider,
 } from './render/characters';
@@ -255,6 +262,7 @@ import {
   firstRunGraphicsPreset,
   GFX,
   getActiveGfxProfile,
+  gfxSoftwareRendering,
   graphicsPresetLabel,
   resolveGfxProfile,
 } from './render/gfx';
@@ -264,6 +272,7 @@ import {
   type SelfMotionFrame,
 } from './render/self_motion';
 import { ensureSkyAssetsAt, navigatorSaveData } from './render/sky';
+import { probeMajorPerformanceCaveat } from './render/software_renderer';
 import { ARRIVAL_NEIGHBOR_STREAM_RADIUS } from './render/zone_streaming';
 import { desktopBridge } from './runtime';
 import { breathFraction, stepBreathUsedSeconds } from './sim/breath';
@@ -286,7 +295,10 @@ import {
 } from './sim/data';
 import { canEquipItem } from './sim/equipment_rules';
 import { buildingAtPoint, buildingDoorNear } from './sim/interiors';
+import { MARKET_HOUSE_STOCK } from './sim/market';
+import { bagOwnedMounts } from './sim/mounts';
 import { findPlayerPath, resolvePlayerDestination } from './sim/pathfind';
+import { isSubmerged } from './sim/player_motion';
 // CR overlay: heavy game runtime (Renderer, Sim, Hud, audio, music, voice, sfx,
 // MobileControls, perf, Input, Keybinds, camera-follow yaw helpers, CharacterPreview,
 // assetsReady) is lazy-loaded via loadGameRuntime() to keep the landing bundle small
@@ -295,10 +307,16 @@ import { findPlayerPath, resolvePlayerDestination } from './sim/pathfind';
 // statically imported, they come from loadGameRuntime() and init in startGame().
 import type { Sim } from './sim/sim';
 import { TAB_NEAR_RADIUS, TAB_QUERY_RADIUS, tabConeHalfAt } from './sim/tab_target';
-import { ALL_CLASSES, dist2d, DT, INTERACT_RANGE, MELEE_RANGE, RUN_SPEED, type PlayerClass, type WorldContent } from './sim/types';
-import { MARKET_HOUSE_STOCK } from './sim/market';
-import { bagOwnedMounts } from './sim/mounts';
-import { isSubmerged } from './sim/player_motion';
+import {
+  ALL_CLASSES,
+  DT,
+  dist2d,
+  INTERACT_RANGE,
+  MELEE_RANGE,
+  type PlayerClass,
+  RUN_SPEED,
+  type WorldContent,
+} from './sim/types';
 import { zoneBiomeAt } from './sim/world';
 import { WORLD_SEED } from './sim/world_seed';
 import { startSitePresence } from './site_presence';
@@ -328,13 +346,13 @@ import {
 import { deleteCharButtonHtml } from './ui/char_delete_button';
 import { ChatCommandMenu } from './ui/chat_command_menu';
 import { CLASS_DETAILS, SIGNATURE_ABILITIES } from './ui/class_details_data';
+import { classIconUrl } from './ui/class_icon_art';
+import { claudiumBalanceAddress, currentWocDiscountBps } from './ui/claudium_view';
 import type { CoopCharacterRef } from './ui/coop_overlay';
 // CR overlay: realm/theme picker. The mount call early-applies the saved
 // `data-theme` to <html>, then the trigger button lives in the index.html
 // `<div id="theme-picker">` block.
 import { mountThemeSelect } from './ui/cryptic/theme_select';
-import { classIconUrl } from './ui/class_icon_art';
-import { claudiumBalanceAddress, currentWocDiscountBps } from './ui/claudium_view';
 import { ensureDeedLocalesLoaded } from './ui/deed_i18n';
 import { isDevGuiCommand } from './ui/dev_command_view';
 import { devTierByIndex, devTierDisplayName } from './ui/dev_tier';
@@ -442,8 +460,11 @@ import { buildWalletConnectionView } from './ui/wallet_connection_view';
 import { formatXp } from './ui/xp_bar';
 import type { IWorld, LeaderboardEntry } from './world_api';
 import './ui/cryptic/realm_env';
+import { audio } from './game/audio';
+import { localPartyMemberIds } from './game/corpse_loot_availability';
 import { crypticMusic } from './game/cryptic_music';
 import { mountXboxEnv } from './game/xbox_env';
+import type { ReleaseEntry } from './net/online';
 import {
   DEFAULT_REALM,
   getActiveRealm,
@@ -453,6 +474,7 @@ import {
   persistActiveRealm,
   type RealmContent,
   type RealmId,
+  realmClassVisualKey,
   resolveActiveRealmId,
   setActiveRealmForOffline,
 } from './sim/realms';
@@ -511,9 +533,6 @@ import { mountUserDropdown } from './ui/cryptic/user_dropdown';
 import { mountWalletPanel } from './ui/cryptic/wallet_panel';
 import { notePropPlaced, tryBuilderSelect } from './ui/cryptic/world_builder';
 import { getMe as getMeForEditor, getToken as getTokenForEditor } from './user/api';
-import { audio } from './game/audio';
-import { localPartyMemberIds } from './game/corpse_loot_availability';
-import type { ReleaseEntry } from './net/online';
 
 // SECURITY: an SSO/realm handoff arrives as `/#auth_token=...&auth_user=...`.
 // Capture it into memory and SCRUB the address bar on the very first line of
@@ -533,7 +552,6 @@ const CAPTURED_SSO_HASH = (() => {
   }
   return '';
 })();
-
 
 const CLICK_MOVE_TURN_RATE = 4.2; // rad/sec; responsive turning while the camera stays decoupled from click spam
 const CLICK_MOVE_WAYPOINT_STOP = 0.8; // yards; intermediate A* corners should roll through, not stutter-stop
@@ -1615,8 +1633,9 @@ async function startGame(
     // entity's OWN `helmHidden` wire bit (the paperdoll eye toggle) rather
     // than the creation turntable's preview state, so peers compose with the
     // owner's choice the day looks ride the wire.
+    const modularRealm = creationUsesModularBody(getActiveRealm().id);
     setModularLookProvider((e) =>
-      e.kind === 'player' && e.id === world.playerId
+      modularRealm && e.kind === 'player' && e.id === world.playerId
         ? inWorldLookFor(e.templateId as PlayerClass, e.helmHidden)
         : null,
     );
@@ -5709,13 +5728,6 @@ function readStoredArmorSet(cls: PlayerClass): ArmorSetId {
   }
 }
 
-/** The composed appearance a class renders with. Reads `modularAppearance`
- *  live, so editing the look in creation is reflected the next time a visual
- *  is built. */
-function modularLookForClass(cls: PlayerClass): ModularLook | null {
-  return { app: modularAppearance, worn: creationLoadout(cls) };
-}
-
 /** The IN-WORLD look: the class's full kit, with the head piece left off when
  *  the wearer's `helmHidden` wire bit says so (the paperdoll eye toggle).
  *  Distinct from creationLoadout on purpose: the creation turntable's
@@ -5739,14 +5751,39 @@ function creationLoadout(cls: PlayerClass): ArmorLoadout {
   return creationHelm ? full : { ...full, head: null };
 }
 
-/** Drive the creation/offline turntable for a class chip: every class composes
- *  from the stored appearance, wearing its class kit, through its own modular
- *  def (class clips + starter weapons). */
+/** Drive every creation/offline body through one precedence rule. Authored
+ *  realm GLBs win everywhere except pristine Claudecraft, whose appearance
+ *  customizer still owns its modular body. */
 function previewClassBody(cls: PlayerClass): void {
   if (!characterPreview) return;
-  const look = modularLookForClass(cls);
-  if (look) characterPreview.setModular(look.app, look.worn, cls);
-  else characterPreview.setClass(cls);
+  const realm = realmContentForCharacterUi();
+  const presentation = realmClassPresentation(cls);
+  const sexPick = charCreateSexPick(cls);
+  const visualKey = sexPick
+    ? visualKeyForCharacter({
+        realm: realm.id,
+        realmHeroId: null,
+        cls,
+        gender: sexPick,
+      })
+    : presentation?.assetUrl
+      ? visualKeyForBodyAsset(presentation.assetUrl)
+      : (presentation?.visualKey ?? realmClassVisualKey(realm.id, cls));
+  if (!creationUsesModularBody(realm.id)) {
+    characterPreview.setExternalAppearance(modularAppearance);
+  }
+  const applied = applyCreationPreview(characterPreview, {
+    realmId: realm.id,
+    cls,
+    visualKey,
+    modularAppearance,
+    worn: creationLoadout(cls),
+    mainhandItemId: CLASSES[cls].startWeapon ?? null,
+    offhandItemId: CLASSES[cls].startOffhand ?? null,
+  });
+  if (!applied) {
+    console.error(`[character-preview] ${realm.id}:${cls} has no authored realm body`);
+  }
 }
 
 /** The class each panel's customizer is currently editing. The customizer
@@ -5764,12 +5801,6 @@ function syncAppearanceUi(panelId: string, cls: PlayerClass): void {
   if (!host) return;
   appearancePanelClass.set(panelId, cls);
   const existing = appearanceUis.get(panelId);
-  if (!modularLookForClass(cls)) {
-    existing?.destroy();
-    appearanceUis.delete(panelId);
-    host.hidden = true;
-    return;
-  }
   host.hidden = false;
   // The authored colours must reach a realm body even before any wheel is
   // touched: seed the preview's external-appearance tint with the stored
@@ -5803,12 +5834,12 @@ function syncAppearanceUi(panelId: string, cls: PlayerClass): void {
         // turntable the moment any wheel was touched. A sex change picks a
         // DIFFERENT realm GLB, so it re-resolves through the grid's own
         // preview path first; the stored appearance re-applies on mount.
-        if (characterPreview?.hasExternalModel()) {
+        if (!creationUsesModularBody(realmContentForCharacterUi().id)) {
           if (genderChanged) showClassPreview(c);
-          characterPreview.setExternalAppearance(next);
+          characterPreview?.setExternalAppearance(next);
           return;
         }
-        characterPreview?.setModular(next, creationLoadout(c), c);
+        previewClassBody(c);
       },
       helm: creationHelm,
       onHelm: (on) => {
@@ -5816,8 +5847,8 @@ function syncAppearanceUi(panelId: string, cls: PlayerClass): void {
         const c = panelClass();
         // A realm body has no composable helm layer: the toggle only concerns
         // the modular turntable, so never let it displace an external mount.
-        if (characterPreview?.hasExternalModel()) return;
-        characterPreview?.setModular(modularAppearance, creationLoadout(c), c);
+        if (!creationUsesModularBody(realmContentForCharacterUi().id)) return;
+        previewClassBody(c);
       },
       // The chips must preview against the set the composed body actually
       // wears: the stored override when one exists, not the class default.
@@ -6092,50 +6123,7 @@ function bodySkinRailHostFor(row: HTMLElement): HTMLElement {
 }
 
 function showClassPreview(cls: PlayerClass): void {
-  // The card's compact Female/Male toggle: an explicit sex pick resolves
-  // hero-neutrally (realmHeroId: null) through THE character resolver
-  // (visualKeyForCharacter, gender arg), so the preview mounts the same
-  // sex-suffixed realm body (class:<cls>:f/:m) the created character's
-  // appearance.gender selects on the roster and in the world. Hero-neutral on
-  // purpose: a published hero: override wins over the suffixed class key in
-  // overrideEntryForCharacter, which would leave the toggle inert on every
-  // card that carries a hero body - i.e. all of them on the infernal grid.
-  const sexPick = charCreateSexPick(cls);
-  if (sexPick) {
-    const key = visualKeyForCharacter({
-      realm: realmContentForCharacterUi().id,
-      realmHeroId: null,
-      cls,
-      gender: sexPick,
-    });
-    const url = VISUALS[key]?.url;
-    if (url) {
-      // Same never-blank pattern as the realm-asset path below: class rig up
-      // first, the suffixed body replaces it on arrival.
-      characterPreview?.setClass(cls);
-      characterPreview?.setExternalModel(url);
-      return;
-    }
-  }
-  const realmClass = realmClassPresentation(cls);
-  if (realmClass?.assetUrl) {
-    // setExternalModel keeps whatever body is mounted until the GLB lands, which
-    // means NOTHING on the first mount: the create screen showed an empty
-    // turntable for the whole multi-megabyte fetch, and forever if it failed.
-    // Stand the class rig up first so the panel is never blank; the external
-    // model replaces it on arrival and survives a failure.
-    characterPreview?.setClass(cls);
-    characterPreview?.setExternalModel(realmClass.assetUrl);
-    return;
-  }
-  if (realmClass?.assetStatus === 'comingSoon') {
-    // Keep the playable class rig visible while a realm-specific GLB is being
-    // curated or generated. A content-status label should never turn the
-    // character turntable into an empty black panel.
-    characterPreview?.setClass(cls);
-    return;
-  }
-  characterPreview?.setClass(cls);
+  previewClassBody(cls);
 }
 
 async function loadRealmPreviewCatalog(): Promise<Map<string, RealmPreviewManifest>> {
@@ -8431,42 +8419,47 @@ async function refreshCharacters(): Promise<void> {
     }
     for (const c of chars) {
       try {
-      const row = document.createElement('li');
-      row.className = `char-row${c.online ? ' online' : ''}${c.forceRename ? ' rename-required' : ''}`;
-      row.setAttribute('tabindex', '0');
-      row.setAttribute('role', 'option');
-      row.setAttribute('aria-selected', 'false');
-      row.dataset.class = c.class;
-      row.dataset.skin = String(c.skin ?? 0);
-      const className = realmClassDisplayName(c.class);
-      // Online characters explain themselves on their own hint line (below the
-      // class) instead of the terse "(in world)" suffix, so the reason for the
-      // Take Over button is unmissable.
-      const statusText = c.online ? '' : c.forceRename ? ` (${t('character.renameRequired')})` : '';
-      const inWorldHint = c.online
-        ? `<span class="char-inworld-hint">${escapeHtml(t('character.inWorldHint'))}</span>`
-        : '';
-      row.innerHTML = `${portraitChipHtml({
-        cls: c.class,
-        skin: c.skin ?? 0,
-        name: c.name,
-        variant: 'sm',
-        // The body this character renders on in the world. Without it the chip
-        // had only the imageUrl below to go on, and since nothing publishes
-        // those pngs every row 404'd straight back to the KayKit class headshot.
-        visualKey: visualKeyForCharacter({
-          realm: rosterRealmId,
-          realmHeroId: c.realmHeroId,
+        const row = document.createElement('li');
+        row.className = `char-row${c.online ? ' online' : ''}${c.forceRename ? ' rename-required' : ''}`;
+        row.setAttribute('tabindex', '0');
+        row.setAttribute('role', 'option');
+        row.setAttribute('aria-selected', 'false');
+        row.dataset.class = c.class;
+        row.dataset.skin = String(c.skin ?? 0);
+        const className = realmClassDisplayName(c.class);
+        // Online characters explain themselves on their own hint line (below the
+        // class) instead of the terse "(in world)" suffix, so the reason for the
+        // Take Over button is unmissable.
+        const statusText = c.online
+          ? ''
+          : c.forceRename
+            ? ` (${t('character.renameRequired')})`
+            : '';
+        const inWorldHint = c.online
+          ? `<span class="char-inworld-hint">${escapeHtml(t('character.inWorldHint'))}</span>`
+          : '';
+        row.innerHTML = `${portraitChipHtml({
           cls: c.class,
-          visualKey: c.visualKey,
-          skinCatalog: c.skinCatalog,
-          gender: (c.appearance as { gender?: 'male' | 'female' } | null)?.gender ?? null,
-        }),
-        // A pre-rendered portrait png beside the body GLB, when one exists: it
-        // skips the offscreen 3D render entirely. Its absence (or a 404) now
-        // costs nothing — the chip falls back to rendering visualKey above.
-        imageUrl: characterPortraitUrl(rosterRealmId, c.realmHeroId, c.class),
-      })}
+          skin: c.skin ?? 0,
+          name: c.name,
+          variant: 'sm',
+          // The body this character renders on in the world. Without it the chip
+          // had only the imageUrl below to go on, and since nothing publishes
+          // those pngs every row 404'd straight back to the KayKit class headshot.
+          visualKey: visualKeyForCharacter({
+            realm: rosterRealmId,
+            realmHeroId: c.realmHeroId,
+            cls: c.class,
+            visualKey: c.visualKey,
+            skinCatalog: c.skinCatalog,
+            gender: (c.appearance as { gender?: 'male' | 'female' } | null)?.gender ?? null,
+            bodySkinId: c.bodySkinId ?? null,
+          }),
+          // A pre-rendered portrait png beside the body GLB, when one exists: it
+          // skips the offscreen 3D render entirely. Its absence (or a 404) now
+          // costs nothing; the chip falls back to rendering visualKey above.
+          imageUrl: characterPortraitUrl(rosterRealmId, c.realmHeroId, c.class),
+        })}
         <div class="char-id">
           <span class="char-name">${escapeHtml(c.name)}</span>
           <span class="char-sub">${escapeHtml(t('character.levelClass', { level: c.level, className }))}${escapeHtml(statusText)}</span>
@@ -8480,81 +8473,81 @@ async function refreshCharacters(): Promise<void> {
               : `<span class="char-actions"><button class="btn enter-world-btn">${escapeHtml(t('auth.enterWorld'))}</button>${deleteCharButtonHtml(false)}</span>`
         }`;
 
-      row.querySelector('.delete-char-btn')?.addEventListener('click', (e) => {
-        e.stopPropagation();
-        openDeleteCharacterDialog(c);
-      });
-
-      if (c.forceRename) {
-        const input = row.querySelector('.rename-input') as HTMLInputElement;
-        row.querySelector('.rename-btn')?.addEventListener('click', async (e) => {
+        row.querySelector('.delete-char-btn')?.addEventListener('click', (e) => {
           e.stopPropagation();
-          $('#charselect-error').textContent = '';
-          try {
-            await api.renameCharacter(c.id, input.value.trim());
-            await refreshCharacters();
-          } catch (err) {
-            $('#charselect-error').textContent = userFacingApiError(err);
+          openDeleteCharacterDialog(c);
+        });
+
+        if (c.forceRename) {
+          const input = row.querySelector('.rename-input') as HTMLInputElement;
+          row.querySelector('.rename-btn')?.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            $('#charselect-error').textContent = '';
+            try {
+              await api.renameCharacter(c.id, input.value.trim());
+              await refreshCharacters();
+            } catch (err) {
+              $('#charselect-error').textContent = userFacingApiError(err);
+            }
+          });
+        } else if (c.online) {
+          row.querySelector('.take-over-btn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            void takeOverAndEnter(c, e.currentTarget as HTMLButtonElement);
+          });
+        } else {
+          row.querySelector('.enter-world-btn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            void enterWorld(c, e.currentTarget as HTMLButtonElement);
+          });
+        }
+
+        const selectRow = () => {
+          // Deselect other characters
+          document.querySelectorAll('#char-list .char-row').forEach((r) => {
+            r.classList.remove('sel');
+            r.setAttribute('aria-selected', 'false');
+          });
+
+          row.classList.add('sel');
+          row.setAttribute('aria-selected', 'true');
+          // The class-details sheet is gone from this screen (the news panel sits
+          // there now), so drive the 3D preview directly: two characters of the
+          // same class can still differ in gear, skin, or cosmetic body.
+          characterPreview?.setAppearance(charselectAppearance(c));
+          charselectSelected = c;
+          paintCharselectBodySkinRail(c);
+          syncCharselectEnterButton();
+          setCharselectPreviewName(c.name);
+          void renderCharacterSelectAssetShelf();
+        };
+
+        row.addEventListener('click', selectRow);
+        row.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectRow();
           }
         });
-      } else if (c.online) {
-        row.querySelector('.take-over-btn')?.addEventListener('click', (e) => {
-          e.stopPropagation();
-          void takeOverAndEnter(c, e.currentTarget as HTMLButtonElement);
-        });
-      } else {
-        row.querySelector('.enter-world-btn')?.addEventListener('click', (e) => {
-          e.stopPropagation();
-          void enterWorld(c, e.currentTarget as HTMLButtonElement);
-        });
-      }
-
-      const selectRow = () => {
-        // Deselect other characters
-        document.querySelectorAll('#char-list .char-row').forEach((r) => {
-          r.classList.remove('sel');
-          r.setAttribute('aria-selected', 'false');
-        });
-
-        row.classList.add('sel');
-        row.setAttribute('aria-selected', 'true');
-        // The class-details sheet is gone from this screen (the news panel sits
-        // there now), so drive the 3D preview directly: two characters of the
-        // same class can still differ in gear, skin, or cosmetic body.
-        characterPreview?.setAppearance(charselectAppearance(c));
-        charselectSelected = c;
-        paintCharselectBodySkinRail(c);
-        syncCharselectEnterButton();
-        setCharselectPreviewName(c.name);
-        void renderCharacterSelectAssetShelf();
-      };
-
-      row.addEventListener('click', selectRow);
-      row.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
+        // Double-click a row to jump straight into the world (classic-select
+        // muscle memory). It routes through the shared desktop Enter World button
+        // so entry owns its loading state; the button only exists in the docked
+        // desktop layout, so this is a no-op on mobile (where the per-row button
+        // is a single tap away). Entry is gated on that shared button being visible
+        // AND enabled: for a forced-rename selection it is disabled (so the rename
+        // input/button on such a row cannot trigger entry), and Delete opens a
+        // full-screen modal on the first click, so the second click retargets and
+        // the browser synthesises no dblclick. Keep entry gated on the shared
+        // button's enabled state for any per-row action added later.
+        row.addEventListener('dblclick', () => {
           selectRow();
-        }
-      });
-      // Double-click a row to jump straight into the world (classic-select
-      // muscle memory). It routes through the shared desktop Enter World button
-      // so entry owns its loading state; the button only exists in the docked
-      // desktop layout, so this is a no-op on mobile (where the per-row button
-      // is a single tap away). Entry is gated on that shared button being visible
-      // AND enabled: for a forced-rename selection it is disabled (so the rename
-      // input/button on such a row cannot trigger entry), and Delete opens a
-      // full-screen modal on the first click, so the second click retargets and
-      // the browser synthesises no dblclick. Keep entry gated on the shared
-      // button's enabled state for any per-row action added later.
-      row.addEventListener('dblclick', () => {
-        selectRow();
-        const enterBtn = document.getElementById(
-          'btn-charselect-enter',
-        ) as HTMLButtonElement | null;
-        if (enterBtn && enterBtn.offsetParent !== null && !enterBtn.disabled) enterBtn.click();
-      });
+          const enterBtn = document.getElementById(
+            'btn-charselect-enter',
+          ) as HTMLButtonElement | null;
+          if (enterBtn && enterBtn.offsetParent !== null && !enterBtn.disabled) enterBtn.click();
+        });
 
-      listEl.appendChild(row);
+        listEl.appendChild(row);
       } catch (rowErr) {
         rowBuildError = String((rowErr as Error)?.message ?? rowErr);
         console.error('char-row-build-failed', c?.name, rowErr);
@@ -8815,10 +8808,7 @@ function paintCharselectBodySkinRail(c: CharacterSummary): void {
   );
 }
 
-async function selectCharacterBodySkin(
-  c: CharacterSummary,
-  skinId: string | null,
-): Promise<void> {
+async function selectCharacterBodySkin(c: CharacterSummary, skinId: string | null): Promise<void> {
   c.bodySkinId = skinId;
   paintCharselectBodySkinRail(c);
   characterPreview?.setAppearance(charselectAppearance(c));
@@ -11931,15 +11921,6 @@ function wireStartScreens(): void {
     delete document.body.dataset.pendingStartPanel;
     handleOfflineSelect();
   }
-
-  btnStartOffline.addEventListener('click', () => {
-    const selCard = document.querySelector('#offline-select .mini-class.sel') as HTMLElement | null;
-    if (selCard) {
-      handleOfflineStart(selCard.dataset.class as PlayerClass);
-    } else {
-      offlineError.textContent = t('errors.selectClass');
-    }
-  });
 
   if (document.body.dataset.pendingOfflineStart === '1') {
     delete document.body.dataset.pendingOfflineStart;
