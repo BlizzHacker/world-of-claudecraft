@@ -223,7 +223,9 @@ import {
   charactersReady,
   ensureCharacterUrl,
   preloadMechAssets,
+  preloadVisualAssets,
   startStreamedCharacterPreloads,
+  visualAssetsReady,
 } from './render/characters/assets';
 import {
   setBodyOverrides,
@@ -483,6 +485,7 @@ import {
 import { mountBestiary } from './ui/cryptic/bestiary';
 import {
   type BodySkinRailLabels,
+  type BodySkinRailRow,
   bodySkinRailHtml,
   bodySkinRailRows,
   unlockLevelSentence,
@@ -6088,7 +6091,7 @@ function paintBodySkinRail(
   grants: { level: number; entitlements?: readonly string[]; dev?: boolean },
   selectedSkinId: string | null,
   onPick?: (skinId: string | null) => void,
-): void {
+): BodySkinRailRow[] {
   const labels = bodySkinRailLabels();
   const rows = bodySkinRailRows({ cls, grants, selectedSkinId, labels });
   host.innerHTML = bodySkinRailHtml(rows, labels);
@@ -6118,6 +6121,7 @@ function paintBodySkinRail(
       handleKeyboardActivation(e, pick);
     });
   });
+  return rows;
 }
 
 /** The rail's host under a creator grid, created on first paint. */
@@ -8803,7 +8807,7 @@ function paintCharselectBodySkinRail(c: CharacterSummary): void {
     host.className = 'body-skin-rail-host';
     container.insertAdjacentElement('afterend', host);
   }
-  paintBodySkinRail(
+  const rows = paintBodySkinRail(
     host,
     c.class,
     {
@@ -8822,6 +8826,18 @@ function paintCharselectBodySkinRail(c: CharacterSummary): void {
       void selectCharacterBodySkin(c, skinId);
     },
   );
+  // Warm each UNLOCKED alternate's body as its chip paints, so the first pick
+  // swaps the turntable instantly instead of fetching its lazy GLB on click.
+  // Skipped on the iOS memory profile, which streams bodies on demand to stay
+  // under the WKWebView per-process ceiling. Best-effort: a failed warmup
+  // just falls back to the on-pick fetch.
+  if (!GFX.nativeIosMemoryProfile) {
+    for (const row of rows) {
+      if (row.lockedBecause !== null || row.skinId === null) continue;
+      const key = charselectVisualKey(c, row.skinId);
+      if (!visualAssetsReady(key)) void preloadVisualAssets(key).catch(() => undefined);
+    }
+  }
 }
 
 async function selectCharacterBodySkin(c: CharacterSummary, skinId: string | null): Promise<void> {
@@ -8837,6 +8853,22 @@ async function selectCharacterBodySkin(c: CharacterSummary, skinId: string | nul
   }
 }
 
+/** The exact body the world would draw for this roster row, with the given
+ *  body-skin selection substituted (the rail warmup above asks for each
+ *  unlocked alternate; charselectAppearance asks for the persisted pick).
+ *  Resolved through the same visualKeyForCharacter chain as the world. */
+function charselectVisualKey(c: CharacterSummary, bodySkinId: string | null): string {
+  return visualKeyForCharacter({
+    realm: realmContentForCharacterUi().id,
+    realmHeroId: c.realmHeroId,
+    cls: c.class,
+    visualKey: c.visualKey,
+    skinCatalog: c.skinCatalog,
+    gender: (c.appearance as { gender?: 'male' | 'female' } | null)?.gender ?? null,
+    bodySkinId,
+  });
+}
+
 function charselectAppearance(c: CharacterSummary): PreviewAppearance {
   // The packaged iOS shell streams the Armory weapon-skin GLBs after world
   // entry instead of holding all of them at the launcher, so the preview of a
@@ -8850,18 +8882,10 @@ function charselectAppearance(c: CharacterSummary): PreviewAppearance {
     // PreviewAppearance has carried an optional `visualKey` all along and this
     // builder simply never filled it, so previewAppearanceVisual fell through to
     // `player_<class>` and the turntable showed the KayKit rig for every
-    // character — even though the roster row already tells us the real body
+    // character, even though the roster row already tells us the real body
     // (CharacterSummary.visualKey) and the operator's overrides are installed by
     // the time rows render. Resolve it exactly the way the world does.
-    visualKey: visualKeyForCharacter({
-      realm: realmContentForCharacterUi().id,
-      realmHeroId: c.realmHeroId,
-      cls: c.class,
-      visualKey: c.visualKey,
-      skinCatalog: c.skinCatalog,
-      gender: (c.appearance as { gender?: 'male' | 'female' } | null)?.gender ?? null,
-      bodySkinId: c.bodySkinId ?? null,
-    }),
+    visualKey: charselectVisualKey(c, c.bodySkinId ?? null),
     skin: c.skin ?? 0,
     skinCatalog: c.skinCatalog ?? 'class',
     mainhandItemId: c.mainhandItemId ?? null,
