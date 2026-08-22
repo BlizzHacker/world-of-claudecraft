@@ -60,6 +60,7 @@ import { ABILITY_VFX_SPECS } from './ability_vfx_specs';
 import { type AmberFeaturesView, buildAmberFeatures } from './amber_features';
 import { isVisuallyDead } from './anim_state';
 import { AOE_RING_LIFETIME, aoeRingAnim } from './aoe_ring';
+import { loadGltf } from './assets/loader';
 import { formatResidencyBudget, residencyBudget } from './assets/residency_budget';
 import type { AmbientPointSource, SpatialAudioSink, Surface } from './audio_sink';
 import { createBackgroundGpuQueue, GPU_WORK_PRIORITY } from './background_gpu_queue';
@@ -73,6 +74,7 @@ import { type BiomeHazePreset, hazeLightLevel } from './biome_haze_field_core';
 import { type BirdsView, buildBirds } from './birds';
 import { type BladeGrassView, buildBladeGrass } from './blade_grass';
 import { type BladeGrassBandView, buildBladeGrassBand } from './blade_grass_band';
+import { type BoarpitView, buildBoarpit } from './boarpit';
 import { createCameraBoom, stepCameraBoom } from './camera_boom_core';
 import {
   cancelCameraDirective,
@@ -188,12 +190,9 @@ import {
 import { shouldPlayDeedFirework } from './deed_fx_gate';
 import { buildDelveModule } from './delve_interiors';
 import { buildDelveInteractable, syncDelveInteractableVisibility } from './delve_props';
-import { type BoarpitView, buildBoarpit } from './boarpit';
-import { buildEastbrookHomes, type EastbrookHomesView } from './eastbrook_homes';
 import { buildDerbyTrack, type DerbyTrackView } from './derby_track';
-import { buildDoorBody } from './door_portal';
 import { detailHorizonStarved } from './detail_horizon_core';
-import { buildRiftGateBody, buildRiftPuzzleProp } from './door_portal';
+import { buildDoorBody, buildRiftGateBody, buildRiftPuzzleProp } from './door_portal';
 import { createLogicalFrameDrawStats, type LogicalFrameDrawStats } from './draw_stats_core';
 import { DungeonInteriors, dungeonDaisHasRaisedPlatform, ensureDungeonAssets } from './dungeon';
 import {
@@ -202,6 +201,7 @@ import {
   dynamicResolutionRect,
   MIN_DYNAMIC_RENDER_SCALE,
 } from './dynamic_resolution_core';
+import { buildEastbrookHomes, type EastbrookHomesView } from './eastbrook_homes';
 import { buildEastbrookTownView, type EastbrookTownView } from './eastbrook_town';
 import { buildEmberFeatures, type EmberFeaturesView } from './ember_features';
 import { buildEmberPools, type EmberPoolsView } from './ember_pools';
@@ -327,6 +327,7 @@ import {
   wildGlowAmount,
 } from './night_lighting_core';
 import { buildEastbrookNoticeboard } from './noticeboard';
+import { npcStructureObjectId } from './npc_structures';
 import {
   type OpaqueSortPolicyInput,
   opaqueFrontToBackSort,
@@ -337,7 +338,6 @@ import { projectionScalePixels } from './perceptual_lod_core';
 import { resolveDirectPickEntityId } from './pick_resolution';
 import { PlacedAssetsView } from './placed_assets';
 import { type PlayerAuraRingInput, PlayerAuraRings } from './player_aura_rings';
-import { RealmDecorView } from './realm_decor';
 import {
   applyPointLightBudget,
   flickerContributingFireLights,
@@ -346,19 +346,6 @@ import {
   reconcileViewPointLights,
 } from './point_light_budget';
 import { buildComposer, type PostPipeline } from './post';
-// Downstream-only imports (forged/ext GLB props via ArcForge). Upstream's sorted
-// import block below covers the rest; these symbols are unique to our fork.
-import {
-  buildPropMaterialPrewarmGroup,
-  buildProps,
-  buildSingleProp,
-  ensurePropLoaded,
-} from './props';
-import { buildGroundQuestObject } from './quest_objects';
-import { npcStructureObjectId } from './npc_structures';
-import { isOwnedPetHostile } from './reaction';
-import { remotePropRef } from './remote_prop';
-import { RenderBudgetGovernor, type RenderBudgetState } from './render_budget';
 import {
   boundedPrewarmVisibility,
   runBackgroundPrewarm,
@@ -385,11 +372,25 @@ import {
   resumeDroppedPrewarmEntries,
   settlePrewarmBeforePublish,
 } from './prewarm_resume';
-import { propResidencySources } from './props';
-import { RaceLine } from './race_line';
-import { buildRealmFlora, type RealmFloraView } from './realm_flora';
+// Downstream-only imports (forged/ext GLB props via ArcForge). Upstream's sorted
+// import block below covers the rest; these symbols are unique to our fork.
 import {
+  buildPropMaterialPrewarmGroup,
+  buildProps,
+  buildSingleProp,
+  ensurePropLoaded,
+  propResidencySources,
+} from './props';
+import { buildGroundQuestObject } from './quest_objects';
+import { RaceLine } from './race_line';
+import { isOwnedPetHostile } from './reaction';
+import { RealmDecorView } from './realm_decor';
+import { buildRealmFlora, type RealmFloraView } from './realm_flora';
+import { remotePropRef } from './remote_prop';
+import {
+  RenderBudgetGovernor,
   type RenderBudgetSample,
+  type RenderBudgetState,
 } from './render_budget';
 import {
   beginRendererFrameTelemetry,
@@ -488,7 +489,6 @@ import { buildWorldAmbientSources, crowdAmbienceAt, footstepSurfaceAt } from './
 import { surfaceDetailPrewarmTextures } from './worn_stone';
 import { buildYumiMaze, type YumiMazeView } from './yumi_maze';
 import { YumiTeamMarkers } from './yumi_team_markers';
-import { loadGltf } from './assets/loader';
 import {
   type FeatureFootprint,
   hasUnseededInstanceMatrix,
@@ -5168,6 +5168,11 @@ export class Renderer {
       if (performance.now() >= deadline) return { group, visualCount: idx };
       const color = CLASSES[cls]?.color ?? 0xffffff;
       const entity = this.prewarmEntity('player', cls, color, 1, 0, -11_500 - idx);
+      // Same lazy-model guard as the skin loop above: an active realm override
+      // can route a plain class to a lazily fetched realm bank body, and
+      // building one here throws "character asset not preloaded" and drops the
+      // seed. Non-lazy realms keep the aura-glow belt seed.
+      if (isVisualLazy(visualKeyFor(entity))) continue;
       const visual = createCharacterVisual(entity);
       if (!visual) continue;
       visual.root.visible = true;
