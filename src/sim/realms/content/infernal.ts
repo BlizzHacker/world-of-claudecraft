@@ -289,7 +289,7 @@ export const INFERNAL_REALM: RealmContent = {
       baseClass: 'druid',
       icon: '\u{1F33F}',
       color: '#27ae60',
-      lore: "While the Infernal Realm burns, Forest Sages tend the last groves of living wood. They channel nature's quiet fury — roots that strangle, spores that heal.",
+      lore: "While the Infernal Realm burns, Forest Sages tend the last groves of living wood. They channel nature's quiet fury: roots that strangle, spores that heal.",
       baseStats: {
         maxHp: 110,
         maxMp: 160,
