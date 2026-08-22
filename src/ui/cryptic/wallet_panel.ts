@@ -7,6 +7,7 @@
 
 import './realm_env';
 import { getActiveRealm } from '../../sim/realms';
+import { readCrypticSession } from './session';
 import { resolveWalletChip, walletChipLabel } from './wallet_panel_core';
 
 interface PhantomProvider {
@@ -35,12 +36,11 @@ interface MeResponse {
   lifetimeEarned: number;
 }
 
+// Session resolution is the shared ./session helper, not a hand-rolled key
+// scan: it covers every dashboard token key (user/mod/admin plus the legacy
+// woc_session blob), validates the token shape, and try/catch-guards storage.
 function readBearer(): string | null {
-  return (
-    localStorage.getItem('cryptic-realm_user_token') ||
-    localStorage.getItem('cryptic-realm_admin_token') ||
-    localStorage.getItem('woc_user_token')
-  );
+  return readCrypticSession()?.token ?? null;
 }
 
 async function fetchPlatinum(): Promise<MeResponse | null> {

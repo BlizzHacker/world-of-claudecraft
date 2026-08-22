@@ -16,21 +16,30 @@ function rebrand(): void {
   const setContent = (sel: string, value: string) => {
     document.querySelectorAll(sel).forEach((el) => el.setAttribute('content', value));
   };
-  setContent('meta[name="description"]',
-    'The only official channels for Cryptic Realm. Play the game and follow us on X, Facebook, Instagram, TikTok, YouTube, Reddit, and Discord. If a channel is not listed here, it is not us.');
+  setContent(
+    'meta[name="description"]',
+    'The only official channels for Cryptic Realm. Play the game and follow us on X, Facebook, Instagram, TikTok, YouTube, Reddit, and Discord. If a channel is not listed here, it is not us.',
+  );
   setContent('meta[property="og:site_name"]', 'Cryptic Realm');
   setContent('meta[property="og:title"]', 'Cryptic Realm - Official Links');
-  setContent('meta[property="og:description"]', 'The only official channels for Cryptic Realm. If a channel is not listed here, it is not us.');
+  setContent(
+    'meta[property="og:description"]',
+    'The only official channels for Cryptic Realm. If a channel is not listed here, it is not us.',
+  );
   setContent('meta[property="og:url"]', socials.links);
   setContent('meta[property="og:image"]', 'https://crypticrealm.com/cryptic-realm-logo.png');
   setContent('meta[property="og:image:alt"]', 'Cryptic Realm');
   setContent('meta[name="twitter:title"]', 'Cryptic Realm - Official Links');
-  setContent('meta[name="twitter:description"]', 'The only official channels for Cryptic Realm. If a channel is not listed here, it is not us.');
+  setContent(
+    'meta[name="twitter:description"]',
+    'The only official channels for Cryptic Realm. If a channel is not listed here, it is not us.',
+  );
   setContent('meta[name="twitter:image"]', 'https://crypticrealm.com/cryptic-realm-logo.png');
   setContent('meta[name="twitter:image:alt"]', 'Cryptic Realm');
 
-  document.querySelectorAll('link[rel="canonical"]').forEach((el) =>
-    el.setAttribute('href', socials.links));
+  document
+    .querySelectorAll('link[rel="canonical"]')
+    .forEach((el) => el.setAttribute('href', socials.links));
 
   // Replace plain-text "World of ClaudeCraft" mentions throughout the body
   // (titles, headings, card labels) with "Cryptic Realm". Done with a
@@ -86,18 +95,27 @@ function rebrand(): void {
     fb.rel = 'noopener noreferrer';
     fb.textContent = 'Facebook - /crypticmmo';
     fb.className = 'cr-link-card';
-    fb.style.cssText = 'display:block;padding:14px 18px;margin:8px 0;border:1px solid #c8a838;border-radius:10px;color:#ffd100;text-decoration:none;font-family:Cinzel,serif;';
+    fb.style.cssText =
+      'display:block;padding:14px 18px;margin:8px 0;border:1px solid #c8a838;border-radius:10px;color:#ffd100;text-decoration:none;font-family:Cinzel,serif;';
     grid.appendChild(fb);
   }
 
-  // Add a Solana tip card.
-  if (socials.tipWalletSolana && grid && !document.querySelector('[data-cr-tip]')) {
+  // Add a Solana tip card, but only on a layout that lacks its own: the CR
+  // links page ships a first-class tip card (#btn-tip) with the address, QR
+  // and copy button, and injecting a second card would duplicate it.
+  if (
+    socials.tipWalletSolana &&
+    grid &&
+    !document.getElementById('btn-tip') &&
+    !document.querySelector('[data-cr-tip]')
+  ) {
     const tip = document.createElement('a');
     tip.href = `solana:${socials.tipWalletSolana}`;
     tip.setAttribute('data-cr-tip', '1');
     tip.textContent = `Tip $CR -> ${socials.tipWalletSolana.slice(0, 8)}...${socials.tipWalletSolana.slice(-8)}`;
     tip.title = 'Send $CR or SOL to support Cryptic Realm - not an investment';
-    tip.style.cssText = 'display:block;padding:14px 18px;margin:8px 0;border:1px solid #00ffa3;border-radius:10px;color:#00ffa3;text-decoration:none;font-family:ui-monospace,monospace;font-size:12px;word-break:break-all;';
+    tip.style.cssText =
+      'display:block;padding:14px 18px;margin:8px 0;border:1px solid #00ffa3;border-radius:10px;color:#00ffa3;text-decoration:none;font-family:ui-monospace,monospace;font-size:12px;word-break:break-all;';
     grid.appendChild(tip);
   }
 }
