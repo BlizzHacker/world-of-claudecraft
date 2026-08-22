@@ -969,7 +969,7 @@ export interface GuideClassInfo {
   specs: GuideClassSpec[];
   signatureAbilities: GuideAbilityRef[];
   abilities: GuideAbilityRef[];
-  model: string;
+  model: string | null;
   tint?: string;
   /** Manifest tint strength (0..1) for this figure's model, when tinted. Feeds the still's
    *  filename identity (still_key.mjs) alongside model/tint; the live viewer reads its own

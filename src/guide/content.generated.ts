@@ -35,7 +35,7 @@ export interface GuideClassInfo {
   specs: GuideClassSpec[];
   signatureAbilities: GuideAbilityRef[];
   abilities: GuideAbilityRef[];
-  model: string;
+  model: string | null;
   tint?: string;
   /** Manifest tint strength (0..1) for this figure's model, when tinted. Feeds the still's
    *  filename identity (still_key.mjs) alongside model/tint; the live viewer reads its own
@@ -511,8 +511,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
         "name": "Mayhem"
       }
     ],
-    "model": "player_warrior",
-    "still": "/guide-stills/player_warrior.webp"
+    "model": null
   },
   {
     "id": "paladin",
@@ -635,8 +634,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
         "name": "Sacred Bulwark"
       }
     ],
-    "model": "player_paladin",
-    "still": "/guide-stills/player_paladin.webp"
+    "model": null
   },
   {
     "id": "hunter",
@@ -757,8 +755,9 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
         "name": "Hushing Shot"
       }
     ],
-    "model": "player_hunter",
-    "still": "/guide-stills/player_hunter.webp"
+    "model": null,
+    "tint": "#ffffff",
+    "tintStrength": 0.18
   },
   {
     "id": "rogue",
@@ -903,8 +902,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
         "name": "Boot"
       }
     ],
-    "model": "player_rogue",
-    "still": "/guide-stills/player_rogue.webp"
+    "model": null
   },
   {
     "id": "priest",
@@ -1002,10 +1000,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
         "name": "Urgent Prayer"
       }
     ],
-    "model": "player_priest",
-    "tint": "#f0e9d6",
-    "tintStrength": 0.12,
-    "still": "/guide-stills/player_priest__f0e9d6__s12.webp"
+    "model": null
   },
   {
     "id": "shaman",
@@ -1107,10 +1102,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
         "name": "Earthquake"
       }
     ],
-    "model": "player_shaman",
-    "tint": "#6f8fc9",
-    "tintStrength": 0.12,
-    "still": "/guide-stills/player_shaman__6f8fc9__s12.webp"
+    "model": null
   },
   {
     "id": "mage",
@@ -1352,8 +1344,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
         "name": "Ember Form"
       }
     ],
-    "model": "player_mage",
-    "still": "/guide-stills/player_mage.webp"
+    "model": null
   },
   {
     "id": "warlock",
@@ -1486,10 +1477,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
         "name": "Gag Order"
       }
     ],
-    "model": "player_warlock",
-    "tint": "#8d5fd3",
-    "tintStrength": 0.12,
-    "still": "/guide-stills/player_warlock__8d5fd3__s12.webp"
+    "model": null
   },
   {
     "id": "druid",
@@ -1684,8 +1672,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
         "name": "Primal Reflexes"
       }
     ],
-    "model": "player_druid",
-    "still": "/guide-stills/player_druid.webp"
+    "model": null
   }
 ];
 
@@ -2121,7 +2108,10 @@ export const GUIDE_WARLOCK_PETS: GuideWarlockPet[] = [
   {
     "id": "wraithborn",
     "name": "Wraithborn",
-    "model": null
+    "model": "mob_ghost",
+    "tint": "#7a3a8e",
+    "tintStrength": 0.55,
+    "still": "/guide-stills/mob_ghost__7a3a8e__s55.webp"
   }
 ];
 
@@ -2788,10 +2778,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 12,
         "rare": false,
         "templateId": "fen_troll",
-        "model": "mob_troll",
-        "tint": "#229954",
-        "tintStrength": 0.12,
-        "still": "/guide-stills/mob_troll__229954__s12.webp"
+        "model": null
       },
       {
         "name": "Grubjaw the Glutton",
@@ -2810,10 +2797,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 19,
         "rare": false,
         "templateId": "dune_troll",
-        "model": "mob_troll",
-        "tint": "#b07040",
-        "tintStrength": 0.12,
-        "still": "/guide-stills/mob_troll__b07040__s12.webp"
+        "model": null
       }
     ]
   },
@@ -2826,10 +2810,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 16,
         "rare": false,
         "templateId": "thornpeak_ogre",
-        "model": "mob_ogre",
-        "tint": "#9e7b53",
-        "tintStrength": 0.2,
-        "still": "/guide-stills/mob_ogre__9e7b53__s20.webp"
+        "model": null
       },
       {
         "name": "Gravenbark Shambler",
@@ -3056,10 +3037,10 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 20,
         "rare": false,
         "templateId": "dragonkin_broodguard",
-        "model": "mob_dragonkin_broodguard",
+        "model": "mob_dragonkin",
         "tint": "#3e6b4f",
-        "tintStrength": 0.1,
-        "still": "/guide-stills/mob_dragonkin_broodguard__3e6b4f__s10.webp"
+        "tintStrength": 0.2,
+        "still": "/guide-stills/mob_dragonkin__3e6b4f__s20.webp"
       },
       {
         "name": "Dragonkin Egg",
@@ -10411,144 +10392,6 @@ export const GUIDE_PROF_PAGES: string[] = [
 ];
 
 export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
-  "player_warrior": {
-    "url": "models/chars/players/knight.glb",
-    "idle": "Idle",
-    "height": 2.6,
-    "show": [
-      "Knight_Helmet",
-      "Knight_Cape"
-    ],
-    "attach": [
-      {
-        "url": "models/weapons/sword_1handed.glb",
-        "bone": "handslot.r"
-      },
-      {
-        "url": "models/weapons/shield_round.glb",
-        "bone": "handslot.l"
-      }
-    ]
-  },
-  "player_paladin": {
-    "url": "models/chars/players/paladin.glb",
-    "idle": "Idle",
-    "height": 2.6,
-    "attach": [
-      {
-        "url": "models/weapons/axe_1handed.glb",
-        "bone": "handslot.r"
-      },
-      {
-        "url": "models/weapons/shield_square.glb",
-        "bone": "handslot.l"
-      }
-    ]
-  },
-  "player_hunter": {
-    "url": "models/chars/players/ranger.glb",
-    "idle": "Idle",
-    "height": 2.6,
-    "attach": [
-      {
-        "url": "models/weapons/crossbow_1handed.glb",
-        "bone": "handslot.r"
-      }
-    ]
-  },
-  "player_rogue": {
-    "url": "models/chars/players/rogue.glb",
-    "idle": "Idle",
-    "height": 2.6,
-    "show": [
-      "Rogue_Cape"
-    ],
-    "attach": [
-      {
-        "url": "models/weapons/dagger.glb",
-        "bone": "handslot.r"
-      },
-      {
-        "url": "models/weapons/dagger.glb",
-        "bone": "handslot.l"
-      }
-    ]
-  },
-  "player_priest": {
-    "url": "models/chars/players/mage.glb",
-    "idle": "Idle",
-    "height": 2.6,
-    "show": [],
-    "attach": [
-      {
-        "url": "models/weapons/staff.glb",
-        "bone": "handslot.r"
-      }
-    ],
-    "tintStrength": 0.12
-  },
-  "player_shaman": {
-    "url": "models/chars/players/barbarian.glb",
-    "idle": "Idle",
-    "height": 2.6,
-    "show": [
-      "Barbarian_BearHat"
-    ],
-    "attach": [
-      {
-        "url": "models/weapons/axe_1handed.glb",
-        "bone": "handslot.r"
-      },
-      {
-        "url": "models/weapons/shield_round.glb",
-        "bone": "handslot.l"
-      }
-    ],
-    "tintStrength": 0.12
-  },
-  "player_mage": {
-    "url": "models/chars/players/mage.glb",
-    "idle": "Idle",
-    "height": 2.6,
-    "show": [
-      "Mage_Cape"
-    ],
-    "attach": [
-      {
-        "url": "models/weapons/staff.glb",
-        "bone": "handslot.r"
-      }
-    ]
-  },
-  "player_warlock": {
-    "url": "models/chars/players/mage.glb",
-    "idle": "Idle",
-    "height": 2.6,
-    "show": [],
-    "attach": [
-      {
-        "url": "models/weapons/wand.glb",
-        "bone": "handslot.r"
-      },
-      {
-        "url": "models/weapons/spellbook_open.glb",
-        "bone": "handslot.l",
-        "gripRef": "Spellbook_open"
-      }
-    ],
-    "tintStrength": 0.12
-  },
-  "player_druid": {
-    "url": "models/chars/players/druid.glb",
-    "idle": "Idle",
-    "height": 2.6,
-    "attach": [
-      {
-        "url": "models/weapons/staff.glb",
-        "bone": "handslot.r"
-      }
-    ]
-  },
   "form_bear": {
     "url": "models/creatures/bear_form.glb",
     "idle": "Idle",
@@ -10564,6 +10407,13 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "url": "models/creatures/chicken_cow.glb",
     "idle": "Idle",
     "height": 2.3
+  },
+  "mob_ghost": {
+    "url": "models/creatures/ghost.glb",
+    "idle": "Flying_Idle",
+    "height": 1.6,
+    "hover": 0.4,
+    "tintStrength": 0.55
   },
   "mob_wolf": {
     "url": "models/creatures/wolf_basic.glb",
@@ -10611,23 +10461,11 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "height": 2.5,
     "tintStrength": 0.25
   },
-  "mob_troll": {
-    "url": "models/creatures/orc.glb",
-    "idle": "Idle",
-    "height": 2.4,
-    "tintStrength": 0.12
-  },
   "mob_grubjaw": {
     "url": "models/creatures/grubjaw.glb",
     "idle": "Idle",
     "height": 2.9,
     "tintStrength": 0.04
-  },
-  "mob_ogre": {
-    "url": "models/creatures/giant.glb",
-    "idle": "Idle",
-    "height": 2.8,
-    "tintStrength": 0.2
   },
   "mob_elemental": {
     "url": "models/creatures/golelingevolved.glb",
@@ -10692,19 +10530,6 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "idle": "Idle",
     "height": 0.95,
     "tintStrength": 0.08
-  },
-  "mob_dragonkin_broodguard": {
-    "url": "models/creatures/dragonkin_mob.glb",
-    "idle": "Idle",
-    "height": 2.2,
-    "tintStrength": 0.1
-  },
-  "mob_ghost": {
-    "url": "models/creatures/ghost.glb",
-    "idle": "Flying_Idle",
-    "height": 1.6,
-    "hover": 0.4,
-    "tintStrength": 0.55
   },
   "mob_stag": {
     "url": "models/creatures/stag.glb",

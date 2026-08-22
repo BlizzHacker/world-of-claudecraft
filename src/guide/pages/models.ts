@@ -44,14 +44,23 @@ function dedupeByModel(options: ModelOption[]): ModelOption[] {
 }
 
 function classOptions(): ModelOption[] {
-  return GUIDE_CLASSES.map((c) => ({
-    modelKey: c.model,
-    name: className(c.id),
-    tint: c.tint,
-    color: c.color,
-    poster: classCrest(c.id, 64),
-    still: c.still,
-  }));
+  // Same rule the creature/form/pet lists use: a class whose body lives only in
+  // the out-of-band realm store bakes no on-disk GLB (model: null), so there is
+  // nothing for the turntable to load and the picker skips it.
+  return GUIDE_CLASSES.flatMap((c) =>
+    c.model
+      ? [
+          {
+            modelKey: c.model,
+            name: className(c.id),
+            tint: c.tint,
+            color: c.color,
+            poster: classCrest(c.id, 64),
+            still: c.still,
+          },
+        ]
+      : [],
+  );
 }
 
 function creatureOptions(): ModelOption[] {
