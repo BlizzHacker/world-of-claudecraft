@@ -319,6 +319,11 @@ export const sv_SE: EnTranslations = {
     "spectate": {
       "banner": "Åskådar {name}"
     },
+    "waypoints": {
+      "title": "Waypoints",
+      "choose": "Choose a destination",
+      "undiscovered": "{name} (undiscovered)"
+    },
     "readyCheck": {
       "prompt": "{name} har startat en beredskapskontroll. Är du redo?",
       "ready": "Redo",

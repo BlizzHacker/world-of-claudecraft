@@ -319,6 +319,11 @@ export const en: EnTranslations = {
     "spectate": {
       "banner": "Spectating {name}"
     },
+    "waypoints": {
+      "title": "Waypoints",
+      "choose": "Choose a destination",
+      "undiscovered": "{name} (undiscovered)"
+    },
     "readyCheck": {
       "prompt": "{name} has started a ready check. Are you ready?",
       "ready": "Ready",

@@ -319,6 +319,11 @@ export const es_ES: EnTranslations = {
     "spectate": {
       "banner": "Observando a {name}"
     },
+    "waypoints": {
+      "title": "Waypoints",
+      "choose": "Choose a destination",
+      "undiscovered": "{name} (undiscovered)"
+    },
     "readyCheck": {
       "prompt": "{name} ha iniciado una comprobación de disponibilidad. ¿Estás listo?",
       "ready": "Listo",

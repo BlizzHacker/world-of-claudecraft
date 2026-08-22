@@ -45,6 +45,26 @@ const baseEnTable = {
   'error.bankMaxSlots': 'Your bank cannot be expanded further.',
   'error.bankTooFar': 'You are too far from the banker.',
   'log.bankSlotsPurchased': 'You purchase additional bank slots.',
+  // Waypoints + Town Portal (src/sim/waypoints.ts, src/sim/town_portal.ts).
+  // The error.* rows are the travel/cast refusal toasts (placeholder-free, so
+  // they register in the EXACT matcher automatically); the parameterized log.*
+  // rows are matched by RULES entries below (waypoint/town names splice
+  // verbatim, like player names).
+  'error.waypointUndiscovered': "You haven't discovered that waypoint yet.",
+  'error.waypointNotAtPylon': 'You must be standing at a waypoint to travel.',
+  'error.waypointJailed': 'You cannot use a waypoint while jailed.',
+  'error.waypointInCombat': 'You cannot use a waypoint while in combat.',
+  'error.waypointCompetitive': 'You cannot use a waypoint during a competitive match.',
+  'error.waypointFromHere': 'You cannot use a waypoint from here.',
+  'error.townPortalInTown': "You're already in town.",
+  'error.townPortalJailed': 'You cannot open a town portal while jailed.',
+  'error.townPortalCompetitive': 'You cannot open a town portal during a competitive match.',
+  'log.portalStep': 'You step through the portal.',
+  'log.waypointActivated':
+    'Waypoint activated: {name}. Travel here from any other waypoint.',
+  'log.waypointChoose': '{name} waypoint. Choose a destination to travel.',
+  'log.waypointTravel': 'You travel to {name}.',
+  'log.townPortalOpen': 'You open a town portal to {name}.',
   // Guild Bank (src/sim/guild_bank.ts): the officer-plus shared treasury +
   // item store. The error.* lines are the refusal toasts (too-far, quest-item,
   // and "Not enough money." reuse the existing rows above / the hud arm); the
@@ -11705,6 +11725,24 @@ const RULES: Rule[] = [
   {
     re: /^You withdraw (.+) from the guild bank\.$/,
     build: (m) => tSim('log.guildBankWithdrawItem', { item: locItem(m[1]) }),
+  },
+  // Waypoints + Town Portal (src/sim/waypoints.ts, src/sim/town_portal.ts):
+  // waypoint and town names splice verbatim (authored proper nouns).
+  {
+    re: /^Waypoint activated: (.+)\. Travel here from any other waypoint\.$/,
+    build: (m) => tSim('log.waypointActivated', { name: m[1] }),
+  },
+  {
+    re: /^(.+) waypoint\. Choose a destination to travel\.$/,
+    build: (m) => tSim('log.waypointChoose', { name: m[1] }),
+  },
+  {
+    re: /^You travel to (.+)\.$/,
+    build: (m) => tSim('log.waypointTravel', { name: m[1] }),
+  },
+  {
+    re: /^You open a town portal to (.+)\.$/,
+    build: (m) => tSim('log.townPortalOpen', { name: m[1] }),
   },
 ];
 

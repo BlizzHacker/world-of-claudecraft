@@ -13,6 +13,13 @@ export const hudChromeStrings = {
   spectate: {
     banner: 'Spectating {name}',
   },
+  // D2 waypoint travel menu (waypoint_map_window.ts). Terse on purpose; the
+  // close button reuses hud.prompts.decline.
+  waypoints: {
+    title: 'Waypoints',
+    choose: 'Choose a destination',
+    undiscovered: '{name} (undiscovered)',
+  },
   // Raid/party ready-check prompt (the leader ran /ready). The buttons answer the
   // yes/no prompt; the outcome is announced in chat by the sim.
   readyCheck: {

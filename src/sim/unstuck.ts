@@ -169,7 +169,11 @@ function forcedMovement(p: Entity): boolean {
   );
 }
 
-function competitive(ctx: SimContext, pid: number, p: Entity): boolean {
+/** In a duel, an arena match, a Vale Cup match, or standing on arena ground.
+ *  Exported for the sibling travel gates (waypoints.ts, town_portal.ts): a
+ *  competitive fight must not be escapable by teleport any more than by
+ *  /unstuck. Draws no rng. */
+export function competitive(ctx: SimContext, pid: number, p: Entity): boolean {
   return (
     ctx.duels.has(pid) ||
     ctx.arenaMatches.has(pid) ||

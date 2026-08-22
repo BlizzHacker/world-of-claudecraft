@@ -319,6 +319,11 @@ export const ko_KR: EnTranslations = {
     "spectate": {
       "banner": "{name} 관전 중"
     },
+    "waypoints": {
+      "title": "웨이포인트",
+      "choose": "목적지를 선택하세요",
+      "undiscovered": "{name} (미발견)"
+    },
     "readyCheck": {
       "prompt": "{name} 님이 준비 확인을 시작했습니다. 준비되셨습니까?",
       "ready": "준비 완료",

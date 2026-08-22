@@ -11694,4 +11694,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.waterRipples': '水面の波紋（航跡）',
   'hudChrome.breath.label': '息',
   'hudChrome.breath.drowning': '溺れています！',
+  'hudChrome.waypoints.title': 'ウェイポイント',
+  'hudChrome.waypoints.choose': '目的地を選択',
+  'hudChrome.waypoints.undiscovered': '{name}（未発見）',
 };

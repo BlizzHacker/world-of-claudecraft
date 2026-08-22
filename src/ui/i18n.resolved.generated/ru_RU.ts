@@ -319,6 +319,11 @@ export const ru_RU: EnTranslations = {
     "spectate": {
       "banner": "Наблюдение за {name}"
     },
+    "waypoints": {
+      "title": "Путевые точки",
+      "choose": "Выберите пункт назначения",
+      "undiscovered": "{name} (не открыто)"
+    },
     "readyCheck": {
       "prompt": "{name} начал проверку готовности. Вы готовы?",
       "ready": "Готов",

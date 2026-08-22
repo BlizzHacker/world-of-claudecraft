@@ -319,6 +319,11 @@ export const cs_CZ: EnTranslations = {
     "spectate": {
       "banner": "Sleduješ {name}"
     },
+    "waypoints": {
+      "title": "Waypoints",
+      "choose": "Choose a destination",
+      "undiscovered": "{name} (undiscovered)"
+    },
     "readyCheck": {
       "prompt": "Hráč {name} zahájil kontrolu připravenosti. Jsi připraven(a)?",
       "ready": "Připraven(a)",

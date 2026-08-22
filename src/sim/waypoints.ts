@@ -8,11 +8,12 @@
 // destination waypoint id; the server validates it's activated and teleports you to
 // its hub. Server-authoritative — the whole flow routes through the sim.
 
-import { ZONES } from './data';
+import { INSTANCE_X_BASE, isDelvePos, isRiftPos, ZONES } from './data';
 import type { RealmId } from './realms/types';
 import { createGroundObject } from './entity';
 import type { SimContext } from './sim_context';
-import type { Entity } from './types';
+import { type Entity, INTERACT_RANGE } from './types';
+import { competitive } from './unstuck';
 
 export interface WaypointDef {
   id: string;
@@ -155,6 +156,37 @@ export function waypointTravel(ctx: SimContext, destId: string, pid?: number): v
   if (!dest) return;
   if (!r.meta.waypointsActivated.has(destId)) {
     ctx.error(r.meta.entityId, "You haven't discovered that waypoint yet.");
+    return;
+  }
+  // Server-side validation: the client menu is a convenience, never an
+  // authority. Every gate below is rng-free and mirrors the /unstuck doctrine
+  // (unstuck.ts): no combat escape, no jailbreak, no competitive exit, and no
+  // teleporting out of an instance band a portal did not open.
+  if (isRiftPos(p.pos.x) || isDelvePos(p.pos.x) || p.pos.x >= INSTANCE_X_BASE) {
+    ctx.error(r.meta.entityId, 'You cannot use a waypoint from here.');
+    return;
+  }
+  // Presence: the traveler must be standing at a live waypoint pylon (any one,
+  // discovered or not; discovery gates the DESTINATION above). The grid holds
+  // mobs and objects; players ride playerGrid, so a pylon is findable here.
+  let atPylon = false;
+  ctx.grid.forEachInRadius(p.pos.x, p.pos.z, INTERACT_RANGE + 2, (e) => {
+    if (e.kind === 'object' && e.templateId === 'waypoint' && !e.dead) atPylon = true;
+  });
+  if (!atPylon) {
+    ctx.error(r.meta.entityId, 'You must be standing at a waypoint to travel.');
+    return;
+  }
+  if (p.jailed) {
+    ctx.error(r.meta.entityId, 'You cannot use a waypoint while jailed.');
+    return;
+  }
+  if (p.inCombat || p.combatTimer < 5) {
+    ctx.error(r.meta.entityId, 'You cannot use a waypoint while in combat.');
+    return;
+  }
+  if (competitive(ctx, p.id, p)) {
+    ctx.error(r.meta.entityId, 'You cannot use a waypoint during a competitive match.');
     return;
   }
   // Arrive at the destination waypoint pylon (matches its spawn offset), just south

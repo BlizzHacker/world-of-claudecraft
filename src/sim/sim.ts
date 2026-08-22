@@ -536,6 +536,7 @@ import {
   spawnOverworldSpiritHealers,
   UNSTUCK_SICKNESS_ID,
 } from './spirit';
+import { closeTownPortal } from './town_portal';
 import { spawnWaypoints, waypointTravel } from './waypoints';
 import * as unstuckMod from './unstuck';
 import {
@@ -4010,6 +4011,11 @@ export class Sim {
     this.party.partyInvites.delete(pid);
     this.tradeInvites.delete(pid);
     this.duelInvites.delete(pid);
+    // A leaver's town-portal pair closes with the session. This is the TRUE
+    // leave teardown: the online server keeps a linkdead player's session (and
+    // so their portals) through the reconnect grace and only calls removePlayer
+    // when the character actually leaves the world.
+    closeTownPortal(this.ctx, pid);
     // mobs forget the leaving player; persistent hunter pets are serialized
     // with the character and removed from the live world instead of released
     const pet = this.petOf(pid, true);

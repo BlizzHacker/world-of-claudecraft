@@ -11173,4 +11173,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.waterRipples': '水面涟漪（尾波）',
   'hudChrome.breath.label': '呼吸',
   'hudChrome.breath.drowning': '溺水！',
+  'hudChrome.waypoints.title': '传送点',
+  'hudChrome.waypoints.choose': '选择目的地',
+  'hudChrome.waypoints.undiscovered': '{name}（未发现）',
 };

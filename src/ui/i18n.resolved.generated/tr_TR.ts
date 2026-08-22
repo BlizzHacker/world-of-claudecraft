@@ -319,6 +319,11 @@ export const tr_TR: EnTranslations = {
     "spectate": {
       "banner": "{name} izleniyor"
     },
+    "waypoints": {
+      "title": "Waypoints",
+      "choose": "Choose a destination",
+      "undiscovered": "{name} (undiscovered)"
+    },
     "readyCheck": {
       "prompt": "{name} bir hazır kontrolü başlattı. Hazır mısın?",
       "ready": "Hazır",
