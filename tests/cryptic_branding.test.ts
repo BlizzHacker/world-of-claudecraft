@@ -57,7 +57,7 @@ describe('Cryptic realm branding crypto surfaces', () => {
     expect(document.querySelector<HTMLAnchorElement>('.social-link.github')?.getAttribute('href')).toBe('/contributions.html');
     expect(document.querySelector<HTMLElement>('.social-link.github')?.style.display).toBe('none');
     expect(document.querySelector<HTMLElement>('.social-link.github span')?.textContent).toBe('Contributions');
-    expect(document.querySelector<HTMLAnchorElement>('.social-link.discord')?.href).toBe('https://discord.gg/Zdj3JGrx');
+    expect(document.querySelector<HTMLAnchorElement>('.social-link.discord')?.href).toBe('https://discord.gg/WnxcamHJdh');
     expect(document.querySelector<HTMLElement>('.social-link.discord span')?.textContent).toBe('Cryptic Realm Discord');
     expect(document.querySelector<HTMLElement>('.cs-wallet')?.style.display).toBe('none');
     expect(document.querySelector<HTMLElement>('.account-wallet-card')?.style.display).toBe('none');
