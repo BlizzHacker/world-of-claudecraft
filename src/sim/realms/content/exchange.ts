@@ -25,9 +25,8 @@ export const EXCHANGE_REALM: RealmContent = {
   mood: 'Neutral · Mercantile · Crowded',
   season: {
     eyebrow: 'Season 1',
-    title: 'The Trader\'s Consignment',
-    body:
-      'Limited weapon skins consigned to the Exchange floor by traders out of every realm. Account-wide, purely cosmetic, and shown to everyone around you.',
+    title: "The Trader's Consignment",
+    body: 'Limited weapon skins consigned to the Exchange floor by traders out of every realm. Account-wide, purely cosmetic, and shown to everyone around you.',
   },
   accentHex: '#c9a14a',
   bgGradient: 'linear-gradient(135deg, #1a1408 0%, #0a0805 100%)',
@@ -36,7 +35,7 @@ export const EXCHANGE_REALM: RealmContent = {
   branding: {
     logoSrc: '/cryptic-realm-logo-512.webp',
     brandText: 'The Exchange - Cryptic Realm',
-    loadingScreenSrc: '/cryptic-realm-loading.png',
+    loadingScreenSrc: '/cryptic-realm-loading-bg.webp',
     discordUrl: 'https://discord.gg/WnxcamHJdh',
     showDonate: false,
     showAuthentikSso: true,
