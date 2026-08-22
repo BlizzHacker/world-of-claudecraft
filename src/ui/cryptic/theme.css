@@ -2370,6 +2370,21 @@ body:not(.game-active) .cr-realm-first-prompt {
   margin: 6px 0 0;
   line-height: 1.5;
 }
+/* Store listings: the second grid under the launcher cards. A store whose
+   listing URL is still empty renders as a disabled .cr-dl-btn badge. */
+.cr-dl-stores {
+  margin: 18px 0 8px;
+}
+.cr-dl-stores h3 {
+  color: var(--gold-2, #e8c879);
+  font-size: 14px;
+  margin: 0 0 8px;
+}
+.cr-dl-stores-row {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
 
 /* Unified in-app doc views (Contributions / White Paper / Links) — content that
    used to live in standalone HTML pages now renders inside the SPA with the ONE
