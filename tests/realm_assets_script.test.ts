@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import {
-  CURATED_INFERNAL_CLASSES,
   classifyAssetKind,
   classifyRealmFromText,
   INFERNAL_BIPED_ACTIONS,
@@ -105,18 +104,6 @@ describe('realm asset build helpers', () => {
   });
 
   it('promotes the compact shared action pack', () => {
-    // The CURATED_INFERNAL_HUMANS half of this test pinned the table that
-    // REGENERATED the condemned bank on every build. Both are gone; the class
-    // pack below was never part of that bank and is still pinned.
-    expect(CURATED_INFERNAL_CLASSES).toHaveLength(18);
-    expect(new Set(CURATED_INFERNAL_CLASSES.map((asset) => asset.outputName)).size).toBe(18);
-    expect(CURATED_INFERNAL_CLASSES.map((asset) => asset.outputName)).toEqual(
-      expect.arrayContaining([
-        'infernal_class_warrior.glb',
-        'infernal_class_necromancer.glb',
-        'infernal_class_blood_knight.glb',
-      ]),
-    );
     expect(INFERNAL_BIPED_ACTIONS.map((asset) => asset.outputName)).toEqual(
       expect.arrayContaining([
         'infernal_biped_run.glb',

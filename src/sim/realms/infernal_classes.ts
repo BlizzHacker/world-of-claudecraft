@@ -18,28 +18,7 @@ export interface InfernalHeroClass {
 }
 
 export type InfernalCharacterVisualKey =
-  | 'realm_infernal_class_warrior'
-  | 'realm_infernal_class_rogue'
-  | 'realm_infernal_class_sorcerer'
-  | 'realm_infernal_class_amazon'
-  | 'realm_infernal_class_barbarian'
-  | 'realm_infernal_class_necromancer'
-  | 'realm_infernal_class_paladin'
-  | 'realm_infernal_class_druid'
-  | 'realm_infernal_class_assassin'
-  | 'realm_infernal_class_demon_hunter'
-  | 'realm_infernal_class_monk'
-  | 'realm_infernal_class_wizard'
-  | 'realm_infernal_class_witch_doctor'
-  | 'realm_infernal_class_crusader'
-  | 'realm_infernal_class_spiritborn'
-  | 'realm_infernal_class_warlock'
-  | 'realm_infernal_class_blood_knight'
-  | 'realm_infernal_class_tempest'
   | 'realm_infernal_hero_blood_knight_f'
-  // The condemned body bank's 18 keys were removed from this union on
-  // 2026-08-17. HERO_VISUALS never named one of them, so they were dead union
-  // members. See docs/condemned-body-bank.md.
   | 'realm_infernal_dark_paladin'
   | 'hellmaw_sigilbound_body'
   | 'realm_infernal_horned_demon'
@@ -139,37 +118,14 @@ export const INFERNAL_HERO_CLASSES: readonly InfernalHeroClass[] = [
 ];
 
 /**
- * COMPILED FALLBACK ONLY - this is not what the creator screen usually shows.
- *
- * infernalClassChoice() resolves `hero:<id>` / `hero:<name>` through the live
- * override document FIRST and only falls back to this table (see
- * realm_class_presentation.ts). As of 2026-08-08 sixteen of the eighteen cards
- * carry a published override, so for those cards this map is dead code until
- * someone clears the override.
- *
- * That matters because the two are drawn from DIFFERENT banks. The overrides
- * point at `realm_infernal_hero_*.glb` - large Meshy rig+animate bodies with a
- * 6-clip pack (Idle/Walk/Run/Attack/Hit/Death and NO emote) - while this table
- * points at the 10-clip `infernal_class_*` bank. They are different files with
- * different faults, and a body judged in one bank says nothing about the other.
- * The 2026-08-08 render audit swept only the class bank, which is why the
- * Blood Knight shipped broken: its class body passes, and its hero body (the one
- * players actually saw) tears its forearms into tubes in Walk and shreds in
- * Attack. Render the asset the card RESOLVES to, not the key it names.
- *
- * OUTSTANDING DEBT: eleven entries below (Sorcerer, Amazon, Barbarian,
- * Necromancer, Druid, Assassin, Wizard, Crusader, Spiritborn, Warlock, Tempest)
- * still name a body in INFERNAL_DEFECTIVE_CLASS_BODY_KEYS. They are harmless
- * today only because an override shadows every one of them - clearing any of
- * those overrides puts a scarecrow back on that card. They are deliberately NOT
- * repointed here: the class bank has only about three intact bodies, so honest
- * fallbacks would collapse eleven archetypes onto three and destroy the variety
- * the cards exist for. Repairing the bank is the fix; Paladin was repointed
- * because it had no override to hide behind.
+ * Compiled, deploy-safe hero bodies. Live ArcForge overrides may replace one,
+ * but clearing an override always returns to this audited full-size roster, not
+ * to the retired miniature class bank.
  */
 const HERO_VISUALS: Readonly<Record<string, string>> = {
   Warrior: 'realm_crypticrealm_rune_warden',
-  Rogue: 'realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289',
+  // Repointed 2026-08-21 off the white hooded assassin (third-party likeness).
+  Rogue: 'realm_infernal_class_rogue_f',
   'Sorcerer / Sorceress': 'realm_infernal_hero_sorcerer',
   Amazon: 'realm_infernal_shadow_warrior_characters_fashio_01942cf0',
   Barbarian: 'realm_infernal_hero_barbarian',

@@ -11,6 +11,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { NodeIO } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
 import { MeshoptDecoder } from 'meshoptimizer';
+import { publishableRealmAssetCandidates } from './realm_assets/catalog_policy.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(ROOT, '..');
@@ -77,27 +78,6 @@ const PICKTURA_FORMATS = new Set(
 // It is removed. See docs/condemned-body-bank.md.
 // tests/condemned_body_bank_guard.test.ts now covers scripts/ as well as src/
 // and server/, so a build recipe cannot reintroduce the bank again.
-
-export const CURATED_INFERNAL_CLASSES = [
-  'warrior',
-  'rogue',
-  'sorcerer',
-  'amazon',
-  'barbarian',
-  'necromancer',
-  'paladin',
-  'druid',
-  'assassin',
-  'demon_hunter',
-  'monk',
-  'wizard',
-  'witch_doctor',
-  'crusader',
-  'spiritborn',
-  'warlock',
-  'blood_knight',
-  'tempest',
-].map((classId) => ({ classId, outputName: `infernal_class_${classId}.glb` }));
 
 const INFERNAL_BIPED_DONOR = '019b7548-998a-7eb1-84f7-9f6f58a8c25a';
 export const INFERNAL_BIPED_ACTIONS = [
@@ -1015,6 +995,7 @@ async function main() {
   // Limit before GLB inspection. A mounted library can contain thousands of
   // files and inspection is intentionally expensive because it reads the
   // complete glTF graph and animation list.
+  candidates = publishableRealmAssetCandidates(candidates);
   candidates = dedupeNamedCandidates(candidates);
   candidates = limitCandidatesByRealm(candidates, MAX_PER_REALM);
   candidates = await inspectCandidates(candidates);

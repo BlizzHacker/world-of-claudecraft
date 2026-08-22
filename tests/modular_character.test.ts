@@ -645,7 +645,7 @@ describe('authored realm bodies replace the modular character', () => {
         kind: 'player',
         templateId: 'rogue',
         skinCatalog: 'class',
-        visualKey: 'realm_infernal_class_rogue',
+        visualKey: 'realm_infernal_hero_assassin',
       } as never),
     ).toBe(false);
     expect(

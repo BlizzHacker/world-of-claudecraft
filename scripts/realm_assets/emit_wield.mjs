@@ -43,6 +43,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isPermanentlyRejectedRealmBodyKey } from './catalog_policy.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const argv = process.argv;
@@ -50,6 +51,29 @@ const arg = (n, d) => (argv.includes(`--${n}`) ? argv[argv.indexOf(`--${n}`) + 1
 
 const GEOMETRY = arg('geometry', resolve(__dirname, 'bodies_geometry.generated.json'));
 const OUT = arg('out', resolve(__dirname, '../../src/render/characters/realm_wield.generated.ts'));
+const PRUNE_ONLY = argv.includes('--prune-only');
+
+function pruneExistingWieldTable() {
+  if (!existsSync(OUT)) {
+    console.error(`[wield] missing ${OUT}; cannot prune generated table`);
+    process.exit(2);
+  }
+  const input = readFileSync(OUT, 'utf8').split('\n');
+  let pruned = 0;
+  const output = input.filter((line) => {
+    const key = /^\s*"([^"]+)":\s/.exec(line)?.[1];
+    if (!key || !isPermanentlyRejectedRealmBodyKey(key)) return true;
+    pruned++;
+    return false;
+  });
+  writeFileSync(OUT, output.join('\n'));
+  console.log(`[wield] pruned ${pruned} rejected body rows -> ${OUT}`);
+}
+
+if (PRUNE_ONLY) {
+  pruneExistingWieldTable();
+  process.exit(0);
+}
 
 // The wielder emit_arms.mjs sizes against: the shared KayKit reference knight,
 // 2.54 world units crown-to-heel. Every weapon length in that file is a fraction
@@ -88,7 +112,11 @@ function main() {
   const clamped = [];
   const skewed = [];
   for (const [rel, geo] of Object.entries(geometry)) {
-    const key = rel.split('/').pop().replace(/\.glb$/, '');
+    const key = rel
+      .split('/')
+      .pop()
+      .replace(/\.glb$/, '');
+    if (isPermanentlyRejectedRealmBodyKey(key)) continue;
     if (!(geo.height > 1e-3)) continue;
     if (geo.handR !== null && Math.abs(geo.handR - 1) > BONE_SCALE_TOLERANCE) {
       skewed.push(`${key} handslot.r scale ${geo.handR}`);
@@ -96,7 +124,8 @@ function main() {
     }
     const raw = geo.height / WIELD_REF_HEIGHT;
     const wield = Math.min(WIELD_MAX, Math.max(WIELD_MIN, raw));
-    if (raw < WIELD_MIN || raw > WIELD_MAX) clamped.push(`${key} ${round(raw, 3)} -> ${round(wield, 3)}`);
+    if (raw < WIELD_MIN || raw > WIELD_MAX)
+      clamped.push(`${key} ${round(raw, 3)} -> ${round(wield, 3)}`);
     scales[key] = round(wield);
   }
 
@@ -116,7 +145,7 @@ function main() {
   lines.push('//');
   lines.push('// One number per generated body: how large this wielder is relative to the');
   lines.push('// reference the weapon library is sized against. assets.ts multiplies it into');
-  lines.push('// the hand grip, which cancels prepareVisual()\'s body normalisation and leaves');
+  lines.push("// the hand grip, which cancels prepareVisual()'s body normalisation and leaves");
   lines.push('// a weapon reading at the same fraction of its wielder on every body.');
   lines.push('//');
   lines.push('// Without it the weapon is a fixed world length attached to bodies whose native');

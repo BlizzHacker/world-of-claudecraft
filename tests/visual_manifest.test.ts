@@ -86,9 +86,12 @@ describe('character visual manifest', () => {
     expect(visualKeyFor({ kind: 'npc', templateId: 'warden_fenwick' } as never)).toMatch(
       /^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/,
     );
-    expect(visualKeyFor({ kind: 'npc', templateId: 'unlisted_infernal_npc' } as never)).toMatch(
-      /^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/,
-    );
+    expect(
+      visualKeyFor({
+        kind: 'npc',
+        templateId: 'unlisted_infernal_npc',
+      } as never),
+    ).toMatch(/^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/);
     setRealmHostEnv(null);
   });
 
@@ -129,12 +132,12 @@ describe('character visual manifest', () => {
     ];
     const npcKeys = npcIds.map((templateId) => visualKeyFor({ kind: 'npc', templateId } as never));
     // RAISED BACK from 3. The condemned bank is gone and the civilian rotation
-    // is eight real townspeople; see docs/condemned-body-bank.md.
-    expect(new Set(npcKeys).size).toBeGreaterThanOrEqual(5);
+    // is five reviewed human townspeople; see docs/condemned-body-bank.md. The
+    // village_elder arm of the pattern is deliberately gone: both elders were
+    // rejected on 2026-08-21 for chibi head proportions.
+    expect(new Set(npcKeys).size).toBeGreaterThanOrEqual(4);
     for (const key of npcKeys) {
-      expect(key).toMatch(
-        /^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/,
-      );
+      expect(key).toMatch(/^realm_crypticrealm_(townswoman|town_guard|craftsman)_/);
       expect(key).not.toMatch(/bone_herald|npc_|elf|orc|demon/i);
     }
     setRealmHostEnv(null);
@@ -144,11 +147,10 @@ describe('character visual manifest', () => {
     // The CONDEMNED bank used to be the other half of this test. It is gone
     // (docs/condemned-body-bank.md), so what is checked now is the CIVILIAN
     // bank that replaced it plus the class bank, which was never condemned.
+    // The two trenchcoat townsmen went when their GLBs turned out to 404, and
+    // the two village elders went on 2026-08-21 as the source of the operator's
+    // "NPC heads too wide" report.
     const npcKeys = [
-      'realm_crypticrealm_village_elder_white_robe_019521ee',
-      'realm_crypticrealm_village_elder_brown_robe_01952165',
-      'realm_crypticrealm_townsman_tan_trenchcoat_01944c9a5744',
-      'realm_crypticrealm_townsman_brown_trenchcoat_01944c9abf1e',
       'realm_crypticrealm_town_guard_female_armored_019875c0',
       'realm_crypticrealm_craftsman_warrior_monk_019ee5e1',
       'realm_crypticrealm_townswoman_practical_monk_f',
@@ -156,13 +158,17 @@ describe('character visual manifest', () => {
       'realm_crypticrealm_townswoman_hooded_mage_f',
       'realm_crypticrealm_townswoman_hooded_rogue_f',
     ];
-    const classKeys = Object.keys(VISUALS).filter((key) => key.startsWith('realm_infernal_class_'));
-    expect(classKeys).toHaveLength(27);
+    const classKeys = Object.keys(VISUALS).filter((key) =>
+      /^realm_infernal_class_\w+_f$/.test(key),
+    );
+    // Only the nine reviewed female/variant bodies remain under this legacy
+    // prefix. The 18 rejected unsuffixed miniatures are not runtime visuals.
+    expect(classKeys).toHaveLength(9);
     // Every civilian is registered and resolves to its OWN GLB - no two share a url.
     for (const key of npcKeys) expect(VISUALS[key], key).toBeTruthy();
     expect(new Set(npcKeys.map((key) => VISUALS[key].url)).size).toBe(npcKeys.length);
-    expect(new Set(classKeys.map((key) => VISUALS[key].url)).size).toBe(27);
-    // 10 civilians + 27 class bodies, every one a distinct GLB.
+    expect(new Set(classKeys.map((key) => VISUALS[key].url)).size).toBe(classKeys.length);
+    // Six civilians plus nine retained variants, every one a distinct GLB.
     expect(new Set([...npcKeys, ...classKeys].map((key) => VISUALS[key].url)).size).toBe(
       npcKeys.length + classKeys.length,
     );
@@ -201,7 +207,10 @@ describe('character visual manifest', () => {
       storageGet: () => null,
       storageSet: () => undefined,
     });
-    const key = visualKeyFor({ kind: 'npc', templateId: 'bursar_fernando' } as never);
+    const key = visualKeyFor({
+      kind: 'npc',
+      templateId: 'bursar_fernando',
+    } as never);
     expect(key).toBe('npc_fernando');
     expect(VISUALS.npc_fernando.tint).toBeUndefined();
     const atlas = SKINS.npc_fernando?.[0];
@@ -290,14 +299,20 @@ describe('character visual manifest', () => {
     ];
     for (const [addId, namedId] of court) {
       const addKey = visualKeyFor({ kind: 'mob', templateId: addId } as never);
-      const namedKey = visualKeyFor({ kind: 'mob', templateId: namedId } as never);
+      const namedKey = visualKeyFor({
+        kind: 'mob',
+        templateId: namedId,
+      } as never);
       expect(addKey, addId).toBe(namedKey);
       expect(addKey, addId).not.toBe('skel_minion');
     }
   });
 
   it('gives the summoned Water Elemental its own untinted animated water body', async () => {
-    const key = visualKeyFor({ kind: 'mob', templateId: 'water_elemental' } as never);
+    const key = visualKeyFor({
+      kind: 'mob',
+      templateId: 'water_elemental',
+    } as never);
     expect(key).toBe('mob_water_elemental');
 
     const visual = VISUALS[key];

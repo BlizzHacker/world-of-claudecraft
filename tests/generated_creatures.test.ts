@@ -11,6 +11,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { isPermanentlyRejectedRealmBodyKey } from '../scripts/realm_assets/catalog_policy.mjs';
 import {
   GENERATED_CREATURE_BODIES,
   GENERATED_CREATURE_VISUALS,
@@ -33,7 +34,21 @@ const STORE =
     : '/mnt/usb4/moveweight-assets/cr-realms');
 const storePresent = existsSync(STORE);
 
-const entries = Object.entries(GENERATED_CREATURE_VISUALS);
+// The emitted roster is UNFILTERED input: manifest.ts drops the permanently
+// rejected keys on the way into VISUALS and into the draw pool, so a body the
+// catalog has banned is legitimately absent from the runtime registry while
+// still sitting in this generated file. Every assertion about the RUNTIME side
+// therefore runs over the surviving keys only. The 2026-08-21 audit rejected
+// seven creature bodies here (all shredded meshes) on exactly this route.
+const entries = Object.entries(GENERATED_CREATURE_VISUALS).filter(
+  ([key]) => !isPermanentlyRejectedRealmBodyKey(key),
+);
+const activeBodies = Object.fromEntries(
+  Object.entries(GENERATED_CREATURE_BODIES).map(([realm, keys]) => [
+    realm,
+    keys.filter((key) => !isPermanentlyRejectedRealmBodyKey(key)),
+  ]),
+);
 
 describe('generated quadruped creatures', () => {
   it('emits a non-trivial roster', () => {
@@ -86,11 +101,11 @@ describe('generated quadruped creatures', () => {
   });
 
   it('every realm roster references a registered visual', () => {
-    for (const [realm, keys] of Object.entries(GENERATED_CREATURE_BODIES)) {
+    for (const [realm, keys] of Object.entries(activeBodies)) {
       expect(keys.length, realm).toBeGreaterThan(0);
       for (const k of keys) expect(VISUALS[k], `${realm} -> ${k}`).toBeDefined();
     }
-    const pooled = Object.values(GENERATED_CREATURE_BODIES).flat();
+    const pooled = Object.values(activeBodies).flat();
     expect(new Set(pooled).size).toBe(entries.length);
   });
 
@@ -173,7 +188,7 @@ describe('creature spawn selection', () => {
   // still fails the second check.
   it('never selects a creature in a realm it was not staged into', () => {
     for (const realm of REALM_IDS) {
-      const staged = new Set(GENERATED_CREATURE_BODIES[realm] ?? []);
+      const staged = new Set(activeBodies[realm] ?? []);
       for (const [id, key] of selectedIn(realm)) {
         expect(staged.has(key), `${realm}/${id} -> ${key} is not staged in ${realm}`).toBe(true);
         expect(VISUALS[key].url, `${realm}/${id} -> ${key}`).toContain(
@@ -184,7 +199,7 @@ describe('creature spawn selection', () => {
   });
 
   it('leaves realms with no staged creatures entirely alone', () => {
-    const bare = REALM_IDS.filter((r) => !GENERATED_CREATURE_BODIES[r]?.length);
+    const bare = REALM_IDS.filter((r) => !activeBodies[r]?.length);
     expect(bare.length).toBeGreaterThan(0);
     for (const realm of bare) {
       expect(selectedIn(realm).map(([id, key]) => `${id} -> ${key}`)).toEqual([]);
@@ -214,14 +229,20 @@ describe('creature spawn selection', () => {
     expect(withRealm('crypticrealm', () => keyFor('mire_prowler'))).toBe(
       'realm_crypticrealm_shadow_drake_sentinel_019677a5',
     );
+    expect(withRealm('claudecraft', () => keyFor('ridge_stalker'))).toBe(
+      'realm_claudecraft_resembles_robust_armored_bear_01981e51',
+    );
     expect(withRealm('crypticrealm', () => keyFor('ridge_stalker'))).toBe(
       'realm_crypticrealm_shadow_drake_sentinel_019677ad',
     );
+    // These two moved on 2026-08-21: the audit rejected seven shredded creature
+    // bodies, and this pool is drawn with a MODULO, so removing any body shifts
+    // the divisor for every unpinned template in the realm.
     expect(withRealm('infernal', () => keyFor('mire_prowler'))).toBe(
-      'realm_infernal_rino_019bc334',
+      'realm_infernal_albino_direwolf_01961261',
     );
     expect(withRealm('infernal', () => keyFor('ridge_stalker'))).toBe(
-      'realm_infernal_feral_alien_creature_carnivore_01945134',
+      'realm_infernal_fox_01942ed0',
     );
     expect(withRealm('arcane', () => keyFor('mire_prowler'))).toBe(
       'realm_arcane_creature_has_quadruped_but_0193df71',
@@ -232,11 +253,11 @@ describe('creature spawn selection', () => {
     expect(withRealm('claudecraft', () => keyFor('mire_prowler'))).toBe(
       'realm_claudecraft_resembles_robust_armored_bear_01981e51',
     );
-    expect(withRealm('fps', () => keyFor('mire_prowler'))).toBe(
-      'realm_fps_extremely_frilled_dragon_lizard_0193e6b8',
-    );
+    expect(withRealm('fps', () => keyFor('mire_prowler'))).toBe('realm_fps_armored_boar_019cb448');
+    // ridge_stalker used to land on realm_fps_ironbound_war_elephant_019ef095,
+    // one of the shredded bodies the audit rejected.
     expect(withRealm('fps', () => keyFor('ridge_stalker'))).toBe(
-      'realm_fps_ironbound_war_elephant_019ef095',
+      'realm_fps_extremely_frilled_dragon_lizard_0193e6b8',
     );
   });
 

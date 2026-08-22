@@ -28,6 +28,10 @@ import {
 } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+  isPermanentlyRejectedRealmBodyKey,
+  PERMANENTLY_REJECTED_REALM_BODY_KEYS,
+} from './catalog_policy.mjs';
 import { humanoidVerdict } from './humanoid_gate.mjs';
 
 function arg(n, d = null) {
@@ -41,6 +45,56 @@ const STAGING = arg('staging', '/mnt/usb4/moveweight-assets/cr-realms-staging');
 const OUT = arg('out', '/opt/cryptic-realm/src/render/characters/manifest.generated.ts');
 const ENTRIES = arg('entries', '/tmp/entries.json');
 const REJECTS = arg('rejects', '/tmp/rejects.json');
+const STORE = arg('store', '/opt/cr-realms-store');
+const ARM_PICKS_PATH = arg('arm-picks', '/opt/cryptic-realm/tmp/arm_picks.json');
+const PRUNE_ONLY = arg('prune-only', false);
+
+function pruneExistingGeneratedManifest(path) {
+  if (!existsSync(path)) {
+    console.error(`[emit] missing ${path}; cannot prune generated manifest`);
+    process.exit(2);
+  }
+  const rejected = PERMANENTLY_REJECTED_REALM_BODY_KEYS;
+  const input = readFileSync(path, 'utf8').split('\n');
+  const output = [];
+  let skippedEntries = 0;
+  let skippedPoolRows = 0;
+  let skippingEntry = false;
+
+  for (const line of input) {
+    if (skippingEntry) {
+      if (line === '  },') skippingEntry = false;
+      continue;
+    }
+    const entry = /^  ([A-Za-z0-9_]+): \{$/.exec(line)?.[1];
+    if (entry && rejected.has(entry)) {
+      skippedEntries++;
+      skippingEntry = true;
+      continue;
+    }
+    const poolKey = /^\s*'([^']+)',\s*$/.exec(line)?.[1];
+    if (poolKey && rejected.has(poolKey)) {
+      skippedPoolRows++;
+      continue;
+    }
+    output.push(line);
+  }
+
+  if (skippingEntry) {
+    console.error(`[emit] malformed ${path}; rejected entry never closed`);
+    process.exit(2);
+  }
+  writeFileSync(`${path}.tmp`, output.join('\n'));
+  renameSync(`${path}.tmp`, path);
+  console.log(
+    `[emit] pruned ${skippedEntries} rejected registrations and ${skippedPoolRows} pool rows -> ${path}`,
+  );
+}
+
+if (PRUNE_ONLY) {
+  pruneExistingGeneratedManifest(OUT);
+  process.exit(0);
+}
 
 // Words that mean the mesh ships holding a weapon -> NPC/enemy only, per directive:
 // "IF they already are holding a weapon then they are an npc / enemy character asset only".
@@ -118,7 +172,7 @@ function poolFor(kind, realm) {
 // that held it and nothing else.
 function armExists(url) {
   const rel = url.startsWith('/cr-realms/') ? url.slice('/cr-realms/'.length) : url;
-  return existsSync(`/opt/cr-realms-store/${rel}`);
+  return existsSync(join(STORE, rel));
 }
 // Filtering is per-pool, not per-body: 1,100+ bodies share a handful of pools,
 // and re-stat'ing 300 files for each of them is minutes of pointless syscalls.
@@ -131,7 +185,6 @@ function livePool(pool) {
   }
   return hit;
 }
-const ARM_PICKS_PATH = '/opt/cryptic-realm/tmp/arm_picks.json';
 const ARM_PICKS = existsSync(ARM_PICKS_PATH)
   ? JSON.parse(readFileSync(ARM_PICKS_PATH, 'utf8'))
   : {};
@@ -205,7 +258,7 @@ for (const realm of realms.sort()) {
   const kept = [];
   for (const f of files) {
     const key = f.replace(/\.glb$/, '');
-    if (rejects.has(key)) continue;
+    if (rejects.has(key) || isPermanentlyRejectedRealmBodyKey(key)) continue;
     const meta = byKey.get(key);
     // Emit ONLY bodies this pipeline produced. Reading the store (which is what
     // makes the url check race-free) also exposes the hand-curated GLBs that
@@ -254,7 +307,8 @@ for (const realm of realms.sort()) {
 const staged = new Set(out.map((e) => e.key));
 for (const e of out) {
   for (const r of e.realms.length ? e.realms : [e.realm]) {
-    (familyKeys[r] ??= []).push(e);
+    familyKeys[r] ??= [];
+    familyKeys[r].push(e);
   }
 }
 // Realms whose theme the lexicon barely matches would otherwise ship EMPTY, which
@@ -401,7 +455,7 @@ for (let i = 0; i < 60; i++) {
 }
 if (lockFd === null) {
   console.error(
-    `[emit] could not take ${LOCK} after 2 minutes — another emit is running; refusing to clobber it`,
+    `[emit] could not take ${LOCK} after 2 minutes: another emit is running; refusing to clobber it`,
   );
   process.exit(3);
 }

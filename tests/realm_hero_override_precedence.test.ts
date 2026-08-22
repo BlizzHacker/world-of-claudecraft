@@ -16,7 +16,7 @@ describe('realm hero body override precedence', () => {
   it('keeps a selected expanded hero distinct from its shared mechanical class', () => {
     setBodyOverrides('infernal', {
       'class:shaman': {
-        assetUrl: '/cr-realms/infernal/infernal_class_witch_doctor.glb',
+        assetUrl: '/cr-realms/infernal/realm_infernal_hero_witch_doctor.glb',
       },
     });
 
@@ -34,13 +34,13 @@ describe('realm hero body override precedence', () => {
         realmHeroId: null,
         cls: 'shaman',
       }),
-    ).toBe('realm_infernal_class_witch_doctor');
+    ).toBe('realm_infernal_hero_witch_doctor');
   });
 
   it('still honors a hero-specific body override', () => {
     setBodyOverrides('infernal', {
       'hero:infernal-hero-monk': {
-        assetUrl: '/cr-realms/infernal/infernal_class_crusader.glb',
+        assetUrl: '/cr-realms/infernal/realm_infernal_hero_crusader.glb',
       },
     });
 
@@ -50,13 +50,13 @@ describe('realm hero body override precedence', () => {
         realmHeroId: 'infernal-hero-monk',
         cls: 'shaman',
       }),
-    ).toBe('realm_infernal_class_crusader');
+    ).toBe('realm_infernal_hero_crusader');
   });
 
   it('resolves a hidden variant through the canonical hero display name', () => {
     setBodyOverrides('infernal', {
       'hero:Sorcerer / Sorceress': {
-        assetUrl: '/cr-realms/infernal/infernal_class_wizard.glb',
+        assetUrl: '/cr-realms/infernal/realm_infernal_hero_wizard.glb',
       },
     });
 
@@ -66,7 +66,7 @@ describe('realm hero body override precedence', () => {
         realmHeroId: 'infernal-hero-sorcerer-m',
         cls: 'mage',
       }),
-    ).toBe('realm_infernal_class_wizard');
+    ).toBe('realm_infernal_hero_wizard');
   });
 
   it('keeps the explicit mech cosmetic ahead of an operator body override in world and roster', () => {

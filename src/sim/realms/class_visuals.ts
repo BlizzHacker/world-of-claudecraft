@@ -20,26 +20,6 @@ export type RealmRuntimeVisualKeyLegacy =
   | 'realm_classic_female_orc'
   | 'realm_classic_treasure_dwarf'
   | 'realm_classic_kitty'
-  | 'realm_infernal_class_warrior'
-  | 'realm_infernal_class_rogue'
-  | 'realm_infernal_class_sorcerer'
-  | 'realm_infernal_class_amazon'
-  | 'realm_infernal_class_barbarian'
-  | 'realm_infernal_class_necromancer'
-  | 'realm_infernal_class_paladin'
-  | 'realm_infernal_class_druid'
-  | 'realm_infernal_class_assassin'
-  | 'realm_infernal_class_demon_hunter'
-  | 'realm_infernal_class_monk'
-  | 'realm_infernal_class_wizard'
-  | 'realm_infernal_class_witch_doctor'
-  | 'realm_infernal_class_crusader'
-  | 'realm_infernal_class_spiritborn'
-  | 'realm_infernal_class_warlock'
-  | 'realm_infernal_class_blood_knight'
-  | 'realm_infernal_class_tempest'
-  // The condemned body bank's 18 keys were removed from this union on
-  // 2026-08-17; see docs/condemned-body-bank.md.
   | 'realm_infernal_durance_humanoid';
 
 function authoredClassPack(realmId: 'classic' | 'dominion' | 'arcane' | 'arcadevoid' | 'fps') {
@@ -82,7 +62,10 @@ const REALM_CLASS_VISUALS: Partial<
     warrior: 'realm_crypticrealm_rune_warden',
     paladin: 'realm_infernal_hero_blood_knight_f',
     hunter: 'realm_infernal_hero_demon_hunter',
-    rogue: 'realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289',
+    // 2026-08-21: repointed off realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289,
+    // the white hooded assassin the audit flagged as a third-party likeness.
+    // This is the realm's own reviewed rogue body and is present in the store.
+    rogue: 'realm_infernal_class_rogue_f',
     priest: 'realm_infernal_violet_necromancer_necromancer_m_019cb976',
     shaman: 'realm_infernal_hero_monk',
     mage: 'realm_infernal_hero_wizard',

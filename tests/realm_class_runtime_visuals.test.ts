@@ -74,6 +74,17 @@ describe('realm class runtime visuals', () => {
     }
   });
 
+  it('mounts the shared meshy24 action bank on every compact realm class pack', () => {
+    for (const realm of ['classic', 'dominion', 'arcane', 'arcadevoid', 'fps'] as const) {
+      for (const cls of CLASSES) {
+        const key = realmClassVisualKey(realm, cls)!;
+        expect(VISUALS[key].animUrls, `${realm}:${cls}`).toContain(
+          '/cr-realms/shared/meshy_clip_bank.glb',
+        );
+      }
+    }
+  });
+
   it('uses one exact authored body in creation, roster, and world for every home realm class', () => {
     for (const realm of THEMED_REALMS) {
       setRealmHostEnv({

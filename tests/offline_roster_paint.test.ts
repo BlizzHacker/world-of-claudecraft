@@ -12,8 +12,8 @@
 //   1. the host table covers both panels and never collides,
 //   2. the roster/faction decision is a function of the REALM, never the panel,
 //   3. a picked card's hero id is what reaches the world, and the world's own
-//      body resolver honours it (and still lets an explicit Female pick win,
-//      per the sex-toggle contract).
+//      body resolver honours it (including a hero-specific sex variant without
+//      collapsing every female hero onto one generic class body).
 import { afterEach, describe, expect, it } from 'vitest';
 import {
   setBodyOverrides,
@@ -34,6 +34,7 @@ import {
 
 const REALM = 'infernal';
 const HERO_URL = '/cr-realms/infernal/test_roster_hero_blood_knight.glb';
+const HERO_FEMALE_URL = '/cr-realms/infernal/test_roster_hero_blood_knight_female.glb';
 const CLASS_URL = '/cr-realms/infernal/test_roster_class_paladin.glb';
 const FEMALE_URL = '/cr-realms/infernal/test_roster_class_paladin_female.glb';
 
@@ -148,14 +149,15 @@ describe('offline pick carries the hero identity into the world', () => {
     expect(VISUALS[withoutHero]?.url).toBe(CLASS_URL);
   });
 
-  it('keeps an explicit Female pick ahead of the hero body', () => {
+  it('keeps a selected hero ahead of generic class sex while honoring its own sex variant', () => {
     setBodyOverrides(REALM, {
       'class:paladin': { assetUrl: CLASS_URL },
       'class:paladin:f': { assetUrl: FEMALE_URL },
       'hero:infernal-hero-blood-knight': { assetUrl: HERO_URL },
+      'hero:infernal-hero-blood-knight:f': { assetUrl: HERO_FEMALE_URL },
     });
-    // The sex toggle must stay honest on a roster card (commit e51760eecf):
-    // Female wins, genderless/male keeps the hero body.
+    // A hero-specific female body wins for this hero. The generic paladin
+    // female row must not replace every female hero with the same model.
     expect(
       VISUALS[
         visualKeyForCharacter({
@@ -165,7 +167,7 @@ describe('offline pick carries the hero identity into the world', () => {
           gender: 'female',
         })
       ]?.url,
-    ).toBe(FEMALE_URL);
+    ).toBe(HERO_FEMALE_URL);
     expect(
       VISUALS[
         visualKeyForCharacter({
@@ -176,5 +178,29 @@ describe('offline pick carries the hero identity into the world', () => {
         })
       ]?.url,
     ).toBe(HERO_URL);
+  });
+
+  it('falls back within the selected hero before consulting generic class sex', () => {
+    setBodyOverrides(REALM, {
+      'class:paladin': { assetUrl: CLASS_URL },
+      'class:paladin:f': { assetUrl: FEMALE_URL },
+      'hero:infernal-hero-blood-knight': { assetUrl: HERO_URL },
+    });
+
+    const femaleHero = visualKeyForCharacter({
+      realm: REALM,
+      realmHeroId: 'infernal-hero-blood-knight',
+      cls: 'paladin',
+      gender: 'female',
+    });
+    expect(VISUALS[femaleHero]?.url).toBe(HERO_URL);
+
+    const genericFemale = visualKeyForCharacter({
+      realm: REALM,
+      realmHeroId: null,
+      cls: 'paladin',
+      gender: 'female',
+    });
+    expect(VISUALS[genericFemale]?.url).toBe(FEMALE_URL);
   });
 });

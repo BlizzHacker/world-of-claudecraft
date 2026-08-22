@@ -21,6 +21,16 @@ const PROVEN_PROPS = [
   'hellmaw_cursed_knight_body', // heraldic dragon-face shield, no body on it
   'realm_infernal_colossal_guardians_abyss_charact_019bc2d0', // limbless maw
   'realm_infernal_colossal_guardians_abyss_charact_019bc320',
+  // The 2026-08-21 reachable-asset audit, one per shape it found.
+  'realm_infernal_muscular_demon_battle_worn_01946207', // giant floating face
+  'realm_arcane_ethereal_guardian_01946212', // bust, no torso or limbs
+  'realm_arcane_weapon_glove_claws_similar_0194ad34', // disembodied clawed hand
+  'realm_classic_alien_predatory_wrath_alien_01942788', // disembodied skull
+  'realm_classic_goblin_boss_head_warhost_01956cfa', // mounted wall plaque
+  'realm_infernal_infernal_majesty_characters_01964448', // skull statue on a pedestal
+  'realm_classic_sorcerer_prison_019aa462', // crystal shard, an inanimate prop
+  'realm_dominion_unexpected_encounter_scifi_fanta_019b99c3', // a whole multi-object scene
+  'realm_infernal_chicken_01940e27', // an animal sitting in the HUMANOID pool
 ];
 
 const GATED_REALMS = ['infernal', 'crypticrealm'] as const;
@@ -32,16 +42,18 @@ describe('non-body asset gate', () => {
 
   it('refuses the props and accepts an ordinary body', () => {
     for (const key of PROVEN_PROPS) expect(isSelectableBody(key)).toBe(false);
-    expect(isSelectableBody('realm_classic_warrior_elder_019880da')).toBe(true);
+    expect(isSelectableBody('realm_classic_warrior_north_character_warrior_019be231')).toBe(true);
     expect(isSelectableBody(null)).toBe(false);
     expect(isSelectableBody(undefined)).toBe(false);
   });
 
   it('never draws a prop out of a pool, even a pool made only of props', () => {
     expect(selectBodyFromPool(PROVEN_PROPS, 'infernal:humanoid:anything')).toBeNull();
-    const mixed = [...PROVEN_PROPS, 'realm_classic_warrior_elder_019880da'];
+    const mixed = [...PROVEN_PROPS, 'realm_classic_warrior_north_character_warrior_019be231'];
     for (let i = 0; i < 200; i++) {
-      expect(selectBodyFromPool(mixed, `seed-${i}`)).toBe('realm_classic_warrior_elder_019880da');
+      expect(selectBodyFromPool(mixed, `seed-${i}`)).toBe(
+        'realm_classic_warrior_north_character_warrior_019be231',
+      );
     }
   });
 
@@ -82,12 +94,18 @@ describe('non-body asset gate', () => {
         },
       });
       for (const id of Object.keys(NPCS)) {
-        const key = visualKeyFor({ kind: 'npc', templateId: id } as unknown as Entity);
+        const key = visualKeyFor({
+          kind: 'npc',
+          templateId: id,
+        } as unknown as Entity);
         expect(NON_BODY_ASSET_KEYS.has(key), `npc:${id} on ${realm} -> ${key}`).toBe(false);
         expect(VISUALS[key], `npc:${id} on ${realm} -> ${key} is unregistered`).toBeDefined();
       }
       for (const id of Object.keys(MOBS)) {
-        const key = visualKeyFor({ kind: 'mob', templateId: id } as unknown as Entity);
+        const key = visualKeyFor({
+          kind: 'mob',
+          templateId: id,
+        } as unknown as Entity);
         expect(NON_BODY_ASSET_KEYS.has(key), `mob:${id} on ${realm} -> ${key}`).toBe(false);
         expect(VISUALS[key], `mob:${id} on ${realm} -> ${key} is unregistered`).toBeDefined();
       }

@@ -30,6 +30,11 @@ interface Expected {
   bodies: Record<string, string>;
 }
 
+// The `bodies` values moved wholesale on 2026-08-21. The reachable-asset audit
+// rejected seven shredded creature bodies, seven of these templates were WEARING
+// one, and the pool is drawn with a modulo, so removing any body re-rolls every
+// unpinned template in that realm. The pins are still the point: they are what
+// makes the next such move visible instead of silent.
 const NEW_BEASTS: Expected[] = [
   {
     id: 'sowfield_marauder',
@@ -38,8 +43,8 @@ const NEW_BEASTS: Expected[] = [
     minLevel: 3,
     maxLevel: 4,
     bodies: {
-      crypticrealm: 'realm_crypticrealm_gorilla_01947fab',
-      infernal: 'realm_infernal_abyssal_charger_0195ec8b',
+      crypticrealm: 'realm_crypticrealm_shadow_drake_sentinel_019677ad',
+      infernal: 'realm_infernal_feral_alien_creature_carnivore_01945133',
       arcane: 'realm_arcane_mystic_war_steed_0197b1c0',
       claudecraft: 'realm_claudecraft_resembles_robust_armored_bear_01981e51',
       fps: 'realm_fps_armored_boar_019cb448',
@@ -53,10 +58,10 @@ const NEW_BEASTS: Expected[] = [
     maxLevel: 5,
     bodies: {
       crypticrealm: 'realm_crypticrealm_gorilla_01947fab',
-      infernal: 'realm_infernal_cragjaw_devourer_019d737f',
+      infernal: 'realm_infernal_rino_019bc334',
       arcane: 'realm_arcane_mystic_war_steed_0197b1c0',
       claudecraft: 'realm_claudecraft_resembles_robust_armored_bear_01981e51',
-      fps: 'realm_fps_armored_majesty_019bc46b',
+      fps: 'realm_fps_extremely_frilled_dragon_lizard_0193e6b8',
     },
   },
   {
@@ -66,11 +71,11 @@ const NEW_BEASTS: Expected[] = [
     minLevel: 5,
     maxLevel: 6,
     bodies: {
-      crypticrealm: 'realm_crypticrealm_shadow_drake_sentinel_019677ad',
-      infernal: 'realm_infernal_inferno_rhino_019bc344',
+      crypticrealm: 'realm_crypticrealm_albino_direwolf_01961261',
+      infernal: 'realm_infernal_mechanical_elephant_sentinel_01966355',
       arcane: 'realm_arcane_mystic_war_steed_0197b1c0',
       claudecraft: 'realm_claudecraft_resembles_robust_armored_bear_01981e51',
-      fps: 'realm_fps_extremely_frilled_dragon_lizard_0193e6b8',
+      fps: 'realm_fps_armored_boar_019cb448',
     },
   },
   {
@@ -80,8 +85,8 @@ const NEW_BEASTS: Expected[] = [
     minLevel: 8,
     maxLevel: 9,
     bodies: {
-      crypticrealm: 'realm_crypticrealm_gorilla_01947f6a',
-      infernal: 'realm_infernal_muscular_anthropomorphic_rat_bodie_01949463',
+      crypticrealm: 'realm_crypticrealm_shadow_drake_sentinel_019677ad',
+      infernal: 'realm_infernal_fox_01942ed4',
       arcane: 'realm_arcane_mystic_war_steed_0197b1c0',
       claudecraft: 'realm_claudecraft_resembles_robust_armored_bear_01981e51',
       fps: 'realm_fps_armored_boar_019cb448',
@@ -94,11 +99,11 @@ const NEW_BEASTS: Expected[] = [
     minLevel: 9,
     maxLevel: 10,
     bodies: {
-      crypticrealm: 'realm_crypticrealm_dusk_fiend_019b3419',
-      infernal: 'realm_infernal_emerald_leviathan_019f24be',
+      crypticrealm: 'realm_crypticrealm_sharkhorse_019644f7',
+      infernal: 'realm_infernal_rino_019bc334',
       arcane: 'realm_arcane_creature_has_quadruped_but_0193df71',
       claudecraft: 'realm_claudecraft_resembles_robust_armored_bear_01981e51',
-      fps: 'realm_fps_armored_majesty_019bc46b',
+      fps: 'realm_fps_extremely_frilled_dragon_lizard_0193e6b8',
     },
   },
   {
@@ -108,11 +113,11 @@ const NEW_BEASTS: Expected[] = [
     minLevel: 10,
     maxLevel: 11,
     bodies: {
-      crypticrealm: 'realm_crypticrealm_albino_direwolf_01961261',
-      infernal: 'realm_infernal_crimson_chomper_019649c3',
+      crypticrealm: 'realm_crypticrealm_fox_01942ed4',
+      infernal: 'realm_infernal_gorilla_01947f76',
       arcane: 'realm_arcane_mystic_war_steed_0197b1c0',
       claudecraft: 'realm_claudecraft_resembles_robust_armored_bear_01981e51',
-      fps: 'realm_fps_ironbound_war_elephant_019ef095',
+      fps: 'realm_fps_extremely_frilled_dragon_lizard_0193e6b8',
     },
   },
   {
@@ -122,11 +127,11 @@ const NEW_BEASTS: Expected[] = [
     minLevel: 11,
     maxLevel: 12,
     bodies: {
-      crypticrealm: 'realm_crypticrealm_shadow_drake_sentinel_019677ad',
-      infernal: 'realm_infernal_mechanical_elephant_sentinel_01966355',
+      crypticrealm: 'realm_crypticrealm_ironbound_warboar_019cb457',
+      infernal: 'realm_infernal_emerald_leviathan_019f24be',
       arcane: 'realm_arcane_creature_has_quadruped_but_0193df71',
       claudecraft: 'realm_claudecraft_resembles_robust_armored_bear_01981e51',
-      fps: 'realm_fps_extremely_frilled_dragon_lizard_0193e6b8',
+      fps: 'realm_fps_armored_boar_019cb448',
     },
   },
   {
@@ -136,11 +141,11 @@ const NEW_BEASTS: Expected[] = [
     minLevel: 12,
     maxLevel: 13,
     bodies: {
-      crypticrealm: 'realm_crypticrealm_shadow_drake_sentinel_019677ad',
-      infernal: 'realm_infernal_crimson_bloom_behemoth_019ca160',
+      crypticrealm: 'realm_crypticrealm_sharkhorse_019644f7',
+      infernal: 'realm_infernal_mechanical_elephant_sentinel_01966355',
       arcane: 'realm_arcane_creature_has_quadruped_but_0193df4d',
       claudecraft: 'realm_claudecraft_resembles_robust_armored_bear_01981e51',
-      fps: 'realm_fps_armored_majesty_019bc46b',
+      fps: 'realm_fps_extremely_frilled_dragon_lizard_0193e6b8',
     },
   },
   {
@@ -150,11 +155,11 @@ const NEW_BEASTS: Expected[] = [
     minLevel: 14,
     maxLevel: 15,
     bodies: {
-      crypticrealm: 'realm_crypticrealm_albino_direwolf_01961261',
-      infernal: 'realm_infernal_crimson_charger_0195ec9e',
+      crypticrealm: 'realm_crypticrealm_sharkhorse_019644f7',
+      infernal: 'realm_infernal_emerald_leviathan_019f24be',
       arcane: 'realm_arcane_creature_has_quadruped_but_0193df71',
       claudecraft: 'realm_claudecraft_resembles_robust_armored_bear_01981e51',
-      fps: 'realm_fps_armored_majesty_019bc46b',
+      fps: 'realm_fps_extremely_frilled_dragon_lizard_0193e6b8',
     },
   },
   {
@@ -164,11 +169,11 @@ const NEW_BEASTS: Expected[] = [
     minLevel: 15,
     maxLevel: 16,
     bodies: {
-      crypticrealm: 'realm_crypticrealm_shadow_drake_sentinel_019677ad',
+      crypticrealm: 'realm_crypticrealm_albino_direwolf_01961261',
       infernal: 'realm_infernal_fox_01942ed5',
       arcane: 'realm_arcane_creature_has_quadruped_but_0193df71',
       claudecraft: 'realm_claudecraft_resembles_robust_armored_bear_01981e51',
-      fps: 'realm_fps_extremely_frilled_dragon_lizard_0193e6b8',
+      fps: 'realm_fps_armored_boar_019cb448',
     },
   },
   {
@@ -178,11 +183,11 @@ const NEW_BEASTS: Expected[] = [
     minLevel: 16,
     maxLevel: 17,
     bodies: {
-      crypticrealm: 'realm_crypticrealm_gorilla_01947fab',
-      infernal: 'realm_infernal_zombear_rampage_019c1c1c',
+      crypticrealm: 'realm_crypticrealm_ironbound_warboar_019cb457',
+      infernal: 'realm_infernal_crimson_charger_0195ec9b',
       arcane: 'realm_arcane_creature_has_quadruped_but_0193df71',
       claudecraft: 'realm_claudecraft_resembles_robust_armored_bear_01981e51',
-      fps: 'realm_fps_extremely_frilled_dragon_lizard_0193e6b8',
+      fps: 'realm_fps_armored_boar_019cb448',
     },
   },
   {
@@ -192,8 +197,8 @@ const NEW_BEASTS: Expected[] = [
     minLevel: 17,
     maxLevel: 18,
     bodies: {
-      crypticrealm: 'realm_crypticrealm_gorilla_01947fab',
-      infernal: 'realm_infernal_dusk_fiend_019b3419',
+      crypticrealm: 'realm_crypticrealm_shadow_drake_sentinel_019677ad',
+      infernal: 'realm_infernal_feral_alien_creature_carnivore_01945133',
       arcane: 'realm_arcane_creature_has_quadruped_but_0193df71',
       claudecraft: 'realm_claudecraft_resembles_robust_armored_bear_01981e51',
       fps: 'realm_fps_armored_boar_019cb448',
@@ -206,11 +211,11 @@ const NEW_BEASTS: Expected[] = [
     minLevel: 18,
     maxLevel: 19,
     bodies: {
-      crypticrealm: 'realm_crypticrealm_dusk_fiend_019b3419',
-      infernal: 'realm_infernal_fox_01942ed0',
+      crypticrealm: 'realm_crypticrealm_sharkhorse_019644f7',
+      infernal: 'realm_infernal_cerberus_massive_muscular_dog_01949471',
       arcane: 'realm_arcane_creature_has_quadruped_but_0193df4d',
       claudecraft: 'realm_claudecraft_resembles_robust_armored_bear_01981e51',
-      fps: 'realm_fps_armored_majesty_019bc46b',
+      fps: 'realm_fps_extremely_frilled_dragon_lizard_0193e6b8',
     },
   },
   {
@@ -220,11 +225,11 @@ const NEW_BEASTS: Expected[] = [
     minLevel: 18,
     maxLevel: 19,
     bodies: {
-      crypticrealm: 'realm_crypticrealm_gorilla_01947fab',
-      infernal: 'realm_infernal_behemoth_roar_019b8b3a',
+      crypticrealm: 'realm_crypticrealm_albino_direwolf_01961261',
+      infernal: 'realm_infernal_gorilla_01947f6a',
       arcane: 'realm_arcane_creature_has_quadruped_but_0193df4d',
       claudecraft: 'realm_claudecraft_resembles_robust_armored_bear_01981e51',
-      fps: 'realm_fps_extremely_frilled_dragon_lizard_0193e6b8',
+      fps: 'realm_fps_armored_boar_019cb448',
     },
   },
 ];
@@ -443,14 +448,20 @@ describe('pool-bodied beasts: body selection', () => {
     // collapse the spread back down.
     const pooled = ['mire_prowler', 'ridge_stalker', ...NEW_IDS];
     // Distinct bodies a player can now meet, per realm. Everything but infernal
-    // is its whole staged roster; infernal's roster is 31 deep, so 16 is what a
+    // is its whole staged roster; infernal's roster is 27 deep, so 12 is what a
     // 16-template hash spread reaches.
+    //
+    // These moved on 2026-08-21. The reachable-asset audit rejected seven
+    // shredded creature bodies, and this pool is drawn with a MODULO, so the
+    // divisor changed for every unpinned template. fps drops hardest (4 to 2):
+    // two of its four staged quadrupeds were shredded, so 2 is the honest depth
+    // of that realm's intact creature roster, not a spread regression.
     const REACH: Record<string, number> = {
-      crypticrealm: 6,
-      infernal: 16,
+      crypticrealm: 7,
+      infernal: 12,
       arcane: 3,
       claudecraft: 1,
-      fps: 4,
+      fps: 2,
     };
     for (const realm of STAGED) {
       const reached = new Set(pooled.map((id) => keyIn(realm, id)));
@@ -459,9 +470,15 @@ describe('pool-bodied beasts: body selection', () => {
         GENERATED_CREATURE_BODIES[realm].length,
       );
     }
-    // The infernal roster is the only one deep enough to give every template its
-    // own body; a collision there means two ids now hash to the same quadruped.
-    expect(new Set(NEW_IDS.map((id) => keyIn('infernal', id))).size).toBe(NEW_IDS.length);
+    // The infernal roster is the only one deep enough (27 bodies for 14 ids) to
+    // give every template its own body. It used to, exactly; after the 2026-08-21
+    // rejections shifted the modulus four ids now share a body with a sibling.
+    // Depth is not the problem and adding art will not fix it: this pool is drawn
+    // with `pool[hash % pool.length]`, so ANY change to the pool re-rolls it. The
+    // real repair is moving it onto the rendezvous draw the humanoid pool already
+    // uses (selectBodyFromPool in body_shape_gate.ts), where removing a body only
+    // moves the templates that were wearing it.
+    expect(new Set(NEW_IDS.map((id) => keyIn('infernal', id))).size).toBeGreaterThanOrEqual(10);
   });
 });
 
@@ -488,6 +505,10 @@ describe('pool-bodied beasts: authored content is untouched', () => {
     }
   });
 
+  // Two of these six moved on 2026-08-21 and both moves are the gate working:
+  // ridge_stalker was wearing realm_fps_ironbound_war_elephant_019ef095, a
+  // shredded mesh, and mire_prowler's infernal pick shifted with the modulus
+  // when the four rejected infernal creature bodies left the pool.
   it('leaves the pre-existing pool beasts on the bodies they already had', () => {
     expect(keyIn('crypticrealm', 'mire_prowler')).toBe(
       'realm_crypticrealm_shadow_drake_sentinel_019677a5',
@@ -495,14 +516,14 @@ describe('pool-bodied beasts: authored content is untouched', () => {
     expect(keyIn('crypticrealm', 'ridge_stalker')).toBe(
       'realm_crypticrealm_shadow_drake_sentinel_019677ad',
     );
-    expect(keyIn('infernal', 'mire_prowler')).toBe('realm_infernal_rino_019bc334');
-    expect(keyIn('infernal', 'ridge_stalker')).toBe(
-      'realm_infernal_feral_alien_creature_carnivore_01945134',
-    );
+    expect(keyIn('infernal', 'mire_prowler')).toBe('realm_infernal_albino_direwolf_01961261');
+    expect(keyIn('infernal', 'ridge_stalker')).toBe('realm_infernal_fox_01942ed0');
     expect(keyIn('arcane', 'mire_prowler')).toBe(
       'realm_arcane_creature_has_quadruped_but_0193df71',
     );
-    expect(keyIn('fps', 'ridge_stalker')).toBe('realm_fps_ironbound_war_elephant_019ef095');
+    expect(keyIn('fps', 'ridge_stalker')).toBe(
+      'realm_fps_extremely_frilled_dragon_lizard_0193e6b8',
+    );
   });
 
   // Stat pins for every authored beast, so "added content" can never quietly

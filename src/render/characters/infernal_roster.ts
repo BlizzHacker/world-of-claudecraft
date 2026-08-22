@@ -21,10 +21,6 @@
  * Registration and the two rig families are handled in manifest.ts - the four
  * townswomen are meshy24 and need the shared clip bank wired explicitly.
  */
-const ELDER_WHITE = 'realm_crypticrealm_village_elder_white_robe_019521ee';
-const ELDER_BROWN = 'realm_crypticrealm_village_elder_brown_robe_01952165';
-const TOWNSMAN_TAN = 'realm_crypticrealm_townsman_tan_trenchcoat_01944c9a5744';
-const TOWNSMAN_BROWN = 'realm_crypticrealm_townsman_brown_trenchcoat_01944c9abf1e';
 const WOMAN_WORKER = 'realm_crypticrealm_townswoman_practical_monk_f';
 const WOMAN_GOWN = 'realm_crypticrealm_townswoman_robed_priest_f';
 const WOMAN_HOODED = 'realm_crypticrealm_townswoman_hooded_mage_f';
@@ -35,49 +31,30 @@ const CRAFTSMAN = 'realm_crypticrealm_craftsman_warrior_monk_019ee5e1';
 /**
  * The rotation the hash draws from for any NPC without an explicit pin.
  *
- * Eight bodies, up from the condemned bank's four, and deliberately only the
- * GENERIC townsfolk: the guard and the craftsman are role-specific and would
- * read wrong on a random villager, so they are pinned below instead of left to
- * the hash. Four men and four women, two of them elders, so a crowd reads as a
- * town rather than as one man repeated.
+ * Five bodies, and deliberately only ones a random villager can wear: the
+ * armored woman is role-specific and would read wrong on a shopkeeper, so she
+ * is pinned below instead of left to the hash.
+ *
+ * Three bodies that used to sit here are gone, and none of them for taste. The
+ * two trenchcoat townsmen 404 (the GLBs are in neither the store nor staging),
+ * and the two village elders are the "NPC heads too wide" the operator was
+ * looking at: their crown band measures 0.256 of figure height against 0.085 to
+ * 0.130 for everyone else in this bank, and normalisation fits a body by TOTAL
+ * height, so the oversized head ships at full size. CRAFTSMAN is promoted out
+ * of the role-only pins to keep a male body in the rotation at all; it measures
+ * 0.089 and is the one proven male civilian left.
  */
 export const CIVILIAN_VISUAL_KEYS = [
-  ELDER_WHITE,
-  ELDER_BROWN,
-  TOWNSMAN_TAN,
-  TOWNSMAN_BROWN,
   WOMAN_WORKER,
   WOMAN_GOWN,
   WOMAN_HOODED,
   WOMAN_SCOUT,
-] as const;
-
-/**
- * The playable class bank is a separate problem from the civilian one. These
- * keys are still registered and still selectable as hero cards, but no class
- * table may point at one.
- *
- * Wade's body-by-body audit of this list moved VERBATIM to
- * docs/condemned-body-bank.md when the condemned bank was purged.
- */
-export const INFERNAL_DEFECTIVE_CLASS_BODY_KEYS = [
-  'realm_infernal_class_sorcerer',
-  'realm_infernal_class_assassin',
-  'realm_infernal_class_warlock',
-  'realm_infernal_class_wizard',
-  'realm_infernal_class_amazon',
-  'realm_infernal_class_paladin',
-  'realm_infernal_class_necromancer',
-  'realm_infernal_class_crusader',
-  'realm_infernal_class_tempest',
-  'realm_infernal_class_barbarian',
-  'realm_infernal_class_druid',
-  'realm_infernal_class_spiritborn',
+  CRAFTSMAN,
 ] as const;
 
 export type CivilianVisualKey = (typeof CIVILIAN_VISUAL_KEYS)[number];
-/** Any body a townsperson may wear: the rotation plus the two role-only bodies. */
-type TownBodyKey = CivilianVisualKey | typeof TOWN_GUARD | typeof CRAFTSMAN;
+/** Any body a townsperson may wear: the rotation plus the one role-only body. */
+type TownBodyKey = CivilianVisualKey | typeof TOWN_GUARD;
 
 /**
  * Explicit body per role, so intent survives the next time the bank changes.
@@ -87,81 +64,81 @@ type TownBodyKey = CivilianVisualKey | typeof TOWN_GUARD | typeof CRAFTSMAN;
  * clearest case, where a smith, a weaver, a cook and a tanner all stand within
  * sight of each other.
  *
- *   ELDER_WHITE / ELDER_BROWN  keepers of records, sages, long-settled trades
- *   TOWNSMAN_TAN / _BROWN      general men: counters, yards, road jobs
  *   WOMAN_WORKER               physical trades
  *   WOMAN_GOWN                 hosts, front-of-house
- *   WOMAN_HOODED               scholarly women
+ *   WOMAN_HOODED               scholarly women, records and rites
  *   WOMAN_SCOUT                anyone on the road or watching a boundary
  *   TOWN_GUARD                 militia and named authority
- *   CRAFTSMAN                  forge and workshop
+ *   CRAFTSMAN                  forge and workshop, and every other man in town
  *
  * KNOWN GAPS, deliberately not faked (generation queued): there is no blacksmith
- * with an apron, no dockhand and no municipal militia body. CRAFTSMAN stands in
- * at the forge and TOWN_GUARD - the only guard body, and female - carries every
- * militia role, so the three authority figures repeat. That repetition is
- * visible and intended; substituting a necromancer or a bare-chested warlord to
- * avoid it is the exact fault this purge exists to end.
+ * with an apron, no dockhand, no municipal militia body, and since the elders
+ * were rejected on 2026-08-21 no second male body of any kind. CRAFTSMAN stands
+ * in at the forge, at the counter and in the chapel, and TOWN_GUARD - the only
+ * guard body, and female - carries every militia role, so both repeat heavily.
+ * That repetition is visible and intended; substituting a necromancer, a
+ * bare-chested warlord, or a chibi-headed elder to avoid it is the exact fault
+ * this purge exists to end.
  */
 const NPC_ROLE_VISUALS: Record<string, TownBodyKey> = {
   // --- authority and militia ---------------------------------------------------
   marshal_redbrook: TOWN_GUARD,
   captain_thessaly: TOWN_GUARD,
   warden_fenwick: TOWN_GUARD,
-  skirmish_footman: TOWNSMAN_BROWN,
+  skirmish_footman: TOWN_GUARD,
   skirmish_builder: CRAFTSMAN,
-  mercenary_kael: TOWNSMAN_BROWN,
-  pit_master_grott: TOWNSMAN_BROWN,
+  mercenary_kael: CRAFTSMAN,
+  pit_master_grott: CRAFTSMAN,
 
   // --- forge and workshop ------------------------------------------------------
   smith_haldren: CRAFTSMAN,
   armorer_hode: CRAFTSMAN,
   toolmaster_gethin: CRAFTSMAN,
   forgemistress_darva: WOMAN_WORKER,
-  foreman_odell: TOWNSMAN_BROWN,
-  wren_saddleworth: TOWNSMAN_TAN,
-  stable_master_wren: TOWNSMAN_TAN,
+  foreman_odell: CRAFTSMAN,
+  wren_saddleworth: WOMAN_SCOUT,
+  stable_master_wren: WOMAN_SCOUT,
 
   // --- counters and trade ------------------------------------------------------
-  the_merchant: TOWNSMAN_TAN,
-  trader_wilkes: ELDER_BROWN,
-  interior_merchant: TOWNSMAN_TAN,
-  provisioner_hale: ELDER_BROWN,
+  the_merchant: CRAFTSMAN,
+  trader_wilkes: WOMAN_GOWN,
+  interior_merchant: WOMAN_GOWN,
+  provisioner_hale: WOMAN_WORKER,
   quartermaster_bree: WOMAN_WORKER,
   realtor_maribel: WOMAN_GOWN,
-  bursar_fernando: TOWNSMAN_TAN,
+  bursar_fernando: CRAFTSMAN,
   interior_innkeeper: WOMAN_GOWN,
-  interior_villager: TOWNSMAN_BROWN,
-  card_master: TOWNSMAN_TAN,
+  interior_villager: WOMAN_WORKER,
+  card_master: WOMAN_GOWN,
 
   // --- remedies and rites ------------------------------------------------------
   apothecary_lin: WOMAN_HOODED,
   herbalist_yara: WOMAN_WORKER,
   alchemist_sable: WOMAN_HOODED,
   spirit_healer: WOMAN_GOWN,
-  brother_halven: ELDER_WHITE,
-  brother_halven_marsh: ELDER_WHITE,
-  cainhurst_sage: ELDER_WHITE,
-  loremaster_caddis: ELDER_WHITE,
+  brother_halven: CRAFTSMAN,
+  brother_halven_marsh: CRAFTSMAN,
+  cainhurst_sage: WOMAN_HOODED,
+  loremaster_caddis: WOMAN_HOODED,
 
   // --- records -----------------------------------------------------------------
-  chronicler_saul: ELDER_BROWN,
-  chronicler_osric_fenn: ELDER_WHITE,
+  chronicler_saul: WOMAN_HOODED,
+  chronicler_osric_fenn: CRAFTSMAN,
   chronicler_edda_hartwell: WOMAN_HOODED,
 
   // --- road, water and boundary ------------------------------------------------
   huntress_verr: WOMAN_SCOUT,
   scout_maren: WOMAN_SCOUT,
   scout_maren_highwatch: WOMAN_SCOUT,
-  tidewatcher_ondrel: TOWNSMAN_BROWN,
-  fisherman_brandt: TOWNSMAN_BROWN,
-  race_marshal_pip: TOWNSMAN_TAN,
-  groundskeeper_bram: ELDER_BROWN,
+  tidewatcher_ondrel: WOMAN_SCOUT,
+  fisherman_brandt: CRAFTSMAN,
+  race_marshal_pip: TOWN_GUARD,
+  groundskeeper_bram: WOMAN_SCOUT,
 
   // --- Eastbrook townsfolk -----------------------------------------------------
   weaver_ottilie: WOMAN_HOODED,
   cook_marlow: WOMAN_WORKER,
-  tanner_briggs: TOWNSMAN_BROWN,
+  tanner_briggs: CRAFTSMAN,
 };
 
 /**
@@ -192,13 +169,21 @@ const HOSTILE_HUMANOID_KEYS = [
   'hellmaw_sigilbound_body',
 ] as const;
 
+/**
+ * hellmaw_spectre_body was dropped from this rotation on 2026-08-21.
+ *
+ * The reachable-asset audit rendered it: it is a FOUR-LEGGED flaming unicorn,
+ * and this rotation bodies BIPEDAL undead in all nine realms, so it was the
+ * single widest-reaching wrong-shape body in the game (17 template rows). The
+ * five that remain are all upright skeletons. Rendezvous hashing means dropping
+ * it re-rolls only the templates that were wearing it.
+ */
 export const INFERNAL_UNDEAD_VISUAL_KEYS = [
   'realm_cryptic_bone_herald',
   'skel_warrior',
   'skel_rogue',
   'skel_mage',
   'skel_golem',
-  'hellmaw_spectre_body',
 ] as const;
 
 function fnv1a(value: string): number {
@@ -240,12 +225,10 @@ function stablePick<T extends string>(value: string, keys: readonly T[]): T {
 
 export function infernalNpcVisualKey(templateId: string): TownBodyKey {
   // Brother Aldric recurs in every hub under suffixed ids and must stay one
-  // recognisable man rather than re-rolling per hub.
-  if (templateId.startsWith('brother_aldric')) return ELDER_WHITE;
-  return (
-    NPC_ROLE_VISUALS[templateId] ??
-    stablePick(templateId, CIVILIAN_VISUAL_KEYS)
-  );
+  // recognisable man rather than re-rolling per hub. He wore ELDER_WHITE until
+  // that body was rejected; CRAFTSMAN is the only male civilian left.
+  if (templateId.startsWith('brother_aldric')) return CRAFTSMAN;
+  return NPC_ROLE_VISUALS[templateId] ?? stablePick(templateId, CIVILIAN_VISUAL_KEYS);
 }
 
 export function infernalOpponentVisualKey(

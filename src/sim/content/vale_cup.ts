@@ -36,7 +36,6 @@ import type { KnownAbility } from './classes';
  * that ever stops holding, this becomes an entity flag and a synced field.
  */
 export const VC_BOT_BODY_KEYS = [
-  'realm_classic_warrior_elder_019880da',
   'realm_classic_warrior_north_character_warrior_019be231',
   'realm_classic_desert_warrior_019b8b6a',
 ] as const;

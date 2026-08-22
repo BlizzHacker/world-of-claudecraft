@@ -54,20 +54,18 @@ describe('Infernal visual roster', () => {
   it('assigns the full starter cast to varied authored humans without KayKit or elves', () => {
     const keys = STARTER_HUMANS.map((id) => infernalNpcVisualKey(id));
 
-    // RAISED BACK. The condemned bank is gone and the civilian rotation is eight
-    // real townspeople, so the starter cast no longer collapses onto three
-    // repeated men. This is the variety floor the old note kept asking for.
-    expect(new Set(keys).size).toBeGreaterThanOrEqual(5);
+    // The condemned bank is gone and the civilian rotation is five reviewed
+    // townspeople, so the starter cast no longer collapses onto three repeated
+    // men. Held at 4 rather than 5 since the two chibi-headed village elders
+    // were rejected on 2026-08-21: the bank is one body smaller and the guard
+    // is the only role-only body left.
+    expect(new Set(keys).size).toBeGreaterThanOrEqual(4);
     for (const key of keys) {
-      // The rotation plus the two role-only bodies: a guard and a craftsman,
-      // kept out of the hash on purpose so they never land on a random villager
-      // but legitimately named by the role pins.
+      // The rotation plus the one role-only body, the guard, kept out of the
+      // hash on purpose so she never lands on a random villager but is
+      // legitimately named by the role pins.
       expect(
-        [
-          ...CIVILIAN_VISUAL_KEYS,
-          'realm_crypticrealm_town_guard_female_armored_019875c0',
-          'realm_crypticrealm_craftsman_warrior_monk_019ee5e1',
-        ],
+        [...CIVILIAN_VISUAL_KEYS, 'realm_crypticrealm_town_guard_female_armored_019875c0'],
         key,
       ).toContain(key);
       expect(key).not.toMatch(/npc_|elf|orc|demon/i);
@@ -75,7 +73,7 @@ describe('Infernal visual roster', () => {
     // Brother Aldric recurs in every hub under suffixed ids, so he is pinned by
     // prefix rather than hashed - one recognisable man across all of them.
     expect(infernalNpcVisualKey('brother_aldric_raid')).toBe(
-      'realm_crypticrealm_village_elder_white_robe_019521ee',
+      'realm_crypticrealm_craftsman_warrior_monk_019ee5e1',
     );
     // An id nobody has pinned still lands on a real townsperson.
     expect(infernalNpcVisualKey('a_future_infernal_civilian')).toMatch(
@@ -83,25 +81,23 @@ describe('Infernal visual roster', () => {
     );
   });
 
-  it('gives the nine runtime classes bodies that survived the render audit', () => {
+  it('gives all nine runtime classes distinct published full-size bodies', () => {
     const keys = CLASSES.map((cls) => realmClassVisualKey('Infernal', cls));
 
-    // Was one distinct body per class. Seven of the nine pointed at a body that
-    // fails in motion - a held T-pose, a hand with no arm weight, feet torn into
-    // planks - so the nine now share the five that passed. RAISE THIS BACK to
-    // CLASSES.length once the class bank is repaired; the distinctness rule is
-    // the product intent and this number is the debt against it.
-    expect(new Set(keys).size).toBeGreaterThanOrEqual(5);
+    expect(new Set(keys).size).toBe(CLASSES.length);
     for (const key of keys) {
-      expect(key).toMatch(/^realm_infernal_class_/);
-      // This guard is a NAME check standing in for "no elf/orc/demon body", so
-      // it cannot tell a species from an archetype. "Demon Hunter" is a hunter
-      // OF demons - a canonical entry in INFERNAL_HERO_CLASSES with a human
-      // body - and it is one of only three class bodies that survived the
-      // 2026-08-08 render audit, so it is named here rather than cast out.
-      if (key !== 'realm_infernal_class_demon_hunter') {
-        expect(key).not.toMatch(/(?:^|_)(?:elf|orc|demon)(?:_|$)/i);
-      }
+      expect(key).toBeTruthy();
+      const visual = VISUALS[key!];
+      expect(visual, key!).toBeTruthy();
+      expect(visual.url, key!).toMatch(/^\/cr-realms\//);
+      expect(visual.url, key!).not.toMatch(/kaykit|models\/chars|claudecraft/i);
+      // The UNSUFFIXED half of this prefix is the condemned miniature/chibi
+      // bank; the `_f` half is the nine reviewed variant bodies that survived
+      // the same audit and are legitimately selectable (the rogue is one of
+      // them). Infernal may deliberately borrow a proven human body from Cryptic
+      // Realm, but it may never fall back to the condemned bank or a stock
+      // ClaudeCraft body.
+      expect(key, key!).not.toMatch(/^realm_infernal_class_(?!\w+_f$)/);
     }
   });
 
@@ -144,7 +140,9 @@ describe('Infernal visual roster', () => {
       ]);
       for (const key of new Set(keys)) expect(pool.has(key), `${realm}:${key}`).toBe(true);
       for (const key of keys) {
-        expect(key, `${realm}:${key}`).toMatch(/^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/);
+        expect(key, `${realm}:${key}`).toMatch(
+          /^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/,
+        );
         expect(VISUALS[key], `${realm}:${key}`).toBeTruthy();
       }
     }

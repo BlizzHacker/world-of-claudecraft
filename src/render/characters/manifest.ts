@@ -2,15 +2,19 @@
 // NPC id, druid/polymorph form) onto a rigged glTF asset + clip names + kit.
 // Pure data + dispatch — no three.js imports, no loading.
 
+import {
+  isPermanentlyRejectedRealmBodyFile,
+  isPermanentlyRejectedRealmBodyKey,
+} from '../../../scripts/realm_assets/catalog_policy.mjs';
 import { MECH_CHROMAS, type MechChroma } from '../../sim/content/skins';
 import { offhandMirrorsWeaponSkin } from '../../sim/content/weapon_skin_rules';
 import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
-import { ITEMS, MOBS } from '../../sim/data';
 import {
   bodySkinAssetUrl,
   bodySkinOverrideKeys,
   isTieredSkinBody,
 } from '../../sim/cosmetics/body_skins';
+import { ITEMS, MOBS } from '../../sim/data';
 import { realmClassVisualKey, resolveRealmCharacterVisual } from '../../sim/realms/class_visuals';
 import {
   infernalCharacterSelection,
@@ -32,8 +36,8 @@ import {
   infernalOpponentVisualKey,
   infernalUndeadVisualKey,
 } from './infernal_roster';
-import { GENERATED_REALM_BODIES, GENERATED_VISUALS } from './manifest.generated';
 import { GENERATED_MACHINE_VISUALS } from './machines.generated';
+import { GENERATED_REALM_BODIES, GENERATED_VISUALS } from './manifest.generated';
 import { isBoundedResidency } from './residency';
 
 export interface EmoteClipSpec {
@@ -507,12 +511,10 @@ const meshyBiped = (
   jump: opts.jump ?? 'Basic_Jump',
 });
 
-// The meshy24 clip map. The bodies it was originally written for - the condemned
-// civilian bank - are gone, and it now serves the realm_infernal_class_* bodies,
-// which were never part of that bank. Wade's paragraph describing the rebuild
-// pipeline moved VERBATIM to docs/condemned-body-bank.md when the bank was
-// purged, because the script it names no longer exists: it regenerated the whole
-// bank, which was a way back in that a source string-ban cannot see.
+// The meshy24 clip map. The rejected early Infernal body banks are gone; this
+// now serves the audited hero/civilian bodies and the compact per-realm class
+// packs. Wade's paragraph describing the old rebuild pipeline moved VERBATIM to
+// docs/condemned-body-bank.md when that bank was purged.
 //
 // What still holds, and why this map is shaped the way it is: these bodies carry
 // only a handful of baked takes, so the shared bank fills everything they leave
@@ -575,16 +577,6 @@ const WEAPONS = 'models/weapons';
 const MOUNTS_DIR = 'models/mounts';
 const REALM_MODELS = '/cr-realms';
 
-function infernalHuman(fileName: string, height = 2.15): VisualDef {
-  return {
-    url: `${REALM_MODELS}/infernal/${fileName}`,
-    animUrls: [MESHY_CLIP_BANK_URL],
-    height,
-    clips: INFERNAL_HUMAN_CLIPS,
-    lazyPreload: true,
-  };
-}
-
 /**
  * A pipeline-published class body with its complete embedded action pack.
  * These files are the small, production-safe nine-body packs emitted into
@@ -596,6 +588,7 @@ function infernalHuman(fileName: string, height = 2.15): VisualDef {
 function authoredRealmClassBody(realm: string, fileName: string, height = 2.2): VisualDef {
   return {
     url: `${REALM_MODELS}/${realm}/${fileName}`,
+    animUrls: [MESHY_CLIP_BANK_URL],
     height,
     clips: INFERNAL_HUMAN_CLIPS,
     lazyPreload: true,
@@ -1284,7 +1277,11 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     show: [],
     attach: [
       { url: `${WEAPONS}/wand.glb`, bone: 'handslot.r' },
-      { url: `${WEAPONS}/spellbook_open.glb`, bone: 'handslot.l', gripRef: 'Spellbook_open' },
+      {
+        url: `${WEAPONS}/spellbook_open.glb`,
+        bone: 'handslot.l',
+        gripRef: 'Spellbook_open',
+      },
     ],
     weaponSlots: [0], // mainhand (wand) swaps; spellbook offhand stays
     // Faint violet lift only, to tell this apart from the mage/priest models
@@ -1397,27 +1394,6 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     },
     lazyPreload: true,
   },
-  // Playable Infernal archetypes use one distinct, full-size body each. They
-  // are deliberately separate from the civilian bank below: changing a class
-  // can never turn every smith or merchant into that class body.
-  realm_infernal_class_warrior: infernalHuman('infernal_class_warrior.glb', 2.3),
-  realm_infernal_class_rogue: infernalHuman('infernal_class_rogue.glb', 2.2),
-  realm_infernal_class_sorcerer: infernalHuman('infernal_class_sorcerer.glb', 2.2),
-  realm_infernal_class_amazon: infernalHuman('infernal_class_amazon.glb', 2.25),
-  realm_infernal_class_barbarian: infernalHuman('infernal_class_barbarian.glb', 2.3),
-  realm_infernal_class_necromancer: infernalHuman('infernal_class_necromancer.glb', 2.2),
-  realm_infernal_class_paladin: infernalHuman('infernal_class_paladin.glb', 2.3),
-  realm_infernal_class_druid: infernalHuman('infernal_class_druid.glb', 2.2),
-  realm_infernal_class_assassin: infernalHuman('infernal_class_assassin.glb', 2.2),
-  realm_infernal_class_demon_hunter: infernalHuman('infernal_class_demon_hunter.glb', 2.2),
-  realm_infernal_class_monk: infernalHuman('infernal_class_monk.glb', 2.2),
-  realm_infernal_class_wizard: infernalHuman('infernal_class_wizard.glb', 2.2),
-  realm_infernal_class_witch_doctor: infernalHuman('infernal_class_witch_doctor.glb', 2.2),
-  realm_infernal_class_crusader: infernalHuman('infernal_class_crusader.glb', 2.3),
-  realm_infernal_class_spiritborn: infernalHuman('infernal_class_spiritborn.glb', 2.25),
-  realm_infernal_class_warlock: infernalHuman('infernal_class_warlock.glb', 2.2),
-  realm_infernal_class_blood_knight: infernalHuman('infernal_class_blood_knight.glb', 2.25),
-  realm_infernal_class_tempest: infernalHuman('infernal_class_tempest.glb', 2.2),
   realm_infernal_hero_blood_knight_f: forgedRealmHero(
     'realm_infernal_hero_blood_knight_f.glb',
     2.2,
@@ -1511,31 +1487,15 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   //                       every realm_crypticrealm_ body - leaving four
   //                       townswomen with no idle, no death and no emotes.
 
+  // The two village elders stood here until 2026-08-21. They are the operator's
+  // "NPC heads too wide": crown band 0.256 of figure height against 0.085 to
+  // 0.130 for every sibling in this block, and a body is normalised by TOTAL
+  // height, so the oversized head arrives at full size. Their registrations are
+  // deleted rather than merely gated, because a registration is what
+  // registerOverrideVisual reuses when an operator override names the same URL.
+  // catalog_policy.mjs carries the ban and the measurements.
+
   // mass_rig 23-joint, full 22-clip vocabulary.
-  realm_crypticrealm_village_elder_white_robe_019521ee: {
-    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_village_elder_white_robe_019521ee.glb`,
-    height: HUMANOID_H,
-    clips: kaykit(['1H_Melee_Attack_Chop']),
-    lazyPreload: true,
-  },
-  realm_crypticrealm_village_elder_brown_robe_01952165: {
-    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_village_elder_brown_robe_01952165.glb`,
-    height: HUMANOID_H,
-    clips: kaykit(['1H_Melee_Attack_Chop']),
-    lazyPreload: true,
-  },
-  realm_crypticrealm_townsman_tan_trenchcoat_01944c9a5744: {
-    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_townsman_tan_trenchcoat_01944c9a5744.glb`,
-    height: HUMANOID_H,
-    clips: kaykit(['1H_Melee_Attack_Chop']),
-    lazyPreload: true,
-  },
-  realm_crypticrealm_townsman_brown_trenchcoat_01944c9abf1e: {
-    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_townsman_brown_trenchcoat_01944c9abf1e.glb`,
-    height: HUMANOID_H,
-    clips: kaykit(['1H_Melee_Attack_Chop']),
-    lazyPreload: true,
-  },
   realm_crypticrealm_town_guard_female_armored_019875c0: {
     url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_town_guard_female_armored_019875c0.glb`,
     height: HUMANOID_H,
@@ -1548,18 +1508,9 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     clips: kaykit(['1H_Melee_Attack_Chop']),
     lazyPreload: true,
   },
-  realm_infernal_cipher_assassin_hooded_red_01942e8f: {
-    url: `${REALM_MODELS}/infernal/realm_infernal_cipher_assassin_hooded_red_01942e8f.glb`,
-    height: HUMANOID_H,
-    clips: kaykit(['1H_Melee_Attack_Slice_Diagonal']),
-    lazyPreload: true,
-  },
-  realm_infernal_village_elder_brown_robe_01952165: {
-    url: `${REALM_MODELS}/infernal/realm_infernal_village_elder_brown_robe_01952165.glb`,
-    height: HUMANOID_H,
-    clips: kaykit(['1H_Melee_Attack_Chop']),
-    lazyPreload: true,
-  },
+  // realm_infernal_village_elder_brown_robe_01952165 was the Infernal alias of
+  // the brown elder above, the same rejected mesh under a second name, and went
+  // with it.
 
   // meshy24, three baked takes each (Walk/Run/Idle). The bank supplies hit,
   // death, cast, jump, sit, swim and the emotes; their own gait is kept.
@@ -1963,17 +1914,20 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   // Several of these PICKTURA exports ship one baked take instead of named
   // locomotion, so those ClipMaps alias that single clip the way
   // realm_classic_kitty does rather than naming clips the GLB lacks.
-  realm_claudecraft_arcane_dragon: claudecraftSingleTake('arcane-dragon_959f8113.glb', 3.4),
-  realm_claudecraft_frost_dragon: claudecraftSingleTake('frostdragon_06cc2f9d.glb', 3.2),
-  realm_claudecraft_polar_bear: claudecraftSingleTake('polar_bear_4d071124.glb', 2.2),
-  realm_claudecraft_blue_beast: claudecraftSingleTake('bluebeast_b30343f9.glb', 2.0),
-  realm_claudecraft_beaver: claudecraftSingleTake('beaver_f5a697cf.glb', 1.1),
-  realm_claudecraft_boar: claudecraftSingleTake('classic-boar_26671af0.glb', 1.3),
-  realm_claudecraft_spine_boar: claudecraftSingleTake('spine-boar_a9e4abad.glb', 1.4),
-  realm_claudecraft_crab: claudecraftSingleTake('crab_e3b8fff8.glb', 1.0),
-  realm_claudecraft_horse: claudecraftSingleTake('horse_493905c2.glb', 2.1),
-  realm_claudecraft_water_dinosaur: claudecraftSingleTake('water-dinosaur-rawr_acffaf83.glb', 2.2),
-  realm_claudecraft_mini_orc: claudecraftBody('mini-orc_895fa3da.glb', 1.5, {
+  realm_claudecraft_arcane_dragon: claudecraftSingleTake('claudcraft__arcane-dragon.glb', 3.4),
+  realm_claudecraft_frost_dragon: claudecraftSingleTake('claudcraft__frostdragon.glb', 3.2),
+  realm_claudecraft_polar_bear: claudecraftSingleTake('claudcraft__polar_bear.glb', 2.2),
+  realm_claudecraft_blue_beast: claudecraftSingleTake('claudcraft__bluebeast.glb', 2.0),
+  realm_claudecraft_beaver: claudecraftSingleTake('claudcraft__beaver.glb', 1.1),
+  realm_claudecraft_boar: claudecraftSingleTake('claudcraft__classic-boar.glb', 1.3),
+  realm_claudecraft_spine_boar: claudecraftSingleTake('claudcraft__spine-boar.glb', 1.4),
+  realm_claudecraft_crab: claudecraftSingleTake('claudcraft__crab.glb', 1.0),
+  realm_claudecraft_horse: claudecraftSingleTake('claudcraft__horse.glb', 2.1),
+  realm_claudecraft_water_dinosaur: claudecraftSingleTake(
+    'claudcraft__water-dinosaur-rawr.glb',
+    2.2,
+  ),
+  realm_claudecraft_mini_orc: claudecraftBody('claudcraft__mini-orc.glb', 1.5, {
     idle: 'Armature|walking_man|baselayer',
     walk: 'Armature|walking_man|baselayer',
     run: 'Armature|walking_man|baselayer',
@@ -1982,7 +1936,7 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     hit: [],
     jump: 'Armature|walking_man|baselayer',
   }),
-  realm_claudecraft_parrot: claudecraftBody('parot-blue_48ee9609.glb', 1.0, {
+  realm_claudecraft_parrot: claudecraftBody('claudcraft__parot-blue.glb', 1.0, {
     idle: 'Thoughtful_Walk',
     walk: 'Walking',
     run: 'Running',
@@ -1990,7 +1944,7 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     death: 'Formal_Bow',
     hit: [],
   }),
-  realm_claudecraft_skeleton_archer: claudecraftBody('skeleton_d7adee4e.glb', HUMANOID_H, {
+  realm_claudecraft_skeleton_archer: claudecraftBody('claudcraft__skeleton.glb', HUMANOID_H, {
     idle: 'Walking',
     walk: 'Walking',
     run: 'Running',
@@ -1998,7 +1952,7 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     death: 'Dead',
     hit: [],
   }),
-  realm_claudecraft_zombie: claudecraftBody('goofy_zombie_42cc51b9.glb', HUMANOID_H, {
+  realm_claudecraft_zombie: claudecraftBody('claudcraft__goofy_zombie.glb', HUMANOID_H, {
     idle: 'Walking',
     walk: 'Walking',
     run: 'Running',
@@ -2006,7 +1960,7 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     death: 'Dead',
     hit: ['BeHit_FlyUp'],
   }),
-  realm_claudecraft_fighting_ghost: claudecraftBody('fighting-ghost_1f46604e.glb', HUMANOID_H, {
+  realm_claudecraft_fighting_ghost: claudecraftBody('claudcraft__fighting-ghost.glb', HUMANOID_H, {
     idle: 'Walking',
     walk: 'Walking',
     run: 'Running',
@@ -2014,19 +1968,15 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     death: 'Walking',
     hit: [],
   }),
-  realm_claudecraft_demon: claudecraftBody(
-    'demon-male-meshy_ai_meshy_merged_animations_f1e842c4.glb',
-    2.4,
-    {
-      idle: 'Walking',
-      walk: 'Walking',
-      run: 'Running',
-      attack: ['Skill_01'],
-      death: 'Walking',
-      hit: [],
-    },
-  ),
-  realm_claudecraft_dark_knight: claudecraftBody('dark-knight_53d5a5c0.glb', 2.3, {
+  realm_claudecraft_demon: claudecraftBody('claudcraft__demon-male-.glb', 2.4, {
+    idle: 'Walking',
+    walk: 'Walking',
+    run: 'Running',
+    attack: ['Skill_01'],
+    death: 'Walking',
+    hit: [],
+  }),
+  realm_claudecraft_dark_knight: claudecraftBody('claudcraft__dark-knight.glb', 2.3, {
     idle: 'Combat_Stance',
     walk: 'Walking',
     run: 'Running',
@@ -2036,7 +1986,7 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     cast: 'Sword_Shout',
     jump: 'Basic_Jump',
   }),
-  realm_claudecraft_dark_wanderer: claudecraftBody('dark-wanderer_01151979.glb', HUMANOID_H, {
+  realm_claudecraft_dark_wanderer: claudecraftBody('claudcraft__dark-wanderer.glb', HUMANOID_H, {
     idle: 'Stand_and_Chat',
     walk: 'Walking',
     run: 'Running',
@@ -2045,19 +1995,15 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     hit: [],
     cast: 'Skill_01',
   }),
-  realm_claudecraft_horned_knight: claudecraftBody(
-    'horned-knight-meshy_ai_meshy_merged_animations_309fa4a3.glb',
-    2.25,
-    {
-      idle: 'Walking',
-      walk: 'Walking',
-      run: 'Running',
-      attack: [],
-      death: 'Walking',
-      hit: [],
-    },
-  ),
-  realm_claudecraft_mini_orc_scout: claudecraftBody('mini-orc2_dd125cdc.glb', 1.5, {
+  realm_claudecraft_horned_knight: claudecraftBody('claudcraft__horned-knight-.glb', 2.25, {
+    idle: 'Walking',
+    walk: 'Walking',
+    run: 'Running',
+    attack: [],
+    death: 'Walking',
+    hit: [],
+  }),
+  realm_claudecraft_mini_orc_scout: claudecraftBody('claudcraft__mini-orc2.glb', 1.5, {
     idle: 'Walking',
     walk: 'Walking',
     run: 'run_fast_2',
@@ -2065,7 +2011,7 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     death: 'Walking',
     hit: [],
   }),
-  realm_claudecraft_mini_elf: claudecraftBody('mini-elf-bearded_89f11a62.glb', 1.5, {
+  realm_claudecraft_mini_elf: claudecraftBody('claudcraft__mini-elf-bearded.glb', 1.5, {
     idle: 'Walking',
     walk: 'Walking',
     run: 'Running',
@@ -2369,7 +2315,10 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     // spread the animal() factory result and override only attack, so the
     // repainted siblings (veiled_stag/gleamstag/veiled_doe/aurelhorn, separate
     // GLB files on the same rig) keep the standing Headbutt/Kick pair.
-    clips: { ...animal(['Attack_Headbutt', 'Attack_Kick']), attack: ['Stag_Attack_Charge'] },
+    clips: {
+      ...animal(['Attack_Headbutt', 'Attack_Kick']),
+      attack: ['Stag_Attack_Charge'],
+    },
     animUrls: [`${CREATURES}/stag_ability_anims.glb`],
     tint: 'entity',
     tintStrength: 0.35,
@@ -2890,7 +2839,10 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     // build_skelboss_anims.mjs, issue #2889). Spread the factory result and
     // override only attack, so skel_mage/delve_skel_varric/rift_ritualist stay
     // on the shared swing.
-    clips: { ...skeletonClips(['2H_Melee_Attack_Chop'], 'Taunt'), attack: ['SkelBoss_Attack'] },
+    clips: {
+      ...skeletonClips(['2H_Melee_Attack_Chop'], 'Taunt'),
+      attack: ['SkelBoss_Attack'],
+    },
     animUrls: [`${ENEMIES}/skelboss_ability_anims.glb`],
     attach: [{ url: `${WEAPONS}/skeleton_staff.glb`, bone: 'handslot.r' }],
     tint: 'entity',
@@ -3070,7 +3022,11 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     show: ['Mage_Hat'],
     attach: [
       { url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' },
-      { url: `${WEAPONS}/spellbook_open.glb`, bone: 'handslot.l', gripRef: 'Spellbook_open' },
+      {
+        url: `${WEAPONS}/spellbook_open.glb`,
+        bone: 'handslot.l',
+        gripRef: 'Spellbook_open',
+      },
     ],
     tint: 'entity',
     tintStrength: 0.55,
@@ -3145,9 +3101,40 @@ const HAND_VISUALS: Record<string, VisualDef> = {
 const MESHY_RIGGED_GENERATED =
   /^realm_infernal_(hero_|meshy_necro_warlord|class_\w+_f$|male_sorcerer$)/;
 
+// The generated module is intentionally treated as untrusted input. An older
+// checked-out artifact or cached pipeline result may still name a body that was
+// permanently rejected after visual review. Filtering both the registry and
+// every pool here makes that stale artifact harmless while the generator policy
+// prevents it from being emitted again.
+const ACTIVE_GENERATED_VISUALS = Object.fromEntries(
+  Object.entries(GENERATED_VISUALS).filter(([key]) => !isPermanentlyRejectedRealmBodyKey(key)),
+);
+const ACTIVE_GENERATED_REALM_BODIES = Object.fromEntries(
+  Object.entries(GENERATED_REALM_BODIES).map(([realm, keys]) => [
+    realm,
+    keys.filter((key) => !isPermanentlyRejectedRealmBodyKey(key)),
+  ]),
+);
+// The quadruped roster gets the same treatment. Its pool is drawn with a
+// MODULO rather than the rendezvous hash, so dropping a body shifts the divisor
+// and would normally re-roll a whole realm; GENERATED_CREATURE_BODY_PINS is
+// what makes it safe, because every template that already had a body keeps it
+// by pin and only the ones that were wearing a rejected body move.
+const ACTIVE_GENERATED_CREATURE_VISUALS = Object.fromEntries(
+  Object.entries(GENERATED_CREATURE_VISUALS).filter(
+    ([key]) => !isPermanentlyRejectedRealmBodyKey(key),
+  ),
+);
+const ACTIVE_GENERATED_CREATURE_BODIES = Object.fromEntries(
+  Object.entries(GENERATED_CREATURE_BODIES).map(([realm, keys]) => [
+    realm,
+    keys.filter((key) => !isPermanentlyRejectedRealmBodyKey(key)),
+  ]),
+);
+
 function generatedVisualCorrections(): Record<string, VisualDef> {
   const out: Record<string, VisualDef> = {};
-  for (const [key, def] of Object.entries(GENERATED_VISUALS)) {
+  for (const [key, def] of Object.entries(ACTIVE_GENERATED_VISUALS)) {
     if (MESHY_RIGGED_GENERATED.test(key)) {
       out[key] = {
         ...def,
@@ -3176,12 +3163,12 @@ function generatedVisualCorrections(): Record<string, VisualDef> {
 }
 
 export const VISUALS: Record<string, VisualDef> = {
-  ...GENERATED_VISUALS,
+  ...ACTIVE_GENERATED_VISUALS,
   ...generatedVisualCorrections(),
   // Quadrupeds bound onto the shipped wolf donor rig (creatures.generated.ts).
   // Same precedence rule as above: generated first, HAND last, so a curated key
   // always wins and re-running the asset pipeline stays safe.
-  ...GENERATED_CREATURE_VISUALS,
+  ...ACTIVE_GENERATED_CREATURE_VISUALS,
   // Arachnids bound onto the arachnid donor rig (arachnids.generated.ts).
   // A separate record because that donor baked a different clip vocabulary;
   // same precedence rule, so HAND_VISUALS still wins over both.
@@ -3255,10 +3242,17 @@ const MOB_KEYS: Record<string, string> = {
   // included, re-tinted gold by her template color) while the dragonkin
   // family fallback (the floating dragonevolved wyrm) stays for the sanctum,
   // temple, rift, and Galecrest dragonkin.
-  drakemaw_broodlord: 'mob_dragonkin_broodlord',
-  cindraleth_maw_matriarch: 'mob_dragonkin_matriarch',
-  dragonkin_broodguard: 'mob_dragonkin_broodguard',
-  dragonkin_whelp: 'mob_dragonkin_whelp',
+  // 2026-08-21: all four brood bodies are PARKED on the family wyrm. The audit
+  // measured them: a ~2-unit mesh bound to a mixamorig skeleton whose bones sit
+  // 65 to 85 units out (bind bounds ~90u), so the Drakelands brood renders as
+  // NOTHING at all today. The floating dragonevolved wyrm the rest of the
+  // family already wears is dragon-adjacent and visible, which beats an
+  // invisible mob. Restore these four the moment the GLBs are re-bound; the
+  // measured gait refs on their defs below are kept for that repair.
+  drakemaw_broodlord: 'mob_dragonkin',
+  cindraleth_maw_matriarch: 'mob_dragonkin',
+  dragonkin_broodguard: 'mob_dragonkin',
+  dragonkin_whelp: 'mob_dragonkin',
   dragonkin_egg: 'mob_dragon_egg',
   // Grubjaw the Glutton: his own body now, not the shared troll stand-in.
   grubjaw: 'mob_grubjaw',
@@ -3341,7 +3335,10 @@ const MOB_KEYS: Record<string, string> = {
   hellmaw_charred_husk: 'hellmaw_husk_body',
   hellmaw_cinder_acolyte: 'hellmaw_acolyte_body',
   hellmaw_ember_behemoth: 'hellmaw_behemoth_body',
-  hellmaw_wailing_spectre: 'hellmaw_spectre_body',
+  // The Wailing Spectre used to name hellmaw_spectre_body, which the 2026-08-21
+  // audit rendered as a four-legged flaming unicorn. mob_ghost is the drifting
+  // wraith rig the Wraithwood already uses, so a spectre is now a spectre.
+  hellmaw_wailing_spectre: 'mob_ghost',
   // Road/hell patrol leader: the approved Dark Paladin body commands the
   // corrupted soldiers instead of inheriting a generic KayKit humanoid.
   hellmaw_cursed_knight: 'realm_infernal_dark_paladin',
@@ -3708,7 +3705,24 @@ function registerOverrideVisual(entry: BodyOverrideEntry): string {
  * class the family has art for.
  */
 function baseEntry(entry: BodyOverrideEntry | undefined): BodyOverrideEntry | undefined {
-  return entry && isTieredSkinBody(entry.assetUrl) ? undefined : entry;
+  const usable = publishableEntry(entry);
+  return usable && isTieredSkinBody(usable.assetUrl) ? undefined : usable;
+}
+
+/**
+ * Drop an override that names a permanently rejected GLB.
+ *
+ * Dropping the key from the registry is NOT enough on this path. An override
+ * carries a URL, and {@link registerOverrideVisual} falls back to synthesizing
+ * an `override_<hash>` def for any URL the manifest does not know, so removing
+ * the real entry would have made the rejected file render through the generic
+ * def instead of not rendering at all. The 2026-08-21 audit found the white
+ * hooded assassin reaching a PLAYER CLASS card exactly this way. Refusing the
+ * entry here instead sends the character down the compiled chain to its own
+ * class body, with no write against the live realm-visuals document.
+ */
+function publishableEntry(entry: BodyOverrideEntry | undefined): BodyOverrideEntry | undefined {
+  return entry && isPermanentlyRejectedRealmBodyFile(entry.assetUrl) ? undefined : entry;
 }
 
 /**
@@ -3755,7 +3769,9 @@ function overrideEntryForCharacter(
   // A tiered skin is resolvable with NO override document: its bodies are
   // compiled into the catalog, so an unlocked look survives a realm-visuals
   // fetch that failed or has not landed yet.
-  const skinned = bodySkinId ? skinEntryFor(map, bodySkinId, cls, gender) : undefined;
+  const skinned = publishableEntry(
+    bodySkinId ? skinEntryFor(map, bodySkinId, cls, gender) : undefined,
+  );
   if (skinned) return skinned;
   if (!map) return undefined;
   const selection = infernalCharacterSelection(realm, realmHeroId ?? null, cls);
@@ -3794,8 +3810,11 @@ export function overrideVisualKeyForEntity(e: Entity): string | null {
   let entry: BodyOverrideEntry | undefined;
   if (e.kind === 'player') {
     const gender =
-      (e as unknown as { modularAppearance?: { gender?: 'male' | 'female' } | null })
-        .modularAppearance?.gender ?? null;
+      (
+        e as unknown as {
+          modularAppearance?: { gender?: 'male' | 'female' } | null;
+        }
+      ).modularAppearance?.gender ?? null;
     entry = overrideEntryForCharacter(
       realm,
       e.realmHeroId,
@@ -3807,9 +3826,9 @@ export function overrideVisualKeyForEntity(e: Entity): string | null {
       (e as unknown as { bodySkinId?: string | null }).bodySkinId ?? null,
     );
   } else if (e.kind === 'npc') {
-    entry = map[`npc:${e.templateId}`];
+    entry = publishableEntry(map[`npc:${e.templateId}`]);
   } else if (e.kind === 'mob') {
-    entry = map[`mob:${e.templateId}`];
+    entry = publishableEntry(map[`mob:${e.templateId}`]);
   } else {
     return null;
   }
@@ -3879,12 +3898,16 @@ export function visualKeyForCharacter(q: CharacterVisualQuery): string {
     q.bodySkinId ?? null,
   );
   if (entry) return registerOverrideVisual(entry);
-  if (q.visualKey && VISUALS[q.visualKey]) return q.visualKey;
+  // The 2D surfaces run the same shape gate the world does. Without this the
+  // roster, the unit frame and the char-select turntable would happily paint a
+  // body {@link visualKeyFor} refuses, which is how a rejected class body kept
+  // showing on the card it had already been pulled from in the world.
+  if (q.visualKey && VISUALS[q.visualKey] && isSelectableBody(q.visualKey)) return q.visualKey;
   // The server omits `vk` for older rows; the compiled per-realm table is the
   // same mapping it would have sent, so the roster never falls back to KayKit
   // just because a character predates the field.
   const compiled = resolveRealmCharacterVisual(realm, q.cls, q.realmHeroId ?? null).visualKey;
-  if (compiled && VISUALS[compiled]) return compiled;
+  if (compiled && VISUALS[compiled] && isSelectableBody(compiled)) return compiled;
   return VISUALS[`player_${q.cls}`] ? `player_${q.cls}` : 'player_warrior';
 }
 
@@ -3933,7 +3956,7 @@ function generatedBodyFor(
   // form re-rolled every template in the realm whenever the pool changed size,
   // which made removing one bad asset a townwide reskin.
   const seed = `${realm}:${family}:${templateId ?? 'anon'}`;
-  return selectBodyFromPool(GENERATED_REALM_BODIES[realm], seed);
+  return selectBodyFromPool(ACTIVE_GENERATED_REALM_BODIES[realm], seed);
 }
 
 /** A generated humanoid that physically belongs to this realm. Some recovered
@@ -3948,7 +3971,7 @@ function realmOwnedGeneratedBodyFor(
   if (isBoundedResidency()) return null;
   if (!family || !GENERATED_POOL_FAMILIES.has(family)) return null;
   const prefix = `/cr-realms/${realm}/`;
-  const pool = (GENERATED_REALM_BODIES[realm] ?? []).filter((key) =>
+  const pool = (ACTIVE_GENERATED_REALM_BODIES[realm] ?? []).filter((key) =>
     VISUALS[key]?.url.startsWith(prefix),
   );
   const seed = `${realm}:${family}:${templateId ?? 'anon'}`;
@@ -4014,7 +4037,7 @@ function generatedCreatureBodyFor(
   // single shared family body.
   if (isBoundedResidency()) return null;
   if (!family || !GENERATED_CREATURE_FAMILIES.has(family)) return null;
-  const pool = GENERATED_CREATURE_BODIES[realm];
+  const pool = ACTIVE_GENERATED_CREATURE_BODIES[realm];
   if (!pool || pool.length === 0) return null;
   // The hash below is taken modulo the pool size, so adding ONE body to a realm
   // re-rolls every mob in it — that is how mire_prowler turned from a drake into
@@ -4132,7 +4155,9 @@ function resolveVisualKeyFor(e: Entity): string {
           spellhound: 'realm_infernal_skullbeast',
           warfiend: 'realm_infernal_horned_demon',
           pyre_colossus: 'realm_infernal_crimson_behemoth',
-          wraithborn: 'hellmaw_spectre_body',
+          // Same 2026-08-21 audit fix as hellmaw_wailing_spectre above: the
+          // wraithborn were wearing a four-legged flaming unicorn.
+          wraithborn: 'mob_ghost',
         };
         return boundDemonBodies[e.templateId] ?? realmFamily ?? 'realm_infernal_horned_demon';
       }
@@ -4201,6 +4226,17 @@ function resolveVisualKeyFor(e: Entity): string {
         realmClassVisualKey(realm, 'warrior') ??
         'mob_bandit'
       );
+    }
+    // ClaudeCraft intentionally keeps its own authored/KayKit cast. Its three
+    // pipeline extras are assignable in ArcForge, but a family-blind generated
+    // draw must not turn a troll into the chibi fairy merely because both keys
+    // share the claudecraft bucket.
+    if (realm === 'claudecraft') {
+      if (override) return override;
+      const creature = generatedCreatureBodyFor(realm, family, e.templateId);
+      if (creature) return creature;
+      if (realmFamily) return realmFamily;
+      return (family && FAMILY_KEYS[family]) || 'mob_bandit';
     }
     // An explicit creature mapping always wins. In particular, a wolf or boar
     // must never be replaced by the Infernal beast-family fallback just because

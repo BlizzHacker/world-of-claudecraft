@@ -618,11 +618,10 @@ const CRYPTIC_BODY_ASSETS = {
   // Full-size authored Cryptic warrior; this is intentionally not the Infernal
   // Dark Paladin enemy body.
   runeWarden: realmStoreAsset('crypticrealm/realm_crypticrealm_rune_warden.glb', 'Rune Warden'),
-  // Published as class:rogue. Dark hooded assassin, red sigil accents, hands free.
-  cipherBlade: realmStoreAsset(
-    'crypticrealm/realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289.glb',
-    'Cipher Blade',
-  ),
+  // Published as class:rogue. Repointed 2026-08-21: the white hooded assassin
+  // this named is a third-party likeness and is now permanently rejected, so
+  // the card falls back to the realm's own reviewed rogue body.
+  cipherBlade: realmStoreAsset('infernal/realm_infernal_class_rogue_f.glb', 'Cipher Blade'),
   // Published as class:hunter. Dark hooded ranger, strapped leathers, no weapon.
   cryptStalker: realmStoreAsset('infernal/realm_infernal_hero_demon_hunter.glb', 'Crypt Stalker'),
   // Published as class:mage. Black shrouded horned faceless figure, hands free.
@@ -661,10 +660,7 @@ const INFERNAL_CLASS_ASSETS = {
   // now names the SAME body the live infernal document publishes for that card, so the
   // compiled fallback and the published override land in the same place.
   Warrior: realmStoreAsset('crypticrealm/realm_crypticrealm_rune_warden.glb', 'Warrior'),
-  Rogue: realmStoreAsset(
-    'crypticrealm/realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289.glb',
-    'Rogue',
-  ),
+  Rogue: realmStoreAsset('infernal/realm_infernal_class_rogue_f.glb', 'Rogue'),
   'Sorcerer / Sorceress': realmStoreAsset(
     'infernal/realm_infernal_hero_sorcerer.glb',
     'Sorcerer / Sorceress',

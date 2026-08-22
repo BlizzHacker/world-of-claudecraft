@@ -22,7 +22,34 @@ function withClaudecraft<T>(fn: () => T): T {
   }
 }
 
-const claudecraftKeys = Object.keys(VISUALS).filter((k) => k.startsWith(CLAUDECRAFT_PREFIX));
+const claudecraftKeys = Object.keys(VISUALS).filter(
+  (key) =>
+    key.startsWith(CLAUDECRAFT_PREFIX) &&
+    VISUALS[key].url.startsWith('/cr-realms/claudecraft/claudcraft__'),
+);
+const PUBLISHED_CLAUDECRAFT_FILES = [
+  'claudcraft__arcane-dragon.glb',
+  'claudcraft__beaver.glb',
+  'claudcraft__bluebeast.glb',
+  'claudcraft__classic-boar.glb',
+  'claudcraft__crab.glb',
+  'claudcraft__dark-knight.glb',
+  'claudcraft__dark-wanderer.glb',
+  'claudcraft__demon-male-.glb',
+  'claudcraft__fighting-ghost.glb',
+  'claudcraft__frostdragon.glb',
+  'claudcraft__goofy_zombie.glb',
+  'claudcraft__horned-knight-.glb',
+  'claudcraft__horse.glb',
+  'claudcraft__mini-elf-bearded.glb',
+  'claudcraft__mini-orc.glb',
+  'claudcraft__mini-orc2.glb',
+  'claudcraft__parot-blue.glb',
+  'claudcraft__polar_bear.glb',
+  'claudcraft__skeleton.glb',
+  'claudcraft__spine-boar.glb',
+  'claudcraft__water-dinosaur-rawr.glb',
+] as const;
 
 describe('Claudecraft realm creature bank', () => {
   it('registers the whole authored store under the realm asset path', () => {
@@ -37,6 +64,9 @@ describe('Claudecraft realm creature bank', () => {
       expect(def.height, key).toBeGreaterThan(0);
       expect(def.lazyPreload, key).toBe(true);
     }
+    expect(claudecraftKeys.map((key) => VISUALS[key].url.split('/').pop()).sort()).toEqual(
+      [...PUBLISHED_CLAUDECRAFT_FILES].sort(),
+    );
   });
 
   it('names a real clip in every locomotion slot', () => {

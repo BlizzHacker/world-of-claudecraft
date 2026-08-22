@@ -1,4 +1,13 @@
 #!/usr/bin/env node
+import {
+  createReadStream,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
 // Stage 8b: measure every rigged body in the realm store the way the ENGINE
 // measures it, so the weapon in its hand can be sized against its wielder.
 //
@@ -35,10 +44,10 @@
 // library (one shared 24-joint skeleton, bound unscaled), and the wield term is
 // only exact while that holds. emit_wield.mjs fails loudly if it ever stops.
 import { createServer } from 'node:http';
-import { createReadStream, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isPermanentlyRejectedRealmBodyKey } from './catalog_policy.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const argv = process.argv;
@@ -53,6 +62,38 @@ const LIMIT = Number(arg('limit', Infinity));
 // that runs out of memory is the renderer, not the frame.
 const RECYCLE = Number(arg('recycle', 120));
 const MERGE = argv.includes('--merge');
+const PRUNE_ONLY = argv.includes('--prune-only');
+
+function isRejectedRelativeBody(rel) {
+  return isPermanentlyRejectedRealmBodyKey(
+    rel
+      .split('/')
+      .pop()
+      .replace(/\.glb$/i, ''),
+  );
+}
+
+function writeFilteredGeometry(input) {
+  const sorted = {};
+  for (const key of Object.keys(input).sort()) {
+    if (!isRejectedRelativeBody(key)) sorted[key] = input[key];
+  }
+  mkdirSync(dirname(OUT), { recursive: true });
+  writeFileSync(OUT, `${JSON.stringify(sorted, null, 1)}\n`);
+  return sorted;
+}
+
+// A rejection is an editorial decision, not a geometry re-measurement. This
+// mode lets the generated geometry and wield tables be rebuilt immediately
+// without launching a browser or touching any accepted body.
+if (PRUNE_ONLY) {
+  const before = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : {};
+  const after = writeFilteredGeometry(before);
+  console.log(
+    `[bodies] pruned ${Object.keys(before).length - Object.keys(after).length} rejected bodies -> ${OUT}`,
+  );
+  process.exit(0);
+}
 
 // Serve the store over localhost rather than shipping GLB bytes through CDP as
 // base64: 1,600 bodies at ~3MB each is 5GB of string marshalling, several times
@@ -138,16 +179,22 @@ const realms = readdirSync(STORE, { withFileTypes: true })
 const targets = [];
 for (const realm of realms) {
   for (const f of readdirSync(join(STORE, realm)).sort()) {
-    if (f.startsWith('realm_') && f.endsWith('.glb')) targets.push(`${realm}/${f}`);
+    if (f.startsWith('realm_') && f.endsWith('.glb') && !isRejectedRelativeBody(`${realm}/${f}`)) {
+      targets.push(`${realm}/${f}`);
+    }
   }
 }
 
 // --merge keeps rows already in the output file and measures only what is
 // missing, which is how you top a run back up after a handful of transport
 // misses without paying for all 1,600 again.
-const out = MERGE && existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : {};
+const previous = MERGE && existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : {};
+const out = Object.fromEntries(
+  Object.entries(previous).filter(([rel]) => !isRejectedRelativeBody(rel)),
+);
 const wanted = targets.slice(0, LIMIT).filter((rel) => !(MERGE && out[rel]));
-if (MERGE) console.error(`[bodies] merge: ${Object.keys(out).length} kept, ${wanted.length} to measure`);
+if (MERGE)
+  console.error(`[bodies] merge: ${Object.keys(out).length} kept, ${wanted.length} to measure`);
 
 let done = 0;
 async function measure(rel, loud) {
@@ -195,17 +242,16 @@ const failed = wanted.filter((rel) => !out[rel]).length;
 await browser.close().catch(() => {});
 server.close();
 
-mkdirSync(dirname(OUT), { recursive: true });
-const keys = Object.keys(out).sort();
-const sorted = {};
-for (const k of keys) sorted[k] = out[k];
-writeFileSync(OUT, `${JSON.stringify(sorted, null, 1)}\n`);
+const sorted = writeFilteredGeometry(out);
+const keys = Object.keys(sorted);
 
-const hs = keys.map((k) => out[k].height).sort((a, b) => a - b);
-console.log(`[bodies] measured ${keys.length}/${targets.length} (${failed} unmeasurable) -> ${OUT}`);
+const hs = keys.map((k) => sorted[k].height).sort((a, b) => a - b);
+console.log(
+  `[bodies] measured ${keys.length}/${targets.length} (${failed} unmeasurable) -> ${OUT}`,
+);
 console.log(
   `[bodies] height: min ${hs[0]}  median ${hs[Math.floor(hs.length / 2)]}  max ${hs[hs.length - 1]}` +
     `  spread ${(hs[hs.length - 1] / hs[0]).toFixed(2)}x`,
 );
-const odd = keys.filter((k) => out[k].handR !== null && Math.abs(out[k].handR - 1) > 1e-3);
+const odd = keys.filter((k) => sorted[k].handR !== null && Math.abs(sorted[k].handR - 1) > 1e-3);
 console.log(`[bodies] handslot.r world scale != 1 on ${odd.length} bodies`);

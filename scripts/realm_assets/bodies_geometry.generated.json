@@ -359,14 +359,6 @@
   "handL": 1,
   "handRY": 0.4821
  },
- "arcane/realm_arcane_elder_arcane_council_characters_0196ee9b.glb": {
-  "height": 1.9216,
-  "width": 1.431,
-  "depth": 0.8877,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.5495
- },
  "arcane/realm_arcane_eldritch_sentinel_characters_019737a4.glb": {
   "height": 3.2453,
   "width": 1.835,
@@ -1607,14 +1599,6 @@
   "handL": 1,
   "handRY": 0.4598
  },
- "classic/realm_classic_crimson_skullbound_warrior_019f5cbd.glb": {
-  "height": 2.3694,
-  "width": 1.1651,
-  "depth": 0.8093,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4451
- },
  "classic/realm_classic_crimson_vanguard_019e6c53.glb": {
   "height": 2.1526,
   "width": 1.335,
@@ -1766,14 +1750,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.4355
- },
- "classic/realm_classic_cyberbear_athlete_01974b12.glb": {
-  "height": 2.1258,
-  "width": 1.4729,
-  "depth": 0.7582,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4935
  },
  "classic/realm_classic_cybernetic_guardian_sciencetechn_0196fe02.glb": {
   "height": 2.0416,
@@ -2047,14 +2023,6 @@
   "handL": 1,
   "handRY": 0.6386
  },
- "classic/realm_classic_cyclopean_warrior_giant_warrior_019ac6ac.glb": {
-  "height": 1.6292,
-  "width": 1.0442,
-  "depth": 0.5717,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.6437
- },
  "classic/realm_classic_cyclops_guardian_fantasy_creatur_019ba36c.glb": {
   "height": 2.5497,
   "width": 2.4558,
@@ -2294,22 +2262,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.3866
- },
- "classic/realm_classic_dwarf_t_pose_chain_01938385.glb": {
-  "height": 2.1192,
-  "width": 1.2838,
-  "depth": 1.7559,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4992
- },
- "classic/realm_classic_dwarf_t_pose_chain_01938388.glb": {
-  "height": 2.2479,
-  "width": 1.3207,
-  "depth": 1.7598,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4747
  },
  "classic/realm_classic_dwarf_warrior_attack_pose_019538cd.glb": {
   "height": 2.0961,
@@ -2870,14 +2822,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.6157
- },
- "classic/realm_classic_game_figure_mortal_kombat_0195a9f8.glb": {
-  "height": 1.9216,
-  "width": 1.3867,
-  "depth": 0.6383,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.5455
  },
  "classic/realm_classic_game_figure_mortal_kombat_0195b937.glb": {
   "height": 2.1866,
@@ -4543,14 +4487,6 @@
   "handL": 1,
   "handRY": 0.5891
  },
- "classic/realm_classic_hildegard_019c2dce.glb": {
-  "height": 1.5658,
-  "width": 1.0414,
-  "depth": 0.4975,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.6711
- },
  "classic/realm_classic_hoge_3_meter_tall_019542be.glb": {
   "height": 2.2189,
   "width": 1.2196,
@@ -5246,14 +5182,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.4206
- },
- "classic/realm_classic_male_monster_warrior_made_0194566f.glb": {
-  "height": 3.4438,
-  "width": 3.0716,
-  "depth": 1.4268,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.3751
  },
  "classic/realm_classic_male_monster_warrior_made_01945672.glb": {
   "height": 3.022,
@@ -6423,14 +6351,6 @@
   "handL": 1,
   "handRY": 0.4413
  },
- "classic/realm_classic_perfect_rig_symmetrical_01945b0c.glb": {
-  "height": 2.374,
-  "width": 1.2872,
-  "depth": 0.4424,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4421
- },
  "classic/realm_classic_perfect_rig_symmetrical_019462a7.glb": {
   "height": 2.3783,
   "width": 1.2885,
@@ -7038,14 +6958,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.5189
- },
- "classic/realm_classic_soccer_savior_019b65fb.glb": {
-  "height": 1.9445,
-  "width": 1.0159,
-  "depth": 0.7378,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.5398
  },
  "classic/realm_classic_sorcerer_prison_019aa462.glb": {
   "height": 2.0801,
@@ -7887,14 +7799,6 @@
   "handL": 1,
   "handRY": 0.492
  },
- "classic/realm_classic_warrior_elder_019880da.glb": {
-  "height": 2.0927,
-  "width": 1.4919,
-  "depth": 0.7646,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.5028
- },
  "classic/realm_classic_warrior_elegance_019b8459.glb": {
   "height": 2.5161,
   "width": 1.53,
@@ -7926,14 +7830,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.5776
- },
- "classic/realm_classic_warrior_fury_characters_019644f7.glb": {
-  "height": 2.1985,
-  "width": 1.7209,
-  "depth": 1.1203,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4833
  },
  "classic/realm_classic_warrior_goblin_characters_weapon_01969220.glb": {
   "height": 2.8243,
@@ -8431,30 +8327,6 @@
   "handL": 1,
   "handRY": 0.494
  },
- "crypticrealm/realm_crypticrealm_realistic_humanoid_assassin_cyberpunk_01942e6a.glb": {
-  "height": 1.3372,
-  "width": 0.8748,
-  "depth": 0.3338,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.7846
- },
- "crypticrealm/realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289.glb": {
-  "height": 2.669,
-  "width": 1.656,
-  "depth": 1.4661,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.3996
- },
- "crypticrealm/realm_crypticrealm_realistic_humanoid_assassin_wearing_01942e8f.glb": {
-  "height": 1.3541,
-  "width": 0.9304,
-  "depth": 0.3391,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.7748
- },
  "crypticrealm/realm_crypticrealm_tall_gaunt_wizard_long_01937e2a.glb": {
   "height": 2.2324,
   "width": 1.3572,
@@ -8582,14 +8454,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.362
- },
- "dominion/realm_dominion_cyber_pirate_overlord_characters_0196e657.glb": {
-  "height": 2.194,
-  "width": 1.8062,
-  "depth": 0.815,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4835
  },
  "dominion/realm_dominion_cyber_sentinel_characters_scienc_01942e67.glb": {
   "height": 2.1555,
@@ -9135,22 +8999,6 @@
   "handL": 1,
   "handRY": 0.3576
  },
- "fps/realm_fps_albino_caveman_incredible_muscle_0193bba3.glb": {
-  "height": 1.6334,
-  "width": 0.5032,
-  "depth": 0.9526,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.6427
- },
- "fps/realm_fps_albino_caveman_incredible_muscle_0193bbad.glb": {
-  "height": 3.1399,
-  "width": 1.3191,
-  "depth": 1.7762,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.3381
- },
  "fps/realm_fps_average_man_pose_game_01940dd0.glb": {
   "height": 1.8418,
   "width": 0.4461,
@@ -9182,14 +9030,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.4915
- },
- "fps/realm_fps_captain_spaulding_characters_01944c28.glb": {
-  "height": 2.9446,
-  "width": 1.8935,
-  "depth": 0.9874,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.3561
  },
  "fps/realm_fps_cave_man_but_he_01949df7.glb": {
   "height": 2.3887,
@@ -9279,14 +9119,6 @@
   "handL": 1,
   "handRY": 0.4566
  },
- "fps/realm_fps_contemplative_hero_characters_0195f45f.glb": {
-  "height": 3.3922,
-  "width": 2.4603,
-  "depth": 1.6157,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.3052
- },
  "fps/realm_fps_dark_warlord_characters_0195ed4b.glb": {
   "height": 1.7928,
   "width": 1.2357,
@@ -9318,14 +9150,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.4201
- },
- "fps/realm_fps_design_featuring_figure_black_0193fb82.glb": {
-  "height": 2.3071,
-  "width": 1.0773,
-  "depth": 0.5258,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4554
  },
  "fps/realm_fps_eternal_titan_fantasy_titan_019b7072.glb": {
   "height": 1.9034,
@@ -9599,14 +9423,6 @@
   "handL": 1,
   "handRY": 0.4155
  },
- "fps/realm_fps_near_future_soldier_robust_01948be9.glb": {
-  "height": 2.514,
-  "width": 1.2649,
-  "depth": 0.7048,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4179
- },
  "fps/realm_fps_near_future_soldier_robust_01948e95.glb": {
   "height": 1.9958,
   "width": 1.0615,
@@ -9614,30 +9430,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.5255
- },
- "fps/realm_fps_ninja_gaiden_pose_characters_01946143.glb": {
-  "height": 2.2233,
-  "width": 1.177,
-  "depth": 0.9545,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4728
- },
- "fps/realm_fps_obese_mortal_combat_019538cf.glb": {
-  "height": 2.1519,
-  "width": 1.8362,
-  "depth": 0.8327,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4883
- },
- "fps/realm_fps_obese_mortal_combat_019538ff.glb": {
-  "height": 2.1519,
-  "width": 1.8362,
-  "depth": 0.8327,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4883
  },
  "fps/realm_fps_pirate_claus_characters_pirate_019b5321.glb": {
   "height": 2.9334,
@@ -9654,14 +9446,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.5453
- },
- "fps/realm_fps_scarred_pugilist_dress_as_0193d788.glb": {
-  "height": 2.793,
-  "width": 1.1146,
-  "depth": 1.6018,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.3764
  },
  "fps/realm_fps_size_executioner_no_shirt_0193fba7.glb": {
   "height": 2.1499,
@@ -9742,14 +9526,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.4347
- },
- "fps/realm_fps_valentine_beautiful_girl_blowing_0195017e.glb": {
-  "height": 1.3869,
-  "width": 0.9708,
-  "depth": 0.6543,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.7581
  },
  "fps/realm_fps_viking_culturehistory_01963f92.glb": {
   "height": 1.9641,
@@ -10166,14 +9942,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.3429
- },
- "infernal/realm_infernal_cybernetic_ghoul_cyberpunk_ghoul_0198816e.glb": {
-  "height": 1.5011,
-  "width": 0.9329,
-  "depth": 0.4648,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.6989
  },
  "infernal/realm_infernal_cybernetic_oni_warrior_pbr_0199063c.glb": {
   "height": 2.2851,
@@ -10615,14 +10383,6 @@
   "handL": 1,
   "handRY": 0.3836
  },
- "infernal/realm_infernal_eddie_somewhere_time_appears_0193ea76.glb": {
-  "height": 2.3958,
-  "width": 1.4681,
-  "depth": 0.5548,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4382
- },
  "infernal/realm_infernal_elder_dragon_majesty_019b5657.glb": {
   "height": 2.0283,
   "width": 1.5201,
@@ -10726,14 +10486,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.4579
- },
- "infernal/realm_infernal_fairy_demon_fairy_albino_0195e7b8.glb": {
-  "height": 1.3191,
-  "width": 1.2137,
-  "depth": 0.3623,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.7969
  },
  "infernal/realm_infernal_fairy_demon_fairy_albino_0195e7c0.glb": {
   "height": 1.9682,
@@ -11168,14 +10920,6 @@
   "handRY": 0.4945
  },
  "infernal/realm_infernal_highly_muscular_albino_devil_0193e9a8.glb": {
-  "height": 2.4921,
-  "width": 1.308,
-  "depth": 1.4062,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4344
- },
- "infernal/realm_infernal_highly_muscular_albino_devil_0193e9b2.glb": {
   "height": 2.4921,
   "width": 1.308,
   "depth": 1.4062,
@@ -11863,14 +11607,6 @@
   "handL": 1,
   "handRY": 0.4796
  },
- "infernal/realm_infernal_jafaime_thin_monstrous_purple_0198f8f6.glb": {
-  "height": 2.0932,
-  "width": 1.6522,
-  "depth": 1.0464,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4974
- },
  "infernal/realm_infernal_jaguar_spirit_0198a144.glb": {
   "height": 1.7251,
   "width": 1.1192,
@@ -11974,14 +11710,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.3813
- },
- "infernal/realm_infernal_malevolent_majesty_fantasy_creat_019bb848.glb": {
-  "height": 3.1419,
-  "width": 2.478,
-  "depth": 1.232,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.3412
  },
  "infernal/realm_infernal_massive_fat_demon_character_0195aedc.glb": {
   "height": 2.5687,
@@ -12119,14 +11847,6 @@
   "handL": 1,
   "handRY": 0.3769
  },
- "infernal/realm_infernal_monster_virus_evil_coronavirus_01989c27.glb": {
-  "height": 1.9995,
-  "width": 1.3413,
-  "depth": 1.2943,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.5249
- },
  "infernal/realm_infernal_most_bad_ass_goblin_01987255.glb": {
   "height": 1.923,
   "width": 1.3465,
@@ -12155,14 +11875,6 @@
   "height": 2.1021,
   "width": 1.1369,
   "depth": 0.4229,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4956
- },
- "infernal/realm_infernal_most_beatifull_female_blond_019875df.glb": {
-  "height": 2.1179,
-  "width": 1.0999,
-  "depth": 0.4003,
   "handR": 1,
   "handL": 1,
   "handRY": 0.4956
@@ -12366,14 +12078,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.4237
- },
- "infernal/realm_infernal_nosferatu_shadow_sketchto3d_mons_019834ac.glb": {
-  "height": 1.9815,
-  "width": 0.9899,
-  "depth": 0.8521,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.5302
  },
  "infernal/realm_infernal_ogre_s_fury_ogre_019ab398.glb": {
   "height": 1.597,
@@ -12647,14 +12351,6 @@
   "handL": 1,
   "handRY": 0.417
  },
- "infernal/realm_infernal_small_twisted_demon_fetus_01956c18.glb": {
-  "height": 2.2519,
-  "width": 1.5111,
-  "depth": 1.5558,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4781
- },
  "infernal/realm_infernal_spiked_entity_01982da7.glb": {
   "height": 2.9662,
   "width": 1.877,
@@ -12918,13 +12614,5 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.5006
- },
- "infernal/realm_infernal_women_masterpiece_lowpoly_myster_01957697.glb": {
-  "height": 1.3419,
-  "width": 0.8928,
-  "depth": 0.6347,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.7821
  }
 }

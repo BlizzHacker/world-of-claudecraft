@@ -1,10 +1,10 @@
-import { createMinigameSession } from '../src/sim/minigames/session';
-import { createZombieDefenseSession } from '../src/sim/minigames/zombie_session';
-import { createArcadeState } from '../src/sim/minigames/arcade';
-import { realmClassVisualKey } from '../src/sim/realms/class_visuals';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { createArcadeState } from '../src/sim/minigames/arcade';
+import { createMinigameSession } from '../src/sim/minigames/session';
+import { createZombieDefenseSession } from '../src/sim/minigames/zombie_session';
+import { realmClassVisualKey } from '../src/sim/realms/class_visuals';
 import { completeCraftCast } from './helpers/enchant_family_cast';
 
 // Mock the db layer so no Postgres is needed; snapshot logic is under test.
@@ -701,20 +701,20 @@ describe('realm class visual over the wire', () => {
   it('mirrors a realm GLB body override into the renderer visual key', () => {
     const sim = new Sim({ seed: 7, playerClass: 'priest', playerName: 'Cleric' });
     const key = realmClassVisualKey('Classic', 'priest');
-    expect(key).toBe('realm_classic_female_elf');
+    expect(key).toBe('realm_classic_class_priest');
     sim.player.visualKey = key;
 
     const wire = wireEntity(sim.player);
     expect(wire.tid).toBe('priest');
-    expect(wire.vk).toBe('realm_classic_female_elf');
+    expect(wire.vk).toBe('realm_classic_class_priest');
 
     const client = bareClient(sim.playerId + 1000);
     (client as any).applySnapshot({ t: 'snap', ents: [wire] });
     const mirrored = client.entities.get(sim.playerId)!;
 
     expect(mirrored.templateId).toBe('priest');
-    expect(mirrored.visualKey).toBe('realm_classic_female_elf');
-    expect(visualKeyFor(mirrored)).toBe('realm_classic_female_elf');
+    expect(mirrored.visualKey).toBe('realm_classic_class_priest');
+    expect(visualKeyFor(mirrored)).toBe('realm_classic_class_priest');
   });
 
   it('lets the explicit mech cosmetic override a realm body', () => {
@@ -726,7 +726,7 @@ describe('realm class visual over the wire', () => {
     (client as any).applySnapshot({ t: 'snap', ents: [wireEntity(sim.player)] });
     const mirrored = client.entities.get(sim.playerId)!;
 
-    expect(mirrored.visualKey).toBe('realm_classic_dwarf');
+    expect(mirrored.visualKey).toBe('realm_classic_class_warrior');
     expect(mirrored.skinCatalog).toBe('mech');
     expect(visualKeyFor(mirrored)).toBe('player_mech');
   });

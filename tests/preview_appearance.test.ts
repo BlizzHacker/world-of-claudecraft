@@ -395,13 +395,13 @@ describe('CharacterPreview.setVisualKey: the weapon-skin rebuild contract', () =
   });
 
   it('drops a late body fetch when a newer selection superseded it', async () => {
-    lazyBodies.notReady.add('realm_infernal_class_warlock');
+    lazyBodies.notReady.add('realm_infernal_hero_warlock');
     const preview = rawPreview(null);
-    preview.setVisualKey('realm_infernal_class_warlock', null, null, null);
+    preview.setVisualKey('realm_infernal_hero_warlock', null, null, null);
     // the operator clicks another roster row before the first GLB lands
     preview.setVisualKey('player_rogue', null, null, null);
     expect(visualDoubles.built).toHaveLength(1);
-    lazyBodies.resolvers.get('realm_infernal_class_warlock')?.();
+    lazyBodies.resolvers.get('realm_infernal_hero_warlock')?.();
     await Promise.resolve();
     await Promise.resolve();
     // still one: the superseded body must not steal the turntable back
