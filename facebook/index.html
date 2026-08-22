@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Cryptic Realm</title>
+  <style>
+    html,body{margin:0;height:100%;background:#050509;color:#e8d5c4;font-family:system-ui,sans-serif;overflow:hidden}
+    .wrap{position:fixed;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#050509;transition:opacity .4s}
+    .wrap.hidden{opacity:0;pointer-events:none}
+    .logo{width:160px;height:160px;border-radius:24px;object-fit:cover;box-shadow:0 8px 40px rgba(201,161,74,.3)}
+    .spin{width:34px;height:34px;border:3px solid rgba(201,161,74,.25);border-top-color:#ffd100;border-radius:50%;animation:s 1s linear infinite}
+    @keyframes s{to{transform:rotate(360deg)}}
+    .t{font-size:13px;color:#b8aa82;letter-spacing:.5px}
+    #game{position:fixed;inset:0;z-index:1;width:100%;height:100%;border:0;background:#050509}
+  </style>
+</head>
+<body>
+  <div class="wrap" id="splash">
+    <img class="logo" src="https://crypticrealm.com/cryptic-realm-logo-512.webp" alt="Cryptic Realm" onerror="this.style.display='none'"/>
+    <div class="spin"></div>
+    <div class="t">Connecting to Cryptic Realm…</div>
+  </div>
+  <script src="https://connect.facebook.net/en_US/fbinstant.8.0.js"></script>
+  <script>
+    // Facebook Instant Games shell for Cryptic Realm. This bundle page is the
+    // only code Facebook hosts (Instant Games requires index.html at the zip
+    // root on FB Web Hosting); the game itself streams from the live site the
+    // same thin-shell way mobile-shell/index.html does. The FBInstant SDK must
+    // live in THIS page, so instead of navigating away (which would tear the
+    // Instant Games context down) the shell frames the live client and keeps
+    // the SDK alive alongside it. The client detects the container through the
+    // fb=1 query param (src/game/facebook_context.ts) and hides the wallet,
+    // daily-reward, and purchase surfaces Facebook policy does not allow.
+    (function () {
+      'use strict';
+      var GAME_URL = 'https://crypticrealm.com/play?fb=1';
+      var frame = null;
+      var started = false;
+
+      function setProgress(pct) {
+        try {
+          if (window.FBInstant) window.FBInstant.setLoadingProgress(pct);
+        } catch (err) {
+          // Progress reporting must never block the boot path.
+        }
+      }
+
+      function reveal() {
+        var splash = document.getElementById('splash');
+        if (splash) splash.classList.add('hidden');
+      }
+
+      function startGame() {
+        if (started) return;
+        started = true;
+        setProgress(100);
+        if (window.FBInstant) {
+          window.FBInstant.startGameAsync().then(reveal, reveal);
+        } else {
+          reveal();
+        }
+      }
+
+      function mountFrame() {
+        if (frame) return;
+        frame = document.createElement('iframe');
+        frame.id = 'game';
+        frame.setAttribute('allow', 'autoplay; fullscreen; gamepad');
+        frame.addEventListener('load', startGame, { once: true });
+        frame.src = GAME_URL;
+        document.body.appendChild(frame);
+      }
+
+      function boot() {
+        // Loading progress uses REAL milestones only (SDK present, platform
+        // initialized, frame mounted, frame document loaded), never a timer
+        // pretending to be progress.
+        setProgress(10);
+        window.FBInstant.initializeAsync().then(
+          function () {
+            setProgress(30);
+            mountFrame();
+            setProgress(60);
+            // Failsafe: if the game document never fires load (a stalled
+            // fetch), start anyway so the player is never stuck behind the
+            // Facebook loading screen; the frame keeps loading underneath.
+            setTimeout(startGame, 30000);
+          },
+          function () {
+            // initializeAsync rejected (for example the page was opened
+            // outside the Facebook container during development): boot the
+            // frame directly, mirroring the mobile-shell failsafe.
+            mountFrame();
+            setTimeout(startGame, 4000);
+          }
+        );
+      }
+
+      if (window.FBInstant) {
+        boot();
+      } else {
+        // SDK script missing or blocked: never leave the player on the splash
+        // (the same never-stuck rule mobile-shell/index.html applies).
+        setTimeout(function () {
+          mountFrame();
+          setTimeout(startGame, 4000);
+        }, 1500);
+      }
+    })();
+  </script>
+</body>
+</html>

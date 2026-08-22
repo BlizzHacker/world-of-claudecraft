@@ -33,6 +33,7 @@
     "tauri:build:store:win-x64": "tauri build --no-bundle --config src-tauri/tauri.microsoftstore.conf.json --runner cargo-xwin --target x86_64-pc-windows-msvc && tauri bundle --config src-tauri/tauri.microsoftstore.conf.json --target x86_64-pc-windows-msvc",
     "tauri:build:msix": "node scripts/build_tauri_msix.mjs",
     "xbox:build:msix": "node scripts/build_xbox_msix.mjs",
+    "facebook:build": "node scripts/build_facebook_bundle.mjs",
     "electron:dev": "node scripts/electron-dev.mjs",
     "electron:pack": "node scripts/electron-build.mjs pack",
     "electron:pack:steam": "node scripts/electron-build.mjs pack steam",
