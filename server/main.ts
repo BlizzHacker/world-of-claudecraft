@@ -5,6 +5,9 @@ import * as fs from 'node:fs';
 import * as http from 'node:http';
 import * as path from 'node:path';
 import { WebSocketServer } from 'ws';
+// CR overlay: economy layer (off-chain platinum + optional Solana SPL token).
+import { setChainAdapter } from '../src/economy/chainAdapter';
+import { maybeBuildSolanaFromEnv } from '../src/economy/solanaAdapter';
 import { DEEDS } from '../src/sim/content/deeds';
 import { resolveActiveWeaponSkin } from '../src/sim/content/weapon_skin_rules';
 import {
@@ -14,9 +17,9 @@ import {
   paginateGuildLeaderboard,
   paginateLeaderboard,
 } from '../src/sim/leaderboard_page';
-import { Sim } from '../src/sim/sim';
 import { resolveRealmCharacterVisual } from '../src/sim/realms/class_visuals';
 import { infernalCharacterSelection } from '../src/sim/realms/infernal_classes';
+import { Sim } from '../src/sim/sim';
 import { type PlayerClass, virtualLevel } from '../src/sim/types';
 import { WORLD_SEED } from '../src/sim/world_seed';
 import {
@@ -70,6 +73,7 @@ import {
   handleAppleLoginNew,
 } from './apple_auth';
 import { pruneApplePendingLogins } from './apple_auth_db';
+import { handleAssetLibraryCatalog, handleAssetLibraryStatic } from './asset_library';
 import {
   hashPassword,
   MAX_PASSWORD_LENGTH,
@@ -85,7 +89,9 @@ import { configureAuthRuntime } from './auth_routes';
 import { computeBankBonus } from './bank_entitlements';
 import { bankLedgerIdle } from './bank_ledger';
 import { configureBattlegroundRuntime, readBgLeaderboard } from './battleground';
+import { isDevAccount } from './body_skin_dev';
 import { BUG_DESCRIPTION_MAX, BugReportRateLimitError, createBugReport } from './bug_report_db';
+import { saveBugReport } from './bug_reports';
 import { createCachedRead } from './cached_read';
 import { characterSheet, SHEET_RECENT_DEEDS, type SheetRank } from './character_sheet';
 import {
@@ -101,6 +107,7 @@ import {
   handleClaudiumStripeWebhook,
 } from './claudium';
 import { configureCommunityTestAccounts } from './community_test_accounts';
+import { maybeHandleContributionsApi } from './contributions';
 import {
   bustDailyRewardBoardCache,
   bustDailyRewardWinnersCache,
@@ -109,6 +116,7 @@ import {
   handleDailyRewardInternalApi,
 } from './daily_rewards';
 import { pruneDailyRewardEventsBatch } from './daily_rewards_db';
+import { handleModeratorApi, handleUserApi } from './dashboard';
 import {
   type ArenaLeaderRow,
   accountAndScopeForToken,
@@ -198,20 +206,14 @@ import {
   handleNativeDiscordExchange,
 } from './discord';
 import { pruneDiscordOAuthStates, pruneDiscordPendingLogins } from './discord_db';
-import { emailAccountCreated } from './email';
-import { saveBugReport } from './bug_reports';
-// CR overlay: economy layer (off-chain platinum + optional Solana SPL token).
-import { setChainAdapter } from '../src/economy/chainAdapter';
-import { maybeBuildSolanaFromEnv } from '../src/economy/solanaAdapter';
+import { isDuranceTesterCharacter } from './durance_tester_entitlement';
 import { maybeHandleEconomyApi } from './economy/api';
 import { applyEconomySchema } from './economy/db';
+import { emailAccountCreated } from './email';
+import { stopEpicMirror } from './epic/mirror';
 import { maybeHandleExchangeApi } from './exchange/api';
 import { applyExchangeSchema } from './exchange/db';
-import { maybeHandleContributionsApi } from './contributions';
 import { handleCrRealmsStatic, handleForgedCatalog, handleForgedStatic } from './forged_assets';
-import { handleAssetLibraryCatalog, handleAssetLibraryStatic } from './asset_library';
-import { handleRealmVisuals } from './realm_visuals';
-import { stopEpicMirror } from './epic/mirror';
 import { GameServer } from './game';
 import {
   handleGitHubCallback,
@@ -294,7 +296,6 @@ import {
 import { pruneExpiredOAuthGrants } from './oauth_db';
 import { registerParseMetrics } from './parse';
 import { handlePerfReport } from './perf_report';
-import { handleModeratorApi, handleUserApi } from './dashboard';
 import {
   pruneAccountIpAssociationsBatch,
   prunePlaySessionsBatch,
@@ -332,13 +333,13 @@ import {
   REALM_DIRECTORY,
   REALM_ORIGINS,
 } from './realm';
+import { handleRealmVisuals } from './realm_visuals';
 import { resolveReportTarget } from './report_target';
 import { BUG_REPORT_MAX_BODY_BYTES, configureReportsRuntime } from './reports';
 import { createRetentionSweep, RETENTION_SWEEP_BATCH_SIZE } from './retention_sweep';
 import { resolveSfxOverlayFile } from './sfx_overlay';
 import { handleSitePresenceHeartbeat } from './site_presence';
 import { adminRolesForAccount } from './staff_db';
-import { isDevAccount } from './body_skin_dev';
 import {
   cacheControlFor,
   etagFor,
@@ -375,7 +376,6 @@ import { allowedCorsOrigin, isWebClientRequest, NATIVE_APP_ORIGINS } from './web
 import { handleWocBalance, parseWocBalanceQuery } from './woc_balance';
 import { createWsAuth } from './ws_auth';
 import { bufferHandshakeMessages } from './ws_buffer';
-import { isDuranceTesterCharacter } from './durance_tester_entitlement';
 
 // The one validated boot Config, loaded ONCE and memoized. Boot-consumed values
 // (port, retention, dispatch, ws cap) thread directly off the local `config` in
@@ -421,11 +421,11 @@ function inMaintenanceMode(): boolean {
 }
 const WIKI_URL = process.env.WIKI_URL?.trim() ?? '';
 
-// Cryptic Realm 3.0 client downloads (Unreal heavy-tier builds). Served from a
-// persistent directory OUTSIDE dist/ so deploys (which wipe dist) never delete
-// uploaded installers. Drop versioned zips into CR_DOWNLOADS_DIR; /downloads
-// lists them newest-first and /downloads/<file> streams them with Range
-// support (resume matters for multi-GB builds).
+// Client build downloads. Served from a persistent directory OUTSIDE dist/ so
+// deploys (which wipe dist) never delete uploaded installers. Drop versioned
+// builds (zips, apks, installers) into CR_DOWNLOADS_DIR; /downloads lists them
+// newest-first and /downloads/<file> streams them with Range support (resume
+// matters for multi-GB builds).
 const DOWNLOADS_DIR = process.env.CR_DOWNLOADS_DIR?.trim() || '/opt/cr-downloads';
 
 function humanSize(bytes: number): string {
@@ -479,9 +479,9 @@ a{color:#e6b34a;text-decoration:none} a:hover{text-decoration:underline}
 p{color:#8d8276;text-align:center}
 .back{display:block;text-align:center;margin-top:2em;color:#6f6459}
 </style></head><body>
-<h1>CRYPTIC REALM</h1><h2>Unreal Client Downloads - Cryptic Realm 3.0</h2>
+<h1>CRYPTIC REALM</h1><h2>Client Downloads</h2>
 ${entries.length ? `<ul>${rows}</ul>` : '<p>No builds published yet, check back soon.</p>'}
-<p>Windows: unzip and run CrypticRealmUnreal.exe. Browser play stays at <a href="/">crypticrealm.com</a>.</p>
+<p>Grab the build for your platform. Browser play stays at <a href="/">crypticrealm.com</a>.</p>
 <a class="back" href="/">&larr; back to the realm</a>
 </body></html>`;
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' });
@@ -497,7 +497,7 @@ ${entries.length ? `<ul>${rows}</ul>` : '<p>No builds published yet, check back 
     return;
   }
   const base = {
-    'Content-Type': 'application/octet-stream',
+    'Content-Type': MIME[path.extname(file)] ?? 'application/octet-stream',
     'Content-Disposition': `attachment; filename="${path.basename(file)}"`,
     'Accept-Ranges': 'bytes',
     'Cache-Control': 'no-cache',
@@ -1322,6 +1322,8 @@ const MIME: Record<string, string> = {
   '.jpeg': 'image/jpeg',
   '.webp': 'image/webp',
   '.mp3': 'audio/mpeg',
+  '.apk': 'application/vnd.android.package-archive',
+  '.webmanifest': 'application/manifest+json',
 };
 // The admin dashboard is reached via the admin.* subdomain (Caddy proxies it
 // to this same port) or /admin for local dev. The hostname only picks which
@@ -3271,9 +3273,17 @@ export function routeHttpRequest(req: http.IncomingMessage, res: http.ServerResp
   else if (req.method === 'GET' && path.startsWith('/c/')) void handleProfilePage(req, res);
   else if (req.method === 'GET' && path === '/sitemap-characters.xml')
     void handleCharacterSitemap(req, res);
+  // Client build downloads: the listing page and Range-aware file streaming,
+  // GET/HEAD only. Exact '/downloads' or a '/downloads/' subpath; '/download'
+  // (singular) is NOT this surface and falls through to serveStatic.
+  else if (
+    (req.method === 'GET' || req.method === 'HEAD') &&
+    (path === '/downloads' || path === '/downloads/' || path.startsWith('/downloads/'))
+  )
+    serveDownloads(req, res, path);
   // Realm/forged asset stores. Both self-guard on their URL prefix and return
   // false when they do not apply, so they cannot shadow a route above. Restored
-  // after the call site was dropped (see cbb388375) — without these the whole
+  // after the call site was dropped (see cbb388375): without these the whole
   // /cr-realms/* store 404s and every realm body silently fails to render.
   else if (handleForgedStatic(req, res)) return;
   else if (handleCrRealmsStatic(req, res)) return;
