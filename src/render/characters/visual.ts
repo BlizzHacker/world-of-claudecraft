@@ -31,7 +31,22 @@ import {
   scanAnimRepair,
   shouldPlayLanding,
 } from './anim_state';
-import { applyMaterials, applyModularSliderMorphs, assembleModel, AssembleModelOptions, ensureSkinTexture, prepareVisual, setHeldOffhand, setHeldWeapon, setWeaponsStowed, skinEmissiveTexture, skinTexture, tintedFarMaterials } from './assets';
+import {
+  type AssembleModelOptions,
+  applyMaterials,
+  applyModularSliderMorphs,
+  assembleModel,
+  ensureSkinTexture,
+  prepareVisual,
+  setHeldOffhand,
+  setHeldWeapon,
+  setWeaponsStowed,
+  skinEmissiveTexture,
+  skinTexture,
+  tintedFarMaterials,
+} from './assets';
+import { nextResolvableClip, resolveClipMap } from './clip_resolution';
+import { firstPersonSelfMeshVisible } from './first_person_parts';
 import { HairSwayDriver } from './hair_sway';
 import { buildHalo } from './halo';
 import type { EmoteClipSpec, VisualDef, WeaponLayoutOverride } from './manifest';
@@ -53,8 +68,6 @@ import {
   disposeOwnedWeaponSkinMaterials,
   markOwnedWeaponSkinMaterials,
 } from './weapon_skin_materials';
-import { firstPersonSelfMeshVisible } from './first_person_parts';
-import { resolveClipMap } from './clip_resolution';
 
 export type { AnimState, BaseState } from './anim_state';
 
@@ -1175,9 +1188,13 @@ export class CharacterVisual {
       return;
     }
     const clips = skinAttack?.clips ?? this.def.clips.attack;
-    if (clips.length === 0) return;
-    const name = clips[this.attackIdx++ % clips.length];
-    this.playOneShot(name, skinAttack?.timeScale ?? this.def.attackTimeScale ?? 1.3);
+    // Rotate over the RESOLVABLE clips only: an unresolvable name used to
+    // consume its slot silently (playOneShot no-ops), a dead swing with no
+    // animation every pass of the rotation.
+    const pick = nextResolvableClip(clips, this.attackIdx, (c) => this.action(c) !== null);
+    if (!pick) return;
+    this.attackIdx = pick.nextIdx;
+    this.playOneShot(pick.name, skinAttack?.timeScale ?? this.def.attackTimeScale ?? 1.3);
     this.currentOneShotIsAttack = true;
   }
 
@@ -1186,9 +1203,15 @@ export class CharacterVisual {
   playWhirl(): void {
     if (this.deadLock) return;
     this.spinOnceTimer = SPIN_ONCE_DURATION;
-    const clips = this.def.clips.attack;
-    if (clips.length > 0) {
-      this.playOneShot(clips[this.attackIdx++ % clips.length], SPIN_ATTACK_TIMESCALE);
+    // Same resolvable-only rotation as playAttack: skip dead slots.
+    const pick = nextResolvableClip(
+      this.def.clips.attack,
+      this.attackIdx,
+      (c) => this.action(c) !== null,
+    );
+    if (pick) {
+      this.attackIdx = pick.nextIdx;
+      this.playOneShot(pick.name, SPIN_ATTACK_TIMESCALE);
     }
   }
 
@@ -2172,7 +2195,9 @@ export class CharacterVisual {
       mesh.material = this.ghosted ? this.effectMaterial(original) : original;
     }
     if (this.farMesh && this.farMaterials) {
-      this.farMesh.material = this.ghosted ? this.effectMaterial(this.farMaterials) : this.farMaterials;
+      this.farMesh.material = this.ghosted
+        ? this.effectMaterial(this.farMaterials)
+        : this.farMaterials;
     }
   }
 

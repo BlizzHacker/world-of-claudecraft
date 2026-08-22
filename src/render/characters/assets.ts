@@ -24,16 +24,10 @@ import { addRimGlow, EMISSIVE_GLOW, GFX, type GfxSettings } from '../gfx';
 import { applySurfaceDetail, riggedWornFamilyFor } from '../worn_stone';
 import { logAssetMissOnce } from './asset_miss_log';
 import { backGripFor } from './back_grips';
-import { resolveClipMap } from './clip_resolution';
+import { resolveClipMap, resolveClipMapScoped } from './clip_resolution';
 import { dequantizeAttribute } from './dequantize_attribute';
 import { type HandGrip, KAYKIT_SHIELD_ACCESSORIES, KAYKIT_SHIELD_GRIPS } from './held_item_grips';
 import { buildMakeupDecal } from './makeup';
-import {
-  attachAppearanceMaskTint,
-  overrideAppearanceCacheKey,
-  type OverrideAppearanceSpec,
-} from './override_appearance';
-import { chooseExternalPreviewClipName } from './preview_clip';
 import {
   type AttachDef,
   characterPreloadUrls,
@@ -77,6 +71,12 @@ import {
   stubbleDecals,
   wearsFaceDecal,
 } from './modular';
+import {
+  attachAppearanceMaskTint,
+  type OverrideAppearanceSpec,
+  overrideAppearanceCacheKey,
+} from './override_appearance';
+import { chooseExternalPreviewClipName } from './preview_clip';
 import { REALM_ARM_FAMILIES } from './realm_arms.generated';
 import { REALM_WIELD_SCALE } from './realm_wield.generated';
 import { animatedNodeNames, mergeSkinnedParts } from './rig_merge';
@@ -2066,6 +2066,16 @@ export function prepareVisual(key: string): PreparedVisual {
     // silently discard the shared vocabulary. A degenerate single-clip GLB with
     // no bank still falls back to that clip for every role.
     def.clips = resolveClipMap(def.clips, [...clips.keys()]);
+  } else {
+    // Authored (non-autoClip) def whose death/sitDown name misses the merged
+    // inventory: remap ONLY those fields to the body's own takes. This has to
+    // happen HERE, at load time on prep.def, not in the CharacterVisual ctor's
+    // full resolveClipMap pass: actions are created from clipNamesOf(prep.def),
+    // so a name remapped only at the ctor never gets an action bound and the
+    // corpse or sit silently holds its previous pose. Scoped tightly (the loose
+    // full-map patterns are what once resolved Jump_Idle as an idle).
+    const scoped = resolveClipMapScoped(def.clips, [...clips.keys()], ['death', 'sitDown']);
+    if (scoped) def.clips = scoped;
   }
 
   // Pose a throwaway clone mid-idle, measure it, and bake the static mesh.
