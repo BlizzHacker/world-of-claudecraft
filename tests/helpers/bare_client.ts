@@ -68,6 +68,7 @@ export function bareClient(pid: number, overrides: BareClientOverrides = {}): Cl
     weaponSkinIds: [],
     weaponSkinLoadout: {},
   };
+  c.bodySkinGrantsMirror = { unlocked: false, dev: false, entitlements: [] };
   c.xp = 0;
   c.lifetimeXp = 0;
   c.prestigeRank = 0;

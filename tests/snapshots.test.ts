@@ -28,6 +28,7 @@ vi.mock('../server/db', () => ({
   loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
 }));
 
+import { grantBodySkinEntitlement } from '../server/body_skin_entitlement';
 import { saveCharacterState } from '../server/db';
 import { type ClientSession, GameServer, wireEntity } from '../server/game';
 import { corpseLootAvailability } from '../src/game/corpse_loot_availability';
@@ -3417,6 +3418,7 @@ const ALL_DELTA_KEYS = [
   'bags',
   'bank',
   'bg',
+  'bodySkin',
   'buyback',
   'cardDuel',
   'cds',
@@ -3775,6 +3777,11 @@ function dirtyEveryDeltaField(): {
     weaponSkinIds: [],
     weaponSkinLoadout: {},
   };
+  // `bodySkin`: the grant-verdict delta ships {unlocked, dev, ents} always, so
+  // only the entitlement list can make it DISTINGUISHABLE for a non-admin
+  // fixture below the level gate. The in-process grant is realm-agnostic and
+  // keyed to this fixture's character name, so no other suite sees it.
+  grantBodySkinEntitlement('skin.famous_heroes', 'Alld');
   // Session-scoped stored action-bar layout (`hbl`, self-only): set the frozen
   // join-time copy so the heavy self block wires it once.
   leader.initialHotbarLayout = {
@@ -4021,6 +4028,16 @@ describe('full self-state snapshot delta fixture', () => {
       mechChromaIds: ['amber_crimson'],
       weaponSkinIds: [],
       weaponSkinLoadout: {},
+    });
+    // bodySkin -> the grants mirror behind bodySkinGrants() (hand-decoded like
+    // vcup/tal, so no TERSE_TO_IWORLD rename entry). The fixture's leader is
+    // below the level gate and not staff, so `unlocked` arrives false and the
+    // accessor falls back to the LIVE mirrored entity level; the in-process
+    // premium grant must survive the wire whole.
+    expect(client.bodySkinGrants()).toEqual({
+      level: client.player.level,
+      entitlements: ['skin.famous_heroes'],
+      dev: false,
     });
     expect([...client.questLog.values()]).toEqual([
       { questId: 'q_widows', counts: [10, 0], state: 'active' },
@@ -4387,8 +4404,8 @@ describe('delta-key contract pins (anti-drift)', () => {
     // (Thornwheel Derby), pit (the Boarpit), homes (Eastbrook Homes), horde
     // (the Dead Road) and skirmish (Warcamp Skirmish), plus the two minigame
     // session wires mgz (zombie defense) and mga (the arcade cabinet).
-    expect(ALL_DELTA_KEYS).toHaveLength(73);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(73);
+    expect(ALL_DELTA_KEYS).toHaveLength(74);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(74);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -4421,8 +4438,9 @@ describe('delta-key contract pins (anti-drift)', () => {
     // mga (the arcade cabinet). That intake grew the key set without moving
     // these two counts, which is the whole reason they read 66 until now:
     // ALL_DELTA_KEYS and game.ts have agreed at 73 since the merge landed, so
-    // this was a bookkeeping miss, never a wire regression.
-    expect(scraped.size).toBe(73);
+    // this was a bookkeeping miss, never a wire regression. The body-skin
+    // fly-swap then adds the bodySkin grant verdict for 74.
+    expect(scraped.size).toBe(74);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -4506,6 +4524,10 @@ describe('delta-key contract pins (anti-drift)', () => {
     // past the sorted-membership and delta-key-or-scalar checks; pin it out here.
     expect('vcup' in TERSE_TO_IWORLD).toBe(false);
     expect('vcupb' in TERSE_TO_IWORLD).toBe(false);
+    // bodySkin hand-decodes into the private grants mirror behind the
+    // bodySkinGrants() accessor (no same-named IWorld data member), so like
+    // vcup it is a delta key that must never grow a rename entry.
+    expect('bodySkin' in TERSE_TO_IWORLD).toBe(false);
     // sorted-membership pin: adding or renaming an entry must be a deliberate,
     // reviewable change landing in alphabetical order
     expect(Object.keys(TERSE_TO_IWORLD)).toEqual([...Object.keys(TERSE_TO_IWORLD)].sort());

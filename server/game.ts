@@ -18,6 +18,7 @@ import { MECH_CHROMAS, mechChromaItemId, mechChromaSkinIndex } from '../src/sim/
 import { SPORT_ROLES, VALE_CUP_BALL_TEMPLATE_ID, VC_NATION_IDS } from '../src/sim/content/vale_cup';
 import { withWeaponSkinApplied } from '../src/sim/content/weapon_skin_rules';
 import { isWeaponSkinType, WEAPON_SKINS } from '../src/sim/content/weapon_skins';
+import { authorizeBodySkin, UNLOCKED_SKIN_LEVEL } from '../src/sim/cosmetics/body_skins';
 import {
   bgOriginAt,
   DELVES,
@@ -113,6 +114,9 @@ import { cancelProfessionSessionOnDisplacement } from '../src/sim/professions/se
 import { restoreToolEffectSlotAction } from '../src/sim/professions/tool_effect_actions';
 import type { ToolEffectConfirmMode } from '../src/sim/professions/tools';
 import { questProgressForWire } from '../src/sim/quests/interact_object_credit';
+import type { RaceInput } from '../src/sim/racing';
+import { resolveRealmCharacterVisual } from '../src/sim/realms/class_visuals';
+import { isRealmId, setRealmHostEnv } from '../src/sim/realms/registry';
 import { loadRiftWorldState, serializeRiftWorldState } from '../src/sim/rift/persistence';
 import type { CharacterState, PetState, PlayerMeta } from '../src/sim/sim';
 import { MAX_CHAT_MESSAGE_LEN, Sim } from '../src/sim/sim';
@@ -175,6 +179,7 @@ import {
   recordGuildBankEscrowRollback,
 } from './bank_ledger';
 import { reportBgOutcomes } from './battleground_telemetry';
+import { bodySkinEntitlementsFor } from './body_skin_entitlement';
 import type {
   BotDetector,
   BotTrackingContext,
@@ -198,8 +203,9 @@ import {
 import { applyChatStrike, loadChatFilterState, recordChatViolation } from './chat_filter_db';
 import { ChatLogger } from './chat_log';
 import { dailyRewardService } from './daily_rewards';
-import { AccountChatMuteStatus, AccountCosmetics, insertRealmProp, isAdminAccount, isModeratorAccount, RequestMetadata, saveWorldState } from './db';
 import {
+  type AccountChatMuteStatus,
+  type AccountCosmetics,
   closePlaySession,
   deleteRealmProp,
   GUILD_BANK_ROW_MAX_BYTES,
@@ -207,17 +213,21 @@ import {
   grantAccountWeaponSkins,
   heartbeatCharacterLeases,
   insertChatLogs,
+  insertRealmProp,
+  isAdminAccount,
+  isModeratorAccount,
   loadAccountFlair,
   loadGuildBankRows,
   loadMailState,
   loadMarketState,
   loadRealmProps,
-  loadWorldState,
   loadRiftState,
+  loadWorldState,
   markAccountQuestComplete,
   markCharacterDead,
   openPlaySession,
   pool,
+  type RequestMetadata,
   releaseCharacterLease,
   revokeAccountMechChroma,
   saveCharacterAndGuildBankState,
@@ -226,6 +236,7 @@ import {
   saveMailState,
   saveMarketState,
   saveRiftState,
+  saveWorldState,
   setAccountWeaponSkinLoadout,
   setCharacterHotbarLayout,
   touchCharacterLogin,
@@ -247,9 +258,6 @@ import { discordFlairForAccount, grantRewardPoints } from './discord_db';
 import { enqueueLinkChange } from './discord_link_changes';
 import { enqueueRelay } from './discord_relay';
 import { isDuranceTesterCharacter } from './durance_tester_entitlement';
-import { authorizeBodySkin } from '../src/sim/cosmetics/body_skins';
-import { bodySkinEntitlementsFor } from './body_skin_entitlement';
-import { isHomeownerCharacter } from './homeowner_entitlement';
 import { formatDuration } from './duration';
 import {
   copperFlowSourceForCommand,
@@ -294,6 +302,7 @@ import {
   type GuildBankWriteResult,
   loadGuildBanksIntoSim,
 } from './guild_bank_state';
+import { isHomeownerCharacter } from './homeowner_entitlement';
 import { gameMetricsCounters, type WsDropCause } from './http/game_signals';
 import { buildSharedInterestCandidates } from './interest_candidates';
 import { IpBlockList } from './ip_block';
@@ -367,11 +376,6 @@ import { hrtimeToMs, TickRateMeter } from './tick_rate_meter';
 import { recordUnstuckEvent } from './unstuck_records';
 import { holderInfoForPubkey } from './woc_balance';
 import { isBackpressureExceeded, WS_ENTRY_BACKPRESSURE_LIMIT_BYTES } from './ws_backpressure';
-import { RaceInput } from '../src/sim/racing';
-import { resolveRealmCharacterVisual } from '../src/sim/realms/class_visuals';
-import { setRealmHostEnv } from '../src/sim/realms/registry';
-import { isRealmId } from '../src/sim/realms/registry';
-
 
 // Bind the server's ACTIVE REALM from CR_REALM_ID *before* any Sim is constructed.
 // The sim resolves per-realm content (worldTheme buildings + collision + the D2
@@ -7131,6 +7135,31 @@ export class GameServer {
       case 'set_helm':
         sim.setHelmHidden(msg.hidden === true, pid);
         break;
+      // Tiered body-skin fly-swap: null clears back to the class body; a
+      // string is a WISH the sim re-authorizes (authorizeBodySkin inside
+      // Sim.setBodySkin) against the SAME three server facts the join gate
+      // uses: the live server-side level, the account's entitlements, and the
+      // handshake-resolved staff identity (session.isAdmin, never a frame
+      // field). On success the sim writes Entity.bodySkinId, the
+      // identityFields `bs` diff re-broadcasts the full record, and the
+      // renderer's updateBaseVisual live-swaps every viewer's model. The
+      // char-select REST route (/api/characters/:id/body-skin) stays the
+      // out-of-world path; persistence rides serializeCharacter either way.
+      case 'set_body_skin': {
+        const raw = msg.skinId;
+        if (raw !== null && typeof raw !== 'string') break;
+        const requested =
+          typeof raw === 'string' && raw.length > 0 && raw.length <= 64 ? raw : null;
+        if (typeof raw === 'string' && requested === null) break;
+        const wearer = sim.entities.get(pid);
+        if (!wearer) break;
+        sim.setBodySkin(requested, pid, {
+          level: wearer.level,
+          entitlements: bodySkinEntitlementsFor(wearer.name, REALM),
+          dev: session.isAdmin,
+        });
+        break;
+      }
       // Per-character action-bar layout upload (untrusted client input). Validate
       // + bound the payload; a malformed/oversized layout is dropped silently
       // (never crashes the session). A clean layout is persisted to the
@@ -8129,8 +8158,7 @@ export class GameServer {
         // is_gm. Nothing else about the session changes, and a non-staff client
         // saying it is staff cannot: the flag is stamped from the database at
         // join and is never read off a frame.
-        const canDev =
-          session.isGm || session.isAdmin || process.env.ALLOW_DEV_COMMANDS === '1';
+        const canDev = session.isGm || session.isAdmin || process.env.ALLOW_DEV_COMMANDS === '1';
         if (canDev && typeof msg.level === 'number') {
           // MAX_POSSIBLE_LEVEL, not the old literal 60: sim.setPlayerLevel already
           // clamps to the ACTIVE realm cap (activeMaxLevel(MAX_LEVEL)), so this
@@ -9714,6 +9742,25 @@ export class GameServer {
       maybe('equip', meta.equipment);
       maybe('einst', meta.equipmentInstance);
       maybe('cosmetics', anchorSession.accountCosmetics);
+      // Body-skin grant verdict for the in-game appearance rail
+      // (IWorldCosmetics.bodySkinGrants): the same three server-resolved facts
+      // the roster summary publishes (bodySkinUnlocked / bodySkinDev /
+      // bodySkinEntitlements, server/characters.ts buildCharacterList), on the
+      // SELF record so the picker paints from a server answer and never
+      // re-derives the gate. `anchorSession.isAdmin` is the handshake-resolved
+      // staff identity of the character this record DESCRIBES (the join gate's
+      // own dev predicate; anchor, not viewer, for the same reason cosmetics
+      // reads anchorSession above); the LIVE entity level moves the verdict
+      // when a character crosses the gate mid-session. Heavy-gated: it changes
+      // at most on a level-up or a staff/entitlement change, and the staggered
+      // safety refresh (<=2s) is fresh enough for a picker. Wire key
+      // `bodySkin`; see ALL_DELTA_KEYS in tests/snapshots.test.ts (hand-decoded
+      // into the grants mirror, so no TERSE_TO_IWORLD rename entry).
+      maybe('bodySkin', {
+        unlocked: anchorSession.isAdmin || p.level >= UNLOCKED_SKIN_LEVEL,
+        dev: anchorSession.isAdmin,
+        ents: bodySkinEntitlementsFor(p.name, REALM),
+      });
       // questProgressForWire strips the server-only per-object interact ledger:
       // the client never reads it, and this snapshot's build + stringify is the
       // dominant avoidable broadcast cost, so it does not carry bookkeeping.

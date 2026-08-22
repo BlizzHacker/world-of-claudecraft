@@ -190,6 +190,7 @@ import {
   bannerSubtextLines,
 } from './banner_queue';
 import { blockLandingLogKey } from './block_landing_feedback_core';
+import { paintBodySkinSwapRail } from './body_skin_swap_window';
 import { CalendarWindow } from './calendar_window';
 import { CardDuelWindow } from './card_duel_window';
 import { CastBarPainter, type CastBarPaintInput } from './cast_bar_painter';
@@ -17235,6 +17236,16 @@ export class Hud {
 
   private renderCharSkinPicker(): void {
     paintCharSkinPicker(this.skinHost());
+    // The tiered appearance rail beside the chroma row: grants come from the
+    // world's server-published verdict (bodySkinGrants), never a local guess;
+    // a pick calls the facet and the world/portrait repaint on refresh.
+    paintBodySkinSwapRail({
+      world: this.sim,
+      refresh: () => {
+        this.renderCharIfOpen();
+        this.drawPlayerFramePortrait();
+      },
+    });
   }
 
   private skinHost(): CharSkinPainterHost {

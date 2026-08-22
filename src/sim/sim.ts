@@ -109,6 +109,7 @@ import { ensureWarriorStance } from './combat/warrior_stances';
 // moved to social/fiesta.ts with that logic; sim.ts keeps only the type used by
 // the PlayerMeta interface + the power-up catalog the fiestaMatchInfo accessor reads.
 import { type AugmentSpecial, type AugmentTier, POWERUPS_BY_ID } from './content/augments';
+import { FINDER_ACTIVITIES, type FinderListingTag } from './content/dungeon_finder';
 import { MAILBOXES } from './content/mailboxes';
 import { DEFAULT_MOUNT, DURANCE_TESTER_MOUNT_ITEM_IDS, type MountKey } from './content/mounts';
 import { GATHERING_PROFESSION_IDS, type GatheringProfessionId } from './content/professions';
@@ -232,6 +233,7 @@ import { formatMoney } from './format_money';
 import type { GuildBankState, GuildMembership } from './guild_bank';
 import * as guildBankMod from './guild_bank';
 import * as interaction from './interaction';
+import { leaveInterior as leaveInteriorImpl, spawnBuildingInteriors } from './interiors';
 import {
   boundCraftedRecipeIdOnLoad,
   sanitizeItemInstancePayloadOnLoad,
@@ -334,7 +336,6 @@ import {
 } from './mob/targeting';
 import { emitMobYell } from './mob/yells';
 import type { MobCombatProfile } from './mob_combat';
-import { updateRoamingNpc } from './npc/roam';
 import {
   cancelMountRace as cancelMountRaceImpl,
   mountRaceViewFor as mountRaceViewForImpl,
@@ -354,6 +355,14 @@ import {
   mountTrainBegin as mountTrainBeginImpl,
   tickMountTraining as tickMountTrainingImpl,
 } from './mounts_training';
+import { updateRoamingNpc } from './npc/roam';
+import {
+  partyFrameAbsorb,
+  partyFrameAggroTargets,
+  partyFrameAuras,
+  partyFrameIncomingHeals,
+  partyFrameRole,
+} from './party_frame_info';
 import {
   findPlayerPath,
   PLAYER_BODY_RADIUS,
@@ -502,14 +511,6 @@ import {
 } from './progression/talents';
 import { prestige as prestigeImpl, updateRested } from './progression/xp';
 import { advancePendingProjectiles, type PendingProjectile } from './projectile_travel';
-import { spawnBuildingInteriors, leaveInterior as leaveInteriorImpl } from './interiors';
-import { repairTalentLoadouts } from './talent_loadouts';
-import { partyFrameAbsorb, partyFrameAggroTargets, partyFrameAuras, partyFrameIncomingHeals, partyFrameRole } from './party_frame_info';
-import { activeMaxLevel } from './realms/registry';
-import { RaceInput } from './racing';
-import { FINDER_ACTIVITIES, FinderListingTag } from './content/dungeon_finder';
-import { DungeonFinderMachine } from './social/dungeon_finder';
-import { CURRENT_CHARACTER_CONTENT_REVISION, migrateCharacterTalentsV2 } from './talent_save_migration';
 import * as honorMod from './pvp';
 // By path, not through the pvp barrel: see the comment in src/sim/pvp/index.ts.
 import {
@@ -517,12 +518,15 @@ import {
   WARFARE_QUARTERMASTER_NPC_ID,
 } from './pvp/warfare_quartermaster';
 import { sanitizeCreditedObjects } from './quests/interact_object_credit';
+import type { RaceInput } from './racing';
+import { activeMaxLevel } from './realms/registry';
 import { sanitizeRemovedZone1Content } from './removed_zone1_content';
 import { rideSteepnessAt, shoreStepOut, stepWaterLevel } from './ride_height';
 import { Rng } from './rng';
 import { persistedResource } from './serialize_resource';
 import { createSimContext, type SimContext, type SimContextHost } from './sim_context';
 import * as chatMod from './social/chat';
+import { DungeonFinderMachine } from './social/dungeon_finder';
 import { npcDuelChallenge, tickNpcDuelRespawn, updateNpcDuels } from './social/npc_duel';
 import * as tradeMod from './social/trade';
 import {
@@ -536,9 +540,14 @@ import {
   spawnOverworldSpiritHealers,
   UNSTUCK_SICKNESS_ID,
 } from './spirit';
+import { repairTalentLoadouts } from './talent_loadouts';
+import {
+  CURRENT_CHARACTER_CONTENT_REVISION,
+  migrateCharacterTalentsV2,
+} from './talent_save_migration';
 import { closeTownPortal } from './town_portal';
-import { spawnWaypoints, waypointTravel } from './waypoints';
 import * as unstuckMod from './unstuck';
+import { spawnWaypoints, waypointTravel } from './waypoints';
 import {
   rollWorldBossLoot as rollWorldBossLootImpl,
   scaleWorldBossHp,
@@ -641,12 +650,12 @@ import * as yumiMod from './social/yumi';
 // public path `import { Sim, eloDelta } from './sim'` (tests/arena.test.ts) holds.
 export { eloDelta } from './social/arena';
 
-import * as boarpitMod from './social/boarpit';
-import * as homesMod from './social/homes';
-import * as hordeMod from './social/horde';
-import * as skirmishMod from './social/skirmish';
-import * as derbyMod from './social/derby';
+import { swapBodySkin } from './cosmetics/body_skin_swap';
+import type { BodySkinGrantContext } from './cosmetics/body_skins';
 import { setHelmHidden as setHelmHiddenMod } from './helm_visibility';
+import { getActiveRealm } from './realms/registry';
+import * as boarpitMod from './social/boarpit';
+import * as derbyMod from './social/derby';
 import * as fiestaMod from './social/fiesta';
 // A3: Fiesta tuning consts moved to social/fiesta.ts; these five are read back here
 // by the fiestaMatchInfo presentation accessor (which STAYS on Sim).
@@ -658,8 +667,11 @@ import {
   FIESTA_TOTAL_WAVES,
 } from './social/fiesta';
 import * as fiestaBotsMod from './social/fiesta_bots';
+import * as homesMod from './social/homes';
+import * as hordeMod from './social/horde';
 import { PartyMachine } from './social/party';
 import * as readyCheckMod from './social/ready_check';
+import * as skirmishMod from './social/skirmish';
 import * as valeCupMod from './social/vale_cup';
 import { createVcState, type VcState } from './social/vale_cup';
 import * as valeCupBotsMod from './social/vale_cup_bots';
@@ -771,7 +783,6 @@ import {
   waterLevel,
   waterLevelAt,
 } from './world';
-import { getActiveRealm } from './realms/registry';
 
 // TRIVIAL_LEVEL_GAP moved to mob/targeting.ts (used only by isTrivialTo).
 // CORPSE_DURATION moved to combat/damage.ts (C1; used only by the death path).
@@ -2372,7 +2383,9 @@ export class Sim {
         );
         if (Math.abs(res.x - e.pos.x) >= 1e-4 || Math.abs(res.z - e.pos.z) >= 1e-4) embedded++;
       }
-      console.log(`[roam census] ${embedded}/${roamers} roaming NPCs spawned overlapping a collider`);
+      console.log(
+        `[roam census] ${embedded}/${roamers} roaming NPCs spawned overlapping a collider`,
+      );
     }
     this.market.seed();
 
@@ -4612,6 +4625,33 @@ export class Sim {
     const r = this.resolve(pid);
     if (!r) return;
     setHelmHiddenMod(r.e, hidden);
+  }
+
+  /** Tiered body-skin fly-swap (IWorld.setBodySkin; server `set_body_skin`
+   *  command). Cosmetic only: writes Entity.bodySkinId, which rides the
+   *  identity wire (`bs`) and the renderer live-swaps to the tier body. The
+   *  gate is src/sim/cosmetics/body_skin_swap.ts over authorizeBodySkin: the
+   *  server passes its account-resolved grants; offline the swap authorizes
+   *  against local meta (the entity's own level, no entitlements, the
+   *  dev-commands flag), so both hosts run the identical rule. */
+  setBodySkin(skinId: string | null, pid?: number, grants?: BodySkinGrantContext): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    swapBodySkin(this.ctx, r.e, skinId, grants ?? this.localBodySkinGrants(r.e));
+  }
+
+  /** IWorldCosmetics.bodySkinGrants, the offline arm: the Sim is its own
+   *  authority, so the grant facts come from local meta. Online, ClientWorld
+   *  mirrors the SERVER's published self verdict instead. */
+  bodySkinGrants(): BodySkinGrantContext {
+    const r = this.resolve();
+    return r ? this.localBodySkinGrants(r.e) : { level: 1, entitlements: [], dev: false };
+  }
+
+  private localBodySkinGrants(e: Entity): BodySkinGrantContext {
+    // No entitlement service offline (the paid shelf is online-only), and the
+    // dev grant maps onto the same flag that gates the /dev cheat surface.
+    return { level: e.level, entitlements: [], dev: this.devCommands };
   }
 
   /** Set a player's guild name (online only) so it rides the entity wire and
