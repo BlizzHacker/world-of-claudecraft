@@ -2,6 +2,7 @@
   "instant_games": {
     "platform_version": "RICH_GAMEPLAY",
     "orientation": "LANDSCAPE",
-    "override_web_orientation": "LANDSCAPE"
+    "override_web_orientation": "LANDSCAPE",
+    "navigation_menu_version": "PLATFORM"
   }
 }
