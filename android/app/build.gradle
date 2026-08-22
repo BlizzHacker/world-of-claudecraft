@@ -7,6 +7,30 @@ def playIntegrityCloudProjectNumber = providers
     .get()
     .trim()
 
+// Release (upload key) signing material. The keystore and its passwords are secrets and
+// never live in Git: this reads android/keystore.properties (gitignored, documented in
+// docs/RELEASE_KEYSTORE.md) and falls back to CR_UPLOAD_* environment variables so a CI
+// runner can inject them instead. When neither source is complete the release build stays
+// UNSIGNED rather than failing, so contributors without the upload key can still build.
+def keystorePropsFile = rootProject.file("keystore.properties")
+def keystoreProps = new Properties()
+if (keystorePropsFile.exists()) {
+    keystorePropsFile.withInputStream { keystoreProps.load(it) }
+}
+def uploadSigningValue = { String propertyName, String envName ->
+    def value = keystoreProps.getProperty(propertyName) ?: System.getenv(envName)
+    return value?.trim() ?: null
+}
+def uploadStoreFile = uploadSigningValue("storeFile", "CR_UPLOAD_STORE_FILE")
+def uploadStorePassword = uploadSigningValue("storePassword", "CR_UPLOAD_STORE_PASSWORD")
+def uploadKeyAlias = uploadSigningValue("keyAlias", "CR_UPLOAD_KEY_ALIAS")
+def uploadKeyPassword = uploadSigningValue("keyPassword", "CR_UPLOAD_KEY_PASSWORD")
+def hasUploadKey = uploadStoreFile && uploadStorePassword && uploadKeyAlias &&
+    uploadKeyPassword && file(uploadStoreFile).exists()
+if (!hasUploadKey) {
+    logger.lifecycle("cryptic-realm: no upload key resolved, release artifacts will be UNSIGNED")
+}
+
 android {
     namespace = "com.worldofclaudecraft"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -15,11 +39,17 @@ android {
         buildConfig true
     }
     defaultConfig {
-        applicationId "com.worldofclaudecraft"
+        // The Play listing this fork updates is com.crypticrealm (see the shipped
+        // 1.0.3/code 4 bundle and commit fb8a25107). The namespace stays
+        // com.worldofclaudecraft because that is where the Java/Kotlin sources and the
+        // generated BuildConfig live; applicationId is the Play identity and is
+        // deliberately different. Upstream merges keep reverting this line, so a bundle
+        // built without it is rejected by Play as the wrong package.
+        applicationId "com.crypticrealm"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 39
-        versionName "0.35.1"
+        versionCode 40
+        versionName "0.35.1-cr.1"
         buildConfigField "long", "PLAY_INTEGRITY_CLOUD_PROJECT_NUMBER", "${playIntegrityCloudProjectNumber}L"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
@@ -38,10 +68,23 @@ android {
             buildConfigField "String", "SOLANA_MOBILE_DISTRIBUTION", '"solana-dapp-store"'
         }
     }
+    signingConfigs {
+        if (hasUploadKey) {
+            release {
+                storeFile file(uploadStoreFile)
+                storePassword uploadStorePassword
+                keyAlias uploadKeyAlias
+                keyPassword uploadKeyPassword
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (hasUploadKey) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }
