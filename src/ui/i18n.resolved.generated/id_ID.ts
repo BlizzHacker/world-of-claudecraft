@@ -879,6 +879,7 @@ export const id_ID: EnTranslations = {
     },
     "leaderboard": {
       "close": "Tutup",
+      "filterAll": "All",
       "tabsLabel": "Papan skor tertinggi",
       "tabPlayers": "Pemain",
       "tabGuilds": "Guild",

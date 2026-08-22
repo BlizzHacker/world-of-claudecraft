@@ -1,5 +1,9 @@
 import { crypticMusic } from './game/cryptic_music';
 import { mountRealmBranding } from './ui/cryptic/branding';
+import {
+  mountHighscoresRealmFilter,
+  normalizeRealmTag,
+} from './ui/cryptic/highscores_realm_filter';
 import { mountMusicWidget } from './ui/cryptic/music_widget';
 import { installNativeSsoReturnHandler, wireNativeSsoLink } from './ui/cryptic/native_sso';
 import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
@@ -46,6 +50,7 @@ function bootLandingBranding(): void {
   mountRealmBranding();
   mountThemeSelect();
   mountNewsRealmFilter();
+  mountHighscoresRealmFilter();
   void mountUserDropdown();
   void loadLandingStats();
   // Monster Chronicle / Skill Trees / Loot Vault / Pickit are in-game reference
@@ -244,8 +249,9 @@ function renderHighscores(rows: LandingLeaderboardEntry[]): string {
     .map((r) => {
       const prestige =
         (r.prestigeRank ?? 0) > 0 ? `<span class="hs-prestige">*${r.prestigeRank}</span>` : '';
+      // data-realm feeds the client-side realm filter (highscores_realm_filter).
       return (
-        `<div class="hs-row${r.rank <= 3 ? ' hs-top' : ''}">` +
+        `<div class="hs-row${r.rank <= 3 ? ' hs-top' : ''}" data-realm="${escapeHtml(normalizeRealmTag(r.realm))}">` +
         `<span class="hs-rank">${r.rank}</span>` +
         `<span class="hs-name">${prestige}${escapeHtml(r.name)}</span>` +
         `<span class="hs-realm">${escapeHtml(r.realm ?? '')}</span>` +
@@ -258,44 +264,26 @@ function renderHighscores(rows: LandingLeaderboardEntry[]): string {
   return head + body;
 }
 
-let highscoresScope: 'global' | 'ladder' = 'global';
-async function loadLandingHighscores(scope: 'global' | 'ladder' = highscoresScope): Promise<void> {
+// The board always fetches the cross-realm global scope; the realm filter
+// (mountHighscoresRealmFilter) narrows it client-side over the realm-tagged
+// rows. The old 'ladder' scope was a phantom: the server has no such scope, so
+// the request silently fell back to the realm default.
+async function loadLandingHighscores(): Promise<void> {
   const host = document.getElementById('hs-leaderboard');
   if (!host || highscoresLoading) return;
-  highscoresScope = scope;
   highscoresLoading = true;
   host.innerHTML = '<div class="hs-loading">Loading rankings...</div>';
   try {
-    const res = await fetch(`/api/leaderboard?scope=${scope}&metric=lifetimeXp&limit=100`);
+    const res = await fetch('/api/leaderboard?scope=global&metric=lifetimeXp&limit=100');
     if (!res.ok) throw new Error(`request failed (${res.status})`);
     const data = await res.json();
     const leaders = Array.isArray(data.leaders) ? data.leaders : [];
-    if (!leaders.length && scope === 'ladder') {
-      host.innerHTML =
-        '<div class="hs-empty">No ladder champions yet — be the first to climb a ladder realm.</div>';
-    } else {
-      host.innerHTML = renderHighscores(leaders);
-    }
+    host.innerHTML = renderHighscores(leaders);
   } catch {
     host.innerHTML = '<div class="hs-error">Could not load rankings. Try again soon.</div>';
   } finally {
     highscoresLoading = false;
   }
-}
-
-function wireHighscoresScope(): void {
-  document.querySelectorAll<HTMLElement>('.hs-scope-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const scope = btn.dataset.hsScope === 'ladder' ? 'ladder' : 'global';
-      if (scope === highscoresScope) return;
-      document.querySelectorAll<HTMLElement>('.hs-scope-btn').forEach((b) => {
-        const on = b === btn;
-        b.classList.toggle('active', on);
-        b.setAttribute('aria-selected', on ? 'true' : 'false');
-      });
-      void loadLandingHighscores(scope);
-    });
-  });
 }
 
 function renderReleaseBody(body: string): string {
@@ -866,7 +854,6 @@ function boot(): void {
   wireMobileMenu();
   wireContractAddressCopy();
   wireLandingPanels();
-  wireHighscoresScope();
   wireLandingOfflinePanel();
   wireDeferredAppLoad();
   void installNativeSsoReturnHandler(acceptNativeSsoHash);

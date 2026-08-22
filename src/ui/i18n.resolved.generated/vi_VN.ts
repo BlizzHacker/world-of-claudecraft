@@ -879,6 +879,7 @@ export const vi_VN: EnTranslations = {
     },
     "leaderboard": {
       "close": "Đóng",
+      "filterAll": "All",
       "tabsLabel": "Bảng điểm cao",
       "tabPlayers": "Người Chơi",
       "tabGuilds": "Bang Hội",

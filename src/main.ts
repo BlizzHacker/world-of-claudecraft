@@ -504,6 +504,7 @@ import {
   setFpsMode,
 } from './ui/cryptic/fps_mode';
 import { mountHudGlobes, resolveHudSkin, setHudSkin } from './ui/cryptic/globes';
+import { mountHighscoresRealmFilter } from './ui/cryptic/highscores_realm_filter';
 import { mountHudLayout, registerHudLayoutTarget } from './ui/cryptic/hud_layout';
 import { mountIngameOptions } from './ui/cryptic/ingame_options';
 import { mountLootVault } from './ui/cryptic/loot_vault';
@@ -891,6 +892,7 @@ if (typeof document !== 'undefined') {
     mountPwaInstall();
     mountXboxEnv();
     mountNewsRealmFilter();
+    mountHighscoresRealmFilter();
     mountDownloadLaunchers();
     mountMusicWidget();
     // Browsers block audio autoplay until a user gesture; kick the Cryptic Realm

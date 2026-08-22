@@ -879,6 +879,7 @@ export const en: EnTranslations = {
     },
     "leaderboard": {
       "close": "Close",
+      "filterAll": "All",
       "tabsLabel": "High-score boards",
       "tabPlayers": "Players",
       "tabGuilds": "Guilds",

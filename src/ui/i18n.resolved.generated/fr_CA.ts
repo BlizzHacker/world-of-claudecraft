@@ -879,6 +879,7 @@ export const fr_CA: EnTranslations = {
     },
     "leaderboard": {
       "close": "Fermer",
+      "filterAll": "All",
       "tabsLabel": "Tableaux des scores",
       "tabPlayers": "Joueurs",
       "tabGuilds": "Guildes",

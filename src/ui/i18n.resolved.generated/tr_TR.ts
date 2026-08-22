@@ -879,6 +879,7 @@ export const tr_TR: EnTranslations = {
     },
     "leaderboard": {
       "close": "Kapat",
+      "filterAll": "All",
       "tabsLabel": "Yüksek skor tabloları",
       "tabPlayers": "Oyuncular",
       "tabGuilds": "Loncalar",

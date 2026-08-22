@@ -879,6 +879,7 @@ export const ja_JP: EnTranslations = {
     },
     "leaderboard": {
       "close": "閉じる",
+      "filterAll": "All",
       "tabsLabel": "ハイスコアボード",
       "tabPlayers": "プレイヤー",
       "tabGuilds": "ギルド",
