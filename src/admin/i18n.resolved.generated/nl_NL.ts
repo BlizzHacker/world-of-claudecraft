@@ -13,6 +13,7 @@ import type { AdminTranslations } from '../i18n.en';
 
 export const nl_NL: AdminTranslations = {
   "app.title": "Cryptic Realm - Beheer",
+  "app.titleRealm": "Cryptic Realm - Admin ({realm})",
   "app.shortTitle": "WoC-beheerder",
   "auth.username": "Gebruikersnaam",
   "auth.password": "Wachtwoord",
@@ -23,6 +24,8 @@ export const nl_NL: AdminTranslations = {
   "auth.twoFactorLabel": "Authenticatiecode",
   "auth.twoFactorPlaceholder": "6-cijferige of herstelcode",
   "auth.twoFactorHint": "Voer de code uit je authenticator-app in, of een van je herstelcodes.",
+  "nav.realmBadge": "Realm",
+  "nav.switchRealm": "Switch realm",
   "nav.overview": "Overzicht",
   "nav.operations": "Operaties",
   "nav.usage": "Gebruik",

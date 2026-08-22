@@ -13,6 +13,7 @@ import type { AdminTranslations } from '../i18n.en';
 
 export const id_ID: AdminTranslations = {
   "app.title": "Cryptic Realm - Admin",
+  "app.titleRealm": "Cryptic Realm - Admin ({realm})",
   "app.shortTitle": "Admin WoC",
   "auth.username": "Nama pengguna",
   "auth.password": "Kata sandi",
@@ -23,6 +24,8 @@ export const id_ID: AdminTranslations = {
   "auth.twoFactorLabel": "Kode autentikasi",
   "auth.twoFactorPlaceholder": "Kode 6 digit atau kode pemulihan",
   "auth.twoFactorHint": "Masukkan kode dari aplikasi autentikator Anda, atau salah satu kode pemulihan Anda.",
+  "nav.realmBadge": "Realm",
+  "nav.switchRealm": "Switch realm",
   "nav.overview": "Ikhtisar",
   "nav.operations": "Operasi",
   "nav.usage": "Penggunaan",

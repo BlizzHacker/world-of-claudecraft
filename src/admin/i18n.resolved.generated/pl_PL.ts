@@ -13,6 +13,7 @@ import type { AdminTranslations } from '../i18n.en';
 
 export const pl_PL: AdminTranslations = {
   "app.title": "Cryptic Realm - Panel administratora",
+  "app.titleRealm": "Cryptic Realm - Admin ({realm})",
   "app.shortTitle": "Administrator WOC",
   "auth.username": "Nazwa użytkownika",
   "auth.password": "Hasło",
@@ -23,6 +24,8 @@ export const pl_PL: AdminTranslations = {
   "auth.twoFactorLabel": "Kod uwierzytelniający",
   "auth.twoFactorPlaceholder": "6-cyfrowy kod lub kod odzyskiwania",
   "auth.twoFactorHint": "Wprowadź kod z aplikacji uwierzytelniającej lub jeden z kodów odzyskiwania.",
+  "nav.realmBadge": "Realm",
+  "nav.switchRealm": "Switch realm",
   "nav.overview": "Przegląd",
   "nav.operations": "Operacje",
   "nav.usage": "Użycie",

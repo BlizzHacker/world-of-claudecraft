@@ -13,6 +13,7 @@ import type { AdminTranslations } from '../i18n.en';
 
 export const vi_VN: AdminTranslations = {
   "app.title": "Cryptic Realm - Quản trị",
+  "app.titleRealm": "Cryptic Realm - Admin ({realm})",
   "app.shortTitle": "Quản trị viên WoC",
   "auth.username": "Tên đăng nhập",
   "auth.password": "Mật khẩu",
@@ -23,6 +24,8 @@ export const vi_VN: AdminTranslations = {
   "auth.twoFactorLabel": "Mã xác thực",
   "auth.twoFactorPlaceholder": "Mã 6 chữ số hoặc mã khôi phục",
   "auth.twoFactorHint": "Nhập mã từ ứng dụng xác thực của bạn, hoặc một trong các mã khôi phục của bạn.",
+  "nav.realmBadge": "Realm",
+  "nav.switchRealm": "Switch realm",
   "nav.overview": "Tổng Quan",
   "nav.operations": "Hoạt động",
   "nav.usage": "Sử Dụng",

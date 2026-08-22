@@ -13,6 +13,7 @@ import type { AdminTranslations } from '../i18n.en';
 
 export const tr_TR: AdminTranslations = {
   "app.title": "Cryptic Realm - Yönetici",
+  "app.titleRealm": "Cryptic Realm - Admin ({realm})",
   "app.shortTitle": "WoC Yöneticisi",
   "auth.username": "Kullanıcı adı",
   "auth.password": "Parola",
@@ -23,6 +24,8 @@ export const tr_TR: AdminTranslations = {
   "auth.twoFactorLabel": "Kimlik doğrulama kodu",
   "auth.twoFactorPlaceholder": "6 haneli kod veya kurtarma kodu",
   "auth.twoFactorHint": "Kimlik doğrulama uygulamanızdan gelen kodu veya kurtarma kodlarınızdan birini girin.",
+  "nav.realmBadge": "Realm",
+  "nav.switchRealm": "Switch realm",
   "nav.overview": "Genel Bakış",
   "nav.operations": "Operasyonlar",
   "nav.usage": "Kullanım",

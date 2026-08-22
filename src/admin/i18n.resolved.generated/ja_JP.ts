@@ -13,6 +13,7 @@ import type { AdminTranslations } from '../i18n.en';
 
 export const ja_JP: AdminTranslations = {
   "app.title": "Cryptic Realm - 管理",
+  "app.titleRealm": "Cryptic Realm - Admin ({realm})",
   "app.shortTitle": "WoC管理者",
   "auth.username": "ユーザー名",
   "auth.password": "パスワード",
@@ -23,6 +24,8 @@ export const ja_JP: AdminTranslations = {
   "auth.twoFactorLabel": "認証コード",
   "auth.twoFactorPlaceholder": "6桁のコードまたはリカバリーコード",
   "auth.twoFactorHint": "認証アプリのコード、またはリカバリーコードのいずれかを入力してください。",
+  "nav.realmBadge": "Realm",
+  "nav.switchRealm": "Switch realm",
   "nav.overview": "概要",
   "nav.operations": "運営",
   "nav.usage": "使用量",

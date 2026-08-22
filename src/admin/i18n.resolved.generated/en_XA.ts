@@ -13,6 +13,7 @@ import type { AdminTranslations } from '../i18n.en';
 
 export const en_XA: AdminTranslations = {
   "app.title": "[Çŕýþţíç Ŕéáļɱ - Áðɱíñ]",
+  "app.titleRealm": "[Çŕýþţíç Ŕéáļɱ - Áðɱíñ ({realm})]",
   "app.shortTitle": "[ÇŔ Áðɱíñ]",
   "auth.username": "[Úšéŕñáɱé]",
   "auth.password": "[Þáššŵóŕð]",
@@ -23,6 +24,8 @@ export const en_XA: AdminTranslations = {
   "auth.twoFactorLabel": "[Áúţĥéñţíçáţíóñ çóðé]",
   "auth.twoFactorPlaceholder": "[6-ðíĝíţ óŕ ŕéçóʋéŕý çóðé]",
   "auth.twoFactorHint": "[Éñţéŕ ţĥé çóðé ƒŕóɱ ýóúŕ áúţĥéñţíçáţóŕ áþþ, óŕ óñé óƒ ýóúŕ ŕéçóʋéŕý çóðéš.]",
+  "nav.realmBadge": "[Ŕéáļɱ]",
+  "nav.switchRealm": "[Šŵíţçĥ ŕéáļɱ]",
   "nav.overview": "[Óʋéŕʋíéŵ]",
   "nav.operations": "[Óþéŕáţíóñš]",
   "nav.usage": "[Úšáĝé]",

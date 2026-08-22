@@ -13,6 +13,7 @@ import type { AdminTranslations } from '../i18n.en';
 
 export const ko_KR: AdminTranslations = {
   "app.title": "Cryptic Realm - 관리자",
+  "app.titleRealm": "Cryptic Realm - Admin ({realm})",
   "app.shortTitle": "WoC 관리자",
   "auth.username": "사용자명",
   "auth.password": "비밀번호",
@@ -23,6 +24,8 @@ export const ko_KR: AdminTranslations = {
   "auth.twoFactorLabel": "인증 코드",
   "auth.twoFactorPlaceholder": "6자리 코드 또는 복구 코드",
   "auth.twoFactorHint": "인증 앱의 코드 또는 복구 코드 중 하나를 입력하세요.",
+  "nav.realmBadge": "Realm",
+  "nav.switchRealm": "Switch realm",
   "nav.overview": "개요",
   "nav.operations": "운영",
   "nav.usage": "사용량",

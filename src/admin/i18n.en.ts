@@ -11,6 +11,7 @@
 
 export const en = {
   'app.title': 'Cryptic Realm - Admin',
+  'app.titleRealm': 'Cryptic Realm - Admin ({realm})',
   'app.shortTitle': 'CR Admin',
   'auth.username': 'Username',
   'auth.password': 'Password',
@@ -22,6 +23,8 @@ export const en = {
   'auth.twoFactorPlaceholder': '6-digit or recovery code',
   'auth.twoFactorHint':
     'Enter the code from your authenticator app, or one of your recovery codes.',
+  'nav.realmBadge': 'Realm',
+  'nav.switchRealm': 'Switch realm',
   'nav.overview': 'Overview',
   'nav.operations': 'Operations',
   'nav.usage': 'Usage',

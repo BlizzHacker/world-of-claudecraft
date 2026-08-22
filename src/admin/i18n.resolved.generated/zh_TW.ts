@@ -13,6 +13,7 @@ import type { AdminTranslations } from '../i18n.en';
 
 export const zh_TW: AdminTranslations = {
   "app.title": "Cryptic Realm - 管理後台",
+  "app.titleRealm": "Cryptic Realm - Admin ({realm})",
   "app.shortTitle": "沃克管理員",
   "auth.username": "使用者名稱",
   "auth.password": "密碼",
@@ -23,6 +24,8 @@ export const zh_TW: AdminTranslations = {
   "auth.twoFactorLabel": "驗證碼",
   "auth.twoFactorPlaceholder": "6位數字或復原碼",
   "auth.twoFactorHint": "請輸入驗證器應用程式中的驗證碼，或您的復原碼之一。",
+  "nav.realmBadge": "Realm",
+  "nav.switchRealm": "Switch realm",
   "nav.overview": "總覽",
   "nav.operations": "營運",
   "nav.usage": "用量",

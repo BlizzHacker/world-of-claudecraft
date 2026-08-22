@@ -2029,6 +2029,9 @@ async function overviewHandler(ctx: Ctx): Promise<void> {
   const serverStats = rt.adminStats();
   ok(ctx.res, {
     ...counts,
+    // The realm this process serves, so the dashboard can badge which realm an
+    // operator is looking at (one process = one realm).
+    realm: REALM,
     peakOnlineToday: Math.max(counts.peakOnlineToday, serverStats.online),
     peakOnlineAllTime: Math.max(counts.peakOnlineAllTime, serverStats.online),
     playersCap: adminPlayersCap(),

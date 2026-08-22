@@ -51,6 +51,7 @@ export interface ProviderUsageSnapshot {
 }
 
 export interface Overview {
+  realm: string;
   accounts: number;
   characters: number;
   accountsToday: number;

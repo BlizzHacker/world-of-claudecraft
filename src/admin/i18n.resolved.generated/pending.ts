@@ -10,31 +10,110 @@
 // and `pretest`). Reproducibility is checked by tests/i18n_admin_catalog.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "es_ES": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "fr_FR": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "fr_CA": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
-  "pt_BR": [],
-  "ru_RU": [],
+  "it_IT": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "de_DE": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "zh_CN": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "zh_TW": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "ko_KR": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "ja_JP": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "pt_BR": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "ru_RU": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
   "cs_CZ": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm",
     "usage.metric.githubContributorsFetch",
     "usage.metric.githubContributorsFetchFailure",
     "usage.metric.githubLinkFailure",
     "usage.metric.githubLinkRateLimited",
     "usage.metric.githubLinkRequest"
   ],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "nl_NL": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "pl_PL": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "id_ID": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "tr_TR": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "sv_SE": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "vi_VN": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ],
+  "da_DK": [
+    "app.titleRealm",
+    "nav.realmBadge",
+    "nav.switchRealm"
+  ]
 };

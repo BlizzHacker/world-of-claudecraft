@@ -13,6 +13,7 @@ import type { AdminTranslations } from '../i18n.en';
 
 export const cs_CZ: AdminTranslations = {
   "app.title": "Cryptic Realm - Admin",
+  "app.titleRealm": "Cryptic Realm - Admin ({realm})",
   "app.shortTitle": "WoC administrace",
   "auth.username": "Uživatelské jméno",
   "auth.password": "Heslo",
@@ -23,6 +24,8 @@ export const cs_CZ: AdminTranslations = {
   "auth.twoFactorLabel": "Ověřovací kód",
   "auth.twoFactorPlaceholder": "6místný nebo záložní kód",
   "auth.twoFactorHint": "Zadejte kód z aplikace ověřovatele nebo jeden ze záložních kódů.",
+  "nav.realmBadge": "Realm",
+  "nav.switchRealm": "Switch realm",
   "nav.overview": "Přehled",
   "nav.operations": "Operace",
   "nav.usage": "Využití",

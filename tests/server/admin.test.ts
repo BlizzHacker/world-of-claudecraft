@@ -2370,6 +2370,7 @@ describe('overview merge math (the one non-trivial read computation)', () => {
       success: true,
       data: {
         accounts: 4,
+        realm: 'Claudemoon',
         peakOnlineToday: 3,
         peakOnlineAllTime: 100,
         playersCap: 4242,

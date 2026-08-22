@@ -13,6 +13,7 @@ import type { AdminTranslations } from '../i18n.en';
 
 export const da_DK: AdminTranslations = {
   "app.title": "Cryptic Realm - Admin",
+  "app.titleRealm": "Cryptic Realm - Admin ({realm})",
   "app.shortTitle": "WoC-administration",
   "auth.username": "Brugernavn",
   "auth.password": "Adgangskode",
@@ -23,6 +24,8 @@ export const da_DK: AdminTranslations = {
   "auth.twoFactorLabel": "Godkendelseskode",
   "auth.twoFactorPlaceholder": "6-cifret eller gendannelseskode",
   "auth.twoFactorHint": "Indtast koden fra din godkendelsesapp, eller en af dine gendannelseskoder.",
+  "nav.realmBadge": "Realm",
+  "nav.switchRealm": "Switch realm",
   "nav.overview": "Oversigt",
   "nav.operations": "Operationer",
   "nav.usage": "Forbrug",
