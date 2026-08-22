@@ -9,6 +9,8 @@ dist/
 dist-env/
 dist-ota/
 dist-server/
+# facebook:build zip output (scripts/build_facebook_bundle.mjs)
+dist-facebook/
 release/
 release-steam/
 # generated main-process runtime bundles (scripts/electron-vendor.mjs)
