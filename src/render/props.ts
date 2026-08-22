@@ -2930,9 +2930,19 @@ export function collectBuildingImpostors(seed: number): {
     used.set(key, a);
     return a;
   };
+  // Mirror the near loop's theme height scale (buildProps): a themed realm
+  // scales building footprints via worldTheme and the near meshes scale their
+  // height by the same factor, so the far sprite must too or the building
+  // visibly squashes at the detail-horizon handoff. Authored assetId
+  // placements keep vScale 1, exactly like the near loop.
+  const themeBuildingScale = getActiveRealm().worldTheme?.buildingScale ?? 1;
   for (const b of activeContent.props.buildings) {
     if (b.landmark) continue;
     if (builtInWorld && isEastbrookRebuildBuilding(b)) continue;
+    // The Fenbridge rebuild kit keeps its bespoke view too; the near loop
+    // skips it, so a sprite here would draw a second building over it.
+    if (builtInWorld && isFenbridgeRebuildBuilding(b)) continue;
+    const vScale = b.assetId ? 1 : themeBuildingScale;
     const y = terrainHeight(b.x, b.z, seed);
     if (b.kind === 'chapel') {
       const tower = use('bellTower');
@@ -2951,7 +2961,7 @@ export function collectBuildingImpostors(seed: number): {
         z: center.z,
         rot: b.rot,
         widthScale: w / Math.max(tower.size.x, tower.size.z),
-        heightScale: CHAPEL_TOWER.height / tower.size.y,
+        heightScale: (CHAPEL_TOWER.height * vScale) / tower.size.y,
       });
       continue;
     }
@@ -2964,7 +2974,7 @@ export function collectBuildingImpostors(seed: number): {
       z: b.z,
       rot: b.rot,
       widthScale: Math.max(b.w, b.d) / Math.max(a.size.x, a.size.z),
-      heightScale: HOUSE_HEIGHT[asset] / a.size.y,
+      heightScale: (HOUSE_HEIGHT[asset] * vScale) / a.size.y,
     });
   }
   for (const d of activeContent.props.decorProps ?? []) {

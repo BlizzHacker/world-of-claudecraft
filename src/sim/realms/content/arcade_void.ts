@@ -75,4 +75,6 @@ export const ARCADE_VOID_REALM: RealmContent = {
       skillTrees: ['Sentries', 'Nanites', 'Mines'],
     },
   ],
+  // Grander settlement re-skin (see classic.ts note): scale/spread only.
+  worldTheme: { buildingScale: 1.6, buildingSpread: 2.2 },
 };

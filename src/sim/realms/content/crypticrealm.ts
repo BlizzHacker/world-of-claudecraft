@@ -98,4 +98,6 @@ export const CRYPTICREALM_REALM: RealmContent = {
   ],
   combatFeel: { castTimeMult: 0.3, gcdMult: 0.4 }, maxLevel: 99,
   combatScaling: { fromLevel: 20, hpPerLevel: 1.05, dmgPerLevel: 1.055 },
+  // Grander settlement re-skin (see classic.ts note): scale/spread only.
+  worldTheme: { buildingScale: 1.5, buildingSpread: 2.0 },
 };

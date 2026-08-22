@@ -44,4 +44,6 @@ export const EXCHANGE_REALM: RealmContent = {
   // The Exchange doesn't ship its own class skins — visiting characters keep
   // whatever class they're playing in their home realm.
   classes: [],
+  // Grander settlement re-skin (see classic.ts note): scale/spread only.
+  worldTheme: { buildingScale: 1.5, buildingSpread: 2.0 },
 };
