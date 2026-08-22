@@ -1,18 +1,16 @@
 import { audio } from '../game/audio';
-import { realmSeasonEyebrow, realmSeasonTitle } from './realm_season';
 import { corpseLootAvailability, localPartyMemberIds } from '../game/corpse_loot_availability';
+import { crypticMusic } from '../game/cryptic_music';
 import type { GamepadKind } from '../game/gamepad_map';
 import type { GraphicsSettingsSnapshot } from '../game/graphics_rebuild_core';
 import { InstanceMusicController } from '../game/instance_music';
 import { type Keybinds, keyCapLabel, keyLabel } from '../game/keybinds';
-import { music, musicZoneForLocation, shouldResetMusicForDungeonEntry } from '../game/music';
-import { crypticMusic } from '../game/cryptic_music';
 import { hideLoadingScreen, showLoadingScreen } from '../game/loading_screen';
 import type { MenuIntentKind } from '../game/menu_gamepad_nav';
+import { music, musicZoneForLocation, shouldResetMusicForDungeonEntry } from '../game/music';
 import type { GameSettings, Settings } from '../game/settings';
 import { sfx } from '../game/sfx';
 import type { UiEffectsTier } from '../game/ui_effects_profile';
-import { visualKeyFor } from '../render/characters/manifest';
 import {
   cadenceDue,
   coerceFxTier,
@@ -32,7 +30,7 @@ import {
   realmBodyKeyForEntity,
 } from '../render/characters';
 import { preloadMechAssets } from '../render/characters/assets';
-import { mechHeldWeaponOverride, skinCount } from '../render/characters/manifest';
+import { mechHeldWeaponOverride, skinCount, visualKeyFor } from '../render/characters/manifest';
 import type { ModularLook } from '../render/characters/modular';
 import {
   onPortraitsReady,
@@ -54,9 +52,9 @@ import { HEROIC_MARK_ITEM_ID } from '../sim/content/dungeon_difficulty';
 import { HEROIC_VENDOR_STOCK } from '../sim/content/heroic_vendor';
 import { isOnMountRaceStartPlatform, MOUNTS } from '../sim/content/mounts';
 import { recipeById } from '../sim/content/recipes';
+import { EVENT_SKIN_TIERS, type SkinTier } from '../sim/content/skins';
 import { FIRST_TALENT_LEVEL, type TalentAllocation, talentsFor } from '../sim/content/talents';
 import { resolveActiveWeaponSkin } from '../sim/content/weapon_skin_rules';
-import { delveAt, questRewardItem, ZoneDef } from '../sim/data';
 import {
   ABILITIES,
   ALL_RECIPES,
@@ -67,22 +65,24 @@ import {
   DELVES,
   DUNGEON_LIST,
   DUNGEON_X_THRESHOLD,
+  delveAt,
   dungeonAt,
-  isDelvePos,
-  isInteriorPos,
   ITEM_SETS,
   ITEMS,
+  isDelvePos,
+  isInteriorPos,
   MOBS,
   NPCS,
   QUESTS,
+  questRewardItem,
   WORLD_MAX_X,
   WORLD_MAX_Z,
   WORLD_MIN_X,
   WORLD_MIN_Z,
-  zoneAt,
   ZONES,
+  type ZoneDef,
+  zoneAt,
 } from '../sim/data';
-import { reconcileLootRolls as computeLootRollReconcile } from './loot_roll_reconcile';
 import { specialRoleColor } from '../sim/discord_roles';
 import { canEquipItem, isUniqueEquipped, weaponHand } from '../sim/equipment_rules';
 import { isItemLevelEligible, itemLevel, itemScore } from '../sim/item_level';
@@ -117,7 +117,6 @@ import type {
   SkinCatalog,
   SkinRank,
 } from '../sim/types';
-import { isQuestTurnInNpc } from '../sim/types';
 import {
   type AbilityEffect,
   ALL_CLASSES,
@@ -134,6 +133,7 @@ import {
   GATHER_CAST_ID,
   type ItemDef,
   isMechWearer,
+  isQuestTurnInNpc,
   MAX_LEVEL,
   MELEE_RANGE,
   MILESTONES,
@@ -158,6 +158,7 @@ import {
   type OverheadEmoteId,
   type PartyInfo,
 } from '../world_api';
+import type { DelveRunInfo } from '../world_api/delves';
 import {
   type AbilityScaling,
   abilityBuffValue,
@@ -168,8 +169,8 @@ import {
   abilitySecondaryEffect,
   abilityTemporalHourglassValues,
 } from './ability_damage';
-import { ArcadeMinigameWindow } from './arcade_minigame_window';
 import { abilityDisplayName, abilityDisplayNameFromSource } from './ability_display_name';
+import { ArcadeMinigameWindow } from './arcade_minigame_window';
 import { ArenaWindow } from './arena_window';
 import { auraDisplayNameFromSource } from './aura_display_name';
 import { type AuraEffectInput, auraEffectDescriptor } from './aura_effect';
@@ -189,6 +190,7 @@ import {
   bannerSubtextLines,
 } from './banner_queue';
 import { blockLandingLogKey } from './block_landing_feedback_core';
+import { paintBodySkinSwapRail } from './body_skin_swap_window';
 import { CalendarWindow } from './calendar_window';
 import { CardDuelWindow } from './card_duel_window';
 import { CastBarPainter, type CastBarPaintInput } from './cast_bar_painter';
@@ -231,6 +233,8 @@ import { ContinentMapPainter } from './continent_map_painter';
 import { type ContinentZoneRegion, continentZoneAt } from './continent_map_view';
 import { cookingCatchHintKey } from './cooking_catch_hint_view';
 import { formatMinimapCoords } from './coords';
+import { corpseHarvestView } from './corpse_harvest_view';
+import { renderCorpseHarvestPicker } from './corpse_harvest_window';
 import {
   buildCraftCastSession,
   type CraftCastSessionView,
@@ -250,6 +254,12 @@ import {
   craftOwnsTab,
 } from './crafting_view';
 import { craftCastStripElements, renderCraftingWindow, stationNameText } from './crafting_window';
+import { mountMoveHudButton } from './cryptic/move_hud_button';
+import {
+  isMusicWidgetHidden,
+  onMusicWidgetHiddenChange,
+  toggleMusicWidget,
+} from './cryptic/music_widget';
 import { shouldRefreshDailyRewardsLauncher } from './daily_rewards_launcher_core';
 import { DailyRewardsWindow } from './daily_rewards_window';
 import { deathRecapFeedback } from './death_recap_feedback';
@@ -258,8 +268,8 @@ import {
   deedBroadcastRendered,
   deedName,
   deedTitleText,
-  titledDisplayName,
   type TitledNameDecoration,
+  titledDisplayName,
   titledNameDecoration,
 } from './deed_i18n';
 import { DeedTrackerPainter } from './deed_tracker_painter';
@@ -270,19 +280,10 @@ import {
   makeDeedTrackerView,
 } from './deeds_view';
 import { DeedsWindow } from './deeds_window';
+import { DerbyHud } from './derby_hud';
 import { DevCommandWindow } from './dev_command_window';
 import { devTierBadgeDataUrl, devTierByIndex, devTierDisplayName } from './dev_tier';
 import { bindDialogKeyActivation } from './dialog_key_activation';
-import { corpseHarvestView } from './corpse_harvest_view';
-import { renderCorpseHarvestPicker } from './corpse_harvest_window';
-import { mountMoveHudButton } from './cryptic/move_hud_button';
-import {
-  isMusicWidgetHidden,
-  onMusicWidgetHiddenChange,
-  toggleMusicWidget,
-} from './cryptic/music_widget';
-import { DerbyHud } from './derby_hud';
-import { HordeHud } from './horde_hud';
 import { markDialogRoot } from './dialog_root';
 import { discordRoleTagLabel } from './discord_role_tag';
 import { discordStatusDisplayName } from './discord_tier';
@@ -349,6 +350,7 @@ import {
   shouldShowHealLanding,
 } from './heal_landing_feedback_core';
 import { honorFloatText } from './honor_float_view';
+import { HordeHud } from './horde_hud';
 import { isSelfOnlyAbility } from './hud/action_bar/ability_self_only';
 import {
   type ActionBarBindState,
@@ -458,6 +460,11 @@ import { LockpickController } from './hud/delve/lockpick_controller';
 import { RiteController } from './hud/delve/rite_controller';
 import { FiestaController } from './hud/fiesta/fiesta_controller';
 import { LootRollController } from './hud/loot/loot_roll_controller';
+import {
+  computeLootRollStatusRows,
+  type LootRollStatusRow,
+  lootRollStatusFingerprint,
+} from './hud/loot/loot_roll_status_view';
 import { lootSettingsView } from './hud/loot/loot_settings_view';
 import { renderLootSettingsWindow } from './hud/loot/loot_settings_window';
 import { LootWindowController } from './hud/loot/loot_window_controller';
@@ -483,12 +490,21 @@ import {
   type VendorMultiple,
 } from './hud/vendor/vendor_view';
 import { renderVendorWindow } from './hud/vendor/vendor_window';
-import { formatMoney as formatLocalizedMoney, formatNumber, getLanguage, moneyParts, t, tOptional, tPlural, type SupportedLanguage, type TranslationKey } from './i18n';
-import { iconDataUrl, QUALITY_COLOR, raidMarkerDataUrl } from './icons';
 import { buildWarfareVendorView, warfareShopViewer } from './hud/vendor/warfare_vendor_view';
 import { renderWarfareVendorWindow } from './hud/vendor/warfare_vendor_window';
 import { unitFrameCurrentMaxText } from './hud_frames';
-import { hasAuraRecipe } from './icons';
+import {
+  formatMoney as formatLocalizedMoney,
+  formatNumber,
+  getLanguage,
+  moneyParts,
+  type SupportedLanguage,
+  type TranslationKey,
+  t,
+  tOptional,
+  tPlural,
+} from './i18n';
+import { hasAuraRecipe, iconDataUrl, QUALITY_COLOR, raidMarkerDataUrl } from './icons';
 import { InspectWindow } from './inspect_window';
 import { itemArmorTypeLabelKey } from './item_armor_type';
 import { requiredClassesForTooltip } from './item_class_restriction';
@@ -502,8 +518,8 @@ import {
   itemNumber,
   itemStatName,
 } from './item_instance_tooltip';
-import { itemModelUrl } from './item_model_catalog';
 import { itemKindLabel, itemQualityLabel } from './item_kind_label';
+import { itemModelUrl } from './item_model_catalog';
 import { itemNameColor } from './item_name_color';
 import { itemSetMemberCounts, itemSetTooltipModel } from './item_set_tooltip_view';
 import { itemSlotLabel as itemSlotName } from './item_slot_labels';
@@ -511,9 +527,8 @@ import { knownItemDef, ownEntry } from './known_item';
 import { LeaderboardWindow } from './leaderboard_window';
 import { ReannounceMarker } from './live_region_reannounce';
 import { isCombatFlavorLog } from './log_event_route';
+import { reconcileLootRolls as computeLootRollReconcile } from './loot_roll_reconcile';
 import { lowHealthVignette } from './low_health';
-import { EVENT_SKIN_TIERS, SkinTier } from '../sim/content/skins';
-import { DelveRunInfo } from '../world_api/delves';
 import { type LowResourceView, lowResourceView, lowResourceViewInto } from './low_resource';
 import { mailIndicatorView } from './mailbox_view';
 import { MailboxWindow } from './mailbox_window';
@@ -545,7 +560,6 @@ import {
   npcMarkerAt,
   questAreaObjectivesAt,
 } from './map_window_view';
-import { computeLootRollStatusRows, lootRollStatusFingerprint, LootRollStatusRow } from './hud/loot/loot_roll_status_view';
 import { marketCollectIndicatorView } from './market_view';
 import { MarketWindow } from './market_window';
 import { materialHintLine } from './material_hint_view';
@@ -631,6 +645,7 @@ import { questMarkerTooltipTag } from './quest_marker_tags';
 import { questProgressEventText } from './quest_progress_text';
 import { lockoutParts, lockoutShape } from './raid_lockout';
 import { type RaidLockoutI18n, raidLockoutPanelHtml } from './raid_lockout_view';
+import { realmSeasonEyebrow, realmSeasonTitle } from './realm_season';
 import { restView } from './rest_indicator';
 import { isTalentRowUnlockLevel } from './row_unlock_toast';
 import { localizeServerText } from './server_i18n';
@@ -10037,7 +10052,6 @@ export class Hud {
     return t(`delveUi.affix.${affixId}` as TranslationKey);
   }
 
-
   private updateRiftTracker(): void {
     this.riftTracker.update();
   }
@@ -15052,7 +15066,8 @@ export class Hud {
       // Warcamp Skirmish: the instanced C&C battle (muster from the board).
       const skirmish = this.sim.skirmishInfo;
       if (!skirmish?.myQueued && !skirmish?.seat) {
-        const sLabel = tOptional('hudChrome.skirmish.gossipJoin') ?? 'Muster a Warcamp Skirmish (1-4 players)';
+        const sLabel =
+          tOptional('hudChrome.skirmish.gossipJoin') ?? 'Muster a Warcamp Skirmish (1-4 players)';
         html += `<button type="button" class="qd-list-item" data-skirmish-join="1" aria-label="${esc(sLabel)}"><span class="gold">⚑</span> ${esc(sLabel)}</button>`;
       } else if (skirmish?.myQueued) {
         const sLabel = tOptional('hudChrome.skirmish.gossipLeave') ?? 'Leave the muster roll';
@@ -15062,7 +15077,8 @@ export class Hud {
       // real defenders). Alarm when quiet; fortify between waves.
       const horde = this.sim.hordeInfo;
       if (!horde || horde.phase === 'idle') {
-        const label = tOptional('hudChrome.horde.gossipStart') ?? 'Sound the horde alarm (live event!)';
+        const label =
+          tOptional('hudChrome.horde.gossipStart') ?? 'Sound the horde alarm (live event!)';
         html += `<button type="button" class="qd-list-item" data-horde-start="1" aria-label="${esc(label)}"><span class="gold">⚔</span> ${esc(label)}</button>`;
       } else if (horde.phase === 'prep' || horde.phase === 'intermission') {
         const label =
@@ -17217,6 +17233,16 @@ export class Hud {
 
   private renderCharSkinPicker(): void {
     paintCharSkinPicker(this.skinHost());
+    // The tiered appearance rail beside the chroma row: grants come from the
+    // world's server-published verdict (bodySkinGrants), never a local guess;
+    // a pick calls the facet and the world/portrait repaint on refresh.
+    paintBodySkinSwapRail({
+      world: this.sim,
+      refresh: () => {
+        this.renderCharIfOpen();
+        this.drawPlayerFramePortrait();
+      },
+    });
   }
 
   private skinHost(): CharSkinPainterHost {

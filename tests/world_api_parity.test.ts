@@ -42,7 +42,7 @@ import type { IWorldActionBar } from '../src/world_api/action_bar';
 import type { IWorldBank } from '../src/world_api/bank';
 import type { IWorldBattleground } from '../src/world_api/battleground';
 import type { IWorldCardMinigame } from '../src/world_api/card_minigame';
-import { isOverheadEmoteId, type IWorldChat, OVERHEAD_EMOTES } from '../src/world_api/chat';
+import { type IWorldChat, isOverheadEmoteId, OVERHEAD_EMOTES } from '../src/world_api/chat';
 // The overhead-emote runtime surface the chat facet derives locally (see the
 // exhaustiveness guard at the bottom of this file): the seam imports sim/ for TYPES
 // only, so world_api/chat.ts rebuilds its id set from OVERHEAD_EMOTES instead of
@@ -61,8 +61,8 @@ import type { IWorldInteraction } from '../src/world_api/interaction';
 import type { IWorldInventory } from '../src/world_api/inventory';
 import type { IWorldLoot } from '../src/world_api/loot';
 import type { IWorldMail } from '../src/world_api/mail';
-import type { IWorldMinigames } from '../src/world_api/minigames';
 import type { IWorldMarket } from '../src/world_api/market';
+import type { IWorldMinigames } from '../src/world_api/minigames';
 import type { IWorldMounts } from '../src/world_api/mounts';
 import type { IWorldParty } from '../src/world_api/party';
 import type { IWorldPet } from '../src/world_api/pet';
@@ -75,6 +75,7 @@ import type { IWorldTargeting } from '../src/world_api/targeting';
 import type { IWorldTelemetry } from '../src/world_api/telemetry';
 import type { IWorldTrade } from '../src/world_api/trade';
 import type { IWorldValeCup } from '../src/world_api/vale_cup';
+
 const FACET_DUNGEON_FINDER = [
   'dungeonFinderInfo',
   'dungeonFinderBoard',
@@ -88,7 +89,6 @@ const FACET_DUNGEON_FINDER = [
   'dungeonFinderApplyCancel',
   'dungeonFinderApplicationRespond',
 ] as const satisfies readonly (keyof IWorldDungeonFinder)[];
-
 
 type IWorldMemberKind = 'method' | 'data';
 
@@ -180,6 +180,8 @@ export const IWORLD_MEMBERS = [
   { name: 'changeWeaponSkin', kind: 'method' },
   { name: 'toggleWeaponStow', kind: 'method' },
   { name: 'setHelmHidden', kind: 'method' },
+  { name: 'setBodySkin', kind: 'method' },
+  { name: 'bodySkinGrants', kind: 'method' },
   { name: 'unstuck', kind: 'method' },
   { name: 'releaseSpirit', kind: 'method' },
   { name: 'resurrectAtCorpse', kind: 'method' },
@@ -567,9 +569,9 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
     // Rift + mounts surface. The v0.31.0 base merge added the release's three new
     // members on top of the branch's 272; making reins usable items then removed
     // two (selectedMount + selectMount) for 273; the v0.32.0 base merge adds
-    expect(IWORLD_MEMBERS.length).toBe(324);
+    expect(IWORLD_MEMBERS.length).toBe(326);
     expect(DATA_MEMBERS.length).toBe(80);
-    expect(METHOD_MEMBERS.length).toBe(244);
+    expect(METHOD_MEMBERS.length).toBe(246);
     // activeMasterLootRolls, leaving 274; the packet's slotted tool effects add
     // toolEffectSlots (data) and slotToolEffect (method) for 276, the
     // acquisition craft's recharge command (rechargeToolEffect) makes 277,
@@ -595,10 +597,11 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
     // (data) plus openCommissionOrder/cancelCommissionOrder/
     // acceptCommissionOrder/deliverCommissionOrder (methods), leaving 299.
     // This branch's paperdoll helmet-visibility eye adds setHelmHidden
-    // (IWorldCosmetics, a method), leaving 300.
-    expect(IWORLD_MEMBERS.length).toBe(324);
+    // (IWorldCosmetics, a method), leaving 300. The body-skin fly-swap adds
+    // setBodySkin + bodySkinGrants (IWorldCosmetics, both methods).
+    expect(IWORLD_MEMBERS.length).toBe(326);
     expect(DATA_MEMBERS.length).toBe(80);
-    expect(METHOD_MEMBERS.length).toBe(244);
+    expect(METHOD_MEMBERS.length).toBe(246);
   });
   it('has no duplicate member names', () => {
     const names = IWORLD_MEMBERS.map((m) => m.name);
@@ -644,6 +647,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'bgQueueLeave',
       'blockAdd',
       'blockRemove',
+      'bodySkinGrants',
       'buyBackItem',
       'buyHeroicVendorItem',
       'buyItem',
@@ -876,6 +880,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'sellAllJunk',
       'sellItem',
       'setActiveTitle',
+      'setBodySkin',
       'setDungeonDifficulty',
       'setHelmHidden',
       'setMarker',
@@ -1046,6 +1051,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'bgQueueLeave',
       'blockAdd',
       'blockRemove',
+      'bodySkinGrants',
       'buyBackItem',
       'buyHeroicVendorItem',
       'buyItem',
@@ -1221,6 +1227,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'sellAllJunk',
       'sellItem',
       'setActiveTitle',
+      'setBodySkin',
       'setDungeonDifficulty',
       'setHelmHidden',
       'setMarker',
@@ -1432,6 +1439,8 @@ const FACET_COSMETICS = [
   'changeWeaponSkin',
   'toggleWeaponStow',
   'setHelmHidden',
+  'setBodySkin',
+  'bodySkinGrants',
 ] as const satisfies readonly (keyof IWorldCosmetics)[];
 type _ExhaustCosmetics = AssertNever<
   Exclude<keyof IWorldCosmetics, (typeof FACET_COSMETICS)[number]>
@@ -1733,7 +1742,9 @@ const FACET_MINIGAMES = [
   'minigameRtsTrain',
   'minigameHousingPlace',
 ] as const satisfies readonly (keyof IWorldMinigames)[];
-type _ExhaustMinigames = AssertNever<Exclude<keyof IWorldMinigames, (typeof FACET_MINIGAMES)[number]>>;
+type _ExhaustMinigames = AssertNever<
+  Exclude<keyof IWorldMinigames, (typeof FACET_MINIGAMES)[number]>
+>;
 
 const FACET_PROFESSIONS = [
   'professionsState',
@@ -1858,8 +1869,8 @@ describe('W1: aggregate IWorld member set equals the disjoint union of the facet
 
   it('the facet union equals the pinned IWORLD_MEMBERS set', () => {
     const union = Object.values(FACET_MEMBER_ARRAYS).flatMap((arr) => [...arr]);
-    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(324);
-    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(324);
+    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(326);
+    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(326);
     const sortedUnion = [...union].sort();
     const pinned = IWORLD_MEMBERS.map((m) => m.name).sort();
     expect(sortedUnion).toEqual(pinned);

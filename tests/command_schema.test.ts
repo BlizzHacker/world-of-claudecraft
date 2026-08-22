@@ -44,9 +44,11 @@ const repoRoot = fileURLToPath(new URL('..', import.meta.url));
 // (bg_queue/bg_leave/bg_flag sends plus the dev-only bg_queue force start),
 // and stopAutoAttackOnTargetSwitch joining as a send + dispatch pair (issue #1358).
 // This branch adds set_helm as a send + dispatch pair (the paperdoll
-// helmet-visibility eye; helmHidden persists per character like weaponStowed).
-const EXPECTED_SEND_COUNT = 224;
-const EXPECTED_DISPATCH_COUNT = 237;
+// helmet-visibility eye; helmHidden persists per character like weaponStowed),
+// then set_body_skin (the tiered body-skin fly-swap; the server re-authorizes
+// via authorizeBodySkin before Entity.bodySkinId changes).
+const EXPECTED_SEND_COUNT = 226;
+const EXPECTED_DISPATCH_COUNT = 239;
 const EXPECTED_DISPATCH_ONLY_COUNT = 13;
 
 // The chat sub-channel routing switch (server/game.ts `switch

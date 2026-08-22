@@ -1191,9 +1191,9 @@ describe('curated bare-named pure cores (cross-check)', () => {
     // but forgotten here would escape both onDiskCores() (bare name) and the loop above
     // (not listed), reopening the gap; this equality makes that omission fail.
     const derivedBare = deriveBareNamedCores(UI_PURE_CORES, RENDER_PURE_CORES);
-    const bareNamedRel = [...new Set(
-      BARE_NAMED.map((f) => relative(repoRoot, f).split('\\').join('/')),
-    )].sort();
+    const bareNamedRel = [
+      ...new Set(BARE_NAMED.map((f) => relative(repoRoot, f).split('\\').join('/'))),
+    ].sort();
     expect(
       derivedBare.map((f) => f.split(String.fromCharCode(92)).join('/')),
       'BARE_NAMED must equal the registered cores whose name is bare (not _view/_core)',
@@ -1487,6 +1487,7 @@ const UI_DOM_MODULES = [
   'src/ui/bags_window.ts',
   'src/ui/bank_quantity_prompt.ts',
   'src/ui/bank_window.ts',
+  'src/ui/body_skin_swap_window.ts',
   'src/ui/breath_bar.ts',
   'src/ui/calendar_window.ts',
   'src/ui/camera_prompt.ts',

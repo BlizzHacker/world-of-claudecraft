@@ -70,6 +70,7 @@
 import type { IWorldActionBar } from './world_api/action_bar';
 import type { IWorldBank } from './world_api/bank';
 import type { IWorldBattleground } from './world_api/battleground';
+import type { IWorldBoarpit } from './world_api/boarpit';
 import type { IWorldCardMinigame } from './world_api/card_minigame';
 import type { IWorldChat } from './world_api/chat';
 import type { IWorldCombat } from './world_api/combat';
@@ -77,16 +78,14 @@ import type { IWorldCosmetics } from './world_api/cosmetics';
 import type { IWorldDailyRewards } from './world_api/daily_rewards';
 import type { IWorldDeeds } from './world_api/deeds';
 import type { IWorldDelves } from './world_api/delves';
-import type { IWorldBoarpit } from './world_api/boarpit';
-import type { IWorldHomes } from './world_api/homes';
-import type { IWorldHorde } from './world_api/horde';
-import type { IWorldSkirmish } from './world_api/skirmish';
 import type { IWorldDerby } from './world_api/derby';
 import type { IWorldDuelArena } from './world_api/duel_arena';
 import type { IWorldDungeonFinder } from './world_api/dungeon_finder';
 import type { IWorldDungeons } from './world_api/dungeons';
 import type { IWorldEntityRoster } from './world_api/entity_roster';
 import type { IWorldGuildBank } from './world_api/guild_bank';
+import type { IWorldHomes } from './world_api/homes';
+import type { IWorldHorde } from './world_api/horde';
 import type { IWorldInteraction } from './world_api/interaction';
 import type { IWorldInventory } from './world_api/inventory';
 import type { IWorldLoot } from './world_api/loot';
@@ -99,6 +98,7 @@ import type { IWorldPet } from './world_api/pet';
 import type { IWorldProfessions } from './world_api/professions';
 import type { IWorldProgressionXp } from './world_api/progression_xp';
 import type { IWorldQuests } from './world_api/quests';
+import type { IWorldSkirmish } from './world_api/skirmish';
 import type { IWorldSocialGraph } from './world_api/social_graph';
 import type { IWorldTalents } from './world_api/talents';
 import type { IWorldTargeting } from './world_api/targeting';
@@ -149,6 +149,14 @@ export type StableCooldownWire =
   | number
   | readonly [expiresAt: number, recoveryRate: number, acceleratedUntil: number];
 
+export type {
+  ArcadeState,
+  ArcadeWireState,
+  MinigameFeatureId,
+  MinigameSessionState,
+  ZombieDefenseSessionState,
+} from './sim/minigames';
+export type { TowerKind } from './sim/minigames/zombie_defense';
 // --- facet aux-type + value re-exports (each travels with its facet file) ---
 export type {
   ActionBarFormLayout,
@@ -165,6 +173,13 @@ export type {
   BgMatchInfo,
   BgPlayerInfo,
 } from './world_api/battleground';
+export type {
+  IWorldBoarpit,
+  PitBoutInfo,
+  PitFighterInfo,
+  PitInfo,
+  PitPhase,
+} from './world_api/boarpit';
 export type { CardMinigameInfo } from './world_api/card_minigame';
 export { isOverheadEmoteId, OVERHEAD_EMOTES } from './world_api/chat';
 export type { ActiveFrostRing, ActiveTemporalHourglass } from './world_api/combat';
@@ -200,21 +215,6 @@ export type {
   IWorldDerby,
 } from './world_api/derby';
 export type {
-  IWorldBoarpit,
-  PitBoutInfo,
-  PitFighterInfo,
-  PitInfo,
-  PitPhase,
-} from './world_api/boarpit';
-export type { HomeLotView, HomesInfo, IWorldHomes } from './world_api/homes';
-export type { HordeInfo, HordePhase, IWorldHorde } from './world_api/horde';
-export type {
-  IWorldSkirmish,
-  SkirmishInfo,
-  SkirmishPhase,
-  SkirmishSeatInfo,
-} from './world_api/skirmish';
-export type {
   ArenaInfo,
   ArenaLadderEntry,
   DuelInfo,
@@ -240,19 +240,13 @@ export {
   type GuildBankLogOp,
   type GuildBankLogView,
 } from './world_api/guild_bank';
+export type { HomeLotView, HomesInfo, IWorldHomes } from './world_api/homes';
+export type { HordeInfo, HordePhase, IWorldHorde } from './world_api/horde';
 export type { WorldInteractionOutcome } from './world_api/interaction';
 export type { MailInfo, MailKindView, MailMessageView } from './world_api/mail';
 export type { MarketInfo, MarketListingView } from './world_api/market';
-export type { IWorldMinigames } from './world_api/minigames';
-export type {
-  ArcadeState,
-  ArcadeWireState,
-  MinigameFeatureId,
-  MinigameSessionState,
-  ZombieDefenseSessionState,
-} from './sim/minigames';
-export type { TowerKind } from './sim/minigames/zombie_defense';
 export { queryDiffersFromEcho, searchDiffersFromEcho } from './world_api/market';
+export type { IWorldMinigames } from './world_api/minigames';
 export type { MountRaceView } from './world_api/mounts';
 export type { PartyInfo, PartyMemberAura, PartyMemberInfo } from './world_api/party';
 export type {
@@ -268,6 +262,12 @@ export type {
   GuildLeaderboardEntry,
   LeaderboardEntry,
 } from './world_api/progression_xp';
+export type {
+  IWorldSkirmish,
+  SkirmishInfo,
+  SkirmishPhase,
+  SkirmishSeatInfo,
+} from './world_api/skirmish';
 export type {
   CharacterProfile,
   CharacterSearchResult,
@@ -665,6 +665,11 @@ export const COMMAND_NAMES = [
   // Paperdoll eye toggle: helmet-visibility preference on the composed body.
   // Appended because wire tokens are never reordered.
   'set_helm',
+  // Tiered body-skin fly-swap: change bodySkinId in-game (null clears back to
+  // the class body). The server re-runs authorizeBodySkin against account
+  // facts before Entity.bodySkinId ever changes; the char-select REST route
+  // (/api/characters/:id/body-skin) stays the out-of-world path.
+  'set_body_skin',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -806,6 +811,7 @@ export const COMMAND_FACETS = {
   change_weapon_skin: 'IWorldCosmetics',
   stow_weapon: 'IWorldCosmetics',
   set_helm: 'IWorldCosmetics',
+  set_body_skin: 'IWorldCosmetics',
   // IWorldPet: hunter-pet commands (snake_case wire strings, by design; pet state
   // mirrors on the owned-mob entity wire, not a self-snapshot field).
   pet_abandon: 'IWorldPet',

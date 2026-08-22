@@ -1,3 +1,4 @@
+import type { BodySkinGrantContext } from '../sim/cosmetics/body_skins';
 import type { WeaponSkinType } from '../sim/types';
 
 export interface AccountCosmetics {
@@ -30,4 +31,13 @@ export interface IWorldCosmetics {
   // and portraits present the chosen look, and persists per character through
   // the sim's own save. Explicit boolean, not a toggle, so it is idempotent.
   setHelmHidden(hidden: boolean): void;
+  // Change the tiered body skin (src/sim/cosmetics/body_skins.ts) on the fly:
+  // null clears back to the class body; a skin id is a WISH re-authorized by
+  // the host (the server against account facts, the offline Sim against local
+  // meta) before it ever reaches Entity.bodySkinId and the `bs` wire.
+  setBodySkin(skinId: string | null): void;
+  // The grant facts the appearance rail paints from: online the SERVER's
+  // published self verdict (never a client derivation), offline the Sim's own
+  // local meta. Feed it straight into authorizeBodySkin for picker painting.
+  bodySkinGrants(): BodySkinGrantContext;
 }
