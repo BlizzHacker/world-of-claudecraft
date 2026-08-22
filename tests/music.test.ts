@@ -5,6 +5,7 @@ import {
   MusicDirector,
   musicZoneForLocation,
   riftMusicZoneForTheme,
+  setCrypticMusicActive,
   shouldResetMusicForDungeonEntry,
   THEME_TRIM,
 } from '../src/game/music';
@@ -371,14 +372,16 @@ describe('MusicDirector stream keeper', () => {
   });
 });
 
-describe('MusicDirector boss combat loop', () => {
+describe('MusicDirector boss combat loop (retired file track)', () => {
   afterEach(() => {
+    setCrypticMusicActive(false);
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
     FakeBufferSource.instances = [];
+    FakeAudio.instances = [];
   });
 
-  it('loads and loops the boss track through the unlocked music AudioContext', async () => {
+  it('never fetches or starts the removed boss file track', async () => {
     const fetchMock = vi.fn(async () => ({
       arrayBuffer: async () => new ArrayBuffer(8),
     }));
@@ -389,18 +392,72 @@ describe('MusicDirector boss combat loop', () => {
     const director = new MusicDirector();
     director.init();
     director.setBossCombat(true);
-    for (let i = 0; i < 10 && FakeBufferSource.instances.length === 0; i++) {
-      await Promise.resolve();
-    }
+    for (let i = 0; i < 10; i++) await Promise.resolve();
 
-    expect(fetchMock).toHaveBeenCalledWith('/audio/dungeon-boss-fight.mp3');
-    const source = FakeBufferSource.instances[0];
-    expect(source.loop).toBe(true);
-    expect(source.start).toHaveBeenCalledTimes(1);
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(FakeBufferSource.instances).toHaveLength(0);
 
     director.setBossCombat(false);
-    expect(source.stop).toHaveBeenCalledTimes(1);
-    expect(source.disconnect).toHaveBeenCalledTimes(1);
+    expect(FakeBufferSource.instances).toHaveLength(0);
+  });
+
+  it('holds the boss gain at zero while the CR soundtrack owns the mix', () => {
+    vi.stubGlobal('AudioContext', FakeAudioContext);
+    vi.stubGlobal('Audio', FakeAudio);
+    vi.stubGlobal('window', { setInterval: vi.fn(() => 1) });
+    setCrypticMusicActive(true);
+    const director = makeDirector();
+    director.setBossCombat(true);
+    const bossGain = (director as unknown as { bossGain: FakeGain }).bossGain;
+    expect(bossGain.gain.value).toBe(0);
+    clearInterval(internals(director).timer);
+  });
+});
+
+describe('MusicDirector Sowfield tracks (retired file pair)', () => {
+  afterEach(() => {
+    setCrypticMusicActive(false);
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+    FakeAudio.instances = [];
+  });
+
+  const boot = () => {
+    vi.stubGlobal('AudioContext', FakeAudioContext);
+    vi.stubGlobal('Audio', FakeAudio);
+    vi.stubGlobal('window', { setInterval: vi.fn(() => 1) });
+    return makeDirector();
+  };
+
+  it('creates no Sowfield media elements now the mp3 pair is removed', () => {
+    const director = boot();
+    const before = FakeAudio.instances.length;
+    director.setSowfieldTrack('waiting');
+    director.setSowfieldTrack('match');
+    expect(FakeAudio.instances.length).toBe(before);
+    const inner = director as unknown as {
+      sowfieldWaitingEl: FakeAudio | null;
+      sowfieldMatchEl: FakeAudio | null;
+    };
+    expect(inner.sowfieldWaitingEl).toBeNull();
+    expect(inner.sowfieldMatchEl).toBeNull();
+    director.setSowfieldTrack(null);
+    clearInterval(internals(director).timer);
+  });
+
+  it('holds the Sowfield gains at zero while the CR soundtrack owns the mix', () => {
+    setCrypticMusicActive(true);
+    const director = boot();
+    director.setSowfieldTrack('waiting');
+    const inner = director as unknown as {
+      sowfieldWaitingGain: FakeGain;
+      sowfieldMatchGain: FakeGain;
+    };
+    expect(inner.sowfieldWaitingGain.gain.value).toBe(0);
+    expect(inner.sowfieldMatchGain.gain.value).toBe(0);
+    director.setSowfieldTrack('match');
+    expect(inner.sowfieldMatchGain.gain.value).toBe(0);
+    clearInterval(internals(director).timer);
   });
 });
 
