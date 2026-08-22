@@ -4,9 +4,14 @@ Your developer account: **wadeivy11@gmail.com** (already approved).
 
 ## What you have
 - **Signed app bundle**: `C:\MoveWeight\cryptic-realm-v1-slim.aab` (the slim build — loads the live MMO, ~a few MB, under Play's 200 MB limit).
-- **Upload keystore**: `C:\MoveWeight\cryptic-realm\cryptic-realm-upload.keystore`
-  - Password: `CrypticRealm2026`, alias: `cryptic-realm`
-  - ⚠️ **BACK THIS UP somewhere safe.** Google signs every future update with it. Lose it and you can't update the app (you'd need a key reset request).
+- **Upload keystore**: `C:\MoveWeight\cryptic-realm\cryptic-realm-upload.keystore`, alias `cryptic-realm`.
+  - The store/key passwords are NOT in this repo. They live in the gitignored
+    `android/keystore.properties` on the build machine, and with the two
+    off-machine backups (Proxmox host `192.168.0.6:/root/cr-keystore-backup-20260822/`
+    and LXC 171 `/root/cr-keystore-backup-20260822-*`, both root-only).
+  - Backed up 2026-08-22, sha256 `15060dd0...de98b44` verified at both copies.
+    Google signs every future update with this key; a lost keystore means a
+    Play key reset request.
 
 ## One-time setup (first upload)
 
@@ -16,7 +21,7 @@ Your developer account: **wadeivy11@gmail.com** (already approved).
    - Accept the declarations.
 
 2. **Complete the required "Set up your app" tasks** (left nav → *Dashboard*). Play won't let you publish until these are done:
-   - **App access** — if login is required to see content, give them test credentials: `playtest1` / `PlayTest2026!` (the test account I created). Or mark "All functionality available without restrictions" if the realm list is browsable pre-login.
+   - **App access** — if login is required to see content, give them test credentials (a dedicated review account; keep the password out of this repo, it lives with the keystore backups). Or mark "All functionality available without restrictions" if the realm list is browsable pre-login.
    - **Ads** — declare whether the app shows ads (No, unless you add them).
    - **Content rating** — fill the questionnaire (it's a fantasy ARPG with mild combat violence → likely Teen / PEGI 12).
    - **Target audience** — 13+ (avoid the "designed for children" rules).
