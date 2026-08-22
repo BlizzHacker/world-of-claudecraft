@@ -59,6 +59,14 @@ const REJECTED_FILES = [
   'realm_fps_near_future_soldier_robust_01948be9.glb',
   'realm_infernal_eddie_somewhere_time_appears_0193ea76.glb',
   'realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289.glb',
+  // The 2026-08-21 civilian bank review: the operator failed both of these on
+  // sight, and the store sweep found no low-tier replacement for either. The
+  // craftsman is the one worth pinning, because the obvious repair does not
+  // work: the GLB is already smooth-shaded, so the faceting is geometry at
+  // 5,020 triangles and no normal edit can add silhouette resolution.
+  'realm_crypticrealm_craftsman_warrior_monk_019ee5e1.glb',
+  'realm_crypticrealm_town_guard_female_armored_019875c0.glb',
+  'realm_classic_humanoid_upper_santa_claus_0193a19d.glb',
 ] as const;
 
 const REJECTED_KEYS = REJECTED_FILES.map((file) => file.replace(/\.glb$/, ''));

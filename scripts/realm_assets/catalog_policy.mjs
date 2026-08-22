@@ -98,6 +98,28 @@ export const PERMANENTLY_REJECTED_REALM_BODY_FILES = new Set([
   'realm_infernal_nosferatu_shadow_sketchto3d_mons_019834ac.glb', // ships with no texture at all
   'realm_infernal_highly_muscular_albino_devil_0193e9b2.glb', // Sister Nhalia's body: plinth baked into the mesh
   'realm_infernal_malevolent_majesty_fantasy_creat_019bb848.glb', // skull statue on a pedestal, reached by override
+  // --- 2026-08-21 civilian bank review -------------------------------------
+  // The operator failed both of these on sight, and the store sweep (3,784
+  // store plus 3,631 staging GLBs, 71 rendered at head zoom) found the rigged
+  // humanoids split into two tiers with nothing between them: 23-joint mass_rig
+  // at 4,500 to 11,000 triangles, and 24-joint meshy24 at roughly 51,000. Every
+  // body he has failed is in the first tier, every body he passed is in the
+  // second, four for four in each direction. These two are 5,020 and 7,496.
+  //
+  // The craftsman is the one worth recording, because the obvious repair does
+  // not work: the store copy is ALREADY smooth-shaded. Grouping its vertices by
+  // exact stored position gives 2,176 multi-vertex groups whose mean maximum
+  // internal normal angle is 0.00 degrees, so flat shading was never the fault.
+  // Re-running smooth_normals.mjs rewrites the NORMAL accessor and changes the
+  // render not at all. At 5,020 triangles for a whole body the crown is a
+  // chamfered polygon in silhouette, and no normal edit adds silhouette
+  // resolution.
+  'realm_crypticrealm_craftsman_warrior_monk_019ee5e1.glb',
+  'realm_crypticrealm_town_guard_female_armored_019875c0.glb',
+  // A not-a-person the first audit missed: rigged, 9,715 triangles, and renders
+  // as an empty red coat with no head inside it.
+  'realm_classic_humanoid_upper_santa_claus_0193a19d.glb',
+
   // The shredded creature-pool bodies. Their store leaf name is not their
   // registry key (see REJECTED_REALM_BODY_KEYS below), so both forms are named.
   'dusk_fiend_019b3419.glb',

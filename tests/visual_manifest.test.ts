@@ -4,6 +4,7 @@ import { NodeIO } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
 import { MeshoptDecoder } from 'meshoptimizer';
 import { describe, expect, it } from 'vitest';
+import { CIVILIAN_VISUAL_KEYS } from '../src/render/characters/infernal_roster';
 import {
   type ClipMap,
   manifestUrls,
@@ -15,6 +16,18 @@ import {
 } from '../src/render/characters/manifest';
 import { NPCS } from '../src/sim/data';
 import { setRealmHostEnv } from '../src/sim/realms/registry';
+
+/**
+ * Every body a Cryptic Realm or Infernal townsperson may wear: both civilian
+ * rotations plus the one role-only body the militia pins name.
+ *
+ * Asserted as MEMBERSHIP rather than as a key-name pattern. The bank used to be
+ * all realm_crypticrealm_ and is now half realm_infernal_ (the male bodies are
+ * the townswomen's own generation siblings), so a name pattern would have to be
+ * widened every time the bank moves, and it silently over-matches besides:
+ * realm_infernal_male_s-orc-erer reads as an orc to a substring test.
+ */
+const TOWN_BANK = [...CIVILIAN_VISUAL_KEYS, 'realm_infernal_hero_crusader'];
 
 function expectedClipNames(clips: ClipMap): string[] {
   return [
@@ -83,15 +96,15 @@ describe('character visual manifest', () => {
     );
     // Both the pinned official and an unpinned id land on a real townsperson
     // from the civilian bank that replaced the condemned one.
-    expect(visualKeyFor({ kind: 'npc', templateId: 'warden_fenwick' } as never)).toMatch(
-      /^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/,
+    expect(TOWN_BANK).toContain(
+      visualKeyFor({ kind: 'npc', templateId: 'warden_fenwick' } as never),
     );
-    expect(
+    expect(TOWN_BANK).toContain(
       visualKeyFor({
         kind: 'npc',
         templateId: 'unlisted_infernal_npc',
       } as never),
-    ).toMatch(/^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/);
+    );
     setRealmHostEnv(null);
   });
 
@@ -131,14 +144,18 @@ describe('character visual manifest', () => {
       'a_future_cryptic_civilian',
     ];
     const npcKeys = npcIds.map((templateId) => visualKeyFor({ kind: 'npc', templateId } as never));
-    // RAISED BACK from 3. The condemned bank is gone and the civilian rotation
-    // is five reviewed human townspeople; see docs/condemned-body-bank.md. The
-    // village_elder arm of the pattern is deliberately gone: both elders were
-    // rejected on 2026-08-21 for chibi head proportions.
-    expect(new Set(npcKeys).size).toBeGreaterThanOrEqual(4);
+    // RAISED BACK from 3. The condemned bank is gone and the bank is eight
+    // reviewed bodies in one art family; see docs/condemned-body-bank.md.
+    expect(new Set(npcKeys).size).toBeGreaterThanOrEqual(5);
     for (const key of npcKeys) {
-      expect(key).toMatch(/^realm_crypticrealm_(townswoman|town_guard|craftsman)_/);
-      expect(key).not.toMatch(/bone_herald|npc_|elf|orc|demon/i);
+      expect(TOWN_BANK).toContain(key);
+      // Whole key SEGMENTS, never substrings: realm_infernal_male_s-orc-erer is
+      // in the bank and a bare /orc/ reads it as an orc. The Demon Hunter is a
+      // hunter OF demons, a reviewed human in a hooded coat.
+      expect(key).not.toMatch(/bone_herald|^npc_|(?:^|_)(?:elf|orc)(?:_|$)/i);
+      if (key !== 'realm_infernal_hero_demon_hunter') {
+        expect(key).not.toMatch(/(?:^|_)demon(?:_|$)/i);
+      }
     }
     setRealmHostEnv(null);
   });
@@ -147,17 +164,13 @@ describe('character visual manifest', () => {
     // The CONDEMNED bank used to be the other half of this test. It is gone
     // (docs/condemned-body-bank.md), so what is checked now is the CIVILIAN
     // bank that replaced it plus the class bank, which was never condemned.
-    // The two trenchcoat townsmen went when their GLBs turned out to 404, and
-    // the two village elders went on 2026-08-21 as the source of the operator's
-    // "NPC heads too wide" report.
-    const npcKeys = [
-      'realm_crypticrealm_town_guard_female_armored_019875c0',
-      'realm_crypticrealm_craftsman_warrior_monk_019ee5e1',
-      'realm_crypticrealm_townswoman_practical_monk_f',
-      'realm_crypticrealm_townswoman_robed_priest_f',
-      'realm_crypticrealm_townswoman_hooded_mage_f',
-      'realm_crypticrealm_townswoman_hooded_rogue_f',
-    ];
+    // The two trenchcoat townsmen went when their GLBs turned out to 404, the
+    // two village elders went on 2026-08-21 as the source of the operator's
+    // "NPC heads too wide" report, and the craftsman and the armored guard went
+    // with them when he failed both on sight. The bank below is the whole
+    // replacement, and it is deliberately one art family: eight 24-joint
+    // meshy24 bodies between 50,514 and 52,014 triangles.
+    const npcKeys = [...TOWN_BANK];
     const classKeys = Object.keys(VISUALS).filter((key) =>
       /^realm_infernal_class_\w+_f$/.test(key),
     );
@@ -249,9 +262,7 @@ describe('character visual manifest', () => {
       'chronicler_edda_hartwell',
     ]) {
       const key = visualKeyFor({ kind: 'npc', templateId } as never);
-      expect(key, templateId).toMatch(
-        /^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/,
-      );
+      expect(TOWN_BANK, templateId).toContain(key);
     }
     setRealmHostEnv(null);
     const visual = VISUALS.npc_chronicler;

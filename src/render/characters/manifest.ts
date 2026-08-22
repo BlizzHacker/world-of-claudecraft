@@ -14,7 +14,7 @@ import {
   bodySkinOverrideKeys,
   isTieredSkinBody,
 } from '../../sim/cosmetics/body_skins';
-import { ITEMS, MOBS } from '../../sim/data';
+import { ITEMS, MOBS, NPCS } from '../../sim/data';
 import { realmClassVisualKey, resolveRealmCharacterVisual } from '../../sim/realms/class_visuals';
 import {
   infernalCharacterSelection,
@@ -24,6 +24,7 @@ import { resolveActiveRealmId } from '../../sim/realms/registry';
 import { ALL_CLASSES, type Entity, isMechWearer, type PlayerClass } from '../../sim/types';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
 import type { OverheadEmoteId } from '../../world_api';
+import { npcStructureVisualKey } from '../npc_structures';
 import { GENERATED_ARACHNID_VISUALS } from './arachnids.generated';
 import { isSelectableBody, selectBodyFromPool } from './body_shape_gate';
 import { KAYKIT_EMOTES, MESHY_BANK_EMOTES, MESHY_CLIP_BANK_URL, withMeshyBank } from './clip_vocab';
@@ -575,6 +576,8 @@ const CREATURES = 'models/creatures';
 const DUNGEON_MODELS = 'models/dungeon';
 const WEAPONS = 'models/weapons';
 const MOUNTS_DIR = 'models/mounts';
+/** World set dressing, for the NPC templates that are furniture rather than people. */
+const BIOME = 'models/biome';
 const REALM_MODELS = '/cr-realms';
 
 /**
@@ -1495,19 +1498,16 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   // registerOverrideVisual reuses when an operator override names the same URL.
   // catalog_policy.mjs carries the ban and the measurements.
 
-  // mass_rig 23-joint, full 22-clip vocabulary.
-  realm_crypticrealm_town_guard_female_armored_019875c0: {
-    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_town_guard_female_armored_019875c0.glb`,
-    height: HUMANOID_H,
-    clips: kaykit(['1H_Melee_Attack_Chop', '2H_Melee_Attack_Chop']),
-    lazyPreload: true,
-  },
-  realm_crypticrealm_craftsman_warrior_monk_019ee5e1: {
-    url: `${REALM_MODELS}/crypticrealm/realm_crypticrealm_craftsman_warrior_monk_019ee5e1.glb`,
-    height: HUMANOID_H,
-    clips: kaykit(['1H_Melee_Attack_Chop']),
-    lazyPreload: true,
-  },
+  // The armored guard and the craftsman stood here until 2026-08-21, when the
+  // operator failed both on sight and the store sweep found no low-tier
+  // replacement. They are 7,496 and 5,020 triangles on the 23-joint mass_rig,
+  // and every body he has failed came from that tier while every body he passed
+  // came from the 24-joint, ~51k meshy24 tier. The craftsman in particular
+  // cannot be repaired by shading: the GLB is ALREADY smooth (mean maximum
+  // normal angle across its 2,176 coincident-vertex groups is 0.00 degrees), so
+  // the faceted crown is silhouette resolution and no normal edit can add it.
+  // Their replacements are Infernal meshy24 siblings registered by the pipeline;
+  // see infernal_roster.ts. catalog_policy.mjs carries the ban.
   // realm_infernal_village_elder_brown_robe_01952165 was the Infernal alias of
   // the brown elder above, the same rejected mesh under a second name, and went
   // with it.
@@ -2981,6 +2981,27 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.35,
   },
+  // The two NPC templates that are FURNITURE (npc_structures.ts). Same GLBs the
+  // world already draws them with through buildGroundQuestObject, registered
+  // here so the 2D surfaces stop asking for a body and getting a townswoman.
+  // Both GLBs are static set dressing and ship no clips at all, so they take
+  // the same STATIC_PROP map the dragonkin egg does: it satisfies the type and
+  // resolves nothing, and CLIPLESS_RIGS in tests/character_clipmaps.test.ts is
+  // what pins that they really are clip-less. They are NOT in
+  // NON_BODY_ASSET_KEYS on purpose: that gate asks "may this stand in for a
+  // PERSON", and gating them would substitute the villager this replaces.
+  npc_signpost: {
+    url: `${BIOME}/camp_signpost.glb`,
+    height: 2.2,
+    clips: STATIC_PROP,
+    lazyPreload: true,
+  },
+  npc_camp_tent: {
+    url: `${BIOME}/camp_tent.glb`,
+    height: 2.8,
+    clips: STATIC_PROP,
+    lazyPreload: true,
+  },
   // Bursar Fernando: the villager body with the likeness atlas (SKINS above)
   // carrying black shoulder-length hair and light brown skin. No entity tint:
   // the gold NpcDef color would wash the repaint back toward the villager look.
@@ -4253,6 +4274,14 @@ function resolveVisualKeyFor(e: Entity): string {
     return (family && FAMILY_KEYS[family]) || REALM_MOB_DEFAULTS[realm] || 'mob_bandit';
   }
   // npcs — Brother Aldric recurs in every hub under suffixed ids
+  // Furniture first. town_defense_board and skirmish_post are NPC entities only
+  // so they can carry a nameplate and quest ids. The world has always drawn them
+  // as ground props (renderer.ts, npcStructureObjectId) and never asked for a
+  // body, but every surface that DOES ask, the roster row, the unit frame, the
+  // wiki bestiary, was handed a townswoman. Realm-independent on purpose: a
+  // board is not a person in Claudecraft either.
+  const structure = npcStructureVisualKey(e.templateId);
+  if (structure) return structure;
   const realm = resolveActiveRealmId();
   // Infernal NPCs are human civilians and officials. Enemy commanders are
   // mobs, not NPCs; never fall through to a KayKit elf, orc, or villager.
@@ -4261,7 +4290,12 @@ function resolveVisualKeyFor(e: Entity): string {
     // template id still owns quests, vendors, housing, and persistence; this
     // branch changes only the rendered body. In particular Brother Aldric and
     // future NPC ids cannot fall through to a miniature KayKit villager.
-    return infernalNpcVisualKey(e.templateId);
+    //
+    // The authored NAME goes with the id: the bank is split by gender and the
+    // rendezvous hash cannot read one from a template id (see
+    // civilian_gender.ts). NPCS is the roster the server and the sim agree on,
+    // so a synthetic entity in a test resolves the same name the world does.
+    return infernalNpcVisualKey(e.templateId, NPCS[e.templateId]?.name ?? null);
   }
   const realmKeys = REALM_NPC_KEYS[realm];
   const themedBody = realmKeys?.[e.templateId] ?? pooledRealmNpcVisualKey(realm, e.templateId);

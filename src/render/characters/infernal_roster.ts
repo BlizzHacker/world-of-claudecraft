@@ -5,55 +5,86 @@
  * quests, vendors, housing, and persistence. Only their rendered bodies vary.
  */
 
+import { civilianGenderForName } from './civilian_gender';
+
 /**
  * The civilian bank.
  *
  * These replace the condemned bank, all 18 of which were rejected outright; the
- * audit record is docs/condemned-body-bank.md. The bodies here were already in
- * the store the whole time, filed under classic/ and arcane/ - the earlier
- * conclusion that "the approved pool contains no townspeople" was a search
- * failure, not a supply problem.
+ * audit record is docs/condemned-body-bank.md.
  *
  * Every one was verified from the GLB rather than its name (an ip_rename pass
  * laundered the names): correct joint counts, real clip inventories, zero scale
  * channels, and hands checked empty so nobody carries a welded prop.
  *
- * Registration and the two rig families are handled in manifest.ts - the four
- * townswomen are meshy24 and need the shared clip bank wired explicitly.
+ * ONE ART FAMILY, and that is the whole selection rule. The 2026-08-21 sweep
+ * rendered 71 candidates out of 3,784 store and 3,631 staging GLBs at head zoom
+ * and found the store's rigged humanoids split cleanly in two with nothing in
+ * between: a 23-joint mass_rig tier at 4,500 to 11,000 triangles, and a
+ * 24-joint meshy24 tier at roughly 51,000. Every body the operator has failed
+ * came from the first tier and every body he passed came from the second, four
+ * for four in each direction. All eight below are 24-joint meshy24 bodies
+ * between 50,514 and 52,014 triangles, so they stand next to each other with no
+ * visible quality step.
+ *
+ * The four men are Infernal-realm keys on purpose. They are the male siblings
+ * of the same generation wave the four townswomen came from, they are already
+ * registered in manifest.generated.ts, already in the store, and already
+ * matched by MESHY_RIGGED_GENERATED, so the shared Meshy clip bank wires itself
+ * and this file is the only thing that changes.
  */
 const WOMAN_WORKER = 'realm_crypticrealm_townswoman_practical_monk_f';
 const WOMAN_GOWN = 'realm_crypticrealm_townswoman_robed_priest_f';
 const WOMAN_HOODED = 'realm_crypticrealm_townswoman_hooded_mage_f';
 const WOMAN_SCOUT = 'realm_crypticrealm_townswoman_hooded_rogue_f';
-const TOWN_GUARD = 'realm_crypticrealm_town_guard_female_armored_019875c0';
-const CRAFTSMAN = 'realm_crypticrealm_craftsman_warrior_monk_019ee5e1';
+/** Ascetic in an olive work robe, sandals, hands empty. */
+const MAN_MONK = 'realm_infernal_hero_monk';
+/** Grey-bearded official in a mantle and tabard; the best face in the store. */
+const MAN_ELDER = 'realm_infernal_male_sorcerer';
+/** Working man in a hooded leather coat. The belt knives are costume, not held:
+ *  the bank's rule is no weapon IN HANDS, and both of his are empty. */
+const MAN_COAT = 'realm_infernal_hero_demon_hunter';
+/** Man-at-arms in plate and cross livery, closed bascinet, gauntlets empty. */
+const TOWN_GUARD = 'realm_infernal_hero_crusader';
 
 /**
- * The rotation the hash draws from for any NPC without an explicit pin.
+ * The rotations the hash draws from for any NPC without an explicit pin.
  *
- * Five bodies, and deliberately only ones a random villager can wear: the
- * armored woman is role-specific and would read wrong on a shopkeeper, so she
- * is pinned below instead of left to the hash.
+ * Split by gender, and NOT because the hash is unfair. Rendezvous hashing
+ * distributes blind, which is exactly what it is for, so dropping three male
+ * bodies into one mixed rotation raises the male share of hash-driven NPCs from
+ * 22% to 53% and then puts a man on Widow Tansy and leaves Huntsman Deral in a
+ * gown. Two rotations plus a router on the authored name (civilian_gender.ts)
+ * is the shape that survives the next roster addition; twenty more hand pins is
+ * the shape that silently breaks on it.
  *
- * Three bodies that used to sit here are gone, and none of them for taste. The
- * two trenchcoat townsmen 404 (the GLBs are in neither the store nor staging),
- * and the two village elders are the "NPC heads too wide" the operator was
- * looking at: their crown band measures 0.256 of figure height against 0.085 to
- * 0.130 for everyone else in this bank, and normalisation fits a body by TOTAL
- * height, so the oversized head ships at full size. CRAFTSMAN is promoted out
- * of the role-only pins to keep a male body in the rotation at all; it measures
- * 0.089 and is the one proven male civilian left.
+ * The armored guard is role-specific and would read wrong on a shopkeeper, so
+ * she stays out of both rotations and is pinned by role below.
+ *
+ * Two bodies that used to sit here are gone, both on the operator's own verdict
+ * and neither for taste. The craftsman cannot be saved: it is already
+ * smooth-shaded (2,176 coincident-vertex groups, mean maximum normal angle
+ * 0.00 degrees, so normals were never the fault) and at 5,020 triangles for the
+ * whole body the crown is a chamfered polygon in silhouette, which no normal
+ * edit can add resolution to. The armored woman is 7,496 triangles in the same
+ * low tier, and her skull pauldrons and spikes read as a boss rather than as
+ * municipal militia.
  */
-export const CIVILIAN_VISUAL_KEYS = [
+export const CIVILIAN_MALE_VISUAL_KEYS = [MAN_MONK, MAN_ELDER, MAN_COAT] as const;
+export const CIVILIAN_FEMALE_VISUAL_KEYS = [
   WOMAN_WORKER,
   WOMAN_GOWN,
   WOMAN_HOODED,
   WOMAN_SCOUT,
-  CRAFTSMAN,
+] as const;
+/** Both rotations, for a name that asserts no gender at all. */
+export const CIVILIAN_VISUAL_KEYS = [
+  ...CIVILIAN_FEMALE_VISUAL_KEYS,
+  ...CIVILIAN_MALE_VISUAL_KEYS,
 ] as const;
 
 export type CivilianVisualKey = (typeof CIVILIAN_VISUAL_KEYS)[number];
-/** Any body a townsperson may wear: the rotation plus the one role-only body. */
+/** Any body a townsperson may wear: the rotations plus the one role-only body. */
 type TownBodyKey = CivilianVisualKey | typeof TOWN_GUARD;
 
 /**
@@ -68,17 +99,22 @@ type TownBodyKey = CivilianVisualKey | typeof TOWN_GUARD;
  *   WOMAN_GOWN                 hosts, front-of-house
  *   WOMAN_HOODED               scholarly women, records and rites
  *   WOMAN_SCOUT                anyone on the road or watching a boundary
+ *   MAN_MONK                   the chapel and the cloister
+ *   MAN_ELDER                  counters, ledgers, records and sages
+ *   MAN_COAT                   forge, workshop, waterside and the road
  *   TOWN_GUARD                 militia and named authority
- *   CRAFTSMAN                  forge and workshop, and every other man in town
  *
- * KNOWN GAPS, deliberately not faked (generation queued): there is no blacksmith
- * with an apron, no dockhand, no municipal militia body, and since the elders
- * were rejected on 2026-08-21 no second male body of any kind. CRAFTSMAN stands
- * in at the forge, at the counter and in the chapel, and TOWN_GUARD - the only
- * guard body, and female - carries every militia role, so both repeat heavily.
- * That repetition is visible and intended; substituting a necromancer, a
- * bare-chested warlord, or a chibi-headed elder to avoid it is the exact fault
- * this purge exists to end.
+ * KNOWN GAPS, deliberately not faked (generation queued): there is still no
+ * blacksmith with an apron, no dockhand and no municipal militia body of the
+ * town's own. The reason is NOT that none exist. dockhand_belted_tunic_male and
+ * town_guard_leather_veteran_male are both sitting in the Cryptic Realm store,
+ * staged 17 August and never registered; they are 5,224 and 9,991 triangles, in
+ * the 23-joint tier every failed body came from, so the right note is "too
+ * low-poly to stand next to the bank", not "does not exist". MAN_COAT stands in
+ * at the forge and on the docks and TOWN_GUARD carries every militia role, so
+ * both repeat. That repetition is visible and intended; substituting a
+ * necromancer, a bare-chested warlord, or a chibi-headed elder to avoid it is
+ * the exact fault this purge exists to end.
  */
 const NPC_ROLE_VISUALS: Record<string, TownBodyKey> = {
   // --- authority and militia ---------------------------------------------------
@@ -86,27 +122,29 @@ const NPC_ROLE_VISUALS: Record<string, TownBodyKey> = {
   captain_thessaly: TOWN_GUARD,
   warden_fenwick: TOWN_GUARD,
   skirmish_footman: TOWN_GUARD,
-  skirmish_builder: CRAFTSMAN,
-  mercenary_kael: CRAFTSMAN,
-  pit_master_grott: CRAFTSMAN,
+  // Pip runs a race, he does not hold a wall: plainclothes, not plate.
+  race_marshal_pip: MAN_COAT,
+  skirmish_builder: MAN_COAT,
+  mercenary_kael: MAN_COAT,
+  pit_master_grott: MAN_COAT,
 
   // --- forge and workshop ------------------------------------------------------
-  smith_haldren: CRAFTSMAN,
-  armorer_hode: CRAFTSMAN,
-  toolmaster_gethin: CRAFTSMAN,
+  smith_haldren: MAN_COAT,
+  armorer_hode: MAN_COAT,
+  toolmaster_gethin: MAN_COAT,
   forgemistress_darva: WOMAN_WORKER,
-  foreman_odell: CRAFTSMAN,
+  foreman_odell: MAN_COAT,
   wren_saddleworth: WOMAN_SCOUT,
   stable_master_wren: WOMAN_SCOUT,
 
   // --- counters and trade ------------------------------------------------------
-  the_merchant: CRAFTSMAN,
-  trader_wilkes: WOMAN_GOWN,
+  the_merchant: MAN_ELDER,
+  trader_wilkes: MAN_ELDER,
   interior_merchant: WOMAN_GOWN,
   provisioner_hale: WOMAN_WORKER,
   quartermaster_bree: WOMAN_WORKER,
   realtor_maribel: WOMAN_GOWN,
-  bursar_fernando: CRAFTSMAN,
+  bursar_fernando: MAN_ELDER,
   interior_innkeeper: WOMAN_GOWN,
   interior_villager: WOMAN_WORKER,
   card_master: WOMAN_GOWN,
@@ -116,14 +154,14 @@ const NPC_ROLE_VISUALS: Record<string, TownBodyKey> = {
   herbalist_yara: WOMAN_WORKER,
   alchemist_sable: WOMAN_HOODED,
   spirit_healer: WOMAN_GOWN,
-  brother_halven: CRAFTSMAN,
-  brother_halven_marsh: CRAFTSMAN,
-  cainhurst_sage: WOMAN_HOODED,
-  loremaster_caddis: WOMAN_HOODED,
+  brother_halven: MAN_MONK,
+  brother_halven_marsh: MAN_MONK,
+  cainhurst_sage: MAN_ELDER,
+  loremaster_caddis: MAN_ELDER,
 
   // --- records -----------------------------------------------------------------
-  chronicler_saul: WOMAN_HOODED,
-  chronicler_osric_fenn: CRAFTSMAN,
+  chronicler_saul: MAN_ELDER,
+  chronicler_osric_fenn: MAN_ELDER,
   chronicler_edda_hartwell: WOMAN_HOODED,
 
   // --- road, water and boundary ------------------------------------------------
@@ -131,14 +169,13 @@ const NPC_ROLE_VISUALS: Record<string, TownBodyKey> = {
   scout_maren: WOMAN_SCOUT,
   scout_maren_highwatch: WOMAN_SCOUT,
   tidewatcher_ondrel: WOMAN_SCOUT,
-  fisherman_brandt: CRAFTSMAN,
-  race_marshal_pip: TOWN_GUARD,
-  groundskeeper_bram: WOMAN_SCOUT,
+  fisherman_brandt: MAN_COAT,
+  groundskeeper_bram: MAN_COAT,
 
   // --- Eastbrook townsfolk -----------------------------------------------------
   weaver_ottilie: WOMAN_HOODED,
-  cook_marlow: WOMAN_WORKER,
-  tanner_briggs: CRAFTSMAN,
+  cook_marlow: MAN_COAT,
+  tanner_briggs: MAN_COAT,
 };
 
 /**
@@ -223,12 +260,27 @@ function stablePick<T extends string>(value: string, keys: readonly T[]): T {
   return best;
 }
 
-export function infernalNpcVisualKey(templateId: string): TownBodyKey {
+/**
+ * The body a Cryptic Realm or Infernal townsperson wears.
+ *
+ * `displayName` is the NPC's authored English name (`NPCS[id].name`), and it is
+ * used for ONE thing: choosing which rotation the hash draws from when there is
+ * no explicit pin. Pass it wherever it is available. Omitting it is safe and
+ * degrades to the mixed bank, which is what shipped before the split, so a
+ * caller with only a template id (a synthetic test entity, a preview) still
+ * gets a real townsperson.
+ */
+export function infernalNpcVisualKey(templateId: string, displayName?: string | null): TownBodyKey {
   // Brother Aldric recurs in every hub under suffixed ids and must stay one
-  // recognisable man rather than re-rolling per hub. He wore ELDER_WHITE until
-  // that body was rejected; CRAFTSMAN is the only male civilian left.
-  if (templateId.startsWith('brother_aldric')) return CRAFTSMAN;
-  return NPC_ROLE_VISUALS[templateId] ?? stablePick(templateId, CIVILIAN_VISUAL_KEYS);
+  // recognisable man rather than re-rolling per hub. He is a brother, so he
+  // wears the cloister body.
+  if (templateId.startsWith('brother_aldric')) return MAN_MONK;
+  const pinned = NPC_ROLE_VISUALS[templateId];
+  if (pinned) return pinned;
+  const gender = civilianGenderForName(displayName);
+  if (gender === 'male') return stablePick(templateId, CIVILIAN_MALE_VISUAL_KEYS);
+  if (gender === 'female') return stablePick(templateId, CIVILIAN_FEMALE_VISUAL_KEYS);
+  return stablePick(templateId, CIVILIAN_VISUAL_KEYS);
 }
 
 export function infernalOpponentVisualKey(

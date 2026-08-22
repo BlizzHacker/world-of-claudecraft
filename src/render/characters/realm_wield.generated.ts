@@ -587,7 +587,6 @@ export const REALM_WIELD_SCALE: Record<string, number> = {
   "realm_classic_human_hybrid_criptid_extreme_019439bd": 0.933,
   "realm_classic_humanoid_form_muscular_geometry_0193daa5": 1.3312,
   "realm_classic_humanoid_form_pointed_elongate_0193e17a": 0.9293,
-  "realm_classic_humanoid_upper_santa_claus_0193a19d": 1.1396,
   "realm_classic_humanoid_upper_santa_claus_0193a1a2": 1.0894,
   "realm_classic_hybrid_hyena_human_creature_01952426": 0.814,
   "realm_classic_hybrid_hyena_human_creature_019525e8": 0.8076,

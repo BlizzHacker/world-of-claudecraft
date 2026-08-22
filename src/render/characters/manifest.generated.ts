@@ -6974,20 +6974,6 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
-  realm_classic_humanoid_upper_santa_claus_0193a19d: {
-    url: `${REALM_MODELS}/classic/realm_classic_humanoid_upper_santa_claus_0193a19d.glb`,
-    height: GEN_H,
-    lazyPreload: true,
-    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
-    tint: 'entity',
-    tintStrength: 0.18,
-    attach: [
-      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
-      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
-    ],
-    weaponSlots: [0],
-    offhandSlot: 1,
-  },
   realm_classic_humanoid_upper_santa_claus_0193a1a2: {
     url: `${REALM_MODELS}/classic/realm_classic_humanoid_upper_santa_claus_0193a1a2.glb`,
     height: GEN_H,
@@ -20153,7 +20139,6 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_classic_human_hybrid_criptid_extreme_019439bd',
     'realm_classic_humanoid_form_muscular_geometry_0193daa5',
     'realm_classic_humanoid_form_pointed_elongate_0193e17a',
-    'realm_classic_humanoid_upper_santa_claus_0193a19d',
     'realm_classic_humanoid_upper_santa_claus_0193a1a2',
     'realm_classic_hybrid_hyena_human_creature_01952426',
     'realm_classic_hybrid_hyena_human_creature_019525e8',

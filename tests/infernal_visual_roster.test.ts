@@ -1,15 +1,21 @@
 import { describe, expect, it } from 'vitest';
 import {
+  CIVILIAN_FEMALE_VISUAL_KEYS,
+  CIVILIAN_MALE_VISUAL_KEYS,
   CIVILIAN_VISUAL_KEYS,
   infernalNpcVisualKey,
   infernalOpponentVisualKey,
   infernalUndeadVisualKey,
 } from '../src/render/characters/infernal_roster';
 import { VISUALS, visualKeyFor } from '../src/render/characters/manifest';
+import { npcStructureVisualKey } from '../src/render/npc_structures';
 import { MOBS, NPCS } from '../src/sim/data';
 import { realmClassVisualKey } from '../src/sim/realms/class_visuals';
 import { setRealmHostEnv } from '../src/sim/realms/registry';
 import type { PlayerClass } from '../src/sim/types';
+
+/** The one role-only body: named by the militia pins, never drawn by the hash. */
+const TOWN_GUARD_KEY = 'realm_infernal_hero_crusader';
 
 const STARTER_HUMANS = [
   'the_merchant',
@@ -54,31 +60,95 @@ describe('Infernal visual roster', () => {
   it('assigns the full starter cast to varied authored humans without KayKit or elves', () => {
     const keys = STARTER_HUMANS.map((id) => infernalNpcVisualKey(id));
 
-    // The condemned bank is gone and the civilian rotation is five reviewed
-    // townspeople, so the starter cast no longer collapses onto three repeated
-    // men. Held at 4 rather than 5 since the two chibi-headed village elders
-    // were rejected on 2026-08-21: the bank is one body smaller and the guard
-    // is the only role-only body left.
-    expect(new Set(keys).size).toBeGreaterThanOrEqual(4);
+    // The condemned bank is gone and the bank is now eight reviewed bodies in
+    // one art family, so the starter cast no longer collapses onto three
+    // repeated men.
+    expect(new Set(keys).size).toBeGreaterThanOrEqual(5);
     for (const key of keys) {
-      // The rotation plus the one role-only body, the guard, kept out of the
-      // hash on purpose so she never lands on a random villager but is
+      // The two rotations plus the one role-only body, the guard, kept out of
+      // the hash on purpose so she never lands on a random villager but is
       // legitimately named by the role pins.
-      expect(
-        [...CIVILIAN_VISUAL_KEYS, 'realm_crypticrealm_town_guard_female_armored_019875c0'],
-        key,
-      ).toContain(key);
-      expect(key).not.toMatch(/npc_|elf|orc|demon/i);
+      expect([...CIVILIAN_VISUAL_KEYS, TOWN_GUARD_KEY], key).toContain(key);
+      // A KayKit stand-in or a species body would be the regression. This is a
+      // NAME test, so it matches whole key SEGMENTS, never substrings: the bank
+      // contains realm_infernal_male_s-orc-erer, and a bare /orc/ reads that as
+      // an orc. It also has to name its one real exception:
+      // realm_infernal_hero_demon_hunter is a hunter OF demons, a reviewed
+      // human in a hooded coat, the same "the word is the quarry, not the
+      // species" case the class roster already carries for the Demon Hunter.
+      expect(key).not.toMatch(/^npc_|(?:^|_)(?:elf|orc)(?:_|$)/i);
+      if (key !== 'realm_infernal_hero_demon_hunter') {
+        expect(key).not.toMatch(/(?:^|_)demon(?:_|$)/i);
+      }
     }
     // Brother Aldric recurs in every hub under suffixed ids, so he is pinned by
-    // prefix rather than hashed - one recognisable man across all of them.
-    expect(infernalNpcVisualKey('brother_aldric_raid')).toBe(
-      'realm_crypticrealm_craftsman_warrior_monk_019ee5e1',
-    );
+    // prefix rather than hashed - one recognisable man across all of them. He is
+    // a brother, so he wears the cloister body.
+    expect(infernalNpcVisualKey('brother_aldric_raid')).toBe('realm_infernal_hero_monk');
     // An id nobody has pinned still lands on a real townsperson.
-    expect(infernalNpcVisualKey('a_future_infernal_civilian')).toMatch(
-      /^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/,
+    expect([...CIVILIAN_VISUAL_KEYS]).toContain(infernalNpcVisualKey('a_future_infernal_civilian'));
+  });
+
+  // The bank is split by gender because rendezvous hashing distributes blind:
+  // one mixed rotation put a man on Widow Tansy and left Huntsman Deral in a
+  // gown. The router reads the authored display name, never the template id and
+  // never the asset filename.
+  it('never draws a male-named NPC from the female rotation, or the reverse', () => {
+    const male = new Set<string>(CIVILIAN_MALE_VISUAL_KEYS);
+    const female = new Set<string>(CIVILIAN_FEMALE_VISUAL_KEYS);
+
+    for (const [id, name] of [
+      ['huntsman_deral', 'Huntsman Deral'],
+      ['cainhurst_sage', 'Cainhurst the Sage'],
+      ['chronicler_saul', 'Saul the Chronicler'],
+      ['keeper_bram', 'Keeper Bram'],
+      ['mender_saul', 'Mender Saul'],
+      ['tanner_hesk', 'Tanner Hesk'],
+      ['bursar_aldous_crane', 'Bursar Aldous Crane'],
+    ] as const) {
+      const key = infernalNpcVisualKey(id, name);
+      expect(female.has(key), `${name} -> ${key}`).toBe(false);
+    }
+
+    for (const [id, name] of [
+      ['widow_tansy', 'Widow Tansy'],
+      ['pearlmother_isha', 'Pearl-Mother Isha'],
+      ['wickmother_sorrel', 'Wickmother Sorrel'],
+      ['forgemistress_darva', 'Forgemistress Darva'],
+      ['mother_sedge', 'Mother Sedge'],
+    ] as const) {
+      const key = infernalNpcVisualKey(id, name);
+      expect(male.has(key), `${name} -> ${key}`).toBe(false);
+    }
+
+    // A name that asserts nothing draws from the WHOLE bank, which is what
+    // shipped before the split and cannot be wrong in a way the data supports.
+    const neutral = infernalNpcVisualKey('bellkeeper_tam', 'Bellkeeper Tam');
+    expect([...CIVILIAN_VISUAL_KEYS]).toContain(neutral);
+
+    // And the router must not be reading the template id: the same id with the
+    // opposite name has to move.
+    expect(infernalNpcVisualKey('same_id', 'Widow Tansy')).not.toBe(
+      infernalNpcVisualKey('same_id', 'Brother Tansy'),
     );
+  });
+
+  // A signboard is not a person. Both templates are NPC entities only so they
+  // can carry a nameplate and quest ids; the world draws them as ground props.
+  it('gives the two structure templates their prop, not a townsperson', () => {
+    setRealmHostEnv({
+      queryParam: (name) => (name === 'realm' ? 'crypticrealm' : null),
+      storageGet: () => null,
+      storageSet: () => undefined,
+    });
+    const civilians = new Set<string>([...CIVILIAN_VISUAL_KEYS, TOWN_GUARD_KEY]);
+    for (const templateId of ['town_defense_board', 'skirmish_post'] as const) {
+      const key = visualKeyFor({ kind: 'npc', templateId } as never);
+      expect(key, templateId).toBe(npcStructureVisualKey(templateId));
+      expect(civilians.has(key), `${templateId} -> ${key}`).toBe(false);
+      expect(VISUALS[key], key).toBeTruthy();
+    }
+    setRealmHostEnv(null);
   });
 
   it('gives all nine runtime classes distinct published full-size bodies', () => {
@@ -126,23 +196,20 @@ describe('Infernal visual roster', () => {
         storageGet: () => null,
         storageSet: () => undefined,
       });
-      const keys = Object.keys(NPCS).map((templateId) =>
-        visualKeyFor({ kind: 'npc', templateId } as never),
-      );
       // The condemned bank is gone (docs/condemned-body-bank.md). The pool is
-      // the eight-body civilian rotation, plus the two role-only bodies the
-      // pins may name - a guard and a craftsman, which are deliberately kept
-      // out of the hash so they never land on a random villager.
-      const pool = new Set<string>([
-        ...CIVILIAN_VISUAL_KEYS,
-        'realm_crypticrealm_town_guard_female_armored_019875c0',
-        'realm_crypticrealm_craftsman_warrior_monk_019ee5e1',
-      ]);
-      for (const key of new Set(keys)) expect(pool.has(key), `${realm}:${key}`).toBe(true);
-      for (const key of keys) {
-        expect(key, `${realm}:${key}`).toMatch(
-          /^realm_crypticrealm_(village_elder|townsman|townswoman|town_guard|craftsman)_/,
-        );
+      // the two civilian rotations plus the one role-only body the pins may
+      // name, the guard, kept out of the hash so she never lands on a random
+      // villager. Membership is asserted against the EXPORTED lists rather
+      // than a key-name regex: the bank is deliberately half realm_infernal_
+      // now (the male bodies are the townswomen's own generation siblings), and
+      // a name pattern would have to be widened every time the bank moves.
+      const pool = new Set<string>([...CIVILIAN_VISUAL_KEYS, TOWN_GUARD_KEY]);
+      for (const templateId of Object.keys(NPCS)) {
+        // The two NPC templates that are furniture resolve to their own prop
+        // and are not civilians at all (src/render/npc_structures.ts).
+        if (npcStructureVisualKey(templateId)) continue;
+        const key = visualKeyFor({ kind: 'npc', templateId } as never);
+        expect(pool.has(key), `${realm}:${templateId} -> ${key}`).toBe(true);
         expect(VISUALS[key], `${realm}:${key}`).toBeTruthy();
       }
     }

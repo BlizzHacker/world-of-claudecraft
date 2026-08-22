@@ -1779,10 +1779,11 @@ describe('Nythraxis raid encounter', () => {
     // Was the shirtless-monk body until 2026-08-17. That body was pulled from
     // the rotation and de-registered for indecency, so Aldric now falls to the
     // explicit `brother_aldric` rule in infernalNpcVisualKey instead of the
-    // hash. Was the white village elder until 2026-08-21, when both elders were
-    // rejected for chibi head proportions. Still the curated bank, which is what
-    // this assertion is for.
-    expect(visualKeyFor(aldric!)).toBe('realm_crypticrealm_craftsman_warrior_monk_019ee5e1');
+    // hash. Then the white village elder until 2026-08-21 (both elders rejected
+    // for chibi head proportions), then the craftsman for the few hours before
+    // the operator failed that one too. He is a brother, so he now wears the
+    // cloister body. Still the curated bank, which is what this assertion is for.
+    expect(visualKeyFor(aldric!)).toBe('realm_infernal_hero_monk');
   });
 
   it('stuns active Nythraxis adds for the full Aldric transition', () => {

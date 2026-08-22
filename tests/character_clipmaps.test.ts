@@ -144,6 +144,11 @@ const CLIPLESS_RIGS = new Set([
   // the dragonkin clutch shell: a two-state prop whose GLB ships no clips
   // (alive/dead is a mesh-visibility swap, VisualDef.corpseMeshSwap)
   'mob_dragon_egg',
+  // the two NPC templates that are furniture (src/render/npc_structures.ts):
+  // a defense board and a warcamp post, drawn from the same static biome GLBs
+  // the world places them with
+  'npc_signpost',
+  'npc_camp_tent',
 ]);
 
 /** mob_yumi_cat is a single-clip objective prop: its ClipMap names the one real
