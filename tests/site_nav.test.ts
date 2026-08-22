@@ -1,13 +1,42 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-const navJs = readFileSync(new URL('../public/nav.js', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
-const navVersionedJs = readFileSync(new URL('../public/nav.v1782009763m.js', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
-const dashboardChromeTs = readFileSync(new URL('../src/ui/cryptic/dashboard_chrome.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
-const userMainTs = readFileSync(new URL('../src/user/main.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
-const moderatorMainTs = readFileSync(new URL('../src/moderator/main.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
-const indexHtml = readFileSync(new URL('../index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
-const linksHtml = readFileSync(new URL('../public/links.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
+const navJs = readFileSync(new URL('../public/nav.js', import.meta.url), 'utf8').replace(
+  /\r\n/g,
+  '\n',
+);
+const navVersionedJs = readFileSync(
+  new URL('../public/nav.v1782009763m.js', import.meta.url),
+  'utf8',
+).replace(/\r\n/g, '\n');
+const dashboardChromeTs = readFileSync(
+  new URL('../src/ui/cryptic/dashboard_chrome.ts', import.meta.url),
+  'utf8',
+).replace(/\r\n/g, '\n');
+const landingTs = readFileSync(new URL('../src/landing.ts', import.meta.url), 'utf8').replace(
+  /\r\n/g,
+  '\n',
+);
+const mainTs = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8').replace(
+  /\r\n/g,
+  '\n',
+);
+const userMainTs = readFileSync(new URL('../src/user/main.ts', import.meta.url), 'utf8').replace(
+  /\r\n/g,
+  '\n',
+);
+const moderatorMainTs = readFileSync(
+  new URL('../src/moderator/main.ts', import.meta.url),
+  'utf8',
+).replace(/\r\n/g, '\n');
+const indexHtml = readFileSync(new URL('../index.html', import.meta.url), 'utf8').replace(
+  /\r\n/g,
+  '\n',
+);
+const linksHtml = readFileSync(new URL('../public/links.html', import.meta.url), 'utf8').replace(
+  /\r\n/g,
+  '\n',
+);
 const packageJson = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 
 describe('site and dashboard navigation', () => {
@@ -37,7 +66,9 @@ describe('site and dashboard navigation', () => {
     expect(dashboardChromeTs).not.toContain('nav-sep');
 
     for (const source of [userMainTs, moderatorMainTs]) {
-      expect(source).toContain("import { mountDashboardChrome } from '../ui/cryptic/dashboard_chrome';");
+      expect(source).toContain(
+        "import { mountDashboardChrome } from '../ui/cryptic/dashboard_chrome';",
+      );
       const rerenders = source.match(/document\.body\.innerHTML = `/g) ?? [];
       const remounts = source.match(/mountDashboardChrome\(\);/g) ?? [];
       expect(rerenders.length).toBeGreaterThan(0);
@@ -45,10 +76,36 @@ describe('site and dashboard navigation', () => {
     }
   });
 
+  it('only switches to view ids that exist as sections in index.html', () => {
+    // Switching to a view id with no matching section hides every view and
+    // blanks the page (the Wiki/Contributions/Links/White Paper bug). Pin that
+    // every id named by main.ts switchMainView and landing.ts VIEWS is a real
+    // element in index.html.
+    const mainViews = /const views = \[([^\]]+)\]/.exec(mainTs)?.[1] ?? '';
+    const landingViews = /const VIEWS = \[([^\]]+)\]/.exec(landingTs)?.[1] ?? '';
+    const ids = [...`${mainViews},${landingViews}`.matchAll(/'#([a-z-]+)'/g)].map((m) => m[1]);
+    expect(ids.length).toBeGreaterThanOrEqual(5);
+    for (const id of ids) {
+      expect(indexHtml, `index.html must contain a section with id="${id}"`).toContain(
+        `id="${id}"`,
+      );
+    }
+    // The removed phantom views stay removed: navigation to these documents is
+    // a real page load, never an in-page view switch.
+    for (const phantom of [
+      '#wiki-view',
+      '#contributions-view',
+      '#links-view',
+      '#whitepaper-view',
+    ]) {
+      expect(ids).not.toContain(phantom.slice(1));
+    }
+  });
+
   it('keeps the public footer on Cryptic versioning and Diabl0 network links', () => {
-    expect(packageJson.version).toBe('0.30.0-cr.1');
-    expect(indexHtml).toContain('<div id="game-version">v0.30.0-cr.1</div>');
-    expect(indexHtml).toContain('ClaudeCraft target v0.30.0');
+    expect(packageJson.version).toBe('0.35.1-cr.1');
+    expect(indexHtml).toContain('<div id="game-version">v0.35.1-cr.1</div>');
+    expect(indexHtml).toContain('ClaudeCraft target v0.35.1');
 
     for (const source of [indexHtml, linksHtml]) {
       expect(source).toContain('https://diabl0.net');

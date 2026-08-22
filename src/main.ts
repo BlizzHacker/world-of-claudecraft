@@ -465,6 +465,7 @@ import { localPartyMemberIds } from './game/corpse_loot_availability';
 import { crypticMusic } from './game/cryptic_music';
 import { mountXboxEnv } from './game/xbox_env';
 import type { ReleaseEntry } from './net/online';
+import { UNLOCKED_SKIN_LEVEL } from './sim/cosmetics/body_skins';
 import {
   DEFAULT_REALM,
   getActiveRealm,
@@ -479,6 +480,12 @@ import {
   setActiveRealmForOffline,
 } from './sim/realms';
 import { mountBestiary } from './ui/cryptic/bestiary';
+import {
+  type BodySkinRailLabels,
+  bodySkinRailHtml,
+  bodySkinRailRows,
+  unlockLevelSentence,
+} from './ui/cryptic/body_skin_rail';
 import { mountRealmBranding } from './ui/cryptic/branding';
 import {
   type CharGridHost,
@@ -487,7 +494,6 @@ import {
   usesRealmHeroRoster,
 } from './ui/cryptic/char_grid_host';
 import { mountChatFrame } from './ui/cryptic/chat_frame';
-import { loadDocFragment } from './ui/cryptic/doc_fragment';
 import { mountDownloadLaunchers } from './ui/cryptic/download_launchers';
 import {
   enforceDiabloLock,
@@ -507,12 +513,6 @@ import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
 import { mountPickitPanel } from './ui/cryptic/pickit_panel';
 import { mountPwaInstall } from './ui/cryptic/pwa_install';
 import {
-  type BodySkinRailLabels,
-  bodySkinRailHtml,
-  bodySkinRailRows,
-  unlockLevelSentence,
-} from './ui/cryptic/body_skin_rail';
-import {
   classChoicesForRealm,
   classPresentationForRealm,
   classSexToggleAvailable,
@@ -520,7 +520,6 @@ import {
   presentationFactionsForRealm,
   realmHasClassOverlay,
 } from './ui/cryptic/realm_class_presentation';
-import { UNLOCKED_SKIN_LEVEL } from './sim/cosmetics/body_skins';
 import { openRealmVisualEditor } from './ui/cryptic/realm_visual_editor';
 import {
   fetchRealmVisualOverrides,
@@ -6994,17 +6993,10 @@ function resetViewTransitionStyle(el: HTMLElement): void {
 }
 
 function switchMainView(targetId: string): void {
-  const views = [
-    '#hero-view',
-    '#highscores-view',
-    '#wiki-view',
-    '#news-view',
-    '#download-view',
-    '#contributions-view',
-    '#links-view',
-    '#whitepaper-view',
-    '#account-view',
-  ];
+  // Only views that exist as sections in index.html. Wiki, Contributions,
+  // Links, and White Paper are real documents; their nav buttons navigate
+  // (switching to a missing section hid every view and blanked the page).
+  const views = ['#hero-view', '#highscores-view', '#news-view', '#download-view', '#account-view'];
   const currentViewId = views.find((id) => {
     const el = $(id);
     return el && !el.hasAttribute('hidden');
@@ -7015,9 +7007,6 @@ function switchMainView(targetId: string): void {
     '#highscores-view': 'nav-btn-highscores',
     '#news-view': 'nav-btn-news',
     '#download-view': 'nav-btn-download',
-    '#contributions-view': 'nav-btn-contributions',
-    '#links-view': 'nav-btn-links',
-    '#whitepaper-view': 'nav-btn-whitepaper',
     '#account-view': 'nav-btn-account',
   };
 
@@ -12837,24 +12826,17 @@ function wireStartScreens(): void {
     switchMainView('#news-view');
     void loadNews();
   });
-  setupNavBtn(navBtnContributions, '#contributions-view');
-  setupNavBtn(navBtnDownload, '#download-view');
-  // Links + White Paper were standalone HTML pages; they're now in-app views.
-  // Their content is injected once (fetched from the retained /*.html fragments)
-  // so we keep a single content source without duplicating it into index.html.
-  setupNavBtn(navBtnLinks, '#links-view', () => {
-    switchMainView('#links-view');
-    void loadDocFragment('/links.html', '#links-content', {
-      errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
-      afterInject: translatePage,
-    });
+  // Contributions, Links, and White Paper are standalone HTML documents (like
+  // the wiki above): navigate to them instead of switching an in-page view.
+  setupNavBtn(navBtnContributions, '', () => {
+    window.location.href = '/contributions.html';
   });
-  setupNavBtn(navBtnWhitepaper, '#whitepaper-view', () => {
-    switchMainView('#whitepaper-view');
-    void loadDocFragment('/whitepaper.html', '#whitepaper-content', {
-      errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
-      afterInject: translatePage,
-    });
+  setupNavBtn(navBtnDownload, '#download-view');
+  setupNavBtn(navBtnLinks, '', () => {
+    window.location.href = '/links.html';
+  });
+  setupNavBtn(navBtnWhitepaper, '', () => {
+    window.location.href = '/whitepaper.html';
   });
   initDesktopDownload();
   initBrowserSupportNotice();
@@ -13354,7 +13336,7 @@ function wireStartScreens(): void {
       return;
     }
     if (hash === 'wiki') {
-      switchMainView('#wiki-view');
+      window.location.href = '/wiki';
       return;
     }
     if (hash === 'news' || hash === 'updates') {
@@ -13367,23 +13349,15 @@ function wireStartScreens(): void {
       return;
     }
     if (hash === 'contributions') {
-      switchMainView('#contributions-view');
+      window.location.href = '/contributions.html';
       return;
     }
     if (hash === 'links') {
-      switchMainView('#links-view');
-      void loadDocFragment('/links.html', '#links-content', {
-        errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
-        afterInject: translatePage,
-      });
+      window.location.href = '/links.html';
       return;
     }
     if (hash === 'whitepaper') {
-      switchMainView('#whitepaper-view');
-      void loadDocFragment('/whitepaper.html', '#whitepaper-content', {
-        errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
-        afterInject: translatePage,
-      });
+      window.location.href = '/whitepaper.html';
       return;
     }
     if (hash === 'login' || hash === 'register' || hash === 'account') {
