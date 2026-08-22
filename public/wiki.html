@@ -113,22 +113,21 @@
       <img class="logo" src="/cryptic-realm-logo.png" alt="Cryptic Realm" />
       <div class="eyebrow">Wiki Hub</div>
       <h1>Browse The Realm</h1>
-      <p class="lead">The front door to the Cryptic Realm wiki. Start with the player references and game knowledge below — each knowledge article opens in the full wiki, with a local summary if the wiki service is offline.</p>
+      <p class="lead">The front door to the Cryptic Realm wiki. Start with the player references and game knowledge below: each knowledge card opens the matching guide page, and short summaries live further down for a quick read.</p>
     </section>
 
     <main>
       <section class="section" aria-labelledby="knowledge-title">
         <h2 class="section-title" id="knowledge-title">Game Knowledge</h2>
         <div class="grid" id="wiki-articles">
-          <!-- Article cards link into MediaWiki when WIKI_BASE is reachable;
-               otherwise they fall back to the on-page anchor summaries below.
-               Article set mirrors the MediaWiki seed (mediawiki/seed/pages.xml). -->
-          <a class="card" data-wiki="Quick_Start" href="#kb-quick-start"><strong>Quick Start</strong><span>Make a character, learn the controls, and enter your first realm.</span><small>Beginner guide</small></a>
-          <a class="card" data-wiki="Combat" href="#kb-combat"><strong>Combat</strong><span>Attacks, first-person and third-person views, targeting, and damage.</span><small>Gameplay system</small></a>
-          <a class="card" data-wiki="Gameplay_Systems" href="#kb-systems"><strong>Gameplay Systems</strong><span>Leveling, prestige, loot rarity, and the pickit item filter.</span><small>Gameplay system</small></a>
-          <a class="card" data-wiki="Parties" href="#kb-parties"><strong>Parties</strong><span>Group up, share XP, and run dungeons together.</span><small>Gameplay system</small></a>
-          <a class="card" data-wiki="The_Gravecaller_Saga" href="#kb-lore"><strong>The Gravecaller Saga</strong><span>The central storyline that threads the realms together.</span><small>Lore</small></a>
-          <a class="card" data-wiki="Development_Timeline" href="#kb-timeline"><strong>Development Timeline</strong><span>Release history from the fork through the current alpha.</span><small>Reference</small></a>
+          <!-- Article cards open the curated guide SPA at /wiki (src/guide/);
+               the on-page anchor summaries below stay as quick references. -->
+          <a class="card" href="/wiki/how-to-play"><strong>Quick Start</strong><span>Make a character, learn the controls, and enter your first realm.</span><small>/wiki/how-to-play</small></a>
+          <a class="card" href="/wiki/reference/combat"><strong>Combat</strong><span>Attacks, first-person and third-person views, targeting, and damage.</span><small>/wiki/reference/combat</small></a>
+          <a class="card" href="/wiki/reference/progression"><strong>Gameplay Systems</strong><span>Leveling, prestige, loot rarity, and the pickit item filter.</span><small>/wiki/reference/progression</small></a>
+          <a class="card" href="/wiki/social"><strong>Parties</strong><span>Group up, share XP, and run dungeons together.</span><small>/wiki/social</small></a>
+          <a class="card" href="/wiki/world"><strong>The Gravecaller Saga</strong><span>The central storyline that threads the realms together.</span><small>/wiki/world</small></a>
+          <a class="card" href="/contributions.html"><strong>Development Timeline</strong><span>Release history from the fork through the current alpha.</span><small>/contributions.html</small></a>
         </div>
       </section>
 
@@ -147,20 +146,23 @@
       <section class="section" aria-labelledby="realms-title">
         <h2 class="section-title" id="realms-title">Realm Portals</h2>
         <div class="grid">
-          <a class="card" href="https://infernal.crypticrealm.com/"><strong>Infernal</strong><span>Dark gothic ARPG realm.</span><small>infernal.crypticrealm.com</small></a>
-          <a class="card" href="https://classic.crypticrealm.com/"><strong>Classic</strong><span>Bright fantasy realm.</span><small>classic.crypticrealm.com</small></a>
-          <a class="card" href="https://dominion.crypticrealm.com/"><strong>Dominion</strong><span>Sci-fi frontier realm.</span><small>dominion.crypticrealm.com</small></a>
-          <a class="card" href="https://arcane.crypticrealm.com/"><strong>Arcane</strong><span>Cosmic void realm.</span><small>arcane.crypticrealm.com</small></a>
+          <!-- The 9 live realms, matching REALM_LIST in src/sim/realms/registry.ts.
+               Arcane Nexus is the arcane subdomain; Arcane Void is arcadevoid. -->
+          <a class="card" href="https://crypticrealm.com/"><strong>Cryptic Realm</strong><span>The flagship namesake realm.</span><small>crypticrealm.com</small></a>
+          <a class="card" href="https://infernal.crypticrealm.com/"><strong>Infernal Realm</strong><span>Dark gothic ARPG realm.</span><small>infernal.crypticrealm.com</small></a>
+          <a class="card" href="https://classic.crypticrealm.com/"><strong>Classic Realm</strong><span>Bright fantasy realm.</span><small>classic.crypticrealm.com</small></a>
+          <a class="card" href="https://dominion.crypticrealm.com/"><strong>Dominion Frontier</strong><span>Sci-fi frontier realm.</span><small>dominion.crypticrealm.com</small></a>
+          <a class="card" href="https://arcane.crypticrealm.com/"><strong>Arcane Nexus</strong><span>Cosmic crystal void realm.</span><small>arcane.crypticrealm.com</small></a>
+          <a class="card" href="https://arcadevoid.crypticrealm.com/"><strong>Arcane Void</strong><span>Neon squad combat and void tech.</span><small>arcadevoid.crypticrealm.com</small></a>
+          <a class="card" href="https://claudecraft.crypticrealm.com/"><strong>World of ClaudeCraft</strong><span>The pristine upstream base world.</span><small>claudecraft.crypticrealm.com</small></a>
+          <a class="card" href="https://fps.crypticrealm.com/"><strong>FPS Realm</strong><span>First-person only realm.</span><small>fps.crypticrealm.com</small></a>
           <a class="card" href="https://exchange.crypticrealm.com/"><strong>The Exchange</strong><span>Cross-realm trade hub.</span><small>exchange.crypticrealm.com</small></a>
-          <a class="card" href="https://alpha.crypticrealm.com/"><strong>Alpha</strong><span>14-day tester realm with higher platinum earn rates.</span><small>alpha.crypticrealm.com</small></a>
-          <a class="card" href="https://beta.crypticrealm.com/"><strong>Beta</strong><span>Monthly public promotion review realm.</span><small>beta.crypticrealm.com</small></a>
-          <a class="card" href="https://claudecraft.crypticrealm.com/"><strong>ClaudeCraft</strong><span>Upstream-friendly realm.</span><small>claudecraft.crypticrealm.com</small></a>
         </div>
       </section>
 
       <section class="section" aria-labelledby="kb-title">
         <h2 class="section-title" id="kb-title">Knowledge Summaries</h2>
-        <p class="lead" style="font-size:15px;">Short reference summaries. When the full wiki is online, the Game Knowledge cards above open the complete articles instead.</p>
+        <p class="lead" style="font-size:15px;">Short reference summaries. The Game Knowledge cards above open the complete guide pages.</p>
         <div class="notice" id="kb-quick-start"><strong style="color:var(--gold)">Quick Start.</strong> Pick a realm from the home page, create a character and class, then enter. Move with WASD, look with the mouse, attack with left click, and toggle first-person view with <kbd>V</kbd>. Your character and progress are saved server-side per realm.</div>
         <div class="notice" id="kb-combat"><strong style="color:var(--gold)">Combat.</strong> Combat is server-authoritative. Both a first-person (reticle-aimed) and third-person camera are supported — switch with <kbd>V</kbd>. Damage, hit detection, and cooldowns are resolved on the server; the client renders the result. Loot drops follow the rarity tiers described in Gameplay Systems.</div>
         <div class="notice" id="kb-systems"><strong style="color:var(--gold)">Gameplay Systems.</strong> Level up through XP, then prestige for lifetime standing. Loot uses Diablo-style rarity tiers, and the pickit filter lets you auto-flag the items you care about. Platinum is an optional premium layer for cosmetics and the Exchange realm; the base game is free.</div>
@@ -175,46 +177,10 @@
     </main>
 
     <footer>
-      This hub is the front door to the wiki. When the full MediaWiki service is online (behind <code>WIKI_URL</code>), the Game Knowledge cards open the complete articles; until then they show the on-page summaries above. The two evolve together — neither replaces the other.
+      This hub is the front door to the wiki. The Game Knowledge cards open the full guide at <code>/wiki</code>; the on-page summaries above stay as quick references. The two evolve together, neither replaces the other.
     </footer>
   </div>
 
-  <script>
-    // Progressive upgrade: if the full MediaWiki is reachable, point the
-    // Game Knowledge cards at the live articles instead of the on-page
-    // summary anchors. Falls back silently to the anchors when offline.
-    // WIKI_BASE may be injected by the server (window.__WIKI_BASE__); we also
-    // probe the conventional /wiki/index.php path.
-    (function () {
-      var base = (window.__WIKI_BASE__ || '').replace(/\/+$/, '');
-      var cards = Array.prototype.slice.call(document.querySelectorAll('a.card[data-wiki]'));
-      if (cards.length === 0) return;
-
-      function applyBase(b) {
-        cards.forEach(function (card) {
-          var title = card.getAttribute('data-wiki');
-          if (!title) return;
-          card.href = b + '/index.php/' + title;
-          card.setAttribute('target', '_blank');
-          card.setAttribute('rel', 'noopener noreferrer');
-        });
-      }
-
-      if (base) { applyBase(base); return; }
-
-      // No injected base — probe the standard MediaWiki location. HEAD with a
-      // short timeout; on success rewrite, on failure keep the summary anchors.
-      var probe = '/wiki/index.php/Main_Page';
-      var ctrl = ('AbortController' in window) ? new AbortController() : null;
-      var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 1500) : null;
-      fetch(probe, { method: 'HEAD', signal: ctrl ? ctrl.signal : undefined })
-        .then(function (res) {
-          if (timer) clearTimeout(timer);
-          if (res && res.ok) applyBase('/wiki');
-        })
-        .catch(function () { /* offline — keep summary anchors */ });
-    })();
-  </script>
-  <script src="/nav.v1782009763m.js" defer></script>
+  <script src="/nav.v1787428220m.js" defer></script>
 </body>
 </html>

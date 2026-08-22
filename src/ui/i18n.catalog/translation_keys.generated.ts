@@ -7980,6 +7980,7 @@ export type TranslationKeyFlat =
   | 'hudChrome.leaderboard.devEmpty'
   | 'hudChrome.leaderboard.devName'
   | 'hudChrome.leaderboard.devTierCol'
+  | 'hudChrome.leaderboard.filterAll'
   | 'hudChrome.leaderboard.guildEmpty'
   | 'hudChrome.leaderboard.guildName'
   | 'hudChrome.leaderboard.guildXp'

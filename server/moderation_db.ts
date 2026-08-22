@@ -1059,3 +1059,78 @@ export async function recordProfessionsRestore(input: {
   });
   return { accountId };
 }
+
+// ---------------------------------------------------------------------------
+// Chat log search (the admin Chat Logs page). Keyset-paged newest-first over
+// the two existing indexes: chat_logs_character(character_id, created_at) when
+// scoped to one character, chat_logs_created(created_at) otherwise. The cursor
+// is the last row's (created_at, id) tuple, compared as a row value so paging
+// never skips or repeats rows that share a timestamp; OFFSET is deliberately
+// not used (it re-scans everything it skips).
+// ---------------------------------------------------------------------------
+
+export interface ChatLogSearchQuery {
+  characterId?: number;
+  channel?: string;
+  search?: string;
+  before?: { createdAt: string; id: number };
+  limit: number;
+}
+
+export interface ChatLogSearchRow {
+  id: number;
+  accountId: number | null;
+  characterId: number | null;
+  characterName: string;
+  channel: string;
+  message: string;
+  createdAt: string;
+}
+
+/** Escape LIKE wildcards in operator input so a search for "50%" is literal. */
+function escapeLike(text: string): string {
+  return text.replace(/[%_]/g, (ch) => `\${ch}`);
+}
+
+export async function searchChatLogs(query: ChatLogSearchQuery): Promise<{
+  rows: ChatLogSearchRow[];
+  nextBefore: { createdAt: string; id: number } | null;
+}> {
+  const where: string[] = [];
+  const params: unknown[] = [];
+  const arg = (value: unknown): string => {
+    params.push(value);
+    return `$${params.length}`;
+  };
+  if (query.characterId !== undefined) where.push(`character_id = ${arg(query.characterId)}`);
+  if (query.channel) where.push(`channel = ${arg(query.channel)}`);
+  if (query.search) {
+    const like = `%${escapeLike(query.search)}%`;
+    where.push(`(message ILIKE ${arg(like)} OR character_name ILIKE ${arg(like)})`);
+  }
+  if (query.before) {
+    where.push(
+      `(created_at, id) < (${arg(query.before.createdAt)}::timestamptz, ${arg(query.before.id)}::bigint)`,
+    );
+  }
+  const limit = Math.min(200, Math.max(1, Math.floor(query.limit)));
+  const result = await pool.query(
+    `SELECT id, account_id, character_id, character_name, channel, message, created_at
+     FROM chat_logs
+     ${where.length ? `WHERE ${where.join(' AND ')}` : ''}
+     ORDER BY created_at DESC, id DESC
+     LIMIT ${arg(limit)}`,
+    params,
+  );
+  const rows: ChatLogSearchRow[] = result.rows.map((r) => ({
+    id: Number(r.id),
+    accountId: r.account_id === null ? null : Number(r.account_id),
+    characterId: r.character_id === null ? null : Number(r.character_id),
+    characterName: r.character_name,
+    channel: r.channel,
+    message: r.message,
+    createdAt: new Date(r.created_at).toISOString(),
+  }));
+  const last = rows.length === limit ? rows[rows.length - 1] : undefined;
+  return { rows, nextBefore: last ? { createdAt: last.createdAt, id: last.id } : null };
+}

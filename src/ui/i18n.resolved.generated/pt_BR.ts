@@ -884,6 +884,7 @@ export const pt_BR: EnTranslations = {
     },
     "leaderboard": {
       "close": "Fechar",
+      "filterAll": "All",
       "tabsLabel": "Quadros de pontuação",
       "tabPlayers": "Jogadores",
       "tabGuilds": "Guildas",

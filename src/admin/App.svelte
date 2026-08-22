@@ -32,6 +32,7 @@
   import AntibotConfig from './pages/AntibotConfig.svelte';
   import SharedIps from './pages/SharedIps.svelte';
   import ChatFilter from './pages/ChatFilter.svelte';
+  import ChatLogs from './pages/ChatLogs.svelte';
   import BlockedIps from './pages/BlockedIps.svelte';
   import BugReports from './pages/BugReports.svelte';
   import UnstuckReports from './pages/UnstuckReports.svelte';
@@ -58,6 +59,7 @@
     'antibot-config': AntibotConfig,
     'shared-ips': SharedIps,
     'chat-filter': ChatFilter,
+    'chat-logs': ChatLogs,
     'blocked-ips': BlockedIps,
     'bug-reports': BugReports,
     'unstuck-reports': UnstuckReports,

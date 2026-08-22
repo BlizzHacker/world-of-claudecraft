@@ -884,6 +884,7 @@ export const nl_NL: EnTranslations = {
     },
     "leaderboard": {
       "close": "Sluiten",
+      "filterAll": "All",
       "tabsLabel": "Topscorelijsten",
       "tabPlayers": "Spelers",
       "tabGuilds": "Gildes",

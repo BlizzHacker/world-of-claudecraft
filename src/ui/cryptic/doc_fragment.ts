@@ -1,17 +1,25 @@
+// Wiki, Links, White Paper, and Contributions are real documents now (the SPA
+// no longer hosts an in-page view for them), so they are deliberately absent
+// from both routing tables: a link to one of them navigates normally.
 const DOC_ROUTE_BY_PATH: Record<string, string> = {
   '/': 'play',
   '/index.html': 'play',
-  '/wiki.html': 'wiki',
-  '/wiki/': 'wiki',
-  '/links.html': 'links',
-  '/links/': 'links',
-  '/whitepaper.html': 'whitepaper',
-  '/whitepaper/': 'whitepaper',
-  '/contributions.html': 'contributions',
-  '/contributions/': 'contributions',
 };
 
-const DOC_ROUTE_BY_HASH = new Set(['play', 'game', 'highscores', 'leaderboard', 'wiki', 'news', 'updates', 'download', 'downloads', 'install', 'links', 'whitepaper', 'contributions', 'login', 'register', 'account']);
+const DOC_ROUTE_BY_HASH = new Set([
+  'play',
+  'game',
+  'highscores',
+  'leaderboard',
+  'news',
+  'updates',
+  'download',
+  'downloads',
+  'install',
+  'login',
+  'register',
+  'account',
+]);
 
 const loadedFragments = new Set<string>();
 
@@ -46,7 +54,9 @@ export function normalizeSpaDocLinks(root: ParentNode): void {
 export function extractDocFragment(raw: string): string {
   const doc = new DOMParser().parseFromString(raw, 'text/html');
   const content = doc.querySelector('main') ?? doc.querySelector('.wrap') ?? doc.body;
-  content.querySelectorAll('script, style, link, nav, header.hero .hero-logo').forEach((el) => el.remove());
+  content
+    .querySelectorAll('script, style, link, nav, header.hero .hero-logo')
+    .forEach((el) => el.remove());
   normalizeSpaDocLinks(content);
   return content.innerHTML;
 }
@@ -56,7 +66,8 @@ function wireSpaDocClicks(host: Element): void {
   if (el.dataset.crSpaDocClicks === '1') return;
   el.dataset.crSpaDocClicks = '1';
   el.addEventListener('click', (event) => {
-    const target = event.target instanceof Element ? event.target.closest('a[data-cr-spa-route]') : null;
+    const target =
+      event.target instanceof Element ? event.target.closest('a[data-cr-spa-route]') : null;
     if (!(target instanceof HTMLAnchorElement)) return;
     const route = target.dataset.crSpaRoute;
     if (!route) return;
@@ -69,7 +80,11 @@ function wireSpaDocClicks(host: Element): void {
   });
 }
 
-export async function loadDocFragment(url: string, targetSel: string, opts: DocFragmentOptions = {}): Promise<void> {
+export async function loadDocFragment(
+  url: string,
+  targetSel: string,
+  opts: DocFragmentOptions = {},
+): Promise<void> {
   const host = document.querySelector(targetSel);
   const loadedKey = `${targetSel}\n${url}`;
   if (!host || loadedFragments.has(loadedKey)) return;
@@ -81,7 +96,8 @@ export async function loadDocFragment(url: string, targetSel: string, opts: DocF
     loadedFragments.add(loadedKey);
     opts.afterInject?.();
   } catch (err) {
-    host.innerHTML = opts.errorHtml ?? '<p class="cr-doc-lead">Could not load this page. Try again soon.</p>';
+    host.innerHTML =
+      opts.errorHtml ?? '<p class="cr-doc-lead">Could not load this page. Try again soon.</p>';
     console.warn('doc fragment load failed:', url, err);
   }
 }

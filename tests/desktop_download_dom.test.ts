@@ -24,7 +24,7 @@ describe('initDesktopDownload', () => {
 
   it('syncs each button href to the versioned artifact URL', () => {
     setUserAgent('Mozilla/5.0 (X11; Linux x86_64)');
-    initDesktopDownload(document);
+    void initDesktopDownload(document, null);
     const mac = document.querySelector('[data-platform="mac"]') as HTMLAnchorElement;
     const linux = document.querySelector('[data-platform="linux"]') as HTMLAnchorElement;
     expect(mac.href).toBe(desktopDownloadUrl('mac'));
@@ -39,7 +39,7 @@ describe('initDesktopDownload', () => {
 
   it('highlights and floats the visitor OS button first, and reveals its hint', () => {
     setUserAgent('Mozilla/5.0 (X11; Linux x86_64) Chrome/125');
-    initDesktopDownload(document);
+    void initDesktopDownload(document, null);
     const actions = document.querySelector('.desktop-download-actions') as HTMLElement;
     const first = actions.firstElementChild as HTMLElement;
     expect(first.dataset.platform).toBe('linux');
@@ -50,7 +50,7 @@ describe('initDesktopDownload', () => {
 
   it('keeps the Linux hint hidden for non-Linux visitors and highlights their OS', () => {
     setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)');
-    initDesktopDownload(document);
+    void initDesktopDownload(document, null);
     const hint = document.querySelector('.desktop-download-hint') as HTMLElement;
     expect(hint.hidden).toBe(true);
     const mac = document.querySelector('[data-platform="mac"]') as HTMLElement;
@@ -59,7 +59,7 @@ describe('initDesktopDownload', () => {
 
   it('highlights and floats the Windows button for Windows visitors', () => {
     setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/125');
-    initDesktopDownload(document);
+    void initDesktopDownload(document, null);
     const actions = document.querySelector('.desktop-download-actions') as HTMLElement;
     const first = actions.firstElementChild as HTMLElement;
     expect(first.dataset.platform).toBe('win');
@@ -68,7 +68,37 @@ describe('initDesktopDownload', () => {
 
   it('no-ops when the download view is absent', () => {
     document.body.innerHTML = '<main></main>';
-    expect(() => initDesktopDownload(document)).not.toThrow();
+    expect(() => initDesktopDownload(document, null)).not.toThrow();
+  });
+
+  it('marks every link unavailable when the latest.yml HEAD probe misses', async () => {
+    setUserAgent('Mozilla/5.0 (X11; Linux x86_64)');
+    await initDesktopDownload(document, async () => ({ status: 404 }));
+    for (const link of document.querySelectorAll<HTMLAnchorElement>('.desktop-download-link')) {
+      expect(link.classList.contains('is-unavailable')).toBe(true);
+      expect(link.getAttribute('aria-disabled')).toBe('true');
+      expect(link.getAttribute('href')).toBeNull();
+      expect(link.classList.contains('is-detected')).toBe(false);
+    }
+    const hint = document.querySelector('.desktop-download-hint') as HTMLElement;
+    expect(hint.hidden).toBe(true);
+  });
+
+  it('marks every link unavailable when the probe fetch throws', async () => {
+    setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64)');
+    await initDesktopDownload(document, async () => {
+      throw new Error('offline');
+    });
+    const win = document.querySelector('[data-platform="win"]') as HTMLElement;
+    expect(win.classList.contains('is-unavailable')).toBe(true);
+  });
+
+  it('keeps the links live when latest.yml answers 200', async () => {
+    setUserAgent('Mozilla/5.0 (X11; Linux x86_64)');
+    await initDesktopDownload(document, async () => ({ status: 200 }));
+    const linux = document.querySelector('[data-platform="linux"]') as HTMLAnchorElement;
+    expect(linux.classList.contains('is-unavailable')).toBe(false);
+    expect(linux.href).toBe(desktopDownloadUrl('linux'));
   });
 });
 

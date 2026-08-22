@@ -884,6 +884,7 @@ export const en_CA: EnTranslations = {
     },
     "leaderboard": {
       "close": "Close",
+      "filterAll": "All",
       "tabsLabel": "High-score boards",
       "tabPlayers": "Players",
       "tabGuilds": "Guilds",

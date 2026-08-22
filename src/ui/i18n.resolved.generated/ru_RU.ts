@@ -884,6 +884,7 @@ export const ru_RU: EnTranslations = {
     },
     "leaderboard": {
       "close": "Закрыть",
+      "filterAll": "All",
       "tabsLabel": "Таблицы рекордов",
       "tabPlayers": "Игроки",
       "tabGuilds": "Гильдии",

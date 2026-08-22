@@ -3,27 +3,38 @@
 // their data-realm attribute. Cards without data-realm show in all realms.
 
 import './realm_env';
-import { REALM_LIST, resolveActiveRealmId, isRealmId, persistActiveRealm } from '../../sim/realms';
+import { isRealmId, persistActiveRealm, REALM_LIST } from '../../sim/realms';
 
 const PICKER_ID = 'cr-news-realm-picker';
 const STORE_KEY = 'cr_news_realm';
 
+// Default 'all': News is a cross-realm feed, so a first visit shows every
+// realm's items; a persisted chip pick still wins.
 function activeNewsRealm(): string {
-  try { return localStorage.getItem(STORE_KEY) || resolveActiveRealmId(); }
-  catch { return resolveActiveRealmId(); }
+  try {
+    return localStorage.getItem(STORE_KEY) || 'all';
+  } catch {
+    return 'all';
+  }
 }
 
 function persistNewsRealm(id: string): void {
-  try { localStorage.setItem(STORE_KEY, id); } catch { /* noop */ }
+  try {
+    localStorage.setItem(STORE_KEY, id);
+  } catch {
+    /* noop */
+  }
 }
 
 function buildPicker(active: string): string {
   return `<div id="${PICKER_ID}" class="cr-news-picker" role="tablist">
     <span class="cr-news-picker-label">Realm:</span>
     <button type="button" class="cr-news-chip${active === 'all' ? ' active' : ''}" data-realm="all">All</button>
-    ${REALM_LIST.map((r) => `
+    ${REALM_LIST.map(
+      (r) => `
       <button type="button" class="cr-news-chip${active === r.id ? ' active' : ''}" data-realm="${r.id}">${r.name}</button>
-    `).join('')}
+    `,
+    ).join('')}
   </div>`;
 }
 
@@ -49,7 +60,9 @@ function mountInto(host: HTMLElement): void {
     if (next !== 'all' && !isRealmId(next)) return;
     persistNewsRealm(next);
     if (next !== 'all') persistActiveRealm(next);
-    host.querySelectorAll('.cr-news-chip').forEach((c) => c.classList.toggle('active', (c as HTMLElement).dataset.realm === next));
+    host.querySelectorAll('.cr-news-chip').forEach((c) => {
+      c.classList.toggle('active', (c as HTMLElement).dataset.realm === next);
+    });
     applyFilter(next);
   });
 }
@@ -57,9 +70,10 @@ function mountInto(host: HTMLElement): void {
 export function mountNewsRealmFilter(): void {
   if (typeof document === 'undefined') return;
   const arm = () => {
-    const target = document.getElementById('news-view') ||
-                   document.querySelector('[data-view="news"]') ||
-                   document.querySelector('.news-section');
+    const target =
+      document.getElementById('news-view') ||
+      document.querySelector('[data-view="news"]') ||
+      document.querySelector('.news-section');
     if (target) mountInto(target as HTMLElement);
   };
   if (document.readyState === 'loading') {
@@ -67,7 +81,7 @@ export function mountNewsRealmFilter(): void {
   } else {
     arm();
   }
-  // News view may render lazily — watch for it.
+  // News view may render lazily; watch for it.
   const obs = new MutationObserver(() => arm());
   obs.observe(document.body, { childList: true, subtree: true });
 }

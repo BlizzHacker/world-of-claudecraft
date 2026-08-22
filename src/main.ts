@@ -498,7 +498,6 @@ import {
   usesRealmHeroRoster,
 } from './ui/cryptic/char_grid_host';
 import { mountChatFrame } from './ui/cryptic/chat_frame';
-import { loadDocFragment } from './ui/cryptic/doc_fragment';
 import { mountDownloadLaunchers } from './ui/cryptic/download_launchers';
 import {
   enforceDiabloLock,
@@ -509,6 +508,7 @@ import {
   setFpsMode,
 } from './ui/cryptic/fps_mode';
 import { mountHudGlobes, resolveHudSkin, setHudSkin } from './ui/cryptic/globes';
+import { mountHighscoresRealmFilter } from './ui/cryptic/highscores_realm_filter';
 import { mountHudLayout, registerHudLayoutTarget } from './ui/cryptic/hud_layout';
 import { mountIngameOptions } from './ui/cryptic/ingame_options';
 import { mountLootVault } from './ui/cryptic/loot_vault';
@@ -896,6 +896,7 @@ if (typeof document !== 'undefined') {
     mountPwaInstall();
     mountXboxEnv();
     mountNewsRealmFilter();
+    mountHighscoresRealmFilter();
     mountDownloadLaunchers();
     mountMusicWidget();
     // Browsers block audio autoplay until a user gesture; kick the Cryptic Realm
@@ -7014,17 +7015,10 @@ function resetViewTransitionStyle(el: HTMLElement): void {
 }
 
 function switchMainView(targetId: string): void {
-  const views = [
-    '#hero-view',
-    '#highscores-view',
-    '#wiki-view',
-    '#news-view',
-    '#download-view',
-    '#contributions-view',
-    '#links-view',
-    '#whitepaper-view',
-    '#account-view',
-  ];
+  // Only views that exist as sections in index.html. Wiki, Contributions,
+  // Links, and White Paper are real documents; their nav buttons navigate
+  // (switching to a missing section hid every view and blanked the page).
+  const views = ['#hero-view', '#highscores-view', '#news-view', '#download-view', '#account-view'];
   const currentViewId = views.find((id) => {
     const el = $(id);
     return el && !el.hasAttribute('hidden');
@@ -7035,9 +7029,6 @@ function switchMainView(targetId: string): void {
     '#highscores-view': 'nav-btn-highscores',
     '#news-view': 'nav-btn-news',
     '#download-view': 'nav-btn-download',
-    '#contributions-view': 'nav-btn-contributions',
-    '#links-view': 'nav-btn-links',
-    '#whitepaper-view': 'nav-btn-whitepaper',
     '#account-view': 'nav-btn-account',
   };
 
@@ -12877,26 +12868,19 @@ function wireStartScreens(): void {
     switchMainView('#news-view');
     void loadNews();
   });
-  setupNavBtn(navBtnContributions, '#contributions-view');
+  // Contributions, Links, and White Paper are standalone HTML documents (like
+  // the wiki above): navigate to them instead of switching an in-page view.
+  setupNavBtn(navBtnContributions, '', () => {
+    window.location.href = '/contributions.html';
+  });
   setupNavBtn(navBtnDownload, '#download-view');
-  // Links + White Paper were standalone HTML pages; they're now in-app views.
-  // Their content is injected once (fetched from the retained /*.html fragments)
-  // so we keep a single content source without duplicating it into index.html.
-  setupNavBtn(navBtnLinks, '#links-view', () => {
-    switchMainView('#links-view');
-    void loadDocFragment('/links.html', '#links-content', {
-      errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
-      afterInject: translatePage,
-    });
+  setupNavBtn(navBtnLinks, '', () => {
+    window.location.href = '/links.html';
   });
-  setupNavBtn(navBtnWhitepaper, '#whitepaper-view', () => {
-    switchMainView('#whitepaper-view');
-    void loadDocFragment('/whitepaper.html', '#whitepaper-content', {
-      errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
-      afterInject: translatePage,
-    });
+  setupNavBtn(navBtnWhitepaper, '', () => {
+    window.location.href = '/whitepaper.html';
   });
-  initDesktopDownload();
+  void initDesktopDownload();
   initBrowserSupportNotice();
   setupNavBtn(navBtnLogin, '#hero-view', () => {
     if (api.token || hydrateApiFromSavedSession()) {
@@ -13394,7 +13378,7 @@ function wireStartScreens(): void {
       return;
     }
     if (hash === 'wiki') {
-      switchMainView('#wiki-view');
+      window.location.href = '/wiki';
       return;
     }
     if (hash === 'news' || hash === 'updates') {
@@ -13407,23 +13391,15 @@ function wireStartScreens(): void {
       return;
     }
     if (hash === 'contributions') {
-      switchMainView('#contributions-view');
+      window.location.href = '/contributions.html';
       return;
     }
     if (hash === 'links') {
-      switchMainView('#links-view');
-      void loadDocFragment('/links.html', '#links-content', {
-        errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
-        afterInject: translatePage,
-      });
+      window.location.href = '/links.html';
       return;
     }
     if (hash === 'whitepaper') {
-      switchMainView('#whitepaper-view');
-      void loadDocFragment('/whitepaper.html', '#whitepaper-content', {
-        errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
-        afterInject: translatePage,
-      });
+      window.location.href = '/whitepaper.html';
       return;
     }
     if (hash === 'login' || hash === 'register' || hash === 'account') {

@@ -1,4 +1,4 @@
-// Shared dashboard chrome — renders the homepage header contract for /me/,
+// Shared dashboard chrome: renders the homepage header contract for /me/,
 // /mod/, and /admin/. These pages are standalone entries, so links navigate
 // instead of switching in-page views, but the DOM/classes intentionally mirror
 // index.html's .homepage-header menu instead of carrying a dashboard-only nav.
@@ -6,6 +6,8 @@
 // Home is the canonical source of nav order/labels; keep this list in sync
 // with public/nav.js. Self-mounts on DOMContentLoaded.
 
+import { getActiveRealm } from '../../sim/realms';
+import { socialsForRealm } from '../../sim/realms/social_links';
 import { mountRealmBranding } from './branding';
 import { mountThemeSelect } from './theme_select';
 import { mountUserDropdown } from './user_dropdown';
@@ -29,33 +31,36 @@ interface NavLink {
   current?: boolean;
 }
 
-// Primary nav — SINGLE SOURCE OF TRUTH is public/nav.js (window.CR_NAV_ITEMS),
+// Primary nav: SINGLE SOURCE OF TRUTH is public/nav.js (window.CR_NAV_ITEMS),
 // loaded by every page. Read it when present so the dashboard nav can never
 // drift from the rest of the site; fall back to a copy only if nav.js hasn't
-// loaded. To change the nav, edit public/nav.js — not here.
+// loaded. To change the nav, edit public/nav.js, not here.
 function primaryLinks(): NavLink[] {
-  const shared = (window as unknown as { CR_NAV_ITEMS?: { href: string; label: string }[] }).CR_NAV_ITEMS;
-  const base = Array.isArray(shared) && shared.length
-    ? shared.map((i) => ({ href: i.href, label: i.label }))
-    : [
-    { href: '/#play', label: 'Play' },
-    { href: '/#highscores', label: 'High Scores' },
-    { href: '/wiki.html', label: 'Wiki' },
-    { href: '/#news', label: 'News' },
-    { href: '/contributions.html', label: 'Contributions' },
-    { href: '/#download', label: 'Download' },
-    { href: '/links.html', label: 'Links' },
-    { href: '/whitepaper.html', label: 'White Paper' },
-    { href: '/#login', label: 'Login/Register' },
-  ];
+  const shared = (window as unknown as { CR_NAV_ITEMS?: { href: string; label: string }[] })
+    .CR_NAV_ITEMS;
+  const base =
+    Array.isArray(shared) && shared.length
+      ? shared.map((i) => ({ href: i.href, label: i.label }))
+      : [
+          { href: '/#play', label: 'Play' },
+          { href: '/#highscores', label: 'High Scores' },
+          { href: '/wiki', label: 'Wiki' },
+          { href: '/#news', label: 'News' },
+          { href: '/contributions.html', label: 'Contributions' },
+          { href: '/#download', label: 'Download' },
+          { href: '/links.html', label: 'Links' },
+          { href: '/whitepaper.html', label: 'White Paper' },
+          { href: '/#login', label: 'Login/Register' },
+        ];
   const kind = pageKind();
-  const context = kind === 'admin'
-    ? { href: '/admin/', label: 'Admin', current: true }
-    : kind === 'mod'
-      ? { href: '/mod/', label: 'Moderator', current: true }
-      : kind === 'me'
-        ? { href: '/me/', label: 'My Account', current: true }
-        : null;
+  const context =
+    kind === 'admin'
+      ? { href: '/admin/', label: 'Admin', current: true }
+      : kind === 'mod'
+        ? { href: '/mod/', label: 'Moderator', current: true }
+        : kind === 'me'
+          ? { href: '/me/', label: 'My Account', current: true }
+          : null;
   if (!context) return base;
   if (base.some((l) => l.href === context.href)) {
     return base.map((l) => ({ ...l, current: l.href === context.href }));
@@ -67,13 +72,30 @@ function primaryLinks(): NavLink[] {
 }
 
 function navId(label: string): string {
-  return `nav-link-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+  return `nav-link-${label
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')}`;
 }
 
 function navItem(l: NavLink): string {
   const cls = `nav-link${l.current ? ' active' : ''}`;
   const aria = l.current ? ' aria-current="page"' : '';
   return `<li class="nav-item"><a class="${cls}" id="${navId(l.label)}" href="${l.href}"${aria}>${l.label}</a></li>`;
+}
+
+// The tip CTA routes to the Links page tip card (#btn-tip), never a raw
+// solana: URI (no-wallet browsers turn the scheme into a dead click), and the
+// advertised address comes from the one per-realm source (social_links.ts)
+// rather than a hardcoded copy that can drift.
+function tipCtaHtml(): string {
+  const tipWallet = socialsForRealm(getActiveRealm().id).tipWalletSolana;
+  if (!tipWallet) return '';
+  const short = `${tipWallet.slice(0, 4)}...${tipWallet.slice(-4)}`;
+  return `<a class="donate-cta" href="/links.html#btn-tip" title="Tip $CR or SOL to ${short}" aria-label="Tip $CR or SOL to support Cryptic Realm at ${tipWallet}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <span>Tip $CR</span>
+          </a>`;
 }
 
 function buildHtml(): string {
@@ -96,10 +118,7 @@ function buildHtml(): string {
         </nav>
         <div class="header-actions">
           <div id="theme-picker" aria-label="Realm selector"></div>
-          <a class="donate-cta" href="solana:GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi" rel="noopener noreferrer" title="Tip $CR or SOL to GncA...BJpi" aria-label="Tip $CR or SOL to support Cryptic Realm at GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            <span>Tip $CR</span>
-          </a>
+          ${tipCtaHtml()}
         </div>
       </div>
     </header>

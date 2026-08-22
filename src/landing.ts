@@ -1,13 +1,16 @@
+import { crypticMusic } from './game/cryptic_music';
 import { mountRealmBranding } from './ui/cryptic/branding';
-import { mountThemeSelect } from './ui/cryptic/theme_select';
+import {
+  mountHighscoresRealmFilter,
+  normalizeRealmTag,
+} from './ui/cryptic/highscores_realm_filter';
+import { mountMusicWidget } from './ui/cryptic/music_widget';
+import { installNativeSsoReturnHandler, wireNativeSsoLink } from './ui/cryptic/native_sso';
 import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
+import { readCrypticSession } from './ui/cryptic/session';
+import { mountThemeSelect } from './ui/cryptic/theme_select';
 import { mountUserDropdown } from './ui/cryptic/user_dropdown';
 import { mountWalletPanel } from './ui/cryptic/wallet_panel';
-import { readCrypticSession } from './ui/cryptic/session';
-import { mountMusicWidget } from './ui/cryptic/music_widget';
-import { loadDocFragment } from './ui/cryptic/doc_fragment';
-import { installNativeSsoReturnHandler, wireNativeSsoLink } from './ui/cryptic/native_sso';
-import { crypticMusic } from './game/cryptic_music';
 
 let appPromise: Promise<typeof import('./main')> | null = null;
 let caCopyResetTimer: number | null = null;
@@ -32,15 +35,22 @@ async function loadLandingStats(): Promise<void> {
     const res = await fetch('/api/project-stats', { signal: AbortSignal.timeout(4000) });
     if (!res.ok) return;
     const data = await res.json();
-    playerEls.forEach((el) => { el.textContent = String(data.players_online ?? 0); });
-    accountEls.forEach((el) => { el.textContent = String(data.accounts_created ?? 0); });
-  } catch { /* leave placeholders on failure */ }
+    playerEls.forEach((el) => {
+      el.textContent = String(data.players_online ?? 0);
+    });
+    accountEls.forEach((el) => {
+      el.textContent = String(data.accounts_created ?? 0);
+    });
+  } catch {
+    /* leave placeholders on failure */
+  }
 }
 
 function bootLandingBranding(): void {
   mountRealmBranding();
   mountThemeSelect();
   mountNewsRealmFilter();
+  mountHighscoresRealmFilter();
   void mountUserDropdown();
   void loadLandingStats();
   // Monster Chronicle / Skill Trees / Loot Vault / Pickit are in-game reference
@@ -52,7 +62,11 @@ function bootLandingBranding(): void {
 }
 
 function acceptNativeSsoHash(hash: string): void {
-  try { history.replaceState(null, '', window.location.pathname + window.location.search + hash); } catch { window.location.hash = hash; }
+  try {
+    history.replaceState(null, '', window.location.pathname + window.location.search + hash);
+  } catch {
+    window.location.hash = hash;
+  }
   window.dispatchEvent(new CustomEvent('cr:sso-native-return', { detail: { hash } }));
   void loadApp().catch((err) => {
     console.error('[cr-boot] loadApp failed after native SSO return', err);
@@ -82,7 +96,11 @@ function wireContractAddressCopy(): void {
     document.body.appendChild(ta);
     ta.select();
     let ok = false;
-    try { ok = document.execCommand('copy'); } catch { ok = false; }
+    try {
+      ok = document.execCommand('copy');
+    } catch {
+      ok = false;
+    }
     document.body.removeChild(ta);
     return ok;
   };
@@ -91,9 +109,12 @@ function wireContractAddressCopy(): void {
     const ca = btn.getAttribute('data-ca');
     if (!ca) return;
     if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(ca).then(showCopied).catch(() => {
-        if (fallbackCopy(ca)) showCopied();
-      });
+      navigator.clipboard
+        .writeText(ca)
+        .then(showCopied)
+        .catch(() => {
+          if (fallbackCopy(ca)) showCopied();
+        });
     } else if (fallbackCopy(ca)) {
       showCopied();
     }
@@ -109,17 +130,23 @@ const APP_TRIGGER_SELECTOR = [
   '.auth-tab',
 ].join(',');
 
-const PANELS = ['#mode-select', '#login-panel', '#realm-panel', '#charselect-panel', '#offline-select'];
-const VIEWS = ['#hero-view', '#highscores-view', '#wiki-view', '#news-view', '#download-view', '#contributions-view', '#links-view', '#whitepaper-view'];
+const PANELS = [
+  '#mode-select',
+  '#login-panel',
+  '#realm-panel',
+  '#charselect-panel',
+  '#offline-select',
+];
+// Only views that actually exist as sections in index.html. Wiki, Contributions,
+// Links, and White Paper are real documents (/wiki, /contributions.html,
+// /links.html, /whitepaper.html); their nav buttons NAVIGATE instead of
+// switching an in-page view (a switch to a missing section blanked the page).
+const VIEWS = ['#hero-view', '#highscores-view', '#news-view', '#download-view'];
 const NAV_BY_VIEW: Record<string, string> = {
   '#hero-view': 'nav-btn-play',
   '#highscores-view': 'nav-btn-highscores',
-  '#wiki-view': 'nav-btn-wiki',
   '#news-view': 'nav-btn-news',
   '#download-view': 'nav-btn-download',
-  '#contributions-view': 'nav-btn-contributions',
-  '#links-view': 'nav-btn-links',
-  '#whitepaper-view': 'nav-btn-whitepaper',
 };
 
 interface LandingLeaderboardEntry {
@@ -147,7 +174,10 @@ let newsLoading = false;
 let downloadMounted = false;
 
 function escapeHtml(value: string): string {
-  return value.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+  return value.replace(
+    /[&<>"]/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!,
+  );
 }
 
 function closeMobileMenu(): void {
@@ -207,43 +237,48 @@ function switchLandingView(targetId: string): void {
 function renderHighscores(rows: LandingLeaderboardEntry[]): string {
   if (rows.length === 0) return '<div class="hs-empty">No rankings yet.</div>';
   const numberFormat = new Intl.NumberFormat();
-  const head = '<div class="hs-row hs-head">'
-    + '<span class="hs-rank">Rank</span>'
-    + '<span class="hs-name">Name</span>'
-    + '<span class="hs-realm">Realm</span>'
-    + '<span class="hs-lvl">Level</span>'
-    + '<span class="hs-vlvl">Virtual</span>'
-    + '<span class="hs-xp">Lifetime XP</span></div>';
-  const body = rows.map((r) => {
-    const prestige = (r.prestigeRank ?? 0) > 0 ? `<span class="hs-prestige">*${r.prestigeRank}</span>` : '';
-    return `<div class="hs-row${r.rank <= 3 ? ' hs-top' : ''}">`
-      + `<span class="hs-rank">${r.rank}</span>`
-      + `<span class="hs-name">${prestige}${escapeHtml(r.name)}</span>`
-      + `<span class="hs-realm">${escapeHtml(r.realm ?? '')}</span>`
-      + `<span class="hs-lvl">${r.level}</span>`
-      + `<span class="hs-vlvl">${r.virtualLevel}</span>`
-      + `<span class="hs-xp">${numberFormat.format(r.lifetimeXp)}</span></div>`;
-  }).join('');
+  const head =
+    '<div class="hs-row hs-head">' +
+    '<span class="hs-rank">Rank</span>' +
+    '<span class="hs-name">Name</span>' +
+    '<span class="hs-realm">Realm</span>' +
+    '<span class="hs-lvl">Level</span>' +
+    '<span class="hs-vlvl">Virtual</span>' +
+    '<span class="hs-xp">Lifetime XP</span></div>';
+  const body = rows
+    .map((r) => {
+      const prestige =
+        (r.prestigeRank ?? 0) > 0 ? `<span class="hs-prestige">*${r.prestigeRank}</span>` : '';
+      // data-realm feeds the client-side realm filter (highscores_realm_filter).
+      return (
+        `<div class="hs-row${r.rank <= 3 ? ' hs-top' : ''}" data-realm="${escapeHtml(normalizeRealmTag(r.realm))}">` +
+        `<span class="hs-rank">${r.rank}</span>` +
+        `<span class="hs-name">${prestige}${escapeHtml(r.name)}</span>` +
+        `<span class="hs-realm">${escapeHtml(r.realm ?? '')}</span>` +
+        `<span class="hs-lvl">${r.level}</span>` +
+        `<span class="hs-vlvl">${r.virtualLevel}</span>` +
+        `<span class="hs-xp">${numberFormat.format(r.lifetimeXp)}</span></div>`
+      );
+    })
+    .join('');
   return head + body;
 }
 
-let highscoresScope: 'global' | 'ladder' = 'global';
-async function loadLandingHighscores(scope: 'global' | 'ladder' = highscoresScope): Promise<void> {
+// The board always fetches the cross-realm global scope; the realm filter
+// (mountHighscoresRealmFilter) narrows it client-side over the realm-tagged
+// rows. The old 'ladder' scope was a phantom: the server has no such scope, so
+// the request silently fell back to the realm default.
+async function loadLandingHighscores(): Promise<void> {
   const host = document.getElementById('hs-leaderboard');
   if (!host || highscoresLoading) return;
-  highscoresScope = scope;
   highscoresLoading = true;
   host.innerHTML = '<div class="hs-loading">Loading rankings...</div>';
   try {
-    const res = await fetch(`/api/leaderboard?scope=${scope}&metric=lifetimeXp&limit=100`);
+    const res = await fetch('/api/leaderboard?scope=global&metric=lifetimeXp&limit=100');
     if (!res.ok) throw new Error(`request failed (${res.status})`);
     const data = await res.json();
     const leaders = Array.isArray(data.leaders) ? data.leaders : [];
-    if (!leaders.length && scope === 'ladder') {
-      host.innerHTML = '<div class="hs-empty">No ladder champions yet — be the first to climb a ladder realm.</div>';
-    } else {
-      host.innerHTML = renderHighscores(leaders);
-    }
+    host.innerHTML = renderHighscores(leaders);
   } catch {
     host.innerHTML = '<div class="hs-error">Could not load rankings. Try again soon.</div>';
   } finally {
@@ -251,26 +286,13 @@ async function loadLandingHighscores(scope: 'global' | 'ladder' = highscoresScop
   }
 }
 
-function wireHighscoresScope(): void {
-  document.querySelectorAll<HTMLElement>('.hs-scope-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const scope = (btn.dataset.hsScope === 'ladder' ? 'ladder' : 'global');
-      if (scope === highscoresScope) return;
-      document.querySelectorAll<HTMLElement>('.hs-scope-btn').forEach((b) => {
-        const on = b === btn;
-        b.classList.toggle('active', on);
-        b.setAttribute('aria-selected', on ? 'true' : 'false');
-      });
-      void loadLandingHighscores(scope);
-    });
-  });
-}
-
 function renderReleaseBody(body: string): string {
   const inline = (line: string): string =>
     escapeHtml(line)
-      .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_m, text, url) =>
-        `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`)
+      .replace(
+        /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+        (_m, text, url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`,
+      )
       .replace(/`([^`]+)`/g, '<code>$1</code>')
       .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   return body
@@ -317,14 +339,18 @@ async function loadLandingNews(): Promise<void> {
       realm: 'all',
     },
   ];
-  const pinnedHtml = pinned.map((r) => {
-    const external = /^https?:\/\//.test(r.url);
-    return `<article class="news-item cr-news-pinned" data-news-item data-realm="${escapeHtml(r.realm)}">`
-      + `<div class="news-item-head"><h3 class="news-item-title">${escapeHtml(r.title)}</h3><span class="news-tag">${escapeHtml(r.tag)}</span></div>`
-      + `<div class="news-body"><p>${escapeHtml(r.body)}</p></div>`
-      + `<div class="news-item-foot"><a class="news-link" href="${escapeHtml(r.url)}"${external ? ' target="_blank" rel="noopener noreferrer"' : ''}>Open</a></div>`
-      + `</article>`;
-  }).join('');
+  const pinnedHtml = pinned
+    .map((r) => {
+      const external = /^https?:\/\//.test(r.url);
+      return (
+        `<article class="news-item cr-news-pinned" data-news-item data-realm="${escapeHtml(r.realm)}">` +
+        `<div class="news-item-head"><h3 class="news-item-title">${escapeHtml(r.title)}</h3><span class="news-tag">${escapeHtml(r.tag)}</span></div>` +
+        `<div class="news-body"><p>${escapeHtml(r.body)}</p></div>` +
+        `<div class="news-item-foot"><a class="news-link" href="${escapeHtml(r.url)}"${external ? ' target="_blank" rel="noopener noreferrer"' : ''}>Open</a></div>` +
+        `</article>`
+      );
+    })
+    .join('');
   try {
     const res = await fetch('/api/releases?limit=20');
     if (!res.ok) throw new Error(`request failed (${res.status})`);
@@ -334,19 +360,23 @@ async function loadLandingNews(): Promise<void> {
       host.innerHTML = `${pinnedHtml}<div class="news-empty">No release notes yet.</div>`;
       return;
     }
-    const releaseHtml = releases.map((r) => {
-      const title = escapeHtml(r.name || r.tag || 'Update');
-      const tag = r.tag ? `<span class="news-tag">${escapeHtml(r.tag)}</span>` : '';
-      const badge = r.prerelease ? '<span class="news-badge">Prerelease</span>' : '';
-      const when = r.publishedAt
-        ? `<span class="news-date">${new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(r.publishedAt))}</span>`
-        : '';
-      const link = r.url
-        ? `<div class="news-item-foot"><a class="news-link" href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer">Read release notes</a></div>`
-        : '';
-      return `<article class="news-item" data-news-item data-realm="all"><div class="news-item-head"><h3 class="news-item-title">${title}</h3>${tag}${badge}${when}</div>`
-        + `<div class="news-body">${renderReleaseBody(r.body ?? '')}</div>${link}</article>`;
-    }).join('');
+    const releaseHtml = releases
+      .map((r) => {
+        const title = escapeHtml(r.name || r.tag || 'Update');
+        const tag = r.tag ? `<span class="news-tag">${escapeHtml(r.tag)}</span>` : '';
+        const badge = r.prerelease ? '<span class="news-badge">Prerelease</span>' : '';
+        const when = r.publishedAt
+          ? `<span class="news-date">${new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(r.publishedAt))}</span>`
+          : '';
+        const link = r.url
+          ? `<div class="news-item-foot"><a class="news-link" href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer">Read release notes</a></div>`
+          : '';
+        return (
+          `<article class="news-item" data-news-item data-realm="all"><div class="news-item-head"><h3 class="news-item-title">${title}</h3>${tag}${badge}${when}</div>` +
+          `<div class="news-body">${renderReleaseBody(r.body ?? '')}</div>${link}</article>`
+        );
+      })
+      .join('');
     host.innerHTML = `${pinnedHtml}${releaseHtml}`;
   } catch {
     host.innerHTML = `${pinnedHtml}<div class="news-error">Could not load release notes. Try again soon.</div>`;
@@ -376,13 +406,17 @@ function showPanel(selector: string): void {
   if (logoImg) {
     logoImg.toggleAttribute(
       'hidden',
-      selector === '#login-panel' || selector === '#realm-panel' || selector === '#charselect-panel' || selector === '#offline-select',
+      selector === '#login-panel' ||
+        selector === '#realm-panel' ||
+        selector === '#charselect-panel' ||
+        selector === '#offline-select',
     );
   }
   const panel = document.querySelector<HTMLElement>(selector);
   if (panel) {
     window.requestAnimationFrame(() => {
-      if (!panel.hasAttribute('hidden')) panel.scrollIntoView({ block: 'center', inline: 'nearest' });
+      if (!panel.hasAttribute('hidden'))
+        panel.scrollIntoView({ block: 'center', inline: 'nearest' });
     });
   }
 }
@@ -392,9 +426,13 @@ async function launchClassic(): Promise<void> {
   if (!host) return;
   try {
     const mod = await import('./classic/classic-entry');
-    document.querySelectorAll<HTMLElement>(
-      '#mode-select,#login-panel,#realm-panel,#charselect-panel,#offline-select',
-    ).forEach((el) => { el.style.display = 'none'; });
+    document
+      .querySelectorAll<HTMLElement>(
+        '#mode-select,#login-panel,#realm-panel,#charselect-panel,#offline-select',
+      )
+      .forEach((el) => {
+        el.style.display = 'none';
+      });
     mod.mountClassic(host, {
       onExit: () => {
         const ms = document.getElementById('mode-select');
@@ -419,38 +457,56 @@ async function loadLandingRealms(): Promise<void> {
   try {
     const res = await fetch('/api/realms');
     if (!res.ok) throw new Error(`realms ${res.status}`);
-    const dir = await res.json() as { realms?: { name: string; url: string; type: string }[] };
+    const dir = (await res.json()) as { realms?: { name: string; url: string; type: string }[] };
     const realms = Array.isArray(dir.realms) ? dir.realms : [];
-    if (!realms.length) { listEl.innerHTML = '<div class="realm-loading">No realms available right now.</div>'; return; }
+    if (!realms.length) {
+      listEl.innerHTML = '<div class="realm-loading">No realms available right now.</div>';
+      return;
+    }
 
     // Group by base realm so each realm is ONE row with its stages (Live default
     // + Alpha/Beta/Dev pills) instead of 4 flat rows each. Keeps the list compact
     // and shows every server, not just the live ones.
-    interface Stage { stage: string; url: string; }
-    interface Group { base: string; type: string; stages: Stage[]; }
+    interface Stage {
+      stage: string;
+      url: string;
+    }
+    interface Group {
+      base: string;
+      type: string;
+      stages: Stage[];
+    }
     const groups = new Map<string, Group>();
     const order: string[] = [];
     for (const r of realms) {
       const m = /^(.*?)\s*\[(BETA|ALPHA|DEV)\]\s*$/i.exec(r.name);
       const base = (m ? m[1] : r.name).trim();
       const stage = m ? m[2].toUpperCase() : 'LIVE';
-      if (!groups.has(base)) { groups.set(base, { base, type: r.type, stages: [] }); order.push(base); }
+      if (!groups.has(base)) {
+        groups.set(base, { base, type: r.type, stages: [] });
+        order.push(base);
+      }
       const g = groups.get(base)!;
       if (stage === 'LIVE') g.type = r.type; // live row defines the realm type
       g.stages.push({ stage, url: r.url });
     }
     const STAGE_ORDER = ['LIVE', 'BETA', 'ALPHA', 'DEV'];
-    const sortStages = (s: Stage[]) => s.sort((a, b) => STAGE_ORDER.indexOf(a.stage) - STAGE_ORDER.indexOf(b.stage));
+    const sortStages = (s: Stage[]) =>
+      s.sort((a, b) => STAGE_ORDER.indexOf(a.stage) - STAGE_ORDER.indexOf(b.stage));
 
-    listEl.innerHTML = order.map((base) => {
-      const g = groups.get(base)!;
-      sortStages(g.stages);
-      const live = g.stages.find((s) => s.stage === 'LIVE') ?? g.stages[0];
-      const extra = g.stages.filter((s) => s.stage !== 'LIVE');
-      const pills = extra.map((s) =>
-        `<button type="button" class="realm-stage-pill realm-stage-${s.stage.toLowerCase()}" data-url="${escapeHtml(s.url)}" data-name="${escapeHtml(base + ' [' + s.stage + ']')}">${s.stage}</button>`,
-      ).join('');
-      return `
+    listEl.innerHTML = order
+      .map((base) => {
+        const g = groups.get(base)!;
+        sortStages(g.stages);
+        const live = g.stages.find((s) => s.stage === 'LIVE') ?? g.stages[0];
+        const extra = g.stages.filter((s) => s.stage !== 'LIVE');
+        const pills = extra
+          .map(
+            (s) =>
+              `<button type="button" class="realm-stage-pill realm-stage-${s.stage.toLowerCase()}" data-url="${escapeHtml(s.url)}" data-name="${escapeHtml(base + ' [' + s.stage + ']')}">${s.stage}</button>`,
+          )
+          .join('');
+        return `
       <div class="realm-row" data-name="${escapeHtml(base)}" data-url="${escapeHtml(live.url)}">
         <div class="realm-row-main">
           <div class="realm-name">${escapeHtml(base)}</div>
@@ -461,7 +517,8 @@ async function loadLandingRealms(): Promise<void> {
           ${pills ? `<div class="realm-stages">${pills}</div>` : ''}
         </div>
       </div>`;
-    }).join('');
+      })
+      .join('');
 
     const connect = (url: string | undefined) => {
       if (readCrypticSession()) {
@@ -469,49 +526,65 @@ async function loadLandingRealms(): Promise<void> {
         showPanel('#realm-panel');
         void loadApp();
       } else if (url) {
-        try { localStorage.setItem('cr_pending_realm_url', url); } catch { /* ignore */ }
+        try {
+          localStorage.setItem('cr_pending_realm_url', url);
+        } catch {
+          /* ignore */
+        }
         showPanel('#login-panel');
       }
     };
     // Stage pills route to their stage URL without triggering the row's live click.
     listEl.querySelectorAll<HTMLElement>('.realm-stage-pill').forEach((pill) => {
-      pill.addEventListener('click', (e) => { e.stopPropagation(); connect(pill.dataset.url); });
+      pill.addEventListener('click', (e) => {
+        e.stopPropagation();
+        connect(pill.dataset.url);
+      });
     });
     listEl.querySelectorAll<HTMLElement>('.realm-row').forEach((row) => {
       row.addEventListener('click', () => connect(row.dataset.url));
     });
     landingRealmsLoaded = true;
   } catch {
-    listEl.innerHTML = '<div class="realm-loading">Could not load realms — try again shortly.</div>';
+    listEl.innerHTML =
+      '<div class="realm-loading">Could not load realms — try again shortly.</div>';
   }
 }
 
 function wireLandingPanels(): void {
-  document.getElementById('nav-btn-play')?.addEventListener('click', () => showPanel('#mode-select'));
-  document.getElementById('nav-btn-login')?.addEventListener('click', () => showPanel('#login-panel'));
+  document
+    .getElementById('nav-btn-play')
+    ?.addEventListener('click', () => showPanel('#mode-select'));
+  document
+    .getElementById('nav-btn-login')
+    ?.addEventListener('click', () => showPanel('#login-panel'));
   document.getElementById('nav-btn-highscores')?.addEventListener('click', () => {
     switchLandingView('#highscores-view');
     void loadLandingHighscores();
   });
-  document.getElementById('nav-btn-wiki')?.addEventListener('click', () => switchLandingView('#wiki-view'));
+  document.getElementById('nav-btn-wiki')?.addEventListener('click', () => {
+    window.location.href = '/wiki';
+  });
   document.getElementById('nav-btn-news')?.addEventListener('click', () => {
     switchLandingView('#news-view');
     void loadLandingNews();
   });
-  document.getElementById('nav-btn-contributions')?.addEventListener('click', () => switchLandingView('#contributions-view'));
+  document.getElementById('nav-btn-contributions')?.addEventListener('click', () => {
+    window.location.href = '/contributions.html';
+  });
   document.getElementById('nav-btn-download')?.addEventListener('click', () => {
     switchLandingView('#download-view');
     void mountLandingDownloads();
   });
   document.getElementById('nav-btn-links')?.addEventListener('click', () => {
-    switchLandingView('#links-view');
-    void loadDocFragment('/links.html', '#links-content');
+    window.location.href = '/links.html';
   });
   document.getElementById('nav-btn-whitepaper')?.addEventListener('click', () => {
-    switchLandingView('#whitepaper-view');
-    void loadDocFragment('/whitepaper.html', '#whitepaper-content');
+    window.location.href = '/whitepaper.html';
   });
-  document.getElementById('btn-classic-mode')?.addEventListener('click', () => { void launchClassic(); });
+  document.getElementById('btn-classic-mode')?.addEventListener('click', () => {
+    void launchClassic();
+  });
   document.getElementById('btn-play')?.addEventListener('click', () => {
     const mode = document.getElementById('server-select')?.dataset.mode ?? 'online';
     if (mode === 'offline') {
@@ -565,9 +638,13 @@ function wireLandingPanels(): void {
       const value = document.getElementById('server-select-value');
       root?.setAttribute('data-mode', mode);
       if (value) value.textContent = mode === 'offline' ? 'Offline' : 'Online';
-      if (playLabel) playLabel.textContent = mode === 'offline'
-        ? 'Start Offline'
-        : (readCrypticSession() ? 'Continue' : 'Log In To Play');
+      if (playLabel)
+        playLabel.textContent =
+          mode === 'offline'
+            ? 'Start Offline'
+            : readCrypticSession()
+              ? 'Continue'
+              : 'Log In To Play';
       document.querySelectorAll<HTMLElement>('.server-select-option').forEach((el) => {
         const selected = el === opt;
         el.classList.toggle('is-selected', selected);
@@ -602,7 +679,9 @@ function selectLandingOfflineClass(cls: string): void {
 
 function wireLandingOfflinePanel(): void {
   document.querySelectorAll<HTMLElement>('#offline-select .mini-class').forEach((card) => {
-    card.addEventListener('click', () => selectLandingOfflineClass(card.dataset.class ?? 'warrior'));
+    card.addEventListener('click', () =>
+      selectLandingOfflineClass(card.dataset.class ?? 'warrior'),
+    );
     card.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
@@ -636,7 +715,7 @@ function applyHashRoute(): void {
     return;
   }
   if (hash === 'wiki') {
-    switchLandingView('#wiki-view');
+    window.location.href = '/wiki';
     return;
   }
   if (hash === 'news' || hash === 'updates') {
@@ -650,17 +729,15 @@ function applyHashRoute(): void {
     return;
   }
   if (hash === 'contributions') {
-    switchLandingView('#contributions-view');
+    window.location.href = '/contributions.html';
     return;
   }
   if (hash === 'links') {
-    switchLandingView('#links-view');
-    void loadDocFragment('/links.html', '#links-content');
+    window.location.href = '/links.html';
     return;
   }
   if (hash === 'whitepaper') {
-    switchLandingView('#whitepaper-view');
-    void loadDocFragment('/whitepaper.html', '#whitepaper-content');
+    window.location.href = '/whitepaper.html';
     return;
   }
   if (hash === 'login' || hash === 'register' || hash === 'account') {
@@ -669,39 +746,45 @@ function applyHashRoute(): void {
 }
 
 function wireDeferredAppLoad(): void {
-  document.addEventListener('click', (event) => {
-    if (appPromise) return;
-    const target = event.target instanceof Element
-      ? targetClosest(event.target, APP_TRIGGER_SELECTOR)
-      : null;
-    if (!target) return;
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    // If the trigger is a submit button inside a form (login / register), the
-    // app wires the form's `submit` event — NOT the button's click. A synthetic
-    // click does not trigger native form submission, so re-dispatching a click
-    // would silently do nothing (this is what broke login-to-play). Re-submit
-    // the form via requestSubmit() so the app's submit handler actually runs.
-    const submitBtn = target instanceof HTMLButtonElement && target.type === 'submit' ? target : null;
-    const form = submitBtn?.form ?? target.closest('form');
-    if (target.id === 'btn-online' && readCrypticSession()) {
-      document.body.dataset.pendingOnlineResume = '1';
-    }
-    void loadApp().then(() => {
-      window.setTimeout(() => {
-        if (form instanceof HTMLFormElement) {
-          if (typeof form.requestSubmit === 'function') {
-            form.requestSubmit(submitBtn ?? undefined);
+  document.addEventListener(
+    'click',
+    (event) => {
+      if (appPromise) return;
+      const target =
+        event.target instanceof Element ? targetClosest(event.target, APP_TRIGGER_SELECTOR) : null;
+      if (!target) return;
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      // If the trigger is a submit button inside a form (login / register), the
+      // app wires the form's `submit` event — NOT the button's click. A synthetic
+      // click does not trigger native form submission, so re-dispatching a click
+      // would silently do nothing (this is what broke login-to-play). Re-submit
+      // the form via requestSubmit() so the app's submit handler actually runs.
+      const submitBtn =
+        target instanceof HTMLButtonElement && target.type === 'submit' ? target : null;
+      const form = submitBtn?.form ?? target.closest('form');
+      if (target.id === 'btn-online' && readCrypticSession()) {
+        document.body.dataset.pendingOnlineResume = '1';
+      }
+      void loadApp().then(() => {
+        window.setTimeout(() => {
+          if (form instanceof HTMLFormElement) {
+            if (typeof form.requestSubmit === 'function') {
+              form.requestSubmit(submitBtn ?? undefined);
+            } else {
+              form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+            }
           } else {
-            form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+            target.dispatchEvent(
+              new MouseEvent('click', { bubbles: true, cancelable: true, view: window }),
+            );
           }
-        } else {
-          target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-        }
+        });
       });
-    });
-  }, true);
+    },
+    true,
+  );
 }
 
 function targetClosest(el: Element, selector: string): HTMLElement | null {
@@ -743,14 +826,19 @@ function installBootErrorTrap(): void {
       if (!bar) {
         bar = document.createElement('div');
         bar.id = 'cr-boot-error';
-        bar.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#3a0a0a;color:#ffd7d7;font:12px/1.5 ui-monospace,monospace;padding:8px 12px;border-top:2px solid #ff5a5f;max-height:40vh;overflow:auto;white-space:pre-wrap;';
+        bar.style.cssText =
+          'position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#3a0a0a;color:#ffd7d7;font:12px/1.5 ui-monospace,monospace;padding:8px 12px;border-top:2px solid #ff5a5f;max-height:40vh;overflow:auto;white-space:pre-wrap;';
         document.body.appendChild(bar);
       }
       bar.textContent = `Boot error (${label}): ${detail}\n(tap to dismiss)`;
       bar.onclick = () => bar?.remove();
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   };
-  window.addEventListener('error', (e) => show('error', `${e.message} @ ${e.filename}:${e.lineno}`));
+  window.addEventListener('error', (e) =>
+    show('error', `${e.message} @ ${e.filename}:${e.lineno}`),
+  );
   window.addEventListener('unhandledrejection', (e) => {
     const r = e.reason;
     show('promise', r instanceof Error ? `${r.message}\n${r.stack ?? ''}` : String(r));
@@ -766,14 +854,17 @@ function boot(): void {
   wireMobileMenu();
   wireContractAddressCopy();
   wireLandingPanels();
-  wireHighscoresScope();
   wireLandingOfflinePanel();
   wireDeferredAppLoad();
   void installNativeSsoReturnHandler(acceptNativeSsoHash);
   // The home page runs landing.ts (NOT main.ts), so mount the moveable music
   // widget here too. First gesture unlocks autoplay.
   mountMusicWidget();
-  const kickMusic = () => { crypticMusic.kick(); window.removeEventListener('pointerdown', kickMusic); window.removeEventListener('keydown', kickMusic); };
+  const kickMusic = () => {
+    crypticMusic.kick();
+    window.removeEventListener('pointerdown', kickMusic);
+    window.removeEventListener('keydown', kickMusic);
+  };
   window.addEventListener('pointerdown', kickMusic);
   window.addEventListener('keydown', kickMusic);
   if (ssoCallbackPending()) {

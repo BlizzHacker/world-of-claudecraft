@@ -32,6 +32,51 @@ export function desktopDownloadUrl(platform: DesktopPlatform): string | null {
   return file ? `${DESKTOP_HOST}/${file}` : null;
 }
 
+// electron-builder always publishes latest.yml beside the website-channel
+// artifacts, so a HEAD probe of it is the cheap "are desktop builds actually
+// up?" gate: probing every per-platform artifact would cost three requests
+// and drift with the artifact names.
+export const DESKTOP_LATEST_YML_URL = `${DESKTOP_HOST}/latest.yml`;
+
+/** Pure gate over the HEAD-probe outcome: only a 2xx proves the update host is
+ *  publishing builds. null (network failure / CORS) and every non-2xx status
+ *  read as absent, so the page never advertises an installer that would 404. */
+export function desktopBuildsPublished(status: number | null): boolean {
+  return status !== null && status >= 200 && status < 300;
+}
+
+type HeadFetcher = (url: string, init: { method: 'HEAD' }) => Promise<{ status: number }>;
+
+/** HEAD-probe latest.yml on the update host; resolves the pure gate's verdict.
+ *  Never throws: any transport failure is "not published". */
+export async function probeDesktopBuilds(fetcher: HeadFetcher): Promise<boolean> {
+  try {
+    const res = await fetcher(DESKTOP_LATEST_YML_URL, { method: 'HEAD' });
+    return desktopBuildsPublished(res.status);
+  } catch {
+    return desktopBuildsPublished(null);
+  }
+}
+
+/** Mark every desktop download link unavailable (used when the latest.yml
+ *  probe says no build is published). Idempotent; the detection highlight and
+ *  platform hints are cleared too so the section reads as "coming soon". */
+export function markDesktopDownloadsUnavailable(doc: Document): void {
+  const section = doc.getElementById('download-view');
+  if (!section) return;
+  for (const link of section.querySelectorAll<HTMLAnchorElement>(
+    '.desktop-download-link[data-platform]',
+  )) {
+    link.classList.add('is-unavailable');
+    link.classList.remove('is-detected');
+    link.setAttribute('aria-disabled', 'true');
+    link.removeAttribute('href');
+  }
+  for (const hint of section.querySelectorAll<HTMLElement>('[data-platform-hint]')) {
+    hint.hidden = true;
+  }
+}
+
 // Best-effort desktop-OS detection from a userAgent string. Pure so Node tests
 // can pin each family; the DOM consumer passes navigator.userAgent. Android
 // reports "linux" in its UA but is not a desktop target, so it maps to 'other'.
@@ -47,9 +92,15 @@ export function detectDesktopPlatform(userAgent: string): DesktopPlatform {
 // Wire the landing download view: sync hrefs to the version constant, highlight
 // the visitor's platform button (and float it first), and reveal any note keyed
 // to that platform. No-ops when the view is absent (every non-index entry).
-export function initDesktopDownload(doc: Document = document): void {
+// Then, async, HEAD-probe latest.yml on the update host and mark every desktop
+// link unavailable when no build is published there; the returned promise
+// settles after that pass (callers may ignore it).
+export function initDesktopDownload(
+  doc: Document = document,
+  fetcher: HeadFetcher | null = typeof fetch === 'function' ? fetch : null,
+): Promise<void> {
   const section = doc.getElementById('download-view');
-  if (!section) return;
+  if (!section) return Promise.resolve();
   const links = section.querySelectorAll<HTMLAnchorElement>(
     '.desktop-download-link[data-platform]',
   );
@@ -77,4 +128,8 @@ export function initDesktopDownload(doc: Document = document): void {
     const platform = hint.dataset.platformHint as DesktopPlatform | undefined;
     hint.hidden = platform !== detected || !desktopDownloadUrl(platform);
   }
+  if (!fetcher) return Promise.resolve();
+  return probeDesktopBuilds(fetcher).then((published) => {
+    if (!published) markDesktopDownloadsUnavailable(doc);
+  });
 }

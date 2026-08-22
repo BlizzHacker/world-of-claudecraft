@@ -884,6 +884,7 @@ export const pl_PL: EnTranslations = {
     },
     "leaderboard": {
       "close": "Zamknij",
+      "filterAll": "All",
       "tabsLabel": "Tablice wyników",
       "tabPlayers": "Gracze",
       "tabGuilds": "Gildie",

@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
   import { auth } from '../state/auth.svelte';
+  import { realm } from '../state/realm.svelte';
   import { t } from '../i18n';
   import { setAccountModalController } from '../account_modal';
   import type { AdminRoute } from '../navigation';
@@ -47,6 +48,21 @@
     navOpen = false;
     closeAccountModal();
   });
+
+  void realm.load();
+
+  // The tab title carries the realm this process serves, so an operator with
+  // several realm dashboards open can tell them apart.
+  $effect(() => {
+    document.title = realm.current
+      ? t('app.titleRealm', { realm: realm.current })
+      : t('app.title');
+  });
+
+  function onRealmSwitch(event: Event): void {
+    const url = (event.currentTarget as HTMLSelectElement).value;
+    if (url) window.location.href = url;
+  }
 </script>
 
 <svelte:window onkeydown={onKeydown} />
@@ -85,6 +101,16 @@
         <span class="app-title">{t('app.shortTitle')}</span>
       </div>
       <div class="who">
+        {#if realm.switchable.length > 0}
+          <select class="realm-switch" aria-label={t('nav.switchRealm')} onchange={onRealmSwitch}>
+            <option value="" selected>{realm.current}</option>
+            {#each realm.switchable as r (r.name)}
+              <option value={r.adminUrl}>{r.name}</option>
+            {/each}
+          </select>
+        {:else if realm.current}
+          <span class="realm-badge" title={t('nav.realmBadge')}>{realm.current}</span>
+        {/if}
         <span>{t('auth.signedInAs')}</span> <span id="who-name">{auth.name}</span>
         <ThemeToggle />
         <button type="button" onclick={() => auth.logout()}>{t('auth.signOut')}</button>
@@ -158,6 +184,25 @@
     gap: 12px;
     color: var(--text-dim);
     font-size: 12px;
+  }
+
+  .realm-badge,
+  .realm-switch {
+    padding: 3px 8px;
+    background: var(--btn-flat-bg);
+    color: var(--gold);
+    border: 1px solid var(--gold-dim);
+    border-radius: 3px;
+    font-size: 12px;
+  }
+
+  .realm-switch {
+    cursor: pointer;
+  }
+
+  .realm-switch:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
   }
 
   .who button,

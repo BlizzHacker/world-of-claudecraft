@@ -884,6 +884,7 @@ export const cs_CZ: EnTranslations = {
     },
     "leaderboard": {
       "close": "Zavřít",
+      "filterAll": "All",
       "tabsLabel": "Žebříčky nejlepších skóre",
       "tabPlayers": "Hráči",
       "tabGuilds": "Cechy",

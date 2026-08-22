@@ -5,15 +5,77 @@
 
 const HOST_ID = 'cr-download-launchers';
 
+// Store listing URLs. An empty string means the listing is not live yet, and
+// the Store listings grid renders that store as a disabled badge until the
+// constant is filled in with the public URL.
+export const MICROSOFT_STORE_URL = '';
+// https://play.google.com/apps/testing/com.crypticrealm when live
+export const PLAY_TESTING_URL = '';
+export const STEAM_STORE_URL = '';
+// https://chromewebstore.google.com/detail/mcgndfbilbedhiaohacplddaiomdpfai once
+// the pending review publishes
+export const CHROME_WEB_STORE_URL = '';
+
+// One row of the Store listings grid (the second grid under the launcher
+// cards). `url` empty renders the disabled "listing pending" badge.
+export interface StoreListing {
+  id: string;
+  label: string;
+  badge: string;
+  url: string;
+  meta: string;
+}
+
+export const STORE_LISTINGS: StoreListing[] = [
+  {
+    id: 'microsoft-store',
+    label: 'Microsoft Store',
+    badge: 'MS',
+    url: MICROSOFT_STORE_URL,
+    meta: 'Windows + Xbox',
+  },
+  {
+    id: 'google-play',
+    label: 'Google Play',
+    badge: 'GP',
+    url: PLAY_TESTING_URL,
+    meta: 'closed testing track',
+  },
+  { id: 'steam', label: 'Steam', badge: 'STM', url: STEAM_STORE_URL, meta: 'desktop client' },
+  {
+    id: 'chrome-web-store',
+    label: 'Chrome Web Store',
+    badge: 'CWS',
+    url: CHROME_WEB_STORE_URL,
+    meta: 'browser app',
+  },
+];
+
+/** HTML for one Store listings entry: a link when the listing URL is live, a
+ *  disabled badge while the constant is still empty. Pure, exported for the
+ *  paired test. */
+export function storeCardHtml(s: StoreListing): string {
+  if (!s.url) {
+    return `
+    <span class="cr-dl-btn cr-dl-disabled" data-store="${s.id}" aria-disabled="true">
+      <span>${s.badge} ${s.label}</span><small>listing pending</small>
+    </span>`;
+  }
+  return `
+    <a class="cr-dl-btn" data-store="${s.id}" href="${s.url}" target="_blank" rel="noopener noreferrer">
+      <span>${s.badge} ${s.label}</span><small>${s.meta}</small>
+    </a>`;
+}
+
 // A single action button (primary, secondary, or one of the Windows tiers).
 interface DlAction {
   label: string;
   href: string;
   meta: string;
-  track?: boolean;   // dimmer "tracking"/secondary styling
+  track?: boolean; // dimmer "tracking"/secondary styling
 }
 
-interface Launcher {
+export interface Launcher {
   os: 'web' | 'windows' | 'macos' | 'linux' | 'android' | 'ios' | 'steam';
   label: string;
   badge: string;
@@ -29,7 +91,7 @@ interface Launcher {
   status: string;
 }
 
-const LAUNCHERS: Launcher[] = [
+export const LAUNCHERS: Launcher[] = [
   {
     os: 'web',
     label: 'Web Client',
@@ -53,11 +115,21 @@ const LAUNCHERS: Launcher[] = [
     label: 'Windows 10/11',
     badge: 'WIN',
     actions: [
-      { label: 'Download · Lite', href: '/CrypticRealm-Setup-Lite.exe', meta: '~2 MB · recommended' },
-      { label: 'Download · Full', href: '/CrypticRealm-Setup-Medium.exe', meta: '~333 MB · offline installer', track: true },
+      {
+        label: 'Download · Lite',
+        href: '/downloads/CrypticRealm-Setup-Lite.exe',
+        meta: '~2 MB · recommended',
+      },
+      {
+        label: 'Download · Full',
+        href: '/downloads/CrypticRealm-Setup-Medium.exe',
+        meta: '~333 MB · offline installer',
+        track: true,
+      },
       { label: 'Heavy (soon)', href: '', meta: 'native client · coming soon', track: true },
     ],
-    status: 'Alpha · experimental · not yet code-signed — Windows SmartScreen will warn. Click "More info" → "Run anyway", then run the installer. Lite downloads the small runtime on first install; Full bundles everything for offline install.',
+    status:
+      'Alpha · experimental · not yet code-signed, so Windows SmartScreen will warn. Click "More info", then "Run anyway", then run the installer. Lite downloads the small runtime on first install; Full bundles everything for offline install.',
   },
   {
     os: 'macos',
@@ -82,12 +154,13 @@ const LAUNCHERS: Launcher[] = [
     label: 'Android',
     badge: 'AND',
     primaryLabel: 'Download APK',
-    primaryHref: '/CrypticRealm.apk',
+    primaryHref: '/downloads/CrypticRealm.apk',
     primaryMeta: 'Direct install · 2.9 MB',
     secondaryLabel: 'Use Mobile Web',
     secondaryHref: '/',
     secondaryMeta: 'works today',
-    status: 'Install the APK directly: tap Download, then open the file (allow installs from this source if Android asks). Google Play release is in review.',
+    status:
+      'Install the APK directly: tap Download, then open the file (allow installs from this source if Android asks). Google Play release is in review.',
   },
   {
     os: 'ios',
@@ -121,14 +194,18 @@ function action(label: string, href: string, meta: string, extraClass = ''): str
 function card(l: Launcher): string {
   let buttons: string;
   if (l.actions && l.actions.length) {
-    buttons = l.actions.map((a) => action(a.label, a.href, a.meta, a.track ? ' cr-dl-track' : '')).join('');
+    buttons = l.actions
+      .map((a) => action(a.label, a.href, a.meta, a.track ? ' cr-dl-track' : ''))
+      .join('');
   } else {
-    const primary = l.primaryLabel && l.primaryHref && l.primaryMeta
-      ? action(l.primaryLabel, l.primaryHref, l.primaryMeta)
-      : '';
-    const secondary = l.secondaryLabel && l.secondaryHref && l.secondaryMeta
-      ? action(l.secondaryLabel, l.secondaryHref, l.secondaryMeta, ' cr-dl-track')
-      : '';
+    const primary =
+      l.primaryLabel && l.primaryHref && l.primaryMeta
+        ? action(l.primaryLabel, l.primaryHref, l.primaryMeta)
+        : '';
+    const secondary =
+      l.secondaryLabel && l.secondaryHref && l.secondaryMeta
+        ? action(l.secondaryLabel, l.secondaryHref, l.secondaryMeta, ' cr-dl-track')
+        : '';
     buttons = `${primary}${secondary}`;
   }
   return `
@@ -144,8 +221,12 @@ function render(host: HTMLElement): void {
     <div class="cr-dl-grid">
       ${LAUNCHERS.map(card).join('')}
     </div>
+    <div class="cr-dl-stores">
+      <h3>Store listings</h3>
+      <div class="cr-dl-stores-row">${STORE_LISTINGS.map(storeCardHtml).join('')}</div>
+    </div>
     <p class="cr-dl-foot">
-      The browser client is live and remains the source of truth while native installers are built, signed, and tested. Windows Alpha builds are unsigned for now — your system may warn before install.
+      The browser client is live and remains the source of truth while native installers are built, signed, and tested. Windows Alpha builds are unsigned for now, so your system may warn before install.
     </p>`;
 }
 
@@ -154,9 +235,10 @@ export function mountDownloadLaunchers(): void {
   let obs: MutationObserver | null = null;
 
   const arm = () => {
-    const target = document.getElementById('download-view') ||
-                   document.querySelector('[data-view="download"]') ||
-                   document.querySelector('.download-section');
+    const target =
+      document.getElementById('download-view') ||
+      document.querySelector('[data-view="download"]') ||
+      document.querySelector('.download-section');
     if (!target) return;
     let host = document.getElementById(HOST_ID) as HTMLElement | null;
     if (!host) {
