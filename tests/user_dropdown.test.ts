@@ -42,4 +42,36 @@ describe('Cryptic Realm user dropdown', () => {
     expect(document.querySelector('#cr-user-dropdown')?.textContent).toContain('Arcane Void');
     expect(document.getElementById('nav-btn-admin')).not.toBeNull();
   });
+
+  it('does not inject a second Admin tab when the nav already links /admin/', async () => {
+    // The shared nav (public/nav.js) can ship its own Admin entry; the
+    // dropdown's injector must notice it and bail instead of duplicating.
+    document.body.innerHTML =
+      '<div class="header-actions"></div>' +
+      '<ul><li><a class="nav-link" href="/admin/">Admin</a></li>' +
+      '<li><button id="nav-btn-login">Login/Register</button></li></ul>';
+    writeCrypticSession({ token: 'c'.repeat(64), username: 'MoveWeight' });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        async () =>
+          new Response(
+            JSON.stringify({
+              data: {
+                accountId: 1,
+                realm: 'Arcane Void',
+                roles: { isAdmin: true, isModerator: true },
+                characters: [],
+              },
+            }),
+            { status: 200 },
+          ),
+      ),
+    );
+
+    await mountUserDropdown();
+
+    expect(document.getElementById('nav-btn-admin')).toBeNull();
+    expect(document.querySelectorAll('a[href^="/admin"], #nav-btn-admin')).toHaveLength(1);
+  });
 });
