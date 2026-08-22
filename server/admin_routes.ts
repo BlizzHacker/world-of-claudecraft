@@ -93,6 +93,9 @@ export const ADMIN_ROUTE_PERMISSIONS: readonly AdminRouteRule[] = [
 
   { method: 'GET', pattern: '/admin/api/moderation/queue', permission: 'moderation.read' },
   { method: 'GET', pattern: '/admin/api/moderation/history', permission: 'moderation.read' },
+  // Keyset-paged chat log search: reads player chat, so it sits with the other
+  // moderation reads.
+  { method: 'GET', pattern: '/admin/api/chat-logs', permission: 'moderation.read' },
   {
     method: 'GET',
     pattern: /^\/admin\/api\/moderation\/accounts\/(\d+)$/,

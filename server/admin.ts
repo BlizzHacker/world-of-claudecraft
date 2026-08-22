@@ -35,9 +35,7 @@ import {
 } from './admin_guilds_read';
 import { parseAdminGuildSort } from './admin_guilds_sort';
 import { cleanIpAssociationLookup } from './admin_ip_association';
-import {
-  readOverviewCounts,
-} from './admin_overview_cache';
+import { readOverviewCounts } from './admin_overview_cache';
 import {
   type AdminPermission,
   ASSIGNABLE_ADMIN_ROLES,
@@ -45,10 +43,7 @@ import {
   SUPERADMIN_ROLE,
   sanitizeRoles,
 } from './admin_permissions';
-import {
-  adminPathKnown,
-  permissionForAdminRoute,
-} from './admin_routes';
+import { adminPathKnown, permissionForAdminRoute } from './admin_routes';
 import {
   listAntibotConfigHistory,
   loadAntibotConfig,
@@ -83,10 +78,23 @@ import {
   type WordTier,
 } from './chat_filter_db';
 import { cleanContentModerationReason } from './content_moderation_db';
+import { currentDailyRewardDay } from './daily_rewards';
 import {
-  currentDailyRewardDay,
-} from './daily_rewards';
-import { accountAndScopeForToken, accountById, accountForToken, accountMailTarget, accountTotpState, findAccount, isAdminAccount, loadAccountFlair, pool, revokeTokensExcept, saveToken, setCharacterGmByName, touchLogin, updatePasswordHash } from './db';
+  accountAndScopeForToken,
+  accountById,
+  accountForToken,
+  accountMailTarget,
+  accountTotpState,
+  findAccount,
+  isAdminAccount,
+  loadAccountFlair,
+  pool,
+  revokeTokensExcept,
+  saveToken,
+  setCharacterGmByName,
+  touchLogin,
+  updatePasswordHash,
+} from './db';
 import { emailSecurityIncident } from './email';
 import type { GameServer } from './game';
 import { ctxAccountId } from './http/context';
@@ -100,28 +108,14 @@ import {
   createRequireAdmin,
   requireAdminTarget,
 } from './http/middleware/require_admin';
-import {
-  enum_,
-} from './http/schema';
-import type {
-  Ctx,
-  RouteDef,
-} from './http/types';
-import {
-  json,
-  readBody,
-} from './http_util';
-import {
-  addBlockedIp,
-  cleanIp,
-  listBlockedIps,
-  removeBlockedIp,
-} from './ip_block_db';
-import {
-  PgMapsDb,
-} from './maps_db';
+import { enum_ } from './http/schema';
+import type { Ctx, RouteDef } from './http/types';
+import { json, readBody } from './http_util';
+import { addBlockedIp, cleanIp, listBlockedIps, removeBlockedIp } from './ip_block_db';
+import { PgMapsDb } from './maps_db';
 import {
   addAccountNote,
+  type ChatLogSearchQuery,
   forceCharacterRename,
   ignoreReport,
   liftAccountChatMute,
@@ -133,6 +127,7 @@ import {
   recordPasswordReset,
   recordProfessionsRestore,
   resetChatStrikesAudited,
+  searchChatLogs,
   setAccountAiFlag,
   setAccountStreamerFlair,
   setDailyRewardsBan,
@@ -359,6 +354,41 @@ async function dailyRewardEventDay(value: string | null): Promise<string | null>
 function boundedPositiveParam(raw: string | null, fallback: number, max: number): number {
   const value = Number(raw ?? fallback);
   return Number.isFinite(value) ? Math.min(max, Math.max(1, Math.floor(value))) : fallback;
+}
+
+// GET /admin/api/chat-logs query: bounded limit, optional exact character/channel
+// filters, an ILIKE text search, and the keyset cursor (the previous page's last
+// row's created_at + id, echoed back as beforeCreatedAt/beforeId). Both dispatch
+// arms parse through this one function so the twins stay byte-identical.
+const CHAT_LOG_DEFAULT_LIMIT = 50;
+const CHAT_LOG_MAX_LIMIT = 200;
+
+function chatLogQuery(params: URLSearchParams): ChatLogSearchQuery {
+  const limit = boundedPositiveParam(
+    params.get('limit'),
+    CHAT_LOG_DEFAULT_LIMIT,
+    CHAT_LOG_MAX_LIMIT,
+  );
+  const rawCharacterId = Number(params.get('characterId'));
+  const channel = (params.get('channel') ?? '').trim().slice(0, 32);
+  const search = (params.get('search') ?? '').trim().slice(0, 128);
+  const rawBeforeId = Number(params.get('beforeId'));
+  const beforeCreatedAt = params.get('beforeCreatedAt') ?? '';
+  const before =
+    Number.isSafeInteger(rawBeforeId) &&
+    rawBeforeId > 0 &&
+    Number.isFinite(Date.parse(beforeCreatedAt))
+      ? { createdAt: beforeCreatedAt, id: rawBeforeId }
+      : undefined;
+  return {
+    limit,
+    ...(Number.isSafeInteger(rawCharacterId) && rawCharacterId > 0
+      ? { characterId: rawCharacterId }
+      : {}),
+    ...(channel ? { channel } : {}),
+    ...(search ? { search } : {}),
+    ...(before ? { before } : {}),
+  };
 }
 
 function unstuckQuery(params: URLSearchParams): {
@@ -1521,6 +1551,9 @@ export async function handleAdminApi(
         await listModerationActions(moderationHistoryTab(url.searchParams), accountId, page, limit),
       );
     }
+    if (path === '/admin/api/chat-logs') {
+      return ok(res, await adminDb().searchChatLogs(chatLogQuery(url.searchParams)));
+    }
     if (path === '/admin/api/bug-reports') {
       const { page, limit } = parsePageParams(url.searchParams);
       const { rows, total } = await listBugReports(limit, (page - 1) * limit);
@@ -1844,6 +1877,7 @@ function makeRealAdminDb() {
     recordAdminGuildBankPurge,
     listModerationActions,
     listSharedIps,
+    searchChatLogs,
     onlineHistory,
     // Cache-backed (the shared admin overview memo; both dispatch arms read it):
     // a setAdminDbForTests override still replaces this member outright, which
@@ -2637,6 +2671,11 @@ async function resetStrikesHandler(ctx: Ctx): Promise<void> {
 /** GET /admin/api/moderation/queue: accounts with open reports. */
 async function moderationQueueHandler(ctx: Ctx): Promise<void> {
   ok(ctx.res, { rows: await adminDb().moderationQueue(useAdminRuntime().liveAccountIds()) });
+}
+
+/** GET /admin/api/chat-logs: keyset-paged chat log search (moderation.read). */
+async function chatLogsHandler(ctx: Ctx): Promise<void> {
+  ok(ctx.res, await adminDb().searchChatLogs(chatLogQuery(ctx.url.searchParams)));
 }
 
 /** GET /admin/api/moderation/history: latest audit actions, optionally scoped to caller. */
@@ -3474,6 +3513,14 @@ export const routes: RouteDef[] = [
     middleware: [requireAdmin],
     meta: ADMIN_META,
     handler: moderationHistoryHandler,
+  },
+  {
+    method: 'GET',
+    path: '/admin/api/chat-logs',
+    surface: 'admin',
+    middleware: [requireAdmin],
+    meta: ADMIN_META,
+    handler: chatLogsHandler,
   },
   {
     method: 'GET',

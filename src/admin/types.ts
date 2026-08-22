@@ -70,6 +70,23 @@ export interface Overview {
   server: ServerStats;
 }
 
+// GET /admin/api/chat-logs (server/moderation_db.ts searchChatLogs): keyset-paged
+// newest-first; nextBefore echoes back as beforeCreatedAt/beforeId for the next page.
+export interface ChatLogRow {
+  id: number;
+  accountId: number | null;
+  characterId: number | null;
+  characterName: string;
+  channel: string;
+  message: string;
+  createdAt: string;
+}
+
+export interface ChatLogsResponse {
+  rows: ChatLogRow[];
+  nextBefore: { createdAt: string; id: number } | null;
+}
+
 // Provider usage is served on its own ops_usage.read-gated route, not inside
 // the overview payload.
 export interface ProviderUsageResponse {
