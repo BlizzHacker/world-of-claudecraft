@@ -1,0 +1,35 @@
+/* Hidden VR entry button (vr_entry.ts). Only ever present behind the ?xr=1
+   experiment gate on immersive-vr capable browsers, so it stays self-contained
+   here rather than joining theme.css. Sits under the PWA banner (z 12000). */
+.cr-vr-entry {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(72px, calc(env(safe-area-inset-bottom) + 56px));
+  z-index: 11000;
+  min-width: 96px;
+  min-height: 40px;
+  padding: 8px 16px;
+  border: 1px solid rgba(198, 161, 91, 0.55);
+  border-radius: 6px;
+  background: rgba(10, 10, 16, 0.88);
+  color: #e8dcc0;
+  font: inherit;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.cr-vr-entry:hover:not(:disabled) {
+  border-color: rgba(198, 161, 91, 0.9);
+  background: rgba(24, 20, 12, 0.92);
+}
+
+.cr-vr-entry:focus-visible {
+  outline: 2px solid Highlight;
+  outline-offset: 2px;
+}
+
+.cr-vr-entry:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
