@@ -6944,8 +6944,16 @@ async function ensureCharacterPreview(panelId: string): Promise<void> {
   }
 
   characterPreviewLoadPromise = (async () => {
-    const { assetsReady, CharacterPreview } = await loadGameRuntime();
-    await assetsReady();
+    const { CharacterPreview } = await loadGameRuntime();
+    // Gate on the NARROW charactersReady (character boot GLBs + skin
+    // atlases, with its own retry loop), never the site-wide assetsReady
+    // gate: that shared promise covers EVERY registered preload (terrain,
+    // dungeon, foliage, ...), so this lazily mounted create/offline
+    // turntable both waited on world content it never draws and sank
+    // forever on any unrelated transient failure, exactly the strand the
+    // boot-time mount near the end of this file already fixed
+    // (tests/character_preview_boot.test.ts pins this gate).
+    await charactersReady();
     const container = $(previewContainerIdFor(panelId));
     const canvas = $('#char-preview-canvas') as HTMLCanvasElement | null;
     // Same memory policy as the boot-time mount: whichever path wins the race

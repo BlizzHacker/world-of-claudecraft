@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it, vi } from 'vitest';
 
 // The bug: the landing character-creation preview was gated on the site-wide
@@ -48,5 +51,37 @@ describe('character preview boot (first-visit transient asset failure)', () => {
     const { charactersReady } = await import('../src/render/characters/assets');
 
     await expect(charactersReady(2)).rejects.toThrow(/character preview assets failed to load/);
+  });
+
+  // The boot-time mount was fixed first; the LAZY mount (ensureCharacterPreview,
+  // which the create/offline panels hit the moment they open) kept awaiting the
+  // site-wide assetsReady(), so it still waited on terrain/dungeon/foliage it
+  // never draws and still sank on any unrelated preload failure. main.ts cannot
+  // be imported in Node (it boots the client at import), so pin the gate at the
+  // source level: the function must await the narrow charactersReady() and must
+  // not touch assetsReady at all.
+  it('ensureCharacterPreview gates on the narrow charactersReady(), never assetsReady()', () => {
+    const mainSrc = readFileSync(
+      path.join(path.dirname(fileURLToPath(import.meta.url)), '../src/main.ts'),
+      'utf8',
+    );
+    const start = mainSrc.indexOf('async function ensureCharacterPreview');
+    expect(start, 'ensureCharacterPreview must exist in src/main.ts').toBeGreaterThan(-1);
+    // Slice the function body by brace matching from its opening brace.
+    const open = mainSrc.indexOf('{', start);
+    let depth = 0;
+    let end = open;
+    for (let i = open; i < mainSrc.length; i++) {
+      if (mainSrc[i] === '{') depth++;
+      else if (mainSrc[i] === '}' && --depth === 0) {
+        end = i;
+        break;
+      }
+    }
+    const body = mainSrc.slice(open, end + 1);
+    expect(body).toContain('await charactersReady()');
+    // No call, await, or destructure of the site-wide gate anywhere in the
+    // body (the word may appear in a comment; a use is what regresses).
+    expect(body).not.toMatch(/assetsReady\s*\(|\{[^}]*\bassetsReady\b[^}]*\}\s*=/);
   });
 });
