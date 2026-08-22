@@ -12840,7 +12840,7 @@ function wireStartScreens(): void {
   setupNavBtn(navBtnWhitepaper, '', () => {
     window.location.href = '/whitepaper.html';
   });
-  initDesktopDownload();
+  void initDesktopDownload();
   initBrowserSupportNotice();
   setupNavBtn(navBtnLogin, '#hero-view', () => {
     if (api.token || hydrateApiFromSavedSession()) {
