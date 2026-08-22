@@ -505,6 +505,7 @@ const RENDER_PURE_CORES = [
   'src/render/warrior_cast_fx_core.ts',
   'src/render/weapon_vfx_apply_queue_core.ts',
   'src/render/weapon_vfx_emissive_core.ts',
+  'src/render/xr_session_core.ts',
   'src/render/zone_feature_visibility_core.ts',
   'src/render/characters/skeleton_update_core.ts',
   'src/render/characters/weapon_attack_style_core.ts',
@@ -1191,9 +1192,9 @@ describe('curated bare-named pure cores (cross-check)', () => {
     // but forgotten here would escape both onDiskCores() (bare name) and the loop above
     // (not listed), reopening the gap; this equality makes that omission fail.
     const derivedBare = deriveBareNamedCores(UI_PURE_CORES, RENDER_PURE_CORES);
-    const bareNamedRel = [...new Set(
-      BARE_NAMED.map((f) => relative(repoRoot, f).split('\\').join('/')),
-    )].sort();
+    const bareNamedRel = [
+      ...new Set(BARE_NAMED.map((f) => relative(repoRoot, f).split('\\').join('/'))),
+    ].sort();
     expect(
       derivedBare.map((f) => f.split(String.fromCharCode(92)).join('/')),
       'BARE_NAMED must equal the registered cores whose name is bare (not _view/_core)',
