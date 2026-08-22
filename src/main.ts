@@ -535,6 +535,7 @@ import {
 import { clearCrypticSession, readCrypticSession, writeCrypticSession } from './ui/cryptic/session';
 import { mountSkillTree } from './ui/cryptic/skilltree';
 import { mountUserDropdown } from './ui/cryptic/user_dropdown';
+import { mountVrEntry } from './ui/cryptic/vr_entry';
 import { mountWalletPanel } from './ui/cryptic/wallet_panel';
 import { notePropPlaced, tryBuilderSelect } from './ui/cryptic/world_builder';
 import { getMe as getMeForEditor, getToken as getTokenForEditor } from './user/api';
@@ -1697,6 +1698,10 @@ async function startGame(
     mountSkillTree();
     mountLootVault();
     mountPickitPanel();
+    // Inert unless ?xr=1 AND the browser reports immersive-vr support (Quest).
+    // The getter re-reads the binding so a graphics-profile renderer rebuild
+    // keeps the entry pointed at the live webgl instance.
+    mountVrEntry(() => (rendererReady ? renderer.webgl : null));
     applyPerfOrnamentVars(); // Performance Overlay window's gilded corner/edge masks
     applyMinimapOrnamentVars(); // minimap disc's gilded ring
     hud.prewarmStaticUiAssets();

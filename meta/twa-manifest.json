@@ -1,0 +1,39 @@
+{
+  "packageId": "com.crypticrealm.quest",
+  "host": "crypticrealm.com",
+  "name": "Cryptic Realm",
+  "launcherName": "Cryptic Realm",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "themeColor": "#050509",
+  "navigationColor": "#050509",
+  "navigationColorDark": "#050509",
+  "navigationDividerColor": "#050509",
+  "navigationDividerColorDark": "#050509",
+  "backgroundColor": "#050509",
+  "startUrl": "/",
+  "iconUrl": "https://crypticrealm.com/icon-512.png",
+  "webManifestUrl": "https://crypticrealm.com/manifest.webmanifest",
+  "fullScopeUrl": "https://crypticrealm.com/",
+  "splashScreenFadeOutDuration": 300,
+  "enableNotifications": false,
+  "enableSiteSettingsShortcut": false,
+  "isChromeOSOnly": false,
+  "isMetaQuest": true,
+  "appVersionName": "0.35.1-cr.1",
+  "appVersionCode": 35001,
+  "shortcuts": [],
+  "additionalOrigins": ["authentik.moveweight.com"],
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "generatorApp": "bubblewrap-cli",
+  "minSdkVersion": 23,
+  "fingerprints": [],
+  "signingKey": {
+    "path": "./meta/keys/quest-release.keystore",
+    "alias": "crypticrealm-quest"
+  }
+}
