@@ -57,6 +57,7 @@ import {
   stopActiveEntryDiagnostics,
   suspendActiveEntryDiagnostics,
 } from './game/entry_diagnostics';
+import { FACEBOOK_APP } from './game/facebook_context';
 import { GamepadManager } from './game/gamepad';
 import { GamepadBindings } from './game/gamepad_bindings';
 import { shouldUseGamepadPointerMode } from './game/gamepad_pointer_mode';
@@ -465,6 +466,7 @@ import { localPartyMemberIds } from './game/corpse_loot_availability';
 import { crypticMusic } from './game/cryptic_music';
 import { mountXboxEnv } from './game/xbox_env';
 import type { ReleaseEntry } from './net/online';
+import { UNLOCKED_SKIN_LEVEL } from './sim/cosmetics/body_skins';
 import {
   DEFAULT_REALM,
   getActiveRealm,
@@ -479,6 +481,12 @@ import {
   setActiveRealmForOffline,
 } from './sim/realms';
 import { mountBestiary } from './ui/cryptic/bestiary';
+import {
+  type BodySkinRailLabels,
+  bodySkinRailHtml,
+  bodySkinRailRows,
+  unlockLevelSentence,
+} from './ui/cryptic/body_skin_rail';
 import { mountRealmBranding } from './ui/cryptic/branding';
 import {
   type CharGridHost,
@@ -507,12 +515,6 @@ import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
 import { mountPickitPanel } from './ui/cryptic/pickit_panel';
 import { mountPwaInstall } from './ui/cryptic/pwa_install';
 import {
-  type BodySkinRailLabels,
-  bodySkinRailHtml,
-  bodySkinRailRows,
-  unlockLevelSentence,
-} from './ui/cryptic/body_skin_rail';
-import {
   classChoicesForRealm,
   classPresentationForRealm,
   classSexToggleAvailable,
@@ -520,7 +522,6 @@ import {
   presentationFactionsForRealm,
   realmHasClassOverlay,
 } from './ui/cryptic/realm_class_presentation';
-import { UNLOCKED_SKIN_LEVEL } from './sim/cosmetics/body_skins';
 import { openRealmVisualEditor } from './ui/cryptic/realm_visual_editor';
 import {
   fetchRealmVisualOverrides,
@@ -584,6 +585,9 @@ const LANDING_GRAPHICS_AUTO = 'auto';
 const $ = <T extends HTMLElement = HTMLElement>(sel: string): T => document.querySelector(sel) as T;
 document.body.classList.toggle('native-app', NATIVE_APP);
 document.body.classList.toggle('desktop-app', DESKTOP_APP);
+// Inside the Facebook Instant Games container (facebook/index.html frames
+// /play?fb=1): a styling hook for surfaces the policy gates below hide.
+document.body.classList.toggle('facebook-app', FACEBOOK_APP);
 if (NATIVE_APP) document.body.classList.add('mobile-touch');
 // Electron shell integration: push t()-localized crash-dialog strings to the
 // main process and render the auto-update toast (no-op without the bridge).
@@ -1666,7 +1670,10 @@ async function startGame(
     // constructor ran initGfxTier, so the adapter verdict is resolved by now.
     initSoftwareRenderNotice(DESKTOP_APP);
     hud = new Hud(world, renderer, keybinds, {
-      dailyRewardsEnabled: NATIVE_APP ? await walletCapabilityReady : true,
+      // Facebook Instant Games: daily rewards hinge on holding the $CR token,
+      // which Meta treats as restricted real-money/crypto surface area, so the
+      // Facebook shell hides them entirely (docs/facebook-release.md).
+      dailyRewardsEnabled: !FACEBOOK_APP && (NATIVE_APP ? await walletCapabilityReady : true),
       devCommandsEnabled: import.meta.env.DEV,
       constrainedMemory: GFX.constrainedMemory,
     });
@@ -3301,14 +3308,20 @@ async function startGame(
       storeSnapshot: async () => {
         const snapshot = await economy.storeSnapshot();
         return {
-          available: snapshot.available,
+          // Facebook Instant Games: purchases must run through
+          // FBInstant.payments; until that integration exists the Facebook
+          // shell ships with no store at all (docs/facebook-release.md).
+          available: snapshot.available && !FACEBOOK_APP,
           balance: snapshot.balance,
           storeItems: snapshot.items,
         };
       },
       snapshot: async () => {
         const pack = await economy.packSnapshot();
-        if (!pack.available) {
+        // Facebook Instant Games: Stripe checkout is an off-platform payment
+        // and the SOL/USDC/WOC rails are crypto surfaces, so the Facebook
+        // shell reports packs unavailable (docs/facebook-release.md).
+        if (!pack.available || FACEBOOK_APP) {
           return {
             available: false,
             balance: pack.balance,
@@ -9711,7 +9724,10 @@ async function authorizeDesktopWalletInBrowser(
 // website-distributed Electron shell opts in through a trusted IPC probe.
 let WALLET_ENABLED = false;
 const walletCapabilityReady = resolveWalletCapability({
-  disabled: String(import.meta.env.VITE_WALLET_DISABLED ?? '').trim() === '1',
+  // The Facebook shell fails the wallet closed the same way Capacitor and
+  // Steam do: Solana wallet connect and the crypto purchase rails are
+  // restricted surfaces under Meta policy (docs/facebook-release.md).
+  disabled: String(import.meta.env.VITE_WALLET_DISABLED ?? '').trim() === '1' || FACEBOOK_APP,
   nativeApp: NATIVE_APP,
   desktopApp: DESKTOP_APP,
   bridge: NATIVE_APP ? nativeSolanaMobileBridge : DESKTOP_APP ? desktopBridge() : null,
