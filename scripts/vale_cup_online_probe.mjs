@@ -3,6 +3,14 @@
 // the wire as they do offline: the sport kit swap, ball streaming, kicking,
 // dribble carry, body trap, and scoring. Requires ALLOW_DEV_COMMANDS=1 on the
 // server (dev_teleport stages exact positions). Template: scripts/chat_e2e.mjs.
+//
+// Arms (the Sowfield holds ONE live match, so each arm needs the slot free):
+//   node scripts/vale_cup_online_probe.mjs          the original 1v1 mechanics arm
+//   node scripts/vale_cup_online_probe.mjs party    the party-queue backfill arm:
+//     A invites B, the leader queues the two-stack into the 2v2 bracket, the
+//     probe waits out the 60s VC_BACKFILL_WAIT until bots fill the far side,
+//     then asserts both clients land in the SAME match with rated false. Needs
+//     no dev commands: queueing and backfill are plain player flow.
 import WebSocket from 'ws';
 import { worldAuthMessage } from './lib/world_auth.mjs';
 
@@ -106,6 +114,107 @@ class Client {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const uniq = Date.now().toString(36);
 const alpha = uniq.replace(/[0-9]/g, (d) => 'abcdefghij'[Number(d)]).slice(-6);
+
+/** Generous poll (wire keys are cadence-throttled; the backfill arm waits out
+ *  a whole 60s queue window). */
+async function until(read, ms, step = 400) {
+  const t0 = Date.now();
+  for (;;) {
+    const v = read();
+    if (v) return v;
+    if (Date.now() - t0 >= ms) return null;
+    await sleep(step);
+  }
+}
+
+// The party arm: a two-stack queued by its leader into the 2v2 bracket, backed
+// up by nothing else in the queue, must be seated together against a
+// bot-backfilled far side once VC_BACKFILL_WAIT (60s) runs out, and that match
+// must be UNRATED (bots play, no standing moves).
+async function partyArm() {
+  const r1 = await api('/api/register', {
+    username: `vcpp_${uniq}_a`,
+    password: 'hunter22',
+    email: `vcpp_${uniq}_a@example.com`,
+  });
+  const r2 = await api('/api/register', {
+    username: `vcpp_${uniq}_b`,
+    password: 'hunter22',
+    email: `vcpp_${uniq}_b@example.com`,
+  });
+  const c1 = await api('/api/characters', { name: `Stacka${alpha}`, class: 'warrior' }, r1.token);
+  const c2 = await api('/api/characters', { name: `Stackb${alpha}`, class: 'mage' }, r2.token);
+  const a = new Client('A');
+  const b = new Client('B');
+  await a.connect(r1.token, c1.id);
+  await b.connect(r2.token, c2.id);
+  await sleep(500);
+
+  // A invites B; B accepts off the invite event; the party lands on the wire.
+  a.cmd({ cmd: 'pinvite', id: b.pid });
+  const invited = await until(
+    () => b.events.find((e) => e.type === 'partyInvite' && e.fromPid === a.pid),
+    8000,
+  );
+  check('B receives the party invite', !!invited);
+  b.cmd({ cmd: 'paccept' });
+  const party = await until(() => (a.self.party?.members?.length ?? 0) === 2, 8000);
+  check('party of two forms on the wire', !!party, JSON.stringify(a.self.party ?? null));
+
+  // The LEADER queues the whole stack into the 2-fit bracket (2v2).
+  a.cmd({ cmd: 'vcup_queue', bracket: 2, nation: 'vale', role: 'allrounder' });
+  const queued = await until(
+    () => a.events.find((e) => e.type === 'vcupQueued' && e.bracket === 2),
+    10_000,
+  );
+  check('leader queue lands (vcupQueued, bracket 2)', !!queued);
+
+  // Wait out the 60s VC_BACKFILL_WAIT plus scheduling slack for the bots to
+  // fill the far side and the found events to fan out to BOTH members.
+  const found = await until(
+    () =>
+      a.events.some((e) => e.type === 'vcupFound') && b.events.some((e) => e.type === 'vcupFound'),
+    110_000,
+    1000,
+  );
+  check('both party members receive vcupFound after the backfill wait', !!found);
+
+  // The vcup snapshot must carry the same match on both clients, unrated.
+  const seated = await until(
+    () => a.self.vcup?.match && b.self.vcup?.match && a.self.vcup.match.id === b.self.vcup.match.id,
+    30_000,
+    1000,
+  );
+  check(
+    'both clients land in the SAME match',
+    !!seated,
+    JSON.stringify({ a: a.self.vcup?.match?.id ?? null, b: b.self.vcup?.match?.id ?? null }),
+  );
+  const matchA = a.self.vcup?.match ?? null;
+  const matchB = b.self.vcup?.match ?? null;
+  check('the backfilled match is rated false (A)', matchA?.rated === false, JSON.stringify(matchA));
+  check('the backfilled match is rated false (B)', matchB?.rated === false);
+  check(
+    'the party is seated on the SAME team',
+    !!matchA && !!matchB && matchA.team !== null && matchA.team === matchB.team,
+    JSON.stringify({ a: matchA?.team ?? null, b: matchB?.team ?? null }),
+  );
+  const sideOf = (m, pid) =>
+    m?.teamA?.some((r) => r.pid === pid) ? 'A' : m?.teamB?.some((r) => r.pid === pid) ? 'B' : null;
+  check(
+    'the roster carries both humans on one side and bots on the other',
+    !!matchA &&
+      sideOf(matchA, a.pid) !== null &&
+      sideOf(matchA, a.pid) === sideOf(matchA, b.pid) &&
+      (sideOf(matchA, a.pid) === 'A' ? matchA.teamB : matchA.teamA).every((r) => r.bot),
+    JSON.stringify({ teamA: matchA?.teamA, teamB: matchA?.teamB }),
+  );
+
+  a.close();
+  b.close();
+  console.log(`\n${pass} passed, ${fail} failed`);
+  process.exit(fail === 0 ? 0 : 1);
+}
 
 async function main() {
   const r1 = await api('/api/register', {
@@ -274,7 +383,9 @@ async function main() {
   process.exit(fail === 0 ? 0 : 1);
 }
 
-main().catch((err) => {
+const arm = process.argv[2] ?? 'core';
+const run = arm === 'party' ? partyArm : main;
+run().catch((err) => {
   console.error(err);
   process.exit(1);
 });
