@@ -3,11 +3,11 @@
 // ostinati, multi-section forms) played by the MusicSynth voices, and that
 // machinery keeps powering the music editor (music_editor.html) and the
 // offline render pipeline (scripts/render_music.mjs). The runtime half no
-// longer synthesizes: the shipped game streams the remastered mp3 renders of
-// those themes (public/audio/music/, see music_tracks.ts) through looping
-// media elements routed into one WebAudio graph, so zone changes crossfade
-// exactly as before while playback costs no synthesis CPU and no up-front
-// download. Each fight opens on one of the two battle themes at random.
+// longer synthesizes: the shipped game streams the Cryptic Realm soundtrack
+// (public/audio/cryptic/, catalog in music_tracks.ts) through looping media
+// elements routed into one WebAudio graph, so zone changes crossfade while
+// playback costs no synthesis CPU and no up-front download. Every fight opens
+// on the CR battle theme, restarted from the top.
 
 import { getActiveRealm, REALMS } from '../sim/realms/registry';
 import type { BiomeId } from '../sim/types';
@@ -76,8 +76,12 @@ const REALM_MUSIC_LABELS: boolean = Object.values(REALMS).some(
 // module flag (not an import) to avoid a circular dependency — cryptic_music
 // already imports the MusicZone type from here.
 let _crypticMusicOn = false;
-export function setCrypticMusicActive(on: boolean): void { _crypticMusicOn = on; }
-function crypticMusicEnabled(): boolean { return _crypticMusicOn; }
+export function setCrypticMusicActive(on: boolean): void {
+  _crypticMusicOn = on;
+}
+function crypticMusicEnabled(): boolean {
+  return _crypticMusicOn;
+}
 
 // The upstream dedicated file tracks (the Nythraxis boss loop and the Sowfield
 // waiting/match pair) were removed with the CR soundtrack takeover: the CR

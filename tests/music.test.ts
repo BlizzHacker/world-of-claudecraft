@@ -190,16 +190,17 @@ describe('MusicDirector streamed combat / background mix', () => {
     expect(el.play).toHaveBeenCalledTimes(2);
   });
 
-  it('plays the vale_cup zone as silence on the zone bus (the Sowfield mp3s own it)', () => {
+  it('streams the vale_cup stadium from the CR zone bus now the Sowfield pair is retired', () => {
     director.update('vale', false);
     director.update('vale_cup', false);
     expect(internals(director).zoneStreams.vale?.target).toBe(0);
-    expect(internals(director).zoneStreams.vale_cup).toBeUndefined();
-    expect(FakeAudio.instances.map((el) => el.src)).not.toContain('/audio/music/vale_cup.mp3');
+    const cup = internals(director).zoneStreams.vale_cup;
+    expect(cup?.target).toBe(1);
+    expect(cup?.el?.src).toBe(ZONE_STREAM_URLS.vale_cup);
   });
 });
 
-describe('MusicDirector random combat theme pick', () => {
+describe('MusicDirector combat theme', () => {
   let director: MusicDirector;
 
   beforeEach(() => {
@@ -216,28 +217,28 @@ describe('MusicDirector random combat theme pick', () => {
     FakeAudio.instances = [];
   });
 
-  it('opens each fight on a randomly chosen battle theme, restarted from the top', () => {
+  it('opens each fight on the CR battle theme, restarted from the top', () => {
     const combat = internals(director).combatStreams;
     expect(combat).toHaveLength(COMBAT_STREAM_URLS.length);
 
-    vi.spyOn(Math, 'random').mockReturnValue(0);
     director.update('vale', true);
     expect(combat[0].target).toBe(1);
-    expect(combat[1].target).toBe(0);
+    expect(combat[0].el?.src).toBe(COMBAT_STREAM_URLS[0]);
     expect(combat[0].el?.play).toHaveBeenCalled();
 
     director.update('vale', false);
-    if (combat[1].el) combat[1].el.currentTime = 12;
-    vi.spyOn(Math, 'random').mockReturnValue(0.99);
+    // Simulate the keeper pausing the faded-out theme between fights.
+    if (combat[0].el) {
+      combat[0].el.paused = true;
+      combat[0].el.currentTime = 12;
+    }
     director.update('vale', true);
-    expect(combat[0].target).toBe(0);
-    expect(combat[1].target).toBe(1);
-    expect(combat[1].el?.currentTime).toBe(0);
+    expect(combat[0].target).toBe(1);
+    expect(combat[0].el?.currentTime).toBe(0);
   });
 
-  it('does not rewind a battle theme still fading out from a chained pull', () => {
+  it('does not rewind the battle theme still fading out from a chained pull', () => {
     const combat = internals(director).combatStreams;
-    vi.spyOn(Math, 'random').mockReturnValue(0);
     director.update('vale', true);
     director.update('vale', false); // fade-out begins; the element keeps playing
     if (combat[0].el) combat[0].el.currentTime = 7;
@@ -245,14 +246,12 @@ describe('MusicDirector random combat theme pick', () => {
     expect(combat[0].el?.currentTime).toBe(7); // resumes, no jump cut
   });
 
-  it('keeps the picked theme through a zone border mid-fight', () => {
+  it('keeps the battle theme running through a zone border mid-fight', () => {
     const combat = internals(director).combatStreams;
-    vi.spyOn(Math, 'random').mockReturnValue(0.99);
     director.update('vale', true);
-    vi.spyOn(Math, 'random').mockReturnValue(0);
     director.update('marsh', true);
-    expect(combat[1].target).toBe(1);
-    expect(combat[0].target).toBe(0);
+    expect(combat[0].target).toBe(1);
+    expect(internals(director).zoneStreams.marsh?.target ?? 0).toBe(0);
   });
 });
 
