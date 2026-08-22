@@ -26,7 +26,7 @@ describe('realm branding overrides', () => {
       if (realm.id === 'claudecraft') {
         expect(realm.branding?.discordUrl).toBe('https://discord.gg/GjhnUsBtw');
       } else {
-        expect(realm.branding?.discordUrl).toBe('https://discord.gg/Zdj3JGrx');
+        expect(realm.branding?.discordUrl).toBe('https://discord.gg/WnxcamHJdh');
         expect(realm.branding?.githubUrl).toBeUndefined();
       }
     }

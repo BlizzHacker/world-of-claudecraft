@@ -42,7 +42,7 @@ const EXPECTED_LINKS = [
   'https://www.tiktok.com/@crypticmmo',
   'https://www.youtube.com/@CrypticMMO',
   'https://www.reddit.com/r/CrypticMMO',
-  'https://discord.gg/Zdj3JGrx',
+  'https://discord.gg/WnxcamHJdh',
   '/contributions.html',
   'https://solscan.io/token/3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv',
 ];
