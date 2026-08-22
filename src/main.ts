@@ -266,6 +266,7 @@ import {
   graphicsPresetLabel,
   resolveGfxProfile,
 } from './render/gfx';
+import { preloadRealmClassVisuals } from './render/realm_class_preload';
 import { Renderer } from './render/renderer';
 import {
   hasAuthoritativeSelfPositionDiscontinuity,
@@ -465,6 +466,7 @@ import { localPartyMemberIds } from './game/corpse_loot_availability';
 import { crypticMusic } from './game/cryptic_music';
 import { mountXboxEnv } from './game/xbox_env';
 import type { ReleaseEntry } from './net/online';
+import { UNLOCKED_SKIN_LEVEL } from './sim/cosmetics/body_skins';
 import {
   DEFAULT_REALM,
   getActiveRealm,
@@ -479,6 +481,12 @@ import {
   setActiveRealmForOffline,
 } from './sim/realms';
 import { mountBestiary } from './ui/cryptic/bestiary';
+import {
+  type BodySkinRailLabels,
+  bodySkinRailHtml,
+  bodySkinRailRows,
+  unlockLevelSentence,
+} from './ui/cryptic/body_skin_rail';
 import { mountRealmBranding } from './ui/cryptic/branding';
 import {
   type CharGridHost,
@@ -507,12 +515,6 @@ import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
 import { mountPickitPanel } from './ui/cryptic/pickit_panel';
 import { mountPwaInstall } from './ui/cryptic/pwa_install';
 import {
-  type BodySkinRailLabels,
-  bodySkinRailHtml,
-  bodySkinRailRows,
-  unlockLevelSentence,
-} from './ui/cryptic/body_skin_rail';
-import {
   classChoicesForRealm,
   classPresentationForRealm,
   classSexToggleAvailable,
@@ -520,7 +522,6 @@ import {
   presentationFactionsForRealm,
   realmHasClassOverlay,
 } from './ui/cryptic/realm_class_presentation';
-import { UNLOCKED_SKIN_LEVEL } from './sim/cosmetics/body_skins';
 import { openRealmVisualEditor } from './ui/cryptic/realm_visual_editor';
 import {
   fetchRealmVisualOverrides,
@@ -5134,6 +5135,13 @@ async function startGame(
     return;
   }
   setLoadingPercent(90, t('loading.enteringWorld'));
+  // Fetch the active realm's lazy class bodies behind the curtain, before the
+  // prewarm, so the player's own body never pops in late through the fail-soft
+  // view-create path. Bytes only (stage 1 of the preloadDelveAssets pattern);
+  // the constrained profile keeps its minimal entry set and streams on demand.
+  if (!GFX.constrainedMemory) {
+    await preloadRealmClassVisuals();
+  }
   try {
     const prewarm = await renderer.prewarmInitialScene({
       onEntryStart: (id, category) =>
