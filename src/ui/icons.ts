@@ -4513,7 +4513,14 @@ export const UI_ITEM_IMAGE_IDS = new Set<string>(['backpack']);
 // the line from both sides: it rejects stale entries after art lands and unenumerated art
 // debt. Do not add to this list merely to silence that failure; commission the art.
 // Empty again after the hunter quiver art landed in the same branch that enumerated it.
-export const ITEM_ART_PENDING = new Set<string>();
+export const ITEM_ART_PENDING = new Set<string>([
+  // Rideable mount reins (src/sim/content/mounts.ts): painted art is OWED and commissioned,
+  // not yet committed. Until each /ui/items/<id>.webp lands (npm run assets:items + remove
+  // the entry here), the reins compose their procedural recipe.
+  'mount_forest_stag',
+  'mount_swamp_raptor',
+  'mount_emerald_wyrm',
+]);
 
 /** Static URL of an item's (or a UI pseudo-item's) image icon, or null if it uses a recipe. */
 export function itemImageUrl(id: string): string | null {

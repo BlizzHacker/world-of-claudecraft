@@ -5,13 +5,12 @@
 // imports, so hud.ts can import it without a cycle.
 
 import { getActiveRealm } from '../sim/realms';
-import { createLoadingTipRotation, type LoadingTipRotation } from '../ui/loading_tips';
 import { t } from '../ui/i18n';
+import { createLoadingTipRotation, type LoadingTipRotation } from '../ui/loading_tips';
 
 export const LOADING_FADE_MS = 350; // keep in sync with the #loading-screen CSS transition
 
-const $ = <T extends HTMLElement = HTMLElement>(sel: string): T =>
-  document.querySelector(sel) as T;
+const $ = <T extends HTMLElement = HTMLElement>(sel: string): T => document.querySelector(sel) as T;
 
 let loadingHideTimer: number | null = null;
 
@@ -27,7 +26,7 @@ let loadingTipTimer: number | null = null;
 // and tears it down independent of the actual asset/scene-build progress.
 function startLoadingTips(): void {
   if (loadingTipTimer !== null) return; // already running
-  loadingTipRotation = createLoadingTipRotation();
+  loadingTipRotation = createLoadingTipRotation(getActiveRealm().id);
   const tipEl = document.querySelector<HTMLElement>('#ls-tip');
   if (!tipEl) return;
   tipEl.textContent = loadingTipRotation.current();

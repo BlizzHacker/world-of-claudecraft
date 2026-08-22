@@ -277,9 +277,14 @@ describe('item webp icons', () => {
     for (const id of ITEM_ART_PENDING) {
       expect(itemImageUrl(id), `${id} must not resolve to uncommitted art`).toBeNull();
     }
-    expect(ITEM_ART_PENDING.size, 'the accepted painted-art wave clears all enumerated debt').toBe(
-      0,
-    );
+    // Pin the EXACT enumerated debt, not just a size: growing this list means owing art
+    // (docs/achievements/icon-brief.md) and shrinking it means the art landed. Today the
+    // three rideable-mount reins await their commissioned paintings.
+    expect([...ITEM_ART_PENDING].sort(), 'enumerated art debt: the three mount reins').toEqual([
+      'mount_emerald_wyrm',
+      'mount_forest_stag',
+      'mount_swamp_raptor',
+    ]);
     // And the inverse: an id with committed art must still win the static url.
     expect(itemImageUrl('linen_pouch')).toBe('/ui/items/linen_pouch.webp');
   });

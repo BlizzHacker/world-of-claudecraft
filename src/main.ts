@@ -223,7 +223,9 @@ import {
   charactersReady,
   ensureCharacterUrl,
   preloadMechAssets,
+  preloadVisualAssets,
   startStreamedCharacterPreloads,
+  visualAssetsReady,
 } from './render/characters/assets';
 import {
   setBodyOverrides,
@@ -266,6 +268,7 @@ import {
   graphicsPresetLabel,
   resolveGfxProfile,
 } from './render/gfx';
+import { preloadRealmClassVisuals } from './render/realm_class_preload';
 import { Renderer } from './render/renderer';
 import {
   hasAuthoritativeSelfPositionDiscontinuity,
@@ -465,6 +468,7 @@ import { localPartyMemberIds } from './game/corpse_loot_availability';
 import { crypticMusic } from './game/cryptic_music';
 import { mountXboxEnv } from './game/xbox_env';
 import type { ReleaseEntry } from './net/online';
+import { UNLOCKED_SKIN_LEVEL } from './sim/cosmetics/body_skins';
 import {
   DEFAULT_REALM,
   getActiveRealm,
@@ -479,6 +483,13 @@ import {
   setActiveRealmForOffline,
 } from './sim/realms';
 import { mountBestiary } from './ui/cryptic/bestiary';
+import {
+  type BodySkinRailLabels,
+  type BodySkinRailRow,
+  bodySkinRailHtml,
+  bodySkinRailRows,
+  unlockLevelSentence,
+} from './ui/cryptic/body_skin_rail';
 import { mountRealmBranding } from './ui/cryptic/branding';
 import {
   type CharGridHost,
@@ -507,12 +518,6 @@ import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
 import { mountPickitPanel } from './ui/cryptic/pickit_panel';
 import { mountPwaInstall } from './ui/cryptic/pwa_install';
 import {
-  type BodySkinRailLabels,
-  bodySkinRailHtml,
-  bodySkinRailRows,
-  unlockLevelSentence,
-} from './ui/cryptic/body_skin_rail';
-import {
   classChoicesForRealm,
   classPresentationForRealm,
   classSexToggleAvailable,
@@ -520,7 +525,6 @@ import {
   presentationFactionsForRealm,
   realmHasClassOverlay,
 } from './ui/cryptic/realm_class_presentation';
-import { UNLOCKED_SKIN_LEVEL } from './sim/cosmetics/body_skins';
 import { openRealmVisualEditor } from './ui/cryptic/realm_visual_editor';
 import {
   fetchRealmVisualOverrides,
@@ -5134,6 +5138,13 @@ async function startGame(
     return;
   }
   setLoadingPercent(90, t('loading.enteringWorld'));
+  // Fetch the active realm's lazy class bodies behind the curtain, before the
+  // prewarm, so the player's own body never pops in late through the fail-soft
+  // view-create path. Bytes only (stage 1 of the preloadDelveAssets pattern);
+  // the constrained profile keeps its minimal entry set and streams on demand.
+  if (!GFX.constrainedMemory) {
+    await preloadRealmClassVisuals();
+  }
   try {
     const prewarm = await renderer.prewarmInitialScene({
       onEntryStart: (id, category) =>
@@ -6080,7 +6091,7 @@ function paintBodySkinRail(
   grants: { level: number; entitlements?: readonly string[]; dev?: boolean },
   selectedSkinId: string | null,
   onPick?: (skinId: string | null) => void,
-): void {
+): BodySkinRailRow[] {
   const labels = bodySkinRailLabels();
   const rows = bodySkinRailRows({ cls, grants, selectedSkinId, labels });
   host.innerHTML = bodySkinRailHtml(rows, labels);
@@ -6110,6 +6121,7 @@ function paintBodySkinRail(
       handleKeyboardActivation(e, pick);
     });
   });
+  return rows;
 }
 
 /** The rail's host under a creator grid, created on first paint. */
@@ -6936,8 +6948,16 @@ async function ensureCharacterPreview(panelId: string): Promise<void> {
   }
 
   characterPreviewLoadPromise = (async () => {
-    const { assetsReady, CharacterPreview } = await loadGameRuntime();
-    await assetsReady();
+    const { CharacterPreview } = await loadGameRuntime();
+    // Gate on the NARROW charactersReady (character boot GLBs + skin
+    // atlases, with its own retry loop), never the site-wide assetsReady
+    // gate: that shared promise covers EVERY registered preload (terrain,
+    // dungeon, foliage, ...), so this lazily mounted create/offline
+    // turntable both waited on world content it never draws and sank
+    // forever on any unrelated transient failure, exactly the strand the
+    // boot-time mount near the end of this file already fixed
+    // (tests/character_preview_boot.test.ts pins this gate).
+    await charactersReady();
     const container = $(previewContainerIdFor(panelId));
     const canvas = $('#char-preview-canvas') as HTMLCanvasElement | null;
     // Same memory policy as the boot-time mount: whichever path wins the race
@@ -8787,7 +8807,7 @@ function paintCharselectBodySkinRail(c: CharacterSummary): void {
     host.className = 'body-skin-rail-host';
     container.insertAdjacentElement('afterend', host);
   }
-  paintBodySkinRail(
+  const rows = paintBodySkinRail(
     host,
     c.class,
     {
@@ -8806,6 +8826,18 @@ function paintCharselectBodySkinRail(c: CharacterSummary): void {
       void selectCharacterBodySkin(c, skinId);
     },
   );
+  // Warm each UNLOCKED alternate's body as its chip paints, so the first pick
+  // swaps the turntable instantly instead of fetching its lazy GLB on click.
+  // Skipped on the iOS memory profile, which streams bodies on demand to stay
+  // under the WKWebView per-process ceiling. Best-effort: a failed warmup
+  // just falls back to the on-pick fetch.
+  if (!GFX.nativeIosMemoryProfile) {
+    for (const row of rows) {
+      if (row.lockedBecause !== null || row.skinId === null) continue;
+      const key = charselectVisualKey(c, row.skinId);
+      if (!visualAssetsReady(key)) void preloadVisualAssets(key).catch(() => undefined);
+    }
+  }
 }
 
 async function selectCharacterBodySkin(c: CharacterSummary, skinId: string | null): Promise<void> {
@@ -8821,6 +8853,22 @@ async function selectCharacterBodySkin(c: CharacterSummary, skinId: string | nul
   }
 }
 
+/** The exact body the world would draw for this roster row, with the given
+ *  body-skin selection substituted (the rail warmup above asks for each
+ *  unlocked alternate; charselectAppearance asks for the persisted pick).
+ *  Resolved through the same visualKeyForCharacter chain as the world. */
+function charselectVisualKey(c: CharacterSummary, bodySkinId: string | null): string {
+  return visualKeyForCharacter({
+    realm: realmContentForCharacterUi().id,
+    realmHeroId: c.realmHeroId,
+    cls: c.class,
+    visualKey: c.visualKey,
+    skinCatalog: c.skinCatalog,
+    gender: (c.appearance as { gender?: 'male' | 'female' } | null)?.gender ?? null,
+    bodySkinId,
+  });
+}
+
 function charselectAppearance(c: CharacterSummary): PreviewAppearance {
   // The packaged iOS shell streams the Armory weapon-skin GLBs after world
   // entry instead of holding all of them at the launcher, so the preview of a
@@ -8834,18 +8882,10 @@ function charselectAppearance(c: CharacterSummary): PreviewAppearance {
     // PreviewAppearance has carried an optional `visualKey` all along and this
     // builder simply never filled it, so previewAppearanceVisual fell through to
     // `player_<class>` and the turntable showed the KayKit rig for every
-    // character — even though the roster row already tells us the real body
+    // character, even though the roster row already tells us the real body
     // (CharacterSummary.visualKey) and the operator's overrides are installed by
     // the time rows render. Resolve it exactly the way the world does.
-    visualKey: visualKeyForCharacter({
-      realm: realmContentForCharacterUi().id,
-      realmHeroId: c.realmHeroId,
-      cls: c.class,
-      visualKey: c.visualKey,
-      skinCatalog: c.skinCatalog,
-      gender: (c.appearance as { gender?: 'male' | 'female' } | null)?.gender ?? null,
-      bodySkinId: c.bodySkinId ?? null,
-    }),
+    visualKey: charselectVisualKey(c, c.bodySkinId ?? null),
     skin: c.skin ?? 0,
     skinCatalog: c.skinCatalog ?? 'class',
     mainhandItemId: c.mainhandItemId ?? null,

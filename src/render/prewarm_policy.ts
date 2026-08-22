@@ -208,7 +208,13 @@ export function resolvePrewarmPolicy(input: PrewarmPolicyInput): PrewarmPolicy {
       maxViews: baseMaxViews,
       yieldBetweenEntries: false,
       linkPassPerEntry: !asyncCompileSupported,
-      compileBeforeFirstFrame: false,
+      // The 65s Infernal world entry (log-proven): world.initial-frame ran
+      // BEFORE programs.compile, so the first full-scene pass force-linked
+      // every program in one synchronous block. With parallel compile the
+      // compile entry links off-thread, so front-loading it (the reorder the
+      // constrained arm has always taken) lets that pass draw already-linked
+      // programs instead.
+      compileBeforeFirstFrame: asyncCompileSupported,
       skipMonolithCompile: !asyncCompileSupported,
       minimalManifest: false,
       textureBatchSize: 0,

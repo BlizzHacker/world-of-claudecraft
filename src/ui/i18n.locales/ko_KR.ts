@@ -18,7 +18,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.items.mount_emerald_wyrm.name': '에메랄드 윔 고삐',
   'entities.npcs.stable_master_wren.name': '렌 새들워스',
   'entities.npcs.stable_master_wren.title': '마구간지기',
-  'entities.npcs.stable_master_wren.greeting': '영웅에겐 탈것이 필요하지, {className}. 수사슴은 듬직하고, 랩터는 빠르고, 윔은... 윔은 하늘을 난다네.',
+  'entities.npcs.stable_master_wren.greeting':
+    '영웅에겐 탈것이 필요하지, {className}. 수사슴은 듬직하고, 랩터는 빠르고, 윔은... 윔은 하늘을 난다네.',
   'hudChrome.bg.clock': '{minutes}:{seconds}',
   'hudChrome.controller.zoomIn': '확대',
   'hudChrome.controller.zoomOut': '축소',
@@ -2825,11 +2826,13 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.heroic_strike.description':
     '강력한 공격으로 근접 피해가 {damage}만큼 증가합니다. 다음 무기 공격 시 발동됩니다.',
   'entities.abilities.battle_shout.name': '강철의 외침',
-  'entities.abilities.battle_shout.description': '외침을 질러 30분 동안 모든 파티원의 전투력을 {buff}%만큼 증가시킵니다.',
+  'entities.abilities.battle_shout.description':
+    '외침을 질러 30분 동안 모든 파티원의 전투력을 {buff}%만큼 증가시킵니다.',
   'entities.abilities.commanding_shout.name': '북돋는 외침',
   'entities.abilities.commanding_shout.description': '2분 동안 체력이 {buff}만큼 증가합니다.',
   'entities.abilities.demoralizing_shout.name': '흉포한 울부짖음',
-  'entities.abilities.demoralizing_shout.description': '무시무시한 외침을 내질러 20초 동안 주위 모든 적이 입히는 피해를 {buff}%만큼 감소시킵니다.',
+  'entities.abilities.demoralizing_shout.description':
+    '무시무시한 외침을 내질러 20초 동안 주위 모든 적이 입히는 피해를 {buff}%만큼 감소시킵니다.',
   'entities.abilities.charge.name': '쇄도',
   'entities.abilities.charge.description':
     '적에게 돌진하여 분노 9를 생성하고 1초 동안 기절시킵니다. 사거리 8-25yd.',
@@ -3856,7 +3859,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_intro.title': '검 말고도 할 수 있는 일',
   'entities.quests.q_prof_intro.text':
     '이스트브룩의 모든 사람은 검 말고도 생업이 있다네, {playerName}. 마을 주변에 광맥이 흩어져 있지. 곡괭이를 휘둘러 광석 5덩이를 가져다 주게. 직접 캐야 하네, 내가 다 구분할 수 있으니까.',
-  'entities.quests.q_prof_intro.completion': '보게나. 광석도 모았고 손에는 굳은살도 박였군. 길을 다닐 때도 채광과 벌목, 약초 채집을 계속하게. 마을에 돌아오면 시장 옆의 마을 집중 게시판과 근처 제작대도 잊지 말고. 원한다면 이 모든 일에서 정당한 생계를 찾을 수 있다네.',
+  'entities.quests.q_prof_intro.completion':
+    '보게나. 광석도 모았고 손에는 굳은살도 박였군. 길을 다닐 때도 채광과 벌목, 약초 채집을 계속하게. 마을에 돌아오면 시장 옆의 마을 집중 게시판과 근처 제작대도 잊지 말고. 원한다면 이 모든 일에서 정당한 생계를 찾을 수 있다네.',
   'entities.quests.q_prof_intro.objectives.0.label': '광석 조각',
   'entities.quests.q_wolves.title': '문 앞의 늑대들',
   'entities.quests.q_wolves.text':
@@ -9632,6 +9636,37 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '팁: 특성 로드아웃을 여러 개 저장해 두면 포인트를 다시 쓰지 않고도 빌드를 바꿀 수 있습니다.',
   'loading.tips.pvp':
     '팁: 다른 플레이어에게 친선 결투를 신청하거나 잿빛 콜로세움 투기장에 참가해 빌드를 시험해보세요.',
+  // Realm-flavored loading tips (M16 wordy fills).
+  'loading.tips.infernal.delves':
+    '팁: 탐굴은 깊이 들어갈수록 험난해집니다. 내려가기 전에 보급품을 챙기세요.',
+  'loading.tips.infernal.rifts':
+    '팁: 등급이 매겨진 균열 차원문이 왕국 곳곳에 열립니다. 등급이 높을수록 싸움은 어렵고 보상은 풍성합니다.',
+  'loading.tips.infernal.crypts':
+    '팁: 지하 묘지 깊은 곳은 촛불조차 드뭅니다. 어둠 속에서는 발밑을 조심하세요.',
+  'loading.tips.classic.dungeons':
+    '팁: 영웅은 던전에서 만들어집니다. 파티를 모아 함께 우두머리를 처치하세요.',
+  'loading.tips.classic.wanderers':
+    '팁: 탁 트인 하늘은 방랑자에게 보답합니다. 지도의 외딴 구석에 희귀 몬스터와 채집지가 숨어 있습니다.',
+  'loading.tips.classic.deeds':
+    '팁: 위업은 업적의 서에 기록됩니다. 칭호와 명성이 모험가를 기다립니다.',
+  'loading.tips.arcane.portals':
+    '팁: 수정의 세계에는 차원문의 기운이 흐릅니다. 세계 균열은 언제나 들러 볼 가치가 있습니다.',
+  'loading.tips.arcane.relics':
+    '팁: 유물과 재료는 끈기 있는 자의 몫입니다. 채집 전문 기술을 익혀 이득을 챙기세요.',
+  'loading.tips.arcane.study':
+    '팁: 공허의 신비는 탐구자의 것입니다. 특성을 초기화하기 전에 꼼꼼히 읽어 보세요.',
+  'loading.tips.dominion.squads':
+    '팁: 개척지에서는 분대가 유리합니다. 던전 찾기로 빠르게 인원을 채울 수 있습니다.',
+  'loading.tips.dominion.formation':
+    '팁: 대형을 유지하세요. 앞의 탱커와 뒤의 힐러가 긴 싸움을 승리로 이끕니다.',
+  'loading.tips.dominion.momentum':
+    '팁: 분쟁 지역은 주인이 금세 바뀝니다. 분대의 기세가 오를 때 밀어붙이세요.',
+  'loading.tips.arcadevoid.movement':
+    '팁: 공허 투기장에서는 기동이 생명입니다. 계속 움직이고 제자리에서 싸우지 마세요.',
+  'loading.tips.arcadevoid.focus':
+    '팁: 네온 총격전은 순식간에 끝납니다. 분대가 한 목표에 화력을 모아 하나씩 제압하세요.',
+  'loading.tips.arcadevoid.upkeep':
+    '팁: 공허 기술은 정비가 중요합니다. 전투 사이에 장비 업그레이드를 확인하세요.',
   // Rideable mounts: the Z keybind + the Mounts window (the stable).
   'hudChrome.keybinds.mount': '탑승 / 하차',
   // Bindable mouse buttons. M16 wordy fill; M3/M4/M5 are keycap labels and stay as-is.

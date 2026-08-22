@@ -18,7 +18,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.items.mount_emerald_wyrm.name': '翡翠巨龙缰绳',
   'entities.npcs.stable_master_wren.name': '雷恩·鞍值',
   'entities.npcs.stable_master_wren.title': '马厩总管',
-  'entities.npcs.stable_master_wren.greeting': '每位英雄都需要坐骑，{className}。雄鹿沉稳，迅猛龙迅捷，而巨龙……巨龙会飞。',
+  'entities.npcs.stable_master_wren.greeting':
+    '每位英雄都需要坐骑，{className}。雄鹿沉稳，迅猛龙迅捷，而巨龙……巨龙会飞。',
   'hudChrome.bg.clock': '{minutes}:{seconds}',
   'hudChrome.controller.zoomIn': '放大',
   'hudChrome.controller.zoomOut': '缩小',
@@ -1859,7 +1860,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'serverUnavailable.logoAlt': 'Cryptic Realm',
   'serverUnavailable.eyebrow': '服务器维护',
   'serverUnavailable.heading': '服务器暂时不可用。',
-  'serverUnavailable.body': '我们正在重启游戏服务，Cryptic Realm 应会很快恢复。此页面会自动继续检查。',
+  'serverUnavailable.body':
+    '我们正在重启游戏服务，Cryptic Realm 应会很快恢复。此页面会自动继续检查。',
   'serverUnavailable.status': '即将恢复',
   'hud.core.elite': '精英',
   'hud.core.boss': '首领',
@@ -2725,11 +2727,13 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.heroic_strike.description':
     '一次强力攻击，使近战伤害提高 {damage}。在你的下一次挥击时触发。',
   'entities.abilities.battle_shout.name': '铁血怒吼',
-  'entities.abilities.battle_shout.description': '发出一声怒吼，使所有队伍成员的攻击强度提高 {buff}%，持续 30 分钟。',
+  'entities.abilities.battle_shout.description':
+    '发出一声怒吼，使所有队伍成员的攻击强度提高 {buff}%，持续 30 分钟。',
   'entities.abilities.commanding_shout.name': '鼓舞呐喊',
   'entities.abilities.commanding_shout.description': '使你的耐力提高 {buff}，持续 2 分钟。',
   'entities.abilities.demoralizing_shout.name': '恐怖嚎叫',
-  'entities.abilities.demoralizing_shout.description': '发出可怕的怒吼，使附近所有敌人造成的伤害降低 {buff}%，持续 20 秒。',
+  'entities.abilities.demoralizing_shout.description':
+    '发出可怕的怒吼，使附近所有敌人造成的伤害降低 {buff}%，持续 20 秒。',
   'entities.abilities.charge.name': '突进',
   'entities.abilities.charge.description':
     '向一名敌人冲锋，产生 9 点怒气并使其昏迷 1 秒。8-25 码距离。',
@@ -3719,7 +3723,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_intro.title': '人人都有一技之长',
   'entities.quests.q_prof_intro.text':
     '伊斯特布鲁克的每个人都有除了剑术之外的手艺，{playerName}。镇子周围散落着矿脉，去挥镐采上5块矿石带给我。要亲自采，别耍花招，我看得出来。',
-  'entities.quests.q_prof_intro.completion': '看吧？矿石采到了，手上也磨出了茧。赶路时继续采矿、伐木和采药；回城后，别忘了市场旁的城镇专注告示板和附近的制作台。只要你愿意，这些手艺都能换来公道的生计。',
+  'entities.quests.q_prof_intro.completion':
+    '看吧？矿石采到了，手上也磨出了茧。赶路时继续采矿、伐木和采药；回城后，别忘了市场旁的城镇专注告示板和附近的制作台。只要你愿意，这些手艺都能换来公道的生计。',
   'entities.quests.q_prof_intro.objectives.0.label': '矿石块',
   'entities.quests.q_wolves.title': '门前群狼',
   'entities.quests.q_wolves.text':
@@ -7545,8 +7550,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.devBadge.linkedAs': '已关联为 {login}',
   'hudChrome.devBadge.unlink': '取消关联 GitHub',
   'hudChrome.nativeUpdate.title': '有可用更新',
-  'hudChrome.nativeUpdate.body':
-    'Cryptic Realm 有新版本可用。立即更新以获取最新修复和改进。',
+  'hudChrome.nativeUpdate.body': 'Cryptic Realm 有新版本可用。立即更新以获取最新修复和改进。',
   'hudChrome.nativeUpdate.bodyWithVersion':
     'Cryptic Realm {version} 版本已可用。立即更新以获取最新修复和改进。',
   'hudChrome.nativeUpdate.notNow': '暂不',
@@ -9213,6 +9217,23 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'loading.tips.professions': '提示：采集与制造类生活技能可以与你的战斗职业同时培养。',
   'loading.tips.loadouts': '提示：保存多套天赋配置，即可在不同 build 间切换而无需重新分配天赋点。',
   'loading.tips.pvp': '提示：向其他玩家发起友谊决斗，或报名灰烬竞技场，来检验你的 build。',
+  // Realm-flavored loading tips (M16 wordy fills).
+  'loading.tips.infernal.delves': '提示：探秘越深越凶险，下潜前备好补给。',
+  'loading.tips.infernal.rifts':
+    '提示：分级的裂隙传送门在王国各处撕开，等级越高战斗越难，收获也越丰厚。',
+  'loading.tips.infernal.crypts': '提示：地穴深处烛光稀少，黑暗中当心脚下。',
+  'loading.tips.classic.dungeons': '提示：英雄在地下城中铸就，组好队伍一起讨伐首领吧。',
+  'loading.tips.classic.wanderers': '提示：广阔天地眷顾旅人，地图的偏远角落藏着稀有怪与采集点。',
+  'loading.tips.classic.deeds': '提示：壮举会写入你的功绩之书，头衔与名望在等着勇者。',
+  'loading.tips.arcane.portals': '提示：水晶国度中传送门能量涌动，遇到世界裂隙总值得绕道一探。',
+  'loading.tips.arcane.relics': '提示：圣物与材料青睐耐心之人，练一门采集专业稳赚不亏。',
+  'loading.tips.arcane.study': '提示：虚空奥秘属于勤学者，重置天赋前先细读每个天赋。',
+  'loading.tips.dominion.squads': '提示：边疆偏爱小队作战，地下城查找器能快速补齐队伍。',
+  'loading.tips.dominion.formation': '提示：保持阵型，坦克在前、治疗在后才能打赢持久战。',
+  'loading.tips.dominion.momentum': '提示：争夺之地易主极快，趁小队气势正盛果断出击。',
+  'loading.tips.arcadevoid.movement': '提示：虚空竞技场重视走位，不断变换位置，切勿站桩作战。',
+  'loading.tips.arcadevoid.focus': '提示：霓虹交火转瞬即逝，全队集火同一目标逐个击破。',
+  'loading.tips.arcadevoid.upkeep': '提示：虚空科技讲究保养，战斗间隙记得检查装备升级。',
   // Rideable mounts: the Z keybind + the Mounts window (the stable).
   'hudChrome.keybinds.mount': '骑乘 / 下骑',
   // Bindable mouse buttons. M16 wordy fill; M3/M4/M5 are keycap labels and stay as-is.
