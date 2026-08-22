@@ -345,4 +345,9 @@ export const CLASSIC_REALM: RealmContent = {
     },
   ],
   maxLevel: 80,
+  // Grander WoW-style settlement: buildings render authored-size without this
+  // (only infernal ever declared a theme). Scale/spread only; collision derives
+  // from the same w/d so the themed town stays solid (data.ts themeWorldForRealm;
+  // authored assetId kits are exempt there by design).
+  worldTheme: { buildingScale: 1.6, buildingSpread: 2.2 },
 };

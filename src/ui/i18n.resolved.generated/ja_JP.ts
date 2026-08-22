@@ -319,6 +319,11 @@ export const ja_JP: EnTranslations = {
     "spectate": {
       "banner": "{name}を観戦中"
     },
+    "waypoints": {
+      "title": "ウェイポイント",
+      "choose": "目的地を選択",
+      "undiscovered": "{name}（未発見）"
+    },
     "readyCheck": {
       "prompt": "{name} が準備確認を開始しました。準備はいいですか？",
       "ready": "準備完了",

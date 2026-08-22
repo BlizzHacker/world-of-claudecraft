@@ -11716,4 +11716,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.waterRipples': '수면 물결 (물살)',
   'hudChrome.breath.label': '숨',
   'hudChrome.breath.drowning': '익사 중!',
+  'hudChrome.waypoints.title': '웨이포인트',
+  'hudChrome.waypoints.choose': '목적지를 선택하세요',
+  'hudChrome.waypoints.undiscovered': '{name} (미발견)',
 };

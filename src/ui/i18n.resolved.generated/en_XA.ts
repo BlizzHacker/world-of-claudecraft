@@ -319,6 +319,11 @@ export const en_XA: EnTranslations = {
     "spectate": {
       "banner": "[Šþéçţáţíñĝ {name}]"
     },
+    "waypoints": {
+      "title": "[Ŵáýþóíñţš]",
+      "choose": "[Çĥóóšé á ðéšţíñáţíóñ]",
+      "undiscovered": "[{name} (úñðíšçóʋéŕéð)]"
+    },
     "readyCheck": {
       "prompt": "[{name} ĥáš šţáŕţéð á ŕéáðý çĥéçķ. Áŕé ýóú ŕéáðý?]",
       "ready": "[Ŕéáðý]",

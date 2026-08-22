@@ -306,7 +306,6 @@ import {
   realmWaypointName,
   riftFloorLabel,
   tEntity,
-  waypointDisplayName,
   zoneDisplayName,
   zonePoiLabel,
 } from './entity_i18n';
@@ -698,6 +697,7 @@ import { buildVcupBriefingView } from './vale_cup_briefing_view';
 import { ValeCupCharge } from './vale_cup_charge';
 import { buildVcupChargeView } from './vale_cup_charge_view';
 import { ValeCupHud } from './vale_cup_hud';
+import { openWaypointMenu } from './waypoint_map_window';
 import { buildVcupHudView } from './vale_cup_hud_view';
 import { ValeCupIndicator } from './vale_cup_indicator';
 import { buildVcupIndicatorView } from './vale_cup_indicator_view';
@@ -12840,7 +12840,10 @@ export class Hud {
           );
           break;
         case 'waypointMenu':
-          this.showWaypointMenu(ev.waypoints);
+          openWaypointMenu(ev.waypoints, {
+            stack: $('#prompt-stack'),
+            travel: (id) => this.sim.waypointTravel(id),
+          });
           break;
         case 'duelCountdown': {
           // The durable-record arm (the phase 14 QA): a countdown digit
@@ -18889,47 +18892,6 @@ export class Hud {
       }
     }, 28000);
     return prompt;
-  }
-
-  // D2 waypoint travel menu: a floating list of the player's DISCOVERED waypoints;
-  // click one to travel. Locked (undiscovered) waypoints show greyed. Opened when
-  // the player interacts with a waypoint (the sim emits waypointMenu with the list).
-  private showWaypointMenu(waypoints: { id: string; name: string; known: boolean }[]): void {
-    document.getElementById('waypoint-menu')?.remove();
-    const stack = $('#prompt-stack');
-    const menu = document.createElement('div');
-    menu.id = 'waypoint-menu';
-    menu.className = 'prompt panel';
-    const title = document.createElement('div');
-    title.className = 'prompt-text';
-    title.innerHTML = '<b>Waypoints</b> — choose a destination';
-    menu.appendChild(title);
-    const list = document.createElement('div');
-    list.className = 'waypoint-list';
-    for (const w of waypoints) {
-      const btn = document.createElement('button');
-      btn.className = 'btn waypoint-dest';
-      // The wire carries the canonical English name; the realm lore overlay
-      // (RealmContent.entityText.waypoints) re-skins it at render only.
-      const name = waypointDisplayName(w.id, w.name);
-      btn.textContent = w.known ? name : `${name} (undiscovered)`;
-      btn.disabled = !w.known;
-      if (w.known) {
-        btn.addEventListener('click', () => {
-          menu.remove();
-          this.sim.waypointTravel(w.id);
-        });
-      }
-      list.appendChild(btn);
-    }
-    menu.appendChild(list);
-    const close = document.createElement('button');
-    close.className = 'btn';
-    close.textContent = t('hud.prompts.decline');
-    close.addEventListener('click', () => menu.remove());
-    menu.appendChild(close);
-    stack.appendChild(menu);
-    window.setTimeout(() => menu.isConnected && menu.remove(), 30000);
   }
 
   // -------------------------------------------------------------------------

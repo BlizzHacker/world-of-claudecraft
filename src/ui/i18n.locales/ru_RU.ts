@@ -11904,4 +11904,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.waterRipples': 'Рябь на воде (кильватер)',
   'hudChrome.breath.label': 'Дыхание',
   'hudChrome.breath.drowning': 'Вы тонете!',
+  'hudChrome.waypoints.title': 'Путевые точки',
+  'hudChrome.waypoints.choose': 'Выберите пункт назначения',
+  'hudChrome.waypoints.undiscovered': '{name} (не открыто)',
 };

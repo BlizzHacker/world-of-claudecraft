@@ -12,6 +12,7 @@ import { INTERIOR_ROOM_ENTRY, INTERIOR_ROOM_EXIT_LOCAL } from './colliders';
 import { INTERIOR_INNKEEPER, INTERIOR_MERCHANT, INTERIOR_VILLAGER } from './content/interior_npcs';
 import { getActiveWorldContent, interiorOrigin, isInteriorPos } from './data';
 import { createGroundObject, createNpc, createProp } from './entity';
+import { HOME_LOTS } from './homes_layout';
 import { getActiveRealm } from './realms/registry';
 import type { SimContext } from './sim_context';
 import { type Entity, INTERACT_RANGE, type NpcDef, type WorldContent } from './types';
@@ -191,7 +192,25 @@ export function spawnBuildingInteriors(
     npcEnt.facing = Math.PI; // face the south door / incoming player
     add(npcEnt);
   }
-  // 2) Nothing to spawn for entry: the door is the building's own +z face. Both the
+  // 2) Every Eastbrook Homes cottage room (per-LOT slot, slot = lot index + 1;
+  // social/homes.ts homeEnter uses the same mapping) gets a voluntary exit door
+  // too, at the same room-local spot as the shared rooms. Without it the only
+  // ways out of your own home were leaving the party or /unstuck. Deterministic,
+  // zero rng.
+  for (let i = 0; i < HOME_LOTS.length; i++) {
+    const o = interiorOrigin(INTERIOR_TYPE_HOME, i + 1);
+    const exit = createGroundObject(
+      nextId(),
+      '',
+      'Exit',
+      ctx.groundPos(o.x + INTERIOR_ROOM_EXIT_LOCAL.x, o.z + INTERIOR_ROOM_EXIT_LOCAL.z),
+    );
+    exit.templateId = 'building_exit';
+    exit.objectItemId = null;
+    exit.lootable = true; // interactable
+    add(exit);
+  }
+  // 3) Nothing to spawn for entry: the door is the building's own +z face. Both the
   // server sim (interaction.ts) and the online client's interact dispatcher (main.ts)
   // resolve doors ON DEMAND from getActiveWorldContent().props.buildings via
   // buildingDoorNear() — a PURE function, so it works identically on the client (which

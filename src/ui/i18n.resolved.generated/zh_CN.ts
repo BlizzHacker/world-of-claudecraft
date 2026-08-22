@@ -319,6 +319,11 @@ export const zh_CN: EnTranslations = {
     "spectate": {
       "banner": "正在观察 {name}"
     },
+    "waypoints": {
+      "title": "传送点",
+      "choose": "选择目的地",
+      "undiscovered": "{name}（未发现）"
+    },
     "readyCheck": {
       "prompt": "{name} 发起了准备确认。你准备好了吗？",
       "ready": "准备就绪",
