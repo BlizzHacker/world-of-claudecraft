@@ -153,7 +153,6 @@ than free, so ask before you rely on it.
 | Guide webfonts (`public/fonts/*.woff2`: Cinzel by Natanael Gama; Alegreya and Alegreya Sans by Juan Pablo del Peral, Huerta Tipografica; woff2 subsets latin/latin-ext/cyrillic/vietnamese as served by Google Fonts, self-hosted for the /wiki guide) | Natanael Gama; Huerta Tipografica | https://fonts.google.com/specimen/Cinzel , https://fonts.google.com/specimen/Alegreya , https://fonts.google.com/specimen/Alegreya+Sans | SIL OFL 1.1 | Yes, under SIL OFL 1.1 |
 | Owner-provided Mage artwork (`fireball_form.webp`, `counterspell.webp`) | Levy Street account | Owner-provided artwork | Used with permission (Levy Street) | **No, permission required** |
 | Temporal clock sound effect (`public/audio/sfx/temporal_clock.mp3`) | World of ClaudeCraft | User-provided source recording | Used with permission (Levy Street) | **No, permission required** |
-| Remastered streamed soundtrack (`public/audio/music/*.mp3`: town, overworld, dungeon, and battle themes) | World of ClaudeCraft | Existing themes were rendered from the project's procedural score (`scripts/render_music.mjs`) and remastered; the new-world remasters are owner-provided Suno Studio exports | Project asset | With the project only |
 
 | Rideable mount models (valorsteed, grag_bear, stalkglider_snail, aether_hover_cycle, shadowjump_toad, stormfeather_griffin, in `public/models/mounts/`) | World of ClaudeCraft | Project-generated via the Tripo API asset pipeline (scripts/asset_pipeline; the quadrupeds auto-rigged, gait clips baked locally via scripts/bake_mount_gaits.mjs), owned under the Tripo paid-plan license | Project asset | With the project only |
 | Terrorspark Groundshaker rideable mount model and item icon (`public/models/mounts/terrorspark_groundshaker.glb`, `public/ui/items/reins_terrorspark_groundshaker.webp`) | World of ClaudeCraft | Original project art procedurally reconstructed from a user-supplied concept without redistributing source pixels; deterministic source, design boundary, and provenance are committed under `scripts/assets/terrorspark_groundshaker/` and `docs/design/terrorspark-groundshaker/` | Project asset, rights reserved | **No, permission required** |
@@ -294,6 +293,16 @@ non-commercial. For commercial use, arrange your own licence with the author.
 | Generated prop model (streetlamp_galecrest_mast) | World of ClaudeCraft | Project-generated via scripts/asset_pipeline (Tripo AI 3D) | Project asset | With the project only |
 | Generated prop model (streetlamp_farshore_coral) | World of ClaudeCraft | Project-generated via scripts/asset_pipeline (Tripo AI 3D) | Project asset | With the project only |
 | Generated creature model + animations (bear_form, the druid Bear Form quadruped) | World of ClaudeCraft | Project-generated Tripo AI 3D sculpt, owned under the Tripo paid-plan license; rigged and animated locally rather than auto-rigged (29 bone deform rig fitted to the sculpt by measurement, distance-solver skinning, and nine IK-authored clips), then KTX2-compressed via glTF-Transform | Project asset | With the project only |
+## Fork assets (Cryptic Realm)
+
+This fork ships its own soundtrack in place of the upstream streamed
+soundtrack, which is removed together with the upstream homepage theme, the
+dedicated boss loop, and the Sowfield track pair.
+
+| Assets | Author | Source | License | Redistribution |
+|---|---|---|---|---|
+| Cryptic Realm soundtrack (`public/audio/cryptic/*.mp3`: the loading-screen theme plus the town, overworld, dungeon, and boss tracks) | Cryptic Realm operator (MoveWeight) | Operator-owned Suno Studio exports produced for this fork | Fork asset, rights reserved | **No, permission required** |
+
 Assets were optimized for shipping (animation clip pruning, meshopt compression,
 texture resizing) via `scripts/assets/build_assets.mjs`; raw packs are not
 committed.
