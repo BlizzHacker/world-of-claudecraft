@@ -40,6 +40,22 @@ export function previewAppearanceVisual(a: PreviewAppearance): PreviewVisual {
   };
 }
 
+/** The rig to remount when a lazy body fetch FAILS while nothing is on the
+ *  turntable. Requesting a themed body first discards a mounted stock rig
+ *  (discardStockVisual), so a failed fetch used to leave the preview EMPTY for
+ *  the session. The class rig is always boot-resident (charactersReady), so it
+ *  is the safe floor; the one body that must never fall back is the class rig
+ *  itself, or a resident-asset failure would re-request itself forever. Kept
+ *  DOM/Three-free so it is unit-tested (tests/preview_appearance.test.ts). */
+export function previewFallbackVisualKey(
+  failedVisualKey: string,
+  cls: PlayerClass | null,
+): string | null {
+  if (!cls) return null;
+  const fallback = `player_${cls}`;
+  return failedVisualKey === fallback ? null : fallback;
+}
+
 /** Stable identity of an appearance, so an async mech re-apply can bail out if a
  *  newer selection superseded it. */
 export function appearanceSignature(a: PreviewAppearance): string {
