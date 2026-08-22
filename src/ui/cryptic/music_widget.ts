@@ -6,6 +6,7 @@
 
 import { CRYPTIC_TRACKS, crypticMusic } from '../../game/cryptic_music';
 import { music } from '../../game/music';
+import { resolveMusicExtProvider } from './music_ext_providers';
 
 const ID = 'cr-music-widget';
 const POS_KEY = 'cr_music_widget_pos';
@@ -38,39 +39,6 @@ export function isMusicWidgetHidden(): boolean {
 export function onMusicWidgetHiddenChange(cb: (hidden: boolean) => void): () => void {
   hiddenListeners.add(cb);
   return () => hiddenListeners.delete(cb);
-}
-
-// Turn a Spotify / Pandora / YouTube / Apple Music share link into an embeddable
-// iframe URL. Returns null if it isn't a recognised embeddable provider.
-function toEmbedUrl(raw: string): string | null {
-  const url = raw.trim();
-  if (!url) return null;
-  try {
-    const u = new URL(url);
-    const host = u.hostname.replace(/^www\./, '');
-    // Spotify: open.spotify.com/<type>/<id> -> open.spotify.com/embed/<type>/<id>
-    if (host === 'open.spotify.com') {
-      return `https://open.spotify.com/embed${u.pathname}`;
-    }
-    // YouTube: watch?v=ID or youtu.be/ID -> youtube.com/embed/ID
-    if (host === 'youtube.com' || host === 'm.youtube.com') {
-      const v = u.searchParams.get('v');
-      if (v) return `https://www.youtube.com/embed/${v}`;
-      if (u.pathname.startsWith('/playlist'))
-        return `https://www.youtube.com/embed/videoseries?list=${u.searchParams.get('list')}`;
-    }
-    if (host === 'youtu.be') return `https://www.youtube.com/embed${u.pathname}`;
-    // Pandora: embeddable via its own embed host for stations.
-    if (host === 'pandora.com') return url; // Pandora embeds open in-page; keep as-is.
-    // Apple Music: music.apple.com/... -> embed.music.apple.com/...
-    if (host === 'music.apple.com') return `https://embed.${host}${u.pathname}${u.search}`;
-    // SoundCloud handled via its player widget.
-    if (host === 'soundcloud.com')
-      return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}`;
-  } catch {
-    /* not a URL */
-  }
-  return null;
 }
 
 interface Pos {
@@ -124,7 +92,7 @@ export function mountMusicWidget(): void {
       </div>
       <div class="cr-mw-ext" hidden>
         <div class="cr-mw-ext-row">
-          <input type="url" class="cr-mw-ext-input" placeholder="Paste Spotify / YouTube / Apple Music / SoundCloud link" />
+          <input type="url" class="cr-mw-ext-input" placeholder="Paste Spotify / YouTube / Apple Music / SoundCloud / Pandora / Plex link" />
           <button type="button" class="cr-mw-ext-load">Load</button>
           <button type="button" class="cr-mw-ext-clear" title="Clear">✕</button>
         </div>
@@ -249,19 +217,25 @@ export function mountMusicWidget(): void {
     applyLock();
   });
 
-  // External music: embed a Spotify/YouTube/Apple/SoundCloud player. Persisted.
+  // External music: embed a Spotify/YouTube/Apple/SoundCloud player, or show a
+  // new-tab link for providers that refuse framing (Pandora, Plex). Persisted.
+  // Provider resolution is the pure module music_ext_providers.ts, and its
+  // embed origins mirror the desktop shell's CSP frame-src allow-list.
   const loadExternal = (raw: string) => {
-    const embed = toEmbedUrl(raw);
-    if (!embed) {
-      extFrame.setAttribute('hidden', '');
+    const resolved = resolveMusicExtProvider(raw);
+    if (!resolved) {
       extFrame.innerHTML =
-        '<div class="cr-mw-ext-err">Unrecognized link. Use a Spotify, YouTube, Apple Music, or SoundCloud share URL.</div>';
+        '<div class="cr-mw-ext-err">Unrecognized link. Use a Spotify, YouTube, Apple Music, SoundCloud, Pandora, or Plex share URL.</div>';
       extFrame.removeAttribute('hidden');
       return;
     }
-    extFrame.innerHTML = `<iframe src="${embed}" width="100%" height="152" frameborder="0" loading="lazy"
+    if (resolved.kind === 'link') {
+      extFrame.innerHTML = `<a class="cr-mw-ext-link" href="${resolved.url}" target="_blank" rel="noopener noreferrer">${resolved.host}</a>`;
+    } else {
+      extFrame.innerHTML = `<iframe src="${resolved.url}" width="100%" height="152" frameborder="0" loading="lazy"
       allow="autoplay; encrypted-media; clipboard-write; fullscreen; picture-in-picture"
       referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+    }
     extFrame.removeAttribute('hidden');
     try {
       localStorage.setItem(EXT_KEY, raw);

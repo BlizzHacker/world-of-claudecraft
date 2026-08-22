@@ -63,6 +63,13 @@ const EMBEDDED_SUBFRAME_ORIGINS = new Set([
   'https://secure.walletconnect.org',
   'https://verify.walletconnect.com',
   'https://verify.walletconnect.org',
+  // The music widget's external-player embeds (src/ui/cryptic/music_ext_providers.ts,
+  // MUSIC_EMBED_ORIGINS): allowed as subframes only, mirroring CSP_ORIGINS.musicFrames
+  // below so the frame-src allowance is actually reachable through the nav guard.
+  'https://open.spotify.com',
+  'https://www.youtube.com',
+  'https://embed.music.apple.com',
+  'https://w.soundcloud.com',
 ]);
 
 // Decide whether a navigation to `url` is permitted. Main-frame navigations may only
@@ -128,6 +135,17 @@ const CSP_ORIGINS = {
     'https://secure.walletconnect.org',
     'https://verify.walletconnect.com',
     'https://verify.walletconnect.org',
+  ],
+  // The music widget's external-player iframes. Exactly the embed origins
+  // resolveMusicExtProvider can return (src/ui/cryptic/music_ext_providers.ts,
+  // MUSIC_EMBED_ORIGINS); tests/electron_shell_guards.test.ts pins the two
+  // lists against each other. Link-only providers (Pandora, Plex) open
+  // externally and need no frame allowance.
+  musicFrames: [
+    'https://open.spotify.com',
+    'https://www.youtube.com',
+    'https://embed.music.apple.com',
+    'https://w.soundcloud.com',
   ],
 };
 
@@ -204,7 +222,7 @@ function buildContentSecurityPolicy({ apiOrigin, scriptHashes = [] } = {}) {
     `style-src 'self' 'unsafe-inline' ${CSP_ORIGINS.fontsStyle}`,
     `font-src 'self' ${CSP_ORIGINS.fontsFile} ${CSP_ORIGINS.reownFonts}`,
     "worker-src 'self' blob:",
-    `frame-src ${CSP_ORIGINS.turnstile} ${CSP_ORIGINS.walletFrames.join(' ')}`,
+    `frame-src ${CSP_ORIGINS.turnstile} ${CSP_ORIGINS.walletFrames.join(' ')} ${CSP_ORIGINS.musicFrames.join(' ')}`,
     "object-src 'none'",
     "base-uri 'none'",
     "frame-ancestors 'none'",

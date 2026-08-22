@@ -13,6 +13,7 @@ import {
   originAllowed,
   withCspHeader,
 } from '../electron/shell_guards.cjs';
+import { MUSIC_EMBED_ORIGINS } from '../src/ui/cryptic/music_ext_providers';
 
 const APP = 'app://worldofclaudecraft';
 const DEV = 'http://127.0.0.1:5173';
@@ -85,6 +86,14 @@ describe('navigationAllowed', () => {
   });
   it('denies a malformed navigation URL', () => {
     expect(navigationAllowed('::: not a url', true, main)).toBe(false);
+  });
+
+  it('allows every music-widget embed origin as a subframe only', () => {
+    for (const origin of MUSIC_EMBED_ORIGINS) {
+      const url = `${origin}/embed/x`;
+      expect(navigationAllowed(url, true, main), url).toBe(false);
+      expect(navigationAllowed(url, false, main), url).toBe(true);
+    }
   });
 });
 
@@ -207,6 +216,16 @@ describe('buildContentSecurityPolicy', () => {
   it('allows Discord CDN avatars in img-src so linked PFPs paint on desktop', () => {
     expect(directive('img-src')).toContain('https://cdn.discordapp.com');
     expect(CSP_ORIGINS.img).toContain('https://cdn.discordapp.com');
+  });
+
+  // The music widget's external players: the shell's frame allow-list carries
+  // exactly the embed origins the resolver can hand back, so the two lists can
+  // never drift apart (a provider added to one without the other fails here).
+  it('frame-src carries exactly the music-widget embed origins', () => {
+    expect(CSP_ORIGINS.musicFrames).toEqual([...MUSIC_EMBED_ORIGINS]);
+    for (const origin of MUSIC_EMBED_ORIGINS) {
+      expect(directive('frame-src')).toContain(origin);
+    }
   });
 });
 
