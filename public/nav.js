@@ -2,7 +2,7 @@
 //
 // Every standalone page (links / wiki / whitepaper / contributions) and the
 // dashboard chrome render their nav from THIS list. To change the nav, edit
-// CR_NAV_ITEMS here — nowhere else. Pages must not hand-write <a> nav links.
+// CR_NAV_ITEMS here: nowhere else. Pages must not hand-write <a> nav links.
 //
 // Usage in a standalone page:
 //   <nav class="nav" data-cr-nav aria-label="Main navigation"></nav>
@@ -15,13 +15,14 @@
   var ITEMS = [
     { href: '/#play', label: 'Play', match: { hash: 'play', home: true } },
     { href: '/#highscores', label: 'High Scores', match: { hash: 'highscores' } },
-    { href: '/wiki.html', label: 'Wiki', match: { hash: 'wiki', path: '/wiki' } },
+    { href: '/wiki', label: 'Wiki', match: { hash: 'wiki', path: '/wiki' } },
     { href: '/#news', label: 'News', match: { hash: 'news' } },
     { href: '/contributions.html', label: 'Contributions', match: { hash: 'contributions', path: '/contributions' } },
     { href: '/#download', label: 'Download', match: { hash: 'download' } },
     { href: '/links.html', label: 'Links', match: { hash: 'links', path: '/links' } },
     { href: '/whitepaper.html', label: 'White Paper', match: { hash: 'whitepaper', path: '/whitepaper' } },
     { href: '/terms', label: 'Terms', match: { path: '/terms' } },
+    { href: '/privacy', label: 'Privacy', match: { path: '/privacy' } },
   ];
 
   function isActive(item) {
@@ -33,7 +34,7 @@
   }
 
   // Inject self-contained nav styles ONCE, so the nav looks correct on every
-  // page regardless of that page's own .nav CSS (which was clashing — washed
+  // page regardless of that page's own .nav CSS (which was clashing: washed
   // out, overlapping text). High contrast, wraps, scoped to .cr-nav.
   function ensureStyle() {
     if (document.getElementById('cr-nav-style')) return;
@@ -130,13 +131,13 @@
     for (var i = 0; i < navs.length; i++) render(navs[i]);
 
     // Homepage SPA: the nav buttons are interactive (in-page view switches), so
-    // we DON'T replace them — we keep their labels in sync with this single
+    // we DON'T replace them: we keep their labels in sync with this single
     // source instead, so the homepage can never drift from the standalone pages.
     // Match the existing .homepage-nav .nav-list items to ITEMS by order.
     var spaList = document.querySelector('.homepage-nav .nav-list');
     if (spaList) {
       var spaLinks = spaList.querySelectorAll('.nav-link');
-      // Only resync if the count matches (same item set) — otherwise leave the
+      // Only resync if the count matches (same item set): otherwise leave the
       // hand-authored markup alone rather than mangle it.
       if (spaLinks.length === ITEMS.length) {
         for (var j = 0; j < spaLinks.length; j++) {

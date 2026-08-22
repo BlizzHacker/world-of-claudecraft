@@ -34,28 +34,31 @@ interface NavLink {
 // drift from the rest of the site; fall back to a copy only if nav.js hasn't
 // loaded. To change the nav, edit public/nav.js — not here.
 function primaryLinks(): NavLink[] {
-  const shared = (window as unknown as { CR_NAV_ITEMS?: { href: string; label: string }[] }).CR_NAV_ITEMS;
-  const base = Array.isArray(shared) && shared.length
-    ? shared.map((i) => ({ href: i.href, label: i.label }))
-    : [
-    { href: '/#play', label: 'Play' },
-    { href: '/#highscores', label: 'High Scores' },
-    { href: '/wiki.html', label: 'Wiki' },
-    { href: '/#news', label: 'News' },
-    { href: '/contributions.html', label: 'Contributions' },
-    { href: '/#download', label: 'Download' },
-    { href: '/links.html', label: 'Links' },
-    { href: '/whitepaper.html', label: 'White Paper' },
-    { href: '/#login', label: 'Login/Register' },
-  ];
+  const shared = (window as unknown as { CR_NAV_ITEMS?: { href: string; label: string }[] })
+    .CR_NAV_ITEMS;
+  const base =
+    Array.isArray(shared) && shared.length
+      ? shared.map((i) => ({ href: i.href, label: i.label }))
+      : [
+          { href: '/#play', label: 'Play' },
+          { href: '/#highscores', label: 'High Scores' },
+          { href: '/wiki', label: 'Wiki' },
+          { href: '/#news', label: 'News' },
+          { href: '/contributions.html', label: 'Contributions' },
+          { href: '/#download', label: 'Download' },
+          { href: '/links.html', label: 'Links' },
+          { href: '/whitepaper.html', label: 'White Paper' },
+          { href: '/#login', label: 'Login/Register' },
+        ];
   const kind = pageKind();
-  const context = kind === 'admin'
-    ? { href: '/admin/', label: 'Admin', current: true }
-    : kind === 'mod'
-      ? { href: '/mod/', label: 'Moderator', current: true }
-      : kind === 'me'
-        ? { href: '/me/', label: 'My Account', current: true }
-        : null;
+  const context =
+    kind === 'admin'
+      ? { href: '/admin/', label: 'Admin', current: true }
+      : kind === 'mod'
+        ? { href: '/mod/', label: 'Moderator', current: true }
+        : kind === 'me'
+          ? { href: '/me/', label: 'My Account', current: true }
+          : null;
   if (!context) return base;
   if (base.some((l) => l.href === context.href)) {
     return base.map((l) => ({ ...l, current: l.href === context.href }));
@@ -67,7 +70,10 @@ function primaryLinks(): NavLink[] {
 }
 
 function navId(label: string): string {
-  return `nav-link-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+  return `nav-link-${label
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')}`;
 }
 
 function navItem(l: NavLink): string {

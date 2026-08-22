@@ -5,8 +5,12 @@ const navJs = readFileSync(new URL('../public/nav.js', import.meta.url), 'utf8')
   /\r\n/g,
   '\n',
 );
+// Cache-busting copy of nav.js referenced by every standalone page; must stay
+// byte-identical to nav.js (regenerate by copying nav.js to a new nav.v<ts>m.js
+// and repointing the pages when the nav changes).
+const NAV_VERSIONED_FILE = 'nav.v1787428220m.js';
 const navVersionedJs = readFileSync(
-  new URL('../public/nav.v1782009763m.js', import.meta.url),
+  new URL(`../public/${NAV_VERSIONED_FILE}`, import.meta.url),
   'utf8',
 ).replace(/\r\n/g, '\n');
 const dashboardChromeTs = readFileSync(
@@ -48,6 +52,33 @@ describe('site and dashboard navigation', () => {
       expect(source).not.toContain("href: '/#links'");
       expect(source).not.toContain("href: '/#whitepaper'");
       expect(source).not.toContain("href: '/#contributions'");
+      // The wiki is the guide SPA at /wiki, not the retired wiki.html shell.
+      expect(source).toContain("href: '/wiki'");
+      expect(source).not.toContain("href: '/wiki.html'");
+    }
+    // The versioned copy is byte-identical to nav.js (same single source).
+    expect(navVersionedJs).toBe(navJs);
+  });
+
+  it('lists Terms and Privacy in the shared nav and mounts it on the legal pages', () => {
+    for (const source of [navJs, navVersionedJs]) {
+      expect(source).toContain("href: '/terms'");
+      expect(source).toContain("href: '/privacy'");
+    }
+    const pages = [
+      'terms.html',
+      'privacy.html',
+      'links.html',
+      'wiki.html',
+      'whitepaper.html',
+      'contributions.html',
+    ];
+    for (const page of pages) {
+      const html = readFileSync(new URL(`../public/${page}`, import.meta.url), 'utf8');
+      expect(html, `${page} must render the shared nav`).toContain('data-cr-nav');
+      expect(html, `${page} must load the versioned nav script`).toContain(
+        `<script src="/${NAV_VERSIONED_FILE}" defer></script>`,
+      );
     }
   });
 
