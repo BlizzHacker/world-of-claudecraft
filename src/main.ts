@@ -465,6 +465,7 @@ import { localPartyMemberIds } from './game/corpse_loot_availability';
 import { crypticMusic } from './game/cryptic_music';
 import { mountXboxEnv } from './game/xbox_env';
 import type { ReleaseEntry } from './net/online';
+import { UNLOCKED_SKIN_LEVEL } from './sim/cosmetics/body_skins';
 import {
   DEFAULT_REALM,
   getActiveRealm,
@@ -479,6 +480,12 @@ import {
   setActiveRealmForOffline,
 } from './sim/realms';
 import { mountBestiary } from './ui/cryptic/bestiary';
+import {
+  type BodySkinRailLabels,
+  bodySkinRailHtml,
+  bodySkinRailRows,
+  unlockLevelSentence,
+} from './ui/cryptic/body_skin_rail';
 import { mountRealmBranding } from './ui/cryptic/branding';
 import {
   type CharGridHost,
@@ -507,12 +514,6 @@ import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
 import { mountPickitPanel } from './ui/cryptic/pickit_panel';
 import { mountPwaInstall } from './ui/cryptic/pwa_install';
 import {
-  type BodySkinRailLabels,
-  bodySkinRailHtml,
-  bodySkinRailRows,
-  unlockLevelSentence,
-} from './ui/cryptic/body_skin_rail';
-import {
   classChoicesForRealm,
   classPresentationForRealm,
   classSexToggleAvailable,
@@ -520,7 +521,6 @@ import {
   presentationFactionsForRealm,
   realmHasClassOverlay,
 } from './ui/cryptic/realm_class_presentation';
-import { UNLOCKED_SKIN_LEVEL } from './sim/cosmetics/body_skins';
 import { openRealmVisualEditor } from './ui/cryptic/realm_visual_editor';
 import {
   fetchRealmVisualOverrides,
@@ -2242,8 +2242,12 @@ async function startGame(
     onProfessions: () => hud.toggleProfessions(),
     onNameplates: () => (renderer.showNameplates = !renderer.showNameplates),
     onMusic: () => {
-      music.setEnabled(!music.enabled);
-      return music.enabled;
+      // One tap drives BOTH engines: the CR soundtrack owns the mix and the
+      // streamed director is its zone-bus twin; off means silence.
+      const on = !(music.enabled || crypticMusic.enabled);
+      music.setEnabled(on);
+      crypticMusic.setEnabled(on);
+      return on;
     },
     onRecenterCamera: () => input.recenterCameraBehind(world.player.facing),
     onGroundAimMove: (x, y) => {
@@ -2293,7 +2297,9 @@ async function startGame(
   };
   // reflect the current music state on the touch toggle (it may already be off
   // from a prior session, persisted in localStorage)
-  document.getElementById('mobile-music')?.classList.toggle('mm-muted', !music.enabled);
+  document
+    .getElementById('mobile-music')
+    ?.classList.toggle('mm-muted', !(music.enabled || crypticMusic.enabled));
 
   // Gamepad: a separate remappable button profile drives the same dispatch the
   // keyboard/touch paths use. Edge-button actions route through this dispatcher;
@@ -2777,6 +2783,7 @@ async function startGame(
         break;
       case 'musicVolume':
         music.setVolume(v);
+        crypticMusic.setVolume(v);
         break;
       case 'voiceVolume':
         voice.setVolume(v);

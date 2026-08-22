@@ -23,6 +23,7 @@
 
 import { syncAppViewport } from '../game/app_viewport';
 import { audio } from '../game/audio';
+import { crypticMusic } from '../game/cryptic_music';
 import { GAMEPAD_NONE, GP, gamepadButtonLabel } from '../game/gamepad_map';
 import {
   BIND_ACTIONS,
@@ -1929,14 +1930,19 @@ export class OptionsWindow {
     const toggle = el('button', 'opt-switch');
     toggle.type = 'button';
     toggle.setAttribute('role', 'switch');
+    // The toggle drives BOTH engines: the CR soundtrack owns the mix and the
+    // streamed director is its zone-bus twin; off means silence.
+    const isOn = () => music.enabled || crypticMusic.enabled;
     const sync = () => {
-      toggle.setAttribute('aria-checked', String(music.enabled));
+      toggle.setAttribute('aria-checked', String(isOn()));
       toggle.setAttribute('aria-label', label);
     };
     sync();
     toggle.addEventListener('click', () => {
       audio.click();
-      music.setEnabled(!music.enabled);
+      const on = !isOn();
+      music.setEnabled(on);
+      crypticMusic.setEnabled(on);
       sync();
     });
     control.appendChild(toggle);
