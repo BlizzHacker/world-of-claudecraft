@@ -3,11 +3,11 @@
 // ostinati, multi-section forms) played by the MusicSynth voices, and that
 // machinery keeps powering the music editor (music_editor.html) and the
 // offline render pipeline (scripts/render_music.mjs). The runtime half no
-// longer synthesizes: the shipped game streams the remastered mp3 renders of
-// those themes (public/audio/music/, see music_tracks.ts) through looping
-// media elements routed into one WebAudio graph, so zone changes crossfade
-// exactly as before while playback costs no synthesis CPU and no up-front
-// download. Each fight opens on one of the two battle themes at random.
+// longer synthesizes: the shipped game streams the Cryptic Realm soundtrack
+// (public/audio/cryptic/, catalog in music_tracks.ts) through looping media
+// elements routed into one WebAudio graph, so zone changes crossfade while
+// playback costs no synthesis CPU and no up-front download. Every fight opens
+// on the CR battle theme, restarted from the top.
 
 import { getActiveRealm, REALMS } from '../sim/realms/registry';
 import type { BiomeId } from '../sim/types';
@@ -76,8 +76,21 @@ const REALM_MUSIC_LABELS: boolean = Object.values(REALMS).some(
 // module flag (not an import) to avoid a circular dependency — cryptic_music
 // already imports the MusicZone type from here.
 let _crypticMusicOn = false;
-export function setCrypticMusicActive(on: boolean): void { _crypticMusicOn = on; }
-function crypticMusicEnabled(): boolean { return _crypticMusicOn; }
+export function setCrypticMusicActive(on: boolean): void {
+  _crypticMusicOn = on;
+}
+function crypticMusicEnabled(): boolean {
+  return _crypticMusicOn;
+}
+
+// The upstream dedicated file tracks (the Nythraxis boss loop and the Sowfield
+// waiting/match pair) were removed with the CR soundtrack takeover: the CR
+// combat cue owns the boss mix and the vale_cup zone stream scores the stadium.
+// Empty URLs keep this playback machinery inert (no element, no fetch) without
+// tearing out the graph plumbing the InstanceMusicController still drives.
+const BOSS_TRACK_URL: string = '';
+const SOWFIELD_WAITING_URL: string = '';
+const SOWFIELD_MATCH_URL: string = '';
 
 const TOWN_MUSIC: Record<string, MusicZone> = {
   eastbrook_vale: 'town_eastbrook',
@@ -4925,7 +4938,12 @@ export class MusicDirector {
 
   private applyBossPlayback(): void {
     if (!this.ctx || !this.bossGain) return;
-    const target = this.bossActive && this._enabled && !this._menuPaused ? 0.6 * this._vol : 0;
+    // While the CR soundtrack is on, its combat cue owns the boss mix; the
+    // retired file loop stays silent.
+    const target =
+      this.bossActive && this._enabled && !this._menuPaused && !crypticMusicEnabled()
+        ? 0.6 * this._vol
+        : 0;
     this.bossGain.gain.setTargetAtTime(target, this.ctx.currentTime, target > 0 ? 0.25 : 0.12);
     if (target > 0) {
       resumeWhenAllowed(this.ctx);
@@ -4949,8 +4967,8 @@ export class MusicDirector {
 
   private ensureBossElement(): HTMLAudioElement | null {
     if (this.bossElement) return this.bossElement;
-    if (typeof Audio !== 'function') return null;
-    const el = new Audio('/audio/dungeon-boss-fight.mp3');
+    if (!BOSS_TRACK_URL || typeof Audio !== 'function') return null;
+    const el = new Audio(BOSS_TRACK_URL);
     el.loop = true;
     el.preload = 'auto';
     this.bossElement = el;
@@ -4959,9 +4977,10 @@ export class MusicDirector {
 
   private ensureBossBuffer(): void {
     const ctx = this.ctx;
+    if (!BOSS_TRACK_URL) return;
     if (!ctx || this.bossBuffer || this.bossLoading || typeof fetch !== 'function') return;
     this.bossLoading = true;
-    void fetch('/audio/dungeon-boss-fight.mp3')
+    void fetch(BOSS_TRACK_URL)
       .then((res) => res.arrayBuffer())
       .then((bytes) => ctx.decodeAudioData(bytes))
       .then((buffer) => {
@@ -5021,6 +5040,7 @@ export class MusicDirector {
 
   private ensureSowfieldElements(): void {
     if (this.sowfieldSrcMade || !this.ctx || typeof Audio !== 'function') return;
+    if (!SOWFIELD_WAITING_URL || !SOWFIELD_MATCH_URL) return;
     this.sowfieldSrcMade = true;
     const mk = (url: string, gain: GainNode | null): HTMLAudioElement => {
       const el = new Audio(url);
@@ -5034,13 +5054,16 @@ export class MusicDirector {
       }
       return el;
     };
-    this.sowfieldWaitingEl = mk('/audio/sowfield-waiting.mp3', this.sowfieldWaitingGain);
-    this.sowfieldMatchEl = mk('/audio/sowfield-match.mp3', this.sowfieldMatchGain);
+    this.sowfieldWaitingEl = mk(SOWFIELD_WAITING_URL, this.sowfieldWaitingGain);
+    this.sowfieldMatchEl = mk(SOWFIELD_MATCH_URL, this.sowfieldMatchGain);
   }
 
   private applySowfield(): void {
     if (!this.ctx) return;
-    const active = this.sowfieldTrack !== null && this._enabled && !this._menuPaused;
+    // Gated like the boss loop: while the CR soundtrack is on it owns the mix,
+    // and the retired Sowfield pair stays silent.
+    const active =
+      this.sowfieldTrack !== null && this._enabled && !this._menuPaused && !crypticMusicEnabled();
     const level = 0.5 * this._vol;
     if (active) {
       resumeWhenAllowed(this.ctx);

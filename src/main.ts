@@ -2247,8 +2247,12 @@ async function startGame(
     onProfessions: () => hud.toggleProfessions(),
     onNameplates: () => (renderer.showNameplates = !renderer.showNameplates),
     onMusic: () => {
-      music.setEnabled(!music.enabled);
-      return music.enabled;
+      // One tap drives BOTH engines: the CR soundtrack owns the mix and the
+      // streamed director is its zone-bus twin; off means silence.
+      const on = !(music.enabled || crypticMusic.enabled);
+      music.setEnabled(on);
+      crypticMusic.setEnabled(on);
+      return on;
     },
     onRecenterCamera: () => input.recenterCameraBehind(world.player.facing),
     onGroundAimMove: (x, y) => {
@@ -2298,7 +2302,9 @@ async function startGame(
   };
   // reflect the current music state on the touch toggle (it may already be off
   // from a prior session, persisted in localStorage)
-  document.getElementById('mobile-music')?.classList.toggle('mm-muted', !music.enabled);
+  document
+    .getElementById('mobile-music')
+    ?.classList.toggle('mm-muted', !(music.enabled || crypticMusic.enabled));
 
   // Gamepad: a separate remappable button profile drives the same dispatch the
   // keyboard/touch paths use. Edge-button actions route through this dispatcher;
@@ -2782,6 +2788,7 @@ async function startGame(
         break;
       case 'musicVolume':
         music.setVolume(v);
+        crypticMusic.setVolume(v);
         break;
       case 'voiceVolume':
         voice.setVolume(v);
@@ -13779,12 +13786,13 @@ function initHomepageTrailer(): void {
   });
 }
 
-// Looping home-page theme. Browsers block audio autoplay until a user gesture,
-// so we try immediately and otherwise start on the first interaction. It keeps
-// playing through the loading screen and fades out once the game is on screen.
+// Looping home-page theme, the Cryptic Realm loading-screen track. Browsers
+// block audio autoplay until a user gesture, so we try immediately and
+// otherwise start on the first interaction. It keeps playing through the
+// loading screen and fades out once the game is on screen.
 function initHomepageMusic(): void {
   if (homepageMusic) return;
-  const el = new Audio('/audio/main-theme.mp3');
+  const el = new Audio('/audio/cryptic/loading-screen-cryptic-realm.mp3');
   el.loop = true;
   el.muted = homepageMusicMuted;
   el.preload = 'auto';
