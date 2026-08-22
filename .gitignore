@@ -151,6 +151,9 @@ public/classic/cryptic-assets/
 android/keystore.properties
 android/local.properties
 
+# Meta Quest signing secrets (meta/CLAUDE.md): keystore + any password sidecars
+/meta/keys/
+
 # --- merged from upstream v0.17.0 ---
 scripts/generate_treasure_chest.mjs
 !.claude/commands/
