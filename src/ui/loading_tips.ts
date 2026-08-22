@@ -3,7 +3,7 @@
 // t(). Kept separate from main.ts (a firewall, not a home for new logic).
 import { type TranslationKey, t } from './i18n';
 
-const LOADING_TIP_KEYS: TranslationKey[] = [
+const GENERIC_TIP_KEYS: TranslationKey[] = [
   'loading.tips.classes',
   'loading.tips.talents',
   'loading.tips.dungeons',
@@ -14,6 +14,45 @@ const LOADING_TIP_KEYS: TranslationKey[] = [
   'loading.tips.pvp',
 ];
 
+// Realm-flavored tips, shown ahead of the generic gameplay list on that
+// realm's loading screen. A realm not named here rotates the generic list
+// alone (the fallback), so a new realm needs no entry to keep working.
+const REALM_TIP_KEYS: Record<string, TranslationKey[]> = {
+  infernal: [
+    'loading.tips.infernal.delves',
+    'loading.tips.infernal.rifts',
+    'loading.tips.infernal.crypts',
+  ],
+  classic: [
+    'loading.tips.classic.dungeons',
+    'loading.tips.classic.wanderers',
+    'loading.tips.classic.deeds',
+  ],
+  arcane: [
+    'loading.tips.arcane.portals',
+    'loading.tips.arcane.relics',
+    'loading.tips.arcane.study',
+  ],
+  dominion: [
+    'loading.tips.dominion.squads',
+    'loading.tips.dominion.formation',
+    'loading.tips.dominion.momentum',
+  ],
+  arcadevoid: [
+    'loading.tips.arcadevoid.movement',
+    'loading.tips.arcadevoid.focus',
+    'loading.tips.arcadevoid.upkeep',
+  ],
+};
+
+/** The tip keys a realm's loading screen rotates: its themed tips first, then
+ *  the generic gameplay list; a realm with no themed list gets the generic
+ *  list alone. Exported for the selection pins in tests/loading_tips.test.ts. */
+export function loadingTipKeysForRealm(realmId: string | null | undefined): TranslationKey[] {
+  const themed = realmId ? REALM_TIP_KEYS[realmId] : undefined;
+  return themed ? [...themed, ...GENERIC_TIP_KEYS] : [...GENERIC_TIP_KEYS];
+}
+
 export interface LoadingTipRotation {
   /** Current tip text, already resolved through t(). */
   current(): string;
@@ -22,23 +61,25 @@ export interface LoadingTipRotation {
 }
 
 /**
- * Starts a rotation at a pseudo-random offset (Date.now()-seeded is fine here:
- * this is cosmetic UI copy, not sim state, so it's exempt from the sim's
- * Rng-only randomness rule) so repeat page loads don't always open on the
- * same tip.
+ * Starts a rotation over the realm's tip list at a pseudo-random offset
+ * (Date.now()/Math.random-seeded is fine here: this is cosmetic UI copy, not
+ * sim state, so it's exempt from the sim's Rng-only randomness rule) so repeat
+ * page loads don't always open on the same tip.
  */
 export function createLoadingTipRotation(
-  startIndex = Math.floor(Math.random() * LOADING_TIP_KEYS.length),
+  realmId?: string | null,
+  startIndex?: number,
 ): LoadingTipRotation {
-  let index =
-    ((startIndex % LOADING_TIP_KEYS.length) + LOADING_TIP_KEYS.length) % LOADING_TIP_KEYS.length;
+  const keys = loadingTipKeysForRealm(realmId);
+  const start = startIndex ?? Math.floor(Math.random() * keys.length);
+  let index = ((start % keys.length) + keys.length) % keys.length;
   return {
     current(): string {
-      return t(LOADING_TIP_KEYS[index]);
+      return t(keys[index]);
     },
     next(): string {
-      index = (index + 1) % LOADING_TIP_KEYS.length;
-      return t(LOADING_TIP_KEYS[index]);
+      index = (index + 1) % keys.length;
+      return t(keys[index]);
     },
   };
 }

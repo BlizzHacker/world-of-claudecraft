@@ -6868,7 +6868,32 @@ export const sv_SE: EnTranslations = {
       "guilds": "Tips: när du går med i ett gille får du en privat chattkanal och en gemensam lista över dina gilleskamrater.",
       "professions": "Tips: samlar- och hantverksyrken kan tränas parallellt med din stridsklass.",
       "loadouts": "Tips: spara mer än en talanguppsättning för att växla mellan byggen utan att spendera poäng två gånger.",
-      "pvp": "Tips: utmana en annan spelare på en vänskaplig duell, eller ställ dig i kö till arenan i Det askgråa colosseumet för att testa ditt bygge."
+      "pvp": "Tips: utmana en annan spelare på en vänskaplig duell, eller ställ dig i kö till arenan i Det askgråa colosseumet för att testa ditt bygge.",
+      "infernal": {
+        "delves": "Tip: a delve grows harsher the deeper you go. Stock up before you descend.",
+        "rifts": "Tip: ranked rift portals tear open across the realm. Higher ranks bring tougher fights and richer spoils.",
+        "crypts": "Tip: candlelight is scarce down in the crypts. Mind your footing in the dark."
+      },
+      "classic": {
+        "dungeons": "Tip: heroes are made in dungeons. Gather a party and take down a boss together.",
+        "wanderers": "Tip: open skies reward wanderers. The far corners of the map hide rares and gathering nodes.",
+        "deeds": "Tip: bold feats fill your Book of Deeds. Titles and Renown await the adventurous."
+      },
+      "arcane": {
+        "portals": "Tip: the crystal realms hum with portal energy. A world rift is always worth a detour.",
+        "relics": "Tip: relics and reagents favor the patient. Train a gathering profession and profit.",
+        "study": "Tip: void mysteries suit the studious. Read your talents closely before you respec."
+      },
+      "dominion": {
+        "squads": "Tip: the frontier favors squads. The Dungeon Finder can fill your ranks fast.",
+        "formation": "Tip: hold formation. A tank up front and a healer behind wins long fights.",
+        "momentum": "Tip: contested ground changes hands quickly. Strike while your squad has momentum."
+      },
+      "arcadevoid": {
+        "movement": "Tip: void arenas favor movement. Keep repositioning and never fight standing still.",
+        "focus": "Tip: neon firefights end fast. Focus one target as a squad and pick foes apart.",
+        "upkeep": "Tip: void tech rewards upkeep. Check your gear for upgrades between fights."
+      }
     },
     "reconnecting": "Anslutning förlorad. Återansluter..."
   },
