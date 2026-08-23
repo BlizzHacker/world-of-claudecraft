@@ -32,9 +32,9 @@ import {
 } from './facebook/bundle_rules.mjs';
 import { auditFacebookSurface, sanitizeFacebookCollisions } from './facebook/private_api_guard.mjs';
 import {
+  BUNDLED_ART,
   DEFAULT_GAME_ORIGIN,
   injectFacebookShell,
-  LOCAL_ART_PATHS,
   rewriteCssUrls,
   rewriteRootRelativeHtml,
   stripTurnstileScript,
@@ -83,6 +83,14 @@ function buildClient(origin) {
       VITE_API_ORIGIN: origin,
       VITE_ASSET_ORIGIN: origin,
       VITE_KTX2_TRANSCODER_PATH: 'basis/',
+      // The art the zip carries locally, so runtime-resolved URLs
+      // (assetHostUrl) point page-relative at the bundled copy instead of the
+      // remote origin the container's img-src CSP blocks. Build-time HTML/CSS
+      // references are rewritten separately by shell_inject.mjs; this covers
+      // the paths only JS knows (the realm loading art).
+      VITE_LOCAL_ASSET_MAP: JSON.stringify(
+        Object.fromEntries(BUNDLED_ART.map((art) => [art.urlPath, art.bundleName])),
+      ),
       // The container CSP blocks the Turnstile widget script, so a site key
       // could only wedge the login form; build without one (empty = unset).
       VITE_TURNSTILE_SITEKEY: '',
@@ -167,13 +175,15 @@ function stageEntries(clientDist, origin) {
     });
   }
 
-  // Minimum local art: favicons + the world-entry loading backdrops.
-  for (const artPath of LOCAL_ART_PATHS) {
-    const file = path.join(repoRoot, 'public', ...artPath.slice(1).split('/'));
+  // Minimum local art: favicons, the world-entry loading backdrops, and the
+  // brand marks painted as <img> (a remote <img> is blocked by the container's
+  // img-src CSP and paints a broken-image glyph, so these must be in-bundle).
+  for (const art of BUNDLED_ART) {
+    const file = path.join(repoRoot, 'public', ...art.sourceFile.split('/'));
     if (!existsSync(file)) {
-      throw new Error(`local art missing from public/: ${artPath}`);
+      throw new Error(`local art missing from public/: ${art.sourceFile}`);
     }
-    entries.push({ name: artPath.slice(1), data: readFileSync(file) });
+    entries.push({ name: art.bundleName, data: readFileSync(file) });
   }
 
   entries.push({

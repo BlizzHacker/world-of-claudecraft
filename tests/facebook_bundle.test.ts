@@ -1,5 +1,13 @@
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
@@ -19,12 +27,13 @@ import {
   sanitizeFacebookCollisions,
 } from '../scripts/facebook/private_api_guard.mjs';
 import {
+  BUNDLED_ART,
+  bundledArtName,
   DEFAULT_GAME_ORIGIN,
   FACEBOOK_CONTEXT_STORAGE_KEY,
   FACEBOOK_PROGRESS_EVENT,
   FACEBOOK_READY_EVENT,
   injectFacebookShell,
-  LOCAL_ART_PATHS,
   rewriteCssUrls,
   rewriteRootRelativeHtml,
   stripTurnstileScript,
@@ -165,6 +174,35 @@ describe('shell injection', () => {
     // Local art ships in the zip and stays relative.
     expect(html).toContain('href="./favicon.ico"');
     expect(html).toContain('url("./loading-screen.jpg")');
+  });
+
+  it('keeps brand <img> marks in the bundle so the img-src CSP cannot break them', () => {
+    // A remote <img> is not a silent degradation in the container: it paints a
+    // broken-image glyph plus alt text. Both brand marks must resolve locally,
+    // and the logo maps to the smaller bundled file it actually ships as.
+    const html = rewriteRootRelativeHtml(
+      '<img class="header-logo" src="/icon-192.png" alt="Cryptic Realm" />' +
+        '<img id="title-logo" src="/cryptic-realm-logo.png" alt="Cryptic Realm" />',
+      'https://example.test',
+    );
+    expect(html).toContain('src="./icon-192.png"');
+    expect(html).toContain('src="./cryptic-realm-logo-512.webp"');
+    expect(html).not.toContain('example.test');
+    expect(bundledArtName('/cryptic-realm-logo.png')).toBe('cryptic-realm-logo-512.webp');
+    expect(bundledArtName('/ui/ranks/frame.webp')).toBe(null);
+    // Every bundled entry names a real file under public/.
+    for (const art of BUNDLED_ART) {
+      expect(existsSync(path.join(repoRoot, 'public', art.sourceFile)), art.sourceFile).toBe(true);
+    }
+  });
+
+  it('hides any image that still fails to load instead of showing a broken glyph', () => {
+    const html = injectFacebookShell(FIXTURE_PLAY_HTML);
+    // Capture-phase listener (resource error events do not bubble), and
+    // visibility rather than display so no surrounding layout reflows.
+    expect(html).toContain("window.addEventListener('error'");
+    expect(html).toContain("el.tagName === 'IMG'");
+    expect(html).toContain("el.style.visibility = 'hidden'");
   });
 
   it('rewrites css urls with an assets-relative local prefix', () => {
@@ -396,7 +434,7 @@ describe('build_facebook_bundle.mjs', () => {
       'assets/play-fixture.js',
       'assets/play-fixture.css',
       'basis/basis_transcoder.wasm',
-      ...LOCAL_ART_PATHS.map((p) => p.slice(1)),
+      ...BUNDLED_ART.map((art) => art.bundleName),
     ]) {
       expect(zip.includes(Buffer.from(name, 'utf8'))).toBe(true);
     }

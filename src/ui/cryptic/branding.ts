@@ -2,6 +2,7 @@
 // swaps the DOM elements affected by Cryptic Realm customization.
 
 import './realm_env';
+import { assetHostUrl } from '../../client_origin';
 import { getActiveRealm, REALM_LIST, type RealmContent } from '../../sim/realms';
 import { socialsForRealm } from '../../sim/realms/social_links';
 
@@ -14,7 +15,8 @@ const REALM_COLOR_TOKENS: Record<string, Record<string, string>> = {
     '--gold': '#d4442a',
     '--gold-dim': '#8b2e1c',
     '--border': '#6b2418',
-    '--panel-bg': 'linear-gradient(170deg, rgba(26,10,10,0.95) 0%, rgba(10,5,5,0.95) 60%, rgba(5,2,2,0.95) 100%)',
+    '--panel-bg':
+      'linear-gradient(170deg, rgba(26,10,10,0.95) 0%, rgba(10,5,5,0.95) 60%, rgba(5,2,2,0.95) 100%)',
     '--color-primary-glow': 'rgba(212, 68, 42, 0.22)',
     '--color-primary-glow-heavy': 'rgba(212, 68, 42, 0.45)',
   },
@@ -22,7 +24,8 @@ const REALM_COLOR_TOKENS: Record<string, Record<string, string>> = {
     '--gold': '#4a9eff',
     '--gold-dim': '#2a5a8b',
     '--border': '#264363',
-    '--panel-bg': 'linear-gradient(170deg, rgba(15,26,42,0.95) 0%, rgba(8,15,26,0.95) 60%, rgba(4,8,16,0.95) 100%)',
+    '--panel-bg':
+      'linear-gradient(170deg, rgba(15,26,42,0.95) 0%, rgba(8,15,26,0.95) 60%, rgba(4,8,16,0.95) 100%)',
     '--color-primary-glow': 'rgba(74, 158, 255, 0.22)',
     '--color-primary-glow-heavy': 'rgba(74, 158, 255, 0.45)',
   },
@@ -30,7 +33,8 @@ const REALM_COLOR_TOKENS: Record<string, Record<string, string>> = {
     '--gold': '#3ad6c8',
     '--gold-dim': '#1a8c80',
     '--border': '#1f5a55',
-    '--panel-bg': 'linear-gradient(170deg, rgba(2,22,26,0.95) 0%, rgba(2,10,13,0.95) 60%, rgba(1,5,7,0.95) 100%)',
+    '--panel-bg':
+      'linear-gradient(170deg, rgba(2,22,26,0.95) 0%, rgba(2,10,13,0.95) 60%, rgba(1,5,7,0.95) 100%)',
     '--color-primary-glow': 'rgba(58, 214, 200, 0.22)',
     '--color-primary-glow-heavy': 'rgba(58, 214, 200, 0.45)',
   },
@@ -38,15 +42,20 @@ const REALM_COLOR_TOKENS: Record<string, Record<string, string>> = {
     '--gold': '#a855f7',
     '--gold-dim': '#6b2fa0',
     '--border': '#4d2675',
-    '--panel-bg': 'linear-gradient(170deg, rgba(21,8,31,0.95) 0%, rgba(10,5,16,0.95) 60%, rgba(5,2,10,0.95) 100%)',
+    '--panel-bg':
+      'linear-gradient(170deg, rgba(21,8,31,0.95) 0%, rgba(10,5,16,0.95) 60%, rgba(5,2,10,0.95) 100%)',
     '--color-primary-glow': 'rgba(168, 85, 247, 0.22)',
     '--color-primary-glow-heavy': 'rgba(168, 85, 247, 0.45)',
   },
 };
 
 const RESET_TOKENS = [
-  '--gold', '--gold-dim', '--border', '--panel-bg',
-  '--color-primary-glow', '--color-primary-glow-heavy',
+  '--gold',
+  '--gold-dim',
+  '--border',
+  '--panel-bg',
+  '--color-primary-glow',
+  '--color-primary-glow-heavy',
 ];
 
 function setAttrAll(selector: string, attr: string, value: string): void {
@@ -88,16 +97,18 @@ function setHiddenAll(selector: string, hidden: boolean): void {
 }
 
 function sanitizePrivateGithubLinks(): void {
-  document.querySelectorAll<HTMLAnchorElement>('a[href*="github.com"][href*="cryptic-realm"]').forEach((a) => {
-    a.href = '/contributions.html';
-    a.removeAttribute('target');
-    a.removeAttribute('rel');
-    a.title = 'Cryptic Realm contributions';
-    a.setAttribute('aria-label', 'Open Cryptic Realm contributions');
-    const span = a.querySelector('span');
-    if (span) span.textContent = 'Contributions';
-    else if ((a.textContent ?? '').trim()) a.textContent = 'Contributions';
-  });
+  document
+    .querySelectorAll<HTMLAnchorElement>('a[href*="github.com"][href*="cryptic-realm"]')
+    .forEach((a) => {
+      a.href = '/contributions.html';
+      a.removeAttribute('target');
+      a.removeAttribute('rel');
+      a.title = 'Cryptic Realm contributions';
+      a.setAttribute('aria-label', 'Open Cryptic Realm contributions');
+      const span = a.querySelector('span');
+      if (span) span.textContent = 'Contributions';
+      else if ((a.textContent ?? '').trim()) a.textContent = 'Contributions';
+    });
 }
 
 function applyDonateLinks(realm: RealmContent): void {
@@ -112,27 +123,29 @@ function applyDonateLinks(realm: RealmContent): void {
     ? `${CR_TIP_LABEL} or SOL to support Cryptic Realm at ${tipWallet}`
     : 'Donate to support Cryptic Realm';
 
-  document.querySelectorAll<HTMLAnchorElement>('.donate-cta, .social-link.donate, .community-link.donate').forEach((a) => {
-    a.href = href;
-    a.title = title;
-    a.setAttribute('aria-label', aria);
-    if (tipWallet) {
-      a.removeAttribute('data-i18n-title');
-      a.removeAttribute('data-i18n-aria');
-      a.removeAttribute('target');
-    } else {
-      a.setAttribute('data-i18n-title', 'a11y.donateProject');
-      a.setAttribute('data-i18n-aria', 'a11y.donateProject');
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-    }
-    const span = a.querySelector('span');
-    if (span) {
-      if (tipWallet) span.removeAttribute('data-i18n');
-      else span.setAttribute('data-i18n', 'nav.donate');
-      span.textContent = label;
-    }
-  });
+  document
+    .querySelectorAll<HTMLAnchorElement>('.donate-cta, .social-link.donate, .community-link.donate')
+    .forEach((a) => {
+      a.href = href;
+      a.title = title;
+      a.setAttribute('aria-label', aria);
+      if (tipWallet) {
+        a.removeAttribute('data-i18n-title');
+        a.removeAttribute('data-i18n-aria');
+        a.removeAttribute('target');
+      } else {
+        a.setAttribute('data-i18n-title', 'a11y.donateProject');
+        a.setAttribute('data-i18n-aria', 'a11y.donateProject');
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+      }
+      const span = a.querySelector('span');
+      if (span) {
+        if (tipWallet) span.removeAttribute('data-i18n');
+        else span.setAttribute('data-i18n', 'nav.donate');
+        span.textContent = label;
+      }
+    });
 }
 
 function applyTokenCard(realm: RealmContent): void {
@@ -152,7 +165,8 @@ function applyTokenCard(realm: RealmContent): void {
     btn.dataset.ca = socials.tokenMintSolana;
     btn.setAttribute('aria-label', 'Copy Cryptic Realm token mint');
     addr.textContent = socials.tokenMintSolana;
-    note.textContent = '$CR is the Cryptic Realm Solana SPL token for gameplay utility, cosmetics, achievements, and account records. It is not needed to play.';
+    note.textContent =
+      '$CR is the Cryptic Realm Solana SPL token for gameplay utility, cosmetics, achievements, and account records. It is not needed to play.';
     return;
   }
 
@@ -160,7 +174,8 @@ function applyTokenCard(realm: RealmContent): void {
   btn.dataset.ca = WOC_TOKEN_MINT;
   btn.setAttribute('aria-label', 'Copy contract address');
   addr.textContent = WOC_TOKEN_MINT;
-  note.textContent = 'WOC is our community token. It is not needed to play. Join Discord to discuss the WOC utility and flywheel.';
+  note.textContent =
+    'WOC is our community token. It is not needed to play. Join Discord to discuss the WOC utility and flywheel.';
 }
 
 function applyWalletSurfaces(realm: RealmContent): void {
@@ -205,29 +220,43 @@ function applyTo(realm: RealmContent): void {
   }
 
   if (b.discordUrl !== undefined) setHrefAll('.community-link.discord', b.discordUrl);
-  if (b.discordUrl !== undefined) setHrefAll('.social-link.discord, [data-cr-social="discord"]', b.discordUrl);
+  if (b.discordUrl !== undefined)
+    setHrefAll('.social-link.discord, [data-cr-social="discord"]', b.discordUrl);
   if (b.githubUrl !== undefined) setHrefAll('.community-link.github', b.githubUrl);
-  if (b.githubUrl !== undefined) setHrefAll('.social-link.github, [data-cr-social="github"]', b.githubUrl);
+  if (b.githubUrl !== undefined)
+    setHrefAll('.social-link.github, [data-cr-social="github"]', b.githubUrl);
 
   const isClaudecraft = realm.id === 'claudecraft';
   setLinkA11yAll(
     '.community-link.discord, .social-link.discord, [data-cr-social="discord"]',
-    isClaudecraft ? 'Join the World of ClaudeCraft Discord community' : 'Join the Cryptic Realm Discord community',
+    isClaudecraft
+      ? 'Join the World of ClaudeCraft Discord community'
+      : 'Join the Cryptic Realm Discord community',
   );
   setLinkA11yAll(
     '.community-link.github, .social-link.github, [data-cr-social="github"]',
-    isClaudecraft ? 'Open the World of ClaudeCraft GitHub project' : 'Open Cryptic Realm contributions',
+    isClaudecraft
+      ? 'Open the World of ClaudeCraft GitHub project'
+      : 'Open Cryptic Realm contributions',
   );
-  setLinkTextAll('.footer-social-row .social-link.github, .footer-social-row [data-cr-social="github"]',
-    isClaudecraft ? 'Upstream Project' : 'Contributions');
-  setLinkTextAll('.footer-social-row .social-link.discord, .footer-social-row [data-cr-social="discord"]',
-    isClaudecraft ? 'Join the Discord' : 'Cryptic Realm Discord');
+  setLinkTextAll(
+    '.footer-social-row .social-link.github, .footer-social-row [data-cr-social="github"]',
+    isClaudecraft ? 'Upstream Project' : 'Contributions',
+  );
+  setLinkTextAll(
+    '.footer-social-row .social-link.discord, .footer-social-row [data-cr-social="discord"]',
+    isClaudecraft ? 'Join the Discord' : 'Cryptic Realm Discord',
+  );
   if (!isClaudecraft) {
-    document.querySelectorAll<HTMLAnchorElement>('.community-link.github, .social-link.github, [data-cr-social="github"]').forEach((a) => {
-      a.href = '/contributions.html';
-      a.removeAttribute('target');
-      a.removeAttribute('rel');
-    });
+    document
+      .querySelectorAll<HTMLAnchorElement>(
+        '.community-link.github, .social-link.github, [data-cr-social="github"]',
+      )
+      .forEach((a) => {
+        a.href = '/contributions.html';
+        a.removeAttribute('target');
+        a.removeAttribute('rel');
+      });
   }
 
   const wantsUpstreamCommunity = isClaudecraft && b.showDonate === true;
@@ -237,8 +266,14 @@ function applyTo(realm: RealmContent): void {
   setHiddenAll('.community-link.github', !wantsUpstreamCommunity);
   setHiddenAll('.community-link.discord', !wantsDiscord);
   setHiddenAll('.footer-social-row .social-link.donate', !(wantsUpstreamCommunity || hasTipWallet));
-  setHiddenAll('.footer-social-row .social-link.github, .footer-social-row [data-cr-social="github"]', !wantsUpstreamCommunity);
-  setHiddenAll('.footer-social-row .social-link.discord, .footer-social-row [data-cr-social="discord"]', !wantsDiscord);
+  setHiddenAll(
+    '.footer-social-row .social-link.github, .footer-social-row [data-cr-social="github"]',
+    !wantsUpstreamCommunity,
+  );
+  setHiddenAll(
+    '.footer-social-row .social-link.discord, .footer-social-row [data-cr-social="discord"]',
+    !wantsDiscord,
+  );
   setHiddenAll('.footer-social-row', !(wantsUpstreamCommunity || hasTipWallet || wantsDiscord));
 
   setHiddenAll('#btn-sso-authentik', b.showAuthentikSso === false);
@@ -278,14 +313,21 @@ function applyTo(realm: RealmContent): void {
   }
 
   if (b.loadingScreenSrc) {
+    // assetHostUrl: these are set at RUNTIME, so they bypass any build-time URL
+    // rewrite a foreign-origin bundle applies to the emitted HTML/CSS. Routing
+    // them through the shared origin policy keeps the loading art resolvable
+    // there (page-relative when the bundle ships it, the remote origin
+    // otherwise); identity on the website build.
+    const loadingSrc = assetHostUrl(b.loadingScreenSrc);
     document.querySelectorAll('img').forEach((img) => {
       const src = img.getAttribute('src') ?? '';
       if (src.includes('loading-screen.jpg') || src.includes('LOADINGSCREEN.png')) {
-        img.setAttribute('src', b.loadingScreenSrc!);
+        img.setAttribute('src', loadingSrc);
       }
     });
     document.documentElement.style.setProperty(
-      '--cr-loading-screen', `url(${JSON.stringify(b.loadingScreenSrc)})`,
+      '--cr-loading-screen',
+      `url(${JSON.stringify(loadingSrc)})`,
     );
   }
 }

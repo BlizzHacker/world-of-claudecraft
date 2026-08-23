@@ -20,17 +20,58 @@ export const FACEBOOK_PROGRESS_EVENT = 'cr-fb-progress';
 export const FACEBOOK_READY_EVENT = 'cr-fb-ready';
 export const DEFAULT_GAME_ORIGIN = 'https://crypticrealm.com';
 
-// Files the bundle carries locally (zip root) instead of streaming from the
-// game origin: the favicons and the world-entry loading backdrops. Everything
-// else that is root-relative in the built HTML/CSS is rewritten to an absolute
-// URL on the game origin.
-export const LOCAL_ART_PATHS = [
-  '/favicon.ico',
-  '/favicon-16x16.png',
-  '/favicon-32x32.png',
-  '/loading-screen.jpg',
-  '/cryptic-realm-loading-bg.webp',
+// Art the bundle carries locally (zip root) instead of streaming from the game
+// origin, as { urlPath, bundleName, sourceFile }: urlPath is what the built
+// page/CSS references, bundleName is the zip entry the rewrite points at, and
+// sourceFile is the file under public/ to copy. Everything else that is
+// root-relative in the built HTML/CSS is rewritten to an absolute URL on the
+// game origin.
+//
+// The BRAND images are here because Facebook's container CSP has an img-src
+// allowlist that does not include crypticrealm.com: a remote <img> is not a
+// silent degradation, it paints a broken-image glyph plus alt text. bundleName
+// may differ from urlPath so the bundle can ship a much smaller equivalent
+// (the 512 webp logo is 100 KB against the 1.4 MB png the site serves); the
+// rewrite maps the reference to the shipped name, so nothing 404s.
+export const BUNDLED_ART = [
+  { urlPath: '/favicon.ico', bundleName: 'favicon.ico', sourceFile: 'favicon.ico' },
+  {
+    urlPath: '/favicon-16x16.png',
+    bundleName: 'favicon-16x16.png',
+    sourceFile: 'favicon-16x16.png',
+  },
+  {
+    urlPath: '/favicon-32x32.png',
+    bundleName: 'favicon-32x32.png',
+    sourceFile: 'favicon-32x32.png',
+  },
+  {
+    urlPath: '/loading-screen.jpg',
+    bundleName: 'loading-screen.jpg',
+    sourceFile: 'loading-screen.jpg',
+  },
+  {
+    urlPath: '/cryptic-realm-loading-bg.webp',
+    bundleName: 'cryptic-realm-loading-bg.webp',
+    sourceFile: 'cryptic-realm-loading-bg.webp',
+  },
+  // Brand marks painted as <img>: the nav/header mark, and the title logo above
+  // the login card (also reused as the loading-screen overlay logo).
+  { urlPath: '/icon-192.png', bundleName: 'icon-192.png', sourceFile: 'icon-192.png' },
+  {
+    urlPath: '/cryptic-realm-logo.png',
+    bundleName: 'cryptic-realm-logo-512.webp',
+    sourceFile: 'cryptic-realm-logo-512.webp',
+  },
 ];
+
+/** The url paths served from inside the bundle (compat + audit convenience). */
+export const LOCAL_ART_PATHS = BUNDLED_ART.map((art) => art.urlPath);
+
+/** The zip entry name for a bundled url path, or null when it stays remote. */
+export function bundledArtName(urlPath) {
+  return BUNDLED_ART.find((art) => art.urlPath === urlPath)?.bundleName ?? null;
+}
 
 /** The inline shell block injected right after <head>. Three scripts, in
  *  order: the fb-context seed (must run before the deferred game module
@@ -43,6 +84,20 @@ export function buildShellScripts() {
   // sessionStorage key at import time to gate the wallet, daily-reward, and
   // purchase surfaces Facebook policy does not allow.
   try { sessionStorage.setItem('${FACEBOOK_CONTEXT_STORAGE_KEY}', '1'); } catch (err) {}
+
+  // Broken-image suppression. The container's img-src allowlist does not
+  // include the game origin, so any <img> still pointing there is blocked, and
+  // a blocked image is NOT invisible: the browser paints a broken-image glyph
+  // plus the alt text. The brand marks ship inside the bundle so they render
+  // normally; this is the safety net for anything else (a missing file, an
+  // image added later). visibility rather than display so the element keeps its
+  // box and no surrounding layout reflows. Capture phase, because resource
+  // error events do not bubble; registered here, in <head>, so it is listening
+  // before the body's images start loading.
+  window.addEventListener('error', function (ev) {
+    var el = ev && ev.target;
+    if (el && el.tagName === 'IMG') el.style.visibility = 'hidden';
+  }, true);
 </script>
 <script src="${FBINSTANT_SDK_URL}"></script>
 <script>
@@ -120,15 +175,11 @@ export function stripTurnstileScript(html) {
   );
 }
 
-function isLocalArt(path) {
-  return LOCAL_ART_PATHS.includes(path.split('?')[0]);
-}
-
 /**
  * Rewrite root-relative references in the built page so they resolve on the
  * Facebook hosting origin, where none of the site's public/ tree exists:
- * - src="/x" and href="/x" become absolute URLs on the game origin
- *   (LOCAL_ART_PATHS become bundle-relative "./x" instead);
+ * - src="/x" and href="/x" become absolute URLs on the game origin (a BUNDLED_ART
+ *   path becomes bundle-relative "./<bundleName>" instead);
  * - src="./x" and href="./x" page-relative public refs (the cursor preloads)
  *   are rewritten the same way, except vite's own "./assets/..." output and
  *   the bundled "./basis/..." transcoder, which must stay in-bundle;
@@ -145,7 +196,8 @@ export function rewriteRootRelativeHtml(html, origin = DEFAULT_GAME_ORIGIN) {
         clean = clean.slice(1); // './ui/x' -> '/ui/x'
         if (clean.startsWith('/assets/') || clean.startsWith('/basis/')) return whole;
       }
-      if (isLocalArt(clean)) return `${before}.${clean}${after}`;
+      const bundled = bundledArtName(clean.split('?')[0]);
+      if (bundled) return `${before}./${bundled}${after}`;
       return `${before}${origin}${clean}${after}`;
     },
   );
@@ -154,12 +206,13 @@ export function rewriteRootRelativeHtml(html, origin = DEFAULT_GAME_ORIGIN) {
 
 /**
  * Rewrite root-relative url(/x) references in CSS text to the game origin.
- * localPrefix maps LOCAL_ART_PATHS into the bundle: './' for CSS inlined in
+ * localPrefix maps a BUNDLED_ART path into the bundle: './' for CSS inlined in
  * index.html at the zip root, '../' for emitted assets/*.css files.
  */
 export function rewriteCssUrls(css, origin = DEFAULT_GAME_ORIGIN, localPrefix = '../') {
   return css.replace(/url\((['"]?)(\/(?!\/)[^)'"]+)\1\)/g, (whole, quote, path) => {
-    if (isLocalArt(path)) return `url(${quote}${localPrefix}${path.slice(1)}${quote})`;
+    const bundled = bundledArtName(path.split('?')[0]);
+    if (bundled) return `url(${quote}${localPrefix}${bundled}${quote})`;
     return `url(${quote}${origin}${path}${quote})`;
   });
 }
@@ -177,11 +230,12 @@ export function validateShellWiring(html) {
       errors.push(`index.html must listen for the ${event} event`);
     }
   }
-  if (
-    /(?:src|href)="\.?\/(?!assets\/|basis\/|favicon|loading-screen|cryptic-realm-loading)/.test(
-      html,
-    )
-  ) {
+  // Anything still page-relative must be a real bundle entry: vite's own
+  // output, the KTX2 transcoder, or one of the BUNDLED_ART names. Derived from
+  // BUNDLED_ART so adding local art cannot desync this allowlist.
+  const localNames = ['assets/', 'basis/', ...BUNDLED_ART.map((art) => art.bundleName)];
+  const allowed = localNames.map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+  if (new RegExp(`(?:src|href)="\\.?/(?!${allowed})`).test(html)) {
     errors.push('index.html still carries a root-relative reference outside the bundle');
   }
   return errors;
