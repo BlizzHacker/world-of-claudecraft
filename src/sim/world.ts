@@ -1,5 +1,6 @@
 import { bgFieldHeightLocal } from './battleground_field';
 import { beaconSpiralLift } from './beacon_spiral';
+import { BOARPIT_FLAT, isInBoarpitShell } from './boarpit_layout';
 import {
   castleLift,
   castlePadTarget,
@@ -22,6 +23,7 @@ import {
   instanceOrigin,
   instanceSlotForZ,
   isBgPos,
+  registerThemedPlacementProbes,
   STRIP_MAX_X,
   STRIP_MIN_X,
   STRIP_ZONES,
@@ -33,6 +35,7 @@ import {
   ZONES,
   zoneAt,
 } from './data';
+import { isInThornwheelShell, THORNWHEEL_FLAT } from './derby_layout';
 import { dockLocalPoint, dockSectionAtLocal, dockSurfaceLine, dockSurfaceYAt } from './dock_layout';
 import { dungeonFloorLift } from './dungeon_floor';
 import { lastKeepLiftAt } from './dungeon_layout';
@@ -43,6 +46,7 @@ import {
   emberNearestOnLink,
 } from './ember_lava_layout';
 import { GALE_DECK_FREEBOARD, galeDeckSurface } from './gale_harbor';
+import { HOMES_FLAT, isInHomesShell } from './homes_layout';
 import { reachDeckClear, reachDeckSurface } from './reach_decks';
 import { fbm2, hash2, noise2 } from './rng';
 import {
@@ -61,13 +65,10 @@ import {
   terrainRegionHas,
 } from './terrain_region_index';
 import { cragLayer, highlandMask, reliefBase, ridged2, warpedCoords } from './terrain_relief';
-import type { BiomeId, HeightStamp, ZoneDef } from './types';
-import { BOARPIT_FLAT, isInBoarpitShell } from './boarpit_layout';
-import { isInThornwheelShell, THORNWHEEL_FLAT } from './derby_layout';
-import { HOMES_FLAT, isInHomesShell } from './homes_layout';
-import type { WorldContent } from './types';
+import type { BiomeId, HeightStamp, WorldContent, ZoneDef } from './types';
 import { isInSowfieldShell, SOWFIELD_FLAT, sowfieldStandLift } from './vale_cup_layout';
 import { wildheartFieldHeight } from './wildheart_field';
+import { WORLD_SEED } from './world_seed';
 
 // Terrain is a pure function of (x, z, seed): both the sim (ground clamping)
 // and the renderer (mesh) sample the same heightfield, so they always agree.
@@ -4999,6 +5000,20 @@ export function roadDistance(x: number, z: number): number {
   }
   return Math.sqrt(best2);
 }
+
+// Hand the ground and the road network to the themed-building placement fit
+// (src/sim/building_theme_fit.ts, driven from data.ts getActiveWorldContent).
+// The edge is inverted into a registration because data.ts cannot import this
+// module: world.ts imports data.ts, and the reverse edge is a runtime cycle
+// whose hoisted top-level const reads land in the temporal dead zone. Every
+// host that has a world has this module, and registering drops any theme copy
+// built before it, so the fit is always solved against real terrain.
+// Fixed at WORLD_SEED: the shipped built-in props are authored against that one
+// world, and the theme cache is per realm, not per Sim.
+registerThemedPlacementProbes({
+  groundAt: (x, z) => terrainHeight(x, z, WORLD_SEED),
+  roadDistanceAt: (x, z) => roadDistance(x, z),
+});
 
 // Deterministic decoration placement (trees, rocks) — used by the renderer,
 // kept here so it shares the seed and stays out of mob camps / hubs / roads /
