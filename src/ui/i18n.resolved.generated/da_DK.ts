@@ -319,6 +319,16 @@ export const da_DK: EnTranslations = {
     "spectate": {
       "banner": "Tilskuer til {name}"
     },
+    "waypoints": {
+      "title": "Waypoints",
+      "choose": "Choose a destination",
+      "undiscovered": "{name} (undiscovered)",
+      "summary": "{known} of {total} discovered",
+      "discoveredGroup": "Discovered",
+      "locked": "Undiscovered ({count})",
+      "filterPlaceholder": "Search destinations",
+      "noMatches": "No destinations match that search."
+    },
     "readyCheck": {
       "prompt": "{name} har startet et klar-tjek. Er du klar?",
       "ready": "Klar",
@@ -879,6 +889,7 @@ export const da_DK: EnTranslations = {
     },
     "leaderboard": {
       "close": "Luk",
+      "filterAll": "All",
       "tabsLabel": "Pointtavler",
       "tabPlayers": "Spillere",
       "tabGuilds": "Guilds",
@@ -6868,7 +6879,32 @@ export const da_DK: EnTranslations = {
       "guilds": "Tip: Når du slutter dig til et laug, får du en privat chatkanal og en fælles liste over dine laugskammerater.",
       "professions": "Tip: Indsamlings- og håndværksfag kan trænes sideløbende med din kampklasse.",
       "loadouts": "Tip: Gem mere end én talentopsætning, så du kan skifte mellem varianter uden at bruge point to gange.",
-      "pvp": "Tip: Udfordr en anden spiller til en venskabelig duel, eller stil dig i kø til arenaen i Det Askegrå Colosseum for at afprøve din opbygning."
+      "pvp": "Tip: Udfordr en anden spiller til en venskabelig duel, eller stil dig i kø til arenaen i Det Askegrå Colosseum for at afprøve din opbygning.",
+      "infernal": {
+        "delves": "Tip: a delve grows harsher the deeper you go. Stock up before you descend.",
+        "rifts": "Tip: ranked rift portals tear open across the realm. Higher ranks bring tougher fights and richer spoils.",
+        "crypts": "Tip: candlelight is scarce down in the crypts. Mind your footing in the dark."
+      },
+      "classic": {
+        "dungeons": "Tip: heroes are made in dungeons. Gather a party and take down a boss together.",
+        "wanderers": "Tip: open skies reward wanderers. The far corners of the map hide rares and gathering nodes.",
+        "deeds": "Tip: bold feats fill your Book of Deeds. Titles and Renown await the adventurous."
+      },
+      "arcane": {
+        "portals": "Tip: the crystal realms hum with portal energy. A world rift is always worth a detour.",
+        "relics": "Tip: relics and reagents favor the patient. Train a gathering profession and profit.",
+        "study": "Tip: void mysteries suit the studious. Read your talents closely before you respec."
+      },
+      "dominion": {
+        "squads": "Tip: the frontier favors squads. The Dungeon Finder can fill your ranks fast.",
+        "formation": "Tip: hold formation. A tank up front and a healer behind wins long fights.",
+        "momentum": "Tip: contested ground changes hands quickly. Strike while your squad has momentum."
+      },
+      "arcadevoid": {
+        "movement": "Tip: void arenas favor movement. Keep repositioning and never fight standing still.",
+        "focus": "Tip: neon firefights end fast. Focus one target as a squad and pick foes apart.",
+        "upkeep": "Tip: void tech rewards upkeep. Check your gear for upgrades between fights."
+      }
     },
     "reconnecting": "Forbindelse mistet. Genopretter forbindelse..."
   },

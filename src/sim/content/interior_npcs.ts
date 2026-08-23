@@ -48,6 +48,9 @@ export const INTERIOR_VILLAGER: NpcDef = {
   questIds: [],
   dynamic: true,
   greeting: 'Oh — a visitor! Mind the mess.',
+  // A modest pantry so a house visit is never a dead end: the same staples the
+  // innkeeper stocks (ids proven by tests/progression.test.ts's dangling-id gate).
+  vendorItems: ['baked_bread', 'spring_water', 'minor_healing_potion'],
 };
 
 export const INTERIOR_NPCS: Record<string, NpcDef> = {

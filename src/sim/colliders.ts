@@ -8,14 +8,44 @@ import {
   resolveSolidBankerChestPlacement,
 } from './banker_chest_layout';
 import { battlegroundColliders } from './battleground_layout';
+import { boarpitColliders } from './boarpit_layout';
 import {
   buildingCameraHeight,
   buildingTerrainEnvelope,
   isEastbrookGrandArmoury,
 } from './building_layout';
 import { MOUNT_RACE_JUMP_FIXTURES, raceGateSegment } from './content/mounts';
-import { getActiveRealm } from './realms/registry';
-import { arenaOriginAt, battlegroundOrigin, dungeonAt, BG_SLOT_COUNT, defaultDelveModules, delveAt, delveModuleLocal, DUNGEON_FLOOR_Y, DUNGEON_LIST, DUNGEON_X_THRESHOLD, DUNGEONS, GATHER_NODES, getActiveWorldContent, INSTANCE_SLOT_COUNT, isBuiltinWorldContent, instanceOrigin, interiorOriginAt, isArenaPos, isBgPos, isDelvePos, isInteriorPos, isRiftPos, isYumiMazePos, PORTALS, RIFT_REGION_HALF_X, RIFT_REGION_HALF_Z, STRIP_MAX_X, STRIP_MIN_X, yumiMazeOriginAt } from './data';
+import {
+  arenaOriginAt,
+  BG_SLOT_COUNT,
+  battlegroundOrigin,
+  DUNGEON_FLOOR_Y,
+  DUNGEON_LIST,
+  DUNGEON_X_THRESHOLD,
+  DUNGEONS,
+  defaultDelveModules,
+  delveAt,
+  delveModuleLocal,
+  dungeonAt,
+  GATHER_NODES,
+  getActiveWorldContent,
+  INSTANCE_SLOT_COUNT,
+  instanceOrigin,
+  interiorOriginAt,
+  isArenaPos,
+  isBgPos,
+  isBuiltinWorldContent,
+  isDelvePos,
+  isInteriorPos,
+  isRiftPos,
+  isYumiMazePos,
+  PORTALS,
+  RIFT_REGION_HALF_X,
+  RIFT_REGION_HALF_Z,
+  STRIP_MAX_X,
+  STRIP_MIN_X,
+  yumiMazeOriginAt,
+} from './data';
 import {
   ROCK_COLLIDER_MIN_SCALE,
   ROCK_RADIUS_PER_SCALE,
@@ -24,6 +54,7 @@ import {
 } from './decoration_dims';
 import { type DelveModuleId, delveModuleColliders } from './delve_layout';
 import { isLitanyModuleId, litanyModuleLosColliders } from './delve_litany_layout';
+import { derbyColliders } from './derby_layout';
 import { dungeonInstanceAt, INTERIOR_LAYOUTS } from './dungeon_floor';
 import {
   ARENA_LAYOUT,
@@ -35,6 +66,8 @@ import {
 import { emberLilySpots } from './ember_lilies';
 import { fenWillowSpots, hollowWillowSpots } from './fen_willows';
 import { FENBRIDGE_LAYOUT } from './fenbridge_layout';
+import { FENCE_HALF_DEPTH } from './fence_clearance';
+import { homesColliders } from './homes_layout';
 import {
   benchDrawnHeight,
   CHAPEL_HALL,
@@ -70,6 +103,7 @@ import {
   TOWN_WALL_SHORT_PILLAR_TOP_FRAC,
   TOWN_WALL_TALL_PILLAR_ALONG,
 } from './prop_layout';
+import { getActiveRealm } from './realms/registry';
 import { type PlacedStreetlamp, planStreetlamps, styleStreetlampSites } from './streetlamp_layout';
 import { STREETLAMP_COLLIDER_RADIUS, STREETLAMP_FIXTURE_HEIGHT } from './streetlamp_style';
 import { townPropPlacements } from './town_props';
@@ -90,9 +124,6 @@ import {
   waterLevelAt,
 } from './world';
 import { yumiMazeColliders } from './yumi_maze_layout';
-import { boarpitColliders } from './boarpit_layout';
-import { derbyColliders } from './derby_layout';
-import { homesColliders } from './homes_layout';
 
 // Static world collision. Prop placement comes from the per-zone content
 // modules (merged into PROPS by sim/data.ts): the renderer builds its meshes
@@ -1385,9 +1416,8 @@ const GRID_CELL = 16;
  *  touch, which is what makes the single-cell support and glue reads below
  *  complete (their reach beyond a collider's bounds never exceeds it). */
 export const MAX_BODY_RADIUS = 0.8;
-/** Fence/blocker wall half-thickness (yards); the editor's blocker overlay
- * reuses it so the drawn wall matches the collider exactly. */
-export const FENCE_HALF_DEPTH = 0.35;
+export { FENCE_HALF_DEPTH };
+
 const FENCE_END_PAD = 0.35;
 /** Blocker walls are full-height (a jump never clears one, unlike a fence);
  * this visual top is retained for the record. */

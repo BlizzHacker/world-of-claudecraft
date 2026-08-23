@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
+  DESKTOP_LATEST_YML_URL,
   DESKTOP_VERSION,
+  desktopBuildsPublished,
   desktopDownloadUrl,
   detectDesktopPlatform,
+  probeDesktopBuilds,
 } from '../src/game/desktop_download';
 
 // Real userAgent strings (trimmed) for the desktop and mobile families.
@@ -46,23 +49,59 @@ describe('detectDesktopPlatform', () => {
 describe('desktopDownloadUrl', () => {
   it('builds the mac universal dmg URL', () => {
     expect(desktopDownloadUrl('mac')).toBe(
-      `https://updates.worldofclaudecraft.com/desktop/world-of-claudecraft-${DESKTOP_VERSION}-mac-universal.dmg`,
+      `https://updates.crypticrealm.com/desktop/cryptic-realm-${DESKTOP_VERSION}-mac-universal.dmg`,
     );
   });
 
   it('builds the Linux x86_64 AppImage URL (electron-builder x64 arch token)', () => {
     expect(desktopDownloadUrl('linux')).toBe(
-      `https://updates.worldofclaudecraft.com/desktop/world-of-claudecraft-${DESKTOP_VERSION}-linux-x86_64.AppImage`,
+      `https://updates.crypticrealm.com/desktop/cryptic-realm-${DESKTOP_VERSION}-linux-x86_64.AppImage`,
     );
   });
 
   it('builds the x64 Windows NSIS installer URL (issue 2013: per-arch installers)', () => {
     expect(desktopDownloadUrl('win')).toBe(
-      `https://updates.worldofclaudecraft.com/desktop/world-of-claudecraft-${DESKTOP_VERSION}-win-x64.exe`,
+      `https://updates.crypticrealm.com/desktop/cryptic-realm-${DESKTOP_VERSION}-win-x64.exe`,
     );
   });
 
   it('returns null for platforms with no published artifact', () => {
     expect(desktopDownloadUrl('other')).toBeNull();
+  });
+});
+
+describe('desktopBuildsPublished (the latest.yml HEAD-probe gate)', () => {
+  it('treats only a 2xx probe as published', () => {
+    expect(desktopBuildsPublished(200)).toBe(true);
+    expect(desktopBuildsPublished(204)).toBe(true);
+    expect(desktopBuildsPublished(301)).toBe(false);
+    expect(desktopBuildsPublished(404)).toBe(false);
+    expect(desktopBuildsPublished(500)).toBe(false);
+  });
+
+  it('treats a transport failure (null status) as not published', () => {
+    expect(desktopBuildsPublished(null)).toBe(false);
+  });
+});
+
+describe('probeDesktopBuilds', () => {
+  it('HEAD-probes latest.yml on the update host', async () => {
+    const calls: Array<{ url: string; method: string }> = [];
+    const ok = await probeDesktopBuilds(async (url, init) => {
+      calls.push({ url, method: init.method });
+      return { status: 200 };
+    });
+    expect(ok).toBe(true);
+    expect(calls).toEqual([{ url: DESKTOP_LATEST_YML_URL, method: 'HEAD' }]);
+    expect(DESKTOP_LATEST_YML_URL).toBe('https://updates.crypticrealm.com/desktop/latest.yml');
+  });
+
+  it('reads a 404 or a thrown fetch as not published, never throwing', async () => {
+    expect(await probeDesktopBuilds(async () => ({ status: 404 }))).toBe(false);
+    expect(
+      await probeDesktopBuilds(async () => {
+        throw new Error('offline');
+      }),
+    ).toBe(false);
   });
 });

@@ -9649,6 +9649,37 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     'ヒント：複数の特性ロードアウトを保存しておけば、ポイントを使い直さずにビルドを切り替えられます。',
   'loading.tips.pvp':
     'ヒント：他のプレイヤーに友好的な決闘を申し込むか、灰塵のコロシアムに参加してビルドを試してみましょう。',
+  // Realm-flavored loading tips (M16 wordy fills).
+  'loading.tips.infernal.delves':
+    'ヒント：デルヴは深く潜るほど過酷になります。降りる前に補給を整えましょう。',
+  'loading.tips.infernal.rifts':
+    'ヒント：ランク付きの裂け目ポータルが王国各地に開きます。高ランクほど強敵で、報酬も豪華です。',
+  'loading.tips.infernal.crypts':
+    'ヒント：地下墓地の奥は蝋燭の光も乏しいもの。暗がりでは足元にご注意を。',
+  'loading.tips.classic.dungeons':
+    'ヒント：英雄はダンジョンで生まれます。パーティを組んでボスを倒しましょう。',
+  'loading.tips.classic.wanderers':
+    'ヒント：広い空は放浪者に報います。マップの辺境にはレア敵や採集ポイントが潜んでいます。',
+  'loading.tips.classic.deeds':
+    'ヒント：偉業は功績の書に刻まれます。称号と名声が冒険者を待っています。',
+  'loading.tips.arcane.portals':
+    'ヒント：水晶の国はポータルの力に満ちています。ワールドの裂け目は寄り道の価値ありです。',
+  'loading.tips.arcane.relics':
+    'ヒント：遺物と素材は根気強い者に微笑みます。採集専門技能を鍛えて稼ぎましょう。',
+  'loading.tips.arcane.study':
+    'ヒント：虚空の神秘は学究の徒のもの。タレントを振り直す前によく読み込みましょう。',
+  'loading.tips.dominion.squads':
+    'ヒント：フロンティアでは分隊が有利です。ダンジョンファインダーで仲間をすぐ集められます。',
+  'loading.tips.dominion.formation':
+    'ヒント：陣形を保ちましょう。前衛のタンクと後衛のヒーラーが長期戦を制します。',
+  'loading.tips.dominion.momentum':
+    'ヒント：係争地はすぐに支配者が変わります。分隊に勢いがあるうちに攻めましょう。',
+  'loading.tips.arcadevoid.movement':
+    'ヒント：虚空の闘技場では機動力が命。動き続け、立ち止まって戦わないこと。',
+  'loading.tips.arcadevoid.focus':
+    'ヒント：ネオンの銃撃戦は一瞬で決まります。分隊で一体ずつ集中攻撃しましょう。',
+  'loading.tips.arcadevoid.upkeep':
+    'ヒント：虚空の技術は手入れが肝心。戦闘の合間に装備の更新を確認しましょう。',
   // Rideable mounts: the Z keybind + the Mounts window (the stable).
   'hudChrome.keybinds.mount': '騎乗 / 降車',
   // Bindable mouse buttons. M16 wordy fill; M3/M4/M5 are keycap labels and stay as-is.
@@ -11694,4 +11725,12 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.waterRipples': '水面の波紋（航跡）',
   'hudChrome.breath.label': '息',
   'hudChrome.breath.drowning': '溺れています！',
+  'hudChrome.waypoints.title': 'ウェイポイント',
+  'hudChrome.waypoints.choose': '目的地を選択',
+  'hudChrome.waypoints.undiscovered': '{name}（未発見）',
+  'hudChrome.waypoints.summary': '発見済み {known}/{total}',
+  'hudChrome.waypoints.discoveredGroup': '発見済み',
+  'hudChrome.waypoints.locked': '未発見（{count}）',
+  'hudChrome.waypoints.filterPlaceholder': '目的地を検索',
+  'hudChrome.waypoints.noMatches': 'その検索に一致する目的地はありません。',
 };

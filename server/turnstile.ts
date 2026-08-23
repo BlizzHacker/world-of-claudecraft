@@ -10,6 +10,7 @@
 // no secret configured (local dev / tests) the caller skips this entirely, so
 // `npm run dev` stays frictionless.
 import type { IncomingMessage } from 'node:http';
+import { isFacebookInstantRequest } from './fb_origins';
 import { verifyNativeAttestation } from './native_attestation';
 import { recordUsageMetric } from './provider_usage';
 import { requestIp } from './ratelimit';
@@ -60,7 +61,13 @@ export async function verifyTurnstile(
 // (siteverify widget error 110200, verified empirically), so there is no token
 // it could send. An Origin header is spoofable, so this is a deliberate,
 // documented softening of the bot gate for the desktop origins only; a real
-// desktop attestation (mirroring the native one) is the long-term fix. With no
+// desktop attestation (mirroring the native one) is the long-term fix. The
+// Facebook Instant Games container (fb_origins.ts) is admitted by Origin alone
+// for the same reason: the container CSP cannot load the Turnstile widget, so
+// there is no token it could send. Origin is the gate, the same deliberate,
+// documented softening as the desktop origins, scoped to the fbsbx predicate
+// only; an FBInstant signed-player attestation
+// (FBInstant.player.getSignedInfoAsync) is the long-term fix. With no
 // secret configured, verification is off entirely. The English rejection error
 // the callers emit is matched to a t() key by userFacingApiError() in
 // src/main.ts; keep the two strings in sync.
@@ -72,6 +79,7 @@ export async function passesTurnstile(
 ): Promise<boolean> {
   if (isNativeAppRequest(req)) return verifyNativeAttestation(req, body.nativeAttestation);
   if (isDesktopAppRequest(req)) return true;
+  if (isFacebookInstantRequest(req)) return true;
   if (!secret) return true;
   return verifyTurnstile(String(body.turnstileToken ?? ''), secret, requestIp(req), fetchImpl);
 }

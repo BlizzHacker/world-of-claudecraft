@@ -6,6 +6,7 @@ import {
   appearanceSignature,
   type PreviewAppearance,
   previewAppearanceVisual,
+  previewFallbackVisualKey,
 } from '../src/render/characters/preview_appearance';
 
 const mechAssets = vi.hoisted(() => ({
@@ -21,17 +22,19 @@ const visualInstances = vi.hoisted(() => [] as Array<{ dispose: ReturnType<typeo
 const lazyBodies = vi.hoisted(() => ({
   notReady: new Set<string>(),
   resolvers: new Map<string, () => void>(),
+  rejecters: new Map<string, (err: Error) => void>(),
 }));
 
 vi.mock('../src/render/characters/assets', () => ({
   visualAssetsReady: (key: string) => !lazyBodies.notReady.has(key),
   preloadVisualAssets: vi.fn(
     (key: string) =>
-      new Promise<void>((resolve) => {
+      new Promise<void>((resolve, reject) => {
         lazyBodies.resolvers.set(key, () => {
           lazyBodies.notReady.delete(key);
           resolve();
         });
+        lazyBodies.rejecters.set(key, reject);
       }),
   ),
   mechAssetsReady: () => mechAssets.ready,
@@ -100,6 +103,7 @@ beforeEach(() => {
   mechAssets.resolve = null;
   lazyBodies.notReady.clear();
   lazyBodies.resolvers.clear();
+  lazyBodies.rejecters.clear();
   vi.mocked(preloadMechAssets).mockClear();
   visualInstances.length = 0;
   vi.mocked(preloadVisualAssets).mockClear();
@@ -406,5 +410,96 @@ describe('CharacterPreview.setVisualKey: the weapon-skin rebuild contract', () =
     await Promise.resolve();
     // still one: the superseded body must not steal the turntable back
     expect(visualDoubles.built).toHaveLength(1);
+  });
+});
+
+describe('previewFallbackVisualKey', () => {
+  it('falls back to the class rig, except for the class rig itself or no class', () => {
+    expect(previewFallbackVisualKey('realm_infernal_hero_warlock', 'mage')).toBe('player_mage');
+    expect(previewFallbackVisualKey('player_mech', 'rogue')).toBe('player_rogue');
+    // the class rig failing must not re-request itself forever
+    expect(previewFallbackVisualKey('player_mage', 'mage')).toBeNull();
+    // no class-aware selection ever ran: nothing safe to mount
+    expect(previewFallbackVisualKey('realm_infernal_hero_warlock', null)).toBeNull();
+  });
+});
+
+describe('CharacterPreview: failed lazy body never strands an empty turntable', () => {
+  beforeEach(() => {
+    visualDoubles.built.length = 0;
+  });
+
+  function fallbackPreview(): CharacterPreview {
+    const preview = Object.create(CharacterPreview.prototype) as CharacterPreview;
+    const state = preview as unknown as Record<string, unknown>;
+    state.destroyed = false;
+    state.currentSkin = 0;
+    state.currentWeaponSkinId = null;
+    state.currentVisual = null;
+    state.closeupCache = new Map();
+    state.characterGroup = { add: vi.fn(), remove: vi.fn(), rotation: { y: 1 } };
+    // Object.create skips field initializers; the catch compares this token.
+    state.externalLoadToken = 0;
+    return preview;
+  }
+
+  async function rejectBody(key: string): Promise<void> {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => {});
+    lazyBodies.rejecters.get(key)?.(new Error('glb 404'));
+    await Promise.resolve();
+    await Promise.resolve();
+    err.mockRestore();
+  }
+
+  it('remounts the class rig when the requested body fails with nothing mounted', async () => {
+    lazyBodies.notReady.add('realm_infernal_hero_warlock');
+    const preview = fallbackPreview();
+    // char-select roster: the persisted realm body of a mage character
+    preview.setAppearance(
+      appearance({
+        cls: 'mage',
+        visualKey: 'realm_infernal_hero_warlock',
+        mainhandItemId: 'staff_x',
+      }),
+    );
+    expect(visualDoubles.built).toHaveLength(0);
+
+    await rejectBody('realm_infernal_hero_warlock');
+
+    // the boot-resident class rig took the turntable, holding the same hands
+    expect(visualDoubles.built).toHaveLength(1);
+    const state = preview as unknown as { currentVisualKey: string | null };
+    expect(state.currentVisualKey).toBe('player_mage');
+  });
+
+  it('keeps a mounted authored body when a later selection fails to fetch', async () => {
+    const preview = fallbackPreview();
+    (preview as unknown as { fallbackClass: string }).fallbackClass = 'mage';
+    // an authored realm body is mounted (resident, builds synchronously)...
+    preview.setVisualKey('realm_infernal_human_iron_warden', null, null, null);
+    expect(visualDoubles.built).toHaveLength(1);
+    // ...and stays up while the next authored selection streams in and fails
+    lazyBodies.notReady.add('realm_infernal_hero_warlock');
+    preview.setVisualKey('realm_infernal_hero_warlock', null, null, null);
+
+    await rejectBody('realm_infernal_hero_warlock');
+
+    // no fallback rebuild: the previous authored GLB still owns the turntable
+    expect(visualDoubles.built).toHaveLength(1);
+  });
+
+  it('does not let a superseded failed fetch steal the turntable back', async () => {
+    lazyBodies.notReady.add('realm_infernal_hero_warlock');
+    const preview = fallbackPreview();
+    preview.setVisualKey('realm_infernal_hero_warlock', null, null, null);
+    // the player picks another roster row before the fetch settles
+    preview.setClass('rogue');
+    expect(visualDoubles.built).toHaveLength(1);
+
+    await rejectBody('realm_infernal_hero_warlock');
+
+    expect(visualDoubles.built).toHaveLength(1);
+    const state = preview as unknown as { currentVisualKey: string | null };
+    expect(state.currentVisualKey).toBe('player_rogue');
   });
 });

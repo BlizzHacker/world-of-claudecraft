@@ -27,6 +27,12 @@ import type {
 
 export type { FishingEntry } from './content/items';
 
+import {
+  type BuildingFitProbes,
+  type FitPoint,
+  resolveThemedBuildings,
+  type ThemedBuildingInput,
+} from './building_theme_fit';
 import { CASTLE_BLOCKERS } from './castle_layout';
 import {
   AMBERFALL_CAMPS,
@@ -45,14 +51,14 @@ import {
 import {
   BROTHER_HALVEN,
   BROTHER_HALVEN_MARSH,
+  CAINHURST_SAGE,
   COLLAPSED_RELIQUARY_DELVE,
   COLLAPSED_RELIQUARY_MODULES,
   DELVE_MOBS,
-  HELLMAW_WELL_DELVE,
-  HELLMAW_WELL_MODULES,
-  CAINHURST_SAGE,
   DROWNED_LITANY_DELVE,
   DROWNED_LITANY_MODULES,
+  HELLMAW_WELL_DELVE,
+  HELLMAW_WELL_MODULES,
 } from './content/delves';
 import {
   DRAKELANDS_BROOD_CAMPS,
@@ -127,9 +133,6 @@ import {
   GALECREST_ZONE,
 } from './content/galecrest';
 import { GATHER_NODES as GATHER_NODES_CONTENT } from './content/gather_nodes';
-import { INTERIOR_NPCS } from './content/interior_npcs';
-import { getActiveRealm } from './realms/registry';
-import type { RealmWorldTheme } from './realms/types';
 import {
   type GraveyardDef,
   OVERWORLD_GRAVEYARDS,
@@ -137,6 +140,7 @@ import {
   SPIRIT_HEALER_NPC_ID,
 } from './content/graveyards';
 import { GROUND_PICKUP_LINES } from './content/ground_pickup_lines';
+import { INTERIOR_NPCS } from './content/interior_npcs';
 import { MAGE_PET_MOBS } from './content/mage_pets';
 import { MAILBOXES } from './content/mailboxes';
 import {
@@ -279,6 +283,8 @@ import {
 import { DUNGEON_WALL_HW, DUNGEON_WALL_X } from './dungeon_layout';
 import { EASTBROOK_LAYOUT } from './eastbrook_layout';
 import { JAIL_BLOCKERS, JAIL_TERRAIN_EDITS } from './jail';
+import { getActiveRealm } from './realms/registry';
+import type { RealmWorldTheme } from './realms/types';
 
 export type { DelveShopEntry, DelveShopGate, DelveShopOffer } from './content/delves';
 // Delve affix/companion catalogs are consumed by the Sim delve engine; re-export
@@ -296,9 +302,9 @@ import { DELVE_ITEMS } from './content/delves/items';
 import { HEROIC_ITEMS, RETIRED_HEROIC_ITEMS } from './content/heroic_loot';
 import { buildHeroicVariants } from './content/heroic_variants';
 import { HEROIC_VENDOR_ITEMS } from './content/heroic_vendor';
+import { MOUNT_ITEMS } from './content/mounts';
 import { PROFESSION_ITEMS } from './content/profession_items';
 import { FURY_NPC, WARFARE_ITEMS } from './content/pvp_honor';
-import { MOUNT_ITEMS } from './content/mounts';
 import { DELVE_MODULE_LAYOUTS, type DelveModuleId, delveModuleSpan } from './delve_layout';
 
 function mergeItems(...parts: Record<string, ItemDef>[]): Record<string, ItemDef> {
@@ -772,16 +778,68 @@ function baseZoneHub(
   return (fallback ?? base.zones.reduce((a, b) => (b.zMax > a.zMax ? b : a))).hub;
 }
 
+// Everything a themed footprint has to live beside that the theme never moves:
+// the town's own dressing, its service anchors and its NPC stands. Collected
+// from the BASE bundle, never the active content, for the same reason
+// baseZoneHub walks the base zones: this runs while the themed copy is being
+// built inside getActiveWorldContent.
+function baseThemeFixtures(base: WorldContent): FitPoint[] {
+  const props = base.props;
+  const out: FitPoint[] = [];
+  const push = (x: number, z: number): void => {
+    out.push({ x, z });
+  };
+  for (const s of props.stalls) push(s.x, s.z);
+  for (const w of props.wells) push(w.x, w.z);
+  for (const m of props.mines) push(m.x, m.z);
+  for (const d of props.docks) push(d.x, d.z);
+  for (const t of props.tents) push(t.x, t.z);
+  for (const [x, z] of props.crates) push(x, z);
+  for (const [x, z] of props.campfires) push(x, z);
+  for (const [x, z] of props.mudHuts) push(x, z);
+  for (const r of props.ruinRings) push(r.x, r.z);
+  for (const g of props.graveyards) push(g.x, g.z);
+  for (const b of props.benches ?? []) push(b.x, b.z);
+  for (const w of props.walls ?? []) push(w.x, w.z);
+  for (const m of props.delveMarkers ?? []) push(m.x, m.z);
+  for (const d of props.decorProps ?? []) push(d.x, d.z);
+  for (const t of props.greatTrees ?? []) push(t.x, t.z);
+  for (const npc of Object.values(base.npcs)) push(npc.pos.x, npc.pos.z);
+  const services = base.services;
+  for (const s of services?.stations ?? []) push(s.pos.x, s.pos.z);
+  for (const m of services?.mailboxes ?? []) push(m.x, m.z);
+  for (const n of services?.noticeboards ?? []) push(n.x, n.z);
+  for (const m of services?.musterBoards ?? []) push(m.x, m.z);
+  for (const g of services?.graveyards ?? []) push(g.x, g.z);
+  push(base.playerStart.x, base.playerStart.z);
+  return out;
+}
+
 // Apply a realm's worldTheme to the base world: scale/space the town buildings for
 // a grander settlement. Both render (props.ts) and collision (colliders.ts) read
 // through getActiveWorldContent, so the themed buildings stay consistent between
 // what you SEE and what BLOCKS you. Realms with no worldTheme (claudecraft) return
 // the base world untouched — vanilla / true to upstream.
-function themeWorldForRealm(base: WorldContent, theme: RealmWorldTheme | undefined): WorldContent {
+//
+// The scale and spread are a REACH, not a fact: building_theme_fit.ts walks each
+// record down a fixed ladder to the largest share of the theme that is no worse
+// than the authored record on ground grade, carriageway, fence runs, unmoved town
+// fixtures and its neighbours' walls and doorsteps. Growing and moving a building
+// with nothing re-solved after it is what pushed live infernal towns off their own
+// hub plateau (one inn spanning twelve yards of terrain drop), across the road, and
+// on top of crates and a mailbox. That fit needs the terrain and the roads, which
+// only src/sim/world.ts can answer and which data.ts must never import (see
+// registerThemedPlacementProbes), so the answers arrive through `probes`; with none
+// registered the fit keeps every rule it can still evaluate.
+function themeWorldForRealm(
+  base: WorldContent,
+  theme: RealmWorldTheme | undefined,
+  probes: BuildingFitProbes,
+): WorldContent {
   const scale = theme?.buildingScale ?? 1;
   const spread = theme?.buildingSpread ?? 1;
   if (scale === 1 && spread === 1) return base;
-  const buildings = base.props.buildings.map((b) => {
+  const inputs: ThemedBuildingInput[] = base.props.buildings.map((b) => {
     // Authored placements (an assetId names a specific GLB) are drawn by their own
     // layout module at fixed coordinates — src/render/eastbrook_town.ts reads
     // EASTBROOK_LAYOUT directly and never sees this theme. Scaling only the
@@ -789,7 +847,8 @@ function themeWorldForRealm(base: WorldContent, theme: RealmWorldTheme | undefin
     // actually see, which is what made the whole of Eastbrook Vale un-enterable.
     // Procedural buildings ARE rendered through getActiveWorldContent, so they keep
     // moving with the theme and stay consistent.
-    if (b.assetId) return b;
+    const footprint = { x: b.x, z: b.z, w: b.w, d: b.d, rot: b.rot };
+    if (b.assetId) return { base: footprint, hub: null, themed: false };
     // Spread is anchored on the building's ZONE HUB, never the world origin.
     // Origin-anchored `x * spread` was tuned when the only themed town sat at
     // the origin; once upstream v0.35 shipped a dozen zones with hub towns up
@@ -804,16 +863,53 @@ function themeWorldForRealm(base: WorldContent, theme: RealmWorldTheme | undefin
     // a zone border. It still takes the grander scale, in place.
     const hub = baseZoneHub(base, b.x, b.z);
     const inSettlement = Math.hypot(b.x - hub.x, b.z - hub.z) <= hub.radius;
-    return {
-      ...b,
-      x: inSettlement ? hub.x + (b.x - hub.x) * spread : b.x,
-      z: inSettlement ? hub.z + (b.z - hub.z) * spread : b.z,
-      w: b.w * scale,
-      d: b.d * scale,
-    };
+    return { base: footprint, hub: inSettlement ? hub : null, themed: true };
+  });
+  const fits = resolveThemedBuildings(
+    inputs,
+    spread,
+    scale,
+    { fences: base.props.fences, fixtures: baseThemeFixtures(base) },
+    probes,
+  );
+  const buildings = base.props.buildings.map((b, i) => {
+    const fit = fits[i];
+    if (fit.reach === 0) return b;
+    return { ...b, x: fit.footprint.x, z: fit.footprint.z, w: fit.footprint.w, d: fit.footprint.d };
   });
   return { ...base, props: { ...base.props, buildings } };
 }
+
+// Terrain and road answers for the themed-building fit. src/sim/world.ts owns
+// both and registers them at import; data.ts CANNOT import world.ts, because
+// world.ts imports data.ts and the reverse edge is a runtime cycle whose hoisted
+// top-level const reads (TERRAIN_CAMP_BOUNDS off CAMPS, and friends) land in the
+// temporal dead zone. Inverting that one edge into a registration is the same
+// move baseZoneHub makes for zoneAt, one layer out.
+//
+// The fallback is flat ground with no road anywhere: every rule the fit can
+// still evaluate (fences, fixtures, neighbours, doorsteps) still applies, and
+// registering invalidates the theme cache, so a copy built before world.ts was
+// loaded is dropped rather than served twice.
+const NO_PLACEMENT_PROBES: BuildingFitProbes = {
+  groundAt: () => 0,
+  roadDistanceAt: () => Number.POSITIVE_INFINITY,
+};
+let placementProbes: BuildingFitProbes | null = null;
+
+export function registerThemedPlacementProbes(probes: BuildingFitProbes): void {
+  placementProbes = probes;
+  themedWorld = null; // a copy built before the probes arrived is never served again
+  themedWorldKey = '';
+}
+
+// True while the themed copy is being BUILT. The fit probes terrain and roads,
+// and both read the active content, so a re-entrant read here has to resolve to
+// something: the BASE world is the exact answer, because the themed copy shares
+// every array they touch (zones, roads, terrainEdits, waterLevel, docks,
+// biomePaint) with BUILTIN_WORLD by reference and differs only in
+// props.buildings, which no terrain or road query reads.
+let themingInFlight = false;
 
 // The world content the terrain function and renderer should sample. Defaults to
 // the built-in world; the editor swaps it for a custom map during play-test.
@@ -822,10 +918,20 @@ function themeWorldForRealm(base: WorldContent, theme: RealmWorldTheme | undefin
 export function getActiveWorldContent(): WorldContent {
   // Custom editor world: never themed (it's an authored map).
   if (activeWorld !== BUILTIN_WORLD) return activeWorld;
+  if (themingInFlight) return BUILTIN_WORLD;
   const realm = getActiveRealm();
   const key = `builtin:${realm.id}`;
   if (themedWorld && themedWorldKey === key) return themedWorld;
-  themedWorld = themeWorldForRealm(BUILTIN_WORLD, realm.worldTheme);
+  themingInFlight = true;
+  try {
+    themedWorld = themeWorldForRealm(
+      BUILTIN_WORLD,
+      realm.worldTheme,
+      placementProbes ?? NO_PLACEMENT_PROBES,
+    );
+  } finally {
+    themingInFlight = false;
+  }
   themedWorldKey = key;
   return themedWorld;
 }
@@ -1215,9 +1321,7 @@ const WIDE_SLOT_DELVE_IDS = new Set(['hellmaw_well']);
 /** Per-delve slot z-spacing: wide for connected-floor delves, tight otherwise. */
 export function delveSlotSpacing(delveIndex: number): number {
   const delve = DELVE_LIST.find((d) => d.index === delveIndex);
-  return delve && WIDE_SLOT_DELVE_IDS.has(delve.id)
-    ? DELVE_WIDE_SLOT_SPACING
-    : DELVE_SLOT_SPACING;
+  return delve && WIDE_SLOT_DELVE_IDS.has(delve.id) ? DELVE_WIDE_SLOT_SPACING : DELVE_SLOT_SPACING;
 }
 
 // ---------------------------------------------------------------------------
@@ -1352,7 +1456,10 @@ export function isInteriorPos(x: number): boolean {
 
 /** Resolve the interior room origin nearest a far-off (x, z): the type column from x
  *  and the slot from z. Used by collision + render to place the room shell. */
-export function interiorOriginAt(x: number, z: number): { x: number; z: number; typeIndex: number; slot: number } {
+export function interiorOriginAt(
+  x: number,
+  z: number,
+): { x: number; z: number; typeIndex: number; slot: number } {
   const typeIndex = Math.max(0, Math.round((x - INTERIOR_X_MIN) / 600));
   let slot = 0;
   let bestD = Infinity;

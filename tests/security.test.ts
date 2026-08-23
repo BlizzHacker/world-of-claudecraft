@@ -3,7 +3,6 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { buildWebSocketAuthMessage, buildWebSocketUrl, webSocketPayloadToText } from '../src/net/online';
 import {
   MAX_EMAIL_LENGTH,
   normalizeCharName,
@@ -45,6 +44,11 @@ import {
 } from '../server/ratelimit';
 import { passesTurnstile } from '../server/turnstile';
 import { isWebClientRequest } from '../server/web_login_guard';
+import {
+  buildWebSocketAuthMessage,
+  buildWebSocketUrl,
+  webSocketPayloadToText,
+} from '../src/net/online';
 import { BUILTIN_WORLD } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
 import type { WorldContent } from '../src/sim/types';
@@ -897,6 +901,35 @@ describe('Turnstile gate policy (passesTurnstile)', () => {
   it('does not bypass for a look-alike desktop origin', async () => {
     const req = fakeReq({ origin: 'app://evil' }, '203.0.113.55');
     await expect(passesTurnstile(req, {}, testSecret, vi.fn() as any)).resolves.toBe(false);
+  });
+
+  it('bypasses verification for the Facebook Instant Games origins even with a secret set', async () => {
+    // The container CSP cannot load the Turnstile widget, so there is no token
+    // the bundle could send; Origin is the gate, the same documented softening
+    // as the desktop shell (see passesTurnstile in server/turnstile.ts).
+    const fetchSpy = vi.fn();
+    for (const origin of [
+      'https://shield-apps-1725436805394319.apps.fbsbx.com',
+      'https://apps-1725436805394319.apps.fbsbx.com',
+    ]) {
+      const req = fakeReq({ origin }, '203.0.113.55');
+      await expect(passesTurnstile(req, {}, testSecret, fetchSpy as any)).resolves.toBe(true);
+    }
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it('does not bypass for fbsbx look-alike origins (they fail closed with no token)', async () => {
+    const fetchSpy = vi.fn();
+    for (const origin of [
+      'https://apps.fbsbx.com.evil.com',
+      'https://foo.bar.apps.fbsbx.com',
+      'http://apps-1725436805394319.apps.fbsbx.com',
+      'https://apps.fbsbx.com',
+    ]) {
+      const req = fakeReq({ origin }, '203.0.113.55');
+      await expect(passesTurnstile(req, {}, testSecret, fetchSpy as any)).resolves.toBe(false);
+    }
+    expect(fetchSpy).not.toHaveBeenCalled();
   });
 
   it('verifies a supplied web token against siteverify', async () => {

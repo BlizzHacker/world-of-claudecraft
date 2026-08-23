@@ -45,6 +45,26 @@ const baseEnTable = {
   'error.bankMaxSlots': 'Your bank cannot be expanded further.',
   'error.bankTooFar': 'You are too far from the banker.',
   'log.bankSlotsPurchased': 'You purchase additional bank slots.',
+  // Waypoints + Town Portal (src/sim/waypoints.ts, src/sim/town_portal.ts).
+  // The error.* rows are the travel/cast refusal toasts (placeholder-free, so
+  // they register in the EXACT matcher automatically); the parameterized log.*
+  // rows are matched by RULES entries below (waypoint/town names splice
+  // verbatim, like player names).
+  'error.waypointUndiscovered': "You haven't discovered that waypoint yet.",
+  'error.waypointNotAtPylon': 'You must be standing at a waypoint to travel.',
+  'error.waypointJailed': 'You cannot use a waypoint while jailed.',
+  'error.waypointInCombat': 'You cannot use a waypoint while in combat.',
+  'error.waypointCompetitive': 'You cannot use a waypoint during a competitive match.',
+  'error.waypointFromHere': 'You cannot use a waypoint from here.',
+  'error.townPortalInTown': "You're already in town.",
+  'error.townPortalJailed': 'You cannot open a town portal while jailed.',
+  'error.townPortalCompetitive': 'You cannot open a town portal during a competitive match.',
+  'log.portalStep': 'You step through the portal.',
+  'log.waypointActivated':
+    'Waypoint activated: {name}. Travel here from any other waypoint.',
+  'log.waypointChoose': '{name} waypoint. Choose a destination to travel.',
+  'log.waypointTravel': 'You travel to {name}.',
+  'log.townPortalOpen': 'You open a town portal to {name}.',
   // Guild Bank (src/sim/guild_bank.ts): the officer-plus shared treasury +
   // item store. The error.* lines are the refusal toasts (too-far, quest-item,
   // and "Not enough money." reuse the existing rows above / the hud arm); the
@@ -82,6 +102,14 @@ const baseEnTable = {
   'log.guildBankWithdrawGold': 'You withdraw {money} from the guild treasury.',
   'log.guildBankDepositItem': 'You deposit {item} into the guild bank.',
   'log.guildBankWithdrawItem': 'You withdraw {item} from the guild bank.',
+  // Body-skin fly-swap refusals (src/sim/cosmetics/body_skin_swap.ts): one row
+  // per authorizeBodySkin denial reason. Placeholder-free, so they register in
+  // the EXACT matcher automatically; the maintainer fills every locale at
+  // release like the other sim rows.
+  'error.bodySkinUnknown': 'That appearance does not exist.',
+  'error.bodySkinLevel': 'You have not unlocked that appearance yet.',
+  'error.bodySkinUnowned': 'You do not own that appearance.',
+  'error.bodySkinNoArt': 'That appearance has no body for your class.',
   'error.specLevel': 'You may choose a specialization at level {level}.',
   'error.equipLevel': 'You must be level {level} to equip that.',
   'error.mountLevel': 'You must be level {level} to ride that mount.',
@@ -744,7 +772,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.mountAlreadyOwned': 'You already own that mount.',
     'error.builderRequiresRole': 'Builder tools require admin or moderator.',
     'log.corpseLootable': "{name}'s corpse can be looted!",
-  'error.mountCombat': "You can't mount in combat.",
+    'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Invalid talent build.',
     'error.unknownSpec': 'Unknown specialization.',
     'error.maxLoadouts': 'You can save at most {count} loadouts.',
@@ -1026,7 +1054,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.ledgerPageDeny':
       'Las páginas del registro están encuadernadas con demasiada firmeza para llevártelas.',
     'groundPickup.morthenGrimoireDeny': 'El broche del grimorio está sellado con magia.',
-    'groundPickup.bindingWardDeny': 'El sigilo arde frio al tacto, aun no tienes motivo para tomarlo.',
+    'groundPickup.bindingWardDeny':
+      'El sigilo arde frio al tacto, aun no tienes motivo para tomarlo.',
     'groundPickup.fenMusterOrderDeny':
       'El sello de cera aguanta hasta que te corresponda reclamar la orden.',
     'groundPickup.caravanGoodsDeny': 'Aún no tienes autorización para recuperar estos bienes.',
@@ -1177,7 +1206,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.mountAlreadyOwned': 'Ya tienes esa montura.',
     'error.builderRequiresRole': 'Builder tools require admin or moderator.',
     'log.corpseLootable': "{name}'s corpse can be looted!",
-  'error.mountCombat': "You can't mount in combat.",
+    'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Configuración de talentos no válida.',
     'error.unknownSpec': 'Especialización desconocida.',
     'error.maxLoadouts': 'Puedes guardar como máximo {count} configuraciones.',
@@ -1469,7 +1498,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.ledgerPageDeny':
       'Las páginas del libro mayor están cosidas demasiado prietas para llevártelas.',
     'groundPickup.morthenGrimoireDeny': 'El broche del grimorio está sellado con magia.',
-    'groundPickup.bindingWardDeny': 'El sigilo arde frio al tacto, aun no tienes motivo para tomarlo.',
+    'groundPickup.bindingWardDeny':
+      'El sigilo arde frio al tacto, aun no tienes motivo para tomarlo.',
     'groundPickup.fenMusterOrderDeny':
       'El sello de lacre aguanta hasta que te corresponda reclamar la orden.',
     'groundPickup.caravanGoodsDeny': 'Aún no tienes autorización para recuperar estos bienes.',
@@ -1620,7 +1650,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.mountAlreadyOwned': 'Ya tienes esa montura.',
     'error.builderRequiresRole': 'Builder tools require admin or moderator.',
     'log.corpseLootable': "{name}'s corpse can be looted!",
-  'error.mountCombat': "You can't mount in combat.",
+    'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Configuración de talentos no válida.',
     'error.unknownSpec': 'Especialización desconocida.',
     'error.maxLoadouts': 'Puedes guardar como máximo {count} configuraciones.',
@@ -1922,7 +1952,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.ledgerPageDeny':
       'Les pages du registre sont trop solidement reliées pour être arrachées.',
     'groundPickup.morthenGrimoireDeny': 'Le fermoir du grimoire est scellé par magie.',
-    'groundPickup.bindingWardDeny': 'Le sceau brule froid sous vos doigts, vous n\'avez pas encore de raison de le prendre.',
+    'groundPickup.bindingWardDeny':
+      "Le sceau brule froid sous vos doigts, vous n'avez pas encore de raison de le prendre.",
     'groundPickup.fenMusterOrderDeny':
       "Le sceau de cire tient tant que l'ordre ne vous revient pas de droit.",
     'groundPickup.caravanGoodsDeny':
@@ -2074,7 +2105,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.mountAlreadyOwned': 'Vous possédez déjà cette monture.',
     'error.builderRequiresRole': 'Builder tools require admin or moderator.',
     'log.corpseLootable': "{name}'s corpse can be looted!",
-  'error.mountCombat': "You can't mount in combat.",
+    'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Distribution de talents invalide.',
     'error.unknownSpec': 'Spécialisation inconnue.',
     'error.maxLoadouts': 'Vous pouvez enregistrer au maximum {count} configurations.',
@@ -2377,7 +2408,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.ledgerPageDeny':
       'Les pages du registre sont trop solidement reliées pour être emportées.',
     'groundPickup.morthenGrimoireDeny': 'Le fermoir du grimoire est scellé par magie.',
-    'groundPickup.bindingWardDeny': 'Le sceau brule froid sous vos doigts, vous n\'avez pas encore de raison de le prendre.',
+    'groundPickup.bindingWardDeny':
+      "Le sceau brule froid sous vos doigts, vous n'avez pas encore de raison de le prendre.",
     'groundPickup.fenMusterOrderDeny':
       'Le sceau de cire tient tant que cet ordre ne vous revient pas.',
     'groundPickup.caravanGoodsDeny': 'Rien ne vous autorise encore à récupérer ces marchandises.',
@@ -2528,7 +2560,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.mountAlreadyOwned': 'Vous possédez déjà cette monture.',
     'error.builderRequiresRole': 'Builder tools require admin or moderator.',
     'log.corpseLootable': "{name}'s corpse can be looted!",
-  'error.mountCombat': "You can't mount in combat.",
+    'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Spécialisation invalide.',
     'error.unknownSpec': 'Spécialisation inconnue.',
     'error.maxLoadouts': 'Vous pouvez enregistrer au maximum {count} configurations.',
@@ -2823,7 +2855,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.mountAlreadyOwned': 'You already own that mount.',
     'error.builderRequiresRole': 'Builder tools require admin or moderator.',
     'log.corpseLootable': "{name}'s corpse can be looted!",
-  'error.mountCombat': "You can't mount in combat.",
+    'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Invalid talent build.',
     'error.unknownSpec': 'Unknown specialization.',
     'error.maxLoadouts': 'You can save at most {count} loadouts.',
@@ -3024,7 +3056,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.ledgerPageDeny':
       'Le pagine del registro sono rilegate troppo saldamente per portarle via.',
     'groundPickup.morthenGrimoireDeny': 'Il fermaglio del grimorio è sigillato dalla magia.',
-    'groundPickup.bindingWardDeny': 'Il sigillo brucia freddo al tatto, non hai ancora motivo di prenderlo.',
+    'groundPickup.bindingWardDeny':
+      'Il sigillo brucia freddo al tatto, non hai ancora motivo di prenderlo.',
     'groundPickup.fenMusterOrderDeny': "Il sigillo di cera resiste finché l'ordine non ti spetta.",
     'groundPickup.caravanGoodsDeny': 'Non sei ancora autorizzato a recuperare queste merci.',
     'groundPickup.rustedCenserDeny': 'Il turibolo è incatenato al suo posto.',
@@ -3044,7 +3077,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilEnough': 'Porti già con te un Sigillo di Gravecaller.',
     'groundPickup.ledgerPageEnough': 'Hai già abbastanza pagine di registro.',
     'groundPickup.morthenGrimoireEnough': 'Hai già il Grimorio di Morthen.',
-    'groundPickup.bindingWardEnough': 'Hai gia tutti e tre i Sigilli dell\'Odio.',
+    'groundPickup.bindingWardEnough': "Hai gia tutti e tre i Sigilli dell'Odio.",
     'groundPickup.fenMusterOrderEnough': "Hai già l'ordine di raduno di Fenbridge.",
     'groundPickup.caravanGoodsEnough': 'Hai già abbastanza merci della carovana.',
     'groundPickup.rustedCenserEnough': 'Hai già abbastanza turiboli arrugginiti.',
@@ -3174,7 +3207,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.mountAlreadyOwned': 'Possiedi già quella cavalcatura.',
     'error.builderRequiresRole': 'Builder tools require admin or moderator.',
     'log.corpseLootable': "{name}'s corpse can be looted!",
-  'error.mountCombat': "You can't mount in combat.",
+    'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Build dei talenti non valida.',
     'error.unknownSpec': 'Specializzazione sconosciuta.',
     'error.maxLoadouts': 'Puoi salvare al massimo {count} configurazioni.',
@@ -3472,7 +3505,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilDeny': 'Das Siegel weist Eure Berührung ab.',
     'groundPickup.ledgerPageDeny': 'Die Buchseiten sind zu fest gebunden, um sie mitzunehmen.',
     'groundPickup.morthenGrimoireDeny': 'Die Schließe des Grimoires ist magisch versiegelt.',
-    'groundPickup.bindingWardDeny': 'Das Siegel brennt kalt bei Beruehrung, du hast noch keinen Grund, es zu nehmen.',
+    'groundPickup.bindingWardDeny':
+      'Das Siegel brennt kalt bei Beruehrung, du hast noch keinen Grund, es zu nehmen.',
     'groundPickup.fenMusterOrderDeny': 'Das Wachssiegel hält, bis Euch der Befehl zusteht.',
     'groundPickup.caravanGoodsDeny': 'Ihr seid noch nicht befugt, diese Waren zu bergen.',
     'groundPickup.rustedCenserDeny': 'Das Räuchergefäß ist fest angekettet.',
@@ -3622,7 +3656,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.mountAlreadyOwned': 'Ihr besitzt dieses Reittier bereits.',
     'error.builderRequiresRole': 'Builder tools require admin or moderator.',
     'log.corpseLootable': "{name}'s corpse can be looted!",
-  'error.mountCombat': "You can't mount in combat.",
+    'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Ungültige Talentverteilung.',
     'error.unknownSpec': 'Unbekannte Spezialisierung.',
     'error.maxLoadouts': 'Ihr könnt höchstens {count} Vorlagen speichern.',
@@ -4127,7 +4161,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.ridingQuestUntrained': '你必须先学习骑乘术才能参加这个课程。',
     'error.builderRequiresRole': 'Builder tools require admin or moderator.',
     'log.corpseLootable': "{name}'s corpse can be looted!",
-  'error.mountCombat': "You can't mount in combat.",
+    'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': '无效的天赋配置。',
     'error.unknownSpec': '未知的专精。',
     'error.maxLoadouts': '你最多只能保存{count}套配置。',
@@ -4560,7 +4594,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.ridingQuestUntrained': '你必須先學習騎乘術才能參加這個課程。',
     'error.builderRequiresRole': 'Builder tools require admin or moderator.',
     'log.corpseLootable': "{name}'s corpse can be looted!",
-  'error.mountCombat': "You can't mount in combat.",
+    'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': '無效的天賦配置。',
     'error.unknownSpec': '未知的專精。',
     'error.maxLoadouts': '你最多只能儲存 {count} 組配置。',
@@ -4999,7 +5033,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.ridingQuestUntrained': '이 수업을 받으려면 먼저 기승술을 배워야 합니다.',
     'error.builderRequiresRole': 'Builder tools require admin or moderator.',
     'log.corpseLootable': "{name}'s corpse can be looted!",
-  'error.mountCombat': "You can't mount in combat.",
+    'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': '잘못된 특성 구성입니다.',
     'error.unknownSpec': '알 수 없는 전문화입니다.',
     'error.maxLoadouts': '특성 묶음은 최대 {count}개까지 저장할 수 있습니다.',
@@ -5449,7 +5483,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.ridingQuestUntrained': 'このレッスンを受けるには、まず騎乗術を習得してください。',
     'error.builderRequiresRole': 'Builder tools require admin or moderator.',
     'log.corpseLootable': "{name}'s corpse can be looted!",
-  'error.mountCombat': "You can't mount in combat.",
+    'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': '無効なタレントビルドです。',
     'error.unknownSpec': '不明な専門化です。',
     'error.maxLoadouts': 'ロードアウトは最大{count}個まで保存できます。',
@@ -5678,7 +5712,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.ledgerPageDeny':
       'As páginas do livro-caixa estão encadernadas firme demais para serem arrancadas.',
     'groundPickup.morthenGrimoireDeny': 'O fecho do grimório está selado por magia.',
-    'groundPickup.bindingWardDeny': 'O sigilo queima frio ao toque, voce ainda nao tem motivo para pega-lo.',
+    'groundPickup.bindingWardDeny':
+      'O sigilo queima frio ao toque, voce ainda nao tem motivo para pega-lo.',
     'groundPickup.fenMusterOrderDeny':
       'O selo de cera resiste até que a ordem seja sua por direito.',
     'groundPickup.caravanGoodsDeny':
@@ -5827,7 +5862,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.mountAlreadyOwned': 'Você já tem essa montaria.',
     'error.builderRequiresRole': 'Builder tools require admin or moderator.',
     'log.corpseLootable': "{name}'s corpse can be looted!",
-  'error.mountCombat': "You can't mount in combat.",
+    'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Estrutura de talentos inválida.',
     'error.unknownSpec': 'Especialização desconhecida.',
     'error.maxLoadouts': 'Você pode salvar no máximo {count} conjuntos.',
@@ -6177,7 +6212,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.ledgerPageDeny':
       'Страницы погребальной книги сшиты слишком крепко, чтобы их вырвать.',
     'groundPickup.morthenGrimoireDeny': 'Застёжка гримуара запечатана магией.',
-    'groundPickup.bindingWardDeny': '????? ???????? ??????? ??? ?????????????, ? ??? ???? ??? ??????? ????? ???.',
+    'groundPickup.bindingWardDeny':
+      '????? ???????? ??????? ??? ?????????????, ? ??? ???? ??? ??????? ????? ???.',
     'groundPickup.fenMusterOrderDeny':
       'Восковая печать держится, пока приказ не станет вашим по праву.',
     'groundPickup.caravanGoodsDeny': 'Вам пока не дозволено забирать эти товары.',
@@ -6344,7 +6380,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.ridingQuestUntrained': 'Чтобы пройти этот урок, сначала обучитесь верховой езде.',
     'error.builderRequiresRole': 'Builder tools require admin or moderator.',
     'log.corpseLootable': "{name}'s corpse can be looted!",
-  'error.mountCombat': "You can't mount in combat.",
+    'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Недопустимая сборка талантов.',
     'error.unknownSpec': 'Неизвестная специализация.',
     'error.maxLoadouts': 'Можно сохранить не более {count} наборов.',
@@ -10157,8 +10193,7 @@ const RULES: Rule[] = [
   },
   {
     re: /^You can't muster a warcamp right now\.$/,
-    build: () =>
-      enPassthrough("You can't muster a warcamp right now.", t('sim.venues.skErrBusy')),
+    build: () => enPassthrough("You can't muster a warcamp right now.", t('sim.venues.skErrBusy')),
   },
   {
     re: /^The muster roll is full\.$/,
@@ -10186,13 +10221,11 @@ const RULES: Rule[] = [
   },
   {
     re: /^Not enough timber and stone for that\.$/,
-    build: () =>
-      enPassthrough('Not enough timber and stone for that.', t('sim.venues.skErrCost')),
+    build: () => enPassthrough('Not enough timber and stone for that.', t('sim.venues.skErrCost')),
   },
   {
     re: /^Your camp already has a barracks\.$/,
-    build: () =>
-      enPassthrough('Your camp already has a barracks.', t('sim.venues.skHasBarracks')),
+    build: () => enPassthrough('Your camp already has a barracks.', t('sim.venues.skHasBarracks')),
   },
   {
     re: /^Your barracks stands\. Footmen may muster\.$/,
@@ -10201,13 +10234,11 @@ const RULES: Rule[] = [
   },
   {
     re: /^Your camp has all its watchtowers\.$/,
-    build: () =>
-      enPassthrough('Your camp has all its watchtowers.', t('sim.venues.skTowersMax')),
+    build: () => enPassthrough('Your camp has all its watchtowers.', t('sim.venues.skTowersMax')),
   },
   {
     re: /^A watchtower rises over your camp\.$/,
-    build: () =>
-      enPassthrough('A watchtower rises over your camp.', t('sim.venues.skTowerUp')),
+    build: () => enPassthrough('A watchtower rises over your camp.', t('sim.venues.skTowerUp')),
   },
   {
     re: /^Footmen need a barracks\.$/,
@@ -10219,8 +10250,7 @@ const RULES: Rule[] = [
   },
   {
     re: /^Your footmen march on the rally point\.$/,
-    build: () =>
-      enPassthrough('Your footmen march on the rally point.', t('sim.venues.skRally')),
+    build: () => enPassthrough('Your footmen march on the rally point.', t('sim.venues.skRally')),
   },
   {
     re: /^WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!$/,
@@ -10461,8 +10491,7 @@ const RULES: Rule[] = [
   },
   {
     re: /^The grid is full for the next race\.$/,
-    build: () =>
-      enPassthrough('The grid is full for the next race.', t('sim.venues.derbyErrFull')),
+    build: () => enPassthrough('The grid is full for the next race.', t('sim.venues.derbyErrFull')),
   },
   {
     re: /^You are on the card for the next Boarpit bout \((.+) signed\)\.$/,
@@ -10486,8 +10515,7 @@ const RULES: Rule[] = [
   },
   {
     re: /^Knocked out! You are hauled to the rail\.$/,
-    build: () =>
-      enPassthrough('Knocked out! You are hauled to the rail.', t('sim.venues.pitKo')),
+    build: () => enPassthrough('Knocked out! You are hauled to the rail.', t('sim.venues.pitKo')),
   },
   {
     re: /^You forfeit the bout\.$/,
@@ -10520,8 +10548,7 @@ const RULES: Rule[] = [
   },
   {
     re: /^The card is full for the next bout\.$/,
-    build: () =>
-      enPassthrough('The card is full for the next bout.', t('sim.venues.pitErrFull')),
+    build: () => enPassthrough('The card is full for the next bout.', t('sim.venues.pitErrFull')),
   },
   {
     re: /^The deed to (.+) is yours\. Welcome home\.$/,
@@ -10549,16 +10576,12 @@ const RULES: Rule[] = [
   },
   {
     re: /^That home already has an owner\.$/,
-    build: () =>
-      enPassthrough('That home already has an owner.', t('sim.venues.homeErrOwned')),
+    build: () => enPassthrough('That home already has an owner.', t('sim.venues.homeErrOwned')),
   },
   {
     re: /^You already hold a deed on Homestead Lane\.$/,
     build: () =>
-      enPassthrough(
-        'You already hold a deed on Homestead Lane.',
-        t('sim.venues.homeErrHaveDeed'),
-      ),
+      enPassthrough('You already hold a deed on Homestead Lane.', t('sim.venues.homeErrHaveDeed')),
   },
   {
     re: /^Unknown command\.$/,
@@ -11705,6 +11728,24 @@ const RULES: Rule[] = [
   {
     re: /^You withdraw (.+) from the guild bank\.$/,
     build: (m) => tSim('log.guildBankWithdrawItem', { item: locItem(m[1]) }),
+  },
+  // Waypoints + Town Portal (src/sim/waypoints.ts, src/sim/town_portal.ts):
+  // waypoint and town names splice verbatim (authored proper nouns).
+  {
+    re: /^Waypoint activated: (.+)\. Travel here from any other waypoint\.$/,
+    build: (m) => tSim('log.waypointActivated', { name: m[1] }),
+  },
+  {
+    re: /^(.+) waypoint\. Choose a destination to travel\.$/,
+    build: (m) => tSim('log.waypointChoose', { name: m[1] }),
+  },
+  {
+    re: /^You travel to (.+)\.$/,
+    build: (m) => tSim('log.waypointTravel', { name: m[1] }),
+  },
+  {
+    re: /^You open a town portal to (.+)\.$/,
+    build: (m) => tSim('log.townPortalOpen', { name: m[1] }),
   },
 ];
 

@@ -13,6 +13,7 @@
 // (src/render/nameplate_painter.ts), not markup.
 import { CLASSES } from '../sim/data';
 import type { LeaderboardEntry } from '../world_api';
+import { normalizeRealmTag } from './cryptic/highscores_realm_filter';
 import { classDisplayName } from './entity_i18n';
 import { esc } from './esc';
 import { formatNumber, t } from './i18n';
@@ -52,8 +53,10 @@ export function highscoreRowHtml(r: LeaderboardEntry): string {
     r.prestigeRank > 0
       ? `<span class="hs-prestige" title="${esc(`${t('game.prestige.rank')} ${formatNumber(r.prestigeRank, { maximumFractionDigits: 0 })}`)}">&starf;${formatNumber(r.prestigeRank, { maximumFractionDigits: 0 })}</span>`
       : '';
+  // data-realm carries the normalized realm tag the High Scores realm filter
+  // (src/ui/cryptic/highscores_realm_filter.ts) matches chips against.
   return (
-    `<div class="hs-row${r.rank <= 3 ? ' hs-top' : ''}">` +
+    `<div class="hs-row${r.rank <= 3 ? ' hs-top' : ''}" data-realm="${esc(normalizeRealmTag(r.realm))}">` +
     `<span class="hs-rank">${formatNumber(r.rank, { maximumFractionDigits: 0 })}</span>` +
     `<span class="hs-name"${known ? ` title="${esc(classDisplayName(r.cls))}"` : ''}>${star}${esc(r.name)}${guildTagHtml(r.guild)}</span>` +
     `<span class="hs-realm" data-label="${esc(realmLabel)}">${esc(r.realm ?? '')}</span>` +

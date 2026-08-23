@@ -18,7 +18,8 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.items.mount_emerald_wyrm.name': '翡翠巨龍韁繩',
   'entities.npcs.stable_master_wren.name': '雷恩·鞍值',
   'entities.npcs.stable_master_wren.title': '馬廄總管',
-  'entities.npcs.stable_master_wren.greeting': '每位英雄都需要坐騎，{className}。雄鹿沉穩，迅猛龍迅捷，而巨龍……巨龍會飛。',
+  'entities.npcs.stable_master_wren.greeting':
+    '每位英雄都需要坐騎，{className}。雄鹿沉穩，迅猛龍迅捷，而巨龍……巨龍會飛。',
   'hudChrome.bg.clock': '{minutes}:{seconds}',
   'hudChrome.controller.zoomIn': '放大',
   'hudChrome.controller.zoomOut': '縮小',
@@ -2727,11 +2728,13 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.heroic_strike.description':
     '一次強力攻擊，使近戰傷害提高 {damage}。在你的下一次揮擊時觸發。',
   'entities.abilities.battle_shout.name': '鐵嗓怒吼',
-  'entities.abilities.battle_shout.description': '發出一聲怒吼，使所有隊伍成員的攻擊強度提高 {buff}%，持續 30 分鐘。',
+  'entities.abilities.battle_shout.description':
+    '發出一聲怒吼，使所有隊伍成員的攻擊強度提高 {buff}%，持續 30 分鐘。',
   'entities.abilities.commanding_shout.name': '激勵吶喊',
   'entities.abilities.commanding_shout.description': '使你的耐力提高 {buff}，持續 2 分鐘。',
   'entities.abilities.demoralizing_shout.name': '厲嚎',
-  'entities.abilities.demoralizing_shout.description': '發出可怕的怒吼，使附近所有敵人造成的傷害降低 {buff}%，持續 20 秒。',
+  'entities.abilities.demoralizing_shout.description':
+    '發出可怕的怒吼，使附近所有敵人造成的傷害降低 {buff}%，持續 20 秒。',
   'entities.abilities.charge.name': '猛衝',
   'entities.abilities.charge.description':
     '向一名敵人衝鋒，產生 9 點怒氣並使其昏迷 1 秒。8-25 碼距離。',
@@ -3722,7 +3725,8 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_intro.title': '人人都有一技之長',
   'entities.quests.q_prof_intro.text':
     '伊斯特布魯克的每個人都有除了劍術之外的手藝，{playerName}。鎮子周圍散落著礦脈，去揮鎬採上5塊礦石帶給我。要親自採，別耍花招，我看得出來。',
-  'entities.quests.q_prof_intro.completion': '看吧？礦石採到了，手上也磨出了繭。趕路時繼續採礦、伐木和採藥；回城後，別忘了市場旁的城鎮專注告示板和附近的製作台。只要你願意，這些手藝都能換來公道的生計。',
+  'entities.quests.q_prof_intro.completion':
+    '看吧？礦石採到了，手上也磨出了繭。趕路時繼續採礦、伐木和採藥；回城後，別忘了市場旁的城鎮專注告示板和附近的製作台。只要你願意，這些手藝都能換來公道的生計。',
   'entities.quests.q_prof_intro.objectives.0.label': '礦石塊',
   'entities.quests.q_wolves.title': '門前群狼',
   'entities.quests.q_wolves.text':
@@ -7545,8 +7549,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.devBadge.linkedAs': '已連結為 {login}',
   'hudChrome.devBadge.unlink': '取消連結 GitHub',
   'hudChrome.nativeUpdate.title': '有可用更新',
-  'hudChrome.nativeUpdate.body':
-    'Cryptic Realm 有新版本可用。立即更新以取得最新修正與改進。',
+  'hudChrome.nativeUpdate.body': 'Cryptic Realm 有新版本可用。立即更新以取得最新修正與改進。',
   'hudChrome.nativeUpdate.bodyWithVersion':
     'Cryptic Realm {version} 版本已可用。立即更新以取得最新修正與改進。',
   'hudChrome.nativeUpdate.notNow': '暫不',
@@ -9213,6 +9216,23 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'loading.tips.professions': '提示：採集與製造類生活技能可以與你的戰鬥職業同時培養。',
   'loading.tips.loadouts': '提示：保存多套天賦配置，即可在不同組合間切換而無需重新分配天賦點。',
   'loading.tips.pvp': '提示：向其他玩家發起友誼決鬥，或報名灰燼競技場，來檢驗你的組合。',
+  // Realm-flavored loading tips (M16 wordy fills).
+  'loading.tips.infernal.delves': '提示：秘探越深越兇險，下潛前備妥補給。',
+  'loading.tips.infernal.rifts':
+    '提示：分級的裂隙傳送門在王國各處撕開，等級越高戰鬥越難，收穫也越豐厚。',
+  'loading.tips.infernal.crypts': '提示：地穴深處燭光稀少，黑暗中當心腳下。',
+  'loading.tips.classic.dungeons': '提示：英雄在地城中鑄就，組好隊伍一起討伐首領吧。',
+  'loading.tips.classic.wanderers': '提示：廣闊天地眷顧旅人，地圖的偏遠角落藏著稀有怪與採集點。',
+  'loading.tips.classic.deeds': '提示：壯舉會寫入你的功績之書，頭銜與名望在等著勇者。',
+  'loading.tips.arcane.portals': '提示：水晶國度中傳送門能量湧動，遇到世界裂隙總值得繞道一探。',
+  'loading.tips.arcane.relics': '提示：聖物與材料青睞耐心之人，練一門採集專業穩賺不虧。',
+  'loading.tips.arcane.study': '提示：虛空奧祕屬於勤學者，重置天賦前先細讀每個天賦。',
+  'loading.tips.dominion.squads': '提示：邊疆偏愛小隊作戰，地城搜尋器能快速補齊隊伍。',
+  'loading.tips.dominion.formation': '提示：保持陣型，坦克在前、治療在後才能打贏持久戰。',
+  'loading.tips.dominion.momentum': '提示：爭奪之地易主極快，趁小隊氣勢正盛果斷出擊。',
+  'loading.tips.arcadevoid.movement': '提示：虛空競技場重視走位，不斷變換位置，切勿站樁作戰。',
+  'loading.tips.arcadevoid.focus': '提示：霓虹交火轉瞬即逝，全隊集火同一目標逐個擊破。',
+  'loading.tips.arcadevoid.upkeep': '提示：虛空科技講究保養，戰鬥間隙記得檢查裝備升級。',
   // Rideable mounts: the Z keybind + the Mounts window (the stable).
   'hudChrome.keybinds.mount': '騎乘 / 下騎',
   // Bindable mouse buttons. M16 wordy fill; M3/M4/M5 are keycap labels and stay as-is.
@@ -11177,4 +11197,12 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.waterRipples': '水面漣漪（尾波）',
   'hudChrome.breath.label': '呼吸',
   'hudChrome.breath.drowning': '溺水！',
+  'hudChrome.waypoints.title': '傳送點',
+  'hudChrome.waypoints.choose': '選擇目的地',
+  'hudChrome.waypoints.undiscovered': '{name}（未發現）',
+  'hudChrome.waypoints.summary': '已發現 {known}/{total}',
+  'hudChrome.waypoints.discoveredGroup': '已發現',
+  'hudChrome.waypoints.locked': '未發現（{count}）',
+  'hudChrome.waypoints.filterPlaceholder': '搜尋目的地',
+  'hudChrome.waypoints.noMatches': '沒有符合該搜尋的目的地。',
 };

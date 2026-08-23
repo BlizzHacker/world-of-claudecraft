@@ -48,6 +48,17 @@ const PRODUCTION_NODE_ENV = 'production';
 // device_authorization JSON responses carry bearer secrets.
 const OAUTH_PATH_PREFIX = '/oauth/';
 
+// The bare game client pages are the ONE surface third parties may frame: the
+// Facebook Instant Games shell wraps /play in the facebook.com canvas iframe.
+// frame-ancestors takes precedence over any X-Frame-Options an edge proxy or
+// CDN transform adds (browsers ignore XFO when frame-ancestors is present), so
+// this is also the override for Cloudflare's managed SAMEORIGIN header. The
+// allowlist stays closed: self plus the Facebook player origins, nothing else.
+const HEADER_CONTENT_SECURITY_POLICY = 'Content-Security-Policy';
+const FRAMABLE_PLAY_PATHS: readonly string[] = ['/play', '/play/', '/play.html'];
+const PLAY_FRAME_ANCESTORS_VALUE =
+  "frame-ancestors 'self' https://www.facebook.com https://apps.fbsbx.com https://*.facebook.com";
+
 // The browser features denied to every page. Fullscreen and Gamepad are
 // deliberately ABSENT: the game client calls the Fullscreen API (src/main.ts,
 // required for the mobile landscape orientation lock) and the Gamepad API
@@ -112,6 +123,10 @@ export function withSecurityHeaders(
   if (path.startsWith(OAUTH_PATH_PREFIX)) {
     res.setHeader(HEADER_FRAME_OPTIONS, FRAME_OPTIONS_DENY_VALUE);
     res.setHeader(HEADER_CACHE_CONTROL, CACHE_CONTROL_NO_STORE_VALUE);
+  }
+
+  if (FRAMABLE_PLAY_PATHS.includes(path)) {
+    res.setHeader(HEADER_CONTENT_SECURITY_POLICY, PLAY_FRAME_ANCESTORS_VALUE);
   }
 
   res.removeHeader(HEADER_SERVER);

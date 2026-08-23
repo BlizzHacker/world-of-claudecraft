@@ -79,12 +79,26 @@ describe('withSecurityHeaders (unit)', () => {
     expect(res.getHeader('Cache-Control')).toBe(EXPECT.cacheControl);
   });
 
-  it('never sets a Content-Security-Policy or a Cross-Origin-Embedder-Policy header', () => {
-    for (const url of ['/api/status', '/oauth/authorize']) {
+  it('sets a Content-Security-Policy nowhere except the framable play pages', () => {
+    for (const url of ['/api/status', '/oauth/authorize', '/', '/index.html', '/player-card']) {
       const res = run(url);
       expect(res.getHeader('Content-Security-Policy')).toBeUndefined();
       expect(res.getHeader('Cross-Origin-Embedder-Policy')).toBeUndefined();
     }
+  });
+
+  it('allows only self and the Facebook player origins to frame the play pages', () => {
+    const expected =
+      "frame-ancestors 'self' https://www.facebook.com https://apps.fbsbx.com https://*.facebook.com";
+    for (const url of ['/play', '/play/', '/play.html', '/play?fb=1']) {
+      const res = run(url);
+      expect(res.getHeader('Content-Security-Policy')).toBe(expected);
+      // The play pages get no X-Frame-Options of their own: frame-ancestors is
+      // the single authority, and it also overrides an edge-added SAMEORIGIN.
+      expect(res.getHeader('X-Frame-Options')).toBeUndefined();
+      expect(res.getHeader('Cross-Origin-Embedder-Policy')).toBeUndefined();
+    }
+    expect(run('/playground').getHeader('Content-Security-Policy')).toBeUndefined();
   });
 
   it('excludes the gameplay features from the Permissions-Policy and denies the sensors', () => {

@@ -173,7 +173,7 @@ export async function mountUserDropdown(): Promise<void> {
     );
 
     // Add an "Admin" nav link in the homepage nav bar when the user is an
-    // admin — quick jump to /admin/ without going through the dropdown menu.
+    // admin: a quick jump to /admin/ without going through the dropdown menu.
     if (me?.roles.isAdmin) ensureNavAdminLink();
     else removeNavAdminLink();
   })();
@@ -193,6 +193,10 @@ function ensureNavAdminLink(): void {
   const loginBtn = document.getElementById('nav-btn-login');
   const navList = loginBtn?.closest('ul') ?? document.querySelector('nav ul');
   if (!navList) return;
+  // The shared nav (public/nav.js) may already ship its own Admin entry;
+  // injecting a second one duplicated the tab. Bail when ANY /admin link is
+  // already in the nav list.
+  if (navList.querySelector('a[href="/admin"], a[href^="/admin/"]')) return;
   const li = document.createElement('li');
   li.className = 'nav-item';
   li.id = `${NAV_ADMIN_ID}-li`;

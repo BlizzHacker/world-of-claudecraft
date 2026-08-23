@@ -47,21 +47,43 @@ describe('web login guard (anti-bot)', () => {
   });
 
   it('accepts Capacitor native app origins', () => {
-    expect(isWebClientRequest(req({ origin: 'capacitor://localhost', host: 'crypticrealm.com' }))).toBe(true);
-    expect(isWebClientRequest(req({ origin: 'http://localhost', host: 'crypticrealm.com' }))).toBe(true);
-    expect(isWebClientRequest(req({ origin: 'https://localhost', host: 'crypticrealm.com' }))).toBe(true);
+    expect(
+      isWebClientRequest(req({ origin: 'capacitor://localhost', host: 'crypticrealm.com' })),
+    ).toBe(true);
+    expect(isWebClientRequest(req({ origin: 'http://localhost', host: 'crypticrealm.com' }))).toBe(
+      true,
+    );
+    expect(isWebClientRequest(req({ origin: 'https://localhost', host: 'crypticrealm.com' }))).toBe(
+      true,
+    );
   });
 
   it('identifies native app origins for Turnstile bypass', () => {
-    expect(isNativeAppRequest(req({ origin: 'capacitor://localhost', host: 'crypticrealm.com' }))).toBe(true);
-    expect(isNativeAppRequest(req({ origin: 'http://localhost', host: 'crypticrealm.com' }))).toBe(true);
-    expect(isNativeAppRequest(req({ origin: 'https://localhost', host: 'crypticrealm.com' }))).toBe(true);
-    expect(isNativeAppRequest(req({ origin: 'https://crypticrealm.com', host: 'crypticrealm.com' }))).toBe(false);
-    expect(isNativeAppRequest(req({ origin: 'https://evil.example.com', host: 'crypticrealm.com' }))).toBe(false);
+    expect(
+      isNativeAppRequest(req({ origin: 'capacitor://localhost', host: 'crypticrealm.com' })),
+    ).toBe(true);
+    expect(isNativeAppRequest(req({ origin: 'http://localhost', host: 'crypticrealm.com' }))).toBe(
+      true,
+    );
+    expect(isNativeAppRequest(req({ origin: 'https://localhost', host: 'crypticrealm.com' }))).toBe(
+      true,
+    );
+    expect(
+      isNativeAppRequest(req({ origin: 'https://crypticrealm.com', host: 'crypticrealm.com' })),
+    ).toBe(false);
+    expect(
+      isNativeAppRequest(req({ origin: 'https://evil.example.com', host: 'crypticrealm.com' })),
+    ).toBe(false);
     expect(isNativeAppRequest(req({ host: 'crypticrealm.com' }))).toBe(false);
-    expect(isWebClientRequest(req({ origin: 'capacitor://localhost', host: 'worldofclaudecraft.com' }))).toBe(true);
-    expect(isWebClientRequest(req({ origin: 'http://localhost', host: 'worldofclaudecraft.com' }))).toBe(true);
-    expect(isWebClientRequest(req({ origin: 'https://localhost', host: 'worldofclaudecraft.com' }))).toBe(true);
+    expect(
+      isWebClientRequest(req({ origin: 'capacitor://localhost', host: 'worldofclaudecraft.com' })),
+    ).toBe(true);
+    expect(
+      isWebClientRequest(req({ origin: 'http://localhost', host: 'worldofclaudecraft.com' })),
+    ).toBe(true);
+    expect(
+      isWebClientRequest(req({ origin: 'https://localhost', host: 'worldofclaudecraft.com' })),
+    ).toBe(true);
     expect(
       isWebClientRequest(req({ origin: 'capacitor://localhost', host: 'worldofclaudecraft.com' })),
     ).toBe(true);
@@ -126,6 +148,60 @@ describe('desktop app origins (Electron shell)', () => {
     expect(isWebClientRequest(req({ origin: 'app://evil', host: 'worldofclaudecraft.com' }))).toBe(
       false,
     );
+  });
+});
+
+describe('Facebook Instant Games origins (fbsbx sandbox)', () => {
+  const staged = 'https://shield-apps-1725436805394319.apps.fbsbx.com';
+  const prod = 'https://apps-1725436805394319.apps.fbsbx.com';
+
+  it('passes the web-login guard for the fbsbx hosting origins in CODE (no WEB_ORIGINS needed)', () => {
+    expect(webLoginEnforced({ NODE_ENV: 'production' } as any)).toBe(true);
+    expect(isWebClientRequest(req({ origin: staged, host: 'crypticrealm.com' }), {} as any)).toBe(
+      true,
+    );
+    expect(isWebClientRequest(req({ origin: prod, host: 'crypticrealm.com' }), {} as any)).toBe(
+      true,
+    );
+  });
+
+  it('rejects fbsbx look-alikes in the web-login guard', () => {
+    for (const origin of [
+      'https://apps.fbsbx.com.evil.com',
+      'https://foo.bar.apps.fbsbx.com',
+      'http://apps-1725436805394319.apps.fbsbx.com',
+      'https://apps.fbsbx.com',
+    ]) {
+      expect(isWebClientRequest(req({ origin, host: 'crypticrealm.com' }), {} as any)).toBe(false);
+    }
+  });
+
+  it('keeps the WEB_ORIGINS env list additive on top of the code lane', () => {
+    // The env list still admits its own entries; the fbsbx code lane does not
+    // replace it.
+    expect(
+      isWebClientRequest(req({ origin: 'https://partner.example.com' }), {
+        WEB_ORIGINS: 'https://partner.example.com',
+      } as any),
+    ).toBe(true);
+    expect(
+      isWebClientRequest(req({ origin: staged }), {
+        WEB_ORIGINS: 'https://partner.example.com',
+      } as any),
+    ).toBe(true);
+  });
+
+  it('reflects the fbsbx hosting origins in the CORS allow-list', () => {
+    expect(allowedCorsOrigin(staged)).toBe(staged);
+    expect(allowedCorsOrigin(prod)).toBe(prod);
+  });
+
+  it('does not reflect fbsbx look-alikes (evil suffix, multi-label, http, no label)', () => {
+    expect(allowedCorsOrigin('https://apps.fbsbx.com.evil.com')).toBeNull();
+    expect(allowedCorsOrigin('https://foo.bar.apps.fbsbx.com')).toBeNull();
+    expect(allowedCorsOrigin('http://apps-1725436805394319.apps.fbsbx.com')).toBeNull();
+    expect(allowedCorsOrigin('https://apps-1725436805394319.apps.fbsbx.com:8443')).toBeNull();
+    expect(allowedCorsOrigin('https://apps.fbsbx.com')).toBeNull();
   });
 });
 

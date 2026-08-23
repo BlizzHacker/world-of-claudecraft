@@ -35,6 +35,11 @@ import { resolveSportKit } from '../sim/content/vale_cup';
 import { resolveActiveWeaponSkin, withWeaponSkinApplied } from '../sim/content/weapon_skin_rules';
 import { WEAPON_SKINS } from '../sim/content/weapon_skins';
 import {
+  authorizeBodySkin,
+  type BodySkinGrantContext,
+  UNLOCKED_SKIN_LEVEL,
+} from '../sim/cosmetics/body_skins';
+import {
   ALL_RECIPES,
   abilitiesKnownAt,
   CLASSES,
@@ -113,10 +118,6 @@ import {
   type DelveRunInfo,
   type DelveShopOfferView,
   type DerbyInfo,
-  type HomesInfo,
-  type HordeInfo,
-  type SkirmishInfo,
-  type PitInfo,
   type DevLeaderboardPage,
   type DuelInfo,
   type FriendInfo,
@@ -124,6 +125,8 @@ import {
   type GuildBankLogEntry,
   type GuildBankLogView,
   type GuildLeaderboardPage,
+  type HomesInfo,
+  type HordeInfo,
   type IWorld,
   isOverheadEmoteId,
   type LeaderboardEntry,
@@ -131,17 +134,19 @@ import {
   type LockpickView,
   type MailInfo,
   type MarketInfo,
+  type MinigameSessionState,
   type MountRaceView,
   ONLINE_WORLD_AUTH_TYPE,
   ONLINE_WORLD_INCOMPATIBLE_MESSAGE,
-  type MinigameSessionState,
   type OverheadEmoteId,
   type PartyInfo,
+  type PitInfo,
   type PlayerProfessionsView,
   type PresenceStatus,
   type RaidLockout,
   type RecipeDef,
   type RiftFloorView,
+  type SkirmishInfo,
   type SocialInfo,
   type ToolEffectSlotView,
   type TowerKind,
@@ -283,8 +288,9 @@ export {
   NATIVE_API_ORIGIN,
   NATIVE_APP,
 } from '../client_origin';
-import { ActiveFrostRing, ActiveTemporalHourglass } from '../world_api/combat';
-import { VcSharedCupInfo, VcViewerReadout } from '../world_api/vale_cup';
+
+import type { ActiveFrostRing, ActiveTemporalHourglass } from '../world_api/combat';
+import type { VcSharedCupInfo, VcViewerReadout } from '../world_api/vale_cup';
 
 export function buildWebSocketAuthMessage(
   token: string,
@@ -423,7 +429,8 @@ export class Api {
   base = NATIVE_API_ORIGIN || DESKTOP_API_ORIGIN || PACKAGED_API_ORIGIN;
 
   setRealm(url: string): void {
-    this.base = normalizeOrigin(url) || NATIVE_API_ORIGIN || DESKTOP_API_ORIGIN || PACKAGED_API_ORIGIN;
+    this.base =
+      normalizeOrigin(url) || NATIVE_API_ORIGIN || DESKTOP_API_ORIGIN || PACKAGED_API_ORIGIN;
   }
 
   // The realm directory is always read from the page's own server. Sending the
@@ -1567,6 +1574,15 @@ export class ClientWorld implements IWorld {
     weaponSkinIds: [],
     weaponSkinLoadout: {},
   };
+  // The server-published body-skin grant verdict (self wire key `bodySkin`):
+  // the roster summary's bodySkinUnlocked / bodySkinDev / entitlements facts,
+  // mirrored so bodySkinGrants() paints the in-game rail from a server answer
+  // and never a client derivation. Defaults locked until the first self frame.
+  private bodySkinGrantsMirror: { unlocked: boolean; dev: boolean; entitlements: string[] } = {
+    unlocked: false,
+    dev: false,
+    entitlements: [],
+  };
   // --- IWorldProgressionXp: XP + post-cap progression scalars + unlocked
   // milestones, mirrored from snapshot self. ---
   xp = 0;
@@ -1998,7 +2014,8 @@ export class ClientWorld implements IWorld {
   ) {
     this.characterId = characterId;
     this.token = token;
-    this.base = normalizeOrigin(base) || NATIVE_API_ORIGIN || DESKTOP_API_ORIGIN || PACKAGED_API_ORIGIN;
+    this.base =
+      normalizeOrigin(base) || NATIVE_API_ORIGIN || DESKTOP_API_ORIGIN || PACKAGED_API_ORIGIN;
     this.clientSeed = clientSeed;
     this.coop = opts?.coop === true;
     this.ownPlayerClass = cls;
@@ -3515,6 +3532,17 @@ export class ClientWorld implements IWorld {
         this.accountCosmetics = normalizeAccountCosmetics(s.cosmetics);
         this.cosmeticsChanged = true;
       }
+      // Body-skin grant verdict (wire `bodySkin`, delta-guarded like cosmetics):
+      // the server's own unlocked/dev/entitlement answer for the appearance
+      // rail, never re-derived here.
+      if (s.bodySkin !== undefined) {
+        const v = (s.bodySkin ?? {}) as Record<string, unknown>;
+        this.bodySkinGrantsMirror = {
+          unlocked: v.unlocked === true,
+          dev: v.dev === true,
+          entitlements: stringList(v.ents),
+        };
+      }
       if (s.qlog !== undefined)
         this.questLog = new Map((s.qlog as QuestProgress[]).map((q) => [q.questId, q]));
       if (s.qdone !== undefined) this.questsDone = new Set(s.qdone);
@@ -4357,6 +4385,34 @@ export class ClientWorld implements IWorld {
   claimEventSkin(skin: number): void {
     const idx = Math.max(0, Math.floor(skin));
     this.cmd({ cmd: 'claim_event_skin', skin: idx });
+  }
+  // Tiered body-skin fly-swap: optimistic local nudge (the changeSkin idiom),
+  // then the snake_case command; the server re-authorizes against account
+  // facts and the next full identity record (`bs`) reconciles every peer. The
+  // optimism itself runs the SAME pure gate over the server-published grants,
+  // so a pick the server would refuse falls back to the base body locally
+  // instead of stranding a lie the wire never corrects.
+  setBodySkin(skinId: string | null): void {
+    const p = this.entities.get(this.playerId);
+    if (p) {
+      p.bodySkinId =
+        skinId === null
+          ? null
+          : authorizeBodySkin(skinId, p.templateId as PlayerClass, this.bodySkinGrants()).skinId;
+    }
+    this.cmd({ cmd: 'set_body_skin', skinId });
+  }
+  // The mirrored server verdict mapped onto the pure grant context the rail
+  // and authorizeBodySkin consume. `unlocked` collapses to the gate level so
+  // one server decides what the gate is; the live entity level is only the
+  // fallback for an older server that never sent the verdict.
+  bodySkinGrants(): BodySkinGrantContext {
+    const m = this.bodySkinGrantsMirror;
+    return {
+      level: m.unlocked ? UNLOCKED_SKIN_LEVEL : (this.entities.get(this.playerId)?.level ?? 0),
+      entitlements: m.entitlements,
+      dev: m.dev,
+    };
   }
   // --- IWorldMounts: collection + dismount. Summoning a specific mount is an
   // item use, not a mount command, so nothing here sends one. The toggle stays

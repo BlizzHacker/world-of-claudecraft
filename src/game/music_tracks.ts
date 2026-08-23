@@ -1,59 +1,58 @@
-// Remastered soundtrack catalog: the streamed mp3 renders of the procedural
-// themes, served from public/audio/music/. The composition machinery in
-// music.ts remains the authoring source (music editor + offline render
-// pipeline); these files are its remastered renders and own runtime playback.
-// Pure data + math, DOM-free, so it unit-tests in plain Node.
+// Cryptic Realm soundtrack catalog: the operator's original CR tracks
+// (public/audio/cryptic/*, owner-provided Suno exports) are the only shipped
+// soundtrack, streamed per zone by the MusicDirector. The composition
+// machinery in music.ts remains the authoring source for the music editor and
+// the offline render pipeline (scripts/render_music.mjs), but its upstream
+// renders no longer ship. Pure data + math, DOM-free, so it unit-tests in
+// plain Node.
 
 import type { MusicZone } from './music';
 
-/** Streamed remaster for each zone cue. null means the zone has no stream:
- *  vale_cup is only ever active at the Sowfield stadium, where the dedicated
- *  sowfield-waiting/sowfield-match tracks own the mix and the zone bus is
- *  ducked to silence, so streaming a file for it would only waste bandwidth. */
-export const ZONE_STREAM_URLS: Record<MusicZone, string | null> = {
-  town_eastbrook: '/audio/music/town_eastbrook.mp3',
-  town_fenbridge: '/audio/music/town_fenbridge.mp3',
-  town_highwatch: '/audio/music/town_highwatch.mp3',
-  vale: '/audio/music/vale.mp3',
-  // The legacy vale cue has no dedicated remaster and is not routed by
-  // musicZoneForLocation; the vale remaster stands in for completeness.
-  vale_legacy: '/audio/music/vale.mp3',
-  marsh: '/audio/music/marsh.mp3',
-  peaks: '/audio/music/peaks.mp3',
-  // STAND-INS (same precedent as vale_legacy): Veiled Hollow, Drakelands, and
-  // Wraithwood do not have supplied remasters yet, so they stream the nearest
-  // existing render instead of falling silent. Replace these three URLs when
-  // their dedicated public/audio/music/<zone>.mp3 files land.
-  dusk: '/audio/music/marsh.mp3',
-  ember: '/audio/music/peaks.mp3',
-  frost: '/audio/music/frost.mp3',
-  amber: '/audio/music/amber.mp3',
-  fen: '/audio/music/fen.mp3',
-  night: '/audio/music/night.mp3',
-  haunt: '/audio/music/marsh.mp3',
-  jungle: '/audio/music/jungle.mp3',
-  garden: '/audio/music/garden.mp3',
-  gale: '/audio/music/gale.mp3',
-  farshore: '/audio/music/farshore.mp3',
-  vale_cup: null,
-  dungeon_hollow_crypt: '/audio/music/dungeon_hollow_crypt.mp3',
-  dungeon_sunken_bastion: '/audio/music/dungeon_sunken_bastion.mp3',
-  dungeon_gravewyrm_sanctum: '/audio/music/dungeon_gravewyrm_sanctum.mp3',
-  // Rift crawl stand-ins borrow the nearest-mood dungeon crawl render.
-  rift_frost: '/audio/music/dungeon_gravewyrm_sanctum.mp3',
-  rift_ember: '/audio/music/dungeon_hollow_crypt.mp3',
-  rift_venom: '/audio/music/dungeon_sunken_bastion.mp3',
-  rift_bone: '/audio/music/dungeon_gravewyrm_sanctum.mp3',
-  rift_brute: '/audio/music/dungeon_hollow_crypt.mp3',
-  rift_void: '/audio/music/dungeon_gravewyrm_sanctum.mp3',
-  rift_storm: '/audio/music/dungeon_hollow_crypt.mp3',
-  rift_tide: '/audio/music/dungeon_sunken_bastion.mp3',
+/** The CR track streamed for each zone cue. All thirty zones map thematically
+ *  onto the twelve-track CR set, mirroring the zone-to-track choices of the CR
+ *  player (src/game/cryptic_music.ts) so both playback paths score a zone the
+ *  same way: towns take the settlement themes, bright overworlds the forest
+ *  and journey cues, moody overworlds the temple and sanctum cues, dungeons
+ *  and rifts the crypt crawls. */
+export const ZONE_STREAM_URLS: Record<MusicZone, string> = {
+  town_eastbrook: '/audio/cryptic/welcome-home-cryptic-realm.mp3',
+  town_fenbridge: '/audio/cryptic/town-hall-cryptic-realm.mp3',
+  town_highwatch: '/audio/cryptic/the-journey-begins-cryptic-realm.mp3',
+  vale: '/audio/cryptic/the-forest-calls-cryptic-realm.mp3',
+  vale_legacy: '/audio/cryptic/the-forest-calls-cryptic-realm.mp3',
+  marsh: '/audio/cryptic/corrupted-temple-cryptic-realm.mp3',
+  peaks: '/audio/cryptic/act-5-sanctum-cryptic-realm.mp3',
+  dusk: '/audio/cryptic/corrupted-temple-cryptic-realm.mp3',
+  ember: '/audio/cryptic/act-5-sanctum-cryptic-realm.mp3',
+  frost: '/audio/cryptic/the-journey-begins-cryptic-realm.mp3',
+  amber: '/audio/cryptic/the-forest-calls-cryptic-realm.mp3',
+  fen: '/audio/cryptic/town-hall-cryptic-realm.mp3',
+  night: '/audio/cryptic/corrupted-temple-cryptic-realm.mp3',
+  haunt: '/audio/cryptic/just-another-crypt-cryptic-realm.mp3',
+  jungle: '/audio/cryptic/the-forest-calls-cryptic-realm.mp3',
+  garden: '/audio/cryptic/welcome-home-cryptic-realm.mp3',
+  gale: '/audio/cryptic/the-journey-begins-cryptic-realm.mp3',
+  farshore: '/audio/cryptic/act-2-welcome-cryptic-realm.mp3',
+  // The dedicated Sowfield waiting/match mp3 pair was retired with the
+  // upstream soundtrack, so the stadium scores from the vale forest cue on the
+  // ordinary zone bus like everywhere else.
+  vale_cup: '/audio/cryptic/the-forest-calls-cryptic-realm.mp3',
+  dungeon_hollow_crypt: '/audio/cryptic/just-another-crypt-cryptic-realm.mp3',
+  dungeon_sunken_bastion: '/audio/cryptic/catacomb-calls-cryptic-realm.mp3',
+  dungeon_gravewyrm_sanctum: '/audio/cryptic/dungeon-time-cryptic-realm.mp3',
+  rift_frost: '/audio/cryptic/catacomb-calls-cryptic-realm.mp3',
+  rift_ember: '/audio/cryptic/dungeon-time-cryptic-realm.mp3',
+  rift_venom: '/audio/cryptic/corrupted-temple-cryptic-realm.mp3',
+  rift_bone: '/audio/cryptic/just-another-crypt-cryptic-realm.mp3',
+  rift_brute: '/audio/cryptic/dungeon-time-cryptic-realm.mp3',
+  rift_void: '/audio/cryptic/catacomb-calls-cryptic-realm.mp3',
+  rift_storm: '/audio/cryptic/act-5-sanctum-cryptic-realm.mp3',
+  rift_tide: '/audio/cryptic/act-2-welcome-cryptic-realm.mp3',
 };
 
-/** The remastered battle themes; each fight opens on one chosen at random. */
+/** The battle themes: every fight opens on the CR boss track. */
 export const COMBAT_STREAM_URLS: string[] = [
-  '/audio/music/combat_1.mp3',
-  '/audio/music/combat_2.mp3',
+  '/audio/cryptic/throne-of-ashes-boss-fight-activated-cryptic-realm.mp3',
 ];
 
 /** Pick which battle theme opens the next fight: uniform over the catalog.

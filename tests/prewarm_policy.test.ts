@@ -58,7 +58,7 @@ const MANIFEST_IDS = [
 ];
 
 describe('resolvePrewarmPolicy: unconstrained (desktop)', () => {
-  it('runs the full manifest with generous budgets and no reordering', () => {
+  it('runs the full manifest with generous budgets', () => {
     const p = resolvePrewarmPolicy(BASE);
     expect(p.minimalManifest).toBe(false);
     expect(p.maxMs).toBe(12000);
@@ -70,9 +70,25 @@ describe('resolvePrewarmPolicy: unconstrained (desktop)', () => {
     // entry timing harness). The soft deadline now bounds the curtain instead.
     expect(p.yieldBetweenEntries).toBe(false);
     expect(p.linkPassPerEntry).toBe(false);
-    expect(p.compileBeforeFirstFrame).toBe(false);
     expect(p.skipMonolithCompile).toBe(false);
     expect(p.finishFullManifestBeforeReveal).toBe(false);
+  });
+
+  it('compiles before the first full-scene frame when parallel compile exists', () => {
+    // The 65s Infernal world entry (log-proven): world.initial-frame drew the
+    // whole scene BEFORE programs.compile ran, so every program force-linked in
+    // one synchronous block inside that first pass. With
+    // KHR_parallel_shader_compile the compile entry links off-thread, so
+    // ordering it ahead of the first frame makes that pass draw already-linked
+    // programs, exactly what the constrained arm has always done.
+    const p = resolvePrewarmPolicy(BASE);
+    expect(p.compileBeforeFirstFrame).toBe(true);
+    const ordered = orderedPrewarmIds(MANIFEST_IDS, p);
+    const frameIdx = ordered.indexOf('world.initial-frame');
+    expect(ordered.indexOf('programs.compile')).toBe(frameIdx - 1);
+    // The reorder never trims or duplicates the manifest.
+    expect(ordered.length).toBe(MANIFEST_IDS.length);
+    expect(new Set(ordered)).toEqual(new Set(MANIFEST_IDS));
   });
 
   it('treats a no-parallel-compile desktop renderer like the constrained arm always was', () => {
@@ -84,6 +100,9 @@ describe('resolvePrewarmPolicy: unconstrained (desktop)', () => {
     expect(p.skipMonolithCompile).toBe(true);
     expect(p.linkPassPerEntry).toBe(true);
     expect(p.minimalManifest).toBe(false);
+    // No off-thread linker to front-load, so the manifest order is unchanged.
+    expect(p.compileBeforeFirstFrame).toBe(false);
+    expect(orderedPrewarmIds(MANIFEST_IDS, p)).toEqual(MANIFEST_IDS);
   });
 
   it('no longer holds the reveal for the full Insane manifest', () => {
@@ -129,10 +148,11 @@ describe('resolvePrewarmPolicy: unconstrained (desktop)', () => {
     expect(resolvePrewarmPolicy({ ...BASE, lowGfx: true }).maxViews).toBe(48);
   });
 
-  it('never reorders or trims the manifest', () => {
-    const p = resolvePrewarmPolicy(BASE);
-    expect(orderedPrewarmIds(MANIFEST_IDS, p)).toEqual(MANIFEST_IDS);
-    for (const id of MANIFEST_IDS) expect(prewarmEntryRuns(id, p)).toBe(true);
+  it('never trims the manifest, whichever compile arm runs', () => {
+    for (const asyncCompileSupported of [true, false]) {
+      const p = resolvePrewarmPolicy({ ...BASE, asyncCompileSupported });
+      for (const id of MANIFEST_IDS) expect(prewarmEntryRuns(id, p)).toBe(true);
+    }
   });
 });
 

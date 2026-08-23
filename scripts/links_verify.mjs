@@ -45,7 +45,7 @@ const EXPECTED_LINKS = [
   'https://www.tiktok.com/@crypticmmo',
   'https://www.youtube.com/@CrypticMMO',
   'https://www.reddit.com/r/CrypticMMO',
-  'https://discord.gg/Zdj3JGrx',
+  'https://discord.gg/WnxcamHJdh',
   '/contributions.html',
   'https://solscan.io/token/3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv',
 ];
@@ -128,7 +128,7 @@ async function main() {
     });
     ok(ld && ld !== 'INVALID', `JSON-LD present and valid`);
     const sameAs = ld && ld !== 'INVALID' ? (ld.about?.sameAs ?? []) : [];
-    ok(['https://x.com/CrypticMMO', 'https://discord.gg/Zdj3JGrx'].every((u) => sameAs.includes(u)),
+    ok(['https://x.com/CrypticMMO', 'https://discord.gg/WnxcamHJdh'].every((u) => sameAs.includes(u)),
       `JSON-LD sameAs lists Cryptic Realm profiles (${sameAs.length})`);
 
     await page.screenshot({ path: path.join(OUT, 'links_desktop.png') });

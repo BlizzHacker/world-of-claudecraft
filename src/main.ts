@@ -59,6 +59,7 @@ import {
 } from './game/entry_diagnostics';
 import { FACEBOOK_APP } from './game/facebook_context';
 import { reportFacebookLoadProgress, signalFacebookGameReady } from './game/facebook_instant';
+import { isSignInMethodAvailable } from './game/facebook_login_gates';
 import { GamepadManager } from './game/gamepad';
 import { GamepadBindings } from './game/gamepad_bindings';
 import { shouldUseGamepadPointerMode } from './game/gamepad_pointer_mode';
@@ -225,7 +226,9 @@ import {
   charactersReady,
   ensureCharacterUrl,
   preloadMechAssets,
+  preloadVisualAssets,
   startStreamedCharacterPreloads,
+  visualAssetsReady,
 } from './render/characters/assets';
 import {
   setBodyOverrides,
@@ -268,6 +271,7 @@ import {
   graphicsPresetLabel,
   resolveGfxProfile,
 } from './render/gfx';
+import { preloadRealmClassVisuals } from './render/realm_class_preload';
 import { Renderer } from './render/renderer';
 import {
   hasAuthoritativeSelfPositionDiscontinuity,
@@ -436,6 +440,7 @@ import {
 } from './ui/portrait_chip';
 import { hideReconnectOverlay, showReconnectOverlay } from './ui/reconnect_overlay';
 import { rovingTarget } from './ui/roving_index';
+import { readLocalStorage, writeLocalStorage } from './ui/safe_local_storage';
 import { createSpectateBadge } from './ui/spectate_badge';
 import { refreshStartSkinPickerPortraits } from './ui/start_skin_picker_portraits';
 import { refreshSteamLinkStatus, wireSteamLink } from './ui/steam_link';
@@ -484,6 +489,7 @@ import {
 import { mountBestiary } from './ui/cryptic/bestiary';
 import {
   type BodySkinRailLabels,
+  type BodySkinRailRow,
   bodySkinRailHtml,
   bodySkinRailRows,
   unlockLevelSentence,
@@ -496,7 +502,6 @@ import {
   usesRealmHeroRoster,
 } from './ui/cryptic/char_grid_host';
 import { mountChatFrame } from './ui/cryptic/chat_frame';
-import { loadDocFragment } from './ui/cryptic/doc_fragment';
 import { mountDownloadLaunchers } from './ui/cryptic/download_launchers';
 import {
   enforceDiabloLock,
@@ -507,6 +512,7 @@ import {
   setFpsMode,
 } from './ui/cryptic/fps_mode';
 import { mountHudGlobes, resolveHudSkin, setHudSkin } from './ui/cryptic/globes';
+import { mountHighscoresRealmFilter } from './ui/cryptic/highscores_realm_filter';
 import { mountHudLayout, registerHudLayoutTarget } from './ui/cryptic/hud_layout';
 import { mountIngameOptions } from './ui/cryptic/ingame_options';
 import { mountLootVault } from './ui/cryptic/loot_vault';
@@ -532,6 +538,7 @@ import {
 import { clearCrypticSession, readCrypticSession, writeCrypticSession } from './ui/cryptic/session';
 import { mountSkillTree } from './ui/cryptic/skilltree';
 import { mountUserDropdown } from './ui/cryptic/user_dropdown';
+import { mountVrEntry } from './ui/cryptic/vr_entry';
 import { mountWalletPanel } from './ui/cryptic/wallet_panel';
 import { notePropPlaced, tryBuilderSelect } from './ui/cryptic/world_builder';
 import { getMe as getMeForEditor, getToken as getTokenForEditor } from './user/api';
@@ -901,6 +908,7 @@ if (typeof document !== 'undefined') {
     mountPwaInstall();
     mountXboxEnv();
     mountNewsRealmFilter();
+    mountHighscoresRealmFilter();
     mountDownloadLaunchers();
     mountMusicWidget();
     // Browsers block audio autoplay until a user gesture; kick the Cryptic Realm
@@ -1697,6 +1705,10 @@ async function startGame(
     mountSkillTree();
     mountLootVault();
     mountPickitPanel();
+    // Inert unless ?xr=1 AND the browser reports immersive-vr support (Quest).
+    // The getter re-reads the binding so a graphics-profile renderer rebuild
+    // keeps the entry pointed at the live webgl instance.
+    mountVrEntry(() => (rendererReady ? renderer.webgl : null));
     applyPerfOrnamentVars(); // Performance Overlay window's gilded corner/edge masks
     applyMinimapOrnamentVars(); // minimap disc's gilded ring
     hud.prewarmStaticUiAssets();
@@ -2254,8 +2266,12 @@ async function startGame(
     onProfessions: () => hud.toggleProfessions(),
     onNameplates: () => (renderer.showNameplates = !renderer.showNameplates),
     onMusic: () => {
-      music.setEnabled(!music.enabled);
-      return music.enabled;
+      // One tap drives BOTH engines: the CR soundtrack owns the mix and the
+      // streamed director is its zone-bus twin; off means silence.
+      const on = !(music.enabled || crypticMusic.enabled);
+      music.setEnabled(on);
+      crypticMusic.setEnabled(on);
+      return on;
     },
     onRecenterCamera: () => input.recenterCameraBehind(world.player.facing),
     onGroundAimMove: (x, y) => {
@@ -2305,7 +2321,9 @@ async function startGame(
   };
   // reflect the current music state on the touch toggle (it may already be off
   // from a prior session, persisted in localStorage)
-  document.getElementById('mobile-music')?.classList.toggle('mm-muted', !music.enabled);
+  document
+    .getElementById('mobile-music')
+    ?.classList.toggle('mm-muted', !(music.enabled || crypticMusic.enabled));
 
   // Gamepad: a separate remappable button profile drives the same dispatch the
   // keyboard/touch paths use. Edge-button actions route through this dispatcher;
@@ -2789,6 +2807,7 @@ async function startGame(
         break;
       case 'musicVolume':
         music.setVolume(v);
+        crypticMusic.setVolume(v);
         break;
       case 'voiceVolume':
         voice.setVolume(v);
@@ -5152,6 +5171,13 @@ async function startGame(
     return;
   }
   setLoadingPercent(90, t('loading.enteringWorld'));
+  // Fetch the active realm's lazy class bodies behind the curtain, before the
+  // prewarm, so the player's own body never pops in late through the fail-soft
+  // view-create path. Bytes only (stage 1 of the preloadDelveAssets pattern);
+  // the constrained profile keeps its minimal entry set and streams on demand.
+  if (!GFX.constrainedMemory) {
+    await preloadRealmClassVisuals();
+  }
   try {
     const prewarm = await renderer.prewarmInitialScene({
       onEntryStart: (id, category) =>
@@ -6098,7 +6124,7 @@ function paintBodySkinRail(
   grants: { level: number; entitlements?: readonly string[]; dev?: boolean },
   selectedSkinId: string | null,
   onPick?: (skinId: string | null) => void,
-): void {
+): BodySkinRailRow[] {
   const labels = bodySkinRailLabels();
   const rows = bodySkinRailRows({ cls, grants, selectedSkinId, labels });
   host.innerHTML = bodySkinRailHtml(rows, labels);
@@ -6128,6 +6154,7 @@ function paintBodySkinRail(
       handleKeyboardActivation(e, pick);
     });
   });
+  return rows;
 }
 
 /** The rail's host under a creator grid, created on first paint. */
@@ -6954,8 +6981,16 @@ async function ensureCharacterPreview(panelId: string): Promise<void> {
   }
 
   characterPreviewLoadPromise = (async () => {
-    const { assetsReady, CharacterPreview } = await loadGameRuntime();
-    await assetsReady();
+    const { CharacterPreview } = await loadGameRuntime();
+    // Gate on the NARROW charactersReady (character boot GLBs + skin
+    // atlases, with its own retry loop), never the site-wide assetsReady
+    // gate: that shared promise covers EVERY registered preload (terrain,
+    // dungeon, foliage, ...), so this lazily mounted create/offline
+    // turntable both waited on world content it never draws and sank
+    // forever on any unrelated transient failure, exactly the strand the
+    // boot-time mount near the end of this file already fixed
+    // (tests/character_preview_boot.test.ts pins this gate).
+    await charactersReady();
     const container = $(previewContainerIdFor(panelId));
     const canvas = $('#char-preview-canvas') as HTMLCanvasElement | null;
     // Same memory policy as the boot-time mount: whichever path wins the race
@@ -7012,17 +7047,10 @@ function resetViewTransitionStyle(el: HTMLElement): void {
 }
 
 function switchMainView(targetId: string): void {
-  const views = [
-    '#hero-view',
-    '#highscores-view',
-    '#wiki-view',
-    '#news-view',
-    '#download-view',
-    '#contributions-view',
-    '#links-view',
-    '#whitepaper-view',
-    '#account-view',
-  ];
+  // Only views that exist as sections in index.html. Wiki, Contributions,
+  // Links, and White Paper are real documents; their nav buttons navigate
+  // (switching to a missing section hid every view and blanked the page).
+  const views = ['#hero-view', '#highscores-view', '#news-view', '#download-view', '#account-view'];
   const currentViewId = views.find((id) => {
     const el = $(id);
     return el && !el.hasAttribute('hidden');
@@ -7033,9 +7061,6 @@ function switchMainView(targetId: string): void {
     '#highscores-view': 'nav-btn-highscores',
     '#news-view': 'nav-btn-news',
     '#download-view': 'nav-btn-download',
-    '#contributions-view': 'nav-btn-contributions',
-    '#links-view': 'nav-btn-links',
-    '#whitepaper-view': 'nav-btn-whitepaper',
     '#account-view': 'nav-btn-account',
   };
 
@@ -7304,7 +7329,7 @@ const LAST_REALM_KEY = 'woc_last_realm';
 function preferredRealmEntry(
   dir: import('./net/online').RealmDirectory,
 ): import('./net/online').RealmEntry | null {
-  const remembered = localStorage.getItem(LAST_REALM_KEY);
+  const remembered = readLocalStorage(LAST_REALM_KEY);
   const rememberedEntry = dir.realms.find((r) => r.name === remembered);
   if (rememberedEntry) return rememberedEntry;
   const activeRealmId = getActiveRealm().id;
@@ -8083,7 +8108,7 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
 }
 
 function selectRealm(entry: import('./net/online').RealmEntry): void {
-  localStorage.setItem(LAST_REALM_KEY, entry.name);
+  writeLocalStorage(LAST_REALM_KEY, entry.name);
   persistActiveRealmFromDirectoryName(entry.name);
   // If the realm lives on a DIFFERENT origin (e.g. dev.crypticrealm.com,
   // fps.moveweight.com), we must NAVIGATE the browser there rather than fetch
@@ -8160,7 +8185,7 @@ function enterRealmWithPopulation(
   ladder: boolean,
   hardcore: boolean,
 ): void {
-  localStorage.setItem(LAST_REALM_KEY, name);
+  writeLocalStorage(LAST_REALM_KEY, name);
   persistActiveRealmFromDirectoryName(name);
   setPopulationPref(ladder, hardcore);
   const pop = `${ladder ? 'l' : ''}${hardcore ? 'h' : ''}` || 'n';
@@ -8271,7 +8296,7 @@ function selectRealmInline(entry: import('./net/online').RealmEntry): void {
   if (entry.name === api.realm) return;
   api.setRealm(entry.url);
   api.realm = entry.name;
-  localStorage.setItem(LAST_REALM_KEY, entry.name);
+  writeLocalStorage(LAST_REALM_KEY, entry.name);
   persistActiveRealmFromDirectoryName(entry.name);
   $('#charselect-realm').textContent = entry.name;
   void refreshCharacters();
@@ -8285,7 +8310,7 @@ const CHAR_SORT_LABEL_KEYS: Record<CharSortMode, TranslationKey> = {
   recent: 'character.sortRecent',
   playtime: 'character.sortPlaytime',
 };
-let charSortMode: CharSortMode = normalizeCharSortMode(localStorage.getItem(CHAR_SORT_KEY));
+let charSortMode: CharSortMode = normalizeCharSortMode(readLocalStorage(CHAR_SORT_KEY));
 let sortDropdownOpen = false;
 
 function updateSortButtonLabel(): void {
@@ -8303,7 +8328,7 @@ function setCharSort(mode: CharSortMode): void {
   closeSortDropdown();
   if (mode === charSortMode) return;
   charSortMode = mode;
-  localStorage.setItem(CHAR_SORT_KEY, mode);
+  writeLocalStorage(CHAR_SORT_KEY, mode);
   updateSortButtonLabel();
   void refreshCharacters();
 }
@@ -8805,7 +8830,7 @@ function paintCharselectBodySkinRail(c: CharacterSummary): void {
     host.className = 'body-skin-rail-host';
     container.insertAdjacentElement('afterend', host);
   }
-  paintBodySkinRail(
+  const rows = paintBodySkinRail(
     host,
     c.class,
     {
@@ -8824,6 +8849,18 @@ function paintCharselectBodySkinRail(c: CharacterSummary): void {
       void selectCharacterBodySkin(c, skinId);
     },
   );
+  // Warm each UNLOCKED alternate's body as its chip paints, so the first pick
+  // swaps the turntable instantly instead of fetching its lazy GLB on click.
+  // Skipped on the iOS memory profile, which streams bodies on demand to stay
+  // under the WKWebView per-process ceiling. Best-effort: a failed warmup
+  // just falls back to the on-pick fetch.
+  if (!GFX.nativeIosMemoryProfile) {
+    for (const row of rows) {
+      if (row.lockedBecause !== null || row.skinId === null) continue;
+      const key = charselectVisualKey(c, row.skinId);
+      if (!visualAssetsReady(key)) void preloadVisualAssets(key).catch(() => undefined);
+    }
+  }
 }
 
 async function selectCharacterBodySkin(c: CharacterSummary, skinId: string | null): Promise<void> {
@@ -8839,6 +8876,22 @@ async function selectCharacterBodySkin(c: CharacterSummary, skinId: string | nul
   }
 }
 
+/** The exact body the world would draw for this roster row, with the given
+ *  body-skin selection substituted (the rail warmup above asks for each
+ *  unlocked alternate; charselectAppearance asks for the persisted pick).
+ *  Resolved through the same visualKeyForCharacter chain as the world. */
+function charselectVisualKey(c: CharacterSummary, bodySkinId: string | null): string {
+  return visualKeyForCharacter({
+    realm: realmContentForCharacterUi().id,
+    realmHeroId: c.realmHeroId,
+    cls: c.class,
+    visualKey: c.visualKey,
+    skinCatalog: c.skinCatalog,
+    gender: (c.appearance as { gender?: 'male' | 'female' } | null)?.gender ?? null,
+    bodySkinId,
+  });
+}
+
 function charselectAppearance(c: CharacterSummary): PreviewAppearance {
   // The packaged iOS shell streams the Armory weapon-skin GLBs after world
   // entry instead of holding all of them at the launcher, so the preview of a
@@ -8852,18 +8905,10 @@ function charselectAppearance(c: CharacterSummary): PreviewAppearance {
     // PreviewAppearance has carried an optional `visualKey` all along and this
     // builder simply never filled it, so previewAppearanceVisual fell through to
     // `player_<class>` and the turntable showed the KayKit rig for every
-    // character — even though the roster row already tells us the real body
+    // character, even though the roster row already tells us the real body
     // (CharacterSummary.visualKey) and the operator's overrides are installed by
     // the time rows render. Resolve it exactly the way the world does.
-    visualKey: visualKeyForCharacter({
-      realm: realmContentForCharacterUi().id,
-      realmHeroId: c.realmHeroId,
-      cls: c.class,
-      visualKey: c.visualKey,
-      skinCatalog: c.skinCatalog,
-      gender: (c.appearance as { gender?: 'male' | 'female' } | null)?.gender ?? null,
-      bodySkinId: c.bodySkinId ?? null,
-    }),
+    visualKey: charselectVisualKey(c, c.bodySkinId ?? null),
     skin: c.skin ?? 0,
     skinCatalog: c.skinCatalog ?? 'class',
     mainhandItemId: c.mainhandItemId ?? null,
@@ -9378,8 +9423,8 @@ async function loadProjectStats(): Promise<void> {
     players_online: number;
     timestamp: number;
   } | null = null;
-  if (typeof localStorage !== 'undefined') {
-    const raw = localStorage.getItem(STATS_CACHE_KEY);
+  {
+    const raw = readLocalStorage(STATS_CACHE_KEY);
     if (raw) {
       try {
         cached = JSON.parse(raw);
@@ -12862,26 +12907,19 @@ function wireStartScreens(): void {
     switchMainView('#news-view');
     void loadNews();
   });
-  setupNavBtn(navBtnContributions, '#contributions-view');
+  // Contributions, Links, and White Paper are standalone HTML documents (like
+  // the wiki above): navigate to them instead of switching an in-page view.
+  setupNavBtn(navBtnContributions, '', () => {
+    window.location.href = '/contributions.html';
+  });
   setupNavBtn(navBtnDownload, '#download-view');
-  // Links + White Paper were standalone HTML pages; they're now in-app views.
-  // Their content is injected once (fetched from the retained /*.html fragments)
-  // so we keep a single content source without duplicating it into index.html.
-  setupNavBtn(navBtnLinks, '#links-view', () => {
-    switchMainView('#links-view');
-    void loadDocFragment('/links.html', '#links-content', {
-      errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
-      afterInject: translatePage,
-    });
+  setupNavBtn(navBtnLinks, '', () => {
+    window.location.href = '/links.html';
   });
-  setupNavBtn(navBtnWhitepaper, '#whitepaper-view', () => {
-    switchMainView('#whitepaper-view');
-    void loadDocFragment('/whitepaper.html', '#whitepaper-content', {
-      errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
-      afterInject: translatePage,
-    });
+  setupNavBtn(navBtnWhitepaper, '', () => {
+    window.location.href = '/whitepaper.html';
   });
-  initDesktopDownload();
+  void initDesktopDownload();
   initBrowserSupportNotice();
   setupNavBtn(navBtnLogin, '#hero-view', () => {
     if (api.token || hydrateApiFromSavedSession()) {
@@ -12901,7 +12939,8 @@ function wireStartScreens(): void {
   let showExternalAuthChoice: ((choice: ExternalAuthLoginChoice) => void) | null = null;
   // "Continue with Discord": first-class login at the top of the auth form.
   const appleLoginBtn = $('#btn-login-apple');
-  if (appleLoginBtn && NATIVE_APP && isNativeIos()) {
+  const appleLoginAvailable = isSignInMethodAvailable('apple', { facebookApp: FACEBOOK_APP });
+  if (appleLoginBtn && appleLoginAvailable && NATIVE_APP && isNativeIos()) {
     appleLoginBtn.hidden = false;
     appleLoginBtn.addEventListener('click', (event) => {
       event.preventDefault();
@@ -12928,7 +12967,14 @@ function wireStartScreens(): void {
   }
   const discordLoginBtn = $('#btn-login-discord');
   const discordOrDivider = document.getElementById('auth-or-divider');
-  if (discordLoginBtn && DISCORD_BUILD_ENABLED) {
+  // Inside the Facebook Instant Games container this CTA can only ever be a dead
+  // button: the click is a full-page hop to discord.com, which the container CSP
+  // and Discord's own framing refusal both stop (src/game/facebook_login_gates.ts).
+  // Leave it hidden there, divider included, so the email form is the one path
+  // on screen instead of the one path under a broken one.
+  const discordLoginAvailable =
+    DISCORD_BUILD_ENABLED && isSignInMethodAvailable('discord', { facebookApp: FACEBOOK_APP });
+  if (discordLoginBtn && discordLoginAvailable) {
     discordLoginBtn.hidden = false;
     if (discordOrDivider) discordOrDivider.hidden = false;
     discordLoginBtn.addEventListener('click', (e) => {
@@ -12963,8 +13009,13 @@ function wireStartScreens(): void {
   // Authentik SSO login (Google / Facebook / Plex). A full-page navigation to the
   // server's OIDC entry, which 302s to Authentik; the callback mints a session and
   // returns to the site. Mirrors the classic SSO button that predates the Discord CTA.
+  // The container cannot come back from that navigation, so the button is hidden
+  // there rather than left to swallow the tap; unlike the Discord CTA this one
+  // ships visible in the markup, so hiding it is an explicit write.
   const ssoLoginBtn = $('#btn-login-sso');
-  if (ssoLoginBtn) {
+  const ssoLoginAvailable = isSignInMethodAvailable('authentikSso', { facebookApp: FACEBOOK_APP });
+  if (ssoLoginBtn && !ssoLoginAvailable) ssoLoginBtn.hidden = true;
+  if (ssoLoginBtn && ssoLoginAvailable) {
     ssoLoginBtn.addEventListener('click', (e) => {
       e.preventDefault();
       window.location.href = `${api.base}/api/oauth/authentik`;
@@ -13379,7 +13430,7 @@ function wireStartScreens(): void {
       return;
     }
     if (hash === 'wiki') {
-      switchMainView('#wiki-view');
+      window.location.href = '/wiki';
       return;
     }
     if (hash === 'news' || hash === 'updates') {
@@ -13392,23 +13443,15 @@ function wireStartScreens(): void {
       return;
     }
     if (hash === 'contributions') {
-      switchMainView('#contributions-view');
+      window.location.href = '/contributions.html';
       return;
     }
     if (hash === 'links') {
-      switchMainView('#links-view');
-      void loadDocFragment('/links.html', '#links-content', {
-        errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
-        afterInject: translatePage,
-      });
+      window.location.href = '/links.html';
       return;
     }
     if (hash === 'whitepaper') {
-      switchMainView('#whitepaper-view');
-      void loadDocFragment('/whitepaper.html', '#whitepaper-content', {
-        errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
-        afterInject: translatePage,
-      });
+      window.location.href = '/whitepaper.html';
       return;
     }
     if (hash === 'login' || hash === 'register' || hash === 'account') {
@@ -13788,12 +13831,13 @@ function initHomepageTrailer(): void {
   });
 }
 
-// Looping home-page theme. Browsers block audio autoplay until a user gesture,
-// so we try immediately and otherwise start on the first interaction. It keeps
-// playing through the loading screen and fades out once the game is on screen.
+// Looping home-page theme, the Cryptic Realm loading-screen track. Browsers
+// block audio autoplay until a user gesture, so we try immediately and
+// otherwise start on the first interaction. It keeps playing through the
+// loading screen and fades out once the game is on screen.
 function initHomepageMusic(): void {
   if (homepageMusic) return;
-  const el = new Audio('/audio/main-theme.mp3');
+  const el = new Audio('/audio/cryptic/loading-screen-cryptic-realm.mp3');
   el.loop = true;
   el.muted = homepageMusicMuted;
   el.preload = 'auto';

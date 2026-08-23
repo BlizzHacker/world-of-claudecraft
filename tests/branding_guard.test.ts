@@ -71,9 +71,9 @@ describe('Cryptic Realm branding guardrails', () => {
       );
     }
     expect(mainTs).toContain("const DONATE_URL = '/links.html#btn-tip';");
-    expect(mainTs).toContain("const DISCORD_INVITE_URL = 'https://discord.gg/Zdj3JGrx';");
+    expect(mainTs).toContain("const DISCORD_INVITE_URL = 'https://discord.gg/WnxcamHJdh';");
     expect(discordStatus).toContain(
-      "export const DEFAULT_DISCORD_INVITE_URL = 'https://discord.gg/Zdj3JGrx';",
+      "export const DEFAULT_DISCORD_INVITE_URL = 'https://discord.gg/WnxcamHJdh';",
     );
   });
 

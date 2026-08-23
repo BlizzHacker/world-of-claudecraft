@@ -957,6 +957,12 @@ describe('S3: every sim.ts emit is recognized (drift guard)', () => {
     // sim_i18n EXACT map via log.veilEnter/log.veilLeave); scanning the module
     // keeps any FUTURE literal emit added here under the drift guard.
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/portals.ts'), 'utf8'),
+    // D2 waypoints + town portals: activation/travel logs, the travel refusal
+    // toasts (pylon presence, jail, combat, competitive, instance origin), the
+    // cast gates, and the portal-step lines. Matched by the sim_i18n waypoint
+    // EXACT rows + RULES.
+    fs.readFileSync(path.resolve(process.cwd(), 'src/sim/waypoints.ts'), 'utf8'),
+    fs.readFileSync(path.resolve(process.cwd(), 'src/sim/town_portal.ts'), 'utf8'),
     // Swim fatigue (the Hollow's open-sea turn-back): the warning literal is
     // variable-routed via FATIGUE_WARNING but matched by the sim_i18n EXACT
     // map (log.seaFatigue); scanning keeps future literal emits guarded.
@@ -1157,6 +1163,11 @@ describe('S3: every sim.ts emit is recognized (drift guard)', () => {
     // treatment src/sim/social and src/sim/professions get above, so a new
     // emit there sits under the drift guard from day one.
     socialSourceUnder(path.resolve(process.cwd(), 'src/sim/interactions')),
+    // Body-skin fly-swap (the set_body_skin command body): the four
+    // authorizeBodySkin refusal toasts (unknown/level/unowned/noArt) have
+    // their ONLY emitter occurrences here, re-localized by the sim_i18n
+    // error.bodySkin* EXACT rows added in the same change.
+    fs.readFileSync(path.resolve(process.cwd(), 'src/sim/cosmetics/body_skin_swap.ts'), 'utf8'),
   ].join('\n');
   // Hardened S3: also scan the authoritative server's player-facing emits. The
   // server (server/game.ts) is language-agnostic like the sim and re-localized

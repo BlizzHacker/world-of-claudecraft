@@ -274,6 +274,7 @@ const UI_PURE_CORES = [
   'src/ui/guild_bank_log_view.ts',
   'src/ui/guild_bank_view.ts',
   'src/ui/item_set_tooltip_view.ts',
+  'src/ui/waypoint_map_view.ts',
   'src/ui/weapon_proc_view.ts',
   'src/ui/options_view.ts',
   'src/ui/hud/vendor/vendor_view.ts',
@@ -505,6 +506,7 @@ const RENDER_PURE_CORES = [
   'src/render/warrior_cast_fx_core.ts',
   'src/render/weapon_vfx_apply_queue_core.ts',
   'src/render/weapon_vfx_emissive_core.ts',
+  'src/render/xr_session_core.ts',
   'src/render/zone_feature_visibility_core.ts',
   'src/render/characters/skeleton_update_core.ts',
   'src/render/characters/weapon_attack_style_core.ts',
@@ -1191,9 +1193,9 @@ describe('curated bare-named pure cores (cross-check)', () => {
     // but forgotten here would escape both onDiskCores() (bare name) and the loop above
     // (not listed), reopening the gap; this equality makes that omission fail.
     const derivedBare = deriveBareNamedCores(UI_PURE_CORES, RENDER_PURE_CORES);
-    const bareNamedRel = [...new Set(
-      BARE_NAMED.map((f) => relative(repoRoot, f).split('\\').join('/')),
-    )].sort();
+    const bareNamedRel = [
+      ...new Set(BARE_NAMED.map((f) => relative(repoRoot, f).split('\\').join('/'))),
+    ].sort();
     expect(
       derivedBare.map((f) => f.split(String.fromCharCode(92)).join('/')),
       'BARE_NAMED must equal the registered cores whose name is bare (not _view/_core)',
@@ -1487,6 +1489,7 @@ const UI_DOM_MODULES = [
   'src/ui/bags_window.ts',
   'src/ui/bank_quantity_prompt.ts',
   'src/ui/bank_window.ts',
+  'src/ui/body_skin_swap_window.ts',
   'src/ui/breath_bar.ts',
   'src/ui/calendar_window.ts',
   'src/ui/camera_prompt.ts',
@@ -1600,6 +1603,7 @@ const UI_DOM_MODULES = [
   'src/ui/vale_cup_briefing.ts',
   'src/ui/vale_cup_charge.ts',
   'src/ui/vale_cup_hud.ts',
+  'src/ui/waypoint_map_window.ts',
   'src/ui/window_drag.ts',
   'src/ui/window_resize.ts',
   'src/ui/arcade_minigame_window.ts',
@@ -1617,6 +1621,7 @@ const UI_DOM_MODULES = [
   'src/ui/cryptic/download_launchers.ts',
   'src/ui/cryptic/fps_mode.ts',
   'src/ui/cryptic/globes.ts',
+  'src/ui/cryptic/highscores_realm_filter.ts',
   'src/ui/cryptic/hud_layout.ts',
   'src/ui/cryptic/ingame_options.ts',
   'src/ui/cryptic/links_rebrand.ts',
@@ -1635,6 +1640,7 @@ const UI_DOM_MODULES = [
   'src/ui/cryptic/theme_select.ts',
   'src/ui/cryptic/tools_host.ts',
   'src/ui/cryptic/user_dropdown.ts',
+  'src/ui/cryptic/vr_entry.ts',
   'src/ui/cryptic/wallet_panel.ts',
   'src/ui/cryptic/world_builder.ts',
   'src/ui/derby_hud.ts',

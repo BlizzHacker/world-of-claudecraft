@@ -8,6 +8,7 @@ import {
   setActiveWorldContent,
   zoneAt,
 } from '../src/sim/data';
+import { HOME_LOTS } from '../src/sim/homes_layout';
 import {
   buildingAtPoint,
   buildingDoorAt,
@@ -46,8 +47,9 @@ describe('building interiors (enterable town buildings)', () => {
     // object). shop/inn/house rooms each get one exit door inside.
     expect(doors().length).toBeGreaterThan(0);
     expect(objsOfType(sim, 'building_door').length).toBe(0); // no separate door object
-    // One shared room (+ exit door) per interior type: shop, inn, house, chapel.
-    expect(objsOfType(sim, 'building_exit').length).toBe(4);
+    // One shared room (+ exit door) per interior type (shop, inn, house,
+    // chapel) plus one voluntary exit per Eastbrook Homes cottage lot.
+    expect(objsOfType(sim, 'building_exit').length).toBe(4 + HOME_LOTS.length);
     for (const d of doors()) expect(typeof d.interiorType).toBe('number');
     // Explicit budget: this case builds the FIRST themed Sim of the run, so it
     // pays the cold module graph plus a full themed world construction that the
@@ -269,8 +271,11 @@ describe('building interiors (enterable town buildings)', () => {
         const p = sim.player;
         const ds = doors();
         expect(ds.length, `${id}: no building doors computed`).toBeGreaterThan(0);
-        // The four shared rooms (shop/inn/house/chapel) are furnished and reachable.
-        expect(objsOfType(sim, 'building_exit').length, `${id}: no interior rooms`).toBe(4);
+        // The four shared rooms (shop/inn/house/chapel) are furnished and
+        // reachable, and every home cottage room carries its exit door too.
+        expect(objsOfType(sim, 'building_exit').length, `${id}: no interior rooms`).toBe(
+          4 + HOME_LOTS.length,
+        );
 
         // (1) the interact key at a door face.
         const door = ds[0];

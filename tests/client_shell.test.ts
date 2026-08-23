@@ -831,14 +831,14 @@ describe('client HTML shell', () => {
     );
     expect(dataDeletionHtml).toContain('<h1>Data Deletion</h1>');
     expect(dataDeletionHtml).toContain('href="mailto:support@crypticrealm.com"');
-    expect(dataDeletionHtml).toContain('href="https://discord.gg/Zdj3JGrx"');
+    expect(dataDeletionHtml).toContain('href="https://discord.gg/WnxcamHJdh"');
     expect(dataDeletionHtml).toContain('href="/support">Support</a>');
     expect(supportHtml).toContain(
       '<link rel="canonical" href="https://crypticrealm.com/support" />',
     );
     expect(supportHtml).toContain('<h1>Support</h1>');
     expect(supportHtml).toContain('href="mailto:support@crypticrealm.com"');
-    expect(supportHtml).toContain('href="https://discord.gg/Zdj3JGrx"');
+    expect(supportHtml).toContain('href="https://discord.gg/WnxcamHJdh"');
     expect(supportHtml).toContain('href="/data-deletion">Data Deletion page</a>');
     expect(supportHtml).toContain('"@type": "ContactPage"');
     expect(html).toContain(
@@ -865,7 +865,7 @@ describe('client HTML shell', () => {
     expect(html).toContain('<link rel="canonical" href="https://crypticrealm.com/" />');
     expect(html).toContain('<meta property="og:site_name" content="Cryptic Realm" />');
     expect(mainTs).not.toContain('github.com/BlizzHacker/cryptic-realm');
-    expect(mainTs).toContain("'https://discord.gg/Zdj3JGrx'");
+    expect(mainTs).toContain("'https://discord.gg/WnxcamHJdh'");
     expect(robotsTxt.trim()).toBe('User-agent: *\nAllow: /\n\nSitemap: https://crypticrealm.com/sitemap.xml');
     expect(robotsTxt).toContain('Sitemap: https://crypticrealm.com/sitemap.xml');
     expect(sitemapXml).toContain('<loc>https://crypticrealm.com/</loc>');
@@ -1018,7 +1018,7 @@ describe('client HTML shell', () => {
     expect(hudCss).toContain('body.native-app #mobile-donate,');
     // The tap targets: the account panel with the invite as the logged-out /
     // offline fallback, and the Cryptic Realm tip page, pinned to the shells' URLs.
-    expect(mainTs).toContain("const DISCORD_INVITE_URL = 'https://discord.gg/Zdj3JGrx';");
+    expect(mainTs).toContain("const DISCORD_INVITE_URL = 'https://discord.gg/WnxcamHJdh';");
     expect(mainTs).toContain("const DONATE_URL = '/links.html#btn-tip';");
     expect(mainTs).toContain(
       "window.open(discordInviteUrl() || DISCORD_INVITE_URL, '_blank', 'noopener,noreferrer');",

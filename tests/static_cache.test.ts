@@ -4,6 +4,7 @@ import {
   cacheControlFor,
   etagFor,
   isNotModified,
+  isPublicAssetPath,
   isPublicSfxPath,
   requestedSfxBlobHash,
   sfxBlobIntegrityMatches,
@@ -96,14 +97,58 @@ describe('isPublicSfxPath', () => {
   it('is wired into the public CORS and OPTIONS path in the production server', () => {
     const source = readFileSync('server/main.ts', 'utf8');
     expect(source).toContain('const publicSfxPath = isPublicSfxPath(url);');
-    expect(source).toContain('if (publicCorsPath || publicSfxPath) publicCors(res);');
-    expect(source).toContain('isApi || publicCorsPath || publicSfxPath');
+    expect(source).toContain(
+      'if (publicCorsPath || publicSfxPath || publicAssetPath) publicCors(res);',
+    );
+    expect(source).toContain('isApi || publicCorsPath || publicSfxPath || publicAssetPath');
     expect(source).toContain('sfxBlobIntegrityMatches(cachePath, actualSfxHash)');
     expect(source).toContain('content-addressed SFX blob failed integrity verification');
     expect(source).toContain('verifiedSfx = readStaticSfxSnapshot(file)');
     expect(source).toContain("'Content-Length': verifiedSfx?.bytes.length ?? stats.size");
     expect(source).toContain('res.end(verifiedSfx.bytes)');
     expect(source).toContain('SFX asset changed during integrity verification');
+  });
+});
+
+describe('isPublicAssetPath', () => {
+  it('opens wildcard CORS for every public credential-free asset prefix', () => {
+    expect(isPublicAssetPath('/models/kaykit/knight.glb')).toBe(true);
+    expect(isPublicAssetPath('/media/models/chars/knight.8f31c2aa91bd.glb')).toBe(true);
+    expect(isPublicAssetPath('/audio/voice/npc.mp3')).toBe(true);
+    expect(isPublicAssetPath('/audio/sfx/foot_grass.mp3')).toBe(true);
+    expect(isPublicAssetPath('/textures/atlas.png')).toBe(true);
+    expect(isPublicAssetPath('/env/vale_day_1k.hdr')).toBe(true);
+    expect(isPublicAssetPath('/vfx/flame.png')).toBe(true);
+  });
+
+  it('strips the query string before the prefix check', () => {
+    expect(isPublicAssetPath('/media/thing.glb?v=abc')).toBe(true);
+    expect(isPublicAssetPath('/audio/sfx/foot_grass.mp3?v=18153d1b82cb')).toBe(true);
+  });
+
+  it('does not open /api, /admin, HTML documents, or partial prefix matches', () => {
+    expect(isPublicAssetPath('/api/login')).toBe(false);
+    expect(isPublicAssetPath('/api/public/characters/1/sheet')).toBe(false);
+    expect(isPublicAssetPath('/admin/api/players')).toBe(false);
+    expect(isPublicAssetPath('/admin.html')).toBe(false);
+    expect(isPublicAssetPath('/index.html')).toBe(false);
+    expect(isPublicAssetPath('/')).toBe(false);
+    expect(isPublicAssetPath('/loading-screen.jpg')).toBe(false);
+    expect(isPublicAssetPath('/assets/main-FDVzfzpz.js')).toBe(false);
+    expect(isPublicAssetPath('/modelsx/file.glb')).toBe(false);
+    expect(isPublicAssetPath('/mediax/file.glb')).toBe(false);
+    expect(isPublicAssetPath('/envx/file.hdr')).toBe(false);
+    expect(isPublicAssetPath('/models')).toBe(false);
+    expect(isPublicAssetPath('/x/models/file.glb')).toBe(false);
+  });
+
+  it('is wired into the public CORS and OPTIONS path in the production server', () => {
+    const source = readFileSync('server/main.ts', 'utf8');
+    expect(source).toContain('const publicAssetPath = isPublicAssetPath(path);');
+    expect(source).toContain(
+      'if (publicCorsPath || publicSfxPath || publicAssetPath) publicCors(res);',
+    );
+    expect(source).toContain('isApi || publicCorsPath || publicSfxPath || publicAssetPath');
   });
 });
 

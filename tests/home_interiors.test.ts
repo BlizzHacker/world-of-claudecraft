@@ -50,6 +50,26 @@ describe('living in an Eastbrook Home', () => {
     expect(sim.entities.get(shopper)!.interiorType).not.toBe(INTERIOR_TYPE_HOME);
   });
 
+  it('walks the owner back OUT through the cottage exit door (voluntary leave)', () => {
+    const sim = makeWorld();
+    const owner = addAtDoor(sim, 'Homebody');
+    deed(sim, 'lot_a', 'Homebody');
+    sim.interact(owner);
+    const e = sim.entities.get(owner)!;
+    expect(e.interiorType).toBe(INTERIOR_TYPE_HOME);
+    // The room spawns its own building_exit within interact range of the entry
+    // spot, so a plain interact press inside walks the owner back outside.
+    const exit = [...sim.entities.values()].find(
+      (obj) => obj.templateId === 'building_exit' && Math.abs(obj.pos.x - e.pos.x) < 80,
+    );
+    expect(exit, 'home room should spawn a building_exit').toBeTruthy();
+    sim.interact(owner);
+    expect(e.interiorType).not.toBe(INTERIOR_TYPE_HOME);
+    const door = HOME_LOTS[0].door;
+    expect(Math.abs(e.pos.x - door.x)).toBeLessThan(5);
+    expect(Math.abs(e.pos.z - door.z)).toBeLessThan(5);
+  });
+
   it('lets party members in and shows them the door when they leave the party', () => {
     const sim = makeWorld();
     const owner = addAtDoor(sim, 'Homebody');

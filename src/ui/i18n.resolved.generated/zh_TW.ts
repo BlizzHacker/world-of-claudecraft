@@ -319,6 +319,16 @@ export const zh_TW: EnTranslations = {
     "spectate": {
       "banner": "正在觀察 {name}"
     },
+    "waypoints": {
+      "title": "傳送點",
+      "choose": "選擇目的地",
+      "undiscovered": "{name}（未發現）",
+      "summary": "已發現 {known}/{total}",
+      "discoveredGroup": "已發現",
+      "locked": "未發現（{count}）",
+      "filterPlaceholder": "搜尋目的地",
+      "noMatches": "沒有符合該搜尋的目的地。"
+    },
     "readyCheck": {
       "prompt": "{name} 發起了準備確認。你準備好了嗎？",
       "ready": "準備就緒",
@@ -879,6 +889,7 @@ export const zh_TW: EnTranslations = {
     },
     "leaderboard": {
       "close": "關閉",
+      "filterAll": "All",
       "tabsLabel": "高分榜",
       "tabPlayers": "玩家",
       "tabGuilds": "公會",
@@ -6868,7 +6879,32 @@ export const zh_TW: EnTranslations = {
       "guilds": "提示：加入公會可獲得專屬聊天頻道與公會成員名單。",
       "professions": "提示：採集與製造類生活技能可以與你的戰鬥職業同時培養。",
       "loadouts": "提示：保存多套天賦配置，即可在不同組合間切換而無需重新分配天賦點。",
-      "pvp": "提示：向其他玩家發起友誼決鬥，或報名灰燼競技場，來檢驗你的組合。"
+      "pvp": "提示：向其他玩家發起友誼決鬥，或報名灰燼競技場，來檢驗你的組合。",
+      "infernal": {
+        "delves": "提示：秘探越深越兇險，下潛前備妥補給。",
+        "rifts": "提示：分級的裂隙傳送門在王國各處撕開，等級越高戰鬥越難，收穫也越豐厚。",
+        "crypts": "提示：地穴深處燭光稀少，黑暗中當心腳下。"
+      },
+      "classic": {
+        "dungeons": "提示：英雄在地城中鑄就，組好隊伍一起討伐首領吧。",
+        "wanderers": "提示：廣闊天地眷顧旅人，地圖的偏遠角落藏著稀有怪與採集點。",
+        "deeds": "提示：壯舉會寫入你的功績之書，頭銜與名望在等著勇者。"
+      },
+      "arcane": {
+        "portals": "提示：水晶國度中傳送門能量湧動，遇到世界裂隙總值得繞道一探。",
+        "relics": "提示：聖物與材料青睞耐心之人，練一門採集專業穩賺不虧。",
+        "study": "提示：虛空奧祕屬於勤學者，重置天賦前先細讀每個天賦。"
+      },
+      "dominion": {
+        "squads": "提示：邊疆偏愛小隊作戰，地城搜尋器能快速補齊隊伍。",
+        "formation": "提示：保持陣型，坦克在前、治療在後才能打贏持久戰。",
+        "momentum": "提示：爭奪之地易主極快，趁小隊氣勢正盛果斷出擊。"
+      },
+      "arcadevoid": {
+        "movement": "提示：虛空競技場重視走位，不斷變換位置，切勿站樁作戰。",
+        "focus": "提示：霓虹交火轉瞬即逝，全隊集火同一目標逐個擊破。",
+        "upkeep": "提示：虛空科技講究保養，戰鬥間隙記得檢查裝備升級。"
+      }
     },
     "reconnecting": "連線已中斷。正在重新連線..."
   },

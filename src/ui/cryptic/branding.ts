@@ -114,7 +114,10 @@ function sanitizePrivateGithubLinks(): void {
 function applyDonateLinks(realm: RealmContent): void {
   const socials = socialsForRealm(realm.id);
   const tipWallet = socials.tipWalletSolana;
-  const href = tipWallet ? `solana:${tipWallet}` : WOC_SPONSORS_URL;
+  // Tip clicks route to the Links page tip card (#btn-tip), never a raw
+  // solana: URI: browsers with no wallet handler registered turn that scheme
+  // into a dead click. The Links card shows the address with a copy button.
+  const href = tipWallet ? '/links.html#btn-tip' : WOC_SPONSORS_URL;
   const label = tipWallet ? CR_TIP_LABEL : 'Donate';
   const title = tipWallet
     ? `${CR_TIP_LABEL} or SOL to ${tipWallet.slice(0, 4)}...${tipWallet.slice(-4)}`

@@ -22,6 +22,7 @@ import {
   appearanceSignature,
   type PreviewAppearance,
   previewAppearanceVisual,
+  previewFallbackVisualKey,
 } from './preview_appearance';
 import { chooseExternalPreviewClipName } from './preview_clip';
 import { PREVIEW_FRAMING, type PreviewFramingName } from './preview_framing';
@@ -160,6 +161,11 @@ export class CharacterPreview {
   // The body key most recently ASKED for, which is not the mounted one while a
   // lazy GLB is in flight. An arriving fetch only mounts if it still matches.
   private requestedVisualKey: string | null = null;
+  /** Class behind the last class-aware selection (setClass/setAppearance/
+   *  setModular). When the requested lazy body FAILS while nothing is mounted,
+   *  its boot-resident class rig is remounted so the turntable never stays
+   *  empty (previewFallbackVisualKey). */
+  private fallbackClass: PlayerClass | null = null;
   private clock = new THREE.Clock();
   private animationFrameId: number | null = null;
   private resizeObserver: ResizeObserver | null = null;
@@ -254,6 +260,7 @@ export class CharacterPreview {
     // A class-driven selection (create/offline picker, or a panel switch) supersedes
     // any pending async mech re-apply, so invalidate the tracked appearance.
     this.appearanceSig = null;
+    this.fallbackClass = cls;
     const weapon = weaponItemId !== undefined ? weaponItemId : (CLASSES[cls].startWeapon ?? null);
     const offhand =
       offhandItemId !== undefined ? offhandItemId : (CLASSES[cls].startOffhand ?? null);
@@ -269,6 +276,7 @@ export class CharacterPreview {
     if (this.destroyed) return;
     this.currentSkin = a.skin;
     this.currentWeaponSkinId = a.weaponSkinId ?? null;
+    this.fallbackClass = a.cls;
     const sig = appearanceSignature(a);
     this.appearanceSig = sig;
     if (a.skinCatalog === 'mech' && !mechAssetsReady()) {
@@ -304,6 +312,7 @@ export class CharacterPreview {
   ): void {
     if (this.destroyed) return;
     this.appearanceSig = null;
+    this.fallbackClass = cls;
     this.pendingLook = { app, worn };
     const weapon = weaponItemId !== undefined ? weaponItemId : (CLASSES[cls].startWeapon ?? null);
     const offhand =
@@ -353,6 +362,16 @@ export class CharacterPreview {
         })
         .catch((err) => {
           console.error(`Failed to load preview character body ${visualKey}:`, err);
+          // The failed fetch was still the LAST selection: nothing newer is
+          // coming to mount, and discardStockVisual above may already have
+          // emptied the turntable. Remount the boot-resident class rig so the
+          // preview never stays blank for the session; a mounted body (a
+          // previous authored GLB) or a newer external model is kept instead.
+          if (this.destroyed || this.requestedVisualKey !== visualKey) return;
+          if (this.externalLoadToken !== extToken) return;
+          if (this.currentVisual !== null) return;
+          const fallback = previewFallbackVisualKey(visualKey, this.fallbackClass);
+          if (fallback) this.setVisualKey(fallback, weaponItemId, null, offhandItemId);
         });
       return;
     }

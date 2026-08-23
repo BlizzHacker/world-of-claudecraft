@@ -12,6 +12,7 @@ import { TOWN_RADIUS, ZONES } from './data';
 import { createGroundObject } from './entity';
 import type { SimContext } from './sim_context';
 import type { Entity, Vec3 } from './types';
+import { competitive } from './unstuck';
 
 /** Overworld = the open field band (|x| <= 600); everything else is an instance
  *  (dungeon/delve/arena/interior). Town hubs live in the overworld. */
@@ -50,6 +51,17 @@ export function castTownPortal(ctx: SimContext, nextId: () => number, pid?: numb
   const r = ctx.resolve(pid);
   if (!r || r.e.dead) return false;
   const p = r.e;
+  // A jailed prisoner or a competitive fighter (duel, arena, Vale Cup; the
+  // unstuck.ts predicate) must not teleport out; both gates are rng-free and
+  // run before the in-town check so the refusal names the real reason.
+  if (p.jailed) {
+    ctx.error(r.meta.entityId, 'You cannot open a town portal while jailed.');
+    return false;
+  }
+  if (competitive(ctx, p.id, p)) {
+    ctx.error(r.meta.entityId, 'You cannot open a town portal during a competitive match.');
+    return false;
+  }
   // D2 town portals are cast FROM the field/dungeon/delve to return to town — that is
   // the whole point. The ONLY place you can't (need not) cast is while already standing
   // in a town hub. So gate on "already in town", NOT on "inside an instance".

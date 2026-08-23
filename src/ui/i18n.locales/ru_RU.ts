@@ -9805,6 +9805,37 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Совет: сохраните несколько наборов талантов, чтобы менять билды, не тратя очки заново.',
   'loading.tips.pvp':
     'Совет: вызовите другого игрока на дружескую дуэль или встаньте в очередь на арену Пепельного Колизея, чтобы испытать свой билд.',
+  // Realm-flavored loading tips (M16 wordy fills).
+  'loading.tips.infernal.delves':
+    'Совет: чем глубже вылазка, тем суровее враги. Запаситесь всем необходимым перед спуском.',
+  'loading.tips.infernal.rifts':
+    'Совет: по королевству открываются ранговые порталы разломов. Чем выше ранг, тем тяжелее бой и богаче добыча.',
+  'loading.tips.infernal.crypts':
+    'Совет: в глубине склепов свечей почти нет. В темноте смотрите под ноги.',
+  'loading.tips.classic.dungeons':
+    'Совет: герои рождаются в подземельях. Соберите группу и одолейте босса вместе.',
+  'loading.tips.classic.wanderers':
+    'Совет: открытые просторы щедры к странникам. В дальних углах карты прячутся редкие враги и месторождения.',
+  'loading.tips.classic.deeds':
+    'Совет: подвиги заполняют вашу Книгу деяний. Титулы и Известность ждут смелых.',
+  'loading.tips.arcane.portals':
+    'Совет: хрустальные миры гудят от энергии порталов. Мировой разлом всегда стоит крюка.',
+  'loading.tips.arcane.relics':
+    'Совет: реликвии и реагенты любят терпеливых. Освойте собирательскую профессию и заработайте.',
+  'loading.tips.arcane.study':
+    'Совет: тайны пустоты покоряются прилежным. Внимательно изучите таланты перед сбросом.',
+  'loading.tips.dominion.squads':
+    'Совет: на фронтире побеждают отряды. Поиск подземелий быстро наберёт вам группу.',
+  'loading.tips.dominion.formation':
+    'Совет: держите строй. Танк впереди и лекарь позади выигрывают затяжные бои.',
+  'loading.tips.dominion.momentum':
+    'Совет: спорные земли быстро меняют хозяев. Атакуйте, пока отряд на подъёме.',
+  'loading.tips.arcadevoid.movement':
+    'Совет: в аренах пустоты решает манёвр. Постоянно перемещайтесь и не стойте на месте.',
+  'loading.tips.arcadevoid.focus':
+    'Совет: неоновые перестрелки скоротечны. Сосредоточьте огонь отряда на одной цели.',
+  'loading.tips.arcadevoid.upkeep':
+    'Совет: пустотные технологии требуют ухода. Между боями проверяйте снаряжение на обновки.',
   // Rideable mounts: the Z keybind + the Mounts window (the stable).
   'hudChrome.keybinds.mount': 'Сесть / Спешиться',
   // Bindable mouse buttons. M16 wordy fill; M3/M4/M5 are keycap labels and stay as-is.
@@ -11873,4 +11904,12 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.waterRipples': 'Рябь на воде (кильватер)',
   'hudChrome.breath.label': 'Дыхание',
   'hudChrome.breath.drowning': 'Вы тонете!',
+  'hudChrome.waypoints.title': 'Путевые точки',
+  'hudChrome.waypoints.choose': 'Выберите пункт назначения',
+  'hudChrome.waypoints.undiscovered': '{name} (не открыто)',
+  'hudChrome.waypoints.summary': 'Открыто {known} из {total}',
+  'hudChrome.waypoints.discoveredGroup': 'Открытые',
+  'hudChrome.waypoints.locked': 'Неоткрытые ({count})',
+  'hudChrome.waypoints.filterPlaceholder': 'Поиск пункта назначения',
+  'hudChrome.waypoints.noMatches': 'Нет пунктов назначения, соответствующих запросу.',
 };

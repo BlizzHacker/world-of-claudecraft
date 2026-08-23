@@ -319,6 +319,16 @@ export const pl_PL: EnTranslations = {
     "spectate": {
       "banner": "Obserwujesz {name}"
     },
+    "waypoints": {
+      "title": "Waypoints",
+      "choose": "Choose a destination",
+      "undiscovered": "{name} (undiscovered)",
+      "summary": "{known} of {total} discovered",
+      "discoveredGroup": "Discovered",
+      "locked": "Undiscovered ({count})",
+      "filterPlaceholder": "Search destinations",
+      "noMatches": "No destinations match that search."
+    },
     "readyCheck": {
       "prompt": "{name} rozpoczyna sprawdzenie gotowości. Czy wszystko gotowe?",
       "ready": "Gotowość",
@@ -879,6 +889,7 @@ export const pl_PL: EnTranslations = {
     },
     "leaderboard": {
       "close": "Zamknij",
+      "filterAll": "All",
       "tabsLabel": "Tablice wyników",
       "tabPlayers": "Gracze",
       "tabGuilds": "Gildie",
@@ -6868,7 +6879,32 @@ export const pl_PL: EnTranslations = {
       "guilds": "Wskazówka: dołączenie do gildii daje ci prywatny kanał czatu i wspólną listę członków gildii.",
       "professions": "Wskazówka: profesje zbierackie i rzemieślnicze można szkolić równolegle z klasą bojową.",
       "loadouts": "Wskazówka: zapisz więcej niż jeden zestaw talentów, aby przełączać się między konfiguracjami bez ponownego wydawania punktów.",
-      "pvp": "Wskazówka: wyzwij innego gracza na przyjazny pojedynek lub dołącz do kolejki na arenę Popielnego Koloseum, aby przetestować swoją konfigurację."
+      "pvp": "Wskazówka: wyzwij innego gracza na przyjazny pojedynek lub dołącz do kolejki na arenę Popielnego Koloseum, aby przetestować swoją konfigurację.",
+      "infernal": {
+        "delves": "Tip: a delve grows harsher the deeper you go. Stock up before you descend.",
+        "rifts": "Tip: ranked rift portals tear open across the realm. Higher ranks bring tougher fights and richer spoils.",
+        "crypts": "Tip: candlelight is scarce down in the crypts. Mind your footing in the dark."
+      },
+      "classic": {
+        "dungeons": "Tip: heroes are made in dungeons. Gather a party and take down a boss together.",
+        "wanderers": "Tip: open skies reward wanderers. The far corners of the map hide rares and gathering nodes.",
+        "deeds": "Tip: bold feats fill your Book of Deeds. Titles and Renown await the adventurous."
+      },
+      "arcane": {
+        "portals": "Tip: the crystal realms hum with portal energy. A world rift is always worth a detour.",
+        "relics": "Tip: relics and reagents favor the patient. Train a gathering profession and profit.",
+        "study": "Tip: void mysteries suit the studious. Read your talents closely before you respec."
+      },
+      "dominion": {
+        "squads": "Tip: the frontier favors squads. The Dungeon Finder can fill your ranks fast.",
+        "formation": "Tip: hold formation. A tank up front and a healer behind wins long fights.",
+        "momentum": "Tip: contested ground changes hands quickly. Strike while your squad has momentum."
+      },
+      "arcadevoid": {
+        "movement": "Tip: void arenas favor movement. Keep repositioning and never fight standing still.",
+        "focus": "Tip: neon firefights end fast. Focus one target as a squad and pick foes apart.",
+        "upkeep": "Tip: void tech rewards upkeep. Check your gear for upgrades between fights."
+      }
     },
     "reconnecting": "Połączenie utracone. Ponowne łączenie..."
   },

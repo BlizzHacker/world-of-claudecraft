@@ -403,3 +403,31 @@ describe('command facet tags (deeds)', () => {
     }
   });
 });
+
+// Body-skin fly-swap: append the one in-game swap command's tag. The
+// table-consistency invariants in the W6 block above (no orphan tag, no
+// dispatch-only leak) already cover the new entry; this block pins the exact
+// facet and that the grants read stays untagged (it rides the self snapshot's
+// `bodySkin` verdict, no wire send). Append-only: never edit a tag.
+const BODY_SKIN_TAGS: Readonly<Record<string, string>> = {
+  set_body_skin: 'IWorldCosmetics',
+};
+
+describe('command facet tags (body skin swap)', () => {
+  const tags = COMMAND_FACETS as Readonly<Record<string, string>>;
+
+  it('tags the fly-swap command with the IWorldCosmetics facet', () => {
+    for (const [cmd, facet] of Object.entries(BODY_SKIN_TAGS)) {
+      expect(tags[cmd], `facet tag for '${cmd}'`).toBe(facet);
+    }
+  });
+
+  it('preserves the snake_case wire string (never normalized to camelCase)', () => {
+    expect('set_body_skin' in tags).toBe(true);
+    expect('setBodySkin' in tags).toBe(false);
+  });
+
+  it('does not tag bodySkinGrants (a snapshot-verdict read, no wire command)', () => {
+    expect('bodySkinGrants' in tags).toBe(false);
+  });
+});

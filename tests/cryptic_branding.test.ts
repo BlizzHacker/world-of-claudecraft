@@ -41,24 +41,44 @@ describe('Cryptic realm branding crypto surfaces', () => {
     mountRealmBranding();
 
     const donate = document.querySelector<HTMLAnchorElement>('.donate-cta')!;
-    expect(donate.href).toBe(`solana:${CR_WALLET}`);
+    // Tip clicks route to the Links page tip card, never a raw solana: URI
+    // (dead click in browsers with no wallet handler). The wallet address
+    // still surfaces in the accessible name so the destination is honest.
+    expect(donate.getAttribute('href')).toBe('/links.html#btn-tip');
+    expect(donate.getAttribute('aria-label')).toContain(CR_WALLET);
     expect(donate.textContent).toContain('Tip $CR');
     expect(donate.style.display).toBe('');
     expect(donate.hasAttribute('data-i18n-title')).toBe(false);
     expect(donate.hasAttribute('data-i18n-aria')).toBe(false);
     expect(donate.querySelector('span')?.hasAttribute('data-i18n')).toBe(false);
-    expect(document.querySelector<HTMLElement>('.token-ca-label')?.textContent).toBe('$CR Contract Address');
+    expect(document.querySelector<HTMLElement>('.token-ca-label')?.textContent).toBe(
+      '$CR Contract Address',
+    );
     expect(document.getElementById('btn-copy-ca')?.getAttribute('data-ca')).toBe(CR_TOKEN);
     expect(document.querySelector<HTMLElement>('.token-ca-addr')?.textContent).toBe(CR_TOKEN);
-    expect(document.querySelector<HTMLElement>('.token-ca-note')?.textContent).toContain('Cryptic Realm Solana SPL token');
-    expect(document.querySelector<HTMLElement>('.token-ca-label')?.hasAttribute('data-i18n')).toBe(false);
+    expect(document.querySelector<HTMLElement>('.token-ca-note')?.textContent).toContain(
+      'Cryptic Realm Solana SPL token',
+    );
+    expect(document.querySelector<HTMLElement>('.token-ca-label')?.hasAttribute('data-i18n')).toBe(
+      false,
+    );
     expect(document.getElementById('btn-copy-ca')?.hasAttribute('data-i18n-aria')).toBe(false);
-    expect(document.querySelector<HTMLElement>('.token-ca-note')?.hasAttribute('data-i18n')).toBe(false);
-    expect(document.querySelector<HTMLAnchorElement>('.social-link.github')?.getAttribute('href')).toBe('/contributions.html');
+    expect(document.querySelector<HTMLElement>('.token-ca-note')?.hasAttribute('data-i18n')).toBe(
+      false,
+    );
+    expect(
+      document.querySelector<HTMLAnchorElement>('.social-link.github')?.getAttribute('href'),
+    ).toBe('/contributions.html');
     expect(document.querySelector<HTMLElement>('.social-link.github')?.style.display).toBe('none');
-    expect(document.querySelector<HTMLElement>('.social-link.github span')?.textContent).toBe('Contributions');
-    expect(document.querySelector<HTMLAnchorElement>('.social-link.discord')?.href).toBe('https://discord.gg/Zdj3JGrx');
-    expect(document.querySelector<HTMLElement>('.social-link.discord span')?.textContent).toBe('Cryptic Realm Discord');
+    expect(document.querySelector<HTMLElement>('.social-link.github span')?.textContent).toBe(
+      'Contributions',
+    );
+    expect(document.querySelector<HTMLAnchorElement>('.social-link.discord')?.href).toBe(
+      'https://discord.gg/WnxcamHJdh',
+    );
+    expect(document.querySelector<HTMLElement>('.social-link.discord span')?.textContent).toBe(
+      'Cryptic Realm Discord',
+    );
     expect(document.querySelector<HTMLElement>('.cs-wallet')?.style.display).toBe('none');
     expect(document.querySelector<HTMLElement>('.account-wallet-card')?.style.display).toBe('none');
     expect(document.getElementById('cr-wallet-panel')?.style.display).toBe('');
@@ -75,10 +95,14 @@ describe('Cryptic realm branding crypto surfaces', () => {
     expect(donate.textContent).toContain('Donate');
     expect(donate.getAttribute('data-i18n-title')).toBe('a11y.donateProject');
     expect(donate.querySelector('span')?.getAttribute('data-i18n')).toBe('nav.donate');
-    expect(document.querySelector<HTMLElement>('.token-ca-label')?.textContent).toBe('$WOC Contract Address');
+    expect(document.querySelector<HTMLElement>('.token-ca-label')?.textContent).toBe(
+      '$WOC Contract Address',
+    );
     expect(document.getElementById('btn-copy-ca')?.getAttribute('data-ca')).toBe(WOC_TOKEN);
     expect(document.querySelector<HTMLElement>('.token-ca-addr')?.textContent).toBe(WOC_TOKEN);
-    expect(document.querySelector<HTMLElement>('.token-ca-label')?.hasAttribute('data-i18n')).toBe(false);
+    expect(document.querySelector<HTMLElement>('.token-ca-label')?.hasAttribute('data-i18n')).toBe(
+      false,
+    );
     expect(document.querySelector<HTMLElement>('.cs-wallet')?.style.display).toBe('');
     expect(document.querySelector<HTMLElement>('.account-wallet-card')?.style.display).toBe('');
     expect(document.getElementById('cr-wallet-panel')?.style.display).toBe('none');
@@ -94,7 +118,11 @@ describe('Cryptic realm branding crypto surfaces', () => {
 
     mountRealmBranding();
 
-    expect(document.querySelector<HTMLImageElement>('.header-logo')?.src).toContain('/cryptic-realm-logo-512.webp');
-    expect(document.querySelector<HTMLImageElement>('.main-logo')?.src).toContain('/cryptic-realm-logo-512.webp');
+    expect(document.querySelector<HTMLImageElement>('.header-logo')?.src).toContain(
+      '/cryptic-realm-logo-512.webp',
+    );
+    expect(document.querySelector<HTMLImageElement>('.main-logo')?.src).toContain(
+      '/cryptic-realm-logo-512.webp',
+    );
   });
 });

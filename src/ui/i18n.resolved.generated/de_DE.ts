@@ -319,6 +319,16 @@ export const de_DE: EnTranslations = {
     "spectate": {
       "banner": "{name} wird beobachtet"
     },
+    "waypoints": {
+      "title": "Waypoints",
+      "choose": "Choose a destination",
+      "undiscovered": "{name} (undiscovered)",
+      "summary": "{known} of {total} discovered",
+      "discoveredGroup": "Discovered",
+      "locked": "Undiscovered ({count})",
+      "filterPlaceholder": "Search destinations",
+      "noMatches": "No destinations match that search."
+    },
     "readyCheck": {
       "prompt": "{name} hat einen Bereitschaftscheck gestartet. Bist du bereit?",
       "ready": "Bereit",
@@ -879,6 +889,7 @@ export const de_DE: EnTranslations = {
     },
     "leaderboard": {
       "close": "SchlieÃŸen",
+      "filterAll": "All",
       "tabsLabel": "Bestenlisten",
       "tabPlayers": "Spieler",
       "tabGuilds": "Gilden",
@@ -6868,7 +6879,32 @@ export const de_DE: EnTranslations = {
       "guilds": "Tipp: Der Beitritt zu einer Gilde gibt dir einen privaten Chatkanal und eine gemeinsame Liste deiner Gildenmitglieder.",
       "professions": "Tipp: Sammel- und Handwerksberufe kÃ¶nnen parallel zu deiner Kampfklasse erlernt werden.",
       "loadouts": "Tipp: Speichere mehr als eine TalentausrÃ¼stung, um zwischen Builds zu wechseln, ohne Punkte doppelt auszugeben.",
-      "pvp": "Tipp: Fordere einen anderen Spieler zu einem freundschaftlichen Duell heraus oder reihe dich fÃ¼r die Arena des Aschenen Kolosseums ein, um deinen Build zu testen."
+      "pvp": "Tipp: Fordere einen anderen Spieler zu einem freundschaftlichen Duell heraus oder reihe dich fÃ¼r die Arena des Aschenen Kolosseums ein, um deinen Build zu testen.",
+      "infernal": {
+        "delves": "Tip: a delve grows harsher the deeper you go. Stock up before you descend.",
+        "rifts": "Tip: ranked rift portals tear open across the realm. Higher ranks bring tougher fights and richer spoils.",
+        "crypts": "Tip: candlelight is scarce down in the crypts. Mind your footing in the dark."
+      },
+      "classic": {
+        "dungeons": "Tip: heroes are made in dungeons. Gather a party and take down a boss together.",
+        "wanderers": "Tip: open skies reward wanderers. The far corners of the map hide rares and gathering nodes.",
+        "deeds": "Tip: bold feats fill your Book of Deeds. Titles and Renown await the adventurous."
+      },
+      "arcane": {
+        "portals": "Tip: the crystal realms hum with portal energy. A world rift is always worth a detour.",
+        "relics": "Tip: relics and reagents favor the patient. Train a gathering profession and profit.",
+        "study": "Tip: void mysteries suit the studious. Read your talents closely before you respec."
+      },
+      "dominion": {
+        "squads": "Tip: the frontier favors squads. The Dungeon Finder can fill your ranks fast.",
+        "formation": "Tip: hold formation. A tank up front and a healer behind wins long fights.",
+        "momentum": "Tip: contested ground changes hands quickly. Strike while your squad has momentum."
+      },
+      "arcadevoid": {
+        "movement": "Tip: void arenas favor movement. Keep repositioning and never fight standing still.",
+        "focus": "Tip: neon firefights end fast. Focus one target as a squad and pick foes apart.",
+        "upkeep": "Tip: void tech rewards upkeep. Check your gear for upgrades between fights."
+      }
     },
     "reconnecting": "Verbindung verloren. Verbindung wird wieder hergestellt..."
   },

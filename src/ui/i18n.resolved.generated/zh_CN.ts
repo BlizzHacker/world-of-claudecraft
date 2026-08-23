@@ -319,6 +319,16 @@ export const zh_CN: EnTranslations = {
     "spectate": {
       "banner": "正在观察 {name}"
     },
+    "waypoints": {
+      "title": "传送点",
+      "choose": "选择目的地",
+      "undiscovered": "{name}（未发现）",
+      "summary": "已发现 {known}/{total}",
+      "discoveredGroup": "已发现",
+      "locked": "未发现（{count}）",
+      "filterPlaceholder": "搜索目的地",
+      "noMatches": "没有匹配该搜索的目的地。"
+    },
     "readyCheck": {
       "prompt": "{name} 发起了准备确认。你准备好了吗？",
       "ready": "准备就绪",
@@ -879,6 +889,7 @@ export const zh_CN: EnTranslations = {
     },
     "leaderboard": {
       "close": "关闭",
+      "filterAll": "All",
       "tabsLabel": "高分榜",
       "tabPlayers": "玩家",
       "tabGuilds": "公会",
@@ -6868,7 +6879,32 @@ export const zh_CN: EnTranslations = {
       "guilds": "提示：加入公会可获得专属聊天频道和公会成员名单。",
       "professions": "提示：采集与制造类生活技能可以与你的战斗职业同时培养。",
       "loadouts": "提示：保存多套天赋配置，即可在不同 build 间切换而无需重新分配天赋点。",
-      "pvp": "提示：向其他玩家发起友谊决斗，或报名灰烬竞技场，来检验你的 build。"
+      "pvp": "提示：向其他玩家发起友谊决斗，或报名灰烬竞技场，来检验你的 build。",
+      "infernal": {
+        "delves": "提示：探秘越深越凶险，下潜前备好补给。",
+        "rifts": "提示：分级的裂隙传送门在王国各处撕开，等级越高战斗越难，收获也越丰厚。",
+        "crypts": "提示：地穴深处烛光稀少，黑暗中当心脚下。"
+      },
+      "classic": {
+        "dungeons": "提示：英雄在地下城中铸就，组好队伍一起讨伐首领吧。",
+        "wanderers": "提示：广阔天地眷顾旅人，地图的偏远角落藏着稀有怪与采集点。",
+        "deeds": "提示：壮举会写入你的功绩之书，头衔与名望在等着勇者。"
+      },
+      "arcane": {
+        "portals": "提示：水晶国度中传送门能量涌动，遇到世界裂隙总值得绕道一探。",
+        "relics": "提示：圣物与材料青睐耐心之人，练一门采集专业稳赚不亏。",
+        "study": "提示：虚空奥秘属于勤学者，重置天赋前先细读每个天赋。"
+      },
+      "dominion": {
+        "squads": "提示：边疆偏爱小队作战，地下城查找器能快速补齐队伍。",
+        "formation": "提示：保持阵型，坦克在前、治疗在后才能打赢持久战。",
+        "momentum": "提示：争夺之地易主极快，趁小队气势正盛果断出击。"
+      },
+      "arcadevoid": {
+        "movement": "提示：虚空竞技场重视走位，不断变换位置，切勿站桩作战。",
+        "focus": "提示：霓虹交火转瞬即逝，全队集火同一目标逐个击破。",
+        "upkeep": "提示：虚空科技讲究保养，战斗间隙记得检查装备升级。"
+      }
     },
     "reconnecting": "连接已断开。正在重新连接..."
   },

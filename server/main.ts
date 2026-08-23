@@ -5,6 +5,9 @@ import * as fs from 'node:fs';
 import * as http from 'node:http';
 import * as path from 'node:path';
 import { WebSocketServer } from 'ws';
+// CR overlay: economy layer (off-chain platinum + optional Solana SPL token).
+import { setChainAdapter } from '../src/economy/chainAdapter';
+import { maybeBuildSolanaFromEnv } from '../src/economy/solanaAdapter';
 import { DEEDS } from '../src/sim/content/deeds';
 import { resolveActiveWeaponSkin } from '../src/sim/content/weapon_skin_rules';
 import {
@@ -14,9 +17,9 @@ import {
   paginateGuildLeaderboard,
   paginateLeaderboard,
 } from '../src/sim/leaderboard_page';
-import { Sim } from '../src/sim/sim';
 import { resolveRealmCharacterVisual } from '../src/sim/realms/class_visuals';
 import { infernalCharacterSelection } from '../src/sim/realms/infernal_classes';
+import { Sim } from '../src/sim/sim';
 import { type PlayerClass, virtualLevel } from '../src/sim/types';
 import { WORLD_SEED } from '../src/sim/world_seed';
 import {
@@ -70,6 +73,7 @@ import {
   handleAppleLoginNew,
 } from './apple_auth';
 import { pruneApplePendingLogins } from './apple_auth_db';
+import { handleAssetLibraryCatalog, handleAssetLibraryStatic } from './asset_library';
 import {
   hashPassword,
   MAX_PASSWORD_LENGTH,
@@ -85,7 +89,9 @@ import { configureAuthRuntime } from './auth_routes';
 import { computeBankBonus } from './bank_entitlements';
 import { bankLedgerIdle } from './bank_ledger';
 import { configureBattlegroundRuntime, readBgLeaderboard } from './battleground';
+import { isDevAccount } from './body_skin_dev';
 import { BUG_DESCRIPTION_MAX, BugReportRateLimitError, createBugReport } from './bug_report_db';
+import { saveBugReport } from './bug_reports';
 import { createCachedRead } from './cached_read';
 import { characterSheet, SHEET_RECENT_DEEDS, type SheetRank } from './character_sheet';
 import {
@@ -101,6 +107,7 @@ import {
   handleClaudiumStripeWebhook,
 } from './claudium';
 import { configureCommunityTestAccounts } from './community_test_accounts';
+import { maybeHandleContributionsApi } from './contributions';
 import {
   bustDailyRewardBoardCache,
   bustDailyRewardWinnersCache,
@@ -109,6 +116,7 @@ import {
   handleDailyRewardInternalApi,
 } from './daily_rewards';
 import { pruneDailyRewardEventsBatch } from './daily_rewards_db';
+import { handleModeratorApi, handleUserApi } from './dashboard';
 import {
   type ArenaLeaderRow,
   accountAndScopeForToken,
@@ -198,20 +206,16 @@ import {
   handleNativeDiscordExchange,
 } from './discord';
 import { pruneDiscordOAuthStates, pruneDiscordPendingLogins } from './discord_db';
-import { emailAccountCreated } from './email';
-import { saveBugReport } from './bug_reports';
-// CR overlay: economy layer (off-chain platinum + optional Solana SPL token).
-import { setChainAdapter } from '../src/economy/chainAdapter';
-import { maybeBuildSolanaFromEnv } from '../src/economy/solanaAdapter';
+import { resolveDownloadTarget } from './downloads_path';
+import { isDuranceTesterCharacter } from './durance_tester_entitlement';
 import { maybeHandleEconomyApi } from './economy/api';
 import { applyEconomySchema } from './economy/db';
+import { emailAccountCreated } from './email';
+import { stopEpicMirror } from './epic/mirror';
 import { maybeHandleExchangeApi } from './exchange/api';
 import { applyExchangeSchema } from './exchange/db';
-import { maybeHandleContributionsApi } from './contributions';
+import { isFacebookInstantOrigin } from './fb_origins';
 import { handleCrRealmsStatic, handleForgedCatalog, handleForgedStatic } from './forged_assets';
-import { handleAssetLibraryCatalog, handleAssetLibraryStatic } from './asset_library';
-import { handleRealmVisuals } from './realm_visuals';
-import { stopEpicMirror } from './epic/mirror';
 import { GameServer } from './game';
 import {
   handleGitHubCallback,
@@ -294,7 +298,6 @@ import {
 import { pruneExpiredOAuthGrants } from './oauth_db';
 import { registerParseMetrics } from './parse';
 import { handlePerfReport } from './perf_report';
-import { handleModeratorApi, handleUserApi } from './dashboard';
 import {
   pruneAccountIpAssociationsBatch,
   prunePlaySessionsBatch,
@@ -332,17 +335,18 @@ import {
   REALM_DIRECTORY,
   REALM_ORIGINS,
 } from './realm';
+import { handleRealmVisuals } from './realm_visuals';
 import { resolveReportTarget } from './report_target';
 import { BUG_REPORT_MAX_BODY_BYTES, configureReportsRuntime } from './reports';
 import { createRetentionSweep, RETENTION_SWEEP_BATCH_SIZE } from './retention_sweep';
 import { resolveSfxOverlayFile } from './sfx_overlay';
 import { handleSitePresenceHeartbeat } from './site_presence';
 import { adminRolesForAccount } from './staff_db';
-import { isDevAccount } from './body_skin_dev';
 import {
   cacheControlFor,
   etagFor,
   isNotModified,
+  isPublicAssetPath,
   isPublicSfxPath,
   requestedSfxBlobHash,
   requestedSfxVersion,
@@ -375,7 +379,6 @@ import { allowedCorsOrigin, isWebClientRequest, NATIVE_APP_ORIGINS } from './web
 import { handleWocBalance, parseWocBalanceQuery } from './woc_balance';
 import { createWsAuth } from './ws_auth';
 import { bufferHandshakeMessages } from './ws_buffer';
-import { isDuranceTesterCharacter } from './durance_tester_entitlement';
 
 // The one validated boot Config, loaded ONCE and memoized. Boot-consumed values
 // (port, retention, dispatch, ws cap) thread directly off the local `config` in
@@ -421,12 +424,15 @@ function inMaintenanceMode(): boolean {
 }
 const WIKI_URL = process.env.WIKI_URL?.trim() ?? '';
 
-// Cryptic Realm 3.0 client downloads (Unreal heavy-tier builds). Served from a
-// persistent directory OUTSIDE dist/ so deploys (which wipe dist) never delete
-// uploaded installers. Drop versioned zips into CR_DOWNLOADS_DIR; /downloads
-// lists them newest-first and /downloads/<file> streams them with Range
-// support (resume matters for multi-GB builds).
-const DOWNLOADS_DIR = process.env.CR_DOWNLOADS_DIR?.trim() || '/opt/cr-downloads';
+// Client build downloads. Served from a persistent directory OUTSIDE dist/ so
+// deploys (which wipe dist) never delete uploaded installers. Drop versioned
+// builds (zips, apks, installers) into CR_DOWNLOADS_DIR; /downloads lists them
+// newest-first and /downloads/<file> streams them with Range support (resume
+// matters for multi-GB builds).
+// Resolved to an absolute path once, at load: every containment test downstream
+// compares absolute paths, so a relative or trailing-slash CR_DOWNLOADS_DIR
+// cannot change the answer.
+const DOWNLOADS_DIR = path.resolve(process.env.CR_DOWNLOADS_DIR?.trim() || '/opt/cr-downloads');
 
 function humanSize(bytes: number): string {
   if (bytes >= 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
@@ -439,9 +445,12 @@ function serveDownloads(
   res: http.ServerResponse,
   urlPath: string,
 ): void {
-  const rel = decodeURIComponent(urlPath.replace(/^\/downloads\/?/, ''));
+  // The whole path decision (listing, one contained file, or refuse) lives in
+  // the pure resolver; urlPath arrives still percent-encoded on purpose, since
+  // the resolver owns the single decode layer and every traversal rule.
+  const target = resolveDownloadTarget(urlPath, DOWNLOADS_DIR);
   // listing page
-  if (rel === '') {
+  if (target.kind === 'listing') {
     let entries: { name: string; size: number; mtime: Date }[] = [];
     try {
       entries = fs
@@ -479,25 +488,34 @@ a{color:#e6b34a;text-decoration:none} a:hover{text-decoration:underline}
 p{color:#8d8276;text-align:center}
 .back{display:block;text-align:center;margin-top:2em;color:#6f6459}
 </style></head><body>
-<h1>CRYPTIC REALM</h1><h2>Unreal Client Downloads - Cryptic Realm 3.0</h2>
+<h1>CRYPTIC REALM</h1><h2>Client Downloads</h2>
 ${entries.length ? `<ul>${rows}</ul>` : '<p>No builds published yet, check back soon.</p>'}
-<p>Windows: unzip and run CrypticRealmUnreal.exe. Browser play stays at <a href="/">crypticrealm.com</a>.</p>
+<p>Grab the build for your platform. Browser play stays at <a href="/">crypticrealm.com</a>.</p>
 <a class="back" href="/">&larr; back to the realm</a>
 </body></html>`;
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' });
     res.end(body);
     return;
   }
-  // file download (Range-aware for resumable multi-GB installers)
-  const file = path.join(DOWNLOADS_DIR, path.posix.normalize(rel).replace(/^([.][.][/\\])+/, ''));
-  const stats = file.startsWith(DOWNLOADS_DIR) && fs.existsSync(file) ? fs.statSync(file) : null;
-  if (!stats?.isFile()) {
+  // file download (Range-aware for resumable multi-GB installers). statSync IS
+  // the existence check, inside the catch, so there is no existsSync-to-statSync
+  // disappearance race (the static server closed the same one).
+  const file = target.kind === 'file' ? target.file : null;
+  let stats: fs.Stats | null = null;
+  if (file !== null) {
+    try {
+      stats = fs.statSync(file);
+    } catch {
+      stats = null;
+    }
+  }
+  if (file === null || !stats?.isFile()) {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     res.end('not found');
     return;
   }
   const base = {
-    'Content-Type': 'application/octet-stream',
+    'Content-Type': MIME[path.extname(file)] ?? 'application/octet-stream',
     'Content-Disposition': `attachment; filename="${path.basename(file)}"`,
     'Accept-Ranges': 'bytes',
     'Cache-Control': 'no-cache',
@@ -553,6 +571,10 @@ const STATIC_PAGE_ALIASES = new Map([
   ['/privacy/', '/privacy.html'],
   ['/terms', '/terms.html'],
   ['/terms/', '/terms.html'],
+  ['/whitepaper', '/whitepaper.html'],
+  ['/whitepaper/', '/whitepaper.html'],
+  ['/contributions', '/contributions.html'],
+  ['/contributions/', '/contributions.html'],
   ['/merch', '/merch.html'],
   ['/merch/', '/merch.html'],
   ['/press', '/press.html'],
@@ -1318,6 +1340,8 @@ const MIME: Record<string, string> = {
   '.jpeg': 'image/jpeg',
   '.webp': 'image/webp',
   '.mp3': 'audio/mpeg',
+  '.apk': 'application/vnd.android.package-archive',
+  '.webmanifest': 'application/manifest+json',
 };
 // The admin dashboard is reached via the admin.* subdomain (Caddy proxies it
 // to this same port) or /admin for local dev. The hostname only picks which
@@ -1497,9 +1521,16 @@ function isOwnRealmOrigin(origin: string): boolean {
   }
 }
 
+// Reflected origins: our own realm vhosts, the native app shells, and the
+// Facebook Instant Games container (fb_origins.ts; the bundle page is our own
+// client served from Facebook's fbsbx sandbox, and bearer auth makes
+// reflecting it safe, same as the native shells).
 function maybeCors(req: http.IncomingMessage, res: http.ServerResponse): void {
   const origin = req.headers.origin;
-  if (typeof origin === 'string' && (isOwnRealmOrigin(origin) || NATIVE_APP_ORIGINS.has(origin))) {
+  if (
+    typeof origin === 'string' &&
+    (isOwnRealmOrigin(origin) || NATIVE_APP_ORIGINS.has(origin) || isFacebookInstantOrigin(origin))
+  ) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Vary', 'Origin');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -3173,8 +3204,9 @@ export function resetApiDispatchModeForTests(): void {
 // BEFORE the prefix ladder so the legacy handlers AND the new /api dispatcher
 // inherit identical CORS from ONE place (a rollback can never drop preflight, and
 // the delegated and onion paths can never diverge on CORS). It applies the exact
-// CORS the ladder always did: the wide-open '*' for public read paths, the narrow
-// realm/native allowlist for other /api + /admin/api. Returns true when the
+// CORS the ladder always did: the wide-open '*' for public read paths, the SFX
+// surface, and the public static asset prefixes; the narrow realm/native/fbsbx
+// allowlist for other /api + /admin/api. Returns true when the
 // request was a fully-handled OPTIONS preflight, so the caller returns.
 function applyCorsAndPreflight(
   req: http.IncomingMessage,
@@ -3182,10 +3214,11 @@ function applyCorsAndPreflight(
   isApi: boolean,
   publicCorsPath: boolean,
   publicSfxPath: boolean,
+  publicAssetPath: boolean,
 ): boolean {
-  if (publicCorsPath || publicSfxPath) publicCors(res);
+  if (publicCorsPath || publicSfxPath || publicAssetPath) publicCors(res);
   else if (isApi) maybeCors(req, res);
-  if (req.method === 'OPTIONS' && (isApi || publicCorsPath || publicSfxPath)) {
+  if (req.method === 'OPTIONS' && (isApi || publicCorsPath || publicSfxPath || publicAssetPath)) {
     res.writeHead(204);
     res.end();
     return true;
@@ -3217,7 +3250,13 @@ export function routeHttpRequest(req: http.IncomingMessage, res: http.ServerResp
   // other /api route keeps the narrow realm/native allowlist.
   const publicCorsPath = isPublicCorsPath(path);
   const publicSfxPath = isPublicSfxPath(url);
-  if (applyCorsAndPreflight(req, res, isApi, publicCorsPath, publicSfxPath)) return;
+  // The credential-free static asset prefixes (/models/, /media/, /audio/,
+  // /textures/, /env/, /vfx/) are CORS-open ('*') so the Facebook Instant
+  // Games bundle can stream world assets cross-origin (static_cache.ts).
+  const publicAssetPath = isPublicAssetPath(path);
+  if (applyCorsAndPreflight(req, res, isApi, publicCorsPath, publicSfxPath, publicAssetPath)) {
+    return;
+  }
   // Operational health + metrics endpoints, ahead of the /internal/ arm so they
   // answer even while the rest of the surface drains. GET-only exact matches on
   // the query-stripped path (mirroring the /sitemap-characters.xml arm below);
@@ -3267,9 +3306,17 @@ export function routeHttpRequest(req: http.IncomingMessage, res: http.ServerResp
   else if (req.method === 'GET' && path.startsWith('/c/')) void handleProfilePage(req, res);
   else if (req.method === 'GET' && path === '/sitemap-characters.xml')
     void handleCharacterSitemap(req, res);
+  // Client build downloads: the listing page and Range-aware file streaming,
+  // GET/HEAD only. Exact '/downloads' or a '/downloads/' subpath; '/download'
+  // (singular) is NOT this surface and falls through to serveStatic.
+  else if (
+    (req.method === 'GET' || req.method === 'HEAD') &&
+    (path === '/downloads' || path === '/downloads/' || path.startsWith('/downloads/'))
+  )
+    serveDownloads(req, res, path);
   // Realm/forged asset stores. Both self-guard on their URL prefix and return
   // false when they do not apply, so they cannot shadow a route above. Restored
-  // after the call site was dropped (see cbb388375) — without these the whole
+  // after the call site was dropped (see cbb388375): without these the whole
   // /cr-realms/* store 404s and every realm body silently fails to render.
   else if (handleForgedStatic(req, res)) return;
   else if (handleCrRealmsStatic(req, res)) return;

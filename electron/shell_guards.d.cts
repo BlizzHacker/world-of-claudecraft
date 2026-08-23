@@ -44,6 +44,9 @@ export const CSP_ORIGINS: {
   turnstile: string;
   fontsStyle: string;
   fontsFile: string;
+  reownFonts: string;
+  walletFrames: string[];
+  musicFrames: string[];
 };
 export function extractInlineScriptHashes(html: string): string[];
 export function buildContentSecurityPolicy(options?: {

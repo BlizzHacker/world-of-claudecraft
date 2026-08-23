@@ -1,26 +1,29 @@
 import { describe, expect, it } from 'vitest';
 import {
-  REALMS,
-  REALM_LIST,
   DEFAULT_REALM,
   getRealm,
   isRealmId,
+  REALM_LIST,
+  REALMS,
   type RealmId,
 } from '../src/sim/realms';
-import {
-  RARITY,
-  RARITY_ORDER,
-  generateRealmItem,
-  rollRarity,
-} from '../src/sim/realms/rarity';
-import { parsePickitFilter, evaluateItem } from '../src/sim/realms/pickit';
+import { evaluateItem, parsePickitFilter } from '../src/sim/realms/pickit';
+import { generateRealmItem, RARITY, RARITY_ORDER, rollRarity } from '../src/sim/realms/rarity';
 import { Rng } from '../src/sim/rng';
 
 describe('realm registry', () => {
   it('ships nine realms (eight playable realm families + The Exchange)', () => {
-    expect(Object.keys(REALMS).sort()).toEqual(
-      ['arcadevoid', 'arcane', 'classic', 'claudecraft', 'crypticrealm', 'dominion', 'exchange', 'fps', 'infernal'],
-    );
+    expect(Object.keys(REALMS).sort()).toEqual([
+      'arcadevoid',
+      'arcane',
+      'classic',
+      'claudecraft',
+      'crypticrealm',
+      'dominion',
+      'exchange',
+      'fps',
+      'infernal',
+    ]);
     expect(REALM_LIST.length).toBe(9);
   });
 
@@ -77,7 +80,20 @@ describe('realm registry', () => {
       (v): v is string => typeof v === 'string',
     );
     for (const src of branding) expect(src).not.toContain('/cr-realms/arcadevoid/');
-    expect(arcade.branding?.loadingScreenSrc).toBe('/cryptic-realm-loading.png');
+    expect(arcade.branding?.loadingScreenSrc).toBe('/cryptic-realm-loading-bg.webp');
+  });
+
+  it('every realm on the wordmark art declares it so the overlay logo stays hidden', () => {
+    // The shared Cryptic Realm loading art paints the title itself. A realm that
+    // serves it without the flag would stack the overlay logo on the baked one.
+    for (const realm of Object.values(REALMS)) {
+      const src = realm.branding?.loadingScreenSrc;
+      if (src === '/cryptic-realm-loading-bg.webp') {
+        expect(realm.branding?.loadingArtHasWordmark).toBe(true);
+      } else {
+        expect(realm.branding?.loadingArtHasWordmark ?? false).toBe(false);
+      }
+    }
   });
 
   it('isRealmId narrows correctly', () => {
@@ -126,7 +142,9 @@ describe('rarity system', () => {
 
 describe('pickit loot filter', () => {
   it('parses SHOW / HIDE rules with rarity conditions', () => {
-    const rules = parsePickitFilter(`# show all rares and up\nSHOW rarity>=rare HIGHLIGHT\nHIDE rarity=common`);
+    const rules = parsePickitFilter(
+      `# show all rares and up\nSHOW rarity>=rare HIGHLIGHT\nHIDE rarity=common`,
+    );
     expect(rules.length).toBe(2);
     expect(rules[0]).toMatchObject({ action: 'show', highlight: true });
     expect(rules[0].conditions[0]).toEqual({ key: 'rarity', op: '>=', value: 'rare' });

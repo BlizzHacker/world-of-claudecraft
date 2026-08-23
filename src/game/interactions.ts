@@ -215,6 +215,19 @@ export function handlePickedEntity(
         hud.openMailbox();
         return true;
       }
+      if (
+        e.templateId === 'building_exit' ||
+        e.templateId === 'waypoint' ||
+        e.templateId === 'town_portal'
+      ) {
+        // Interior exit door, waypoint pylon, town portal: server-authoritative
+        // object interactions. Route through world.interact() (the sim's own
+        // interact dispatcher) rather than pickUpObject, the same branch the
+        // proximity press already takes (nearby_interaction.ts), so a CLICK on
+        // the pylon works too instead of trying to pocket it.
+        world.interact();
+        return true;
+      }
       return world.pickUpObject(id);
     } else if (e.kind === 'mob' && e.dead && e.lootable) {
       if (world.player.dead) {
@@ -301,6 +314,15 @@ export function handlePickedEntity(
       if (e.templateId === 'dungeon_exit') return world.leaveDungeon();
       if (e.templateId === 'mailbox') {
         hud.openMailbox();
+        return true;
+      }
+      if (
+        e.templateId === 'building_exit' ||
+        e.templateId === 'waypoint' ||
+        e.templateId === 'town_portal'
+      ) {
+        // Same server-authoritative routing as the right-click arm above.
+        world.interact();
         return true;
       }
       return world.pickUpObject(id);

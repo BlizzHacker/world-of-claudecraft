@@ -63,15 +63,26 @@ export interface RealmClassSkin {
 }
 
 export interface RealmClassStats {
-  maxHp: number; maxMp: number;
-  str: number; dex: number; vit: number; nrg: number;
-  dmg: number; def: number; spd: number;
+  maxHp: number;
+  maxMp: number;
+  str: number;
+  dex: number;
+  vit: number;
+  nrg: number;
+  dmg: number;
+  def: number;
+  spd: number;
 }
 
 export interface RealmClassSkill {
-  name: string; icon: string; mp: number;
-  type: string; dmg: number; range: number;
-  desc: string; color: string;
+  name: string;
+  icon: string;
+  mp: number;
+  type: string;
+  dmg: number;
+  range: number;
+  desc: string;
+  color: string;
 }
 
 /** Per-realm branding & UX overrides. Every field is optional — when a realm
@@ -86,6 +97,11 @@ export interface RealmBranding {
   brandText?: string;
   /** Loading-screen background image. Defaults to `/loading-screen.jpg`. */
   loadingScreenSrc?: string;
+  /** Whether `loadingScreenSrc` already paints the game wordmark. When true the
+   *  loading screen hides its own logo overlay, so the art's baked-in title is
+   *  the only one on screen instead of a title stacked on a title. Defaults to
+   *  false (art with no wordmark, overlay shown). */
+  loadingArtHasWordmark?: boolean;
   /** Discord invite URL shown in community footer. */
   discordUrl?: string;
   /** GitHub repo URL shown in community footer. */
