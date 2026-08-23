@@ -232,7 +232,12 @@ describe('WOC Store window contract', () => {
   });
 
   it('keeps the store and Claudium out of native builds while gating Daily Rewards by wallet capability', () => {
-    expect(main).toContain('dailyRewardsEnabled: NATIVE_APP ? await walletCapabilityReady : true');
+    // The Facebook Instant Games shell hard-disables Daily Rewards (off-platform
+    // payment/crypto surfaces, docs/facebook-release.md); everywhere else the
+    // native wallet capability gates it as before.
+    expect(main).toContain(
+      'dailyRewardsEnabled: !FACEBOOK_APP && (NATIVE_APP ? await walletCapabilityReady : true)',
+    );
     expect(main).toContain('devCommandsEnabled: import.meta.env.DEV');
     const economyWiring = main.slice(
       main.indexOf('if (!NATIVE_APP) {', main.indexOf('const claudiumHooks')),
@@ -282,7 +287,10 @@ describe('WOC Store window contract', () => {
     const hook = main.slice(main.indexOf('snapshot: async () =>'));
     const snapshot = hook.slice(0, hook.indexOf('buy: async'));
     expect(snapshot).toContain('economy.packSnapshot()');
-    expect(snapshot).toContain('if (!pack.available)');
+    // The Facebook shell reports packs unavailable alongside the typed
+    // economy fallback (Stripe checkout and the crypto rails are off-platform
+    // there, docs/facebook-release.md).
+    expect(snapshot).toContain('if (!pack.available || FACEBOOK_APP)');
     expect(snapshot).toContain('available: false');
     expect(snapshot).toContain('available: true');
   });
