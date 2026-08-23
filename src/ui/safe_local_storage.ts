@@ -17,7 +17,7 @@
  * quota lockouts on some browsers). Callers still wrap their own getItem/setItem in
  * try/catch: a storage object handed back here can still throw on individual calls.
  */
-export function safeLocalStorage(): Pick<Storage, 'getItem' | 'setItem'> | null {
+export function safeLocalStorage(): Pick<Storage, 'getItem' | 'setItem' | 'removeItem'> | null {
   try {
     return typeof localStorage !== 'undefined' ? localStorage : null;
   } catch {
