@@ -1,7 +1,12 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { isBlocked } from '../src/sim/colliders';
 import { clonePropsWithoutEastbrookLayout } from '../src/sim/custom_world_props';
-import { BUILTIN_WORLD, getActiveWorldContent, setActiveWorldContent } from '../src/sim/data';
+import {
+  BUILTIN_WORLD,
+  getActiveWorldContent,
+  isBuiltinWorldContent,
+  setActiveWorldContent,
+} from '../src/sim/data';
 import { EASTBROOK_LAYOUT } from '../src/sim/eastbrook_layout';
 import { FENBRIDGE_LAYOUT } from '../src/sim/fenbridge_layout';
 import { sanitizeMapDoc } from '../src/sim/map_doc';
@@ -38,7 +43,16 @@ afterEach(() => {
 
 describe('custom-map terrain seam', () => {
   it('defaults to the built-in world', () => {
-    expect(getActiveWorldContent()).toBe(BUILTIN_WORLD);
+    // With no editor swap the registry serves the shipped built-in world. The
+    // default realm carries a worldTheme, so what comes back is the per-realm
+    // themed COPY of BUILTIN_WORLD (data.ts themeWorldForRealm), classified
+    // builtin by isBuiltinWorldContent; every array except props.buildings is
+    // still the builtin reference.
+    const active = getActiveWorldContent();
+    expect(isBuiltinWorldContent(active)).toBe(true);
+    expect(active.zones).toBe(BUILTIN_WORLD.zones);
+    expect(active.roads).toBe(BUILTIN_WORLD.roads);
+    expect(active.props.fences).toBe(BUILTIN_WORLD.props.fences);
   });
 
   it('built-in terrain is deterministic across calls', () => {
@@ -419,8 +433,14 @@ describe('custom-map terrain seam', () => {
 // content the calling test has set (restores it afterwards is handled by afterEach).
 function terrainHeightDefaultAt(x: number, z: number): number {
   const active = getActiveWorldContent();
+  // Classify BEFORE the reset below: setActiveWorldContent invalidates the
+  // themed-copy cache isBuiltinWorldContent checks against.
+  const wasBuiltin = isBuiltinWorldContent(active);
   setActiveWorldContent(null);
   const h = terrainHeight(x, z, SEED);
-  setActiveWorldContent(active === BUILTIN_WORLD ? null : active);
+  // Restore what the caller had: null re-selects the (possibly themed)
+  // builtin path; re-registering a themed copy would demote it to a custom
+  // world.
+  setActiveWorldContent(wasBuiltin ? null : active);
   return h;
 }

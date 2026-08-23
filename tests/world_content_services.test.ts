@@ -3,6 +3,7 @@ import { LADDER_RECIPES, TOOL_RECIPES } from '../src/sim/content/recipes';
 import {
   BUILTIN_WORLD,
   getActiveWorldContent,
+  isBuiltinWorldContent,
   STATIONS,
   setActiveWorldContent,
 } from '../src/sim/data';
@@ -98,11 +99,14 @@ describe('WorldContent static gameplay services', () => {
 
   it('uses cfg.world graveyards and start while noticeboards follow the active world authority', () => {
     const world = worldWithoutServices();
-    expect(getActiveWorldContent()).toBe(BUILTIN_WORLD);
+    // The active registry stays on the shipped built-in world (the default
+    // realm's themed copy of it; identity moved when worldThemes shipped, so
+    // the pin is the isBuiltinWorldContent classification, not ===).
+    expect(isBuiltinWorldContent(getActiveWorldContent())).toBe(true);
 
     const sim = new Sim({ seed: 71, playerClass: 'warrior', world });
 
-    expect(getActiveWorldContent()).toBe(BUILTIN_WORLD);
+    expect(isBuiltinWorldContent(getActiveWorldContent())).toBe(true);
     expect(sim.stationPlacements).toEqual([]);
     expect(entitiesWithTemplate(sim, 'mailbox')).toEqual([]);
     expect(entitiesWithTemplate(sim, 'noticeboard_eastbrook')).toHaveLength(
@@ -128,7 +132,7 @@ describe('WorldContent static gameplay services', () => {
     const sim = new Sim({ seed: 71, playerClass: 'warrior', world });
     const healer = entitiesWithTemplate(sim, 'spirit_healer');
 
-    expect(getActiveWorldContent()).toBe(BUILTIN_WORLD);
+    expect(isBuiltinWorldContent(getActiveWorldContent())).toBe(true);
     expect(healer).toHaveLength(1);
     expect({ x: healer[0].pos.x, z: healer[0].pos.z }).toEqual({
       x: graveyard.x,
@@ -149,7 +153,7 @@ describe('WorldContent static gameplay services', () => {
     const world = worldWithoutServices();
     const sim = new Sim({ seed: 71, playerClass: 'warrior', world });
 
-    expect(getActiveWorldContent()).toBe(BUILTIN_WORLD);
+    expect(isBuiltinWorldContent(getActiveWorldContent())).toBe(true);
     expect(sim.stationPlacements).toEqual([]);
     expect(stationsOfType(sim.stationPlacements, 'forge')).toEqual([]);
     expect(isAtStation(sim.stationPlacements, STATIONS[0].pos, STATIONS[0].type)).toBe(false);
@@ -200,7 +204,7 @@ describe('WorldContent static gameplay services', () => {
     };
 
     const sim = new Sim({ seed: 71, playerClass: 'warrior', world });
-    expect(getActiveWorldContent()).toBe(BUILTIN_WORLD);
+    expect(isBuiltinWorldContent(getActiveWorldContent())).toBe(true);
     expect(isAtStation(sim.stationPlacements, world.playerStart, toolworks.type)).toBe(true);
 
     runCraft(sim, TOOL_RECIPES[0].id);

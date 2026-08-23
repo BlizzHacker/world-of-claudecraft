@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { objectDisplayName } from '../src/render/entity_labels';
 import { colliderInternalsForTest } from '../src/sim/colliders';
 import { noticeboardDefByEntityId } from '../src/sim/content/noticeboards';
-import { BUILTIN_WORLD, setActiveWorldContent } from '../src/sim/data';
+import { BUILTIN_WORLD, getActiveWorldContent, setActiveWorldContent } from '../src/sim/data';
 import { EASTBROOK_LAYOUT } from '../src/sim/eastbrook_layout';
 import { Sim } from '../src/sim/sim';
 import {
@@ -88,8 +88,13 @@ describe('active-world noticeboard service', () => {
       ...BUILTIN_WORLD.services,
       noticeboards: [],
     };
+    // Clone the ACTIVE builtin content (the default realm's themed copy, with
+    // its scaled/spread buildings), not the bare BUILTIN_WORLD: a custom world
+    // registered via setActiveWorldContent is never themed, and comparing a
+    // themed roster against an unthemed one perturbs every building-adjusted
+    // NPC spawn, which is exactly the noise this test must exclude.
     const worldWithoutBoard: WorldContent = {
-      ...BUILTIN_WORLD,
+      ...getActiveWorldContent(),
       services: servicesWithoutBoard,
     };
     setActiveWorldContent(worldWithoutBoard);
