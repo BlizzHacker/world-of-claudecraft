@@ -2294,7 +2294,13 @@ body:not(.game-active) .cr-realm-first-prompt {
 .cr-dl-grid {
   display: grid;
   gap: 14px;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  /* min(280px, 100%), never a bare 280px: a bare minimum is a FLOOR the track
+     honours even when the container is narrower, so the grid overflows its own
+     column instead of shrinking. The download panel measures 288px inside a
+     320px phone, 8px of slack, which any extra padding or a display-zoom
+     accessibility setting spends. min() lets the track collapse to the container
+     and changes nothing at a width that already fits. */
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
   margin: 14px 0;
 }
 .cr-dl-card {
@@ -2324,7 +2330,14 @@ body:not(.game-active) .cr-realm-first-prompt {
 }
 .cr-dl-btn {
   flex: 1;
-  min-width: 110px;
+  /* min-width in min() form for the same reason as the grid track above: a bare
+     110px floor cannot shrink, so two buttons in a narrow card would push the
+     row past its own edge. */
+  min-width: min(110px, 100%);
+  /* The download buttons are the whole point of this page and several are real
+     links; hold the 40px tap floor rather than leaving it to the padding. */
+  min-height: 40px;
+  box-sizing: border-box;
   background: rgba(0, 0, 0, 0.45);
   border: 1px solid var(--gold, #c8a838);
   color: var(--gold, #ffd100);
@@ -2333,6 +2346,7 @@ body:not(.game-active) .cr-realm-first-prompt {
   border-radius: 6px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 2px;
   text-align: center;
   font-size: 13px;
@@ -2383,7 +2397,8 @@ body:not(.game-active) .cr-realm-first-prompt {
 .cr-dl-stores-row {
   display: grid;
   gap: 10px;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  /* Same collapsible track minimum as .cr-dl-grid above. */
+  grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
 }
 
 /* Unified in-app doc views (Contributions / White Paper / Links) — content that
