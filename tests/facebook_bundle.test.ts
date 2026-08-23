@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
@@ -12,7 +12,24 @@ import {
   validateEntryHtml,
   validateFbappConfig,
 } from '../scripts/facebook/bundle_rules.mjs';
+import {
+  DEFAULT_GAME_ORIGIN,
+  FACEBOOK_CONTEXT_STORAGE_KEY,
+  FACEBOOK_PROGRESS_EVENT,
+  FACEBOOK_READY_EVENT,
+  injectFacebookShell,
+  LOCAL_ART_PATHS,
+  rewriteCssUrls,
+  rewriteRootRelativeHtml,
+  stripTurnstileScript,
+  validateShellWiring,
+} from '../scripts/facebook/shell_inject.mjs';
 import { crc32, createStoreZip } from '../scripts/facebook/zip_store.mjs';
+import { FACEBOOK_CONTEXT_STORAGE_KEY as CLIENT_STORAGE_KEY } from '../src/game/facebook_context';
+import {
+  FACEBOOK_PROGRESS_EVENT as CLIENT_PROGRESS_EVENT,
+  FACEBOOK_READY_EVENT as CLIENT_READY_EVENT,
+} from '../src/game/facebook_instant';
 
 const repoRoot = path.join(__dirname, '..');
 const facebookDir = path.join(repoRoot, 'facebook');
@@ -22,6 +39,40 @@ const tempDirs: string[] = [];
 afterAll(() => {
   for (const dir of tempDirs) rmSync(dir, { recursive: true, force: true });
 });
+
+// A minimal stand-in for the vite-built play.html: head, the sentinel inline
+// script, the Turnstile include, bundle-relative built refs, and the kinds of
+// root-relative public refs the rewriter must send to the game origin.
+const FIXTURE_PLAY_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Cryptic Realm</title>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="preload" as="image" href="./ui/cursors/arrow.png" />
+<link rel="stylesheet" crossorigin href="./assets/play-fixture.css" />
+<style>#loading-screen{background:#000 url("/loading-screen.jpg") center / cover no-repeat}</style>
+</head>
+<body>
+<img src="/ui/ranks/frame.webp" alt="" />
+<script type="module" crossorigin src="./assets/play-fixture.js"></script>
+</body>
+</html>
+`;
+
+function makeFixtureClientDist(): string {
+  const dir = mkdtempSync(path.join(tmpdir(), 'cr-fb-client-'));
+  tempDirs.push(dir);
+  writeFileSync(path.join(dir, 'play.html'), FIXTURE_PLAY_HTML);
+  mkdirSync(path.join(dir, 'assets'));
+  writeFileSync(path.join(dir, 'assets', 'play-fixture.js'), 'console.log("fixture");\n');
+  writeFileSync(
+    path.join(dir, 'assets', 'play-fixture.css'),
+    'body{cursor:url("/ui/cursors/arrow.png") 7 2, default;background:url("/cryptic-realm-loading-bg.webp")}\n',
+  );
+  return dir;
+}
 
 describe('fbapp-config validation', () => {
   it('accepts the shipped facebook/fbapp-config.json', () => {
@@ -55,12 +106,76 @@ describe('fbapp-config validation', () => {
   });
 });
 
-describe('entry html validation', () => {
-  it('accepts the shipped facebook/index.html', () => {
-    const html = readFileSync(path.join(facebookDir, 'index.html'), 'utf8');
+describe('shell injection', () => {
+  it('produces an entry page that passes the platform and wiring validators', () => {
+    const html = rewriteRootRelativeHtml(
+      stripTurnstileScript(injectFacebookShell(FIXTURE_PLAY_HTML)),
+    );
     expect(validateEntryHtml(html)).toEqual([]);
+    expect(validateShellWiring(html)).toEqual([]);
   });
 
+  it('injects the SDK, the context seed, and the lifecycle after <head>', () => {
+    const html = injectFacebookShell(FIXTURE_PLAY_HTML);
+    const headAt = html.indexOf('<head>');
+    expect(html.indexOf(FBINSTANT_SDK_URL)).toBeGreaterThan(headAt);
+    expect(html.indexOf(FBINSTANT_SDK_URL)).toBeLessThan(html.indexOf('<link rel="icon"'));
+    expect(html).toContain(`sessionStorage.setItem('${FACEBOOK_CONTEXT_STORAGE_KEY}', '1')`);
+    for (const call of ['initializeAsync', 'setLoadingProgress', 'startGameAsync']) {
+      expect(html).toContain(call);
+    }
+    // Injecting twice is a build bug, never a silent double-shell.
+    expect(() => injectFacebookShell(html)).toThrow('already carries');
+  });
+
+  it('shares the context key and event names with the client modules', () => {
+    // The shell page and src/game must agree or the fb gate and the loading
+    // progress bridge silently stop working.
+    expect(FACEBOOK_CONTEXT_STORAGE_KEY).toBe(CLIENT_STORAGE_KEY);
+    expect(FACEBOOK_PROGRESS_EVENT).toBe(CLIENT_PROGRESS_EVENT);
+    expect(FACEBOOK_READY_EVENT).toBe(CLIENT_READY_EVENT);
+  });
+
+  it('strips the Turnstile include', () => {
+    const html = stripTurnstileScript(FIXTURE_PLAY_HTML);
+    expect(html).not.toContain('challenges.cloudflare.com');
+  });
+
+  it('rewrites root-relative references to the game origin, keeping the bundle local', () => {
+    const html = rewriteRootRelativeHtml(FIXTURE_PLAY_HTML, 'https://example.test');
+    // Built assets stay bundle-relative.
+    expect(html).toContain('src="./assets/play-fixture.js"');
+    expect(html).toContain('href="./assets/play-fixture.css"');
+    // Public refs (root-relative AND page-relative) go absolute.
+    expect(html).toContain('src="https://example.test/ui/ranks/frame.webp"');
+    expect(html).toContain('href="https://example.test/ui/cursors/arrow.png"');
+    // Local art ships in the zip and stays relative.
+    expect(html).toContain('href="./favicon.ico"');
+    expect(html).toContain('url("./loading-screen.jpg")');
+  });
+
+  it('rewrites css urls with an assets-relative local prefix', () => {
+    const css = rewriteCssUrls(
+      'a{background:url("/ui/x.png")}b{background:url("/loading-screen.jpg")}c{background:url(data:image/png;base64,x)}',
+      'https://example.test',
+      '../',
+    );
+    expect(css).toContain('url("https://example.test/ui/x.png")');
+    expect(css).toContain('url("../loading-screen.jpg")');
+    expect(css).toContain('url(data:image/png;base64,x)');
+  });
+
+  it('flags missing wiring and leftover root-relative references', () => {
+    const errors = validateShellWiring(
+      '<html><head></head><body><img src="/ui/x.png"></body></html>',
+    );
+    expect(errors.some((e: string) => e.includes(FACEBOOK_CONTEXT_STORAGE_KEY))).toBe(true);
+    expect(errors.some((e: string) => e.includes(FACEBOOK_PROGRESS_EVENT))).toBe(true);
+    expect(errors.some((e: string) => e.includes('root-relative'))).toBe(true);
+  });
+});
+
+describe('entry html validation', () => {
   it('demands the SDK include and the full lifecycle', () => {
     const errors = validateEntryHtml('<html><body>hello</body></html>');
     expect(errors).toContain(`index.html must load the FBInstant SDK from ${FBINSTANT_SDK_URL}`);
@@ -138,22 +253,38 @@ describe('build_facebook_bundle.mjs', () => {
     execFileSync(process.execPath, ['--check', buildScript], { encoding: 'utf8' });
   });
 
-  it('builds a passing bundle from the real facebook/ directory', () => {
+  it('packages a staged client into a passing bundle', () => {
+    const clientDist = makeFixtureClientDist();
     const outDir = mkdtempSync(path.join(tmpdir(), 'cr-fb-bundle-'));
     tempDirs.push(outDir);
-    const stdout = execFileSync(process.execPath, [buildScript, '--out-dir', outDir], {
-      cwd: repoRoot,
-      encoding: 'utf8',
-      timeout: 30_000,
-    });
+    const stdout = execFileSync(
+      process.execPath,
+      [buildScript, '--client-dist', clientDist, '--out-dir', outDir],
+      { cwd: repoRoot, encoding: 'utf8', timeout: 30_000 },
+    );
     expect(stdout).toContain('[facebook-bundle] PASS');
     const zips = readdirSync(outDir).filter((name) => name.endsWith('.zip'));
     expect(zips.length).toBe(1);
     expect(zips[0]).toMatch(/^cryptic-realm-instant-games-v.+\.zip$/);
     const zip = readFileSync(path.join(outDir, zips[0]));
     expect(zip.readUInt32LE(0)).toBe(0x04034b50);
-    expect(existsSync(path.join(repoRoot, 'facebook', 'index.html'))).toBe(true);
-    // The shell bundle must stay far below the recommended initial size.
-    expect(zip.length).toBeLessThan(RECOMMENDED_INITIAL_BUNDLE_BYTES);
+    // The real client plus the local support files land in the zip: the
+    // transformed entry page, the built assets, the KTX2 transcoder, the
+    // local art, and the platform config.
+    for (const name of [
+      'index.html',
+      'fbapp-config.json',
+      'assets/play-fixture.js',
+      'assets/play-fixture.css',
+      'basis/basis_transcoder.wasm',
+      ...LOCAL_ART_PATHS.map((p) => p.slice(1)),
+    ]) {
+      expect(zip.includes(Buffer.from(name, 'utf8'))).toBe(true);
+    }
+    // The staged page kept the shell contract: SDK + lifecycle + origin rewrites.
+    expect(zip.includes(Buffer.from(FBINSTANT_SDK_URL, 'utf8'))).toBe(true);
+    expect(zip.includes(Buffer.from(`${DEFAULT_GAME_ORIGIN}/ui/ranks/frame.webp`, 'utf8'))).toBe(
+      true,
+    );
   });
 });

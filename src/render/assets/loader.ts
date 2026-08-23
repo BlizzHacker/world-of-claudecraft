@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { type GLTF, GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { ASSET_ORIGIN } from '../../client_origin';
 import { GFX } from '../gfx';
 import { resampleHdrRgba } from '../hdr_resample';
 import { ktx2Loader } from './ktx2_support';
@@ -373,6 +374,38 @@ export function loadHdr(url: string, options: HdrLoadOptions = {}): Promise<THRE
   return p;
 }
 
+// When the client runs on a foreign origin with all public assets remote (the
+// Facebook Instant Games bundle, VITE_ASSET_ORIGIN configured), textures cannot
+// ride HTMLImageElement: the container page's CSP img-src allowlist does not
+// include the game site, so THREE.TextureLoader would be blocked outright.
+// fetch + createImageBitmap uses connect-src instead, which the platform
+// explicitly blesses for the game's own backend. The bitmap is pre-flipped via
+// imageOrientation so the texture must keep flipY=false (three's
+// ImageBitmapLoader contract: UNPACK_FLIP_Y_WEBGL cannot flip ImageBitmaps).
+function remoteBitmapTextures(): boolean {
+  return ASSET_ORIGIN !== '' && typeof createImageBitmap === 'function';
+}
+
+async function fetchBitmapTexture(
+  resolved: string,
+  url: string,
+  opts: { srgb?: boolean; repeat?: boolean },
+): Promise<THREE.Texture> {
+  const res = await fetch(resolved, { mode: 'cors' });
+  if (!res.ok) throw new Error(`texture load failed: ${url} (http ${res.status})`);
+  const bitmap = await createImageBitmap(await res.blob(), {
+    imageOrientation: 'flipY',
+    premultiplyAlpha: 'none',
+    colorSpaceConversion: 'none',
+  });
+  const tex = new THREE.Texture(bitmap);
+  tex.flipY = false;
+  if (opts.srgb) tex.colorSpace = THREE.SRGBColorSpace;
+  if (opts.repeat) tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  tex.needsUpdate = true;
+  return tex;
+}
+
 /** Plain image texture (terrain splats, water normals, VFX sprites). */
 export function loadTexture(
   url: string,
@@ -385,20 +418,21 @@ export function loadTexture(
     const startedAt = assetLoadStarted();
     p = scheduleLoad(textureQueue, () => {
       const seq = diagStart('tex', resolved);
-      return withRetry(
-        () =>
-          new Promise<THREE.Texture>((resolve, reject) => {
-            new THREE.TextureLoader().load(
-              resolved,
-              (tex) => {
-                if (opts.srgb) tex.colorSpace = THREE.SRGBColorSpace;
-                if (opts.repeat) tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-                resolve(tex);
-              },
-              undefined,
-              () => reject(new Error(`texture load failed: ${url}`)),
-            );
-          }),
+      return withRetry(() =>
+        remoteBitmapTextures()
+          ? fetchBitmapTexture(resolved, url, opts)
+          : new Promise<THREE.Texture>((resolve, reject) => {
+              new THREE.TextureLoader().load(
+                resolved,
+                (tex) => {
+                  if (opts.srgb) tex.colorSpace = THREE.SRGBColorSpace;
+                  if (opts.repeat) tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+                  resolve(tex);
+                },
+                undefined,
+                () => reject(new Error(`texture load failed: ${url}`)),
+              );
+            }),
       ).then(
         (tex) => {
           diagSettle(seq, 'tex', resolved, true);

@@ -9,6 +9,7 @@
 // playback costs no synthesis CPU and no up-front download. Every fight opens
 // on the CR battle theme, restarted from the top.
 
+import { assetHostUrl } from '../client_origin';
 import { getActiveRealm, REALMS } from '../sim/realms/registry';
 import type { BiomeId } from '../sim/types';
 import { resumeWhenAllowed } from './audio_unlock';
@@ -5161,7 +5162,7 @@ export class MusicDirector {
   /** Create and wire the looping, progressively-downloaded media element. */
   private ensureElement(stream: StreamTrack): void {
     if (stream.el || !this.ctx || typeof Audio !== 'function') return;
-    const el = new Audio(stream.url);
+    const el = new Audio(assetHostUrl(stream.url));
     el.loop = true;
     el.preload = 'auto';
     try {

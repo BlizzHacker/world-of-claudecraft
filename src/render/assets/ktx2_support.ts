@@ -16,7 +16,13 @@ import { KTX2Loader } from 'three/addons/loaders/KTX2Loader.js';
 // Served verbatim from public/basis/ in every host (vite dev, the deployed
 // site, the Capacitor native bundle, the Electron app scheme). The files are
 // deliberately not media-manifest hashed: KTX2Loader fetches them by path.
-const TRANSCODER_PATH = '/basis/';
+// The Facebook Instant Games bundle overrides this with a page-relative
+// 'basis/' (VITE_KTX2_TRANSCODER_PATH): the bundle ships the transcoder beside
+// index.html because a root-absolute path would resolve against the Facebook
+// hosting origin's root, where nothing of ours is served.
+const DEFAULT_TRANSCODER_PATH = '/basis/';
+const TRANSCODER_PATH =
+  String(import.meta.env.VITE_KTX2_TRANSCODER_PATH ?? '') || DEFAULT_TRANSCODER_PATH;
 
 let ktx2: KTX2Loader | null = null;
 
