@@ -304,6 +304,38 @@ const MASCOT_WORDS = new Set([
   'bunny', 'wreath', 'stocking', 'elf', 'balloon', 'ornament',
 ]);
 
+// Words that name a PERSON or a humanoid creature. Unlike the two bans above
+// this one is NARROW: it only stops a row taking a BUILDING role. The store
+// files by bucket, so four gaunt-revenant humanoids that shipped under
+// `buildings` were catalogued `structure` and the placer stood them at the
+// 11-yard building band on an infernal ridge, reported from the live world as
+// "the giant random dude with a hat". A character belongs to spawn logic, not
+// to scenery, which is the verdict the vision table already records as the
+// never-place class `humanoid_misgated`; this list applies it to the rows no
+// human rendered and reviewed. A reviewed or vision verdict still wins, so the
+// gold rotunda a reviewer corrected off its `gaunt_revenant` slug keeps its
+// monument role, and a figure filed under props still reaches `monument` by
+// the statue vocabulary below.
+//
+// Mirrored in src/sim/decor_figure_gate.ts (DECOR_FIGURE_WORDS), which gates
+// the SHIPPED catalogue at runtime because a regen needs the store; the two
+// lists are pinned equal by tests/decor_figure_gate.test.ts.
+export const FIGURE_WORDS = new Set([
+  'angel', 'apparition', 'assassin', 'banshee', 'barbarian', 'berserker',
+  'cadaver', 'centaur', 'colossus', 'corpse', 'corpses', 'deity', 'demon',
+  'devil', 'druid', 'effigy', 'elder', 'emperor', 'executioner', 'ghost',
+  'ghoul', 'ghouls', 'gladiator', 'goblin', 'goblins', 'goddess', 'golem',
+  'hum', 'huma', 'human', 'humano', 'humanoi', 'humanoid', 'humanoids',
+  'humans', 'imp', 'king', 'knight', 'knights', 'lich', 'liches', 'maiden',
+  'minotaur', 'monk', 'necromancer', 'ninja', 'nomad', 'ogre', 'orc', 'orcs',
+  'paladin', 'pharaoh', 'phantom', 'pilgrim', 'prince', 'princess', 'priest',
+  'priestess', 'queen', 'revenant', 'revenants', 'sage', 'samurai', 'seraph',
+  'shaman', 'skeleton', 'skeletons', 'soldier', 'soldiers', 'sorceress',
+  'sorcerer', 'specter', 'spectre', 'troll', 'valkyrie', 'vampire', 'wanderer',
+  'warlord', 'warrior', 'warriors', 'witch', 'wizard', 'wraith', 'wraiths',
+  'zombie', 'zombies',
+]);
+
 // Rows a human RENDERED AND LOOKED AT, keyed by the store slug's 8-hex tail.
 //
 // The vocabulary gate below admits a scenery prop only when one of its slug
@@ -429,7 +461,11 @@ export function classifyDecor(file, reviewBucket) {
   }
   const direct = ROLE_BY_REVIEW_BUCKET[reviewBucket];
   if (direct) return direct;
-  if (reviewBucket === 'building_structure') return 'structure';
+  if (reviewBucket === 'building_structure') {
+    // A humanoid the store happened to file under buildings is not a building.
+    for (const w of words) if (FIGURE_WORDS.has(w)) return null;
+    return 'structure';
+  }
   if (reviewBucket !== 'scenery_prop' && reviewBucket !== 'props') return null;
   for (const [role, list] of Object.entries(SCENERY_ROLE_WORDS)) {
     for (const w of words) if (list.includes(w)) return role;
