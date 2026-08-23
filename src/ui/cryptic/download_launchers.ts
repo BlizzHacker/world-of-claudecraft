@@ -121,9 +121,14 @@ export const LAUNCHERS: Launcher[] = [
         meta: '~2 MB · recommended',
       },
       {
+        // No CrypticRealm-Setup-Medium.exe has ever been published to the
+        // downloads store, so this shipped a button that 404d. Empty href
+        // renders the disabled "coming soon" treatment (see action()) until
+        // the artifact actually exists, which is how Heavy was shown before
+        // it was built.
         label: 'Download · Full',
-        href: '/downloads/CrypticRealm-Setup-Medium.exe',
-        meta: '~333 MB · offline installer',
+        href: '',
+        meta: '~333 MB · offline installer (soon)',
         track: true,
       },
       {
