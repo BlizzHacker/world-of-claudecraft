@@ -9,6 +9,7 @@
 // exactly as before while playback costs no synthesis CPU and no up-front
 // download. Each fight opens on one of the two battle themes at random.
 
+import { assetHostUrl } from '../client_origin';
 import { getActiveRealm, REALMS } from '../sim/realms/registry';
 import type { BiomeId } from '../sim/types';
 import { resumeWhenAllowed } from './audio_unlock';
@@ -76,8 +77,12 @@ const REALM_MUSIC_LABELS: boolean = Object.values(REALMS).some(
 // module flag (not an import) to avoid a circular dependency — cryptic_music
 // already imports the MusicZone type from here.
 let _crypticMusicOn = false;
-export function setCrypticMusicActive(on: boolean): void { _crypticMusicOn = on; }
-function crypticMusicEnabled(): boolean { return _crypticMusicOn; }
+export function setCrypticMusicActive(on: boolean): void {
+  _crypticMusicOn = on;
+}
+function crypticMusicEnabled(): boolean {
+  return _crypticMusicOn;
+}
 
 const TOWN_MUSIC: Record<string, MusicZone> = {
   eastbrook_vale: 'town_eastbrook',
@@ -4950,7 +4955,11 @@ export class MusicDirector {
   private ensureBossElement(): HTMLAudioElement | null {
     if (this.bossElement) return this.bossElement;
     if (typeof Audio !== 'function') return null;
-    const el = new Audio('/audio/dungeon-boss-fight.mp3');
+    // assetHostUrl on every music URL below: identity on the website; the
+    // remote asset origin for bundles with no local public/ tree (Facebook
+    // Instant Games). Where the container's media-src CSP blocks cross-origin
+    // media elements the existing play()/fetch catch arms fail soft to silence.
+    const el = new Audio(assetHostUrl('/audio/dungeon-boss-fight.mp3'));
     el.loop = true;
     el.preload = 'auto';
     this.bossElement = el;
@@ -4961,7 +4970,7 @@ export class MusicDirector {
     const ctx = this.ctx;
     if (!ctx || this.bossBuffer || this.bossLoading || typeof fetch !== 'function') return;
     this.bossLoading = true;
-    void fetch('/audio/dungeon-boss-fight.mp3')
+    void fetch(assetHostUrl('/audio/dungeon-boss-fight.mp3'))
       .then((res) => res.arrayBuffer())
       .then((bytes) => ctx.decodeAudioData(bytes))
       .then((buffer) => {
@@ -5034,8 +5043,11 @@ export class MusicDirector {
       }
       return el;
     };
-    this.sowfieldWaitingEl = mk('/audio/sowfield-waiting.mp3', this.sowfieldWaitingGain);
-    this.sowfieldMatchEl = mk('/audio/sowfield-match.mp3', this.sowfieldMatchGain);
+    this.sowfieldWaitingEl = mk(
+      assetHostUrl('/audio/sowfield-waiting.mp3'),
+      this.sowfieldWaitingGain,
+    );
+    this.sowfieldMatchEl = mk(assetHostUrl('/audio/sowfield-match.mp3'), this.sowfieldMatchGain);
   }
 
   private applySowfield(): void {
@@ -5138,7 +5150,7 @@ export class MusicDirector {
   /** Create and wire the looping, progressively-downloaded media element. */
   private ensureElement(stream: StreamTrack): void {
     if (stream.el || !this.ctx || typeof Audio !== 'function') return;
-    const el = new Audio(stream.url);
+    const el = new Audio(assetHostUrl(stream.url));
     el.loop = true;
     el.preload = 'auto';
     try {

@@ -129,7 +129,10 @@ describe('GLB texture KTX2 compression', () => {
       path.join(ROOT, 'src', 'render', 'assets', 'ktx2_support.ts'),
       'utf8',
     );
-    expect(supportSrc).toContain("const TRANSCODER_PATH = '/basis/';");
+    expect(supportSrc).toContain("const DEFAULT_TRANSCODER_PATH = '/basis/';");
+    // The Facebook Instant Games bundle ships the transcoder in-zip and points
+    // the loader at it page-relatively; every other build keeps the default.
+    expect(supportSrc).toContain('VITE_KTX2_TRANSCODER_PATH');
     expect(supportSrc).toContain('detectSupport');
   });
 

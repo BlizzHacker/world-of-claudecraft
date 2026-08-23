@@ -10,8 +10,7 @@ export const NATIVE_APP = String(import.meta.env.VITE_NATIVE_APP ?? '') === '1';
 // build was made WITHOUT a VITE_API_ORIGIN, fall back to the production origin
 // instead of location.host, so REST and the world socket still reach the game.
 // A build that sets VITE_API_ORIGIN keeps full control.
-const PACKAGED_APP_LOCAL =
-  typeof location !== 'undefined' && location.hostname === 'app.local';
+const PACKAGED_APP_LOCAL = typeof location !== 'undefined' && location.hostname === 'app.local';
 export const NATIVE_API_ORIGIN =
   normalizeOrigin(String(import.meta.env.VITE_API_ORIGIN ?? '')) ||
   (PACKAGED_APP_LOCAL ? 'https://crypticrealm.com' : '');
@@ -38,4 +37,22 @@ export function apiUrl(path: string, base = ''): string {
   const origin =
     normalizeOrigin(base) || NATIVE_API_ORIGIN || DESKTOP_API_ORIGIN || PACKAGED_API_ORIGIN;
   return origin ? `${origin}${path}` : path;
+}
+
+// Remote public-asset origin for builds whose page is NOT served by the game
+// site and ships no public/ tree of its own (the Facebook Instant Games bundle:
+// Facebook hosts only the built JS/CSS/HTML, and every model/texture/audio
+// file streams from the live site at runtime). Empty everywhere else, so the
+// default web, native, and desktop builds keep their page-relative asset URLs.
+export const ASSET_ORIGIN = normalizeOrigin(String(import.meta.env.VITE_ASSET_ORIGIN ?? ''));
+
+/** Resolve a public-asset path ('/models/x.glb', '/audio/y.mp3') against the
+ *  configured remote asset origin. Absolute and data/blob URLs pass through;
+ *  with no VITE_ASSET_ORIGIN configured this is the identity function. */
+export function assetHostUrl(path: string): string {
+  if (!ASSET_ORIGIN) return path;
+  if (/^(https?:)?\/\//.test(path) || path.startsWith('data:') || path.startsWith('blob:')) {
+    return path;
+  }
+  return path.startsWith('/') ? `${ASSET_ORIGIN}${path}` : `${ASSET_ORIGIN}/${path}`;
 }

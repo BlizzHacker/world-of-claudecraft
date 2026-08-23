@@ -9,7 +9,7 @@
 // lazy context loads, a hard concurrency cap, a per-key cooldown, and a tiny
 // pool of persistent looping sources for ambience and sustained spell casts.
 
-import { apiUrl } from '../client_origin';
+import { apiUrl, assetHostUrl } from '../client_origin';
 import { ABILITIES } from '../sim/data';
 import type { BiomeId } from '../sim/types';
 import { isAbilityMomentRecorded } from './ability_sfx_coverage';
@@ -282,7 +282,11 @@ class Sfx {
           this.failedLoads.add(cacheKey);
           return null;
         }
-        const res = await fetch(variant.url);
+        // assetHostUrl: identity on the website; the remote asset origin for
+        // bundles with no local public/ tree (Facebook Instant Games). Clip
+        // fetches ride connect-src there, so sampled SFX keep working where
+        // media-element audio is CSP-blocked.
+        const res = await fetch(assetHostUrl(variant.url));
         if (!res.ok) {
           this.failedLoads.add(cacheKey);
           return null;

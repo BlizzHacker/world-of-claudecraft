@@ -4,14 +4,14 @@
 // bespoke overlay. Leaf module: only DOM + realm branding + i18n, no game/sim/render
 // imports, so hud.ts can import it without a cycle.
 
+import { assetHostUrl } from '../client_origin';
 import { getActiveRealm } from '../sim/realms';
-import { createLoadingTipRotation, type LoadingTipRotation } from '../ui/loading_tips';
 import { t } from '../ui/i18n';
+import { createLoadingTipRotation, type LoadingTipRotation } from '../ui/loading_tips';
 
 export const LOADING_FADE_MS = 350; // keep in sync with the #loading-screen CSS transition
 
-const $ = <T extends HTMLElement = HTMLElement>(sel: string): T =>
-  document.querySelector(sel) as T;
+const $ = <T extends HTMLElement = HTMLElement>(sel: string): T => document.querySelector(sel) as T;
 
 let loadingHideTimer: number | null = null;
 
@@ -50,8 +50,11 @@ export function showLoadingScreen(statusText: string): void {
   if (!el) return;
   // Per-realm loading art: each realm's content pack names its own loading screen
   // (branding.loadingScreenSrc); the CSS default is the Cryptic Realm art.
+  // assetHostUrl: remote asset origin for bundles with no local public/ tree
+  // (Facebook Instant Games); identity everywhere else. A CSP-blocked image
+  // there fails soft to the plain backdrop colour.
   const realmLoading = getActiveRealm().branding?.loadingScreenSrc;
-  if (realmLoading) el.style.backgroundImage = `url("${realmLoading}")`;
+  if (realmLoading) el.style.backgroundImage = `url("${assetHostUrl(realmLoading)}")`;
   if (loadingHideTimer !== null) {
     window.clearTimeout(loadingHideTimer);
     loadingHideTimer = null;

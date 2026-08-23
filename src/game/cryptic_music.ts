@@ -5,10 +5,15 @@
 //
 // Zone → track mapping mirrors the procedural MusicZone set in music.ts.
 
+import { assetHostUrl } from '../client_origin';
 import type { MusicZone } from './music';
 import { setCrypticMusicActive } from './music';
 
-const BASE = '/audio/cryptic';
+// assetHostUrl: identity on the website; the remote asset origin for bundles
+// with no local public/ tree (Facebook Instant Games). Track loads there may be
+// blocked by the container's media-src CSP; this module already fails soft when
+// a track cannot load, which is the intended degradation.
+const BASE = assetHostUrl('/audio/cryptic');
 
 // Each zone's signature track. Town themes, overworld biomes, dungeon moods, and
 // a boss cue — drawn from the Cryptic Realm MP3 set.
@@ -68,14 +73,20 @@ const STORE_KEY = 'cr_cryptic_music_on';
 // The full soundtrack, in a stable order — used to populate the song picker and
 // to drive shuffle. Derived from the zone map + combat cue so there's one source
 // of track filenames.
-export interface CrypticTrack { src: string; title: string; }
+export interface CrypticTrack {
+  src: string;
+  title: string;
+}
 export const CRYPTIC_TRACKS: CrypticTrack[] = (() => {
   const seen = new Set<string>();
   const list: CrypticTrack[] = [];
   for (const src of [...Object.values(ZONE_TRACK), COMBAT_TRACK]) {
     if (seen.has(src)) continue;
     seen.add(src);
-    list.push({ src, title: TRACK_TITLE[src] ?? src.replace(/-cryptic-realm\.mp3$/, '').replace(/-/g, ' ') });
+    list.push({
+      src,
+      title: TRACK_TITLE[src] ?? src.replace(/-cryptic-realm\.mp3$/, '').replace(/-/g, ' '),
+    });
   }
   return list;
 })();
@@ -95,15 +106,25 @@ export class CrypticMusicPlayer {
   private onTrackChange: (() => void) | undefined;
 
   constructor() {
-    try { this._enabled = localStorage.getItem(STORE_KEY) !== '0'; } catch { /* default on */ }
+    try {
+      this._enabled = localStorage.getItem(STORE_KEY) !== '0';
+    } catch {
+      /* default on */
+    }
     setCrypticMusicActive(this._enabled);
   }
 
-  get enabled(): boolean { return this._enabled; }
+  get enabled(): boolean {
+    return this._enabled;
+  }
   setEnabled(on: boolean): void {
     this._enabled = on;
     setCrypticMusicActive(on);
-    try { localStorage.setItem(STORE_KEY, on ? '1' : '0'); } catch { /* ignore */ }
+    try {
+      localStorage.setItem(STORE_KEY, on ? '1' : '0');
+    } catch {
+      /* ignore */
+    }
     if (!on) this.stop();
   }
 
@@ -115,7 +136,10 @@ export class CrypticMusicPlayer {
   /** Human-readable now-playing title (track + zone), or null when idle. */
   nowPlaying(): string | null {
     if (!this.currentTrack || !this.active || this.active.paused) return null;
-    return TRACK_TITLE[this.currentTrack] ?? this.currentTrack.replace(/-cryptic-realm\.mp3$/, '').replace(/-/g, ' ');
+    return (
+      TRACK_TITLE[this.currentTrack] ??
+      this.currentTrack.replace(/-cryptic-realm\.mp3$/, '').replace(/-/g, ' ')
+    );
   }
 
   private make(src: string): HTMLAudioElement {
@@ -130,20 +154,28 @@ export class CrypticMusicPlayer {
   update(zone: MusicZone | null, combat: boolean): void {
     if (!this._enabled || typeof document === 'undefined') return;
     if (this._manual) return; // user picked a song / shuffle — don't stomp it
-    const want = combat ? COMBAT_TRACK : (zone ? ZONE_TRACK[zone] : '');
+    const want = combat ? COMBAT_TRACK : zone ? ZONE_TRACK[zone] : '';
     if (!want || want === this.currentTrack) return;
     this.crossfadeTo(want);
   }
 
   // --- Manual player controls (Spotify/Pandora-style) ------------------------
 
-  get manual(): boolean { return this._manual; }
-  get shuffle(): boolean { return this._shuffle; }
+  get manual(): boolean {
+    return this._manual;
+  }
+  get shuffle(): boolean {
+    return this._shuffle;
+  }
   /** Currently playing track filename, or '' when idle. */
-  get track(): string { return this.currentTrack; }
+  get track(): string {
+    return this.currentTrack;
+  }
 
   /** Register a callback fired whenever the active track changes (UI refresh). */
-  setOnTrackChange(cb: (() => void) | undefined): void { this.onTrackChange = cb; }
+  setOnTrackChange(cb: (() => void) | undefined): void {
+    this.onTrackChange = cb;
+  }
 
   /** Play a specific track now; enters manual mode (zone music won't override). */
   playTrack(src: string): void {
@@ -162,14 +194,20 @@ export class CrypticMusicPlayer {
 
   toggleShuffle(): boolean {
     this._shuffle = !this._shuffle;
-    if (this._shuffle) { this._manual = true; this.playRandom(); }
+    if (this._shuffle) {
+      this._manual = true;
+      this.playRandom();
+    }
     return this._shuffle;
   }
 
   /** Skip to the next track (random in shuffle, else next in list order). */
   next(): void {
     this._manual = true;
-    if (this._shuffle) { this.playRandom(); return; }
+    if (this._shuffle) {
+      this.playRandom();
+      return;
+    }
     const i = CRYPTIC_TRACKS.findIndex((t) => t.src === this.currentTrack);
     const nx = CRYPTIC_TRACKS[(i + 1 + CRYPTIC_TRACKS.length) % CRYPTIC_TRACKS.length];
     if (nx) this.crossfadeTo(nx.src);
@@ -184,7 +222,9 @@ export class CrypticMusicPlayer {
 
   private playRandom(): void {
     const pool = CRYPTIC_TRACKS.filter((t) => t.src !== this.currentTrack);
-    const pick = (pool.length ? pool : CRYPTIC_TRACKS)[Math.floor(Math.random() * (pool.length || CRYPTIC_TRACKS.length))];
+    const pick = (pool.length ? pool : CRYPTIC_TRACKS)[
+      Math.floor(Math.random() * (pool.length || CRYPTIC_TRACKS.length))
+    ];
     if (pick) this.crossfadeTo(pick.src);
   }
 
@@ -196,11 +236,23 @@ export class CrypticMusicPlayer {
     // In shuffle, tracks should advance rather than loop forever on one song.
     if (this._shuffle) {
       next.loop = false;
-      next.addEventListener('ended', () => { if (this._shuffle && this.active === next) this.playRandom(); }, { once: true });
+      next.addEventListener(
+        'ended',
+        () => {
+          if (this._shuffle && this.active === next) this.playRandom();
+        },
+        { once: true },
+      );
     }
-    try { this.onTrackChange?.(); } catch { /* UI callback must not break playback */ }
+    try {
+      this.onTrackChange?.();
+    } catch {
+      /* UI callback must not break playback */
+    }
     // Autoplay may be blocked until a user gesture; play() rejection is fine.
-    void next.play().catch(() => { /* will start after first interaction */ });
+    void next.play().catch(() => {
+      /* will start after first interaction */
+    });
     const start = performance.now();
     const DUR = 1400;
     if (this.fadeTimer) cancelAnimationFrame(this.fadeTimer);
@@ -211,8 +263,12 @@ export class CrypticMusicPlayer {
       // HTMLMediaElement.volume setter throws IndexSizeError outside [0,1].
       next.volume = clamp01(this._vol * t);
       if (prev) prev.volume = clamp01(this._vol * (1 - t));
-      if (t < 1) { this.fadeTimer = requestAnimationFrame(step); }
-      else if (prev) { prev.pause(); prev.src = ''; }
+      if (t < 1) {
+        this.fadeTimer = requestAnimationFrame(step);
+      } else if (prev) {
+        prev.pause();
+        prev.src = '';
+      }
     };
     this.fadeTimer = requestAnimationFrame(step);
     // Keep the double-buffer references tidy.
@@ -229,7 +285,12 @@ export class CrypticMusicPlayer {
 
   stop(): void {
     if (this.fadeTimer) cancelAnimationFrame(this.fadeTimer);
-    for (const el of [this.a, this.b]) { if (el) { el.pause(); el.src = ''; } }
+    for (const el of [this.a, this.b]) {
+      if (el) {
+        el.pause();
+        el.src = '';
+      }
+    }
     this.a = this.b = this.active = null;
     this.currentTrack = '';
   }

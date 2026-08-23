@@ -7,6 +7,7 @@
 // `quest__<questId>__complete`) against the generated manifest; unknown keys and
 // missing files are silent no-ops, so the game runs fine before any audio exists.
 
+import { assetHostUrl } from '../client_origin';
 import { VOICE_LINES } from './voice_manifest.generated';
 
 // Voices sit slightly under their slider value so NPC dialogue doesn't overpower
@@ -81,7 +82,11 @@ class GameVoice {
     if (!src) return;
     this.stop();
     if (!this.el) this.el = new Audio();
-    this.el.src = src;
+    // assetHostUrl: remote asset origin for bundles with no local public/ tree
+    // (Facebook Instant Games). If the container's media-src CSP blocks the
+    // cross-origin element there, playback errors are already swallowed below,
+    // so voice fails soft to silence.
+    this.el.src = assetHostUrl(src);
     this.playGain = opts?.gain ?? 1;
     this.distanceGain = 1; // a fresh line starts at full: you just clicked the NPC, you are close
     this.applyVolume();
