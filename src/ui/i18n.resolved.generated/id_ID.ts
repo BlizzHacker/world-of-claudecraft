@@ -322,7 +322,12 @@ export const id_ID: EnTranslations = {
     "waypoints": {
       "title": "Waypoints",
       "choose": "Choose a destination",
-      "undiscovered": "{name} (undiscovered)"
+      "undiscovered": "{name} (undiscovered)",
+      "summary": "{known} of {total} discovered",
+      "discoveredGroup": "Discovered",
+      "locked": "Undiscovered ({count})",
+      "filterPlaceholder": "Search destinations",
+      "noMatches": "No destinations match that search."
     },
     "readyCheck": {
       "prompt": "{name} memulai pemeriksaan kesiapan. Apakah kamu siap?",

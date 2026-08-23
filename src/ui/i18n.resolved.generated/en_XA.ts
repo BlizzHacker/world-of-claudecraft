@@ -322,7 +322,12 @@ export const en_XA: EnTranslations = {
     "waypoints": {
       "title": "[Ŵáýþóíñţš]",
       "choose": "[Çĥóóšé á ðéšţíñáţíóñ]",
-      "undiscovered": "[{name} (úñðíšçóʋéŕéð)]"
+      "undiscovered": "[{name} (úñðíšçóʋéŕéð)]",
+      "summary": "[{known} óƒ {total} ðíšçóʋéŕéð]",
+      "discoveredGroup": "[Ðíšçóʋéŕéð]",
+      "locked": "[Úñðíšçóʋéŕéð ({count})]",
+      "filterPlaceholder": "[Šéáŕçĥ ðéšţíñáţíóñš]",
+      "noMatches": "[Ñó ðéšţíñáţíóñš ɱáţçĥ ţĥáţ šéáŕçĥ.]"
     },
     "readyCheck": {
       "prompt": "[{name} ĥáš šţáŕţéð á ŕéáðý çĥéçķ. Áŕé ýóú ŕéáðý?]",

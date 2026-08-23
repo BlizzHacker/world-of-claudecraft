@@ -11719,4 +11719,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.waypoints.title': '웨이포인트',
   'hudChrome.waypoints.choose': '목적지를 선택하세요',
   'hudChrome.waypoints.undiscovered': '{name} (미발견)',
+  'hudChrome.waypoints.summary': '발견 {known}/{total}',
+  'hudChrome.waypoints.discoveredGroup': '발견함',
+  'hudChrome.waypoints.locked': '미발견 ({count})',
+  'hudChrome.waypoints.filterPlaceholder': '목적지 검색',
+  'hudChrome.waypoints.noMatches': '검색과 일치하는 목적지가 없습니다.',
 };

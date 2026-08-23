@@ -11200,4 +11200,9 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.waypoints.title': '傳送點',
   'hudChrome.waypoints.choose': '選擇目的地',
   'hudChrome.waypoints.undiscovered': '{name}（未發現）',
+  'hudChrome.waypoints.summary': '已發現 {known}/{total}',
+  'hudChrome.waypoints.discoveredGroup': '已發現',
+  'hudChrome.waypoints.locked': '未發現（{count}）',
+  'hudChrome.waypoints.filterPlaceholder': '搜尋目的地',
+  'hudChrome.waypoints.noMatches': '沒有符合該搜尋的目的地。',
 };

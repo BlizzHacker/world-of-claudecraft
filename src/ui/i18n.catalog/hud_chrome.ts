@@ -14,11 +14,20 @@ export const hudChromeStrings = {
     banner: 'Spectating {name}',
   },
   // D2 waypoint travel menu (waypoint_map_window.ts). Terse on purpose; the
-  // close button reuses hud.prompts.decline.
+  // close button reuses hud.prompts.decline. `undiscovered` is the ACCESSIBLE
+  // name of a locked row (the visible text is the bare place name, since the
+  // group heading already says the state); `summary` is the header count line,
+  // and `locked` labels the disclosure that keeps the locked wall from burying
+  // the handful of destinations the player can actually travel to.
   waypoints: {
     title: 'Waypoints',
     choose: 'Choose a destination',
     undiscovered: '{name} (undiscovered)',
+    summary: '{known} of {total} discovered',
+    discoveredGroup: 'Discovered',
+    locked: 'Undiscovered ({count})',
+    filterPlaceholder: 'Search destinations',
+    noMatches: 'No destinations match that search.',
   },
   // Raid/party ready-check prompt (the leader ran /ready). The buttons answer the
   // yes/no prompt; the outcome is announced in chat by the sim.

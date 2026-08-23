@@ -11197,4 +11197,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.waypoints.title': '传送点',
   'hudChrome.waypoints.choose': '选择目的地',
   'hudChrome.waypoints.undiscovered': '{name}（未发现）',
+  'hudChrome.waypoints.summary': '已发现 {known}/{total}',
+  'hudChrome.waypoints.discoveredGroup': '已发现',
+  'hudChrome.waypoints.locked': '未发现（{count}）',
+  'hudChrome.waypoints.filterPlaceholder': '搜索目的地',
+  'hudChrome.waypoints.noMatches': '没有匹配该搜索的目的地。',
 };
