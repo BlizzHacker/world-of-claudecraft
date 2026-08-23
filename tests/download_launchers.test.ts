@@ -69,4 +69,34 @@ describe('launcher binary hrefs', () => {
     expect(hrefs.length).toBeGreaterThan(0);
     for (const href of hrefs) expect(href, href).toMatch(/^\/downloads\//);
   });
+
+  // The Windows "Full" tier shipped href /downloads/CrypticRealm-Setup-Medium.exe
+  // for as long as the card existed, but that artifact was never published to
+  // the store, so the button 404d for every player who clicked it. Only names
+  // that are actually in /opt/cr-downloads on the realm host may be linked;
+  // anything else uses the empty-href "coming soon" treatment instead.
+  const PUBLISHED_WINDOWS_INSTALLERS: readonly string[] = [
+    'CrypticRealm-Setup-Lite.exe',
+    'CrypticRealm-Setup-Heavy.exe',
+  ];
+
+  it('links only Windows installers that exist in the downloads store', () => {
+    const linked = LAUNCHERS.flatMap((l) => (l.actions ?? []).map((a) => a.href))
+      .filter((href) => href.endsWith('.exe'))
+      .map((href) => href.replace('/downloads/', ''));
+    expect(linked.length).toBeGreaterThan(0);
+    for (const name of linked) {
+      expect(PUBLISHED_WINDOWS_INSTALLERS, name).toContain(name);
+    }
+  });
+
+  it('renders an unbuilt tier as a disabled button rather than a dead link', () => {
+    // Every action carrying a "(soon)" meta must have no href, or the disabled
+    // branch in action() never runs and the card links into a 404.
+    for (const l of LAUNCHERS) {
+      for (const a of l.actions ?? []) {
+        if (/\bsoon\b/i.test(a.meta)) expect(a.href, a.label).toBe('');
+      }
+    }
+  });
 });
