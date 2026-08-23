@@ -182,13 +182,14 @@ describe('banker chest model and placement', () => {
       // candidates sample blocked and the chest takes the pushed-out front
       // corner. Petra's rebuilt exterior teller likewise keeps the bank facade
       // directly behind her, so its first fully clear spot is also in front.
-      // Aldous banks in a procedural hub town: the default realm's worldTheme
-      // (data.ts themeWorldForRealm) spreads those buildings apart, moving the
-      // inn that used to crowd his back out of range, so his chest takes the
-      // preferred behind-side candidate.
+      // Aldous banks in a procedural hub town, and the inn at his back stays
+      // where it was authored: Highwatch sits in the peaks, so the fit
+      // (building_theme_fit.ts) refuses that record every rung of the theme
+      // rather than float it over a five-yard drop. The crowded back therefore
+      // samples blocked and his chest takes the pushed-out front corner too.
       bursar_fernando: [2.0, 0.9],
       bursar_petra_vell: [2.0, 0.9],
-      bursar_aldous_crane: [1.15, -1.6],
+      bursar_aldous_crane: [2.0, 0.9],
     };
     for (const [templateId, expected] of Object.entries(expectedOffsets)) {
       const entity = placedBuiltInBanker(templateId);

@@ -31,17 +31,18 @@
 // filters and truncates it, so a phone sees a subset of the same world a
 // desktop sees, never a different one.
 
-import { getActiveWorldContent, WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z } from './data';
 import { isInBoarpitShell } from './boarpit_layout';
+import { getActiveWorldContent, WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z } from './data';
+import { decorRoleAdmitted } from './decor_figure_gate';
 import { isInThornwheelShell } from './derby_layout';
 import { isInHomesShell } from './homes_layout';
-import { hash2 } from './rng';
 import type {
   RealmDecorAsset,
   RealmDecorBudget,
   RealmDecorPlacement,
   RealmDecorRole,
 } from './realm_decor_types';
+import { hash2 } from './rng';
 import { isInSowfieldShell } from './vale_cup_layout';
 import {
   DECORATION_MAX_SLOPE,
@@ -71,14 +72,23 @@ export const DECOR_NORMALIZED_HEIGHT = 2.2;
  *  data.ts themeWorldForRealm returns the base world untouched for it — so it
  *  gets no realm dressing either. */
 export const REALM_DECOR_THEME: Readonly<
-  Record<string, { readonly sources: readonly string[]; readonly roles: Readonly<Partial<Record<RealmDecorRole, number>>> }>
+  Record<
+    string,
+    {
+      readonly sources: readonly string[];
+      readonly roles: Readonly<Partial<Record<RealmDecorRole, number>>>;
+    }
+  >
 > = {
   classic: { sources: ['classic'], roles: { structure: 3, monument: 3, flora: 2, camp: 1 } },
   infernal: {
     sources: ['infernal', 'classic'],
     roles: { structure: 3, monument: 3, camp: 1, flora: 1 },
   },
-  arcane: { sources: ['arcane', 'classic'], roles: { structure: 3, monument: 3, flora: 2, camp: 1 } },
+  arcane: {
+    sources: ['arcane', 'classic'],
+    roles: { structure: 3, monument: 3, flora: 2, camp: 1 },
+  },
   crypticrealm: {
     sources: ['crypticrealm', 'infernal'],
     roles: { structure: 3, monument: 3, flora: 2, camp: 1 },
@@ -320,6 +330,11 @@ export function realmDecorCandidates(
   for (const source of theme.sources) {
     for (const asset of catalog[source] ?? []) {
       if (theme.roles[asset.role] === undefined) continue;
+      // A catalogue row whose slug names a PERSON may never take the building
+      // band (decor_figure_gate.ts): the store filed four gaunt-revenant
+      // humanoids under `buildings`, so they inherited `structure` and stood on
+      // the Martyrspike ridge at 11 yards, taller than the town below them.
+      if (!decorRoleAdmitted(asset.key, asset.role)) continue;
       const list = byRole.get(asset.role);
       if (list) list.push(asset);
       else byRole.set(asset.role, [asset]);
@@ -367,7 +382,8 @@ export function realmDecorCandidates(
     if (!pool || pool.length === 0) return;
     const roll = hash2(cellX, cellZ, seed + salt + SALT_ASSET) ** ASSET_SIZE_BIAS;
     const asset = pool[Math.min(pool.length - 1, Math.floor(roll * pool.length))];
-    const height = ROLE_HEIGHT[role] * (0.85 + hash2(cellX, cellZ, seed + salt + SALT_HEIGHT) * 0.4);
+    const height =
+      ROLE_HEIGHT[role] * (0.85 + hash2(cellX, cellZ, seed + salt + SALT_HEIGHT) * 0.4);
     const radius = Math.max(1, asset.foot * height);
     if (!decorSiteOk(x, z, radius, seed, anchors, minRoad, maxRoad)) return;
     for (const other of accepted) {
@@ -420,10 +436,20 @@ export function realmDecorCandidates(
   // 2 + 3. Roadside and backcountry scatter, on the same hash grid the tree
   // field uses (integer cell coords hashed with the seed, jittered inside the
   // cell) so the two fields never correlate but behave identically.
-  const scatter = (band: Band, step: number, density: number, minRoad: number, maxRoad: number): void => {
+  const scatter = (
+    band: Band,
+    step: number,
+    density: number,
+    minRoad: number,
+    maxRoad: number,
+  ): void => {
     const half = WORLD_MAX_X - WORLD_EDGE_MARGIN;
     for (let gx = -half; gx < half; gx += step) {
-      for (let gz = WORLD_MIN_Z + WORLD_EDGE_MARGIN; gz < WORLD_MAX_Z - WORLD_EDGE_MARGIN; gz += step) {
+      for (
+        let gz = WORLD_MIN_Z + WORLD_EDGE_MARGIN;
+        gz < WORLD_MAX_Z - WORLD_EDGE_MARGIN;
+        gz += step
+      ) {
         const cellX = Math.round(gx);
         const cellZ = Math.round(gz);
         if (hash2(cellX, cellZ, seed + salt + SALT_BAND) > density) continue;
