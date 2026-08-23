@@ -19,7 +19,8 @@ const PUBLIC_ALLOW_METHODS = 'GET, OPTIONS';
 
 /**
  * The default 'api' allow check: exactly the legacy maybeCors allow-list (realm
- * vhosts + native app shells + the Electron desktop shells), delegated to
+ * vhosts + native app shells + the Electron desktop shells + the Facebook
+ * Instant Games container), delegated to
  * allowedCorsOrigin so the list lives in ONE place (server/web_login_guard.ts)
  * and cannot drift from the top-level wrapper both dispatch arms share.
  */

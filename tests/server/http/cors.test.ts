@@ -79,6 +79,31 @@ describe('withCors: api default allow predicate (defaultApiAllow)', () => {
     await compose([withCors('api'), async (_ctx, next) => next()])(ctx);
     expect(res.headers['access-control-allow-origin']).toBeUndefined();
   });
+
+  it('reflects the Facebook Instant Games hosting origins with the SHIPPING predicate', async () => {
+    for (const origin of [
+      'https://shield-apps-1725436805394319.apps.fbsbx.com',
+      'https://apps-1725436805394319.apps.fbsbx.com',
+    ]) {
+      const ctx = fakeCtx({ headers: { origin } });
+      const res = resOf(ctx);
+      await compose([withCors('api'), async (_ctx, next) => next()])(ctx);
+      expect(res.headers['access-control-allow-origin']).toBe(origin);
+    }
+  });
+
+  it('does not reflect fbsbx look-alike origins with the shipping predicate', async () => {
+    for (const origin of [
+      'https://apps.fbsbx.com.evil.com',
+      'https://foo.bar.apps.fbsbx.com',
+      'http://apps-1725436805394319.apps.fbsbx.com',
+    ]) {
+      const ctx = fakeCtx({ headers: { origin } });
+      const res = resOf(ctx);
+      await compose([withCors('api'), async (_ctx, next) => next()])(ctx);
+      expect(res.headers['access-control-allow-origin']).toBeUndefined();
+    }
+  });
 });
 
 describe('withCors: public allow class', () => {

@@ -1,4 +1,5 @@
 import type { IncomingMessage } from 'node:http';
+import { isFacebookInstantOrigin } from './fb_origins';
 import { REALM_ORIGINS } from './realm';
 
 export const NATIVE_APP_ORIGINS = new Set([
@@ -29,9 +30,10 @@ export function isDesktopAppRequest(req: Pick<IncomingMessage, 'headers'>): bool
 }
 
 // The CORS reflection allow-list for /api/*: realm vhosts plus the native and
-// desktop app shells, whose pages are served from a non-site origin and so need
-// the browser's permission to call the API. Auth is a bearer token (no cookies),
-// so reflecting these specific origins is safe. Returns the origin to reflect,
+// desktop app shells and the Facebook Instant Games container (fb_origins.ts),
+// whose pages are served from a non-site origin and so need the browser's
+// permission to call the API. Auth is a bearer token (no cookies), so
+// reflecting these specific origins is safe. Returns the origin to reflect,
 // or null when the request must get no CORS headers (same-origin pages and
 // unknown origins).
 export function allowedCorsOrigin(origin: unknown): string | null {
@@ -39,7 +41,8 @@ export function allowedCorsOrigin(origin: unknown): string | null {
   if (
     REALM_ORIGINS.has(origin) ||
     NATIVE_APP_ORIGINS.has(origin) ||
-    DESKTOP_APP_ORIGINS.has(origin)
+    DESKTOP_APP_ORIGINS.has(origin) ||
+    isFacebookInstantOrigin(origin)
   ) {
     return origin;
   }
@@ -65,14 +68,18 @@ export function webLoginEnforced(env: NodeJS.ProcessEnv = process.env): boolean 
 
 // True when the request carries an Origin that belongs to this site — i.e. it
 // came from a page we served, not a raw API client. Accepts: an explicitly
-// allow-listed origin (WEB_ORIGINS or a configured REALM_ORIGINS entry), the same
-// host the request was sent to (Host / X-Forwarded-Host), or localhost for dev.
+// allow-listed origin (WEB_ORIGINS or a configured REALM_ORIGINS entry), a
+// Facebook Instant Games hosting origin (the bundle page is OUR client served
+// from Facebook's sandbox, accepted in code like the native/desktop shells; the
+// WEB_ORIGINS env list stays purely additive on top), the same host the request
+// was sent to (Host / X-Forwarded-Host), or localhost for dev.
 export function isWebClientRequest(
   req: Pick<IncomingMessage, 'headers'>,
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
   const origin = req.headers.origin;
   if (typeof origin !== 'string' || origin === '') return false;
+  if (isFacebookInstantOrigin(origin)) return true;
   const allow = new Set<string>([
     ...REALM_ORIGINS,
     ...NATIVE_APP_ORIGINS,

@@ -125,6 +125,61 @@ describe('routeHttpRequest: OPTIONS-204 + CORS short-circuit', () => {
     // realm/native allowlist maybeCors applies to the rest of /api.
     expect(res.headers['access-control-allow-origin']).toBe('*');
   });
+
+  it('reflects the Facebook Instant Games origins on an /api preflight (maybeCors)', async () => {
+    const { routeHttpRequest } = await loadRoute();
+    for (const origin of [
+      'https://shield-apps-1725436805394319.apps.fbsbx.com',
+      'https://apps-1725436805394319.apps.fbsbx.com',
+    ]) {
+      const res = fakeRes();
+      routeHttpRequest(
+        fakeReq('OPTIONS', '/api/login', { origin }),
+        res as unknown as http.ServerResponse,
+      );
+      expect(res.writeHeadCodes).toEqual([204]);
+      expect(res.headers['access-control-allow-origin']).toBe(origin);
+      expect(res.headers['access-control-allow-headers']).toBe('Authorization, Content-Type');
+    }
+  });
+
+  it('does not reflect fbsbx look-alike origins on an /api preflight', async () => {
+    const { routeHttpRequest } = await loadRoute();
+    for (const origin of [
+      'https://apps.fbsbx.com.evil.com',
+      'https://foo.bar.apps.fbsbx.com',
+      'http://apps-1725436805394319.apps.fbsbx.com',
+    ]) {
+      const res = fakeRes();
+      routeHttpRequest(
+        fakeReq('OPTIONS', '/api/login', { origin }),
+        res as unknown as http.ServerResponse,
+      );
+      // The preflight still 204s (isApi), but with no CORS grant.
+      expect(res.writeHeadCodes).toEqual([204]);
+      expect(res.headers['access-control-allow-origin']).toBeUndefined();
+    }
+  });
+
+  it('applies wide-open public CORS and 204 to an OPTIONS on every public asset prefix', async () => {
+    const { routeHttpRequest } = await loadRoute();
+    for (const url of [
+      '/models/kaykit/knight.glb',
+      '/media/models/chars/knight.8f31c2aa91bd.glb',
+      '/audio/voice/npc.mp3',
+      '/textures/atlas.png',
+      '/env/vale_day_1k.hdr',
+      '/vfx/flame.png',
+    ]) {
+      const res = fakeRes();
+      routeHttpRequest(
+        fakeReq('OPTIONS', url, { origin: 'https://apps-1725436805394319.apps.fbsbx.com' }),
+        res as unknown as http.ServerResponse,
+      );
+      expect(res.writeHeadCodes).toEqual([204]);
+      expect(res.headers['access-control-allow-origin']).toBe('*');
+    }
+  });
 });
 
 describe('routeHttpRequest: prefix ladder dispatch order', () => {

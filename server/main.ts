@@ -213,6 +213,7 @@ import { emailAccountCreated } from './email';
 import { stopEpicMirror } from './epic/mirror';
 import { maybeHandleExchangeApi } from './exchange/api';
 import { applyExchangeSchema } from './exchange/db';
+import { isFacebookInstantOrigin } from './fb_origins';
 import { handleCrRealmsStatic, handleForgedCatalog, handleForgedStatic } from './forged_assets';
 import { GameServer } from './game';
 import {
@@ -344,6 +345,7 @@ import {
   cacheControlFor,
   etagFor,
   isNotModified,
+  isPublicAssetPath,
   isPublicSfxPath,
   requestedSfxBlobHash,
   requestedSfxVersion,
@@ -1503,9 +1505,16 @@ function isOwnRealmOrigin(origin: string): boolean {
   }
 }
 
+// Reflected origins: our own realm vhosts, the native app shells, and the
+// Facebook Instant Games container (fb_origins.ts; the bundle page is our own
+// client served from Facebook's fbsbx sandbox, and bearer auth makes
+// reflecting it safe, same as the native shells).
 function maybeCors(req: http.IncomingMessage, res: http.ServerResponse): void {
   const origin = req.headers.origin;
-  if (typeof origin === 'string' && (isOwnRealmOrigin(origin) || NATIVE_APP_ORIGINS.has(origin))) {
+  if (
+    typeof origin === 'string' &&
+    (isOwnRealmOrigin(origin) || NATIVE_APP_ORIGINS.has(origin) || isFacebookInstantOrigin(origin))
+  ) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Vary', 'Origin');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -3179,8 +3188,9 @@ export function resetApiDispatchModeForTests(): void {
 // BEFORE the prefix ladder so the legacy handlers AND the new /api dispatcher
 // inherit identical CORS from ONE place (a rollback can never drop preflight, and
 // the delegated and onion paths can never diverge on CORS). It applies the exact
-// CORS the ladder always did: the wide-open '*' for public read paths, the narrow
-// realm/native allowlist for other /api + /admin/api. Returns true when the
+// CORS the ladder always did: the wide-open '*' for public read paths, the SFX
+// surface, and the public static asset prefixes; the narrow realm/native/fbsbx
+// allowlist for other /api + /admin/api. Returns true when the
 // request was a fully-handled OPTIONS preflight, so the caller returns.
 function applyCorsAndPreflight(
   req: http.IncomingMessage,
@@ -3188,10 +3198,11 @@ function applyCorsAndPreflight(
   isApi: boolean,
   publicCorsPath: boolean,
   publicSfxPath: boolean,
+  publicAssetPath: boolean,
 ): boolean {
-  if (publicCorsPath || publicSfxPath) publicCors(res);
+  if (publicCorsPath || publicSfxPath || publicAssetPath) publicCors(res);
   else if (isApi) maybeCors(req, res);
-  if (req.method === 'OPTIONS' && (isApi || publicCorsPath || publicSfxPath)) {
+  if (req.method === 'OPTIONS' && (isApi || publicCorsPath || publicSfxPath || publicAssetPath)) {
     res.writeHead(204);
     res.end();
     return true;
@@ -3223,7 +3234,13 @@ export function routeHttpRequest(req: http.IncomingMessage, res: http.ServerResp
   // other /api route keeps the narrow realm/native allowlist.
   const publicCorsPath = isPublicCorsPath(path);
   const publicSfxPath = isPublicSfxPath(url);
-  if (applyCorsAndPreflight(req, res, isApi, publicCorsPath, publicSfxPath)) return;
+  // The credential-free static asset prefixes (/models/, /media/, /audio/,
+  // /textures/, /env/, /vfx/) are CORS-open ('*') so the Facebook Instant
+  // Games bundle can stream world assets cross-origin (static_cache.ts).
+  const publicAssetPath = isPublicAssetPath(path);
+  if (applyCorsAndPreflight(req, res, isApi, publicCorsPath, publicSfxPath, publicAssetPath)) {
+    return;
+  }
   // Operational health + metrics endpoints, ahead of the /internal/ arm so they
   // answer even while the rest of the surface drains. GET-only exact matches on
   // the query-stripped path (mirroring the /sitemap-characters.xml arm below);

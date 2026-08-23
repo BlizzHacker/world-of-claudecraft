@@ -5,10 +5,10 @@
 // keeps its URL across deploys, so clients must revalidate — a 304 costs one
 // round-trip of headers instead of re-downloading the bytes.
 import type { Stats } from 'node:fs';
+
 function isImmutable(urlPath: string): boolean {
   return IMMUTABLE_PREFIXES.some((prefix) => urlPath.startsWith(prefix));
 }
-
 
 const IMMUTABLE_PREFIXES = ['/assets/', '/media/'];
 const VERSIONED_SFX = /^\/audio\/sfx\/[a-z0-9]+(?:_[a-z0-9]+)*\.mp3\?v=([a-f0-9]{12})$/;
@@ -21,6 +21,21 @@ export function isPublicSfxPath(urlPath: string): boolean {
     VERSIONED_SFX.test(urlPath) ||
     BLOB_SFX.test(urlPath)
   );
+}
+
+// Public, credential-free static ASSET prefixes: world models, content-hashed
+// media, audio, textures, HDR environments, VFX sprites. The Facebook Instant
+// Games bundle (docs/facebook-release.md) streams all of these cross-origin
+// with fetch (THREE loaders and fetch + createImageBitmap textures), so the
+// static server answers them with the wildcard Access-Control-Allow-Origin,
+// the same mechanism as the versioned SFX surface above. Every file here is
+// public and identical for every caller, so '*' is safe. Deliberately NOT
+// here: /api, /admin, and the HTML shells, which keep their narrow rules.
+const PUBLIC_ASSET_PREFIXES = ['/models/', '/media/', '/audio/', '/textures/', '/env/', '/vfx/'];
+
+export function isPublicAssetPath(urlPath: string): boolean {
+  const path = urlPath.split('?')[0];
+  return PUBLIC_ASSET_PREFIXES.some((prefix) => path.startsWith(prefix));
 }
 
 export function requestedSfxVersion(urlPath: string): string | null {

@@ -88,7 +88,8 @@ export const defaultCrossSiteMismatchSink: CrossSiteMismatchSink = createCrossSi
 
 /**
  * The default allowlist arm: an Origin is allowed when it is in the CORS
- * reflection allowlist (realm vhosts + native Capacitor + Electron desktop),
+ * reflection allowlist (realm vhosts + native Capacitor + Electron desktop +
+ * the Facebook Instant Games container),
  * delegated to allowedCorsOrigin so this gate and withCors share ONE allowlist
  * and same-origin allowlist drift is impossible. Mirrors cors.ts's defaultApiAllow.
  *
