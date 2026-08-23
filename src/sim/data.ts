@@ -45,14 +45,14 @@ import {
 import {
   BROTHER_HALVEN,
   BROTHER_HALVEN_MARSH,
+  CAINHURST_SAGE,
   COLLAPSED_RELIQUARY_DELVE,
   COLLAPSED_RELIQUARY_MODULES,
   DELVE_MOBS,
-  HELLMAW_WELL_DELVE,
-  HELLMAW_WELL_MODULES,
-  CAINHURST_SAGE,
   DROWNED_LITANY_DELVE,
   DROWNED_LITANY_MODULES,
+  HELLMAW_WELL_DELVE,
+  HELLMAW_WELL_MODULES,
 } from './content/delves';
 import {
   DRAKELANDS_BROOD_CAMPS,
@@ -127,9 +127,6 @@ import {
   GALECREST_ZONE,
 } from './content/galecrest';
 import { GATHER_NODES as GATHER_NODES_CONTENT } from './content/gather_nodes';
-import { INTERIOR_NPCS } from './content/interior_npcs';
-import { getActiveRealm } from './realms/registry';
-import type { RealmWorldTheme } from './realms/types';
 import {
   type GraveyardDef,
   OVERWORLD_GRAVEYARDS,
@@ -137,6 +134,7 @@ import {
   SPIRIT_HEALER_NPC_ID,
 } from './content/graveyards';
 import { GROUND_PICKUP_LINES } from './content/ground_pickup_lines';
+import { INTERIOR_NPCS } from './content/interior_npcs';
 import { MAGE_PET_MOBS } from './content/mage_pets';
 import { MAILBOXES } from './content/mailboxes';
 import {
@@ -278,7 +276,10 @@ import {
 } from './content/zone3';
 import { DUNGEON_WALL_HW, DUNGEON_WALL_X } from './dungeon_layout';
 import { EASTBROOK_LAYOUT } from './eastbrook_layout';
+import { footprintCrossesAnyFenceRun } from './fence_clearance';
 import { JAIL_BLOCKERS, JAIL_TERRAIN_EDITS } from './jail';
+import { getActiveRealm } from './realms/registry';
+import type { RealmWorldTheme } from './realms/types';
 
 export type { DelveShopEntry, DelveShopGate, DelveShopOffer } from './content/delves';
 // Delve affix/companion catalogs are consumed by the Sim delve engine; re-export
@@ -296,9 +297,9 @@ import { DELVE_ITEMS } from './content/delves/items';
 import { HEROIC_ITEMS, RETIRED_HEROIC_ITEMS } from './content/heroic_loot';
 import { buildHeroicVariants } from './content/heroic_variants';
 import { HEROIC_VENDOR_ITEMS } from './content/heroic_vendor';
+import { MOUNT_ITEMS } from './content/mounts';
 import { PROFESSION_ITEMS } from './content/profession_items';
 import { FURY_NPC, WARFARE_ITEMS } from './content/pvp_honor';
-import { MOUNT_ITEMS } from './content/mounts';
 import { DELVE_MODULE_LAYOUTS, type DelveModuleId, delveModuleSpan } from './delve_layout';
 
 function mergeItems(...parts: Record<string, ItemDef>[]): Record<string, ItemDef> {
@@ -804,13 +805,22 @@ function themeWorldForRealm(base: WorldContent, theme: RealmWorldTheme | undefin
     // a zone border. It still takes the grander scale, in place.
     const hub = baseZoneHub(base, b.x, b.z);
     const inSettlement = Math.hypot(b.x - hub.x, b.z - hub.z) <= hub.radius;
-    return {
+    const themed = {
       ...b,
       x: inSettlement ? hub.x + (b.x - hub.x) * spread : b.x,
       z: inSettlement ? hub.z + (b.z - hub.z) * spread : b.z,
       w: b.w * scale,
       d: b.d * scale,
     };
+    // Authored yard fences never move with the theme, so a themed footprint
+    // that reaches one (a scaled farmstead poking through its own paddock
+    // rail) keeps its authored footprint instead: a mover stepping into the
+    // enlarged box is depenetrated to the NEAREST face, which can sit on the
+    // far side of the fence line, popping the mover across a rail that must
+    // block (fence_clearance.ts; pinned by tests/pathfind.test.ts "blocks
+    // crossing every authored fence run").
+    if (footprintCrossesAnyFenceRun(themed, base.props.fences)) return b;
+    return themed;
   });
   return { ...base, props: { ...base.props, buildings } };
 }
@@ -1215,9 +1225,7 @@ const WIDE_SLOT_DELVE_IDS = new Set(['hellmaw_well']);
 /** Per-delve slot z-spacing: wide for connected-floor delves, tight otherwise. */
 export function delveSlotSpacing(delveIndex: number): number {
   const delve = DELVE_LIST.find((d) => d.index === delveIndex);
-  return delve && WIDE_SLOT_DELVE_IDS.has(delve.id)
-    ? DELVE_WIDE_SLOT_SPACING
-    : DELVE_SLOT_SPACING;
+  return delve && WIDE_SLOT_DELVE_IDS.has(delve.id) ? DELVE_WIDE_SLOT_SPACING : DELVE_SLOT_SPACING;
 }
 
 // ---------------------------------------------------------------------------
@@ -1352,7 +1360,10 @@ export function isInteriorPos(x: number): boolean {
 
 /** Resolve the interior room origin nearest a far-off (x, z): the type column from x
  *  and the slot from z. Used by collision + render to place the room shell. */
-export function interiorOriginAt(x: number, z: number): { x: number; z: number; typeIndex: number; slot: number } {
+export function interiorOriginAt(
+  x: number,
+  z: number,
+): { x: number; z: number; typeIndex: number; slot: number } {
   const typeIndex = Math.max(0, Math.round((x - INTERIOR_X_MIN) / 600));
   let slot = 0;
   let bestD = Infinity;
