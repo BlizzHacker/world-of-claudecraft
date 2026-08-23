@@ -2477,6 +2477,13 @@
     box-shadow: 0 0 12px var(--color-primary-glow);
     outline: none;
   }
+  /* The copy pill is a real tap target on the landing entry screen and its
+     padding alone left it at 36px (38px above the 520px breakpoint), under the
+     40px floor. The narrow-screen rule below trims the padding further, so the
+     floor is declared here where it survives both. */
+  body.mobile-touch .token-ca-pill {
+    min-height: 40px;
+  }
   .token-ca-addr {
     font-family: "SFMono-Regular", ui-monospace, "Cascadia Code", "Courier New", monospace;
     font-size: 13px;

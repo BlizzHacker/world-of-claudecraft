@@ -129,6 +129,10 @@ describe('pre-game touch floors and wrapping (shell.css)', () => {
     expect(nameField).toMatch(/box-sizing:\s*border-box/);
   });
 
+  it('floors the landing token contract-address copy pill', () => {
+    expect(ruleBody(SHELL_CSS, 'body.mobile-touch .token-ca-pill')).toMatch(/min-height:\s*40px/);
+  });
+
   it('floors the landing and play footer link rows', () => {
     const body = ruleBody(
       SHELL_CSS,

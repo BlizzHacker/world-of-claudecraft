@@ -303,5 +303,23 @@ describe('landing and play footer links clear the mobile tap floor', () => {
         ).toBeGreaterThanOrEqual(TOUCH_FLOOR - EPSILON);
       }
     });
+
+    it(`floors the token contract-address copy pill (${name})`, async () => {
+      await page.viewport(v.w, v.h);
+      document.body.className = 'mobile-touch';
+      const wrap = el('div', { id: 'token-ca' });
+      const pill = el('button', { class: 'token-ca-pill', type: 'button' });
+      const addr = el('span', { class: 'token-ca-addr' });
+      addr.textContent = '3QZvD68wupHfRwUZGnuhodB9example';
+      const copy = el('span', { class: 'token-ca-copy' });
+      pill.append(addr, copy);
+      wrap.appendChild(pill);
+      document.body.appendChild(wrap);
+
+      const box = pill.getBoundingClientRect();
+      expect(box.height, `.token-ca-pill height ${box.height}`).toBeGreaterThanOrEqual(
+        TOUCH_FLOOR - EPSILON,
+      );
+    });
   }
 });
