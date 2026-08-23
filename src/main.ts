@@ -59,6 +59,7 @@ import {
 } from './game/entry_diagnostics';
 import { FACEBOOK_APP } from './game/facebook_context';
 import { reportFacebookLoadProgress, signalFacebookGameReady } from './game/facebook_instant';
+import { isSignInMethodAvailable } from './game/facebook_login_gates';
 import { GamepadManager } from './game/gamepad';
 import { GamepadBindings } from './game/gamepad_bindings';
 import { shouldUseGamepadPointerMode } from './game/gamepad_pointer_mode';
@@ -12937,7 +12938,8 @@ function wireStartScreens(): void {
   let showExternalAuthChoice: ((choice: ExternalAuthLoginChoice) => void) | null = null;
   // "Continue with Discord": first-class login at the top of the auth form.
   const appleLoginBtn = $('#btn-login-apple');
-  if (appleLoginBtn && NATIVE_APP && isNativeIos()) {
+  const appleLoginAvailable = isSignInMethodAvailable('apple', { facebookApp: FACEBOOK_APP });
+  if (appleLoginBtn && appleLoginAvailable && NATIVE_APP && isNativeIos()) {
     appleLoginBtn.hidden = false;
     appleLoginBtn.addEventListener('click', (event) => {
       event.preventDefault();
@@ -12964,7 +12966,14 @@ function wireStartScreens(): void {
   }
   const discordLoginBtn = $('#btn-login-discord');
   const discordOrDivider = document.getElementById('auth-or-divider');
-  if (discordLoginBtn && DISCORD_BUILD_ENABLED) {
+  // Inside the Facebook Instant Games container this CTA can only ever be a dead
+  // button: the click is a full-page hop to discord.com, which the container CSP
+  // and Discord's own framing refusal both stop (src/game/facebook_login_gates.ts).
+  // Leave it hidden there, divider included, so the email form is the one path
+  // on screen instead of the one path under a broken one.
+  const discordLoginAvailable =
+    DISCORD_BUILD_ENABLED && isSignInMethodAvailable('discord', { facebookApp: FACEBOOK_APP });
+  if (discordLoginBtn && discordLoginAvailable) {
     discordLoginBtn.hidden = false;
     if (discordOrDivider) discordOrDivider.hidden = false;
     discordLoginBtn.addEventListener('click', (e) => {
@@ -12999,8 +13008,13 @@ function wireStartScreens(): void {
   // Authentik SSO login (Google / Facebook / Plex). A full-page navigation to the
   // server's OIDC entry, which 302s to Authentik; the callback mints a session and
   // returns to the site. Mirrors the classic SSO button that predates the Discord CTA.
+  // The container cannot come back from that navigation, so the button is hidden
+  // there rather than left to swallow the tap; unlike the Discord CTA this one
+  // ships visible in the markup, so hiding it is an explicit write.
   const ssoLoginBtn = $('#btn-login-sso');
-  if (ssoLoginBtn) {
+  const ssoLoginAvailable = isSignInMethodAvailable('authentikSso', { facebookApp: FACEBOOK_APP });
+  if (ssoLoginBtn && !ssoLoginAvailable) ssoLoginBtn.hidden = true;
+  if (ssoLoginBtn && ssoLoginAvailable) {
     ssoLoginBtn.addEventListener('click', (e) => {
       e.preventDefault();
       window.location.href = `${api.base}/api/oauth/authentik`;
