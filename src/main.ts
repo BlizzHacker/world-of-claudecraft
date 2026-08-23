@@ -101,7 +101,7 @@ import {
 import { applyMobileKeyboardViewport } from './game/keyboard_viewport_applier';
 import { shouldUseStaticBackdrop } from './game/landing_backdrop';
 import { createLandingThemeAudio } from './game/landing_theme';
-import { LOADING_FADE_MS, setLoadingProgress } from './game/loading_screen';
+import { applyLoadingArt, LOADING_FADE_MS, setLoadingProgress } from './game/loading_screen';
 // mobile_controls: landing-safe helpers only; the MobileControls class is runtime (GameRuntime).
 import {
   interfaceModeFromSetting,
@@ -1229,6 +1229,9 @@ function loadingCurtainFadeDelayMs(): number {
 function showLoadingScreen(statusText: string): void {
   const el = $('#loading-screen');
   const wasVisible = el.classList.contains('visible');
+  // The realm's own loading art + wordmark rule, owned by game/loading_screen.ts
+  // so this curtain and the delve one cannot drift apart again.
+  applyLoadingArt(el);
   if (loadingHideTimer !== null) {
     window.clearTimeout(loadingHideTimer);
     loadingHideTimer = null;
@@ -1268,7 +1271,9 @@ function setLoadingPercent(percent: number, statusText: string): void {
 // and tears it down independent of the actual asset/scene-build progress.
 function startLoadingTips(): void {
   if (loadingTipTimer !== null) return; // already running
-  loadingTipRotation = createLoadingTipRotation();
+  // Realm-flavoured tips, same as the delve curtain: the world-entry screen is
+  // the one a player actually reads, so it must not fall back to generic copy.
+  loadingTipRotation = createLoadingTipRotation(getActiveRealm().id);
   const tipEl = document.querySelector<HTMLElement>('#ls-tip');
   if (!tipEl) return;
   tipEl.textContent = loadingTipRotation.current();

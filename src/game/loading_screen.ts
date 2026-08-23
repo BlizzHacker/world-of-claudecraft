@@ -45,9 +45,18 @@ function stopLoadingTips(): void {
   loadingTipRotation = null;
 }
 
-export function showLoadingScreen(statusText: string): void {
-  const el = $('#loading-screen');
-  if (!el) return;
+/** Paint the active realm's loading art onto `el` and mark whether that art
+ *  already carries the wordmark.
+ *
+ *  Exported because `src/main.ts` owns the WORLD-ENTRY curtain (it adds a
+ *  progress reset, the slow-connection watch, and a reduced-motion fade this
+ *  module has no business knowing about) and so keeps its own show/hide pair.
+ *  Both curtains are the same #loading-screen element, so the realm rules live
+ *  here once and main.ts consumes them: duplicating the four lines there is
+ *  exactly how world entry came to ignore the wordmark flag while delve
+ *  transitions honoured it.
+ */
+export function applyLoadingArt(el: HTMLElement): void {
   // Per-realm loading art: each realm's content pack names its own loading screen
   // (branding.loadingScreenSrc); the CSS default is the Cryptic Realm art.
   // assetHostUrl: remote asset origin for bundles with no local public/ tree
@@ -59,6 +68,12 @@ export function showLoadingScreen(statusText: string): void {
   // Art that already paints the wordmark hides the overlay logo, so the screen
   // never stacks a title on top of a title.
   el.classList.toggle('art-has-wordmark', branding?.loadingArtHasWordmark === true);
+}
+
+export function showLoadingScreen(statusText: string): void {
+  const el = $('#loading-screen');
+  if (!el) return;
+  applyLoadingArt(el);
   if (loadingHideTimer !== null) {
     window.clearTimeout(loadingHideTimer);
     loadingHideTimer = null;
