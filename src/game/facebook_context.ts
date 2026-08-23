@@ -1,10 +1,10 @@
-// Facebook Instant Games context detection. The Facebook bundle
-// (facebook/index.html, hosted on FB Web Hosting) keeps the FBInstant SDK in
-// its own page and frames the live client at /play?fb=1, so the client cannot
-// see the SDK global across the cross-origin boundary and detects the
-// container by the query param instead. A hit is persisted to sessionStorage
-// so same-origin SPA navigation that drops the param keeps the context. The
-// FBInstant-global signal stays in the detector for a future same-page boot.
+// Facebook Instant Games context detection. The Facebook bundle (built by
+// scripts/build_facebook_bundle.mjs, hosted on FB Web Hosting) runs the REAL
+// game client in the bundle page alongside the FBInstant SDK, so two signals
+// fire there: the shell seeds the sessionStorage flag before the game module
+// executes, and the FBInstant global is visible in the same page. The fb=1
+// query param remains a supported dev/testing entry, and a hit is persisted
+// to sessionStorage so SPA navigation that drops the param keeps the context.
 //
 // FACEBOOK_APP mirrors the NATIVE_APP gate pattern (src/client_origin.ts): a
 // module-scope const src/main.ts consults to keep surfaces Facebook policy

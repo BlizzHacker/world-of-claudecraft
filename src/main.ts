@@ -58,6 +58,7 @@ import {
   suspendActiveEntryDiagnostics,
 } from './game/entry_diagnostics';
 import { FACEBOOK_APP } from './game/facebook_context';
+import { reportFacebookLoadProgress, signalFacebookGameReady } from './game/facebook_instant';
 import { GamepadManager } from './game/gamepad';
 import { GamepadBindings } from './game/gamepad_bindings';
 import { shouldUseGamepadPointerMode } from './game/gamepad_pointer_mode';
@@ -585,9 +586,13 @@ const LANDING_GRAPHICS_AUTO = 'auto';
 const $ = <T extends HTMLElement = HTMLElement>(sel: string): T => document.querySelector(sel) as T;
 document.body.classList.toggle('native-app', NATIVE_APP);
 document.body.classList.toggle('desktop-app', DESKTOP_APP);
-// Inside the Facebook Instant Games container (facebook/index.html frames
-// /play?fb=1): a styling hook for surfaces the policy gates below hide.
+// Inside the Facebook Instant Games container (the bundle page seeds the
+// fb-context flag before this module runs): a styling hook for surfaces the
+// policy gates below hide. Reaching this line means the multi-megabyte module
+// graph finished downloading, parsing, and started executing, a real load
+// milestone the Instant Games shell forwards to FBInstant.setLoadingProgress.
 document.body.classList.toggle('facebook-app', FACEBOOK_APP);
+reportFacebookLoadProgress(60);
 if (NATIVE_APP) document.body.classList.add('mobile-touch');
 // Electron shell integration: push t()-localized crash-dialog strings to the
 // main process and render the auto-update toast (no-op without the bridge).
@@ -11415,6 +11420,10 @@ function wireStartScreens(): void {
       translatePage();
     } finally {
       if (gated && startScreen) startScreen.style.visibility = '';
+      // Instant Games: the localized login/character screen just became
+      // visible and interactive, the milestone Facebook wants startGameAsync
+      // tied to. No-op outside the Facebook container.
+      signalFacebookGameReady();
     }
   };
   void ensureLocaleLoaded(bootLang).then(revealLocalized, revealLocalized);

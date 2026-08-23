@@ -1,10 +1,10 @@
-import react from '@vitejs/plugin-react';
 import { execSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { svelteTesting } from '@testing-library/svelte/vite';
+import react from '@vitejs/plugin-react';
 import { browserslistToTargets } from 'lightningcss';
 import { defineConfig } from 'vite';
 import { loadBrowserslistFloors } from './scripts/browserslist_targets.mjs';
@@ -71,6 +71,14 @@ const appBuildId =
   appBuildDate.replace(/[-:TZ.]/g, '').slice(0, 12);
 const desktopApiOrigin = env(['VITE_DESKTOP_API_ORIGIN']);
 const isDesktopDevBuild = env(['VITE_DESKTOP_APP']) === '1';
+// Facebook Instant Games bundle build (scripts/build_facebook_bundle.mjs sets
+// WOC_FACEBOOK_BUNDLE=1): only the play entry, relative base (Facebook hosts
+// the zip under an app-scoped path, never at an origin root), no public/ copy
+// (every heavy asset streams from the live site at runtime via
+// VITE_ASSET_ORIGIN, see src/client_origin.ts), and its own outDir so a normal
+// dist/ build is never clobbered. The i18n modulepreload hook is index.html
+// only and is skipped: the play entry's sentinel stays a no-op by design.
+const isFacebookBundle = env(['WOC_FACEBOOK_BUNDLE']) === '1';
 const apiProxyTarget =
   env(['WOC_DEV_API_TARGET']) ??
   (isDesktopDevBuild && desktopApiOrigin ? desktopApiOrigin : 'http://127.0.0.1:8787');
@@ -304,7 +312,8 @@ function musicEditorSavePlugin() {
 }
 
 export default defineConfig({
-  base: '/',
+  base: isFacebookBundle ? './' : '/',
+  publicDir: isFacebookBundle ? false : 'public',
   // The Svelte plugin only transforms the standalone admin entry. The React
   // plugin transforms the CR overlay .jsx/.tsx islands. The testing plugin is
   // scoped to Vitest so it cannot affect production client builds.
@@ -313,7 +322,7 @@ export default defineConfig({
     svelte(),
     ...(process.env.VITEST ? [svelteTesting({ autoCleanup: false })] : []),
     staticPageAliasPlugin(),
-    i18nModulepreloadPlugin(),
+    ...(isFacebookBundle ? [] : [i18nModulepreloadPlugin()]),
     musicEditorSavePlugin(),
   ],
   resolve: { alias: { '#bot-detector': botDetectorImpl } },
@@ -347,6 +356,7 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
+    outDir: isFacebookBundle ? 'dist-facebook/client' : 'dist',
     cssMinify: 'lightningcss',
     chunkSizeWarningLimit: 1500,
     // Don't eagerly <link rel="modulepreload"> the Classic island chunk: it pulls
@@ -354,25 +364,26 @@ export default defineConfig({
     // visitor chooses Classic mode, not on every landing visit. (React still never
     // executes until the click; this just stops the unconditional download.)
     modulePreload: {
-      resolveDependencies: (_filename, deps) =>
-        deps.filter((d) => !d.includes('classic-entry')),
+      resolveDependencies: (_filename, deps) => deps.filter((d) => !d.includes('classic-entry')),
     },
     // Emit dist/.vite/manifest.json so the Phase 4 modulepreload hook can resolve each
     // lazy locale chunk's content-hashed filename. Metadata only - does not perturb the
     // bundle or move the resolved-table SHA.
     manifest: true,
     rollupOptions: {
-      input: {
-        main: fileURLToPath(new URL('index.html', import.meta.url)),
-        admin: fileURLToPath(new URL('admin.html', import.meta.url)),
-        // CR overlay: user-facing /me/ and moderator-facing /mod/ dashboards
-        user: fileURLToPath(new URL('user.html', import.meta.url)),
-        moderator: fileURLToPath(new URL('mod.html', import.meta.url)),
-        play: fileURLToPath(new URL('play.html', import.meta.url)),
-        guide: fileURLToPath(new URL('guide.html', import.meta.url)),
-        editor: fileURLToPath(new URL('editor.html', import.meta.url)),
-        walletHandoff: fileURLToPath(new URL('wallet-handoff.html', import.meta.url)),
-      },
+      input: isFacebookBundle
+        ? { play: fileURLToPath(new URL('play.html', import.meta.url)) }
+        : {
+            main: fileURLToPath(new URL('index.html', import.meta.url)),
+            admin: fileURLToPath(new URL('admin.html', import.meta.url)),
+            // CR overlay: user-facing /me/ and moderator-facing /mod/ dashboards
+            user: fileURLToPath(new URL('user.html', import.meta.url)),
+            moderator: fileURLToPath(new URL('mod.html', import.meta.url)),
+            play: fileURLToPath(new URL('play.html', import.meta.url)),
+            guide: fileURLToPath(new URL('guide.html', import.meta.url)),
+            editor: fileURLToPath(new URL('editor.html', import.meta.url)),
+            walletHandoff: fileURLToPath(new URL('wallet-handoff.html', import.meta.url)),
+          },
       output: {
         // three.js almost never changes between our releases and is the single
         // heaviest dependency in the game/editor bundles; splitting it into its
