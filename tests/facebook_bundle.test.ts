@@ -220,6 +220,58 @@ describe('private api guard', () => {
     expect(flagged.some((e) => e.includes('computed or unparseable'))).toBe(true);
   });
 
+  it('flags sandbox-escape, native-bridge, endpoint, and Meta Pixel patterns', () => {
+    const cases: [string, string][] = [
+      ['parent.postMessage(m, "*")', 'parent.postMessage'],
+      ['if (window.self !== window.top) {}', 'window.top'],
+      ['const p = window.parent', 'window.parent'],
+      ['await navigator.sendBeacon(u, b)', 'navigator.sendBeacon'],
+      ['const c = document.cookie', 'document.cookie'],
+      ['navigator.serviceWorker.register("/sw.js")', 'serviceWorker.register'],
+      ['e?.webkit?.messageHandlers?.bridge', 'webkit.messageHandlers'],
+      ['const b = e.androidBridge', 'androidBridge'],
+      ['MessengerExtensions.requestCloseBrowser()', 'MessengerExtensions'],
+      ['const r = window.fbq; r("trackCustom")', 'fbq'],
+      ['fetch("https://graph.facebook.com/me")', 'graph.facebook.com'],
+      ['open("https://m.facebook.com/x")', 'm.facebook.com'],
+    ];
+    for (const [code, needle] of cases) {
+      const errors = auditFacebookSurface(code, 'chunk.js');
+      expect(
+        errors.some((e) => e.includes(needle)),
+        `${needle} in: ${code}`,
+      ).toBe(true);
+    }
+  });
+
+  it('allows ordinary navigation, worker messaging, and the one SDK include', () => {
+    // Standard web navigation and Web Worker postMessage are not private-API
+    // access; only parent/top/opener frame messaging is.
+    expect(auditFacebookSurface('window.open(u, "_blank", "noopener,noreferrer")')).toEqual([]);
+    expect(auditFacebookSurface('window.location.href = "/admin/"')).toEqual([]);
+    expect(auditFacebookSurface('self.postMessage(x); worker.postMessage(y)')).toEqual([]);
+    expect(auditFacebookSurface('if (a === b) {}')).toEqual([]);
+    // The one sanctioned FBInstant SDK include passes; a second FB host does not.
+    const shell = '<script src="https://connect.facebook.net/en_US/fbinstant.8.0.js"></script>';
+    expect(auditFacebookSurface(shell, 'index.html')).toEqual([]);
+    expect(
+      auditFacebookSurface(`${shell}<img src="https://connect.facebook.net/tr">`, 'index.html'),
+    ).not.toEqual([]);
+  });
+
+  it('renames a Meta Pixel member read so the fbq literal never ships', () => {
+    const code = 'function t(){let r=window.fbq;if(typeof r=="function")r("trackCustom")}';
+    const out = sanitizeFacebookCollisions(code, 'chunk.js');
+    // The standalone `window.fbq` read is gone (the renamed `window.fbqUnavailable`
+    // contains it only as a prefix substring, so match on a word boundary).
+    expect(/window\.fbq\b/.test(out)).toBe(false);
+    expect(out).toContain('window.fbqUnavailable');
+    expect(auditFacebookSurface(out, 'chunk.js')).toEqual([]);
+    // A computed pixel access is neutralized the same way.
+    const computed = sanitizeFacebookCollisions('const r=window["fbq"];', 'c2.js');
+    expect(auditFacebookSurface(computed, 'c2.js')).toEqual([]);
+  });
+
   it('renames a minified FB identifier and escapes literal collisions', () => {
     const code =
       'const FB={main:`k`,heal:`h`};use(FB.main,FB[e]);const re=/FB[AS]V\\//;const s="FB[x]";';

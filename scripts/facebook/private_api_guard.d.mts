@@ -1,5 +1,8 @@
 // Hand-written declarations for private_api_guard.mjs (imported by the
 // type-checked tests/facebook_bundle.test.ts; see scripts/CLAUDE.md).
+// auditFacebookSurface covers both the FB.*/FBInstant.* member surface and the
+// forbidden sandbox-escape / native-bridge / FB-endpoint / Meta-Pixel surface;
+// sanitizeFacebookCollisions renames FB collisions and neutralizes .fbq reads.
 export declare const FBINSTANT_PUBLIC_API: Set<string>;
 export interface FacebookGlobalToken {
   kind: 'FB' | 'FBInstant';

@@ -79,6 +79,44 @@ const isDesktopDevBuild = env(['VITE_DESKTOP_APP']) === '1';
 // dist/ build is never clobbered. The i18n modulepreload hook is index.html
 // only and is skipped: the play entry's sentinel stays a no-op by design.
 const isFacebookBundle = env(['WOC_FACEBOOK_BUNDLE']) === '1';
+
+// Vendor specifiers redirected to inert stubs for the Facebook build only:
+// the external-wallet tree (src/net/wallet*.ts) and the Capacitor native shell
+// (reached from the core online client via @capacitor/app). Both are dead in
+// the Facebook container yet shipped code that reads as private-API access to
+// Facebook's bundle scanner (see the stub files). Anchored regexes so an alias
+// is EXACT: a plain-string vite alias is a prefix match, which would rewrite
+// '@reown/appkit/networks' via the '@reown/appkit' entry.
+function facebookVendorStubAliases(): { find: RegExp; replacement: string }[] {
+  const stub = (rel: string) => fileURLToPath(new URL(rel, import.meta.url));
+  const exact = (specifier: string) =>
+    new RegExp(`^${specifier.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`);
+  const group = (specifiers: string[], rel: string) =>
+    specifiers.map((specifier) => ({ find: exact(specifier), replacement: stub(rel) }));
+  return [
+    // External-wallet vendor tree (W3mFrame parent.postMessage, self!==top
+    // probes, WalletConnect cookies/sendBeacon, wallet-deeplink navigation).
+    ...group(
+      [
+        '@reown/appkit',
+        '@reown/appkit/networks',
+        '@reown/appkit-adapter-solana',
+        '@solana/web3.js',
+        '@solana/wallet-standard-chains',
+        '@solana/wallet-standard-features',
+        '@wallet-standard/app',
+        '@wallet-standard/features',
+      ],
+      'src/net/facebook_wallet_stub.ts',
+    ),
+    // Capacitor native shell (document.cookie + webkit.messageHandlers /
+    // androidBridge native-bridge probes), dead weight with NATIVE_APP false.
+    ...group(
+      ['@capacitor/app', '@capacitor/browser', '@capacitor/core'],
+      'src/net/facebook_native_stub.ts',
+    ),
+  ];
+}
 const apiProxyTarget =
   env(['WOC_DEV_API_TARGET']) ??
   (isDesktopDevBuild && desktopApiOrigin ? desktopApiOrigin : 'http://127.0.0.1:8787');
@@ -325,7 +363,22 @@ export default defineConfig({
     ...(isFacebookBundle ? [] : [i18nModulepreloadPlugin()]),
     musicEditorSavePlugin(),
   ],
-  resolve: { alias: { '#bot-detector': botDetectorImpl } },
+  resolve: {
+    // Array form (find/replacement) so the wallet vendor aliases can be
+    // EXACT-match anchored regexes; the '#bot-detector' entry keeps its plain
+    // prefix behavior. Facebook Instant Games build: redirect the
+    // external-wallet vendor tree (Reown AppKit / WalletConnect / Solana web3)
+    // to an inert stub so its sandbox-escape code (W3mFrame parent.postMessage,
+    // self!==top probes, document.cookie, sendBeacon, wallet-deeplink
+    // navigation) is never pulled into the graph. That code reads as a
+    // private-API call to Facebook's bundle scanner and is unreachable anyway
+    // (the wallet surface is gated off by FACEBOOK_APP). Also drops the
+    // heaviest chunks. See src/net/facebook_wallet_stub.ts.
+    alias: [
+      { find: '#bot-detector', replacement: botDetectorImpl },
+      ...(isFacebookBundle ? facebookVendorStubAliases() : []),
+    ],
+  },
   define: {
     __APP_VERSION__: JSON.stringify(appVersion),
     __APP_BUILD_ID__: JSON.stringify(appBuildId.slice(0, 12)),

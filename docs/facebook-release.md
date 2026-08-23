@@ -86,6 +86,47 @@ over exactly those channels. Concretely:
   wallet/rewards/store gates are active from the first frame; the FBInstant
   global in the same page is a second, independent signal.
 
+### Private-API surface: vendor exclusion is the fix, the guard is the backstop
+
+Facebook's Web Hosting upload validator rejects a bundle with "Must Not Call
+Private APIs" when it greps the shipped text and finds either an access on its
+SDK globals (`FBInstant.*` outside the public 8.0 API, or the legacy `FB.*`)
+or platform-capability-bypass / sandbox-escape code a game in the iframe has no
+business running. Two vendor trees shipped exactly that surface even though
+their features are gated off in the Facebook context:
+
+- The external-wallet tree (Reown AppKit / WalletConnect / Solana web3, reached
+  from `src/net/wallet*.ts`): W3mFrame does `parent.postMessage(msg, '*')`
+  (iframe escape), AppKit probes `window.self !== window.top`, WalletConnect
+  core reads `document.cookie`, and the modal controller calls
+  `navigator.sendBeacon` and navigates via `window.location.href` to wallet
+  deeplinks.
+- The Capacitor native shell (`@capacitor/core`, pulled in by `@capacitor/app`
+  from the core online client `src/net/online.ts`): it reads `document.cookie`
+  (CapacitorCookies) and probes `webkit.messageHandlers` / `androidBridge`.
+
+The real fix is to keep that code out of the Facebook build entirely, not to
+string-mangle it: `vite.config.ts` aliases every wallet-vendor and Capacitor
+specifier to inert stubs (`src/net/facebook_wallet_stub.ts`,
+`src/net/facebook_native_stub.ts`) when `WOC_FACEBOOK_BUNDLE=1`, so the trees
+are never pulled into the graph. Both are dead weight there anyway (the wallet
+surface is gated by `FACEBOOK_APP`, and `NATIVE_APP` is false), and dropping
+them also cut the bundle by ~3 MB and ~140 chunks.
+
+`scripts/facebook/private_api_guard.mjs` is the backstop, run over every text
+entry at package time (`auditFacebookSurface`): it fails the build on any FB.*
+access, any non-public FBInstant member, any second `connect.facebook.net`
+beyond the one SDK include, and any forbidden sandbox-escape / native-bridge /
+direct-FB-endpoint pattern (`parent.postMessage`, `window.top`/`.parent`,
+`document.cookie`, `sendBeacon`, `serviceWorker.register`,
+`webkit.messageHandlers`, `graph.facebook.com`, and the Meta Pixel `fbq`,
+among others). It also sanitizes the two known accidental-literal classes
+(a minifier-named `FB` local, a UA regex containing `FB[`) and neutralizes a
+`.fbq` Meta Pixel read (always undefined in the container). Ordinary web
+navigation (`window.open` with noopener, internal `location.href`) and Web
+Worker `postMessage` are deliberately NOT flagged: they are standard web APIs,
+not private-API access.
+
 Known fail-soft degradations inside the container (all CSP-imposed, all
 non-blocking):
 
@@ -107,7 +148,10 @@ non-blocking):
 - runs the facebook-mode vite build of the play entry into
   `dist-facebook/client/` (gitignored), with `VITE_API_ORIGIN` and
   `VITE_ASSET_ORIGIN` baked to https://crypticrealm.com and no Turnstile site
-  key (the container CSP blocks the widget script);
+  key (the container CSP blocks the widget script). This build also aliases the
+  external-wallet and Capacitor vendor trees to inert stubs (see the
+  private-API section above), so their sandbox-escape / native-bridge code is
+  never in the bundle;
 - transforms the built page into the bundle `index.html`
   (`scripts/facebook/shell_inject.mjs`): FBInstant shell injection, the
   Turnstile include stripped, every root-relative reference rewritten to the
@@ -116,17 +160,12 @@ non-blocking):
   loading backdrops, and `facebook/fbapp-config.json`, then zips them into
   `dist-facebook/cryptic-realm-instant-games-v<version>.zip` (deterministic
   store-only zip, no external dependencies);
-- runs the private-api guard (`scripts/facebook/private_api_guard.mjs`):
-  Facebook's upload validator greps the bundle text for `FB.*`/`FBInstant.*`
-  member literals and rejects with "Must Not Call Private APIs" on anything
-  outside the public surface, a net that also catches accidents. The v2
-  bundle was rejected because the minifier named a hud-chunk local `FB`
-  (shipping `FB.main` / `FB[e]`) and a vendor user-agent regex literally
-  contains `FB[` (`/FB[AS]V\//`, the Facebook in-app browser UA). The guard
-  alpha-renames colliding `FB` identifiers to an unused name and escapes the
-  `B` inside literal/regex collisions (same runtime value), then audits every
-  text entry: any remaining FB member literal, or an FBInstant member outside
-  the documented 8.0 API, fails the build before upload;
+- runs the private-api guard (`scripts/facebook/private_api_guard.mjs`, full
+  rationale in the private-API section above): it sanitizes the two known
+  accidental FB literal classes (a minifier-named `FB` local, a UA regex
+  containing `FB[`) and a `.fbq` Meta Pixel read, then audits every text entry
+  and fails the build on any FB.* access, any non-public FBInstant member, or
+  any forbidden sandbox-escape / native-bridge / direct-FB-endpoint pattern;
 - validates the bundle against the platform rules
   (`scripts/facebook/bundle_rules.mjs`: required files at the zip root, the
   SDK include and full lifecycle present in `index.html`, `fbapp-config.json`

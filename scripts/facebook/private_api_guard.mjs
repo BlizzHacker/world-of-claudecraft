@@ -1,25 +1,83 @@
 // Facebook "Must Not Call Private APIs" guard for the Instant Games bundle.
 //
 // Facebook's Web Hosting upload validator statically greps the bundle text for
-// member accesses on its SDK globals (FBInstant.*, and the legacy FB.* SDK
-// global) and rejects the upload when it sees anything outside the public
-// surface. That net also catches ACCIDENTAL literals: the v2 bundle was
-// rejected because the minifier happened to name a hud-chunk local `FB`
-// (shipping the text `FB.main` / `FB[e]`), and a vendor user-agent regex
-// literally contains `FB[` (`/FB[AS]V\//`, the Facebook in-app browser UA).
+// two things and rejects the upload on either: (1) member accesses on its SDK
+// globals (FBInstant.*, and the legacy FB.* SDK global) outside the documented
+// public surface, and (2) platform-capability bypass / sandbox-escape code that
+// a game running inside the Facebook iframe has no business doing. Category (1)
+// also catches ACCIDENTAL literals (the minifier naming a chunk local `FB`, a
+// vendor UA regex containing `FB[`). Category (2) is what the vendor trees
+// tripped: Reown/WalletConnect does `parent.postMessage` (W3mFrame iframe
+// escape), reads `document.cookie`, calls `navigator.sendBeacon`, and probes
+// `window.self !== window.top`; Capacitor probes `webkit.messageHandlers` /
+// `androidBridge` and reads cookies. The real fix for (2) is to exclude those
+// vendor trees from the Facebook build (vite.config.ts aliases them to inert
+// stubs); this guard is the backstop that fails the build if any of that
+// surface, or the Meta Pixel `fbq`, reappears.
 //
 // Two pure tools, shared by scripts/build_facebook_bundle.mjs and
 // tests/facebook_bundle.test.ts:
 // - sanitizeFacebookCollisions: parser-based (rolldown/utils parseSync),
 //   semantics-preserving rewrite of a built JS file so the flagged literals
-//   never appear: identifier `FB` is alpha-renamed to an unused name, and
-//   `FB` inside string/template/regex literals or comments has its `B`
-//   escaped (`FB`, same runtime value).
+//   never appear: identifier `FB` is alpha-renamed to an unused name, `FB`
+//   inside string/template/regex literals or comments has its `B` escaped
+//   (`FB`, same runtime value), and a `.fbq` member read (Meta Pixel, always
+//   undefined in the Facebook container) is renamed so the literal never ships.
 // - auditFacebookSurface: the gate the packager runs over every text entry;
-//   any remaining FB member access, or an FBInstant member outside the
-//   public 8.0 API, fails the build loudly.
+//   any FB.* access, any FBInstant member outside the public 8.0 API, or any
+//   forbidden sandbox-escape / native-bridge / FB-endpoint pattern fails the
+//   build loudly. Ordinary web navigation (window.open, location.href) and Web
+//   Worker postMessage (self/worker, never parent/top/opener) are deliberately
+//   NOT flagged: they are not private-API access.
 
 import { parseSync } from 'rolldown/utils';
+
+// The one sanctioned Facebook host reference in the bundle: the FBInstant SDK
+// include in index.html. Every other connect.facebook.net / graph / dialog /
+// cdn reference is forbidden.
+const SANCTIONED_SDK_INCLUDE = 'https://connect.facebook.net/en_US/fbinstant.8.0.js';
+
+// The Meta Pixel property read renamed to (an always-undefined) inert name.
+const FBQ_REPLACEMENT = 'fbqUnavailable';
+
+// Patterns that read as a sandbox escape, a native-bridge call, a direct
+// Facebook endpoint, or use of a Facebook platform capability outside the
+// Instant Games SDK. None has a legitimate use in the game client; each is a
+// hard build failure. connect.facebook.net is checked separately so the one
+// sanctioned SDK include is allowed. `window.open` and `location.*` navigation
+// are intentionally absent: standard web navigation is not private-API access.
+// `\??\.` in the member-access patterns tolerates optional chaining (`?.`, how
+// Capacitor writes `webkit?.messageHandlers`) as well as a plain dot; the text
+// grep must catch both forms.
+const FORBIDDEN_PATTERNS = [
+  [/\bparent\s*\??\.\s*postMessage\b/, 'parent.postMessage (iframe escape)'],
+  [/\btop\s*\??\.\s*postMessage\b/, 'top.postMessage (iframe escape)'],
+  [/\bopener\s*\??\.\s*postMessage\b/, 'opener.postMessage (iframe escape)'],
+  [/\bwindow\s*\??\.\s*parent\b/, 'window.parent (frame access)'],
+  [/\bwindow\s*\??\.\s*top\b/, 'window.top (frame access)'],
+  [/\bwindow\s*\??\.\s*opener\b/, 'window.opener (frame access)'],
+  [/\bframeElement\b/, 'frameElement (frame access)'],
+  [/\bdocument\s*\??\.\s*domain\s*=[^=]/, 'document.domain write'],
+  [/\bdocument\s*\??\.\s*cookie\b/, 'document.cookie'],
+  [/\bnavigator\s*\??\.\s*sendBeacon\b/, 'navigator.sendBeacon'],
+  [/\bserviceWorker\s*\??\.\s*register\b/, 'serviceWorker.register'],
+  [/\bNotification\s*\??\.\s*requestPermission\b/, 'Notification.requestPermission'],
+  [/\bwebkit\s*\??\.\s*messageHandlers\b/, 'webkit.messageHandlers (native bridge)'],
+  [/\bandroidBridge\b/, 'androidBridge (native bridge)'],
+  [/\bFBInstantBridge\b/, 'FBInstantBridge (private native bridge)'],
+  [/\b__fbNative\b/, '__fbNative (private native bridge)'],
+  [/\bMessengerExtensions\b/, 'MessengerExtensions (private bridge)'],
+  [/\bIGCommands\b/, 'IGCommands (private bridge)'],
+  [/\b__buffetInstance\b/, '__buffetInstance (private bridge)'],
+  [
+    /(?:\??\.|\bwindow\s*\??\.)\s*fbq\b|\bfbq\s*\(/,
+    'fbq (Meta Pixel; use FBInstant.logEvent instead)',
+  ],
+  [/graph\.facebook\.com/, 'graph.facebook.com (direct Graph API)'],
+  [/\bfbcdn\b/, 'fbcdn (direct Facebook CDN)'],
+  [/\bm\.facebook\.com/, 'm.facebook.com (direct Facebook endpoint)'],
+  [/facebook\.com\s*\/\s*dialog/, 'facebook.com/dialog (direct Facebook dialog)'],
+];
 
 // The documented FBInstant 8.0 surface (developers.facebook.com/documentation/
 // games; checked 2026-08). The player.*/context.* families hang off the two
@@ -90,6 +148,7 @@ export function findFacebookGlobalTokens(text) {
 /** The packager's gate: problems (empty = ok) for one bundle text entry. */
 export function auditFacebookSurface(text, name = 'entry') {
   const errors = [];
+  // (1) FB.* / FBInstant.* member accesses.
   for (const token of findFacebookGlobalTokens(text)) {
     if (token.kind === 'FB') {
       errors.push(
@@ -103,6 +162,18 @@ export function auditFacebookSurface(text, name = 'entry') {
     } else if (!FBINSTANT_PUBLIC_API.has(token.member)) {
       errors.push(`${name}: FBInstant.${token.member} is not in the documented public API`);
     }
+  }
+  // (2) connect.facebook.net beyond the one sanctioned SDK include.
+  const sdkIncludes = text.split(SANCTIONED_SDK_INCLUDE).length - 1;
+  const connectRefs = (text.match(/connect\.facebook\.net/g) ?? []).length;
+  if (connectRefs > sdkIncludes) {
+    errors.push(
+      `${name}: references connect.facebook.net beyond the sanctioned FBInstant SDK include`,
+    );
+  }
+  // (3) sandbox-escape / native-bridge / direct-endpoint / platform-bypass.
+  for (const [pattern, reason] of FORBIDDEN_PATTERNS) {
+    if (pattern.test(text)) errors.push(`${name}: forbidden pattern ${reason}`);
   }
   return errors;
 }
@@ -162,7 +233,7 @@ function escapeLiteralSpan(raw, spanStart, spanName) {
  * shape it cannot prove safe; the packager treats that as a build failure.
  */
 export function sanitizeFacebookCollisions(code, filename = 'chunk.js') {
-  if (!/\bFB\s*[.[]/.test(code)) return code;
+  if (!/\bFB\s*[.[]/.test(code) && !/\bfbq\b/.test(code)) return code;
   const parsed = parseSync(filename, code);
   if (parsed.errors?.length) {
     throw new Error(
@@ -174,6 +245,27 @@ export function sanitizeFacebookCollisions(code, filename = 'chunk.js') {
 
   walkWithParents(parsed.program, [], (node, parents) => {
     const parent = parents[parents.length - 1];
+    // Meta Pixel: rename a `.fbq` / `obj['fbq']` member read to an inert,
+    // always-undefined property so the literal `fbq` never ships. Reading a
+    // different absent property is behavior-identical in the Facebook
+    // container, where the pixel global is never present. A bare identifier
+    // `fbq` (e.g. a minified local) is left alone; the audit only flags the
+    // member/call forms, so it does not false-positive on one.
+    if (node.type === 'MemberExpression' && node.property) {
+      if (!node.computed && node.property.type === 'Identifier' && node.property.name === 'fbq') {
+        edits.push({ start: node.property.start, end: node.property.end, text: FBQ_REPLACEMENT });
+      } else if (
+        node.computed &&
+        node.property.type === 'Literal' &&
+        node.property.value === 'fbq'
+      ) {
+        edits.push({
+          start: node.property.start,
+          end: node.property.end,
+          text: JSON.stringify(FBQ_REPLACEMENT),
+        });
+      }
+    }
     if (node.type === 'Identifier' && node.name === 'FB') {
       // Non-computed member property (`x.FB`) and object/class keys named FB
       // are property names, not references; renaming them would change
