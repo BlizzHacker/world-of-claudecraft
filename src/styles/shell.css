@@ -1938,6 +1938,21 @@
     outline: none;
   }
 
+  /* Touch floor for the two footer link rows on the landing / play entry screens.
+     They rendered as bare inline text (19px for the legal row, 16px for the
+     hosting credits), under even the 24px WCAG 2.2 SC 2.5.8 absolute floor, and
+     these are the links a player reaches for Terms, Privacy and the whitepaper.
+     Same shape as .landing-graphics-control in this footer: the box grows, the
+     text stays on its line. Gated on the runtime touch state rather than a width
+     query, so a landscape phone gets it too (src/ui/CLAUDE.md). */
+  body.mobile-touch .footer-link,
+  body.mobile-touch .footer-hosting a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    vertical-align: middle;
+  }
+
   .homepage-footer #game-version {
     color: rgba(255, 255, 255, 0.25);
     font-family: var(--font-heading);
@@ -2001,14 +2016,33 @@
     opacity: 0;
   }
   #loading-screen .ls-logo {
-    width: min(380px, 64vw);
+    /* Both maxima, not a width: the shipped logos are SQUARE (512 and 1024), so
+       sizing by width alone made the mark as tall as it is wide. At the 380px cap
+       that is 380px of a 390px-tall landscape phone, which pushed the progress
+       bar, status line and tip clean off the bottom of the screen (in-game web
+       mobile is landscape-only, so that is the orientation every phone player
+       loads in). auto/auto plus a max on each axis keeps the aspect ratio and
+       always leaves the progress block its share of a short viewport. The height
+       cap clamps against the JS-synced app viewport like every other viewport
+       clamp in this tree (--app-vh, see layout.css). */
+    width: auto;
     height: auto;
+    max-width: min(380px, 64vw);
+    max-height: calc(var(--app-vh, 100vh) * 0.4);
     filter: drop-shadow(0 0 24px #000c) drop-shadow(2px 2px 5px #000);
   }
   /* The realm's loading art already paints the wordmark, so the overlay logo
      would stack a second title over the first one. */
   #loading-screen.art-has-wordmark .ls-logo {
     display: none;
+  }
+  /* ...and hiding it leaves the screen with ONE flex child, which is not what
+     justify-content: space-between distributes: the progress block stopped being
+     "the bottom half" and slid to the very top of the screen, under whatever the
+     art paints there. Anchor it at the end instead, where it sits when the
+     overlay logo is showing. */
+  #loading-screen.art-has-wordmark {
+    justify-content: flex-end;
   }
   .ls-progress {
     display: flex;
@@ -6080,6 +6114,21 @@
   body.mobile-touch #offline-select .auth-actions .btn {
     min-height: 44px;
   }
+  /* The realm picker and the name field are the first two controls on the
+     character screens and both rendered under the 40px floor with a finger on
+     them: the realm cards at 33px, the name input at 32px. The input's FONT was
+     already fine (base.css floors every coarse-pointer control at 16px so iOS
+     never auto-zooms); it was only the box that was short. Both name fields are
+     listed because charcreate's #new-char-name is the online twin of the offline
+     #char-name and shares the same 240px-wide chrome. */
+  body.mobile-touch .offline-realm-card {
+    min-height: 40px;
+  }
+  body.mobile-touch #char-name,
+  body.mobile-touch #new-char-name {
+    min-height: 40px;
+    box-sizing: border-box;
+  }
 
   #btn-charcreate-back,
   #btn-charselect-back {
@@ -8413,6 +8462,14 @@
   }
   .realm-faction-filter {
     display: flex;
+    /* WRAP, because this strip is not a nav header collapsing to a drawer: it is
+       a chip row, the same shape as .body-skin-shelf-chips right below it on the
+       same screen, and it wraps for the same reason. The default nowrap laid four
+       faction chips out on one line whatever the width: on a 390px phone the
+       creation column is 274px and the row needed 431px, so the last chips were
+       painted outside the panel and clipped away by its overflow: hidden. A
+       faction the player cannot see is a faction they cannot pick. */
+    flex-wrap: wrap;
     gap: 8px;
     width: 100%;
     margin: 0 0 10px;
@@ -8421,8 +8478,12 @@
     display: none;
   }
   .realm-faction-tab {
-    min-height: 38px;
-    flex: 1 1 0;
+    /* 40px, the preferred mobile tap floor (src/ui/CLAUDE.md), not the old 38. */
+    min-height: 40px;
+    /* `auto` basis, not 0: a 0-basis chip always "fits", so it would never wrap
+       and the strip would keep overflowing. Sized by its label, growing to fill
+       whatever line it lands on. */
+    flex: 1 1 auto;
     padding: 7px 12px;
     border: 1px solid rgba(137, 102, 43, 0.72);
     border-radius: 6px;

@@ -5827,6 +5827,19 @@
     animation-name: fct-rise-mobile;
   }
 
+  /* ---------- waypoint travel menu (mobile) ---------- */
+  /* The class-scoped twin of the @media (pointer: coarse) `.prompt .btn` floor in
+     hud.css, covering the destination rows AND the dismiss button below them.
+     This window's tap targets are its whole content and its list is long, so the
+     floor is pinned on the runtime touch STATE as well as the media query: a
+     shell that reports a fine pointer while running under a thumb (and the
+     fine-pointer browser suite that measures this) still gets 40px. The height
+     clamp and the scrolling list itself live in hud.css, unlayered, beside the
+     rest of the menu. */
+  body.mobile-touch #waypoint-menu .btn {
+    min-height: 40px;
+  }
+
   /* ---------- Dungeon Finder (mobile) ---------- */
   /* One navigable pane: the catalogue rail and the detail never compete for
      width; the painter's df-pane-* class picks which one shows, and the Back

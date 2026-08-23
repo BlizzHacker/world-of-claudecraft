@@ -7796,12 +7796,46 @@ body.reduce-motion .breath-bar.breath-bar-drowning {
   animation: none;
 }
 
-/* D2 waypoint travel menu — a vertical list of destination buttons. */
+/* D2 waypoint travel menu: a vertical list of destination buttons.
+ *
+ * It is built on the .prompt family, which is sized for a fixed one-to-three
+ * button confirmation and therefore carries NONE of the .window viewport clamps
+ * in layout.css. Its content is a LIST though (one row per waypoint in the realm,
+ * a town pylon plus a wilderness pylon per zone), so it grew to about 1700px:
+ * on a landscape phone, the orientation in-game web mobile runs in, 25 of 29
+ * destinations and the dismiss button were painted below the bottom edge of the
+ * screen with nothing to scroll. Take the clamp idiom the windows use instead
+ * (clamp against the JS-synced app viewport, divided by the #ui zoom) and give
+ * the LIST the scrollbar, so the title and the dismiss button stay put while the
+ * destinations scroll under them.
+ *
+ * 0.6 rather than the .window 0.85: #prompt-stack is pinned at top: 34%, so the
+ * menu's own share of the viewport starts there and 0.6 leaves it clear of the
+ * bottom edge in portrait and landscape alike.
+ *
+ * align-items: center keeps the dismiss button its natural width, which is what
+ * .prompt's text-align: center gave it before this became a flex container. */
+#waypoint-menu {
+  --window-scale: var(--ui-scale, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  max-width: calc(var(--app-vw, 100vw) / var(--window-scale) - 16px);
+  max-height: calc(var(--app-vh, 100vh) * 0.6 / var(--window-scale) - 24px);
+}
+#waypoint-menu .prompt-text {
+  align-self: stretch;
+}
 #waypoint-menu .waypoint-list {
+  align-self: stretch;
   display: flex;
   flex-direction: column;
   gap: 5px;
   margin: 8px 0;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 #waypoint-menu .waypoint-dest {
   text-align: left;
