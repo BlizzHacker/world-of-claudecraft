@@ -5,8 +5,11 @@
 // as the landing page. main.ts is shared by both entries, so every hook the
 // online-only entry omits must be resolved defensively there; these tests pin
 // both sides of that contract so one entry cannot silently break the other.
+// This entry is also what the Facebook Instant Games bundle is packaged from, so
+// the login CTAs it carries are pinned against the container gate as well.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { isSignInMethodAvailable } from '../src/game/facebook_login_gates';
 
 const read = (p: string) =>
   readFileSync(new URL(`../${p}`, import.meta.url), 'utf8').replace(/\r\n/g, '\n');
@@ -63,8 +66,28 @@ describe('/play login panel carries Continue with Discord', () => {
     expect(playHtml).toContain('id="auth-or-divider"');
   });
 
-  it('main.ts reveals the button only when present and Discord is enabled', () => {
-    expect(mainTs).toContain('if (discordLoginBtn && DISCORD_BUILD_ENABLED)');
+  it('main.ts reveals the button only when the build enables it AND the runtime can finish it', () => {
+    // Two conditions, resolved into one name and then guarding the reveal: the
+    // build flag, and whether this client context can actually complete a Discord
+    // redirect. The Facebook Instant Games bundle is packaged from THIS entry
+    // (scripts/build_facebook_bundle.mjs) and its container CSP stops the hop to
+    // discord.com, so a build-flag-only reveal puts a permanently dead CTA on the
+    // container's login screen (src/game/facebook_login_gates.ts).
+    expect(mainTs).toContain(
+      "DISCORD_BUILD_ENABLED && isSignInMethodAvailable('discord', { facebookApp: FACEBOOK_APP })",
+    );
+    // The button AND the or-email divider are revealed inside that one guard, so
+    // the divider can never caption an alternative that is not on screen.
+    expect(mainTs).toMatch(
+      /if \(discordLoginBtn && discordLoginAvailable\) \{\n\s*discordLoginBtn\.hidden = false;\n\s*if \(discordOrDivider\) discordOrDivider\.hidden = false;/,
+    );
+  });
+
+  it('the gate it asks really excludes the Facebook container, and only it', () => {
+    // The source pins above only say main.ts ASKS. This says what the answer is,
+    // so a gate quietly loosened to always-true cannot leave them green.
+    expect(isSignInMethodAvailable('discord', { facebookApp: true })).toBe(false);
+    expect(isSignInMethodAvailable('discord', { facebookApp: false })).toBe(true);
   });
 });
 
