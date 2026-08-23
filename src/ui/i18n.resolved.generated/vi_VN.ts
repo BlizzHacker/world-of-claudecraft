@@ -322,7 +322,12 @@ export const vi_VN: EnTranslations = {
     "waypoints": {
       "title": "Waypoints",
       "choose": "Choose a destination",
-      "undiscovered": "{name} (undiscovered)"
+      "undiscovered": "{name} (undiscovered)",
+      "summary": "{known} of {total} discovered",
+      "discoveredGroup": "Discovered",
+      "locked": "Undiscovered ({count})",
+      "filterPlaceholder": "Search destinations",
+      "noMatches": "No destinations match that search."
     },
     "readyCheck": {
       "prompt": "{name} đã bắt đầu kiểm tra sẵn sàng. Bạn đã sẵn sàng chưa?",

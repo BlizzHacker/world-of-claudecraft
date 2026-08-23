@@ -7796,10 +7796,199 @@ body.reduce-motion .breath-bar.breath-bar-drowning {
   animation: none;
 }
 
-/* D2 waypoint travel menu — a vertical list of destination buttons. */
-#waypoint-menu .waypoint-list { display: flex; flex-direction: column; gap: 5px; margin: 8px 0; }
-#waypoint-menu .waypoint-dest { text-align: left; }
-#waypoint-menu .waypoint-dest:disabled { opacity: 0.45; cursor: default; }
+/* ---------- waypoint travel menu ---------- */
+/* The D2 destination picker a waypoint pylon opens (src/ui/waypoint_map_window.ts).
+   The overworld carries a town-hub waypoint PLUS a wilderness trail waypoint per
+   zone, so this list is a couple of dozen rows long the first time a player sees
+   it. The panel therefore bounds its own height against the app viewport and
+   scrolls INSIDE, instead of growing until it runs off the bottom of the screen
+   (which is what shipped). The clamps divide by --ui-scale for the same reason the
+   .window clamps divide by --window-scale: this panel lives inside the zoomed #ui,
+   so an unscaled length would be multiplied by the zoom a second time.
+   #prompt-stack anchors its children at 34% of that box, which is the right
+   place for a two-line invite prompt and the wrong one for a full destination
+   list: the negative margin lifts THIS panel to about 20% so the 0.74 share
+   still lands clear of the bottom edge (measured across 330px to 1080px tall).
+   It is the stack's own axis, so a rare second live prompt would sit closer than
+   the usual gap; that is the trade, and the alternative (a viewport-relative
+   height with no lift) leaves a landscape phone under two rows of list.
+   The fixed width (rather than shrink-to-fit) is the no-layout-shift half: the
+   panel must not change size as the player types into the filter. */
+#waypoint-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+  min-width: 0;
+  width: min(360px, calc(var(--app-vw, 100vw) / var(--ui-scale, 1) - 16px));
+  margin-top: calc(var(--app-vh, 100vh) * -0.14 / var(--ui-scale, 1));
+  max-height: calc(var(--app-vh, 100vh) * 0.74 / var(--ui-scale, 1) - 12px);
+  min-height: 0;
+}
+#waypoint-menu .waypoint-menu-head {
+  flex: 0 0 auto;
+}
+#waypoint-menu .waypoint-menu-title {
+  margin-bottom: 0;
+  font-family: var(--title-font);
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: var(--gold);
+}
+#waypoint-menu .waypoint-menu-sub {
+  font-size: 12px;
+  color: var(--color-text-light);
+}
+#waypoint-menu .waypoint-menu-summary {
+  margin-top: 2px;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+#waypoint-menu .waypoint-menu-filter {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 8px;
+  padding: 7px 9px;
+  border: 1px solid var(--color-border-default);
+  border-radius: 3px;
+  background: var(--color-bg-input);
+  color: var(--color-text-light);
+  font: 13px var(--ui-font);
+}
+#waypoint-menu .waypoint-menu-filter::placeholder {
+  color: var(--color-text-muted);
+}
+#waypoint-menu .waypoint-menu-filter:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 1px;
+}
+/* The one scrolling region. min-height:0 is what lets it actually shrink inside
+   the flex column on a short viewport (a landscape phone), so the header and the
+   close button stay on screen and the destinations scroll under them. */
+#waypoint-menu .waypoint-menu-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  padding: 2px 4px 0 0;
+  border-top: 1px solid var(--color-border-showcase);
+  border-bottom: 1px solid var(--color-border-showcase);
+  text-align: left;
+}
+#waypoint-menu .waypoint-menu-group {
+  margin: 8px 0 4px;
+  font-family: var(--title-font);
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+#waypoint-menu .waypoint-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0 0 8px;
+}
+#waypoint-menu .waypoint-dest {
+  box-sizing: border-box;
+  width: 100%;
+  text-align: left;
+}
+#waypoint-menu .waypoint-dest:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+/* The counted disclosure that keeps the locked wall from burying the handful of
+   destinations the player can actually travel to. Styled as a quiet section
+   header, not a button, so it reads as a fold rather than a second action. */
+#waypoint-menu .waypoint-menu-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 6px 0 2px;
+  padding: 6px 4px;
+  border: 0;
+  border-top: 1px solid var(--color-border-showcase);
+  background: transparent;
+  color: var(--color-text-muted);
+  font: 11.5px var(--ui-font);
+  letter-spacing: 0.06em;
+  text-align: left;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+#waypoint-menu .waypoint-menu-toggle::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 5px solid currentcolor;
+}
+#waypoint-menu .waypoint-menu-toggle[aria-expanded="true"]::before {
+  transform: rotate(90deg);
+}
+#waypoint-menu .waypoint-menu-toggle:hover {
+  color: var(--color-text-light);
+}
+#waypoint-menu .waypoint-menu-toggle:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 1px;
+}
+#waypoint-menu .waypoint-menu-empty {
+  padding: 14px 4px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+#waypoint-menu .waypoint-menu-actions {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: center;
+}
+/* Touch floors. The destination rows already inherit the .prompt .btn 40px floor
+   above; the fold and the filter are not .btn, so they take their own. */
+@media (pointer: coarse) {
+  #waypoint-menu .waypoint-menu-toggle,
+  #waypoint-menu .waypoint-menu-filter {
+    min-height: 40px;
+  }
+}
+/* Short viewports (a phone held landscape is the real case) spend a third of the
+   screen on #prompt-stack's anchor before this panel starts. Give the scrolling
+   destination list the space back by compacting the chrome around it rather than
+   letting it collapse to a row and a half: the sub-line repeats what the title
+   and the group headings already say, so it is the first thing to go. */
+@media (max-height: 520px) {
+  #waypoint-menu {
+    gap: 5px;
+    padding: 8px 12px;
+  }
+  #waypoint-menu .waypoint-menu-sub {
+    display: none;
+  }
+  #waypoint-menu .waypoint-menu-filter {
+    margin-top: 5px;
+  }
+  #waypoint-menu .waypoint-menu-group {
+    margin: 4px 0 3px;
+  }
+}
+@media (forced-colors: active) {
+  #waypoint-menu .waypoint-menu-scroll {
+    border-color: CanvasText;
+  }
+  #waypoint-menu .waypoint-menu-toggle {
+    border-top-color: CanvasText;
+    color: CanvasText;
+  }
+}
 
 /* ---------------------------------------------------------------------
  * Restored from the fork: the v0.30.0 merge took the other parent's copy of
@@ -7821,14 +8010,16 @@ body.reduce-motion .breath-bar.breath-bar-drowning {
       0 0 7px 1px #ff5a3ccc,
       inset 0 0 2px #ffd2a0dd;
   }
-  .pfm-auras .buff .dur, .pfm-auras .buff .stacks {
+  .pfm-auras .buff .dur,
+  .pfm-auras .buff .stacks {
     display: none;
   }
   .pet-btn.cooldown {
     filter: grayscale(0.8) brightness(0.65);
     cursor: default;
   }
-  #actionbar, #actionbar2 {
+  #actionbar,
+  #actionbar2 {
     display: flex;
     gap: 4px;
     padding: 6px;

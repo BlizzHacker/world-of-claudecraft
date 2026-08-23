@@ -322,7 +322,12 @@ export const ja_JP: EnTranslations = {
     "waypoints": {
       "title": "ウェイポイント",
       "choose": "目的地を選択",
-      "undiscovered": "{name}（未発見）"
+      "undiscovered": "{name}（未発見）",
+      "summary": "発見済み {known}/{total}",
+      "discoveredGroup": "発見済み",
+      "locked": "未発見（{count}）",
+      "filterPlaceholder": "目的地を検索",
+      "noMatches": "その検索に一致する目的地はありません。"
     },
     "readyCheck": {
       "prompt": "{name} が準備確認を開始しました。準備はいいですか？",

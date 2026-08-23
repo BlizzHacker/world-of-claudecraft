@@ -322,7 +322,12 @@ export const ru_RU: EnTranslations = {
     "waypoints": {
       "title": "Путевые точки",
       "choose": "Выберите пункт назначения",
-      "undiscovered": "{name} (не открыто)"
+      "undiscovered": "{name} (не открыто)",
+      "summary": "Открыто {known} из {total}",
+      "discoveredGroup": "Открытые",
+      "locked": "Неоткрытые ({count})",
+      "filterPlaceholder": "Поиск пункта назначения",
+      "noMatches": "Нет пунктов назначения, соответствующих запросу."
     },
     "readyCheck": {
       "prompt": "{name} начал проверку готовности. Вы готовы?",

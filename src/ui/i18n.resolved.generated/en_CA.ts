@@ -322,7 +322,12 @@ export const en_CA: EnTranslations = {
     "waypoints": {
       "title": "Waypoints",
       "choose": "Choose a destination",
-      "undiscovered": "{name} (undiscovered)"
+      "undiscovered": "{name} (undiscovered)",
+      "summary": "{known} of {total} discovered",
+      "discoveredGroup": "Discovered",
+      "locked": "Undiscovered ({count})",
+      "filterPlaceholder": "Search destinations",
+      "noMatches": "No destinations match that search."
     },
     "readyCheck": {
       "prompt": "{name} has started a ready check. Are you ready?",

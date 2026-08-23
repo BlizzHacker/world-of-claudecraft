@@ -11907,4 +11907,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.waypoints.title': 'Путевые точки',
   'hudChrome.waypoints.choose': 'Выберите пункт назначения',
   'hudChrome.waypoints.undiscovered': '{name} (не открыто)',
+  'hudChrome.waypoints.summary': 'Открыто {known} из {total}',
+  'hudChrome.waypoints.discoveredGroup': 'Открытые',
+  'hudChrome.waypoints.locked': 'Неоткрытые ({count})',
+  'hudChrome.waypoints.filterPlaceholder': 'Поиск пункта назначения',
+  'hudChrome.waypoints.noMatches': 'Нет пунктов назначения, соответствующих запросу.',
 };

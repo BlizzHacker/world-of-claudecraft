@@ -322,7 +322,12 @@ export const ko_KR: EnTranslations = {
     "waypoints": {
       "title": "웨이포인트",
       "choose": "목적지를 선택하세요",
-      "undiscovered": "{name} (미발견)"
+      "undiscovered": "{name} (미발견)",
+      "summary": "발견 {known}/{total}",
+      "discoveredGroup": "발견함",
+      "locked": "미발견 ({count})",
+      "filterPlaceholder": "목적지 검색",
+      "noMatches": "검색과 일치하는 목적지가 없습니다."
     },
     "readyCheck": {
       "prompt": "{name} 님이 준비 확인을 시작했습니다. 준비되셨습니까?",

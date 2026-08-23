@@ -11728,4 +11728,9 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.waypoints.title': 'ウェイポイント',
   'hudChrome.waypoints.choose': '目的地を選択',
   'hudChrome.waypoints.undiscovered': '{name}（未発見）',
+  'hudChrome.waypoints.summary': '発見済み {known}/{total}',
+  'hudChrome.waypoints.discoveredGroup': '発見済み',
+  'hudChrome.waypoints.locked': '未発見（{count}）',
+  'hudChrome.waypoints.filterPlaceholder': '目的地を検索',
+  'hudChrome.waypoints.noMatches': 'その検索に一致する目的地はありません。',
 };

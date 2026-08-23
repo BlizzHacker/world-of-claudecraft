@@ -322,7 +322,12 @@ export const sv_SE: EnTranslations = {
     "waypoints": {
       "title": "Waypoints",
       "choose": "Choose a destination",
-      "undiscovered": "{name} (undiscovered)"
+      "undiscovered": "{name} (undiscovered)",
+      "summary": "{known} of {total} discovered",
+      "discoveredGroup": "Discovered",
+      "locked": "Undiscovered ({count})",
+      "filterPlaceholder": "Search destinations",
+      "noMatches": "No destinations match that search."
     },
     "readyCheck": {
       "prompt": "{name} har startat en beredskapskontroll. Är du redo?",

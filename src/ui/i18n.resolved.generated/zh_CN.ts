@@ -322,7 +322,12 @@ export const zh_CN: EnTranslations = {
     "waypoints": {
       "title": "传送点",
       "choose": "选择目的地",
-      "undiscovered": "{name}（未发现）"
+      "undiscovered": "{name}（未发现）",
+      "summary": "已发现 {known}/{total}",
+      "discoveredGroup": "已发现",
+      "locked": "未发现（{count}）",
+      "filterPlaceholder": "搜索目的地",
+      "noMatches": "没有匹配该搜索的目的地。"
     },
     "readyCheck": {
       "prompt": "{name} 发起了准备确认。你准备好了吗？",
