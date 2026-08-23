@@ -2005,6 +2005,11 @@
     height: auto;
     filter: drop-shadow(0 0 24px #000c) drop-shadow(2px 2px 5px #000);
   }
+  /* The realm's loading art already paints the wordmark, so the overlay logo
+     would stack a second title over the first one. */
+  #loading-screen.art-has-wordmark .ls-logo {
+    display: none;
+  }
   .ls-progress {
     display: flex;
     flex-direction: column;

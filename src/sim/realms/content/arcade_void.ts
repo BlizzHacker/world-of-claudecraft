@@ -35,6 +35,7 @@ export const ARCADE_VOID_REALM: RealmContent = {
     // of that art drop (the sibling PNGs in the same directory) is unreferenced
     // by code but still served from public/; it needs an out-of-band purge.
     loadingScreenSrc: '/cryptic-realm-loading-bg.webp',
+    loadingArtHasWordmark: true,
     discordUrl: 'https://discord.gg/WnxcamHJdh',
     showDonate: false,
     showAuthentikSso: true,

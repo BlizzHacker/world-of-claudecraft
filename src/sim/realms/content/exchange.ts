@@ -36,6 +36,7 @@ export const EXCHANGE_REALM: RealmContent = {
     logoSrc: '/cryptic-realm-logo-512.webp',
     brandText: 'The Exchange - Cryptic Realm',
     loadingScreenSrc: '/cryptic-realm-loading-bg.webp',
+    loadingArtHasWordmark: true,
     discordUrl: 'https://discord.gg/WnxcamHJdh',
     showDonate: false,
     showAuthentikSso: true,

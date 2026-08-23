@@ -53,8 +53,12 @@ export function showLoadingScreen(statusText: string): void {
   // assetHostUrl: remote asset origin for bundles with no local public/ tree
   // (Facebook Instant Games); identity everywhere else. A CSP-blocked image
   // there fails soft to the plain backdrop colour.
-  const realmLoading = getActiveRealm().branding?.loadingScreenSrc;
+  const branding = getActiveRealm().branding;
+  const realmLoading = branding?.loadingScreenSrc;
   if (realmLoading) el.style.backgroundImage = `url("${assetHostUrl(realmLoading)}")`;
+  // Art that already paints the wordmark hides the overlay logo, so the screen
+  // never stacks a title on top of a title.
+  el.classList.toggle('art-has-wordmark', branding?.loadingArtHasWordmark === true);
   if (loadingHideTimer !== null) {
     window.clearTimeout(loadingHideTimer);
     loadingHideTimer = null;

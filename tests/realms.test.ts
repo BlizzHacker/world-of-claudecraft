@@ -83,6 +83,19 @@ describe('realm registry', () => {
     expect(arcade.branding?.loadingScreenSrc).toBe('/cryptic-realm-loading-bg.webp');
   });
 
+  it('every realm on the wordmark art declares it so the overlay logo stays hidden', () => {
+    // The shared Cryptic Realm loading art paints the title itself. A realm that
+    // serves it without the flag would stack the overlay logo on the baked one.
+    for (const realm of Object.values(REALMS)) {
+      const src = realm.branding?.loadingScreenSrc;
+      if (src === '/cryptic-realm-loading-bg.webp') {
+        expect(realm.branding?.loadingArtHasWordmark).toBe(true);
+      } else {
+        expect(realm.branding?.loadingArtHasWordmark ?? false).toBe(false);
+      }
+    }
+  });
+
   it('isRealmId narrows correctly', () => {
     expect(isRealmId('infernal')).toBe(true);
     expect(isRealmId('CLAUDECRAFT')).toBe(false);

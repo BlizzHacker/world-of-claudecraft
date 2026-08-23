@@ -25,6 +25,7 @@ export const INFERNAL_REALM: RealmContent = {
     logoSrc: '/cryptic-realm-logo-512.webp',
     brandText: 'Cryptic Realm - Infernal',
     loadingScreenSrc: '/cryptic-realm-loading-bg.webp',
+    loadingArtHasWordmark: true,
     discordUrl: 'https://discord.gg/WnxcamHJdh',
     showDonate: false,
     showAuthentikSso: true,
