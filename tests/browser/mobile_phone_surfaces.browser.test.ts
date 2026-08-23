@@ -202,13 +202,20 @@ describe('waypoint travel menu fits the screen and every destination is reachabl
       document.body.appendChild(stack);
       openWaypointMenu(waypoints, { stack, travel: () => undefined });
 
-      const list = document.querySelector('.waypoint-list') as HTMLElement;
-      expect(list.scrollHeight).toBeGreaterThan(list.clientHeight);
-      list.scrollTop = list.scrollHeight;
-      expect(list.scrollTop, 'the destination list must scroll').toBeGreaterThan(0);
+      // ONE scroller wraps the group headings and both .waypoint-list groups, so
+      // the region, not a list, is what overflows (src/ui/waypoint_map_window.ts
+      // appends head, scroll, actions).
+      const scroll = document.querySelector('.waypoint-menu-scroll') as HTMLElement;
+      expect(scroll.scrollHeight).toBeGreaterThan(scroll.clientHeight);
+      scroll.scrollTop = scroll.scrollHeight;
+      expect(scroll.scrollTop, 'the destination list must scroll').toBeGreaterThan(0);
 
-      // The LAST destination becomes reachable once scrolled to the end.
-      const last = list.lastElementChild as HTMLElement;
+      // The LAST destination becomes reachable once scrolled to the end. The locked
+      // group starts folded, so only the rows actually laid out count.
+      const rows = [...scroll.querySelectorAll<HTMLElement>('.waypoint-dest')].filter(
+        (row) => row.offsetParent !== null,
+      );
+      const last = rows[rows.length - 1] as HTMLElement;
       const lastBox = last.getBoundingClientRect();
       expect(lastBox.bottom).toBeLessThanOrEqual(v.h + EPSILON);
       expect(lastBox.height).toBeGreaterThanOrEqual(TOUCH_FLOOR - EPSILON);
@@ -226,7 +233,9 @@ describe('waypoint travel menu fits the screen and every destination is reachabl
 
   function menuDismissButton(): HTMLElement {
     const menu = document.getElementById('waypoint-menu') as HTMLElement;
-    return menu.lastElementChild as HTMLElement;
+    // The button itself, not its .waypoint-menu-actions row: the row would satisfy
+    // the tap floor by containing something that does.
+    return menu.querySelector('.waypoint-menu-actions .btn') as HTMLElement;
   }
 });
 
