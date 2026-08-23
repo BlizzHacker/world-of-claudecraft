@@ -126,10 +126,15 @@ export const LAUNCHERS: Launcher[] = [
         meta: '~333 MB · offline installer',
         track: true,
       },
-      { label: 'Heavy (soon)', href: '', meta: 'native client · coming soon', track: true },
+      {
+        label: 'Download · Heavy',
+        href: '/downloads/CrypticRealm-Setup-Heavy.exe',
+        meta: '~890 MB · complete offline game',
+        track: true,
+      },
     ],
     status:
-      'Alpha · experimental · not yet code-signed, so Windows SmartScreen will warn. Click "More info", then "Run anyway", then run the installer. Lite downloads the small runtime on first install; Full bundles everything for offline install.',
+      'Alpha · experimental · not yet code-signed, so Windows SmartScreen will warn. Click "More info", then "Run anyway", then run the installer. Lite downloads the small runtime on first install; Full bundles the client for offline install; Heavy bundles the complete game with every model, texture, and soundtrack for fully offline play.',
   },
   {
     os: 'macos',
