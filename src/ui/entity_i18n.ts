@@ -20,8 +20,8 @@ import {
   ZONES,
 } from '../sim/data';
 import { getActiveRealm, REALMS } from '../sim/realms/registry';
-import { waypointDefs } from '../sim/waypoints';
 import type { ItemDef, PlayerClass } from '../sim/types';
+import { waypointDefs } from '../sim/waypoint_defs';
 import {
   en,
   getLanguage,
