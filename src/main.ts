@@ -440,6 +440,7 @@ import {
 } from './ui/portrait_chip';
 import { hideReconnectOverlay, showReconnectOverlay } from './ui/reconnect_overlay';
 import { rovingTarget } from './ui/roving_index';
+import { readLocalStorage, writeLocalStorage } from './ui/safe_local_storage';
 import { createSpectateBadge } from './ui/spectate_badge';
 import { refreshStartSkinPickerPortraits } from './ui/start_skin_picker_portraits';
 import { refreshSteamLinkStatus, wireSteamLink } from './ui/steam_link';
@@ -7328,7 +7329,7 @@ const LAST_REALM_KEY = 'woc_last_realm';
 function preferredRealmEntry(
   dir: import('./net/online').RealmDirectory,
 ): import('./net/online').RealmEntry | null {
-  const remembered = localStorage.getItem(LAST_REALM_KEY);
+  const remembered = readLocalStorage(LAST_REALM_KEY);
   const rememberedEntry = dir.realms.find((r) => r.name === remembered);
   if (rememberedEntry) return rememberedEntry;
   const activeRealmId = getActiveRealm().id;
@@ -8107,7 +8108,7 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
 }
 
 function selectRealm(entry: import('./net/online').RealmEntry): void {
-  localStorage.setItem(LAST_REALM_KEY, entry.name);
+  writeLocalStorage(LAST_REALM_KEY, entry.name);
   persistActiveRealmFromDirectoryName(entry.name);
   // If the realm lives on a DIFFERENT origin (e.g. dev.crypticrealm.com,
   // fps.moveweight.com), we must NAVIGATE the browser there rather than fetch
@@ -8184,7 +8185,7 @@ function enterRealmWithPopulation(
   ladder: boolean,
   hardcore: boolean,
 ): void {
-  localStorage.setItem(LAST_REALM_KEY, name);
+  writeLocalStorage(LAST_REALM_KEY, name);
   persistActiveRealmFromDirectoryName(name);
   setPopulationPref(ladder, hardcore);
   const pop = `${ladder ? 'l' : ''}${hardcore ? 'h' : ''}` || 'n';
@@ -8295,7 +8296,7 @@ function selectRealmInline(entry: import('./net/online').RealmEntry): void {
   if (entry.name === api.realm) return;
   api.setRealm(entry.url);
   api.realm = entry.name;
-  localStorage.setItem(LAST_REALM_KEY, entry.name);
+  writeLocalStorage(LAST_REALM_KEY, entry.name);
   persistActiveRealmFromDirectoryName(entry.name);
   $('#charselect-realm').textContent = entry.name;
   void refreshCharacters();
@@ -8309,7 +8310,7 @@ const CHAR_SORT_LABEL_KEYS: Record<CharSortMode, TranslationKey> = {
   recent: 'character.sortRecent',
   playtime: 'character.sortPlaytime',
 };
-let charSortMode: CharSortMode = normalizeCharSortMode(localStorage.getItem(CHAR_SORT_KEY));
+let charSortMode: CharSortMode = normalizeCharSortMode(readLocalStorage(CHAR_SORT_KEY));
 let sortDropdownOpen = false;
 
 function updateSortButtonLabel(): void {
@@ -8327,7 +8328,7 @@ function setCharSort(mode: CharSortMode): void {
   closeSortDropdown();
   if (mode === charSortMode) return;
   charSortMode = mode;
-  localStorage.setItem(CHAR_SORT_KEY, mode);
+  writeLocalStorage(CHAR_SORT_KEY, mode);
   updateSortButtonLabel();
   void refreshCharacters();
 }
@@ -9422,8 +9423,8 @@ async function loadProjectStats(): Promise<void> {
     players_online: number;
     timestamp: number;
   } | null = null;
-  if (typeof localStorage !== 'undefined') {
-    const raw = localStorage.getItem(STATS_CACHE_KEY);
+  {
+    const raw = readLocalStorage(STATS_CACHE_KEY);
     if (raw) {
       try {
         cached = JSON.parse(raw);
