@@ -30,6 +30,7 @@ import {
   validateEntryHtml,
   validateFbappConfig,
 } from './facebook/bundle_rules.mjs';
+import { auditFacebookSurface, sanitizeFacebookCollisions } from './facebook/private_api_guard.mjs';
 import {
   DEFAULT_GAME_ORIGIN,
   injectFacebookShell,
@@ -130,7 +131,10 @@ function stageEntries(clientDist, origin) {
 
   // Everything else vite emitted (assets/*.js, *.css, worker chunks, lazy
   // locale chunks). CSS gets the same root-relative rewrite, with local art
-  // reached from assets/ via '../'.
+  // reached from assets/ via '../'. JS goes through the private-api guard:
+  // Facebook's upload validator greps the bundle for FB.*/FBInstant.* member
+  // literals, and minifier-generated identifiers or vendor regexes can
+  // collide with that net (scripts/facebook/private_api_guard.mjs).
   for (const name of collectFiles(clientDist)) {
     if (name === 'play.html') continue;
     const file = path.join(clientDist, ...name.split('/'));
@@ -138,6 +142,11 @@ function stageEntries(clientDist, origin) {
       entries.push({
         name,
         data: Buffer.from(rewriteCssUrls(readFileSync(file, 'utf8'), origin, '../'), 'utf8'),
+      });
+    } else if (name.endsWith('.js') || name.endsWith('.mjs')) {
+      entries.push({
+        name,
+        data: Buffer.from(sanitizeFacebookCollisions(readFileSync(file, 'utf8'), name), 'utf8'),
       });
     } else {
       entries.push({ name, data: readFileSync(file) });
@@ -149,7 +158,13 @@ function stageEntries(clientDist, origin) {
   // cross-origin fetch, CORS, or the container's CSP.
   const basisDir = path.join(repoRoot, 'public', 'basis');
   for (const name of collectFiles(basisDir)) {
-    entries.push({ name: `basis/${name}`, data: readFileSync(path.join(basisDir, name)) });
+    const file = path.join(basisDir, name);
+    entries.push({
+      name: `basis/${name}`,
+      data: name.endsWith('.js')
+        ? Buffer.from(sanitizeFacebookCollisions(readFileSync(file, 'utf8'), `basis/${name}`))
+        : readFileSync(file),
+    });
   }
 
   // Minimum local art: favicons + the world-entry loading backdrops.
@@ -186,6 +201,14 @@ function main() {
     ...validateBundleEntryNames(entries.map((entry) => entry.name)),
     ...validateEntryHtml(indexHtml),
     ...validateShellWiring(indexHtml),
+    // Facebook's upload validator greps the whole bundle for FB.*/FBInstant.*
+    // member literals ("Must Not Call Private APIs"); gate every text entry so
+    // a future chunk that reintroduces a collision fails HERE, not at upload.
+    ...entries.flatMap((entry) =>
+      /\.(js|mjs|css|html|json)$/.test(entry.name)
+        ? auditFacebookSurface(entry.data.toString('utf8'), entry.name)
+        : [],
+    ),
     ...(() => {
       try {
         return validateFbappConfig(JSON.parse(byName.get('fbapp-config.json').toString('utf8')));

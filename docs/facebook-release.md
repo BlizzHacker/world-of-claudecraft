@@ -116,6 +116,17 @@ non-blocking):
   loading backdrops, and `facebook/fbapp-config.json`, then zips them into
   `dist-facebook/cryptic-realm-instant-games-v<version>.zip` (deterministic
   store-only zip, no external dependencies);
+- runs the private-api guard (`scripts/facebook/private_api_guard.mjs`):
+  Facebook's upload validator greps the bundle text for `FB.*`/`FBInstant.*`
+  member literals and rejects with "Must Not Call Private APIs" on anything
+  outside the public surface, a net that also catches accidents. The v2
+  bundle was rejected because the minifier named a hud-chunk local `FB`
+  (shipping `FB.main` / `FB[e]`) and a vendor user-agent regex literally
+  contains `FB[` (`/FB[AS]V\//`, the Facebook in-app browser UA). The guard
+  alpha-renames colliding `FB` identifiers to an unused name and escapes the
+  `B` inside literal/regex collisions (same runtime value), then audits every
+  text entry: any remaining FB member literal, or an FBInstant member outside
+  the documented 8.0 API, fails the build before upload;
 - validates the bundle against the platform rules
   (`scripts/facebook/bundle_rules.mjs`: required files at the zip root, the
   SDK include and full lifecycle present in `index.html`, `fbapp-config.json`

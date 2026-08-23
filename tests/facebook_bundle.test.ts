@@ -13,6 +13,12 @@ import {
   validateFbappConfig,
 } from '../scripts/facebook/bundle_rules.mjs';
 import {
+  auditFacebookSurface,
+  FBINSTANT_PUBLIC_API,
+  findFacebookGlobalTokens,
+  sanitizeFacebookCollisions,
+} from '../scripts/facebook/private_api_guard.mjs';
+import {
   DEFAULT_GAME_ORIGIN,
   FACEBOOK_CONTEXT_STORAGE_KEY,
   FACEBOOK_PROGRESS_EVENT,
@@ -66,7 +72,14 @@ function makeFixtureClientDist(): string {
   tempDirs.push(dir);
   writeFileSync(path.join(dir, 'play.html'), FIXTURE_PLAY_HTML);
   mkdirSync(path.join(dir, 'assets'));
-  writeFileSync(path.join(dir, 'assets', 'play-fixture.js'), 'console.log("fixture");\n');
+  // The FB identifier and the FB[..]-shaped regex reproduce the two literal
+  // collisions Facebook's private-api grep rejected in the v2 bundle (a
+  // minified hud local named FB, a vendor UA-sniff regex); the packager must
+  // sanitize both on the way into the zip.
+  writeFileSync(
+    path.join(dir, 'assets', 'play-fixture.js'),
+    'const FB={main:"woc_meters_frame"};console.log(FB.main,/FB[AS]V\\//.test(navigator.userAgent));\n',
+  );
   writeFileSync(
     path.join(dir, 'assets', 'play-fixture.css'),
     'body{cursor:url("/ui/cursors/arrow.png") 7 2, default;background:url("/cryptic-realm-loading-bg.webp")}\n',
@@ -172,6 +185,60 @@ describe('shell injection', () => {
     expect(errors.some((e: string) => e.includes(FACEBOOK_CONTEXT_STORAGE_KEY))).toBe(true);
     expect(errors.some((e: string) => e.includes(FACEBOOK_PROGRESS_EVENT))).toBe(true);
     expect(errors.some((e: string) => e.includes('root-relative'))).toBe(true);
+  });
+});
+
+describe('private api guard', () => {
+  it('finds FB and FBInstant member accesses, quoted, dotted, and regex-shaped', () => {
+    const tokens = findFacebookGlobalTokens(
+      'FB.main; FB[e]; FBInstant.initializeAsync(); FBInstant["player"]; /FB[AS]V\\//; window.FBInstant;',
+    );
+    expect(tokens.map(({ kind, member }) => ({ kind, member }))).toEqual([
+      { kind: 'FB', member: 'main' },
+      { kind: 'FB', member: null },
+      { kind: 'FBInstant', member: 'initializeAsync' },
+      { kind: 'FBInstant', member: 'player' },
+      { kind: 'FB', member: null },
+    ]);
+    // The bare window.FBInstant probe at the tail is not a member access.
+    expect(tokens.every((t, i) => i === 0 || t.index > tokens[i - 1].index)).toBe(true);
+  });
+
+  it('accepts the public lifecycle and flags everything else', () => {
+    expect(
+      auditFacebookSurface(
+        'window.FBInstant.initializeAsync().then(function(){FBInstant.setLoadingProgress(50);FBInstant.startGameAsync()})',
+      ),
+    ).toEqual([]);
+    expect(FBINSTANT_PUBLIC_API.has('player')).toBe(true);
+    const flagged = auditFacebookSurface(
+      'FB.main; FBInstant._private(); FBInstant[method]();',
+      'x.js',
+    );
+    expect(flagged.some((e) => e.includes('FB.* member access'))).toBe(true);
+    expect(flagged.some((e) => e.includes('FBInstant._private'))).toBe(true);
+    expect(flagged.some((e) => e.includes('computed or unparseable'))).toBe(true);
+  });
+
+  it('renames a minified FB identifier and escapes literal collisions', () => {
+    const code =
+      'const FB={main:`k`,heal:`h`};use(FB.main,FB[e]);const re=/FB[AS]V\\//;const s="FB[x]";';
+    const out = sanitizeFacebookCollisions(code, 'chunk.js');
+    expect(auditFacebookSurface(out, 'chunk.js')).toEqual([]);
+    expect(out).toContain('Fb_0={main:`k`');
+    expect(out).toContain('use(Fb_0.main,Fb_0[e])');
+    // Regex and string values are preserved byte for byte at runtime: the B
+    // becomes a B escape, which evaluates to the same character.
+    expect(out).toContain('/F\\u0042[AS]V\\//');
+    expect(out).toContain('"F\\u0042[x]"');
+  });
+
+  it('leaves clean code untouched and refuses shapes it cannot prove safe', () => {
+    const clean = 'globalThis.FBInstant !== void 0 && window.FBInstant.startGameAsync();';
+    expect(sanitizeFacebookCollisions(clean, 'clean.js')).toBe(clean);
+    expect(() => sanitizeFacebookCollisions('use(o.FB.main);', 'prop.js')).toThrow(
+      'property/key name',
+    );
   });
 });
 
@@ -286,5 +353,12 @@ describe('build_facebook_bundle.mjs', () => {
     expect(zip.includes(Buffer.from(`${DEFAULT_GAME_ORIGIN}/ui/ranks/frame.webp`, 'utf8'))).toBe(
       true,
     );
+    // The private-api guard sanitized the fixture's deliberate collisions on
+    // the way in: no FB member literal ships, the rename and the value-
+    // preserving regex escape do.
+    expect(zip.includes(Buffer.from('FB.main', 'utf8'))).toBe(false);
+    expect(zip.includes(Buffer.from('FB[AS]V', 'utf8'))).toBe(false);
+    expect(zip.includes(Buffer.from('Fb_0.main', 'utf8'))).toBe(true);
+    expect(zip.includes(Buffer.from('F\\u0042[AS]V', 'utf8'))).toBe(true);
   });
 });
