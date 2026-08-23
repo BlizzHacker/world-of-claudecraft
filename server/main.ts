@@ -206,6 +206,7 @@ import {
   handleNativeDiscordExchange,
 } from './discord';
 import { pruneDiscordOAuthStates, pruneDiscordPendingLogins } from './discord_db';
+import { resolveDownloadTarget } from './downloads_path';
 import { isDuranceTesterCharacter } from './durance_tester_entitlement';
 import { maybeHandleEconomyApi } from './economy/api';
 import { applyEconomySchema } from './economy/db';
@@ -428,7 +429,10 @@ const WIKI_URL = process.env.WIKI_URL?.trim() ?? '';
 // builds (zips, apks, installers) into CR_DOWNLOADS_DIR; /downloads lists them
 // newest-first and /downloads/<file> streams them with Range support (resume
 // matters for multi-GB builds).
-const DOWNLOADS_DIR = process.env.CR_DOWNLOADS_DIR?.trim() || '/opt/cr-downloads';
+// Resolved to an absolute path once, at load: every containment test downstream
+// compares absolute paths, so a relative or trailing-slash CR_DOWNLOADS_DIR
+// cannot change the answer.
+const DOWNLOADS_DIR = path.resolve(process.env.CR_DOWNLOADS_DIR?.trim() || '/opt/cr-downloads');
 
 function humanSize(bytes: number): string {
   if (bytes >= 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
@@ -441,9 +445,12 @@ function serveDownloads(
   res: http.ServerResponse,
   urlPath: string,
 ): void {
-  const rel = decodeURIComponent(urlPath.replace(/^\/downloads\/?/, ''));
+  // The whole path decision (listing, one contained file, or refuse) lives in
+  // the pure resolver; urlPath arrives still percent-encoded on purpose, since
+  // the resolver owns the single decode layer and every traversal rule.
+  const target = resolveDownloadTarget(urlPath, DOWNLOADS_DIR);
   // listing page
-  if (rel === '') {
+  if (target.kind === 'listing') {
     let entries: { name: string; size: number; mtime: Date }[] = [];
     try {
       entries = fs
@@ -490,10 +497,19 @@ ${entries.length ? `<ul>${rows}</ul>` : '<p>No builds published yet, check back 
     res.end(body);
     return;
   }
-  // file download (Range-aware for resumable multi-GB installers)
-  const file = path.join(DOWNLOADS_DIR, path.posix.normalize(rel).replace(/^([.][.][/\\])+/, ''));
-  const stats = file.startsWith(DOWNLOADS_DIR) && fs.existsSync(file) ? fs.statSync(file) : null;
-  if (!stats?.isFile()) {
+  // file download (Range-aware for resumable multi-GB installers). statSync IS
+  // the existence check, inside the catch, so there is no existsSync-to-statSync
+  // disappearance race (the static server closed the same one).
+  const file = target.kind === 'file' ? target.file : null;
+  let stats: fs.Stats | null = null;
+  if (file !== null) {
+    try {
+      stats = fs.statSync(file);
+    } catch {
+      stats = null;
+    }
+  }
+  if (file === null || !stats?.isFile()) {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     res.end('not found');
     return;

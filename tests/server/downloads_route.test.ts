@@ -3,7 +3,7 @@
 // nothing else. CR_DOWNLOADS_DIR must be primed BEFORE importing server/main
 // (the module reads it once at load), mirroring the static SFX suite's rig.
 
-import { mkdtempSync, rmSync, utimesSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, utimesSync, writeFileSync } from 'node:fs';
 import * as http from 'node:http';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -13,6 +13,13 @@ const downloadsRoot = mkdtempSync(join(tmpdir(), 'woc-downloads-'));
 // A file OUTSIDE the downloads dir that a traversal would reach.
 const outsideRoot = mkdtempSync(join(tmpdir(), 'woc-downloads-outside-'));
 writeFileSync(join(outsideRoot, 'secret.txt'), 'TOP SECRET');
+// A SIBLING directory whose absolute path shares the downloads root as a string
+// prefix (the classic '/opt/cr-downloads' vs '/opt/cr-downloads-evil' shape). A
+// containment check written as a bare startsWith admits it; a separator-aware
+// one does not.
+const siblingRoot = `${downloadsRoot}-evil`;
+mkdirSync(siblingRoot, { recursive: true });
+writeFileSync(join(siblingRoot, 'secret.txt'), 'TOP SECRET');
 
 const savedDatabaseUrl = process.env.DATABASE_URL;
 const savedDownloadsDir = process.env.CR_DOWNLOADS_DIR;
@@ -28,16 +35,14 @@ beforeAll(async () => {
 afterAll(() => {
   rmSync(downloadsRoot, { recursive: true, force: true });
   rmSync(outsideRoot, { recursive: true, force: true });
+  rmSync(siblingRoot, { recursive: true, force: true });
   if (savedDatabaseUrl === undefined) delete process.env.DATABASE_URL;
   else process.env.DATABASE_URL = savedDatabaseUrl;
   if (savedDownloadsDir === undefined) delete process.env.CR_DOWNLOADS_DIR;
   else process.env.CR_DOWNLOADS_DIR = savedDownloadsDir;
 });
 
-async function request(
-  url: string,
-  options: { method?: 'GET' | 'HEAD'; headers?: Record<string, string> } = {},
-): Promise<{ body: Buffer; headers: Headers; status: number }> {
+async function withServer<T>(run: (port: number) => Promise<T>): Promise<T> {
   const server = http.createServer((req, res) => routeHttpRequest(req, res));
   const port = await new Promise<number>((resolve, reject) => {
     server.once('error', reject);
@@ -48,6 +53,19 @@ async function request(
     });
   });
   try {
+    return await run(port);
+  } finally {
+    await new Promise<void>((resolve, reject) => {
+      server.close((error) => (error ? reject(error) : resolve()));
+    });
+  }
+}
+
+async function request(
+  url: string,
+  options: { method?: 'GET' | 'HEAD'; headers?: Record<string, string> } = {},
+): Promise<{ body: Buffer; headers: Headers; status: number }> {
+  return withServer(async (port) => {
     const response = await fetch(`http://127.0.0.1:${port}${url}`, {
       method: options.method ?? 'GET',
       headers: options.headers,
@@ -57,11 +75,36 @@ async function request(
       headers: response.headers,
       status: response.status,
     };
-  } finally {
-    await new Promise<void>((resolve, reject) => {
-      server.close((error) => (error ? reject(error) : resolve()));
-    });
-  }
+  });
+}
+
+// Sends the request target BYTE FOR BYTE, which fetch cannot do: the WHATWG URL
+// parser collapses dot segments before the socket write, and it treats '%2e' as
+// a dot while doing it, so fetch('/downloads/%2e%2e/%2e%2e/etc/passwd') actually
+// puts 'GET /etc/passwd' on the wire and never touches this route at all. An
+// attacker is under no such constraint (curl --path-as-is, any raw client), so
+// every traversal probe below goes out through this helper instead.
+async function rawRequest(target: string): Promise<{ body: string; status: number }> {
+  return withServer(
+    (port) =>
+      new Promise((resolve, reject) => {
+        const req = http.request(
+          { host: '127.0.0.1', port, path: target, method: 'GET' },
+          (res) => {
+            const chunks: Buffer[] = [];
+            res.on('data', (chunk: Buffer) => chunks.push(chunk));
+            res.on('end', () =>
+              resolve({
+                body: Buffer.concat(chunks).toString('utf8'),
+                status: res.statusCode ?? 0,
+              }),
+            );
+          },
+        );
+        req.on('error', reject);
+        req.end();
+      }),
+  );
 }
 
 describe('/downloads listing', () => {
@@ -133,16 +176,50 @@ describe('/downloads/<file> streaming', () => {
   });
 
   it('404s a traversal out of the downloads dir', async () => {
-    const secretRel = `..%2F${encodeURIComponent(outsideRoot.split(/[\\/]/).pop() ?? '')}%2Fsecret.txt`;
+    const outsideName = outsideRoot.split(/[\\/]/).pop() ?? '';
+    const siblingName = siblingRoot.split(/[\\/]/).pop() ?? '';
     for (const probe of [
-      `/downloads/${secretRel}`,
+      // The neighbouring temp dir, reached by name: raw, single-encoded, and
+      // double-encoded separators.
+      `/downloads/../${outsideName}/secret.txt`,
+      `/downloads/..%2F${encodeURIComponent(outsideName)}%2Fsecret.txt`,
+      `/downloads/%2e%2e%2f${encodeURIComponent(outsideName)}%2fsecret.txt`,
+      `/downloads/%252e%252e%252f${encodeURIComponent(outsideName)}%252fsecret.txt`,
+      `/downloads/..%5C${encodeURIComponent(outsideName)}%5Csecret.txt`,
+      `/downloads/.%2e/${outsideName}/secret.txt`,
+      // The SIBLING directory whose path is a string prefix match on the
+      // downloads root: only a separator-aware containment test refuses it.
+      `/downloads/../${siblingName}/secret.txt`,
+      `/downloads/..%2F${encodeURIComponent(siblingName)}%2Fsecret.txt`,
+      // Classic escapes with no file behind them.
+      '/downloads/../../etc/passwd',
       '/downloads/..%2F..%2Fetc%2Fpasswd',
       '/downloads/%2e%2e/%2e%2e/etc/passwd',
+      '/downloads/%2e%2e%2f%2e%2e%2fetc%2fpasswd',
+      '/downloads/%252e%252e/%252e%252e/etc/passwd',
+      '/downloads/..%5C..%5Cetc%5Cpasswd',
+      '/downloads/....//....//etc/passwd',
+      // Absolute paths, both forms.
+      '/downloads//etc/passwd',
+      '/downloads/%2Fetc%2Fpasswd',
+      '/downloads/C%3A%5CWindows%5Cwin.ini',
+      // A NUL truncation attempt and a malformed escape: both must answer, and
+      // the malformed one must not throw out of the request handler.
+      '/downloads/CrypticRealm-0.35.apk%00.txt',
+      '/downloads/%2e%2e%2fsecret.txt%00',
+      '/downloads/%zz',
     ]) {
-      const res = await request(probe);
+      const res = await rawRequest(probe);
       expect(res.status, probe).toBe(404);
-      expect(res.body.toString('utf8')).not.toContain('TOP SECRET');
+      expect(res.body, probe).not.toContain('TOP SECRET');
     }
+  });
+
+  it('still serves a legitimate build after the traversal guard', async () => {
+    // The guard refuses, it does not clamp: an ordinary filename still streams.
+    const res = await rawRequest('/downloads/CrypticRealm-0.35.apk');
+    expect(res.status).toBe(200);
+    expect(res.body.length).toBe(4096);
   });
 
   it('404s a missing file instead of falling back to the SPA shell', async () => {
