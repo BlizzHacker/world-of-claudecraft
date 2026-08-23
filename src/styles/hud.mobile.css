@@ -5910,7 +5910,8 @@
     font-size: 8px;
     line-height: 8px;
   }
-  body.mobile-touch .np-tier, body.mobile-touch .np-dev-tier {
+  body.mobile-touch .np-tier,
+  body.mobile-touch .np-dev-tier {
     width: 12px;
     height: 12px;
   }
@@ -5928,7 +5929,8 @@
   body.mobile-touch:not(.mobile-menu-open) #mobile-combat-controls {
     pointer-events: none;
   }
-  body.mobile-touch #mobile-menu-collapse-toggle, body.mobile-touch #mobile-consumables-toggle {
+  body.mobile-touch #mobile-menu-collapse-toggle,
+  body.mobile-touch #mobile-consumables-toggle {
     width: 40px;
     height: max(40px, calc(54px * var(--mobile-chrome-scale, 1)));
     flex: none;
@@ -5949,11 +5951,13 @@
       inset 0 1px 0 #ffffff14,
       0 2px 8px #0009;
   }
-  body.mobile-touch #mobile-menu-collapse-toggle .ui-icon, body.mobile-touch #mobile-consumables-toggle .ui-icon {
+  body.mobile-touch #mobile-menu-collapse-toggle .ui-icon,
+  body.mobile-touch #mobile-consumables-toggle .ui-icon {
     width: 14px;
     height: 14px;
   }
-  body.mobile-touch.mobile-menu-open #mobile-menu-collapse-toggle, body.mobile-touch.mobile-consumables-open #mobile-consumables-toggle {
+  body.mobile-touch.mobile-menu-open #mobile-menu-collapse-toggle,
+  body.mobile-touch.mobile-consumables-open #mobile-consumables-toggle {
     opacity: 1;
     border-color: var(--gold-dim);
     color: #ffdf9c;
@@ -5963,7 +5967,7 @@
   }
   body.mobile-touch #mobile-combat-buttons {
     --mobile-menu-row-w: calc(338px - 40px - 8px);
-    
+
     --mobile-menu-scale: calc(var(--btn-scale, 1) * var(--mobile-chrome-scale, 1));
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -5993,13 +5997,15 @@
         transform 0.16s ease,
         visibility 0.16s;
     }
-    body.mobile-touch #mobile-menu-collapse-toggle .ui-icon, body.mobile-touch #mobile-consumables-toggle .ui-icon {
+    body.mobile-touch #mobile-menu-collapse-toggle .ui-icon,
+    body.mobile-touch #mobile-consumables-toggle .ui-icon {
       transition: transform 0.16s ease;
     }
   }
 }
 @layer hud-mobile {
-  body.mobile-touch #mobile-action-ring > button::after, body.mobile-touch .action-btn::after {
+  body.mobile-touch #mobile-action-ring > button::after,
+  body.mobile-touch .action-btn::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -6009,14 +6015,17 @@
     pointer-events: none;
     transition: opacity 0.08s ease;
   }
-  body.mobile-touch #mobile-action-ring > button:active::after, body.mobile-touch .action-btn:active::after {
+  body.mobile-touch #mobile-action-ring > button:active::after,
+  body.mobile-touch .action-btn:active::after {
     opacity: 0.16;
   }
   body.mobile-touch #mobile-extra-controls .window-body {
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
   }
-  body.mobile-touch.mobile-chrome-idle #mobile-combat-controls .mobile-btn, body.mobile-touch.mobile-chrome-idle #mobile-menu-collapse-toggle, body.mobile-touch.mobile-chrome-idle #mobile-consumables-toggle {
+  body.mobile-touch.mobile-chrome-idle #mobile-combat-controls .mobile-btn,
+  body.mobile-touch.mobile-chrome-idle #mobile-menu-collapse-toggle,
+  body.mobile-touch.mobile-chrome-idle #mobile-consumables-toggle {
     opacity: 0.5;
   }
   .chat-mobile-move {
@@ -6027,7 +6036,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    
+
     width: 40px;
     height: 40px;
     align-items: center;
@@ -6045,13 +6054,14 @@
   body.mobile-touch.mobile-chat-open #chatlog-frame .chat-pane {
     padding-bottom: 22px;
   }
-  body.mobile-touch.mobile-keyboard-open.mobile-chat-open .chat-mobile-resize, body.mobile-touch.mobile-keyboard-open.mobile-chat-open #chatlog-wrap .chat-mobile-move {
+  body.mobile-touch.mobile-keyboard-open.mobile-chat-open .chat-mobile-resize,
+  body.mobile-touch.mobile-keyboard-open.mobile-chat-open #chatlog-wrap .chat-mobile-move {
     display: none;
   }
   body.mobile-touch #daily-rewards-window .dr-body {
     column-count: 2;
     column-gap: 12px;
-    
+
     max-height: none;
     overflow-y: visible;
   }
@@ -6059,7 +6069,26 @@
     break-inside: avoid;
     margin-bottom: 10px;
   }
-  body.mobile-touch #options-menu, body.mobile-touch #quest-log-window, body.mobile-touch #spellbook, body.mobile-touch #vendor-window, body.mobile-touch #market-window, body.mobile-touch #quest-dialog, body.mobile-touch #calendar-window, body.mobile-touch #crafting-window, body.mobile-touch #mailbox-window, body.mobile-touch #emote-editor, body.mobile-touch #arena-window, body.mobile-touch #valecup-window, body.mobile-touch #zombie-defense-window, body.mobile-touch #arcade-minigame-window, body.mobile-touch #exchange-window, body.mobile-touch #delve-board, body.mobile-touch #leaderboard-window, body.mobile-touch #daily-rewards-window, body.mobile-touch #loot-settings-window, body.mobile-touch #town-focus-window {
+  body.mobile-touch #options-menu,
+  body.mobile-touch #quest-log-window,
+  body.mobile-touch #spellbook,
+  body.mobile-touch #vendor-window,
+  body.mobile-touch #market-window,
+  body.mobile-touch #quest-dialog,
+  body.mobile-touch #calendar-window,
+  body.mobile-touch #crafting-window,
+  body.mobile-touch #mailbox-window,
+  body.mobile-touch #emote-editor,
+  body.mobile-touch #arena-window,
+  body.mobile-touch #valecup-window,
+  body.mobile-touch #zombie-defense-window,
+  body.mobile-touch #arcade-minigame-window,
+  body.mobile-touch #exchange-window,
+  body.mobile-touch #delve-board,
+  body.mobile-touch #leaderboard-window,
+  body.mobile-touch #daily-rewards-window,
+  body.mobile-touch #loot-settings-window,
+  body.mobile-touch #town-focus-window {
     left: 10px;
     right: 10px;
     top: 10px;
@@ -6068,13 +6097,15 @@
     box-sizing: border-box;
     overflow-y: auto;
   }
-  body.mobile-touch .window:has(> .window-frame):not(#char-window):not(#talents-window):not(#crafting-window) {
+  body.mobile-touch
+    .window:has(> .window-frame):not(#char-window):not(#talents-window):not(#crafting-window) {
     overflow-y: hidden;
   }
   body.mobile-touch .window:has(> .window-frame) {
     padding: 0;
   }
-  body.mobile-touch .mkt-filters, body.mobile-touch .mkt-filters.has-subtype {
+  body.mobile-touch .mkt-filters,
+  body.mobile-touch .mkt-filters.has-subtype {
     grid-template-columns: 1fr;
   }
   body.mobile-touch .inspect-paperdoll {
@@ -6094,7 +6125,18 @@
     width: 16px;
     height: 16px;
   }
-  body.mobile-touch .bag-item, body.mobile-touch .mkt-tab, body.mobile-touch .mkt-btn, body.mobile-touch .mkt-list-btn, body.mobile-touch #loot-window .btn, body.mobile-touch .loot-roll-btn, body.mobile-touch .soc-tab, body.mobile-touch .soc-x, body.mobile-touch .soc-sugg-item, body.mobile-touch .trade-item.mine, body.mobile-touch #social-window .btn, body.mobile-touch #trade-window .btn {
+  body.mobile-touch .bag-item,
+  body.mobile-touch .mkt-tab,
+  body.mobile-touch .mkt-btn,
+  body.mobile-touch .mkt-list-btn,
+  body.mobile-touch #loot-window .btn,
+  body.mobile-touch .loot-roll-btn,
+  body.mobile-touch .soc-tab,
+  body.mobile-touch .soc-x,
+  body.mobile-touch .soc-sugg-item,
+  body.mobile-touch .trade-item.mine,
+  body.mobile-touch #social-window .btn,
+  body.mobile-touch #trade-window .btn {
     min-height: 40px;
     font-size: 16px;
   }
@@ -6102,7 +6144,8 @@
     min-height: var(--touch-min);
     font-size: 16px;
   }
-  body.mobile-touch .soc-add input, body.mobile-touch .trade-money input {
+  body.mobile-touch .soc-add input,
+  body.mobile-touch .trade-money input {
     min-height: 40px;
     font-size: 16px;
     box-sizing: border-box;
@@ -6116,18 +6159,27 @@
     padding: 10px 5px;
     margin: 0 -5px;
   }
-  body.mobile-touch #quest-log-window, body.mobile-touch #vendor-window, body.mobile-touch #quest-dialog, body.mobile-touch #spellbook, body.mobile-touch #options-menu, body.mobile-touch #options-menu.kb-wide, body.mobile-touch #options-menu.perf-wide {
+  body.mobile-touch #quest-log-window,
+  body.mobile-touch #vendor-window,
+  body.mobile-touch #quest-dialog,
+  body.mobile-touch #spellbook,
+  body.mobile-touch #options-menu,
+  body.mobile-touch #options-menu.kb-wide,
+  body.mobile-touch #options-menu.perf-wide {
     left: 50%;
     right: auto;
     top: 12px;
     transform: translateX(-50%);
   }
-  body.mobile-touch #quest-log-window, body.mobile-touch #vendor-window, body.mobile-touch #quest-dialog {
+  body.mobile-touch #quest-log-window,
+  body.mobile-touch #vendor-window,
+  body.mobile-touch #quest-dialog {
     width: clamp(320px, 76vw, 680px);
     max-width: calc(100vw - 20px);
     max-height: calc(var(--app-vh) / var(--ui-scale, 1) - 92px);
   }
-  body.mobile-touch.vendor-open #vendor-window .window-titlebar, body.mobile-touch.vendor-open #bags .window-titlebar {
+  body.mobile-touch.vendor-open #vendor-window .window-titlebar,
+  body.mobile-touch.vendor-open #bags .window-titlebar {
     height: var(--window-titlebar-h-touch);
     min-height: var(--window-titlebar-h-touch);
     box-sizing: border-box;
@@ -6135,7 +6187,8 @@
   body.mobile-touch.vendor-open #vendor-window .window-close {
     display: none;
   }
-  body.mobile-touch.bank-open #bank-window, body.mobile-touch.bank-open #bags {
+  body.mobile-touch.bank-open #bank-window,
+  body.mobile-touch.bank-open #bags {
     position: fixed;
     top: max(10px, env(safe-area-inset-top));
     bottom: calc(72px + env(safe-area-inset-bottom));
@@ -6154,14 +6207,16 @@
     border-bottom-left-radius: 0;
     border-left: 0;
   }
-  body.mobile-touch.bank-open #bank-window .panel-title, body.mobile-touch.bank-open #bags .panel-title {
+  body.mobile-touch.bank-open #bank-window .panel-title,
+  body.mobile-touch.bank-open #bags .panel-title {
     height: 47px;
     min-height: 47px;
     padding-bottom: 6px;
     margin-bottom: 8px;
     box-sizing: border-box;
   }
-  body.mobile-touch.market-open #market-window, body.mobile-touch.market-open #bags {
+  body.mobile-touch.market-open #market-window,
+  body.mobile-touch.market-open #bags {
     position: fixed;
     top: max(10px, env(safe-area-inset-top));
     bottom: max(10px, env(safe-area-inset-bottom));
@@ -6180,13 +6235,15 @@
     border-bottom-left-radius: 0;
     border-left: 0;
   }
-  body.mobile-touch #bank-window .bag-chips, body.mobile-touch.bank-open #bags .bag-chips {
+  body.mobile-touch #bank-window .bag-chips,
+  body.mobile-touch.bank-open #bags .bag-chips {
     flex-wrap: nowrap;
     overflow-x: auto;
     overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
   }
-  body.mobile-touch #bank-window .bag-chip, body.mobile-touch.bank-open #bags .bag-chip {
+  body.mobile-touch #bank-window .bag-chip,
+  body.mobile-touch.bank-open #bags .bag-chip {
     flex: 0 0 auto;
   }
   body.mobile-touch #talents-window .window-body {
@@ -6200,12 +6257,12 @@
 @layer hud-mobile {
   @media (orientation: portrait) {
     body.mobile-touch #mobile-combat-buttons {
-      
       --mobile-menu-scale: var(--btn-scale, 1);
       --mobile-menu-row-w: calc(234px - 40px - 8px);
       gap: 6px;
     }
-    body.mobile-touch #mobile-menu-collapse-toggle, body.mobile-touch #mobile-consumables-toggle {
+    body.mobile-touch #mobile-menu-collapse-toggle,
+    body.mobile-touch #mobile-consumables-toggle {
       height: 44px;
     }
   }
@@ -6214,13 +6271,15 @@
   @media (orientation: landscape) {
     body.mobile-touch #mobile-combat-buttons {
       --mobile-menu-row-w: calc(310px - 40px - 8px);
-      
+
       gap: 6px;
     }
-    body.mobile-touch #mobile-menu-collapse-toggle, body.mobile-touch #mobile-consumables-toggle {
+    body.mobile-touch #mobile-menu-collapse-toggle,
+    body.mobile-touch #mobile-consumables-toggle {
       height: max(40px, calc(48px * var(--mobile-chrome-scale, 1)));
     }
-    body.mobile-touch #raid-lockout, body.mobile-touch #mail-indicator {
+    body.mobile-touch #raid-lockout,
+    body.mobile-touch #mail-indicator {
       top: 94px;
       transform: scale(1.27);
     }
@@ -6244,10 +6303,14 @@
     width: var(--control-h-touch);
     height: var(--control-h-touch);
   }
-  body.mobile-touch .window-frame .field input, body.mobile-touch .window-frame .field select, body.mobile-touch .window-frame .search-field input, body.mobile-touch .window-frame .search-field .search-clear {
+  body.mobile-touch .window-frame .field input,
+  body.mobile-touch .window-frame .field select,
+  body.mobile-touch .window-frame .search-field input,
+  body.mobile-touch .window-frame .search-field .search-clear {
     height: var(--control-h-touch);
   }
-  body.mobile-touch .window-frame .data-table th, body.mobile-touch .window-frame .data-table td {
+  body.mobile-touch .window-frame .data-table th,
+  body.mobile-touch .window-frame .data-table td {
     height: 48px;
   }
   body.mobile-touch .window-footer {
@@ -6266,14 +6329,18 @@
   body.mobile-touch .vcup-role {
     min-height: 40px;
   }
-  body.mobile-touch.mobile-window-open #minimap-wrap, body.mobile-touch.mobile-window-open #mail-indicator, body.mobile-touch.mobile-more-open #minimap-wrap, body.mobile-touch.mobile-more-open #mail-indicator {
+  body.mobile-touch.mobile-window-open #minimap-wrap,
+  body.mobile-touch.mobile-window-open #mail-indicator,
+  body.mobile-touch.mobile-more-open #minimap-wrap,
+  body.mobile-touch.mobile-more-open #mail-indicator {
     display: none;
   }
   body.mobile-touch #char-window .skin-swatch {
     width: 40px;
     height: 40px;
   }
-  body.mobile-touch #bags .chip, body.mobile-touch .window-frame .chip {
+  body.mobile-touch #bags .chip,
+  body.mobile-touch .window-frame .chip {
     min-width: 40px;
     min-height: 40px;
   }
@@ -6311,14 +6378,33 @@
 }
 @layer hud-mobile {
   @media (min-width: 1200px) {
-    body.mobile-touch:not(.vendor-open) #vendor-window, body.mobile-touch #quest-log-window, body.mobile-touch #spellbook, body.mobile-touch #quest-dialog, body.mobile-touch #calendar-window, body.mobile-touch #crafting-window, body.mobile-touch #mailbox-window, body.mobile-touch #emote-editor, body.mobile-touch #arena-window, body.mobile-touch #valecup-window, body.mobile-touch #delve-board, body.mobile-touch #leaderboard-window, body.mobile-touch #loot-settings-window, body.mobile-touch #town-focus-window, body.mobile-touch #inspect-window, body.mobile-touch #trade-window, body.mobile-touch #daily-rewards-window, body.mobile-touch:not(.vendor-open):not(.bank-open):not(.market-open) #bags {
+    body.mobile-touch:not(.vendor-open) #vendor-window,
+    body.mobile-touch #quest-log-window,
+    body.mobile-touch #spellbook,
+    body.mobile-touch #quest-dialog,
+    body.mobile-touch #calendar-window,
+    body.mobile-touch #crafting-window,
+    body.mobile-touch #mailbox-window,
+    body.mobile-touch #emote-editor,
+    body.mobile-touch #arena-window,
+    body.mobile-touch #valecup-window,
+    body.mobile-touch #delve-board,
+    body.mobile-touch #leaderboard-window,
+    body.mobile-touch #loot-settings-window,
+    body.mobile-touch #town-focus-window,
+    body.mobile-touch #inspect-window,
+    body.mobile-touch #trade-window,
+    body.mobile-touch #daily-rewards-window,
+    body.mobile-touch:not(.vendor-open):not(.bank-open):not(.market-open) #bags {
       max-width: 900px;
       margin-inline: auto;
     }
   }
 }
 @layer hud-mobile {
-  body.mobile-touch #options-menu, body.mobile-touch #options-menu.kb-wide, body.mobile-touch #options-menu.perf-wide {
+  body.mobile-touch #options-menu,
+  body.mobile-touch #options-menu.kb-wide,
+  body.mobile-touch #options-menu.perf-wide {
     left: max(10px, env(safe-area-inset-left));
     right: max(10px, env(safe-area-inset-right));
     top: max(10px, env(safe-area-inset-top));
@@ -6333,7 +6419,8 @@
   body.mobile-touch #options-menu > .window-frame {
     background-color: var(--color-panel-l2-base);
   }
-  body.mobile-touch #options-menu:not(.opt-mrail) > .window-frame > .window-titlebar, body.mobile-touch #options-menu:not(.opt-mrail) > .window-frame > .window-footer {
+  body.mobile-touch #options-menu:not(.opt-mrail) > .window-frame > .window-titlebar,
+  body.mobile-touch #options-menu:not(.opt-mrail) > .window-frame > .window-footer {
     display: none;
   }
   body.mobile-touch #options-menu .window-body {
@@ -6350,7 +6437,8 @@
   body.mobile-touch #options-menu {
     --opt-rail-w: 248px;
   }
-  body.mobile-touch #options-menu .opt-tab-icon, body.mobile-touch #options-menu .opt-tab-icon .ui-icon {
+  body.mobile-touch #options-menu .opt-tab-icon,
+  body.mobile-touch #options-menu .opt-tab-icon .ui-icon {
     width: 24px;
     height: 24px;
   }
@@ -6439,7 +6527,8 @@
   .opt-mshell-cat.is-danger:hover {
     border-color: var(--color-text-error);
   }
-  .opt-mshell-cat.is-danger .opt-mshell-cat-icon, .opt-mshell-cat.is-danger .opt-mshell-cat-label {
+  .opt-mshell-cat.is-danger .opt-mshell-cat-icon,
+  .opt-mshell-cat.is-danger .opt-mshell-cat-label {
     color: var(--color-text-error);
   }
   .opt-mshell-cat-icon {
@@ -6464,7 +6553,8 @@
     font-size: var(--text-md);
     color: var(--color-text-light);
   }
-  .opt-mshell-cat-sub, .opt-mshell-chevron {
+  .opt-mshell-cat-sub,
+  .opt-mshell-chevron {
     display: none;
   }
   .opt-mshell-cat .opt-tab-dot {
@@ -6552,7 +6642,8 @@
     height: 8px;
     border-radius: 4px;
   }
-  body.mobile-touch #options-menu .opt-slider::-moz-range-track, body.mobile-touch #options-menu .opt-slider::-moz-range-progress {
+  body.mobile-touch #options-menu .opt-slider::-moz-range-track,
+  body.mobile-touch #options-menu .opt-slider::-moz-range-progress {
     height: 8px;
     border-radius: 4px;
   }
@@ -6565,7 +6656,8 @@
     width: 26px;
     height: 26px;
   }
-  body.mobile-touch #options-menu .search-field input, body.mobile-touch #options-menu .ui-dd-btn {
+  body.mobile-touch #options-menu .search-field input,
+  body.mobile-touch #options-menu .ui-dd-btn {
     min-height: 48px;
   }
   body.mobile-touch #options-menu .search-input {
@@ -6581,7 +6673,28 @@
  * never had. Rules the suite explicitly forbids are NOT restored.
  * ------------------------------------------------------------------- */
 @layer hud-mobile {
-  body.mobile-touch #options-menu, body.mobile-touch #quest-log-window, body.mobile-touch #spellbook, body.mobile-touch #vendor-window, body.mobile-touch #train-window, body.mobile-touch #unbind-window, body.mobile-touch #market-window, body.mobile-touch #quest-dialog, body.mobile-touch #calendar-window, body.mobile-touch #crafting-window, body.mobile-touch #mailbox-window, body.mobile-touch #emote-editor, body.mobile-touch #arena-window, body.mobile-touch #dungeon-finder-window, body.mobile-touch #valecup-window, body.mobile-touch #card-duel-window, body.mobile-touch #delve-board, body.mobile-touch #leaderboard-window, body.mobile-touch #loot-settings-window, body.mobile-touch #town-focus-window, body.mobile-touch #dev-command-window, body.mobile-touch #claudium-window {
+  body.mobile-touch #options-menu,
+  body.mobile-touch #quest-log-window,
+  body.mobile-touch #spellbook,
+  body.mobile-touch #vendor-window,
+  body.mobile-touch #train-window,
+  body.mobile-touch #unbind-window,
+  body.mobile-touch #market-window,
+  body.mobile-touch #quest-dialog,
+  body.mobile-touch #calendar-window,
+  body.mobile-touch #crafting-window,
+  body.mobile-touch #mailbox-window,
+  body.mobile-touch #emote-editor,
+  body.mobile-touch #arena-window,
+  body.mobile-touch #dungeon-finder-window,
+  body.mobile-touch #valecup-window,
+  body.mobile-touch #card-duel-window,
+  body.mobile-touch #delve-board,
+  body.mobile-touch #leaderboard-window,
+  body.mobile-touch #loot-settings-window,
+  body.mobile-touch #town-focus-window,
+  body.mobile-touch #dev-command-window,
+  body.mobile-touch #claudium-window {
     left: 10px;
     right: 10px;
     top: 10px;
